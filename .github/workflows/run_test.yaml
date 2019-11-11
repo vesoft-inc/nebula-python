@@ -1,0 +1,33 @@
+name: run_test
+
+on:
+  push:
+
+
+jobs:
+  build:
+    name: get run nebula cluster
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        tag_name: [nebula-python2:v1.0, nebula-python3:v1.0]
+    container:
+      image: vesoft/${{ matrix.tag_name }}
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: run all test
+        if: failure()
+        timeout-minutes: 40
+        env:
+          GRAPHD_PORT=`docker-compose ps|grep 3699|cut -d ":" -f 2 | cut -d '-' -f 1`
+          SRC_DIR=`pwd`
+    run: |
+      echo "#### SRC_DIR = $SRC_DIR ####"
+      echo "#### GRAPHD_PORT = $GRAPHD_PORT ####"
+      git clone https://github.com/vesoft-inc/nebula-docker-compose.git
+      cd nebula-docker-compose/
+      docker-compose up -d
+      cd $SRC_DIR/tests/
+      python TestClient.py 127.0.0.1 GRAPHD_PORT

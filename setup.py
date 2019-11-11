@@ -9,20 +9,14 @@ import os
 import sys
 from setuptools import setup
 
-from nebula import __version__
-
-import urllib
-thrift_file = 'https://raw.githubusercontent.com/vesoft-inc/nebula/master/src/interface/graph.thrift'
-urllib.urlretrieve(thrift_file, "nebula/graph.thrift")
-
 setup(
     name = 'nebula-client',
-    version = __version__,
+    version = "rc2",
     description = 'Python client for Nebula Graph',
-    url = 'github.com/vesoft-inc/nebula',
+    url = 'https://github.com/vesoft-inc/nebula-python',
     author = 'darion.wang',
     author_email = 'darion.wang@vesoft-inc.com',
+    install_requires = ['gevent', 'future', 'futures', 'six', 'gevent']
     packages=['nebula'],
     package_dir={'nebula': 'nebula'},
-    package_data={'nebula': ['graph.thrift']},
 )

@@ -1,0 +1,7 @@
+FROM python:3.5
+
+RUN  pip install django-import-export future futures six gevent prettytable
+
+RUN mkdir -p /home/nebula
+
+WORKDIR /home/nebula
