@@ -1,31 +1,24 @@
-#!/usr/bin/env python
+# signout--coding:utf-8--
 
 # Copyright (c) 2019 vesoft inc. All rights reserved.
 #
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
-import sys
 
-sys.path.insert(0, './dependence')
-sys.path.insert(0, './gen-py')
-sys.path.insert(0, './')
-
-from graph import GraphService
-from graph import ttypes
-from ConnectionPool import ConnectionPool
+import logging
 
 
 class AuthException(Exception):
     def __init__(message):
-        Exception.__init__(self, message)
-        self.message = message
+        Exception.__init__(message)
+        message = message
 
 
 class ExecutionException(Exception):
     def __init__(self, message):
-        Exception.__init__(self, message)
-        self.message = message
+        Exception.__init__(message)
+        message = message
 
 
 class SimpleResponse:
@@ -49,6 +42,7 @@ class GraphClient(object):
         """
         self._pool = pool
         self._client = self._pool.get_connection()
+        self._session_id = 0
 
     def authenticate(self, user, password):
         """authenticate to graph server
@@ -62,12 +56,13 @@ class GraphClient(object):
                 - session_id
                 - error_msg
         """
-        authResponse = self._client.authenticate(user, password)
-        if authResponse.error_code:
+        resp = self._client.authenticate(user, password)
+        if resp.error_code:
             raise AuthException("Auth failed")
         else:
-            self._session_id = authResponse.session_id
-        return authResponse
+            self._session_id = resp.session_id
+            logging.info("client: %d authenticate succeed" % self._session_id)
+        return resp
 
     def execute(self, statement):
         """execute statement to graph server
@@ -96,12 +91,13 @@ class GraphClient(object):
                 - rows
                 - space_name
         """
-        executionResponse = self._client.execute(self._session_id, statement)
-        if executionResponse.error_code:
-            raise ExecutionException("Execute failed %s, error: %s" % (statement, executionResponse.error_msg))
+        resp = self._client.execute(self._session_id, statement)
+        if resp.error_code:
+            raise ExecutionException("Execute failed %s, error: %s" % (statement, resp.error_msg))
         else:
-            return executionResponse
+            return resp
 
     def signout(self):
+        logging.info("client: %d signout" % self._session_id)
         self._client.signout(self._session_id)
         self._pool.return_connection(self._client)

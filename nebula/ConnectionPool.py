@@ -1,5 +1,4 @@
-#--coding:utf-8--
-
+# --coding:utf-8--
 # Copyright (c) 2019 vesoft inc. All rights reserved.
 #
 # This source code is licensed under Apache 2.0 License,
@@ -15,6 +14,7 @@ sys.path.insert(0, './gen-py')
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
+from thrift.transport.TTransport import TTransportException
 
 from graph import GraphService
 
@@ -65,7 +65,7 @@ class ConnectionPool(object):
                 conn = self._connection_queue.get(block=False)
                 try:
                     self._close_thrift_connection(conn)
-                except:
+                except Exception:
                     pass
             except self._QueueEmpty:
                 pass
@@ -83,12 +83,12 @@ class ConnectionPool(object):
     def _close_connection(self, conn):
         try:
             conn._iprot.trans.close()
-        except:
+        except Exception:
             logging.warning('warn: failed to close iprot trans on {}', conn)
             pass
         try:
             conn._oprot.trans.close()
-        except:
+        except Exception:
             logging.error('warn: failed to close oprot trans on {}', conn)
             pass
 
@@ -97,15 +97,19 @@ class ConnectionPool(object):
         """
         self._semaphore.acquire()
         if self._closed:
-            raise RuntimeError('connection pool closed')
+            logging.exception('connection pool closed')
+            return None
         try:
             return self._connection_queue.get(block=False)
         except self._QueueEmpty:
             try:
                 return self._create_connection()
-            except:
+            except Exception:
                 self._semaphore.release()
-                raise
+                return None
+        except Exception as ex:
+            logging.exception(ex)
+            return None
 
     def return_connection(self, conn):
         """ return a thrift connection to the pool.
@@ -121,7 +125,7 @@ class ConnectionPool(object):
         """
         try:
             self._close_connection(conn)
-        except:
+        except Exception:
             pass
         if not self._closed:
             self._semaphore.release()
