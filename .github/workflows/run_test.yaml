@@ -1,33 +1,43 @@
-name: run_test
+name: Python package
 
-on:
-  push:
-
+on: [push]
 
 jobs:
   build:
-    name: get run nebula cluster
+
     runs-on: ubuntu-18.04
     strategy:
+      max-parallel: 4
       matrix:
-        tag_name: [nebula-python2:v1.0, nebula-python3:v1.0]
-    container:
-      image: vesoft/${{ matrix.tag_name }}
+        python-version: [2.7, 3.5, 3.6, 3.7]
+
     steps:
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-      - name: run all test
-        if: failure()
-        timeout-minutes: 40
-        env:
-          GRAPHD_PORT=`docker-compose ps|grep 3699|cut -d ":" -f 2 | cut -d '-' -f 1`
-          SRC_DIR=`pwd`
-    run: |
-      echo "#### SRC_DIR = $SRC_DIR ####"
-      echo "#### GRAPHD_PORT = $GRAPHD_PORT ####"
-      git clone https://github.com/vesoft-inc/nebula-docker-compose.git
-      cd nebula-docker-compose/
-      docker-compose up -d
-      cd $SRC_DIR/tests/
-      python TestClient.py 127.0.0.1 GRAPHD_PORT
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install django-import-export future futures six gevent prettytable
+    #- name: Lint with flake8
+      #run: |
+        #pip install flake8
+        # stop the build if there are Python syntax errors or undefined names
+        #flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        # flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest 
+      run: |
+        echo "#### SRC_DIR = $SRC_DIR  ####"
+        mkdir tmp
+        cd tmp
+        git clone https://github.com/vesoft-inc/nebula-docker-compose.git
+        cd nebula-docker-compose/
+        docker-compose up -d
+        sleep 5
+        cd ../../tests/
+        pip install pytest
+        pytest -s
+

@@ -5,11 +5,6 @@
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
 import sys
-import logging
-
-sys.path.insert(0, './dependence')
-sys.path.insert(0, './gen-py')
-
 
 from thrift.transport import TSocket
 from thrift.transport import TTransport
@@ -42,7 +37,6 @@ class ConnectionPool(object):
             try:
                 from gevent import lock as glock
             except ImportError:
-                # gevent < 1.0
                 from gevent import coros as glock
             self._semaphore = glock.BoundedSemaphore(socket_num)
             self._connection_queue = gevent.queue.LifoQueue(socket_num)
@@ -59,16 +53,60 @@ class ConnectionPool(object):
             self._QueueEmpty = Queue.Empty
 
     def close(self):
+        """ close all connection in the pool
+        Returns: None
+        """
         self._closed = True
         while not self._connection_queue.empty():
             try:
                 conn = self._connection_queue.get(block=False)
                 try:
-                    self._close_thrift_connection(conn)
+                    self._close_connection(conn)
                 except Exception:
                     pass
             except self._QueueEmpty:
                 pass
+
+    def get_connection(self):
+        """ get a connection from the pool. This blocks until one is available.
+        Returns: None
+        """
+        self._semaphore.acquire()
+        if self._closed:
+            print('ERROR: connection pool closed')
+            return None
+        try:
+            return self._connection_queue.get(block=False)
+        except self._QueueEmpty:
+            try:
+                return self._create_connection()
+            except Exception:
+                self._semaphore.release()
+                return None
+        except Exception as ex:
+            print(ex)
+            return None
+
+    def return_connection(self, conn):
+        """ return a thrift connection to the pool.
+        Returns: None
+        """
+        if self._closed:
+            self._close_connection(conn)
+            return
+        self._connection_queue.put(conn)
+        self._semaphore.release()
+
+    def release_conn(self, conn):
+        """ call when the connect is no usable anymore
+        Returns: None
+        """
+        try:
+            self._close_connection(conn)
+        except Exception:
+            pass
+        if not self._closed:
+            self._semaphore.release()
 
     def _create_connection(self):
         transport = TSocket.TSocket(self._ip, self._port)
@@ -84,48 +122,10 @@ class ConnectionPool(object):
         try:
             conn._iprot.trans.close()
         except Exception:
-            logging.warning('warn: failed to close iprot trans on {}', conn)
+            print('WARNING: failed to close iprot trans on ', conn)
             pass
         try:
             conn._oprot.trans.close()
         except Exception:
-            logging.error('warn: failed to close oprot trans on {}', conn)
+            print('WARNING: failed to close oprot trans on ', conn)
             pass
-
-    def get_connection(self):
-        """ get a connection from the pool. This blocks until one is available.
-        """
-        self._semaphore.acquire()
-        if self._closed:
-            logging.exception('connection pool closed')
-            return None
-        try:
-            return self._connection_queue.get(block=False)
-        except self._QueueEmpty:
-            try:
-                return self._create_connection()
-            except Exception:
-                self._semaphore.release()
-                return None
-        except Exception as ex:
-            logging.exception(ex)
-            return None
-
-    def return_connection(self, conn):
-        """ return a thrift connection to the pool.
-        """
-        if self._closed:
-            self._close_connection(conn)
-            return
-        self._connection_queue.put(conn)
-        self._semaphore.release()
-
-    def release_conn(self, conn):
-        """ call when the connect is no usable anymore
-        """
-        try:
-            self._close_connection(conn)
-        except Exception:
-            pass
-        if not self._closed:
-            self._semaphore.release()

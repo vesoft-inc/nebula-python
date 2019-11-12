@@ -12,22 +12,19 @@ Nebula Client example.
 import sys
 import time
 import threading
-import logging
 import prettytable
 
-sys.path.insert(0, '../nebula/dependence')
-sys.path.insert(0, '../nebula/gen-py')
-sys.path.insert(0, '../nebula')
+from distutils.sysconfig import get_python_lib
+import platform
 
+# get the site-packages path
+python_version = platform.python_version()[0:3]
+lib_path = get_python_lib() + '/nebula_python-1.0.0-py' + python_version + '.egg/nebula'
+sys.path.insert(0, lib_path)
 
-from graph import ttypes
-from ConnectionPool import ConnectionPool
-from client import GraphClient, ExecutionException
-
-
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(name)s - %(thread) - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+from nebula.graph import ttypes
+from nebula.ConnectionPool import ConnectionPool
+from nebula.Client import GraphClient, ExecutionException, AuthException
 
 
 def print_value(column_names, rows):
@@ -37,7 +34,7 @@ def print_value(column_names, rows):
         value_list = []
         for col in row.columns:
             if col.getType() == ttypes.ColumnValue.__EMPTY__:
-                logging.exception('ERROR: type is empty')
+                print('ERROR: type is empty')
                 return
             if col.getType() == ttypes.ColumnValue.BOOL_VAL:
                 value_list.append(col.get_bool_val())
@@ -49,7 +46,7 @@ def print_value(column_names, rows):
                 value_list.append(col.get_id())
                 continue
             if col.getType() == ttypes.ColumnValue.STR:
-                value_list.append(col.get_str())
+                value_list.append(col.get_str().decode('utf-8'))
                 continue
             if col.getType() == ttypes.ColumnValue.DOUBLE_PRECISION:
                 value_list.append(col.get_double_precision())
@@ -57,16 +54,17 @@ def print_value(column_names, rows):
             if col.getType() == ttypes.ColumnValue.TIMESTAMP:
                 value_list.append(col.get_timestamp())
                 continue
-            logging.exception('ERROR: Type unsupported')
+            print('ERROR: Type unsupported')
             return
         output_table.add_row(value_list)
     print(output_table)
 
 
 def do_simple_execute(client, cmd):
+    print("do execute %s" %cmd)
     resp = client.execute(cmd)
     if resp.error_code != 0:
-        logging.error('Execute failed: %s, error msg: %s' % (cmd, resp.error_msg))
+        print('Execute failed: %s, error msg: %s' % (cmd, resp.error_msg))
         raise ExecutionException('Execute failed: %s, error msg: %s' % (cmd, resp.error_msg))
 
 
@@ -83,18 +81,17 @@ def main_test():
     client = None
     try:
         space_name = 'space_' + threading.current_thread().getName()
-        logging.info('thread name: %s, space_name : %s'
-                     % (threading.current_thread().getName(), space_name))
+        print('thread name: %s, space_name : %s' % 
+                (threading.current_thread().getName(), space_name))
         # Get one client
         client = GraphClient(connection_pool)
         auth_resp = client.authenticate('user', 'password')
         if auth_resp.error_code:
-            logging.error('Auth failed: %s' % auth_resp.error_msg)
-            exit(1)
+            raise AuthException("Auth failed")
 
-        query_resp = client.executeQuery('SHOW SPACES')
+        query_resp = client.execute_query('SHOW SPACES')
         if has_space(query_resp.rows, space_name):
-            logging.info('has %s, drop it' % space_name)
+            print('has %s, drop it' % space_name)
             do_simple_execute(client, 'DROP SPACE %s' % space_name)
 
         # Create space mySpace
@@ -102,6 +99,7 @@ def main_test():
                           % space_name)
 
         do_simple_execute(client, 'USE %s' % space_name)
+        time.sleep(1)
 
         # Create tag and edge
         do_simple_execute(client, 'CREATE TAG person(name string, age int); '
@@ -118,23 +116,21 @@ def main_test():
         do_simple_execute(client, 'INSERT EDGE like(likeness) VALUES 1->3:(70.0)')
 
         # Query data
-        query_resp = client.executeQuery('GO FROM 1 OVER like YIELD $$.person.name, '
-                                         '$$.person.age, like.likeness')
+        query_resp = client.execute_query('GO FROM 1 OVER like YIELD $$.person.name, '
+                                          '$$.person.age, like.likeness')
         if query_resp.error_code:
-            logging.error('Execute failed: %s' % query_resp.error_msg)
+            print('Execute failed: %s' % query_resp.error_msg)
             exit(1)
 
         # Print the result of query
         print(' \n====== The query result of thread[%s]======\n '
               % threading.current_thread().getName())
         print_value(query_resp.column_names, query_resp.rows)
-        client.signout()
+        client.sign_out()
     except Exception as x:
-        logging.exception(x)
+        print(x)
 
-        if not client:
-            client.signout()
-
+        client.sign_out()
         exit(1)
 
 
@@ -143,13 +139,13 @@ if __name__ == '__main__':
     g_ip = '127.0.0.1'
     g_port = 3699
 
-    logging.info('input argv num is %d' % len(sys.argv))
+    print('input argv num is %d' % len(sys.argv))
     if len(sys.argv) == 3:
-        logging.info('input argv num is 3')
+        print('input argv num is 3')
         g_ip = sys.argv[1]
-        logging.info('ip %s' %g_ip)
+        print('ip: %s' % g_ip)
         g_port = sys.argv[2]
-        logging.info('port %s' % g_port)
+        print('port: %s' % g_port)
 
     # init connection pool
     connection_pool = ConnectionPool(g_ip, g_port)
@@ -169,3 +165,6 @@ if __name__ == '__main__':
     thread2.join()
     thread3.join()
     thread4.join()
+
+    # close connect pool
+    connection_pool.close()

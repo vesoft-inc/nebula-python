@@ -6,19 +6,16 @@
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
 
-import logging
-
-
 class AuthException(Exception):
-    def __init__(message):
-        Exception.__init__(message)
-        message = message
+    def __init__(self, message):
+        Exception.__init__(self, message)
+        self.message = message
 
 
 class ExecutionException(Exception):
     def __init__(self, message):
-        Exception.__init__(message)
-        message = message
+        Exception.__init__(self, message)
+        self.message = message
 
 
 class SimpleResponse:
@@ -37,7 +34,7 @@ class GraphClient(object):
     def __init__(self, pool):
         """Initializer
         Arguments:
-            pool: the connection pool instance
+            - pool: the connection pool instance
         Returns: empty
         """
         self._pool = pool
@@ -47,8 +44,8 @@ class GraphClient(object):
     def authenticate(self, user, password):
         """authenticate to graph server
         Arguments:
-            user: the user name
-            password: the password of user
+            - user: the user name
+            - password: the password of user
         Returns:
             AuthResponse: the response of graph
             AuthResponse's attributes:
@@ -56,31 +53,37 @@ class GraphClient(object):
                 - session_id
                 - error_msg
         """
+        if self._client is None:
+            raise AuthException("No client")
+
         resp = self._client.authenticate(user, password)
         if resp.error_code:
             raise AuthException("Auth failed")
         else:
             self._session_id = resp.session_id
-            logging.info("client: %d authenticate succeed" % self._session_id)
+            print("client: %d authenticate succeed" % self._session_id)
         return resp
 
     def execute(self, statement):
         """execute statement to graph server
         Arguments:
-            statement: the statement
+            - statement: the statement
         Returns:
             SimpleResponse: the response of graph
             SimpleResponse's attributes:
                 - error_code
                 - error_msg
         """
+        if self._client is None:
+            raise ExecutionException("No client")
+
         resp = self._client.execute(self._session_id, statement)
         return SimpleResponse(resp.error_code, resp.error_msg)
 
-    def executeQuery(self, statement):
+    def execute_query(self, statement):
         """execute query statement to graph server
         Arguments:
-            statement: the statement
+            - statement: the statement
         Returns:
             ExecutionResponse: the response of graph
             ExecutionResponse's attributes:
@@ -91,13 +94,27 @@ class GraphClient(object):
                 - rows
                 - space_name
         """
+        if self._client is None:
+            raise ExecutionException("No client")
+
         resp = self._client.execute(self._session_id, statement)
         if resp.error_code:
             raise ExecutionException("Execute failed %s, error: %s" % (statement, resp.error_msg))
         else:
             return resp
 
-    def signout(self):
-        logging.info("client: %d signout" % self._session_id)
+    def sign_out(self):
+        """sign out: Users should call sign_out when catch the exception or exit
+        """
+        print("client: %d sign out" % self._session_id)
+        if self._client is None:
+            return
         self._client.signout(self._session_id)
         self._pool.return_connection(self._client)
+
+    def is_none(self):
+        """is_none: determine if the client creation was successful
+        Returns:
+            True or False
+        """
+        return self._client is None
