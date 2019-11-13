@@ -5,4 +5,4 @@
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
-__version__ = '1.0.0-beta'
+__all__ = ['Client', 'ConnectionPool']
