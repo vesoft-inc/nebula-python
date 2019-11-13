@@ -16,11 +16,11 @@ import os
 import time
 import threading
 
-sys.path.insert(0, '../nebula')
+sys.path.insert(0, '../')
 
 from graph import ttypes
-from ConnectionPool import ConnectionPool
-from Client import GraphClient, AuthException, ExecutionException
+from nebula.ConnectionPool import ConnectionPool
+from nebula.Client import GraphClient, AuthException, ExecutionException
 
 
 def get_port():

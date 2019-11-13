@@ -106,9 +106,10 @@ class GraphClient(object):
     def sign_out(self):
         """sign out: Users should call sign_out when catch the exception or exit
         """
-        print("client: %d sign out" % self._session_id)
         if self._client is None:
             return
+
+        print("client: %d sign out" % self._session_id)
         self._client.signout(self._session_id)
         self._pool.return_connection(self._client)
 
