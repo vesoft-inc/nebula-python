@@ -13,13 +13,13 @@ This repository provides Nebula client API in Python.
     |
     |-- common                        // the common data types
     |
-    |-- graph                         // date types and client interfaces interact with graphd
+    |-- graph                         // data types and client interfaces to interact with graphd
     |
-    |-- meta                          // date types and client interfaces interact with metad
+    |-- meta                          // data types and client interfaces to interact with metad
     |
-    |-- raftex                        // date types and client interfaces interact with raftex
+    |-- raftex                        // data types and client interfaces to interact with raftex
     |
-    |-- storage                       // date types and client interfaces interact with storaged
+    |-- storage                       // data types and client interfaces to interact with storaged
     |
     |__ thrift                        // the socket implementation code
     |
@@ -38,9 +38,9 @@ This repository provides Nebula client API in Python.
 
 ## How to get nebula-python
 
-### Option One
+### Option One: cloning from GitHub
 
-- Cloning from GitHub
+- Cloning
 
 ```bash
 git clone git@github.com:laura-ding/nebula-python.git
@@ -53,9 +53,7 @@ cd nebula-python
 python setup.py install
 ```
 
-### Option Two
-
-- Using pip
+### Option Two: using pip
 
 ```python
 pip install nebula-python
