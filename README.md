@@ -1,83 +1,85 @@
 # nebula-python
 
-Nebula client API in Python
+This repository provides Nebula client API in Python.
 
-## the directory structure
+## The directory structure
 
 ```text
 |--nebula-python
     |
     |-- nebula                        // client code
-    |   |-- Client.py                 // the interfaces to operate nebula 
-    |   |-- ConnectionPool.py         // manger all connection, user can change the connection nums and timeout
+    |   |-- Client.py                 // interfaces controlling nebula
+    |   |-- ConnectionPool.py         // the connection pool that manages all the connections, users can specify the connection numbers and timeout when creating it
     |
-    |-- common                        // the common types
+    |-- common                        // the common data types
     |
-    |-- graph                         // the types with graphd, and the client with graphd
+    |-- graph                         // data types and client interfaces to interact with graphd
     |
-    |-- meta                          // the types with metad, and the client with metad
+    |-- meta                          // data types and client interfaces to interact with metad
     |
-    |-- raftex                        // the types with raftex, and the client with raftex
+    |-- raftex                        // data types and client interfaces to interact with raftex
     |
-    |-- storage                       // the types with stroged, and the client with stroged
+    |-- storage                       // data types and client interfaces to interact with storaged
     |
-    |__ thrift                        // the thrift code, about the socket
-    |   
-    |-- examples               
-    |   |__ ClientExample.py          // the example
+    |__ thrift                        // the socket implementation code
+    |
+    |-- examples
+    |   |__ ClientExample.py          // the example code
     |
     |-- tests
-    |   |__ test_client.py            // the test file
+    |   |__ test_client.py            // the test code
     |
-    |-- setup.py                      // use to install or package
+    |-- setup.py                      // used to install or package
     |
-    |-- README.md                     // the introduce of nebula-python 
+    |-- README.md                     // the introduce of nebula-python
     |
     |__ LICENSES                      // license file
 ```
 
-## how to get the nebula-python
+## How to get nebula-python
 
-Method 1
-- get the nebula-python src from github
+### Option One: cloning from GitHub
+
+- Cloning
 
 ```bash
-git clone git@github.com:laura-ding/nebula-python.git
+git clone git@github.com:vesoft-inc/nebula-python.git
 cd nebula-python
 ```
-- install
+
+- Install
 
 ```python
 python setup.py install
 ```
 
-Method 2
-- get from pypi
+### Option Two: using pip
 
 ```python
 pip install nebula-python
 ```
 
-## how to use nebula-python in your code
-There are three major modules: Client.py, ConnectionPool.py, ttypes.py.
+## How to use nebula-python in your code
+
+There are three major modules:
 
 - ConnectionPool.py
 - Client.py
 - ttypes.py
 
-You'll use them to do things. Please see the sample code [example](https://github.com/vesoft-inc/nebula-python/tree/master/examples/ClientExample.py)
+Please refer to the [sample code](examples/ClientExample.py) on detail usage.
 
 - Steps to create a client
-    - Step1: create a connection pool
-    - Step2: create a client through the connection pool
-    - Step3: authenticate
-    - Step4: execute/execute_query
-    - Step5: return the client to pool and close pool
+  - Step1: create a connection pool
+  - Step2: create a client through the connection pool
+  - Step3: authenticate
+  - Step4: execute/execute_query
+  - Step5: return the client to pool and close pool
 
+## Install by pip
 
-## install by pip
 - django-import-export
 - future
 - six
 - httplib2
-- futures   # python2.x need
+- futures   # python2.x is needed
