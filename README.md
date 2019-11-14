@@ -51,7 +51,7 @@ cd nebula-python
 python setup.py install
 ```
 
-Method 2 
+Method 2
 - get from pypi
 
 ```python
@@ -74,10 +74,10 @@ You'll use them to do things. Please see the sample code [example](https://githu
     - Step4: execute/execute_query
     - Step5: return the client to pool and close pool
 
+
 ## install by pip
 - django-import-export
 - future
 - six
 - httplib2
-- gevent
 - futures   # python2.x need
