@@ -43,7 +43,7 @@ This repository provides Nebula client API in Python.
 - Cloning
 
 ```bash
-git clone git@github.com:laura-ding/nebula-python.git
+git clone git@github.com:vesoft-inc/nebula-python.git
 cd nebula-python
 ```
 
