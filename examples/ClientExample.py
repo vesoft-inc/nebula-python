@@ -14,15 +14,7 @@ import time
 import threading
 import prettytable
 
-from distutils.sysconfig import get_python_lib
-import platform
-
-# get the site-packages path
-python_version = platform.python_version()[0:3]
-lib_path = get_python_lib() + '/nebula_python-1.0.0-py' + python_version + '.egg/nebula'
-sys.path.insert(0, lib_path)
-
-from nebula.graph import ttypes
+from graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
 from nebula.Client import GraphClient, ExecutionException, AuthException
 

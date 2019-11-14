@@ -6,15 +6,22 @@ Nebula client API in Python
 
 ```text
 |--nebula-python
-    |-- nebula                        // the major code dir
+    |
+    |-- nebula                        // client code
     |   |-- Client.py                 // the interfaces to operate nebula 
     |   |-- ConnectionPool.py         // manger all connection, user can change the connection nums and timeout
-    |   |-- common                    // the common types
-    |   |-- graph                     // the types with graphd, and the client with graphd
-    |   |-- meta                      // the types with metad, and the client with metad
-    |   |-- raftex                    // the types with stroged, and the client with stroged
-    |   |-- storage                   // the types with stroged, and the client with stroged
-    |   |__ thrift                    // the thrift code, about the socket
+    |
+    |-- common                        // the common types
+    |
+    |-- graph                         // the types with graphd, and the client with graphd
+    |
+    |-- meta                          // the types with metad, and the client with metad
+    |
+    |-- raftex                        // the types with raftex, and the client with raftex
+    |
+    |-- storage                       // the types with stroged, and the client with stroged
+    |
+    |__ thrift                        // the thrift code, about the socket
     |   
     |-- examples               
     |   |__ ClientExample.py          // the example
@@ -44,7 +51,7 @@ cd nebula-python
 python setup.py install
 ```
 
-Method 2 
+Method 2
 - get from pypi
 
 ```python
@@ -67,10 +74,10 @@ You'll use them to do things. Please see the sample code [example](https://githu
     - Step4: execute/execute_query
     - Step5: return the client to pool and close pool
 
+
 ## install by pip
 - django-import-export
 - future
 - six
 - httplib2
 - futures   # python2.x need
-- gevent
