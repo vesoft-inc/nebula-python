@@ -109,7 +109,8 @@ class GraphClient(object):
         if self._client is None:
             return
 
-        print("client: %d sign out" % self._session_id)
+        if not self._session_id is None:
+            print("client: %d sign out" % self._session_id)
         self._client.signout(self._session_id)
         self._pool.return_connection(self._client)
 

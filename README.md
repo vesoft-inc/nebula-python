@@ -49,14 +49,32 @@ cd nebula-python
 
 - Install
 
+python2
+
 ```python
-python setup.py install
+sudo python setup.py install
 ```
+
+python3
+
+```python
+sudo python3 setup.py install
+```
+
+Note that when installing via python3, the error message msg `extras_require = {':python_version == "2.7"':['futures']}` will appear. There is no such package under python3, just ignore this error. 
+
+When your environment cannot access `pypi`, you need to manually install the following packages.
+
+- django-import-export
+- future
+- six
+- httplib2
+- futures   # python2.x is needed
 
 ### Option Two: using pip
 
 ```python
-pip install nebula-python
+sudo pip install nebula-python
 ```
 
 ## How to use nebula-python in your code
@@ -68,18 +86,15 @@ There are three major modules:
 - ttypes.py
 
 Please refer to the [sample code](examples/ClientExample.py) on detail usage.
+If you want to run the sample code, please install `prettytable` via pip.
 
 - Steps to create a client
   - Step1: create a connection pool
+    - The default connection number of the connection pool is **two**
+    - The default timeout of connection is **1000ms**
+    - When the created clients exceed the number of connections in the connection pool, the clients that exceed the number of connections will enter the wait state, waiting for the previous clients to release before continuing
   - Step2: create a client through the connection pool
   - Step3: authenticate
   - Step4: execute/execute_query
   - Step5: return the client to pool and close pool
 
-## Install by pip
-
-- django-import-export
-- future
-- six
-- httplib2
-- futures   # python2.x is needed
