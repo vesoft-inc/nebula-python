@@ -17,8 +17,6 @@ This repository provides Nebula client API in Python.
     |
     |-- meta                          // data types and client interfaces to interact with metad
     |
-    |-- raftex                        // data types and client interfaces to interact with raftex
-    |
     |-- storage                       // data types and client interfaces to interact with storaged
     |
     |__ thrift                        // the socket implementation code
