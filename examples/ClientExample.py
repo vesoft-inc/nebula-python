@@ -87,7 +87,7 @@ def main_test():
             do_simple_execute(client, 'DROP SPACE %s' % space_name)
 
         # Create space mySpace
-        do_simple_execute(client, 'CREATE SPACE %s(partition_num=1, replica_factor=1)'
+        do_simple_execute(client, 'CREATE SPACE %s'
                           % space_name)
 
         do_simple_execute(client, 'USE %s' % space_name)

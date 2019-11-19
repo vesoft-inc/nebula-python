@@ -105,7 +105,7 @@ def test_create_schema(get_client):
         assert resp.error_code == 0, resp.error_msg
         client.execute('DROP SPACE space1')
 
-        resp = client.execute('CREATE SPACE space1(partition_num=1, replica_factor=1)')
+        resp = client.execute('CREATE SPACE space1')
         assert resp.error_code == 0, resp.error_msg
 
         time.sleep(1)
@@ -129,7 +129,7 @@ def test_create_schema(get_client):
         assert len(resp.rows) == 1, resp.error_msg
         assert resp.rows[0].columns[1].get_str().decode('utf-8') == 'like', resp.error_msg
 
-        time.sleep(6)
+        time.sleep(10)
         client.sign_out()
 
     except Exception as ex:
@@ -226,7 +226,7 @@ def test_multi_thread():
                 raise AuthException('Auth failed')
 
             client.execute('DROP SPACE %s' % space_name)
-            resp = client.execute('CREATE SPACE %s(partition_num=1, replica_factor=1)' % space_name)
+            resp = client.execute('CREATE SPACE %s' % space_name)
             if resp.error_code != 0:
                 raise ExecutionException('CREATE SPACE failed')
 
