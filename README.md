@@ -1,5 +1,8 @@
 # nebula-python
 
+[![star this repo](http://githubbadges.com/star.svg?user=vesoft-inc&repo=nebula-python&style=default)](https://github.com/vesoft-inc/nebula-python)
+[![fork this repo](http://githubbadges.com/fork.svg?user=vesoft-inc&repo=nebula-python&style=default)](https://github.com/vesoft-inc/nebula-python/fork)
+
 This repository provides Nebula client API in Python.
 
 ## The directory structure
