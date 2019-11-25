@@ -134,20 +134,6 @@ class Iface:
     """
     pass
 
-  def addHosts(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def removeHosts(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
   def listHosts(self, req=None):
     """
     Parameters:
@@ -156,6 +142,13 @@ class Iface:
     pass
 
   def getPartsAlloc(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def listParts(self, req=None):
     """
     Parameters:
      - req
@@ -423,20 +416,6 @@ class ContextIface:
     """
     pass
 
-  def addHosts(self, handler_ctx, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def removeHosts(self, handler_ctx, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
   def listHosts(self, handler_ctx, req=None):
     """
     Parameters:
@@ -445,6 +424,13 @@ class ContextIface:
     pass
 
   def getPartsAlloc(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def listParts(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -3485,416 +3471,6 @@ def listEdges_result__setstate__(self, state):
 listEdges_result.__getstate__ = lambda self: self.__dict__.copy()
 listEdges_result.__setstate__ = listEdges_result__setstate__
 
-class addHosts_args:
-  """
-  Attributes:
-   - req
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      self.checkRequired()
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      self.checkRequired()
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.req = AddHostsReq()
-          self.req.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-    self.checkRequired()
-
-  def checkRequired(self):
-    return
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('addHosts_args')
-    if self.req != None:
-      oprot.writeFieldBegin('req', TType.STRUCT, 1)
-      self.req.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.req is not None:
-      value = pprint.pformat(self.req, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    req=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(addHosts_args)
-addHosts_args.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'req', [AddHostsReq, AddHostsReq.thrift_spec, False], None, 2, ), # 1
-)
-
-addHosts_args.thrift_struct_annotations = {
-}
-addHosts_args.thrift_field_annotations = {
-}
-
-def addHosts_args__init__(self, req=None,):
-  self.req = req
-
-addHosts_args.__init__ = addHosts_args__init__
-
-def addHosts_args__setstate__(self, state):
-  state.setdefault('req', None)
-  self.__dict__ = state
-
-addHosts_args.__getstate__ = lambda self: self.__dict__.copy()
-addHosts_args.__setstate__ = addHosts_args__setstate__
-
-class addHosts_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      self.checkRequired()
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      self.checkRequired()
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.STRUCT:
-          self.success = ExecResp()
-          self.success.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-    self.checkRequired()
-
-  def checkRequired(self):
-    return
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('addHosts_result')
-    if self.success != None:
-      oprot.writeFieldBegin('success', TType.STRUCT, 0)
-      self.success.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.success is not None:
-      value = pprint.pformat(self.success, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    success=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(addHosts_result)
-addHosts_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
-)
-
-addHosts_result.thrift_struct_annotations = {
-}
-addHosts_result.thrift_field_annotations = {
-}
-
-def addHosts_result__init__(self, success=None,):
-  self.success = success
-
-addHosts_result.__init__ = addHosts_result__init__
-
-def addHosts_result__setstate__(self, state):
-  state.setdefault('success', None)
-  self.__dict__ = state
-
-addHosts_result.__getstate__ = lambda self: self.__dict__.copy()
-addHosts_result.__setstate__ = addHosts_result__setstate__
-
-class removeHosts_args:
-  """
-  Attributes:
-   - req
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      self.checkRequired()
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      self.checkRequired()
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.req = RemoveHostsReq()
-          self.req.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-    self.checkRequired()
-
-  def checkRequired(self):
-    return
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('removeHosts_args')
-    if self.req != None:
-      oprot.writeFieldBegin('req', TType.STRUCT, 1)
-      self.req.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.req is not None:
-      value = pprint.pformat(self.req, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    req=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(removeHosts_args)
-removeHosts_args.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'req', [RemoveHostsReq, RemoveHostsReq.thrift_spec, False], None, 2, ), # 1
-)
-
-removeHosts_args.thrift_struct_annotations = {
-}
-removeHosts_args.thrift_field_annotations = {
-}
-
-def removeHosts_args__init__(self, req=None,):
-  self.req = req
-
-removeHosts_args.__init__ = removeHosts_args__init__
-
-def removeHosts_args__setstate__(self, state):
-  state.setdefault('req', None)
-  self.__dict__ = state
-
-removeHosts_args.__getstate__ = lambda self: self.__dict__.copy()
-removeHosts_args.__setstate__ = removeHosts_args__setstate__
-
-class removeHosts_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      self.checkRequired()
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      self.checkRequired()
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.STRUCT:
-          self.success = ExecResp()
-          self.success.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-    self.checkRequired()
-
-  def checkRequired(self):
-    return
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('removeHosts_result')
-    if self.success != None:
-      oprot.writeFieldBegin('success', TType.STRUCT, 0)
-      self.success.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.success is not None:
-      value = pprint.pformat(self.success, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    success=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(removeHosts_result)
-removeHosts_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
-)
-
-removeHosts_result.thrift_struct_annotations = {
-}
-removeHosts_result.thrift_field_annotations = {
-}
-
-def removeHosts_result__init__(self, success=None,):
-  self.success = success
-
-removeHosts_result.__init__ = removeHosts_result__init__
-
-def removeHosts_result__setstate__(self, state):
-  state.setdefault('success', None)
-  self.__dict__ = state
-
-removeHosts_result.__getstate__ = lambda self: self.__dict__.copy()
-removeHosts_result.__setstate__ = removeHosts_result__setstate__
-
 class listHosts_args:
   """
   Attributes:
@@ -4304,6 +3880,211 @@ def getPartsAlloc_result__setstate__(self, state):
 
 getPartsAlloc_result.__getstate__ = lambda self: self.__dict__.copy()
 getPartsAlloc_result.__setstate__ = getPartsAlloc_result__setstate__
+
+class listParts_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = ListPartsReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('listParts_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(listParts_args)
+listParts_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [ListPartsReq, ListPartsReq.thrift_spec, False], None, 2, ), # 1
+)
+
+listParts_args.thrift_struct_annotations = {
+}
+listParts_args.thrift_field_annotations = {
+}
+
+def listParts_args__init__(self, req=None,):
+  self.req = req
+
+listParts_args.__init__ = listParts_args__init__
+
+def listParts_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+listParts_args.__getstate__ = lambda self: self.__dict__.copy()
+listParts_args.__setstate__ = listParts_args__setstate__
+
+class listParts_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ListPartsResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('listParts_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(listParts_result)
+listParts_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ListPartsResp, ListPartsResp.thrift_spec, False], None, 2, ), # 0
+)
+
+listParts_result.thrift_struct_annotations = {
+}
+listParts_result.thrift_field_annotations = {
+}
+
+def listParts_result__init__(self, success=None,):
+  self.success = success
+
+listParts_result.__init__ = listParts_result__init__
+
+def listParts_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+listParts_result.__getstate__ = lambda self: self.__dict__.copy()
+listParts_result.__setstate__ = listParts_result__setstate__
 
 class multiPut_args:
   """
@@ -9455,66 +9236,6 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "listEdges failed: unknown result");
 
-  def addHosts(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    self.send_addHosts(req)
-    return self.recv_addHosts()
-
-  def send_addHosts(self, req=None):
-    self._oprot.writeMessageBegin('addHosts', TMessageType.CALL, self._seqid)
-    args = addHosts_args()
-    args.req = req
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_addHosts(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = addHosts_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success != None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "addHosts failed: unknown result");
-
-  def removeHosts(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    self.send_removeHosts(req)
-    return self.recv_removeHosts()
-
-  def send_removeHosts(self, req=None):
-    self._oprot.writeMessageBegin('removeHosts', TMessageType.CALL, self._seqid)
-    args = removeHosts_args()
-    args.req = req
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_removeHosts(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = removeHosts_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success != None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "removeHosts failed: unknown result");
-
   def listHosts(self, req=None):
     """
     Parameters:
@@ -9574,6 +9295,36 @@ class Client(Iface):
     if result.success != None:
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "getPartsAlloc failed: unknown result");
+
+  def listParts(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_listParts(req)
+    return self.recv_listParts()
+
+  def send_listParts(self, req=None):
+    self._oprot.writeMessageBegin('listParts', TMessageType.CALL, self._seqid)
+    args = listParts_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_listParts(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = listParts_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "listParts failed: unknown result");
 
   def multiPut(self, req=None):
     """
@@ -10302,14 +10053,12 @@ class Processor(Iface, TProcessor):
     self._priorityMap["getEdge"] = TPriority.NORMAL
     self._processMap["listEdges"] = Processor.process_listEdges
     self._priorityMap["listEdges"] = TPriority.NORMAL
-    self._processMap["addHosts"] = Processor.process_addHosts
-    self._priorityMap["addHosts"] = TPriority.NORMAL
-    self._processMap["removeHosts"] = Processor.process_removeHosts
-    self._priorityMap["removeHosts"] = TPriority.NORMAL
     self._processMap["listHosts"] = Processor.process_listHosts
     self._priorityMap["listHosts"] = TPriority.NORMAL
     self._processMap["getPartsAlloc"] = Processor.process_getPartsAlloc
     self._priorityMap["getPartsAlloc"] = TPriority.NORMAL
+    self._processMap["listParts"] = Processor.process_listParts
+    self._priorityMap["listParts"] = TPriority.NORMAL
     self._processMap["multiPut"] = Processor.process_multiPut
     self._priorityMap["multiPut"] = TPriority.NORMAL
     self._processMap["get"] = Processor.process_get
@@ -10519,28 +10268,6 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
-  @process_method(addHosts_args, oneway=False)
-  def process_addHosts(self, args, handler_ctx):
-    result = addHosts_result()
-    try:
-      result.success = self._handler.addHosts(args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'addHosts', ex)
-      result = Thrift.TApplicationException(message=str(ex))
-    return result
-
-  @process_method(removeHosts_args, oneway=False)
-  def process_removeHosts(self, args, handler_ctx):
-    result = removeHosts_result()
-    try:
-      result.success = self._handler.removeHosts(args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'removeHosts', ex)
-      result = Thrift.TApplicationException(message=str(ex))
-    return result
-
   @process_method(listHosts_args, oneway=False)
   def process_listHosts(self, args, handler_ctx):
     result = listHosts_result()
@@ -10560,6 +10287,17 @@ class Processor(Iface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'getPartsAlloc', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(listParts_args, oneway=False)
+  def process_listParts(self, args, handler_ctx):
+    result = listParts_result()
+    try:
+      result.success = self._handler.listParts(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'listParts', ex)
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
@@ -10854,14 +10592,12 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["getEdge"] = TPriority.NORMAL
     self._processMap["listEdges"] = ContextProcessor.process_listEdges
     self._priorityMap["listEdges"] = TPriority.NORMAL
-    self._processMap["addHosts"] = ContextProcessor.process_addHosts
-    self._priorityMap["addHosts"] = TPriority.NORMAL
-    self._processMap["removeHosts"] = ContextProcessor.process_removeHosts
-    self._priorityMap["removeHosts"] = TPriority.NORMAL
     self._processMap["listHosts"] = ContextProcessor.process_listHosts
     self._priorityMap["listHosts"] = TPriority.NORMAL
     self._processMap["getPartsAlloc"] = ContextProcessor.process_getPartsAlloc
     self._priorityMap["getPartsAlloc"] = TPriority.NORMAL
+    self._processMap["listParts"] = ContextProcessor.process_listParts
+    self._priorityMap["listParts"] = TPriority.NORMAL
     self._processMap["multiPut"] = ContextProcessor.process_multiPut
     self._priorityMap["multiPut"] = TPriority.NORMAL
     self._processMap["get"] = ContextProcessor.process_get
@@ -11071,28 +10807,6 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
-  @process_method(addHosts_args, oneway=False)
-  def process_addHosts(self, args, handler_ctx):
-    result = addHosts_result()
-    try:
-      result.success = self._handler.addHosts(handler_ctx, args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'addHosts', ex)
-      result = Thrift.TApplicationException(message=str(ex))
-    return result
-
-  @process_method(removeHosts_args, oneway=False)
-  def process_removeHosts(self, args, handler_ctx):
-    result = removeHosts_result()
-    try:
-      result.success = self._handler.removeHosts(handler_ctx, args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'removeHosts', ex)
-      result = Thrift.TApplicationException(message=str(ex))
-    return result
-
   @process_method(listHosts_args, oneway=False)
   def process_listHosts(self, args, handler_ctx):
     result = listHosts_result()
@@ -11112,6 +10826,17 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'getPartsAlloc', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(listParts_args, oneway=False)
+  def process_listParts(self, args, handler_ctx):
+    result = listParts_result()
+    try:
+      result.success = self._handler.listParts(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'listParts', ex)
       result = Thrift.TApplicationException(message=str(ex))
     return result
 

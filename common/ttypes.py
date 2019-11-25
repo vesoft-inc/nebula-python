@@ -39,11 +39,11 @@ class SupportedType:
   FLOAT = 4
   DOUBLE = 5
   STRING = 6
-  TIMESTAMP = 21
-  YEAR = 22
-  YEARMONTH = 23
-  DATE = 24
-  DATETIME = 25
+  TIMESTAMP = 7
+  YEAR = 8
+  YEARMONTH = 9
+  DATE = 10
+  DATETIME = 11
   PATH = 41
 
   _VALUES_TO_NAMES = {
@@ -54,11 +54,11 @@ class SupportedType:
     4: "FLOAT",
     5: "DOUBLE",
     6: "STRING",
-    21: "TIMESTAMP",
-    22: "YEAR",
-    23: "YEARMONTH",
-    24: "DATE",
-    25: "DATETIME",
+    7: "TIMESTAMP",
+    8: "YEAR",
+    9: "YEARMONTH",
+    10: "DATE",
+    11: "DATETIME",
     41: "PATH",
   }
 
@@ -70,11 +70,11 @@ class SupportedType:
     "FLOAT": 4,
     "DOUBLE": 5,
     "STRING": 6,
-    "TIMESTAMP": 21,
-    "YEAR": 22,
-    "YEARMONTH": 23,
-    "DATE": 24,
-    "DATETIME": 25,
+    "TIMESTAMP": 7,
+    "YEAR": 8,
+    "YEARMONTH": 9,
+    "DATE": 10,
+    "DATETIME": 11,
     "PATH": 41,
   }
 
