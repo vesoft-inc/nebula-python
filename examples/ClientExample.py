@@ -28,26 +28,21 @@ def print_value(column_names, rows):
             if col.getType() == ttypes.ColumnValue.__EMPTY__:
                 print('ERROR: type is empty')
                 return
-            if col.getType() == ttypes.ColumnValue.BOOL_VAL:
+            elif col.getType() == ttypes.ColumnValue.BOOL_VAL:
                 value_list.append(col.get_bool_val())
-                continue
-            if col.getType() == ttypes.ColumnValue.INTEGER:
+            elif col.getType() == ttypes.ColumnValue.INTEGER:
                 value_list.append(col.get_integer())
-                continue
-            if col.getType() == ttypes.ColumnValue.ID:
+            elif col.getType() == ttypes.ColumnValue.ID:
                 value_list.append(col.get_id())
-                continue
-            if col.getType() == ttypes.ColumnValue.STR:
+            elif col.getType() == ttypes.ColumnValue.STR:
                 value_list.append(col.get_str().decode('utf-8'))
-                continue
-            if col.getType() == ttypes.ColumnValue.DOUBLE_PRECISION:
+            elif col.getType() == ttypes.ColumnValue.DOUBLE_PRECISION:
                 value_list.append(col.get_double_precision())
-                continue
-            if col.getType() == ttypes.ColumnValue.TIMESTAMP:
+            elif col.getType() == ttypes.ColumnValue.TIMESTAMP:
                 value_list.append(col.get_timestamp())
-                continue
-            print('ERROR: Type unsupported')
-            return
+            else:
+                print('ERROR: Type unsupported')
+                return
         output_table.add_row(value_list)
     print(output_table)
 
