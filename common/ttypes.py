@@ -29,7 +29,7 @@ if not '__pypy__' in sys.builtin_module_names:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'SupportedType', 'ValueType', 'ColumnDef', 'SchemaProp', 'Schema', 'HostAddr', 'Pair', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'VertexID', 'IPv4', 'Port', 'SchemaVer', 'UserID', 'ClusterID']
+__all__ = ['UTF8STRINGS', 'SupportedType', 'ValueType', 'Value', 'ColumnDef', 'SchemaProp', 'Schema', 'HostAddr', 'Pair', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'VertexID', 'IPv4', 'Port', 'SchemaVer', 'UserID', 'ClusterID']
 
 class SupportedType:
   UNKNOWN = 0
@@ -187,11 +187,180 @@ class ValueType:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class Value(object):
+  """
+  Attributes:
+   - int_value
+   - bool_value
+   - double_value
+   - string_value
+  """
+
+  thrift_spec = None
+  __init__ = None
+
+  __EMPTY__ = 0
+  INT_VALUE = 1
+  BOOL_VALUE = 2
+  DOUBLE_VALUE = 3
+  STRING_VALUE = 4
+  
+  @staticmethod
+  def isUnion():
+    return True
+
+  def get_int_value(self):
+    assert self.field == 1
+    return self.value
+
+  def get_bool_value(self):
+    assert self.field == 2
+    return self.value
+
+  def get_double_value(self):
+    assert self.field == 3
+    return self.value
+
+  def get_string_value(self):
+    assert self.field == 4
+    return self.value
+
+  def set_int_value(self, value):
+    self.field = 1
+    self.value = value
+
+  def set_bool_value(self, value):
+    self.field = 2
+    self.value = value
+
+  def set_double_value(self, value):
+    self.field = 3
+    self.value = value
+
+  def set_string_value(self, value):
+    self.field = 4
+    self.value = value
+
+  def getType(self):
+    return self.field
+
+  def __repr__(self):
+    value = pprint.pformat(self.value)
+    member = ''
+    if self.field == 1:
+      padding = ' ' * 10
+      value = padding.join(value.splitlines(True))
+      member = '\n    %s=%s' % ('int_value', value)
+    if self.field == 2:
+      padding = ' ' * 11
+      value = padding.join(value.splitlines(True))
+      member = '\n    %s=%s' % ('bool_value', value)
+    if self.field == 3:
+      padding = ' ' * 13
+      value = padding.join(value.splitlines(True))
+      member = '\n    %s=%s' % ('double_value', value)
+    if self.field == 4:
+      padding = ' ' * 13
+      value = padding.join(value.splitlines(True))
+      member = '\n    %s=%s' % ('string_value', value)
+    return "%s(%s)" % (self.__class__.__name__, member)
+
+  def read(self, iprot):
+    self.field = 0
+    self.value = None
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+
+      if fid == 1:
+        if ftype == TType.I64:
+          int_value = iprot.readI64()
+          assert self.field == 0 and self.value is None
+          self.set_int_value(int_value)
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.BOOL:
+          bool_value = iprot.readBool()
+          assert self.field == 0 and self.value is None
+          self.set_bool_value(bool_value)
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.DOUBLE:
+          double_value = iprot.readDouble()
+          assert self.field == 0 and self.value is None
+          self.set_double_value(double_value)
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          string_value = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+          assert self.field == 0 and self.value is None
+          self.set_string_value(string_value)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeUnionBegin('Value')
+    if self.field == 1:
+      oprot.writeFieldBegin('int_value', TType.I64, 1)
+      int_value = self.value
+      oprot.writeI64(int_value)
+      oprot.writeFieldEnd()
+    if self.field == 2:
+      oprot.writeFieldBegin('bool_value', TType.BOOL, 2)
+      bool_value = self.value
+      oprot.writeBool(bool_value)
+      oprot.writeFieldEnd()
+    if self.field == 3:
+      oprot.writeFieldBegin('double_value', TType.DOUBLE, 3)
+      double_value = self.value
+      oprot.writeDouble(double_value)
+      oprot.writeFieldEnd()
+    if self.field == 4:
+      oprot.writeFieldBegin('string_value', TType.STRING, 4)
+      string_value = self.value
+      oprot.writeString(string_value.encode('utf-8')) if UTF8STRINGS and not isinstance(string_value, bytes) else oprot.writeString(string_value)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeUnionEnd()
+  
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
 class ColumnDef:
   """
   Attributes:
    - name
    - type
+   - default_value
   """
 
   thrift_spec = None
@@ -227,6 +396,12 @@ class ColumnDef:
           self.type.read(iprot)
         else:
           iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRUCT:
+          self.default_value = Value()
+          self.default_value.read(iprot)
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -258,6 +433,10 @@ class ColumnDef:
       oprot.writeFieldBegin('type', TType.STRUCT, 2)
       self.type.write(oprot)
       oprot.writeFieldEnd()
+    if self.default_value != None:
+      oprot.writeFieldBegin('default_value', TType.STRUCT, 3)
+      self.default_value.write(oprot)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -272,6 +451,10 @@ class ColumnDef:
       value = pprint.pformat(self.type, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    type=%s' % (value))
+    if self.default_value is not None:
+      value = pprint.pformat(self.default_value, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    default_value=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -722,11 +905,48 @@ def ValueType__setstate__(self, state):
 ValueType.__getstate__ = lambda self: self.__dict__.copy()
 ValueType.__setstate__ = ValueType__setstate__
 
+all_structs.append(Value)
+Value.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'int_value', None, None, 2, ), # 1
+  (2, TType.BOOL, 'bool_value', None, None, 2, ), # 2
+  (3, TType.DOUBLE, 'double_value', None, None, 2, ), # 3
+  (4, TType.STRING, 'string_value', True, None, 2, ), # 4
+)
+
+Value.thrift_struct_annotations = {
+}
+Value.thrift_field_annotations = {
+}
+
+def Value__init__(self, int_value=None, bool_value=None, double_value=None, string_value=None,):
+  self.field = 0
+  self.value = None
+  if int_value is not None:
+    assert self.field == 0 and self.value is None
+    self.field = 1
+    self.value = int_value
+  if bool_value is not None:
+    assert self.field == 0 and self.value is None
+    self.field = 2
+    self.value = bool_value
+  if double_value is not None:
+    assert self.field == 0 and self.value is None
+    self.field = 3
+    self.value = double_value
+  if string_value is not None:
+    assert self.field == 0 and self.value is None
+    self.field = 4
+    self.value = string_value
+
+Value.__init__ = Value__init__
+
 all_structs.append(ColumnDef)
 ColumnDef.thrift_spec = (
   None, # 0
   (1, TType.STRING, 'name', True, None, 0, ), # 1
   (2, TType.STRUCT, 'type', [ValueType, ValueType.thrift_spec, False], None, 0, ), # 2
+  (3, TType.STRUCT, 'default_value', [Value, Value.thrift_spec, True], None, 1, ), # 3
 )
 
 ColumnDef.thrift_struct_annotations = {
@@ -734,15 +954,17 @@ ColumnDef.thrift_struct_annotations = {
 ColumnDef.thrift_field_annotations = {
 }
 
-def ColumnDef__init__(self, name=None, type=None,):
+def ColumnDef__init__(self, name=None, type=None, default_value=None,):
   self.name = name
   self.type = type
+  self.default_value = default_value
 
 ColumnDef.__init__ = ColumnDef__init__
 
 def ColumnDef__setstate__(self, state):
   state.setdefault('name', None)
   state.setdefault('type', None)
+  state.setdefault('default_value', None)
   self.__dict__ = state
 
 ColumnDef.__getstate__ = lambda self: self.__dict__.copy()
