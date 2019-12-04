@@ -99,8 +99,10 @@ def main_test():
         do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES 1:(\'Bob\', 10)')
         do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES 2:(\'Lily\', 9)')
         do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES 3:(\'Tom\', 10)')
+        do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES 4:(\'Jerry\', 13);INSERT VERTEX person(name, age) VALUES 5:(\'John\', 11)')
         do_simple_execute(client, 'INSERT EDGE like(likeness) VALUES 1->2:(80.0)')
         do_simple_execute(client, 'INSERT EDGE like(likeness) VALUES 1->3:(70.0)')
+        do_simple_execute(client, 'INSERT EDGE like(likeness) VALUES 2->4:(84.0), 3->5:(68.3), 1->5:(97.2)')
 
         # Query data
         query_resp = client.execute_query('GO FROM 1 OVER like YIELD $$.person.name, '

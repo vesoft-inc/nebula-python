@@ -89,7 +89,7 @@ There are three major modules:
 Please refer to the [sample code](examples/ClientExample.py) on detail usage.
 If you want to run the sample code, please install `prettytable` via pip.
 
-- Steps to create a client
+### Steps to create a client
   - Step1: create a connection pool
     - The default connection number of the connection pool is **two**
     - The default timeout of connection is **1000ms**
