@@ -18,7 +18,7 @@ setup(
     install_requires=['httplib2',
                       'future',
                       'six',
-                      'futures'],
+                      'futures; python_version == "2.7"'],
     packages=find_packages(),
     platforms=["2.7, 3.5, 3.7"],
     package_dir={'nebula': 'nebula',
