@@ -113,6 +113,20 @@ class Iface:
     """
     pass
 
+  def scanEdge(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def scanVertex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def transLeader(self, req=None):
     """
     Parameters:
@@ -155,7 +169,35 @@ class Iface:
     """
     pass
 
+  def checkPeers(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def getLeaderPart(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def createCheckpoint(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def dropCheckpoint(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def blockingWrites(self, req=None):
     """
     Parameters:
      - req
@@ -276,6 +318,20 @@ class ContextIface:
     """
     pass
 
+  def scanEdge(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def scanVertex(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def transLeader(self, handler_ctx, req=None):
     """
     Parameters:
@@ -318,7 +374,35 @@ class ContextIface:
     """
     pass
 
+  def checkPeers(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def getLeaderPart(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def createCheckpoint(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def dropCheckpoint(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def blockingWrites(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -2618,6 +2702,416 @@ def updateEdge_result__setstate__(self, state):
 updateEdge_result.__getstate__ = lambda self: self.__dict__.copy()
 updateEdge_result.__setstate__ = updateEdge_result__setstate__
 
+class scanEdge_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = ScanEdgeRequest()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('scanEdge_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(scanEdge_args)
+scanEdge_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [ScanEdgeRequest, ScanEdgeRequest.thrift_spec, False], None, 2, ), # 1
+)
+
+scanEdge_args.thrift_struct_annotations = {
+}
+scanEdge_args.thrift_field_annotations = {
+}
+
+def scanEdge_args__init__(self, req=None,):
+  self.req = req
+
+scanEdge_args.__init__ = scanEdge_args__init__
+
+def scanEdge_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+scanEdge_args.__getstate__ = lambda self: self.__dict__.copy()
+scanEdge_args.__setstate__ = scanEdge_args__setstate__
+
+class scanEdge_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ScanEdgeResponse()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('scanEdge_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(scanEdge_result)
+scanEdge_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ScanEdgeResponse, ScanEdgeResponse.thrift_spec, False], None, 2, ), # 0
+)
+
+scanEdge_result.thrift_struct_annotations = {
+}
+scanEdge_result.thrift_field_annotations = {
+}
+
+def scanEdge_result__init__(self, success=None,):
+  self.success = success
+
+scanEdge_result.__init__ = scanEdge_result__init__
+
+def scanEdge_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+scanEdge_result.__getstate__ = lambda self: self.__dict__.copy()
+scanEdge_result.__setstate__ = scanEdge_result__setstate__
+
+class scanVertex_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = ScanVertexRequest()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('scanVertex_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(scanVertex_args)
+scanVertex_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [ScanVertexRequest, ScanVertexRequest.thrift_spec, False], None, 2, ), # 1
+)
+
+scanVertex_args.thrift_struct_annotations = {
+}
+scanVertex_args.thrift_field_annotations = {
+}
+
+def scanVertex_args__init__(self, req=None,):
+  self.req = req
+
+scanVertex_args.__init__ = scanVertex_args__init__
+
+def scanVertex_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+scanVertex_args.__getstate__ = lambda self: self.__dict__.copy()
+scanVertex_args.__setstate__ = scanVertex_args__setstate__
+
+class scanVertex_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ScanVertexResponse()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('scanVertex_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(scanVertex_result)
+scanVertex_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ScanVertexResponse, ScanVertexResponse.thrift_spec, False], None, 2, ), # 0
+)
+
+scanVertex_result.thrift_struct_annotations = {
+}
+scanVertex_result.thrift_field_annotations = {
+}
+
+def scanVertex_result__init__(self, success=None,):
+  self.success = success
+
+scanVertex_result.__init__ = scanVertex_result__init__
+
+def scanVertex_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+scanVertex_result.__getstate__ = lambda self: self.__dict__.copy()
+scanVertex_result.__setstate__ = scanVertex_result__setstate__
+
 class transLeader_args:
   """
   Attributes:
@@ -3848,6 +4342,211 @@ def memberChange_result__setstate__(self, state):
 memberChange_result.__getstate__ = lambda self: self.__dict__.copy()
 memberChange_result.__setstate__ = memberChange_result__setstate__
 
+class checkPeers_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = CheckPeersReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('checkPeers_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(checkPeers_args)
+checkPeers_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [CheckPeersReq, CheckPeersReq.thrift_spec, False], None, 2, ), # 1
+)
+
+checkPeers_args.thrift_struct_annotations = {
+}
+checkPeers_args.thrift_field_annotations = {
+}
+
+def checkPeers_args__init__(self, req=None,):
+  self.req = req
+
+checkPeers_args.__init__ = checkPeers_args__init__
+
+def checkPeers_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+checkPeers_args.__getstate__ = lambda self: self.__dict__.copy()
+checkPeers_args.__setstate__ = checkPeers_args__setstate__
+
+class checkPeers_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = AdminExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('checkPeers_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(checkPeers_result)
+checkPeers_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [AdminExecResp, AdminExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+checkPeers_result.thrift_struct_annotations = {
+}
+checkPeers_result.thrift_field_annotations = {
+}
+
+def checkPeers_result__init__(self, success=None,):
+  self.success = success
+
+checkPeers_result.__init__ = checkPeers_result__init__
+
+def checkPeers_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+checkPeers_result.__getstate__ = lambda self: self.__dict__.copy()
+checkPeers_result.__setstate__ = checkPeers_result__setstate__
+
 class getLeaderPart_args:
   """
   Attributes:
@@ -4052,6 +4751,621 @@ def getLeaderPart_result__setstate__(self, state):
 
 getLeaderPart_result.__getstate__ = lambda self: self.__dict__.copy()
 getLeaderPart_result.__setstate__ = getLeaderPart_result__setstate__
+
+class createCheckpoint_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = CreateCPRequest()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('createCheckpoint_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(createCheckpoint_args)
+createCheckpoint_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [CreateCPRequest, CreateCPRequest.thrift_spec, False], None, 2, ), # 1
+)
+
+createCheckpoint_args.thrift_struct_annotations = {
+}
+createCheckpoint_args.thrift_field_annotations = {
+}
+
+def createCheckpoint_args__init__(self, req=None,):
+  self.req = req
+
+createCheckpoint_args.__init__ = createCheckpoint_args__init__
+
+def createCheckpoint_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+createCheckpoint_args.__getstate__ = lambda self: self.__dict__.copy()
+createCheckpoint_args.__setstate__ = createCheckpoint_args__setstate__
+
+class createCheckpoint_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = AdminExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('createCheckpoint_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(createCheckpoint_result)
+createCheckpoint_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [AdminExecResp, AdminExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+createCheckpoint_result.thrift_struct_annotations = {
+}
+createCheckpoint_result.thrift_field_annotations = {
+}
+
+def createCheckpoint_result__init__(self, success=None,):
+  self.success = success
+
+createCheckpoint_result.__init__ = createCheckpoint_result__init__
+
+def createCheckpoint_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+createCheckpoint_result.__getstate__ = lambda self: self.__dict__.copy()
+createCheckpoint_result.__setstate__ = createCheckpoint_result__setstate__
+
+class dropCheckpoint_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = DropCPRequest()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('dropCheckpoint_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(dropCheckpoint_args)
+dropCheckpoint_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [DropCPRequest, DropCPRequest.thrift_spec, False], None, 2, ), # 1
+)
+
+dropCheckpoint_args.thrift_struct_annotations = {
+}
+dropCheckpoint_args.thrift_field_annotations = {
+}
+
+def dropCheckpoint_args__init__(self, req=None,):
+  self.req = req
+
+dropCheckpoint_args.__init__ = dropCheckpoint_args__init__
+
+def dropCheckpoint_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+dropCheckpoint_args.__getstate__ = lambda self: self.__dict__.copy()
+dropCheckpoint_args.__setstate__ = dropCheckpoint_args__setstate__
+
+class dropCheckpoint_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = AdminExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('dropCheckpoint_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(dropCheckpoint_result)
+dropCheckpoint_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [AdminExecResp, AdminExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+dropCheckpoint_result.thrift_struct_annotations = {
+}
+dropCheckpoint_result.thrift_field_annotations = {
+}
+
+def dropCheckpoint_result__init__(self, success=None,):
+  self.success = success
+
+dropCheckpoint_result.__init__ = dropCheckpoint_result__init__
+
+def dropCheckpoint_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+dropCheckpoint_result.__getstate__ = lambda self: self.__dict__.copy()
+dropCheckpoint_result.__setstate__ = dropCheckpoint_result__setstate__
+
+class blockingWrites_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = BlockingSignRequest()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('blockingWrites_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(blockingWrites_args)
+blockingWrites_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [BlockingSignRequest, BlockingSignRequest.thrift_spec, False], None, 2, ), # 1
+)
+
+blockingWrites_args.thrift_struct_annotations = {
+}
+blockingWrites_args.thrift_field_annotations = {
+}
+
+def blockingWrites_args__init__(self, req=None,):
+  self.req = req
+
+blockingWrites_args.__init__ = blockingWrites_args__init__
+
+def blockingWrites_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+blockingWrites_args.__getstate__ = lambda self: self.__dict__.copy()
+blockingWrites_args.__setstate__ = blockingWrites_args__setstate__
+
+class blockingWrites_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = AdminExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('blockingWrites_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(blockingWrites_result)
+blockingWrites_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [AdminExecResp, AdminExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+blockingWrites_result.thrift_struct_annotations = {
+}
+blockingWrites_result.thrift_field_annotations = {
+}
+
+def blockingWrites_result__init__(self, success=None,):
+  self.success = success
+
+blockingWrites_result.__init__ = blockingWrites_result__init__
+
+def blockingWrites_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+blockingWrites_result.__getstate__ = lambda self: self.__dict__.copy()
+blockingWrites_result.__setstate__ = blockingWrites_result__setstate__
 
 class put_args:
   """
@@ -5423,6 +6737,66 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "updateEdge failed: unknown result");
 
+  def scanEdge(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_scanEdge(req)
+    return self.recv_scanEdge()
+
+  def send_scanEdge(self, req=None):
+    self._oprot.writeMessageBegin('scanEdge', TMessageType.CALL, self._seqid)
+    args = scanEdge_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_scanEdge(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = scanEdge_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "scanEdge failed: unknown result");
+
+  def scanVertex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_scanVertex(req)
+    return self.recv_scanVertex()
+
+  def send_scanVertex(self, req=None):
+    self._oprot.writeMessageBegin('scanVertex', TMessageType.CALL, self._seqid)
+    args = scanVertex_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_scanVertex(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = scanVertex_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "scanVertex failed: unknown result");
+
   def transLeader(self, req=None):
     """
     Parameters:
@@ -5603,6 +6977,36 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "memberChange failed: unknown result");
 
+  def checkPeers(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_checkPeers(req)
+    return self.recv_checkPeers()
+
+  def send_checkPeers(self, req=None):
+    self._oprot.writeMessageBegin('checkPeers', TMessageType.CALL, self._seqid)
+    args = checkPeers_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_checkPeers(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = checkPeers_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "checkPeers failed: unknown result");
+
   def getLeaderPart(self, req=None):
     """
     Parameters:
@@ -5632,6 +7036,96 @@ class Client(Iface):
     if result.success != None:
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "getLeaderPart failed: unknown result");
+
+  def createCheckpoint(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_createCheckpoint(req)
+    return self.recv_createCheckpoint()
+
+  def send_createCheckpoint(self, req=None):
+    self._oprot.writeMessageBegin('createCheckpoint', TMessageType.CALL, self._seqid)
+    args = createCheckpoint_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_createCheckpoint(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = createCheckpoint_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "createCheckpoint failed: unknown result");
+
+  def dropCheckpoint(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_dropCheckpoint(req)
+    return self.recv_dropCheckpoint()
+
+  def send_dropCheckpoint(self, req=None):
+    self._oprot.writeMessageBegin('dropCheckpoint', TMessageType.CALL, self._seqid)
+    args = dropCheckpoint_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_dropCheckpoint(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = dropCheckpoint_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "dropCheckpoint failed: unknown result");
+
+  def blockingWrites(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_blockingWrites(req)
+    return self.recv_blockingWrites()
+
+  def send_blockingWrites(self, req=None):
+    self._oprot.writeMessageBegin('blockingWrites', TMessageType.CALL, self._seqid)
+    args = blockingWrites_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_blockingWrites(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = blockingWrites_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "blockingWrites failed: unknown result");
 
   def put(self, req=None):
     """
@@ -5814,6 +7308,10 @@ class Processor(Iface, TProcessor):
     self._priorityMap["updateVertex"] = TPriority.NORMAL
     self._processMap["updateEdge"] = Processor.process_updateEdge
     self._priorityMap["updateEdge"] = TPriority.NORMAL
+    self._processMap["scanEdge"] = Processor.process_scanEdge
+    self._priorityMap["scanEdge"] = TPriority.NORMAL
+    self._processMap["scanVertex"] = Processor.process_scanVertex
+    self._priorityMap["scanVertex"] = TPriority.NORMAL
     self._processMap["transLeader"] = Processor.process_transLeader
     self._priorityMap["transLeader"] = TPriority.NORMAL
     self._processMap["addPart"] = Processor.process_addPart
@@ -5826,8 +7324,16 @@ class Processor(Iface, TProcessor):
     self._priorityMap["removePart"] = TPriority.NORMAL
     self._processMap["memberChange"] = Processor.process_memberChange
     self._priorityMap["memberChange"] = TPriority.NORMAL
+    self._processMap["checkPeers"] = Processor.process_checkPeers
+    self._priorityMap["checkPeers"] = TPriority.NORMAL
     self._processMap["getLeaderPart"] = Processor.process_getLeaderPart
     self._priorityMap["getLeaderPart"] = TPriority.NORMAL
+    self._processMap["createCheckpoint"] = Processor.process_createCheckpoint
+    self._priorityMap["createCheckpoint"] = TPriority.NORMAL
+    self._processMap["dropCheckpoint"] = Processor.process_dropCheckpoint
+    self._priorityMap["dropCheckpoint"] = TPriority.NORMAL
+    self._processMap["blockingWrites"] = Processor.process_blockingWrites
+    self._priorityMap["blockingWrites"] = TPriority.NORMAL
     self._processMap["put"] = Processor.process_put
     self._priorityMap["put"] = TPriority.NORMAL
     self._processMap["get"] = Processor.process_get
@@ -5968,6 +7474,28 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
+  @process_method(scanEdge_args, oneway=False)
+  def process_scanEdge(self, args, handler_ctx):
+    result = scanEdge_result()
+    try:
+      result.success = self._handler.scanEdge(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'scanEdge', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(scanVertex_args, oneway=False)
+  def process_scanVertex(self, args, handler_ctx):
+    result = scanVertex_result()
+    try:
+      result.success = self._handler.scanVertex(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'scanVertex', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
   @process_method(transLeader_args, oneway=False)
   def process_transLeader(self, args, handler_ctx):
     result = transLeader_result()
@@ -6034,6 +7562,17 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
+  @process_method(checkPeers_args, oneway=False)
+  def process_checkPeers(self, args, handler_ctx):
+    result = checkPeers_result()
+    try:
+      result.success = self._handler.checkPeers(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'checkPeers', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
   @process_method(getLeaderPart_args, oneway=False)
   def process_getLeaderPart(self, args, handler_ctx):
     result = getLeaderPart_result()
@@ -6042,6 +7581,39 @@ class Processor(Iface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'getLeaderPart', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(createCheckpoint_args, oneway=False)
+  def process_createCheckpoint(self, args, handler_ctx):
+    result = createCheckpoint_result()
+    try:
+      result.success = self._handler.createCheckpoint(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'createCheckpoint', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(dropCheckpoint_args, oneway=False)
+  def process_dropCheckpoint(self, args, handler_ctx):
+    result = dropCheckpoint_result()
+    try:
+      result.success = self._handler.dropCheckpoint(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'dropCheckpoint', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(blockingWrites_args, oneway=False)
+  def process_blockingWrites(self, args, handler_ctx):
+    result = blockingWrites_result()
+    try:
+      result.success = self._handler.blockingWrites(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'blockingWrites', ex)
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
@@ -6132,6 +7704,10 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["updateVertex"] = TPriority.NORMAL
     self._processMap["updateEdge"] = ContextProcessor.process_updateEdge
     self._priorityMap["updateEdge"] = TPriority.NORMAL
+    self._processMap["scanEdge"] = ContextProcessor.process_scanEdge
+    self._priorityMap["scanEdge"] = TPriority.NORMAL
+    self._processMap["scanVertex"] = ContextProcessor.process_scanVertex
+    self._priorityMap["scanVertex"] = TPriority.NORMAL
     self._processMap["transLeader"] = ContextProcessor.process_transLeader
     self._priorityMap["transLeader"] = TPriority.NORMAL
     self._processMap["addPart"] = ContextProcessor.process_addPart
@@ -6144,8 +7720,16 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["removePart"] = TPriority.NORMAL
     self._processMap["memberChange"] = ContextProcessor.process_memberChange
     self._priorityMap["memberChange"] = TPriority.NORMAL
+    self._processMap["checkPeers"] = ContextProcessor.process_checkPeers
+    self._priorityMap["checkPeers"] = TPriority.NORMAL
     self._processMap["getLeaderPart"] = ContextProcessor.process_getLeaderPart
     self._priorityMap["getLeaderPart"] = TPriority.NORMAL
+    self._processMap["createCheckpoint"] = ContextProcessor.process_createCheckpoint
+    self._priorityMap["createCheckpoint"] = TPriority.NORMAL
+    self._processMap["dropCheckpoint"] = ContextProcessor.process_dropCheckpoint
+    self._priorityMap["dropCheckpoint"] = TPriority.NORMAL
+    self._processMap["blockingWrites"] = ContextProcessor.process_blockingWrites
+    self._priorityMap["blockingWrites"] = TPriority.NORMAL
     self._processMap["put"] = ContextProcessor.process_put
     self._priorityMap["put"] = TPriority.NORMAL
     self._processMap["get"] = ContextProcessor.process_get
@@ -6286,6 +7870,28 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
+  @process_method(scanEdge_args, oneway=False)
+  def process_scanEdge(self, args, handler_ctx):
+    result = scanEdge_result()
+    try:
+      result.success = self._handler.scanEdge(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'scanEdge', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(scanVertex_args, oneway=False)
+  def process_scanVertex(self, args, handler_ctx):
+    result = scanVertex_result()
+    try:
+      result.success = self._handler.scanVertex(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'scanVertex', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
   @process_method(transLeader_args, oneway=False)
   def process_transLeader(self, args, handler_ctx):
     result = transLeader_result()
@@ -6352,6 +7958,17 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
+  @process_method(checkPeers_args, oneway=False)
+  def process_checkPeers(self, args, handler_ctx):
+    result = checkPeers_result()
+    try:
+      result.success = self._handler.checkPeers(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'checkPeers', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
   @process_method(getLeaderPart_args, oneway=False)
   def process_getLeaderPart(self, args, handler_ctx):
     result = getLeaderPart_result()
@@ -6360,6 +7977,39 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'getLeaderPart', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(createCheckpoint_args, oneway=False)
+  def process_createCheckpoint(self, args, handler_ctx):
+    result = createCheckpoint_result()
+    try:
+      result.success = self._handler.createCheckpoint(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'createCheckpoint', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(dropCheckpoint_args, oneway=False)
+  def process_dropCheckpoint(self, args, handler_ctx):
+    result = dropCheckpoint_result()
+    try:
+      result.success = self._handler.dropCheckpoint(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'dropCheckpoint', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(blockingWrites_args, oneway=False)
+  def process_blockingWrites(self, args, handler_ctx):
+    result = blockingWrites_result()
+    try:
+      result.success = self._handler.blockingWrites(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'blockingWrites', ex)
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
