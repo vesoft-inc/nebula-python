@@ -65,6 +65,14 @@ FUNCTIONS = {
     'remove': Function('remove', 'MetaService', 'ExecResp', [('RemoveReq', 'req', 'RemoveReq')]),
     'removeRange': Function('removeRange', 'MetaService', 'ExecResp', [('RemoveRangeReq', 'req', 'RemoveRangeReq')]),
     'scan': Function('scan', 'MetaService', 'ScanResp', [('ScanReq', 'req', 'ScanReq')]),
+    'createTagIndex': Function('createTagIndex', 'MetaService', 'ExecResp', [('CreateTagIndexReq', 'req', 'CreateTagIndexReq')]),
+    'dropTagIndex': Function('dropTagIndex', 'MetaService', 'ExecResp', [('DropTagIndexReq', 'req', 'DropTagIndexReq')]),
+    'getTagIndex': Function('getTagIndex', 'MetaService', 'GetTagIndexResp', [('GetTagIndexReq', 'req', 'GetTagIndexReq')]),
+    'listTagIndexes': Function('listTagIndexes', 'MetaService', 'ListTagIndexesResp', [('ListTagIndexesReq', 'req', 'ListTagIndexesReq')]),
+    'createEdgeIndex': Function('createEdgeIndex', 'MetaService', 'ExecResp', [('CreateEdgeIndexReq', 'req', 'CreateEdgeIndexReq')]),
+    'dropEdgeIndex': Function('dropEdgeIndex', 'MetaService', 'ExecResp', [('DropEdgeIndexReq', 'req', 'DropEdgeIndexReq')]),
+    'getEdgeIndex': Function('getEdgeIndex', 'MetaService', 'GetEdgeIndexResp', [('GetEdgeIndexReq', 'req', 'GetEdgeIndexReq')]),
+    'listEdgeIndexes': Function('listEdgeIndexes', 'MetaService', 'ListEdgeIndexesResp', [('ListEdgeIndexesReq', 'req', 'ListEdgeIndexesReq')]),
     'createUser': Function('createUser', 'MetaService', 'ExecResp', [('CreateUserReq', 'req', 'CreateUserReq')]),
     'dropUser': Function('dropUser', 'MetaService', 'ExecResp', [('DropUserReq', 'req', 'DropUserReq')]),
     'alterUser': Function('alterUser', 'MetaService', 'ExecResp', [('AlterUserReq', 'req', 'AlterUserReq')]),
@@ -82,6 +90,9 @@ FUNCTIONS = {
     'getConfig': Function('getConfig', 'MetaService', 'GetConfigResp', [('GetConfigReq', 'req', 'GetConfigReq')]),
     'setConfig': Function('setConfig', 'MetaService', 'ExecResp', [('SetConfigReq', 'req', 'SetConfigReq')]),
     'listConfigs': Function('listConfigs', 'MetaService', 'ListConfigsResp', [('ListConfigsReq', 'req', 'ListConfigsReq')]),
+    'createSnapshot': Function('createSnapshot', 'MetaService', 'ExecResp', [('CreateSnapshotReq', 'req', 'CreateSnapshotReq')]),
+    'dropSnapshot': Function('dropSnapshot', 'MetaService', 'ExecResp', [('DropSnapshotReq', 'req', 'DropSnapshotReq')]),
+    'listSnapshots': Function('listSnapshots', 'MetaService', 'ListSnapshotsResp', [('ListSnapshotsReq', 'req', 'ListSnapshotsReq')]),
 }
 
 SERVICE_NAMES = ['MetaService', ]
