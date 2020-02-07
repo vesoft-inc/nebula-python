@@ -16,7 +16,8 @@ import prettytable
 
 from graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
-from nebula.Client import GraphClient, ExecutionException, AuthException
+from nebula.Client import GraphClient
+from nebula.Common import *
 
 
 def print_value(column_names, rows):
