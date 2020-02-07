@@ -6,27 +6,7 @@
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
 
-class AuthException(Exception):
-    def __init__(self, message):
-        Exception.__init__(self, message)
-        self.message = message
-
-
-class ExecutionException(Exception):
-    def __init__(self, message):
-        Exception.__init__(self, message)
-        self.message = message
-
-
-class SimpleResponse:
-    """
-    Attributes:
-         - error_code
-         - error_msg
-    """
-    def __init__(self, code, msg):
-        self.error_code = code
-        self.error_msg = msg
+from .Common import *
 
 
 class GraphClient(object):
@@ -115,12 +95,12 @@ class GraphClient(object):
             return
 
         try:
-            if not self._session_id is None:
-                print("client: %d sign out" % self._session_id)
+            if self._session_id is not None:
+                print('client: %d sign out' % self._session_id)
             self._client.signout(self._session_id)
             self._pool.return_connection(self._client)
         except Exception as x:
-            raise Exception("SignOut failed: {}".format(x))
+            raise Exception('SignOut failed: {}'.format(x))
 
     def is_none(self):
         """is_none: determine if the client creation was successful
