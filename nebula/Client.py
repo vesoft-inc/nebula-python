@@ -6,27 +6,7 @@
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
 
-class AuthException(Exception):
-    def __init__(self, message):
-        Exception.__init__(self, message)
-        self.message = message
-
-
-class ExecutionException(Exception):
-    def __init__(self, message):
-        Exception.__init__(self, message)
-        self.message = message
-
-
-class SimpleResponse:
-    """
-    Attributes:
-         - error_code
-         - error_msg
-    """
-    def __init__(self, code, msg):
-        self.error_code = code
-        self.error_msg = msg
+from .Common import *
 
 
 class GraphClient(object):
@@ -56,13 +36,16 @@ class GraphClient(object):
         if self._client is None:
             raise AuthException("No client")
 
-        resp = self._client.authenticate(user, password)
-        if resp.error_code:
-            raise AuthException("Auth failed")
-        else:
-            self._session_id = resp.session_id
-            print("client: %d authenticate succeed" % self._session_id)
-        return resp
+        try:
+            resp = self._client.authenticate(user, password)
+            if resp.error_code:
+                return resp
+            else:
+                self._session_id = resp.session_id
+                print("client: %d authenticate succeed" % self._session_id)
+            return resp
+        except Exception as x:
+            raise AuthException("Auth failed: {}".format(x))
 
     def execute(self, statement):
         """execute statement to graph server
@@ -77,8 +60,11 @@ class GraphClient(object):
         if self._client is None:
             raise ExecutionException("No client")
 
-        resp = self._client.execute(self._session_id, statement)
-        return SimpleResponse(resp.error_code, resp.error_msg)
+        try:
+            resp = self._client.execute(self._session_id, statement)
+            return SimpleResponse(resp.error_code, resp.error_msg)
+        except Exception as x:
+            raise ExecutionException("Execute `{}' failed: {}".format(statement, x))
 
     def execute_query(self, statement):
         """execute query statement to graph server
@@ -97,11 +83,10 @@ class GraphClient(object):
         if self._client is None:
             raise ExecutionException("No client")
 
-        resp = self._client.execute(self._session_id, statement)
-        if resp.error_code:
-            raise ExecutionException("Execute failed %s, error: %s" % (statement, resp.error_msg))
-        else:
-            return resp
+        try:
+            return self._client.execute(self._session_id, statement)
+        except Exception as x:
+            raise ExecutionException("Execute `{}' failed: {}".format(statement, x))
 
     def sign_out(self):
         """sign out: Users should call sign_out when catch the exception or exit
@@ -109,10 +94,13 @@ class GraphClient(object):
         if self._client is None:
             return
 
-        if not self._session_id is None:
-            print("client: %d sign out" % self._session_id)
-        self._client.signout(self._session_id)
-        self._pool.return_connection(self._client)
+        try:
+            if self._session_id is not None:
+                print('client: %d sign out' % self._session_id)
+            self._client.signout(self._session_id)
+            self._pool.return_connection(self._client)
+        except Exception as x:
+            raise Exception('SignOut failed: {}'.format(x))
 
     def is_none(self):
         """is_none: determine if the client creation was successful

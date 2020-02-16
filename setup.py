@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='nebula-python',
-    version="1.0.0-rc2",
+    version="1.0.0-rc3",
     description='Python client for Nebula Graph',
     url='https://github.com/vesoft-inc/nebula-python',
     author='darion.wang',

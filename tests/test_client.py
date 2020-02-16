@@ -20,17 +20,12 @@ sys.path.insert(0, '../')
 
 from graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
-from nebula.Client import GraphClient, AuthException, ExecutionException
+from nebula.Client import GraphClient
+from nebula.Common import *
 
 
 def get_port():
-    port = 3699
-    port_str = os.popen("docker-compose -f ../tmp/nebula-docker-compose/docker-compose.yaml ps "
-                        "| grep 3699 |cut -d ',' -f 4 | cut -d ':' -f 2 | cut -d '-' -f 1").read()
-    print("get port_str: %s" % port_str)
-    if len(port_str) != 0 and len(port_str) < 7:
-        port = int(port_str[0:-1])
-    return port
+    return 3699
 
 
 def create_pool(port):
@@ -107,17 +102,22 @@ def test_create_schema(get_client):
 
         resp = client.execute('CREATE SPACE space1')
         assert resp.error_code == 0, resp.error_msg
-
-        time.sleep(1)
-
-        resp = client.execute('USE space1')
-        assert resp.error_code == 0, resp.error_msg
+        time.sleep(5)
+        count = 0
+        while count < 100:
+            resp = client.execute('USE space1')
+            if resp.error_code == 0:
+                break
+            print(resp.error_msg)
+            count += 1
 
         resp = client.execute('CREATE TAG person(name string, age int)')
         assert resp.error_code == 0, resp.error_msg
 
         client.execute('CREATE EDGE like(likeness double)')
         assert resp.error_code == 0, resp.error_msg
+
+        time.sleep(12)
 
         resp = client.execute_query('SHOW TAGS')
         assert resp.error_code == 0, resp.error_msg
@@ -230,6 +230,14 @@ def test_multi_thread():
             if resp.error_code != 0:
                 raise ExecutionException('CREATE SPACE failed')
 
+            time.sleep(3)
+            count = 0
+            while count < 100:
+                resp = client.execute('USE %s' % space_name)
+                if resp.error_code == 0:
+                    break
+                print(resp.error_msg)
+                count += 1
             resp = client.execute('USE %s' % space_name)
             if resp.error_code != 0:
                 raise ExecutionException('USE SPACE failed')

@@ -5,11 +5,11 @@
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
 import sys
+import threading
 
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
-from thrift.transport.TTransport import TTransportException
 
 from graph import GraphService
 
@@ -22,7 +22,6 @@ class ConnectionPool(object):
                  ip,
                  port,
                  socket_num=DEFAULT_CONNECT_SIZE,
-                 is_async=False,
                  network_timeout=DEFAULT_TIMEOUT):
         self._ip = ip
         self._port = port
@@ -31,26 +30,13 @@ class ConnectionPool(object):
         self._num = socket_num
 
         self._closed = False
-        self._async = is_async
-        if self._async:
-            import gevent.queue
-            try:
-                from gevent import lock as glock
-            except ImportError:
-                from gevent import coros as glock
-            self._semaphore = glock.BoundedSemaphore(socket_num)
-            self._connection_queue = gevent.queue.LifoQueue(socket_num)
-            self._QueueEmpty = gevent.queue.Empty
-
-        else:
-            import threading
-            try:
-                import Queue
-            except ImportError:
-                import queue as Queue
-            self._semaphore = threading.BoundedSemaphore(socket_num)
-            self._connection_queue = Queue.LifoQueue(socket_num)
-            self._QueueEmpty = Queue.Empty
+        try:
+            import Queue
+        except ImportError:
+            import queue as Queue
+        self._semaphore = threading.BoundedSemaphore(socket_num)
+        self._connection_queue = Queue.LifoQueue(socket_num)
+        self._QueueEmpty = Queue.Empty
 
     def close(self):
         """ close all connection in the pool
