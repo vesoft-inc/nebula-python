@@ -31,7 +31,7 @@ if not '__pypy__' in sys.builtin_module_names:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'ErrorCode', 'PropOwner', 'EngineSignType', 'StatType', 'EntryId', 'PropDef', 'ResultCode', 'EdgeData', 'TagData', 'VertexData', 'ResponseCommon', 'QueryResponse', 'ExecResponse', 'EdgePropResponse', 'QueryStatsResponse', 'EdgeKeyResponse', 'Tag', 'Vertex', 'EdgeKey', 'Edge', 'GetNeighborsRequest', 'VertexPropRequest', 'EdgePropRequest', 'AddVerticesRequest', 'AddEdgesRequest', 'EdgeKeyRequest', 'DeleteVertexRequest', 'DeleteEdgesRequest', 'AdminExecResp', 'AddPartReq', 'RemovePartReq', 'MemberChangeReq', 'TransLeaderReq', 'AddLearnerReq', 'CatchUpDataReq', 'CheckPeersReq', 'GetLeaderReq', 'GetLeaderResp', 'UpdateResponse', 'UpdateItem', 'UpdateVertexRequest', 'UpdateEdgeRequest', 'ScanEdgeRequest', 'ScanEdgeResponse', 'ScanEdge', 'ScanVertexRequest', 'ScanVertex', 'ScanVertexResponse', 'PutRequest', 'RemoveRequest', 'RemoveRangeRequest', 'GetRequest', 'PrefixRequest', 'ScanRequest', 'GeneralResponse', 'GetUUIDReq', 'GetUUIDResp', 'BlockingSignRequest', 'CreateCPRequest', 'DropCPRequest']
+__all__ = ['UTF8STRINGS', 'ErrorCode', 'PropOwner', 'EngineSignType', 'StatType', 'EntryId', 'PropDef', 'ResultCode', 'EdgeKey', 'Edge', 'IdAndProp', 'EdgeData', 'TagData', 'VertexData', 'VertexIndexData', 'ResponseCommon', 'QueryResponse', 'ExecResponse', 'EdgePropResponse', 'QueryStatsResponse', 'Tag', 'Vertex', 'GetNeighborsRequest', 'VertexPropRequest', 'EdgePropRequest', 'AddVerticesRequest', 'AddEdgesRequest', 'DeleteVerticesRequest', 'DeleteEdgesRequest', 'AdminExecResp', 'AddPartReq', 'RemovePartReq', 'MemberChangeReq', 'TransLeaderReq', 'AddLearnerReq', 'CatchUpDataReq', 'CheckPeersReq', 'GetLeaderReq', 'GetLeaderResp', 'UpdateResponse', 'UpdateItem', 'UpdateVertexRequest', 'UpdateEdgeRequest', 'ScanEdgeRequest', 'ScanEdgeResponse', 'ScanEdge', 'ScanVertexRequest', 'ScanVertex', 'ScanVertexResponse', 'PutRequest', 'RemoveRequest', 'RemoveRangeRequest', 'GetRequest', 'PrefixRequest', 'ScanRequest', 'GeneralResponse', 'GetUUIDReq', 'GetUUIDResp', 'BlockingSignRequest', 'CreateCPRequest', 'DropCPRequest', 'RebuildIndexRequest', 'LookUpVertexIndexResp', 'LookUpEdgeIndexResp', 'LookUpIndexRequest']
 
 class ErrorCode:
   SUCCEEDED = 0
@@ -49,6 +49,7 @@ class ErrorCode:
   E_IMPROPER_DATA_TYPE = -23
   E_EDGE_NOT_FOUND = -24
   E_TAG_NOT_FOUND = -25
+  E_INDEX_NOT_FOUND = -26
   E_INVALID_FILTER = -31
   E_INVALID_UPDATER = -32
   E_INVALID_STORE = -33
@@ -58,6 +59,8 @@ class ErrorCode:
   E_LOAD_META_FAILED = -41
   E_FAILED_TO_CHECKPOINT = -50
   E_CHECKPOINT_BLOCKED = -51
+  E_FILTER_OUT = -60
+  E_PARTIAL_RESULT = -99
   E_UNKNOWN = -100
 
   _VALUES_TO_NAMES = {
@@ -76,6 +79,7 @@ class ErrorCode:
     -23: "E_IMPROPER_DATA_TYPE",
     -24: "E_EDGE_NOT_FOUND",
     -25: "E_TAG_NOT_FOUND",
+    -26: "E_INDEX_NOT_FOUND",
     -31: "E_INVALID_FILTER",
     -32: "E_INVALID_UPDATER",
     -33: "E_INVALID_STORE",
@@ -85,6 +89,8 @@ class ErrorCode:
     -41: "E_LOAD_META_FAILED",
     -50: "E_FAILED_TO_CHECKPOINT",
     -51: "E_CHECKPOINT_BLOCKED",
+    -60: "E_FILTER_OUT",
+    -99: "E_PARTIAL_RESULT",
     -100: "E_UNKNOWN",
   }
 
@@ -104,6 +110,7 @@ class ErrorCode:
     "E_IMPROPER_DATA_TYPE": -23,
     "E_EDGE_NOT_FOUND": -24,
     "E_TAG_NOT_FOUND": -25,
+    "E_INDEX_NOT_FOUND": -26,
     "E_INVALID_FILTER": -31,
     "E_INVALID_UPDATER": -32,
     "E_INVALID_STORE": -33,
@@ -113,6 +120,8 @@ class ErrorCode:
     "E_LOAD_META_FAILED": -41,
     "E_FAILED_TO_CHECKPOINT": -50,
     "E_CHECKPOINT_BLOCKED": -51,
+    "E_FILTER_OUT": -60,
+    "E_PARTIAL_RESULT": -99,
     "E_UNKNOWN": -100,
   }
 
@@ -516,11 +525,319 @@ class ResultCode:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class EdgeKey:
+  """
+  Attributes:
+   - src
+   - edge_type
+   - ranking
+   - dst
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.src = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I32:
+          self.edge_type = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I64:
+          self.ranking = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.I64:
+          self.dst = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('EdgeKey')
+    if self.src != None:
+      oprot.writeFieldBegin('src', TType.I64, 1)
+      oprot.writeI64(self.src)
+      oprot.writeFieldEnd()
+    if self.edge_type != None:
+      oprot.writeFieldBegin('edge_type', TType.I32, 2)
+      oprot.writeI32(self.edge_type)
+      oprot.writeFieldEnd()
+    if self.ranking != None:
+      oprot.writeFieldBegin('ranking', TType.I64, 3)
+      oprot.writeI64(self.ranking)
+      oprot.writeFieldEnd()
+    if self.dst != None:
+      oprot.writeFieldBegin('dst', TType.I64, 4)
+      oprot.writeI64(self.dst)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.src is not None:
+      value = pprint.pformat(self.src, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    src=%s' % (value))
+    if self.edge_type is not None:
+      value = pprint.pformat(self.edge_type, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    edge_type=%s' % (value))
+    if self.ranking is not None:
+      value = pprint.pformat(self.ranking, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    ranking=%s' % (value))
+    if self.dst is not None:
+      value = pprint.pformat(self.dst, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    dst=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class Edge:
+  """
+  Attributes:
+   - key
+   - props
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.key = EdgeKey()
+          self.key.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.props = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('Edge')
+    if self.key != None:
+      oprot.writeFieldBegin('key', TType.STRUCT, 1)
+      self.key.write(oprot)
+      oprot.writeFieldEnd()
+    if self.props != None:
+      oprot.writeFieldBegin('props', TType.STRING, 2)
+      oprot.writeString(self.props)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.key is not None:
+      value = pprint.pformat(self.key, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    key=%s' % (value))
+    if self.props is not None:
+      value = pprint.pformat(self.props, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    props=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class IdAndProp:
+  """
+  Attributes:
+   - dst
+   - props
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.dst = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.props = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('IdAndProp')
+    if self.dst != None:
+      oprot.writeFieldBegin('dst', TType.I64, 1)
+      oprot.writeI64(self.dst)
+      oprot.writeFieldEnd()
+    if self.props != None:
+      oprot.writeFieldBegin('props', TType.STRING, 2)
+      oprot.writeString(self.props)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.dst is not None:
+      value = pprint.pformat(self.dst, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    dst=%s' % (value))
+    if self.props is not None:
+      value = pprint.pformat(self.props, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    props=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
 class EdgeData:
   """
   Attributes:
    - type
-   - data
+   - edges
   """
 
   thrift_spec = None
@@ -550,9 +867,21 @@ class EdgeData:
           self.type = iprot.readI32()
         else:
           iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.STRING:
-          self.data = iprot.readString()
+      elif fid == 3:
+        if ftype == TType.LIST:
+          self.edges = []
+          (_etype3, _size0) = iprot.readListBegin()
+          if _size0 >= 0:
+            for _i4 in six.moves.range(_size0):
+              _elem5 = IdAndProp()
+              _elem5.read(iprot)
+              self.edges.append(_elem5)
+          else: 
+            while iprot.peekList():
+              _elem6 = IdAndProp()
+              _elem6.read(iprot)
+              self.edges.append(_elem6)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -576,9 +905,12 @@ class EdgeData:
       oprot.writeFieldBegin('type', TType.I32, 1)
       oprot.writeI32(self.type)
       oprot.writeFieldEnd()
-    if self.data != None:
-      oprot.writeFieldBegin('data', TType.STRING, 2)
-      oprot.writeString(self.data)
+    if self.edges != None:
+      oprot.writeFieldBegin('edges', TType.LIST, 3)
+      oprot.writeListBegin(TType.STRUCT, len(self.edges))
+      for iter7 in self.edges:
+        iter7.write(oprot)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -590,10 +922,10 @@ class EdgeData:
       value = pprint.pformat(self.type, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    type=%s' % (value))
-    if self.data is not None:
-      value = pprint.pformat(self.data, indent=0)
+    if self.edges is not None:
+      value = pprint.pformat(self.edges, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    data=%s' % (value))
+      L.append('    edges=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -740,34 +1072,34 @@ class VertexData:
       elif fid == 2:
         if ftype == TType.LIST:
           self.tag_data = []
-          (_etype3, _size0) = iprot.readListBegin()
-          if _size0 >= 0:
-            for _i4 in six.moves.range(_size0):
-              _elem5 = TagData()
-              _elem5.read(iprot)
-              self.tag_data.append(_elem5)
+          (_etype11, _size8) = iprot.readListBegin()
+          if _size8 >= 0:
+            for _i12 in six.moves.range(_size8):
+              _elem13 = TagData()
+              _elem13.read(iprot)
+              self.tag_data.append(_elem13)
           else: 
             while iprot.peekList():
-              _elem6 = TagData()
-              _elem6.read(iprot)
-              self.tag_data.append(_elem6)
+              _elem14 = TagData()
+              _elem14.read(iprot)
+              self.tag_data.append(_elem14)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.LIST:
           self.edge_data = []
-          (_etype10, _size7) = iprot.readListBegin()
-          if _size7 >= 0:
-            for _i11 in six.moves.range(_size7):
-              _elem12 = EdgeData()
-              _elem12.read(iprot)
-              self.edge_data.append(_elem12)
+          (_etype18, _size15) = iprot.readListBegin()
+          if _size15 >= 0:
+            for _i19 in six.moves.range(_size15):
+              _elem20 = EdgeData()
+              _elem20.read(iprot)
+              self.edge_data.append(_elem20)
           else: 
             while iprot.peekList():
-              _elem13 = EdgeData()
-              _elem13.read(iprot)
-              self.edge_data.append(_elem13)
+              _elem21 = EdgeData()
+              _elem21.read(iprot)
+              self.edge_data.append(_elem21)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -795,15 +1127,15 @@ class VertexData:
     if self.tag_data != None:
       oprot.writeFieldBegin('tag_data', TType.LIST, 2)
       oprot.writeListBegin(TType.STRUCT, len(self.tag_data))
-      for iter14 in self.tag_data:
-        iter14.write(oprot)
+      for iter22 in self.tag_data:
+        iter22.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.edge_data != None:
       oprot.writeFieldBegin('edge_data', TType.LIST, 3)
       oprot.writeListBegin(TType.STRUCT, len(self.edge_data))
-      for iter15 in self.edge_data:
-        iter15.write(oprot)
+      for iter23 in self.edge_data:
+        iter23.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -824,6 +1156,99 @@ class VertexData:
       value = pprint.pformat(self.edge_data, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    edge_data=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class VertexIndexData:
+  """
+  Attributes:
+   - vertex_id
+   - props
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.vertex_id = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.props = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('VertexIndexData')
+    if self.vertex_id != None:
+      oprot.writeFieldBegin('vertex_id', TType.I64, 1)
+      oprot.writeI64(self.vertex_id)
+      oprot.writeFieldEnd()
+    if self.props != None:
+      oprot.writeFieldBegin('props', TType.STRING, 2)
+      oprot.writeString(self.props)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.vertex_id is not None:
+      value = pprint.pformat(self.vertex_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    vertex_id=%s' % (value))
+    if self.props is not None:
+      value = pprint.pformat(self.props, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    props=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -871,17 +1296,17 @@ class ResponseCommon:
       if fid == 1:
         if ftype == TType.LIST:
           self.failed_codes = []
-          (_etype19, _size16) = iprot.readListBegin()
-          if _size16 >= 0:
-            for _i20 in six.moves.range(_size16):
-              _elem21 = ResultCode()
-              _elem21.read(iprot)
-              self.failed_codes.append(_elem21)
+          (_etype27, _size24) = iprot.readListBegin()
+          if _size24 >= 0:
+            for _i28 in six.moves.range(_size24):
+              _elem29 = ResultCode()
+              _elem29.read(iprot)
+              self.failed_codes.append(_elem29)
           else: 
             while iprot.peekList():
-              _elem22 = ResultCode()
-              _elem22.read(iprot)
-              self.failed_codes.append(_elem22)
+              _elem30 = ResultCode()
+              _elem30.read(iprot)
+              self.failed_codes.append(_elem30)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -916,8 +1341,8 @@ class ResponseCommon:
     if self.failed_codes != None:
       oprot.writeFieldBegin('failed_codes', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.failed_codes))
-      for iter23 in self.failed_codes:
-        iter23.write(oprot)
+      for iter31 in self.failed_codes:
+        iter31.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.latency_in_us != None:
@@ -960,6 +1385,7 @@ class QueryResponse:
    - vertex_schema
    - edge_schema
    - vertices
+   - total_edges
   """
 
   thrift_spec = None
@@ -993,56 +1419,61 @@ class QueryResponse:
       elif fid == 2:
         if ftype == TType.MAP:
           self.vertex_schema = {}
-          (_ktype25, _vtype26, _size24 ) = iprot.readMapBegin() 
-          if _size24 >= 0:
-            for _i28 in six.moves.range(_size24):
-              _key29 = iprot.readI32()
-              _val30 = common.ttypes.Schema()
-              _val30.read(iprot)
-              self.vertex_schema[_key29] = _val30
+          (_ktype33, _vtype34, _size32 ) = iprot.readMapBegin() 
+          if _size32 >= 0:
+            for _i36 in six.moves.range(_size32):
+              _key37 = iprot.readI32()
+              _val38 = common.ttypes.Schema()
+              _val38.read(iprot)
+              self.vertex_schema[_key37] = _val38
           else: 
             while iprot.peekMap():
-              _key31 = iprot.readI32()
-              _val32 = common.ttypes.Schema()
-              _val32.read(iprot)
-              self.vertex_schema[_key31] = _val32
+              _key39 = iprot.readI32()
+              _val40 = common.ttypes.Schema()
+              _val40.read(iprot)
+              self.vertex_schema[_key39] = _val40
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.MAP:
           self.edge_schema = {}
-          (_ktype34, _vtype35, _size33 ) = iprot.readMapBegin() 
-          if _size33 >= 0:
-            for _i37 in six.moves.range(_size33):
-              _key38 = iprot.readI32()
-              _val39 = common.ttypes.Schema()
-              _val39.read(iprot)
-              self.edge_schema[_key38] = _val39
+          (_ktype42, _vtype43, _size41 ) = iprot.readMapBegin() 
+          if _size41 >= 0:
+            for _i45 in six.moves.range(_size41):
+              _key46 = iprot.readI32()
+              _val47 = common.ttypes.Schema()
+              _val47.read(iprot)
+              self.edge_schema[_key46] = _val47
           else: 
             while iprot.peekMap():
-              _key40 = iprot.readI32()
-              _val41 = common.ttypes.Schema()
-              _val41.read(iprot)
-              self.edge_schema[_key40] = _val41
+              _key48 = iprot.readI32()
+              _val49 = common.ttypes.Schema()
+              _val49.read(iprot)
+              self.edge_schema[_key48] = _val49
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       elif fid == 4:
         if ftype == TType.LIST:
           self.vertices = []
-          (_etype45, _size42) = iprot.readListBegin()
-          if _size42 >= 0:
-            for _i46 in six.moves.range(_size42):
-              _elem47 = VertexData()
-              _elem47.read(iprot)
-              self.vertices.append(_elem47)
+          (_etype53, _size50) = iprot.readListBegin()
+          if _size50 >= 0:
+            for _i54 in six.moves.range(_size50):
+              _elem55 = VertexData()
+              _elem55.read(iprot)
+              self.vertices.append(_elem55)
           else: 
             while iprot.peekList():
-              _elem48 = VertexData()
-              _elem48.read(iprot)
-              self.vertices.append(_elem48)
+              _elem56 = VertexData()
+              _elem56.read(iprot)
+              self.vertices.append(_elem56)
           iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.I32:
+          self.total_edges = iprot.readI32()
         else:
           iprot.skip(ftype)
       else:
@@ -1072,25 +1503,29 @@ class QueryResponse:
     if self.vertex_schema != None:
       oprot.writeFieldBegin('vertex_schema', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.STRUCT, len(self.vertex_schema))
-      for kiter49,viter50 in self.vertex_schema.items():
-        oprot.writeI32(kiter49)
-        viter50.write(oprot)
+      for kiter57,viter58 in self.vertex_schema.items():
+        oprot.writeI32(kiter57)
+        viter58.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.edge_schema != None:
       oprot.writeFieldBegin('edge_schema', TType.MAP, 3)
       oprot.writeMapBegin(TType.I32, TType.STRUCT, len(self.edge_schema))
-      for kiter51,viter52 in self.edge_schema.items():
-        oprot.writeI32(kiter51)
-        viter52.write(oprot)
+      for kiter59,viter60 in self.edge_schema.items():
+        oprot.writeI32(kiter59)
+        viter60.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.vertices != None:
       oprot.writeFieldBegin('vertices', TType.LIST, 4)
       oprot.writeListBegin(TType.STRUCT, len(self.vertices))
-      for iter53 in self.vertices:
-        iter53.write(oprot)
+      for iter61 in self.vertices:
+        iter61.write(oprot)
       oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.total_edges != None:
+      oprot.writeFieldBegin('total_edges', TType.I32, 5)
+      oprot.writeI32(self.total_edges)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -1114,6 +1549,10 @@ class QueryResponse:
       value = pprint.pformat(self.vertices, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    vertices=%s' % (value))
+    if self.total_edges is not None:
+      value = pprint.pformat(self.total_edges, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    total_edges=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -1436,118 +1875,6 @@ class QueryStatsResponse:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class EdgeKeyResponse:
-  """
-  Attributes:
-   - result
-   - edge_keys
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      self.checkRequired()
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      self.checkRequired()
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.result = ResponseCommon()
-          self.result.read(iprot)
-        else:
-          iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.LIST:
-          self.edge_keys = []
-          (_etype57, _size54) = iprot.readListBegin()
-          if _size54 >= 0:
-            for _i58 in six.moves.range(_size54):
-              _elem59 = EdgeKey()
-              _elem59.read(iprot)
-              self.edge_keys.append(_elem59)
-          else: 
-            while iprot.peekList():
-              _elem60 = EdgeKey()
-              _elem60.read(iprot)
-              self.edge_keys.append(_elem60)
-          iprot.readListEnd()
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-    self.checkRequired()
-
-  def checkRequired(self):
-    if self.result == None:
-      raise TProtocolException(TProtocolException.MISSING_REQUIRED_FIELD, "Required field 'result' was not found in serialized data! Struct: EdgeKeyResponse")
-
-    return
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('EdgeKeyResponse')
-    if self.result != None:
-      oprot.writeFieldBegin('result', TType.STRUCT, 1)
-      self.result.write(oprot)
-      oprot.writeFieldEnd()
-    if self.edge_keys != None:
-      oprot.writeFieldBegin('edge_keys', TType.LIST, 2)
-      oprot.writeListBegin(TType.STRUCT, len(self.edge_keys))
-      for iter61 in self.edge_keys:
-        iter61.write(oprot)
-      oprot.writeListEnd()
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.result is not None:
-      value = pprint.pformat(self.result, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    result=%s' % (value))
-    if self.edge_keys is not None:
-      value = pprint.pformat(self.edge_keys, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    edge_keys=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
 class Tag:
   """
   Attributes:
@@ -1734,221 +2061,6 @@ class Vertex:
       value = pprint.pformat(self.tags, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    tags=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-class EdgeKey:
-  """
-  Attributes:
-   - src
-   - edge_type
-   - ranking
-   - dst
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      self.checkRequired()
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      self.checkRequired()
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.I64:
-          self.src = iprot.readI64()
-        else:
-          iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.I32:
-          self.edge_type = iprot.readI32()
-        else:
-          iprot.skip(ftype)
-      elif fid == 3:
-        if ftype == TType.I64:
-          self.ranking = iprot.readI64()
-        else:
-          iprot.skip(ftype)
-      elif fid == 4:
-        if ftype == TType.I64:
-          self.dst = iprot.readI64()
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-    self.checkRequired()
-
-  def checkRequired(self):
-    return
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('EdgeKey')
-    if self.src != None:
-      oprot.writeFieldBegin('src', TType.I64, 1)
-      oprot.writeI64(self.src)
-      oprot.writeFieldEnd()
-    if self.edge_type != None:
-      oprot.writeFieldBegin('edge_type', TType.I32, 2)
-      oprot.writeI32(self.edge_type)
-      oprot.writeFieldEnd()
-    if self.ranking != None:
-      oprot.writeFieldBegin('ranking', TType.I64, 3)
-      oprot.writeI64(self.ranking)
-      oprot.writeFieldEnd()
-    if self.dst != None:
-      oprot.writeFieldBegin('dst', TType.I64, 4)
-      oprot.writeI64(self.dst)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.src is not None:
-      value = pprint.pformat(self.src, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    src=%s' % (value))
-    if self.edge_type is not None:
-      value = pprint.pformat(self.edge_type, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    edge_type=%s' % (value))
-    if self.ranking is not None:
-      value = pprint.pformat(self.ranking, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    ranking=%s' % (value))
-    if self.dst is not None:
-      value = pprint.pformat(self.dst, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    dst=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-class Edge:
-  """
-  Attributes:
-   - key
-   - props
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      self.checkRequired()
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      self.checkRequired()
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.key = EdgeKey()
-          self.key.read(iprot)
-        else:
-          iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.STRING:
-          self.props = iprot.readString()
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-    self.checkRequired()
-
-  def checkRequired(self):
-    return
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('Edge')
-    if self.key != None:
-      oprot.writeFieldBegin('key', TType.STRUCT, 1)
-      self.key.write(oprot)
-      oprot.writeFieldEnd()
-    if self.props != None:
-      oprot.writeFieldBegin('props', TType.STRING, 2)
-      oprot.writeString(self.props)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.key is not None:
-      value = pprint.pformat(self.key, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    key=%s' % (value))
-    if self.props is not None:
-      value = pprint.pformat(self.props, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    props=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -2820,12 +2932,11 @@ class AddEdgesRequest:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class EdgeKeyRequest:
+class DeleteVerticesRequest:
   """
   Attributes:
    - space_id
-   - part_id
-   - vid
+   - parts
   """
 
   thrift_spec = None
@@ -2856,120 +2967,40 @@ class EdgeKeyRequest:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.part_id = iprot.readI32()
-        else:
-          iprot.skip(ftype)
-      elif fid == 3:
-        if ftype == TType.I64:
-          self.vid = iprot.readI64()
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-    self.checkRequired()
-
-  def checkRequired(self):
-    return
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('EdgeKeyRequest')
-    if self.space_id != None:
-      oprot.writeFieldBegin('space_id', TType.I32, 1)
-      oprot.writeI32(self.space_id)
-      oprot.writeFieldEnd()
-    if self.part_id != None:
-      oprot.writeFieldBegin('part_id', TType.I32, 2)
-      oprot.writeI32(self.part_id)
-      oprot.writeFieldEnd()
-    if self.vid != None:
-      oprot.writeFieldBegin('vid', TType.I64, 3)
-      oprot.writeI64(self.vid)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.space_id is not None:
-      value = pprint.pformat(self.space_id, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    space_id=%s' % (value))
-    if self.part_id is not None:
-      value = pprint.pformat(self.part_id, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    part_id=%s' % (value))
-    if self.vid is not None:
-      value = pprint.pformat(self.vid, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    vid=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-class DeleteVertexRequest:
-  """
-  Attributes:
-   - space_id
-   - part_id
-   - vid
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      self.checkRequired()
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      self.checkRequired()
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.I32:
-          self.space_id = iprot.readI32()
-        else:
-          iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.I32:
-          self.part_id = iprot.readI32()
-        else:
-          iprot.skip(ftype)
-      elif fid == 3:
-        if ftype == TType.I64:
-          self.vid = iprot.readI64()
+        if ftype == TType.MAP:
+          self.parts = {}
+          (_ktype233, _vtype234, _size232 ) = iprot.readMapBegin() 
+          if _size232 >= 0:
+            for _i236 in six.moves.range(_size232):
+              _key237 = iprot.readI32()
+              _val238 = []
+              (_etype242, _size239) = iprot.readListBegin()
+              if _size239 >= 0:
+                for _i243 in six.moves.range(_size239):
+                  _elem244 = iprot.readI64()
+                  _val238.append(_elem244)
+              else: 
+                while iprot.peekList():
+                  _elem245 = iprot.readI64()
+                  _val238.append(_elem245)
+              iprot.readListEnd()
+              self.parts[_key237] = _val238
+          else: 
+            while iprot.peekMap():
+              _key246 = iprot.readI32()
+              _val247 = []
+              (_etype251, _size248) = iprot.readListBegin()
+              if _size248 >= 0:
+                for _i252 in six.moves.range(_size248):
+                  _elem253 = iprot.readI64()
+                  _val247.append(_elem253)
+              else: 
+                while iprot.peekList():
+                  _elem254 = iprot.readI64()
+                  _val247.append(_elem254)
+              iprot.readListEnd()
+              self.parts[_key246] = _val247
+          iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -2988,18 +3019,21 @@ class DeleteVertexRequest:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('DeleteVertexRequest')
+    oprot.writeStructBegin('DeleteVerticesRequest')
     if self.space_id != None:
       oprot.writeFieldBegin('space_id', TType.I32, 1)
       oprot.writeI32(self.space_id)
       oprot.writeFieldEnd()
-    if self.part_id != None:
-      oprot.writeFieldBegin('part_id', TType.I32, 2)
-      oprot.writeI32(self.part_id)
-      oprot.writeFieldEnd()
-    if self.vid != None:
-      oprot.writeFieldBegin('vid', TType.I64, 3)
-      oprot.writeI64(self.vid)
+    if self.parts != None:
+      oprot.writeFieldBegin('parts', TType.MAP, 2)
+      oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
+      for kiter255,viter256 in self.parts.items():
+        oprot.writeI32(kiter255)
+        oprot.writeListBegin(TType.I64, len(viter256))
+        for iter257 in viter256:
+          oprot.writeI64(iter257)
+        oprot.writeListEnd()
+      oprot.writeMapEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -3011,14 +3045,10 @@ class DeleteVertexRequest:
       value = pprint.pformat(self.space_id, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    space_id=%s' % (value))
-    if self.part_id is not None:
-      value = pprint.pformat(self.part_id, indent=0)
+    if self.parts is not None:
+      value = pprint.pformat(self.parts, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    part_id=%s' % (value))
-    if self.vid is not None:
-      value = pprint.pformat(self.vid, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    vid=%s' % (value))
+      L.append('    parts=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -3071,41 +3101,41 @@ class DeleteEdgesRequest:
       elif fid == 2:
         if ftype == TType.MAP:
           self.parts = {}
-          (_ktype233, _vtype234, _size232 ) = iprot.readMapBegin() 
-          if _size232 >= 0:
-            for _i236 in six.moves.range(_size232):
-              _key237 = iprot.readI32()
-              _val238 = []
-              (_etype242, _size239) = iprot.readListBegin()
-              if _size239 >= 0:
-                for _i243 in six.moves.range(_size239):
-                  _elem244 = EdgeKey()
-                  _elem244.read(iprot)
-                  _val238.append(_elem244)
+          (_ktype259, _vtype260, _size258 ) = iprot.readMapBegin() 
+          if _size258 >= 0:
+            for _i262 in six.moves.range(_size258):
+              _key263 = iprot.readI32()
+              _val264 = []
+              (_etype268, _size265) = iprot.readListBegin()
+              if _size265 >= 0:
+                for _i269 in six.moves.range(_size265):
+                  _elem270 = EdgeKey()
+                  _elem270.read(iprot)
+                  _val264.append(_elem270)
               else: 
                 while iprot.peekList():
-                  _elem245 = EdgeKey()
-                  _elem245.read(iprot)
-                  _val238.append(_elem245)
+                  _elem271 = EdgeKey()
+                  _elem271.read(iprot)
+                  _val264.append(_elem271)
               iprot.readListEnd()
-              self.parts[_key237] = _val238
+              self.parts[_key263] = _val264
           else: 
             while iprot.peekMap():
-              _key246 = iprot.readI32()
-              _val247 = []
-              (_etype251, _size248) = iprot.readListBegin()
-              if _size248 >= 0:
-                for _i252 in six.moves.range(_size248):
-                  _elem253 = EdgeKey()
-                  _elem253.read(iprot)
-                  _val247.append(_elem253)
+              _key272 = iprot.readI32()
+              _val273 = []
+              (_etype277, _size274) = iprot.readListBegin()
+              if _size274 >= 0:
+                for _i278 in six.moves.range(_size274):
+                  _elem279 = EdgeKey()
+                  _elem279.read(iprot)
+                  _val273.append(_elem279)
               else: 
                 while iprot.peekList():
-                  _elem254 = EdgeKey()
-                  _elem254.read(iprot)
-                  _val247.append(_elem254)
+                  _elem280 = EdgeKey()
+                  _elem280.read(iprot)
+                  _val273.append(_elem280)
               iprot.readListEnd()
-              self.parts[_key246] = _val247
+              self.parts[_key272] = _val273
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -3133,11 +3163,11 @@ class DeleteEdgesRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
-      for kiter255,viter256 in self.parts.items():
-        oprot.writeI32(kiter255)
-        oprot.writeListBegin(TType.STRUCT, len(viter256))
-        for iter257 in viter256:
-          iter257.write(oprot)
+      for kiter281,viter282 in self.parts.items():
+        oprot.writeI32(kiter281)
+        oprot.writeListBegin(TType.STRUCT, len(viter282))
+        for iter283 in viter282:
+          iter283.write(oprot)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -3942,17 +3972,17 @@ class CheckPeersReq:
       elif fid == 3:
         if ftype == TType.LIST:
           self.peers = []
-          (_etype261, _size258) = iprot.readListBegin()
-          if _size258 >= 0:
-            for _i262 in six.moves.range(_size258):
-              _elem263 = common.ttypes.HostAddr()
-              _elem263.read(iprot)
-              self.peers.append(_elem263)
+          (_etype287, _size284) = iprot.readListBegin()
+          if _size284 >= 0:
+            for _i288 in six.moves.range(_size284):
+              _elem289 = common.ttypes.HostAddr()
+              _elem289.read(iprot)
+              self.peers.append(_elem289)
           else: 
             while iprot.peekList():
-              _elem264 = common.ttypes.HostAddr()
-              _elem264.read(iprot)
-              self.peers.append(_elem264)
+              _elem290 = common.ttypes.HostAddr()
+              _elem290.read(iprot)
+              self.peers.append(_elem290)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -3984,8 +4014,8 @@ class CheckPeersReq:
     if self.peers != None:
       oprot.writeFieldBegin('peers', TType.LIST, 3)
       oprot.writeListBegin(TType.STRUCT, len(self.peers))
-      for iter265 in self.peers:
-        iter265.write(oprot)
+      for iter291 in self.peers:
+        iter291.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -4120,37 +4150,37 @@ class GetLeaderResp:
       elif fid == 2:
         if ftype == TType.MAP:
           self.leader_parts = {}
-          (_ktype267, _vtype268, _size266 ) = iprot.readMapBegin() 
-          if _size266 >= 0:
-            for _i270 in six.moves.range(_size266):
-              _key271 = iprot.readI32()
-              _val272 = []
-              (_etype276, _size273) = iprot.readListBegin()
-              if _size273 >= 0:
-                for _i277 in six.moves.range(_size273):
-                  _elem278 = iprot.readI32()
-                  _val272.append(_elem278)
+          (_ktype293, _vtype294, _size292 ) = iprot.readMapBegin() 
+          if _size292 >= 0:
+            for _i296 in six.moves.range(_size292):
+              _key297 = iprot.readI32()
+              _val298 = []
+              (_etype302, _size299) = iprot.readListBegin()
+              if _size299 >= 0:
+                for _i303 in six.moves.range(_size299):
+                  _elem304 = iprot.readI32()
+                  _val298.append(_elem304)
               else: 
                 while iprot.peekList():
-                  _elem279 = iprot.readI32()
-                  _val272.append(_elem279)
+                  _elem305 = iprot.readI32()
+                  _val298.append(_elem305)
               iprot.readListEnd()
-              self.leader_parts[_key271] = _val272
+              self.leader_parts[_key297] = _val298
           else: 
             while iprot.peekMap():
-              _key280 = iprot.readI32()
-              _val281 = []
-              (_etype285, _size282) = iprot.readListBegin()
-              if _size282 >= 0:
-                for _i286 in six.moves.range(_size282):
-                  _elem287 = iprot.readI32()
-                  _val281.append(_elem287)
+              _key306 = iprot.readI32()
+              _val307 = []
+              (_etype311, _size308) = iprot.readListBegin()
+              if _size308 >= 0:
+                for _i312 in six.moves.range(_size308):
+                  _elem313 = iprot.readI32()
+                  _val307.append(_elem313)
               else: 
                 while iprot.peekList():
-                  _elem288 = iprot.readI32()
-                  _val281.append(_elem288)
+                  _elem314 = iprot.readI32()
+                  _val307.append(_elem314)
               iprot.readListEnd()
-              self.leader_parts[_key280] = _val281
+              self.leader_parts[_key306] = _val307
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -4181,11 +4211,11 @@ class GetLeaderResp:
     if self.leader_parts != None:
       oprot.writeFieldBegin('leader_parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.leader_parts))
-      for kiter289,viter290 in self.leader_parts.items():
-        oprot.writeI32(kiter289)
-        oprot.writeListBegin(TType.I32, len(viter290))
-        for iter291 in viter290:
-          oprot.writeI32(iter291)
+      for kiter315,viter316 in self.leader_parts.items():
+        oprot.writeI32(kiter315)
+        oprot.writeListBegin(TType.I32, len(viter316))
+        for iter317 in viter316:
+          oprot.writeI32(iter317)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -4517,32 +4547,32 @@ class UpdateVertexRequest:
       elif fid == 5:
         if ftype == TType.LIST:
           self.update_items = []
-          (_etype295, _size292) = iprot.readListBegin()
-          if _size292 >= 0:
-            for _i296 in six.moves.range(_size292):
-              _elem297 = UpdateItem()
-              _elem297.read(iprot)
-              self.update_items.append(_elem297)
+          (_etype321, _size318) = iprot.readListBegin()
+          if _size318 >= 0:
+            for _i322 in six.moves.range(_size318):
+              _elem323 = UpdateItem()
+              _elem323.read(iprot)
+              self.update_items.append(_elem323)
           else: 
             while iprot.peekList():
-              _elem298 = UpdateItem()
-              _elem298.read(iprot)
-              self.update_items.append(_elem298)
+              _elem324 = UpdateItem()
+              _elem324.read(iprot)
+              self.update_items.append(_elem324)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
       elif fid == 6:
         if ftype == TType.LIST:
           self.return_columns = []
-          (_etype302, _size299) = iprot.readListBegin()
-          if _size299 >= 0:
-            for _i303 in six.moves.range(_size299):
-              _elem304 = iprot.readString()
-              self.return_columns.append(_elem304)
+          (_etype328, _size325) = iprot.readListBegin()
+          if _size325 >= 0:
+            for _i329 in six.moves.range(_size325):
+              _elem330 = iprot.readString()
+              self.return_columns.append(_elem330)
           else: 
             while iprot.peekList():
-              _elem305 = iprot.readString()
-              self.return_columns.append(_elem305)
+              _elem331 = iprot.readString()
+              self.return_columns.append(_elem331)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -4587,15 +4617,15 @@ class UpdateVertexRequest:
     if self.update_items != None:
       oprot.writeFieldBegin('update_items', TType.LIST, 5)
       oprot.writeListBegin(TType.STRUCT, len(self.update_items))
-      for iter306 in self.update_items:
-        iter306.write(oprot)
+      for iter332 in self.update_items:
+        iter332.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.return_columns != None:
       oprot.writeFieldBegin('return_columns', TType.LIST, 6)
       oprot.writeListBegin(TType.STRING, len(self.return_columns))
-      for iter307 in self.return_columns:
-        oprot.writeString(iter307)
+      for iter333 in self.return_columns:
+        oprot.writeString(iter333)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.insertable != None:
@@ -4709,32 +4739,32 @@ class UpdateEdgeRequest:
       elif fid == 5:
         if ftype == TType.LIST:
           self.update_items = []
-          (_etype311, _size308) = iprot.readListBegin()
-          if _size308 >= 0:
-            for _i312 in six.moves.range(_size308):
-              _elem313 = UpdateItem()
-              _elem313.read(iprot)
-              self.update_items.append(_elem313)
+          (_etype337, _size334) = iprot.readListBegin()
+          if _size334 >= 0:
+            for _i338 in six.moves.range(_size334):
+              _elem339 = UpdateItem()
+              _elem339.read(iprot)
+              self.update_items.append(_elem339)
           else: 
             while iprot.peekList():
-              _elem314 = UpdateItem()
-              _elem314.read(iprot)
-              self.update_items.append(_elem314)
+              _elem340 = UpdateItem()
+              _elem340.read(iprot)
+              self.update_items.append(_elem340)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
       elif fid == 6:
         if ftype == TType.LIST:
           self.return_columns = []
-          (_etype318, _size315) = iprot.readListBegin()
-          if _size315 >= 0:
-            for _i319 in six.moves.range(_size315):
-              _elem320 = iprot.readString()
-              self.return_columns.append(_elem320)
+          (_etype344, _size341) = iprot.readListBegin()
+          if _size341 >= 0:
+            for _i345 in six.moves.range(_size341):
+              _elem346 = iprot.readString()
+              self.return_columns.append(_elem346)
           else: 
             while iprot.peekList():
-              _elem321 = iprot.readString()
-              self.return_columns.append(_elem321)
+              _elem347 = iprot.readString()
+              self.return_columns.append(_elem347)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -4779,15 +4809,15 @@ class UpdateEdgeRequest:
     if self.update_items != None:
       oprot.writeFieldBegin('update_items', TType.LIST, 5)
       oprot.writeListBegin(TType.STRUCT, len(self.update_items))
-      for iter322 in self.update_items:
-        iter322.write(oprot)
+      for iter348 in self.update_items:
+        iter348.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.return_columns != None:
       oprot.writeFieldBegin('return_columns', TType.LIST, 6)
       oprot.writeListBegin(TType.STRING, len(self.return_columns))
-      for iter323 in self.return_columns:
-        oprot.writeString(iter323)
+      for iter349 in self.return_columns:
+        oprot.writeString(iter349)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.insertable != None:
@@ -4896,41 +4926,41 @@ class ScanEdgeRequest:
       elif fid == 4:
         if ftype == TType.MAP:
           self.return_columns = {}
-          (_ktype325, _vtype326, _size324 ) = iprot.readMapBegin() 
-          if _size324 >= 0:
-            for _i328 in six.moves.range(_size324):
-              _key329 = iprot.readI32()
-              _val330 = []
-              (_etype334, _size331) = iprot.readListBegin()
-              if _size331 >= 0:
-                for _i335 in six.moves.range(_size331):
-                  _elem336 = PropDef()
-                  _elem336.read(iprot)
-                  _val330.append(_elem336)
+          (_ktype351, _vtype352, _size350 ) = iprot.readMapBegin() 
+          if _size350 >= 0:
+            for _i354 in six.moves.range(_size350):
+              _key355 = iprot.readI32()
+              _val356 = []
+              (_etype360, _size357) = iprot.readListBegin()
+              if _size357 >= 0:
+                for _i361 in six.moves.range(_size357):
+                  _elem362 = PropDef()
+                  _elem362.read(iprot)
+                  _val356.append(_elem362)
               else: 
                 while iprot.peekList():
-                  _elem337 = PropDef()
-                  _elem337.read(iprot)
-                  _val330.append(_elem337)
+                  _elem363 = PropDef()
+                  _elem363.read(iprot)
+                  _val356.append(_elem363)
               iprot.readListEnd()
-              self.return_columns[_key329] = _val330
+              self.return_columns[_key355] = _val356
           else: 
             while iprot.peekMap():
-              _key338 = iprot.readI32()
-              _val339 = []
-              (_etype343, _size340) = iprot.readListBegin()
-              if _size340 >= 0:
-                for _i344 in six.moves.range(_size340):
-                  _elem345 = PropDef()
-                  _elem345.read(iprot)
-                  _val339.append(_elem345)
+              _key364 = iprot.readI32()
+              _val365 = []
+              (_etype369, _size366) = iprot.readListBegin()
+              if _size366 >= 0:
+                for _i370 in six.moves.range(_size366):
+                  _elem371 = PropDef()
+                  _elem371.read(iprot)
+                  _val365.append(_elem371)
               else: 
                 while iprot.peekList():
-                  _elem346 = PropDef()
-                  _elem346.read(iprot)
-                  _val339.append(_elem346)
+                  _elem372 = PropDef()
+                  _elem372.read(iprot)
+                  _val365.append(_elem372)
               iprot.readListEnd()
-              self.return_columns[_key338] = _val339
+              self.return_columns[_key364] = _val365
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -4986,11 +5016,11 @@ class ScanEdgeRequest:
     if self.return_columns != None:
       oprot.writeFieldBegin('return_columns', TType.MAP, 4)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.return_columns))
-      for kiter347,viter348 in self.return_columns.items():
-        oprot.writeI32(kiter347)
-        oprot.writeListBegin(TType.STRUCT, len(viter348))
-        for iter349 in viter348:
-          iter349.write(oprot)
+      for kiter373,viter374 in self.return_columns.items():
+        oprot.writeI32(kiter373)
+        oprot.writeListBegin(TType.STRUCT, len(viter374))
+        for iter375 in viter374:
+          iter375.write(oprot)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -5104,36 +5134,36 @@ class ScanEdgeResponse:
       elif fid == 2:
         if ftype == TType.MAP:
           self.edge_schema = {}
-          (_ktype351, _vtype352, _size350 ) = iprot.readMapBegin() 
-          if _size350 >= 0:
-            for _i354 in six.moves.range(_size350):
-              _key355 = iprot.readI32()
-              _val356 = common.ttypes.Schema()
-              _val356.read(iprot)
-              self.edge_schema[_key355] = _val356
+          (_ktype377, _vtype378, _size376 ) = iprot.readMapBegin() 
+          if _size376 >= 0:
+            for _i380 in six.moves.range(_size376):
+              _key381 = iprot.readI32()
+              _val382 = common.ttypes.Schema()
+              _val382.read(iprot)
+              self.edge_schema[_key381] = _val382
           else: 
             while iprot.peekMap():
-              _key357 = iprot.readI32()
-              _val358 = common.ttypes.Schema()
-              _val358.read(iprot)
-              self.edge_schema[_key357] = _val358
+              _key383 = iprot.readI32()
+              _val384 = common.ttypes.Schema()
+              _val384.read(iprot)
+              self.edge_schema[_key383] = _val384
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.LIST:
           self.edge_data = []
-          (_etype362, _size359) = iprot.readListBegin()
-          if _size359 >= 0:
-            for _i363 in six.moves.range(_size359):
-              _elem364 = ScanEdge()
-              _elem364.read(iprot)
-              self.edge_data.append(_elem364)
+          (_etype388, _size385) = iprot.readListBegin()
+          if _size385 >= 0:
+            for _i389 in six.moves.range(_size385):
+              _elem390 = ScanEdge()
+              _elem390.read(iprot)
+              self.edge_data.append(_elem390)
           else: 
             while iprot.peekList():
-              _elem365 = ScanEdge()
-              _elem365.read(iprot)
-              self.edge_data.append(_elem365)
+              _elem391 = ScanEdge()
+              _elem391.read(iprot)
+              self.edge_data.append(_elem391)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -5174,16 +5204,16 @@ class ScanEdgeResponse:
     if self.edge_schema != None:
       oprot.writeFieldBegin('edge_schema', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.STRUCT, len(self.edge_schema))
-      for kiter366,viter367 in self.edge_schema.items():
-        oprot.writeI32(kiter366)
-        viter367.write(oprot)
+      for kiter392,viter393 in self.edge_schema.items():
+        oprot.writeI32(kiter392)
+        viter393.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.edge_data != None:
       oprot.writeFieldBegin('edge_data', TType.LIST, 3)
       oprot.writeListBegin(TType.STRUCT, len(self.edge_data))
-      for iter368 in self.edge_data:
-        iter368.write(oprot)
+      for iter394 in self.edge_data:
+        iter394.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.has_next != None:
@@ -5409,41 +5439,41 @@ class ScanVertexRequest:
       elif fid == 4:
         if ftype == TType.MAP:
           self.return_columns = {}
-          (_ktype370, _vtype371, _size369 ) = iprot.readMapBegin() 
-          if _size369 >= 0:
-            for _i373 in six.moves.range(_size369):
-              _key374 = iprot.readI32()
-              _val375 = []
-              (_etype379, _size376) = iprot.readListBegin()
-              if _size376 >= 0:
-                for _i380 in six.moves.range(_size376):
-                  _elem381 = PropDef()
-                  _elem381.read(iprot)
-                  _val375.append(_elem381)
+          (_ktype396, _vtype397, _size395 ) = iprot.readMapBegin() 
+          if _size395 >= 0:
+            for _i399 in six.moves.range(_size395):
+              _key400 = iprot.readI32()
+              _val401 = []
+              (_etype405, _size402) = iprot.readListBegin()
+              if _size402 >= 0:
+                for _i406 in six.moves.range(_size402):
+                  _elem407 = PropDef()
+                  _elem407.read(iprot)
+                  _val401.append(_elem407)
               else: 
                 while iprot.peekList():
-                  _elem382 = PropDef()
-                  _elem382.read(iprot)
-                  _val375.append(_elem382)
+                  _elem408 = PropDef()
+                  _elem408.read(iprot)
+                  _val401.append(_elem408)
               iprot.readListEnd()
-              self.return_columns[_key374] = _val375
+              self.return_columns[_key400] = _val401
           else: 
             while iprot.peekMap():
-              _key383 = iprot.readI32()
-              _val384 = []
-              (_etype388, _size385) = iprot.readListBegin()
-              if _size385 >= 0:
-                for _i389 in six.moves.range(_size385):
-                  _elem390 = PropDef()
-                  _elem390.read(iprot)
-                  _val384.append(_elem390)
+              _key409 = iprot.readI32()
+              _val410 = []
+              (_etype414, _size411) = iprot.readListBegin()
+              if _size411 >= 0:
+                for _i415 in six.moves.range(_size411):
+                  _elem416 = PropDef()
+                  _elem416.read(iprot)
+                  _val410.append(_elem416)
               else: 
                 while iprot.peekList():
-                  _elem391 = PropDef()
-                  _elem391.read(iprot)
-                  _val384.append(_elem391)
+                  _elem417 = PropDef()
+                  _elem417.read(iprot)
+                  _val410.append(_elem417)
               iprot.readListEnd()
-              self.return_columns[_key383] = _val384
+              self.return_columns[_key409] = _val410
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -5499,11 +5529,11 @@ class ScanVertexRequest:
     if self.return_columns != None:
       oprot.writeFieldBegin('return_columns', TType.MAP, 4)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.return_columns))
-      for kiter392,viter393 in self.return_columns.items():
-        oprot.writeI32(kiter392)
-        oprot.writeListBegin(TType.STRUCT, len(viter393))
-        for iter394 in viter393:
-          iter394.write(oprot)
+      for kiter418,viter419 in self.return_columns.items():
+        oprot.writeI32(kiter418)
+        oprot.writeListBegin(TType.STRUCT, len(viter419))
+        for iter420 in viter419:
+          iter420.write(oprot)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -5724,36 +5754,36 @@ class ScanVertexResponse:
       elif fid == 2:
         if ftype == TType.MAP:
           self.vertex_schema = {}
-          (_ktype396, _vtype397, _size395 ) = iprot.readMapBegin() 
-          if _size395 >= 0:
-            for _i399 in six.moves.range(_size395):
-              _key400 = iprot.readI32()
-              _val401 = common.ttypes.Schema()
-              _val401.read(iprot)
-              self.vertex_schema[_key400] = _val401
+          (_ktype422, _vtype423, _size421 ) = iprot.readMapBegin() 
+          if _size421 >= 0:
+            for _i425 in six.moves.range(_size421):
+              _key426 = iprot.readI32()
+              _val427 = common.ttypes.Schema()
+              _val427.read(iprot)
+              self.vertex_schema[_key426] = _val427
           else: 
             while iprot.peekMap():
-              _key402 = iprot.readI32()
-              _val403 = common.ttypes.Schema()
-              _val403.read(iprot)
-              self.vertex_schema[_key402] = _val403
+              _key428 = iprot.readI32()
+              _val429 = common.ttypes.Schema()
+              _val429.read(iprot)
+              self.vertex_schema[_key428] = _val429
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.LIST:
           self.vertex_data = []
-          (_etype407, _size404) = iprot.readListBegin()
-          if _size404 >= 0:
-            for _i408 in six.moves.range(_size404):
-              _elem409 = ScanVertex()
-              _elem409.read(iprot)
-              self.vertex_data.append(_elem409)
+          (_etype433, _size430) = iprot.readListBegin()
+          if _size430 >= 0:
+            for _i434 in six.moves.range(_size430):
+              _elem435 = ScanVertex()
+              _elem435.read(iprot)
+              self.vertex_data.append(_elem435)
           else: 
             while iprot.peekList():
-              _elem410 = ScanVertex()
-              _elem410.read(iprot)
-              self.vertex_data.append(_elem410)
+              _elem436 = ScanVertex()
+              _elem436.read(iprot)
+              self.vertex_data.append(_elem436)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -5794,16 +5824,16 @@ class ScanVertexResponse:
     if self.vertex_schema != None:
       oprot.writeFieldBegin('vertex_schema', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.STRUCT, len(self.vertex_schema))
-      for kiter411,viter412 in self.vertex_schema.items():
-        oprot.writeI32(kiter411)
-        viter412.write(oprot)
+      for kiter437,viter438 in self.vertex_schema.items():
+        oprot.writeI32(kiter437)
+        viter438.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.vertex_data != None:
       oprot.writeFieldBegin('vertex_data', TType.LIST, 3)
       oprot.writeListBegin(TType.STRUCT, len(self.vertex_data))
-      for iter413 in self.vertex_data:
-        iter413.write(oprot)
+      for iter439 in self.vertex_data:
+        iter439.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.has_next != None:
@@ -5892,41 +5922,41 @@ class PutRequest:
       elif fid == 2:
         if ftype == TType.MAP:
           self.parts = {}
-          (_ktype415, _vtype416, _size414 ) = iprot.readMapBegin() 
-          if _size414 >= 0:
-            for _i418 in six.moves.range(_size414):
-              _key419 = iprot.readI32()
-              _val420 = []
-              (_etype424, _size421) = iprot.readListBegin()
-              if _size421 >= 0:
-                for _i425 in six.moves.range(_size421):
-                  _elem426 = common.ttypes.Pair()
-                  _elem426.read(iprot)
-                  _val420.append(_elem426)
+          (_ktype441, _vtype442, _size440 ) = iprot.readMapBegin() 
+          if _size440 >= 0:
+            for _i444 in six.moves.range(_size440):
+              _key445 = iprot.readI32()
+              _val446 = []
+              (_etype450, _size447) = iprot.readListBegin()
+              if _size447 >= 0:
+                for _i451 in six.moves.range(_size447):
+                  _elem452 = common.ttypes.Pair()
+                  _elem452.read(iprot)
+                  _val446.append(_elem452)
               else: 
                 while iprot.peekList():
-                  _elem427 = common.ttypes.Pair()
-                  _elem427.read(iprot)
-                  _val420.append(_elem427)
+                  _elem453 = common.ttypes.Pair()
+                  _elem453.read(iprot)
+                  _val446.append(_elem453)
               iprot.readListEnd()
-              self.parts[_key419] = _val420
+              self.parts[_key445] = _val446
           else: 
             while iprot.peekMap():
-              _key428 = iprot.readI32()
-              _val429 = []
-              (_etype433, _size430) = iprot.readListBegin()
-              if _size430 >= 0:
-                for _i434 in six.moves.range(_size430):
-                  _elem435 = common.ttypes.Pair()
-                  _elem435.read(iprot)
-                  _val429.append(_elem435)
+              _key454 = iprot.readI32()
+              _val455 = []
+              (_etype459, _size456) = iprot.readListBegin()
+              if _size456 >= 0:
+                for _i460 in six.moves.range(_size456):
+                  _elem461 = common.ttypes.Pair()
+                  _elem461.read(iprot)
+                  _val455.append(_elem461)
               else: 
                 while iprot.peekList():
-                  _elem436 = common.ttypes.Pair()
-                  _elem436.read(iprot)
-                  _val429.append(_elem436)
+                  _elem462 = common.ttypes.Pair()
+                  _elem462.read(iprot)
+                  _val455.append(_elem462)
               iprot.readListEnd()
-              self.parts[_key428] = _val429
+              self.parts[_key454] = _val455
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -5954,11 +5984,11 @@ class PutRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
-      for kiter437,viter438 in self.parts.items():
-        oprot.writeI32(kiter437)
-        oprot.writeListBegin(TType.STRUCT, len(viter438))
-        for iter439 in viter438:
-          iter439.write(oprot)
+      for kiter463,viter464 in self.parts.items():
+        oprot.writeI32(kiter463)
+        oprot.writeListBegin(TType.STRUCT, len(viter464))
+        for iter465 in viter464:
+          iter465.write(oprot)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -6028,37 +6058,37 @@ class RemoveRequest:
       elif fid == 2:
         if ftype == TType.MAP:
           self.parts = {}
-          (_ktype441, _vtype442, _size440 ) = iprot.readMapBegin() 
-          if _size440 >= 0:
-            for _i444 in six.moves.range(_size440):
-              _key445 = iprot.readI32()
-              _val446 = []
-              (_etype450, _size447) = iprot.readListBegin()
-              if _size447 >= 0:
-                for _i451 in six.moves.range(_size447):
-                  _elem452 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-                  _val446.append(_elem452)
+          (_ktype467, _vtype468, _size466 ) = iprot.readMapBegin() 
+          if _size466 >= 0:
+            for _i470 in six.moves.range(_size466):
+              _key471 = iprot.readI32()
+              _val472 = []
+              (_etype476, _size473) = iprot.readListBegin()
+              if _size473 >= 0:
+                for _i477 in six.moves.range(_size473):
+                  _elem478 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+                  _val472.append(_elem478)
               else: 
                 while iprot.peekList():
-                  _elem453 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-                  _val446.append(_elem453)
+                  _elem479 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+                  _val472.append(_elem479)
               iprot.readListEnd()
-              self.parts[_key445] = _val446
+              self.parts[_key471] = _val472
           else: 
             while iprot.peekMap():
-              _key454 = iprot.readI32()
-              _val455 = []
-              (_etype459, _size456) = iprot.readListBegin()
-              if _size456 >= 0:
-                for _i460 in six.moves.range(_size456):
-                  _elem461 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-                  _val455.append(_elem461)
+              _key480 = iprot.readI32()
+              _val481 = []
+              (_etype485, _size482) = iprot.readListBegin()
+              if _size482 >= 0:
+                for _i486 in six.moves.range(_size482):
+                  _elem487 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+                  _val481.append(_elem487)
               else: 
                 while iprot.peekList():
-                  _elem462 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-                  _val455.append(_elem462)
+                  _elem488 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+                  _val481.append(_elem488)
               iprot.readListEnd()
-              self.parts[_key454] = _val455
+              self.parts[_key480] = _val481
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -6086,11 +6116,11 @@ class RemoveRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
-      for kiter463,viter464 in self.parts.items():
-        oprot.writeI32(kiter463)
-        oprot.writeListBegin(TType.STRING, len(viter464))
-        for iter465 in viter464:
-          oprot.writeString(iter465.encode('utf-8')) if UTF8STRINGS and not isinstance(iter465, bytes) else oprot.writeString(iter465)
+      for kiter489,viter490 in self.parts.items():
+        oprot.writeI32(kiter489)
+        oprot.writeListBegin(TType.STRING, len(viter490))
+        for iter491 in viter490:
+          oprot.writeString(iter491.encode('utf-8')) if UTF8STRINGS and not isinstance(iter491, bytes) else oprot.writeString(iter491)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -6160,41 +6190,41 @@ class RemoveRangeRequest:
       elif fid == 2:
         if ftype == TType.MAP:
           self.parts = {}
-          (_ktype467, _vtype468, _size466 ) = iprot.readMapBegin() 
-          if _size466 >= 0:
-            for _i470 in six.moves.range(_size466):
-              _key471 = iprot.readI32()
-              _val472 = []
-              (_etype476, _size473) = iprot.readListBegin()
-              if _size473 >= 0:
-                for _i477 in six.moves.range(_size473):
-                  _elem478 = common.ttypes.Pair()
-                  _elem478.read(iprot)
-                  _val472.append(_elem478)
+          (_ktype493, _vtype494, _size492 ) = iprot.readMapBegin() 
+          if _size492 >= 0:
+            for _i496 in six.moves.range(_size492):
+              _key497 = iprot.readI32()
+              _val498 = []
+              (_etype502, _size499) = iprot.readListBegin()
+              if _size499 >= 0:
+                for _i503 in six.moves.range(_size499):
+                  _elem504 = common.ttypes.Pair()
+                  _elem504.read(iprot)
+                  _val498.append(_elem504)
               else: 
                 while iprot.peekList():
-                  _elem479 = common.ttypes.Pair()
-                  _elem479.read(iprot)
-                  _val472.append(_elem479)
+                  _elem505 = common.ttypes.Pair()
+                  _elem505.read(iprot)
+                  _val498.append(_elem505)
               iprot.readListEnd()
-              self.parts[_key471] = _val472
+              self.parts[_key497] = _val498
           else: 
             while iprot.peekMap():
-              _key480 = iprot.readI32()
-              _val481 = []
-              (_etype485, _size482) = iprot.readListBegin()
-              if _size482 >= 0:
-                for _i486 in six.moves.range(_size482):
-                  _elem487 = common.ttypes.Pair()
-                  _elem487.read(iprot)
-                  _val481.append(_elem487)
+              _key506 = iprot.readI32()
+              _val507 = []
+              (_etype511, _size508) = iprot.readListBegin()
+              if _size508 >= 0:
+                for _i512 in six.moves.range(_size508):
+                  _elem513 = common.ttypes.Pair()
+                  _elem513.read(iprot)
+                  _val507.append(_elem513)
               else: 
                 while iprot.peekList():
-                  _elem488 = common.ttypes.Pair()
-                  _elem488.read(iprot)
-                  _val481.append(_elem488)
+                  _elem514 = common.ttypes.Pair()
+                  _elem514.read(iprot)
+                  _val507.append(_elem514)
               iprot.readListEnd()
-              self.parts[_key480] = _val481
+              self.parts[_key506] = _val507
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -6222,11 +6252,11 @@ class RemoveRangeRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
-      for kiter489,viter490 in self.parts.items():
-        oprot.writeI32(kiter489)
-        oprot.writeListBegin(TType.STRUCT, len(viter490))
-        for iter491 in viter490:
-          iter491.write(oprot)
+      for kiter515,viter516 in self.parts.items():
+        oprot.writeI32(kiter515)
+        oprot.writeListBegin(TType.STRUCT, len(viter516))
+        for iter517 in viter516:
+          iter517.write(oprot)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -6264,6 +6294,7 @@ class GetRequest:
   Attributes:
    - space_id
    - parts
+   - return_partly
   """
 
   thrift_spec = None
@@ -6296,38 +6327,43 @@ class GetRequest:
       elif fid == 2:
         if ftype == TType.MAP:
           self.parts = {}
-          (_ktype493, _vtype494, _size492 ) = iprot.readMapBegin() 
-          if _size492 >= 0:
-            for _i496 in six.moves.range(_size492):
-              _key497 = iprot.readI32()
-              _val498 = []
-              (_etype502, _size499) = iprot.readListBegin()
-              if _size499 >= 0:
-                for _i503 in six.moves.range(_size499):
-                  _elem504 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-                  _val498.append(_elem504)
+          (_ktype519, _vtype520, _size518 ) = iprot.readMapBegin() 
+          if _size518 >= 0:
+            for _i522 in six.moves.range(_size518):
+              _key523 = iprot.readI32()
+              _val524 = []
+              (_etype528, _size525) = iprot.readListBegin()
+              if _size525 >= 0:
+                for _i529 in six.moves.range(_size525):
+                  _elem530 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+                  _val524.append(_elem530)
               else: 
                 while iprot.peekList():
-                  _elem505 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-                  _val498.append(_elem505)
+                  _elem531 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+                  _val524.append(_elem531)
               iprot.readListEnd()
-              self.parts[_key497] = _val498
+              self.parts[_key523] = _val524
           else: 
             while iprot.peekMap():
-              _key506 = iprot.readI32()
-              _val507 = []
-              (_etype511, _size508) = iprot.readListBegin()
-              if _size508 >= 0:
-                for _i512 in six.moves.range(_size508):
-                  _elem513 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-                  _val507.append(_elem513)
+              _key532 = iprot.readI32()
+              _val533 = []
+              (_etype537, _size534) = iprot.readListBegin()
+              if _size534 >= 0:
+                for _i538 in six.moves.range(_size534):
+                  _elem539 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+                  _val533.append(_elem539)
               else: 
                 while iprot.peekList():
-                  _elem514 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-                  _val507.append(_elem514)
+                  _elem540 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+                  _val533.append(_elem540)
               iprot.readListEnd()
-              self.parts[_key506] = _val507
+              self.parts[_key532] = _val533
           iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.BOOL:
+          self.return_partly = iprot.readBool()
         else:
           iprot.skip(ftype)
       else:
@@ -6354,13 +6390,17 @@ class GetRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
-      for kiter515,viter516 in self.parts.items():
-        oprot.writeI32(kiter515)
-        oprot.writeListBegin(TType.STRING, len(viter516))
-        for iter517 in viter516:
-          oprot.writeString(iter517.encode('utf-8')) if UTF8STRINGS and not isinstance(iter517, bytes) else oprot.writeString(iter517)
+      for kiter541,viter542 in self.parts.items():
+        oprot.writeI32(kiter541)
+        oprot.writeListBegin(TType.STRING, len(viter542))
+        for iter543 in viter542:
+          oprot.writeString(iter543.encode('utf-8')) if UTF8STRINGS and not isinstance(iter543, bytes) else oprot.writeString(iter543)
         oprot.writeListEnd()
       oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    if self.return_partly != None:
+      oprot.writeFieldBegin('return_partly', TType.BOOL, 3)
+      oprot.writeBool(self.return_partly)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -6376,6 +6416,10 @@ class GetRequest:
       value = pprint.pformat(self.parts, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    parts=%s' % (value))
+    if self.return_partly is not None:
+      value = pprint.pformat(self.return_partly, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    return_partly=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -6428,17 +6472,17 @@ class PrefixRequest:
       elif fid == 2:
         if ftype == TType.MAP:
           self.parts = {}
-          (_ktype519, _vtype520, _size518 ) = iprot.readMapBegin() 
-          if _size518 >= 0:
-            for _i522 in six.moves.range(_size518):
-              _key523 = iprot.readI32()
-              _val524 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-              self.parts[_key523] = _val524
+          (_ktype545, _vtype546, _size544 ) = iprot.readMapBegin() 
+          if _size544 >= 0:
+            for _i548 in six.moves.range(_size544):
+              _key549 = iprot.readI32()
+              _val550 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+              self.parts[_key549] = _val550
           else: 
             while iprot.peekMap():
-              _key525 = iprot.readI32()
-              _val526 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-              self.parts[_key525] = _val526
+              _key551 = iprot.readI32()
+              _val552 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+              self.parts[_key551] = _val552
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -6466,9 +6510,9 @@ class PrefixRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.STRING, len(self.parts))
-      for kiter527,viter528 in self.parts.items():
-        oprot.writeI32(kiter527)
-        oprot.writeString(viter528.encode('utf-8')) if UTF8STRINGS and not isinstance(viter528, bytes) else oprot.writeString(viter528)
+      for kiter553,viter554 in self.parts.items():
+        oprot.writeI32(kiter553)
+        oprot.writeString(viter554.encode('utf-8')) if UTF8STRINGS and not isinstance(viter554, bytes) else oprot.writeString(viter554)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -6537,19 +6581,19 @@ class ScanRequest:
       elif fid == 2:
         if ftype == TType.MAP:
           self.parts = {}
-          (_ktype530, _vtype531, _size529 ) = iprot.readMapBegin() 
-          if _size529 >= 0:
-            for _i533 in six.moves.range(_size529):
-              _key534 = iprot.readI32()
-              _val535 = common.ttypes.Pair()
-              _val535.read(iprot)
-              self.parts[_key534] = _val535
+          (_ktype556, _vtype557, _size555 ) = iprot.readMapBegin() 
+          if _size555 >= 0:
+            for _i559 in six.moves.range(_size555):
+              _key560 = iprot.readI32()
+              _val561 = common.ttypes.Pair()
+              _val561.read(iprot)
+              self.parts[_key560] = _val561
           else: 
             while iprot.peekMap():
-              _key536 = iprot.readI32()
-              _val537 = common.ttypes.Pair()
-              _val537.read(iprot)
-              self.parts[_key536] = _val537
+              _key562 = iprot.readI32()
+              _val563 = common.ttypes.Pair()
+              _val563.read(iprot)
+              self.parts[_key562] = _val563
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -6577,9 +6621,9 @@ class ScanRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.STRUCT, len(self.parts))
-      for kiter538,viter539 in self.parts.items():
-        oprot.writeI32(kiter538)
-        viter539.write(oprot)
+      for kiter564,viter565 in self.parts.items():
+        oprot.writeI32(kiter564)
+        viter565.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -6649,17 +6693,17 @@ class GeneralResponse:
       elif fid == 2:
         if ftype == TType.MAP:
           self.values = {}
-          (_ktype541, _vtype542, _size540 ) = iprot.readMapBegin() 
-          if _size540 >= 0:
-            for _i544 in six.moves.range(_size540):
-              _key545 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-              _val546 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-              self.values[_key545] = _val546
+          (_ktype567, _vtype568, _size566 ) = iprot.readMapBegin() 
+          if _size566 >= 0:
+            for _i570 in six.moves.range(_size566):
+              _key571 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+              _val572 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+              self.values[_key571] = _val572
           else: 
             while iprot.peekMap():
-              _key547 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-              _val548 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-              self.values[_key547] = _val548
+              _key573 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+              _val574 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+              self.values[_key573] = _val574
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -6690,9 +6734,9 @@ class GeneralResponse:
     if self.values != None:
       oprot.writeFieldBegin('values', TType.MAP, 2)
       oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.values))
-      for kiter549,viter550 in self.values.items():
-        oprot.writeString(kiter549.encode('utf-8')) if UTF8STRINGS and not isinstance(kiter549, bytes) else oprot.writeString(kiter549)
-        oprot.writeString(viter550.encode('utf-8')) if UTF8STRINGS and not isinstance(viter550, bytes) else oprot.writeString(viter550)
+      for kiter575,viter576 in self.values.items():
+        oprot.writeString(kiter575.encode('utf-8')) if UTF8STRINGS and not isinstance(kiter575, bytes) else oprot.writeString(kiter575)
+        oprot.writeString(viter576.encode('utf-8')) if UTF8STRINGS and not isinstance(viter576, bytes) else oprot.writeString(viter576)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7210,6 +7254,555 @@ class DropCPRequest:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class RebuildIndexRequest:
+  """
+  Attributes:
+   - space_id
+   - parts
+   - index_id
+   - is_offline
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I32:
+          self.space_id = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.parts = []
+          (_etype580, _size577) = iprot.readListBegin()
+          if _size577 >= 0:
+            for _i581 in six.moves.range(_size577):
+              _elem582 = iprot.readI32()
+              self.parts.append(_elem582)
+          else: 
+            while iprot.peekList():
+              _elem583 = iprot.readI32()
+              self.parts.append(_elem583)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.index_id = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.BOOL:
+          self.is_offline = iprot.readBool()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('RebuildIndexRequest')
+    if self.space_id != None:
+      oprot.writeFieldBegin('space_id', TType.I32, 1)
+      oprot.writeI32(self.space_id)
+      oprot.writeFieldEnd()
+    if self.parts != None:
+      oprot.writeFieldBegin('parts', TType.LIST, 2)
+      oprot.writeListBegin(TType.I32, len(self.parts))
+      for iter584 in self.parts:
+        oprot.writeI32(iter584)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.index_id != None:
+      oprot.writeFieldBegin('index_id', TType.I32, 3)
+      oprot.writeI32(self.index_id)
+      oprot.writeFieldEnd()
+    if self.is_offline != None:
+      oprot.writeFieldBegin('is_offline', TType.BOOL, 4)
+      oprot.writeBool(self.is_offline)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.space_id is not None:
+      value = pprint.pformat(self.space_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    space_id=%s' % (value))
+    if self.parts is not None:
+      value = pprint.pformat(self.parts, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    parts=%s' % (value))
+    if self.index_id is not None:
+      value = pprint.pformat(self.index_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    index_id=%s' % (value))
+    if self.is_offline is not None:
+      value = pprint.pformat(self.is_offline, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    is_offline=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class LookUpVertexIndexResp:
+  """
+  Attributes:
+   - result
+   - schema
+   - rows
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.result = ResponseCommon()
+          self.result.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRUCT:
+          self.schema = common.ttypes.Schema()
+          self.schema.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.LIST:
+          self.rows = []
+          (_etype588, _size585) = iprot.readListBegin()
+          if _size585 >= 0:
+            for _i589 in six.moves.range(_size585):
+              _elem590 = VertexIndexData()
+              _elem590.read(iprot)
+              self.rows.append(_elem590)
+          else: 
+            while iprot.peekList():
+              _elem591 = VertexIndexData()
+              _elem591.read(iprot)
+              self.rows.append(_elem591)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    if self.result == None:
+      raise TProtocolException(TProtocolException.MISSING_REQUIRED_FIELD, "Required field 'result' was not found in serialized data! Struct: LookUpVertexIndexResp")
+
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('LookUpVertexIndexResp')
+    if self.result != None:
+      oprot.writeFieldBegin('result', TType.STRUCT, 1)
+      self.result.write(oprot)
+      oprot.writeFieldEnd()
+    if self.schema != None:
+      oprot.writeFieldBegin('schema', TType.STRUCT, 2)
+      self.schema.write(oprot)
+      oprot.writeFieldEnd()
+    if self.rows != None:
+      oprot.writeFieldBegin('rows', TType.LIST, 3)
+      oprot.writeListBegin(TType.STRUCT, len(self.rows))
+      for iter592 in self.rows:
+        iter592.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.result is not None:
+      value = pprint.pformat(self.result, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    result=%s' % (value))
+    if self.schema is not None:
+      value = pprint.pformat(self.schema, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    schema=%s' % (value))
+    if self.rows is not None:
+      value = pprint.pformat(self.rows, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    rows=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class LookUpEdgeIndexResp:
+  """
+  Attributes:
+   - result
+   - schema
+   - rows
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.result = ResponseCommon()
+          self.result.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRUCT:
+          self.schema = common.ttypes.Schema()
+          self.schema.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.LIST:
+          self.rows = []
+          (_etype596, _size593) = iprot.readListBegin()
+          if _size593 >= 0:
+            for _i597 in six.moves.range(_size593):
+              _elem598 = Edge()
+              _elem598.read(iprot)
+              self.rows.append(_elem598)
+          else: 
+            while iprot.peekList():
+              _elem599 = Edge()
+              _elem599.read(iprot)
+              self.rows.append(_elem599)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    if self.result == None:
+      raise TProtocolException(TProtocolException.MISSING_REQUIRED_FIELD, "Required field 'result' was not found in serialized data! Struct: LookUpEdgeIndexResp")
+
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('LookUpEdgeIndexResp')
+    if self.result != None:
+      oprot.writeFieldBegin('result', TType.STRUCT, 1)
+      self.result.write(oprot)
+      oprot.writeFieldEnd()
+    if self.schema != None:
+      oprot.writeFieldBegin('schema', TType.STRUCT, 2)
+      self.schema.write(oprot)
+      oprot.writeFieldEnd()
+    if self.rows != None:
+      oprot.writeFieldBegin('rows', TType.LIST, 3)
+      oprot.writeListBegin(TType.STRUCT, len(self.rows))
+      for iter600 in self.rows:
+        iter600.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.result is not None:
+      value = pprint.pformat(self.result, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    result=%s' % (value))
+    if self.schema is not None:
+      value = pprint.pformat(self.schema, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    schema=%s' % (value))
+    if self.rows is not None:
+      value = pprint.pformat(self.rows, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    rows=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class LookUpIndexRequest:
+  """
+  Attributes:
+   - space_id
+   - parts
+   - index_id
+   - filter
+   - return_columns
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I32:
+          self.space_id = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.parts = []
+          (_etype604, _size601) = iprot.readListBegin()
+          if _size601 >= 0:
+            for _i605 in six.moves.range(_size601):
+              _elem606 = iprot.readI32()
+              self.parts.append(_elem606)
+          else: 
+            while iprot.peekList():
+              _elem607 = iprot.readI32()
+              self.parts.append(_elem607)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.index_id = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.filter = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.LIST:
+          self.return_columns = []
+          (_etype611, _size608) = iprot.readListBegin()
+          if _size608 >= 0:
+            for _i612 in six.moves.range(_size608):
+              _elem613 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+              self.return_columns.append(_elem613)
+          else: 
+            while iprot.peekList():
+              _elem614 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+              self.return_columns.append(_elem614)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('LookUpIndexRequest')
+    if self.space_id != None:
+      oprot.writeFieldBegin('space_id', TType.I32, 1)
+      oprot.writeI32(self.space_id)
+      oprot.writeFieldEnd()
+    if self.parts != None:
+      oprot.writeFieldBegin('parts', TType.LIST, 2)
+      oprot.writeListBegin(TType.I32, len(self.parts))
+      for iter615 in self.parts:
+        oprot.writeI32(iter615)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.index_id != None:
+      oprot.writeFieldBegin('index_id', TType.I32, 3)
+      oprot.writeI32(self.index_id)
+      oprot.writeFieldEnd()
+    if self.filter != None:
+      oprot.writeFieldBegin('filter', TType.STRING, 4)
+      oprot.writeString(self.filter)
+      oprot.writeFieldEnd()
+    if self.return_columns != None:
+      oprot.writeFieldBegin('return_columns', TType.LIST, 5)
+      oprot.writeListBegin(TType.STRING, len(self.return_columns))
+      for iter616 in self.return_columns:
+        oprot.writeString(iter616.encode('utf-8')) if UTF8STRINGS and not isinstance(iter616, bytes) else oprot.writeString(iter616)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.space_id is not None:
+      value = pprint.pformat(self.space_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    space_id=%s' % (value))
+    if self.parts is not None:
+      value = pprint.pformat(self.parts, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    parts=%s' % (value))
+    if self.index_id is not None:
+      value = pprint.pformat(self.index_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    index_id=%s' % (value))
+    if self.filter is not None:
+      value = pprint.pformat(self.filter, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    filter=%s' % (value))
+    if self.return_columns is not None:
+      value = pprint.pformat(self.return_columns, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    return_columns=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
 all_structs.append(EntryId)
 EntryId.thrift_spec = (
   None, # 0
@@ -7297,11 +7890,96 @@ def ResultCode__setstate__(self, state):
 ResultCode.__getstate__ = lambda self: self.__dict__.copy()
 ResultCode.__setstate__ = ResultCode__setstate__
 
+all_structs.append(EdgeKey)
+EdgeKey.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'src', None, None, 2, ), # 1
+  (2, TType.I32, 'edge_type', None, None, 2, ), # 2
+  (3, TType.I64, 'ranking', None, None, 2, ), # 3
+  (4, TType.I64, 'dst', None, None, 2, ), # 4
+)
+
+EdgeKey.thrift_struct_annotations = {
+}
+EdgeKey.thrift_field_annotations = {
+}
+
+def EdgeKey__init__(self, src=None, edge_type=None, ranking=None, dst=None,):
+  self.src = src
+  self.edge_type = edge_type
+  self.ranking = ranking
+  self.dst = dst
+
+EdgeKey.__init__ = EdgeKey__init__
+
+def EdgeKey__setstate__(self, state):
+  state.setdefault('src', None)
+  state.setdefault('edge_type', None)
+  state.setdefault('ranking', None)
+  state.setdefault('dst', None)
+  self.__dict__ = state
+
+EdgeKey.__getstate__ = lambda self: self.__dict__.copy()
+EdgeKey.__setstate__ = EdgeKey__setstate__
+
+all_structs.append(Edge)
+Edge.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'key', [EdgeKey, EdgeKey.thrift_spec, False], None, 2, ), # 1
+  (2, TType.STRING, 'props', False, None, 2, ), # 2
+)
+
+Edge.thrift_struct_annotations = {
+}
+Edge.thrift_field_annotations = {
+}
+
+def Edge__init__(self, key=None, props=None,):
+  self.key = key
+  self.props = props
+
+Edge.__init__ = Edge__init__
+
+def Edge__setstate__(self, state):
+  state.setdefault('key', None)
+  state.setdefault('props', None)
+  self.__dict__ = state
+
+Edge.__getstate__ = lambda self: self.__dict__.copy()
+Edge.__setstate__ = Edge__setstate__
+
+all_structs.append(IdAndProp)
+IdAndProp.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'dst', None, None, 2, ), # 1
+  (2, TType.STRING, 'props', False, None, 2, ), # 2
+)
+
+IdAndProp.thrift_struct_annotations = {
+}
+IdAndProp.thrift_field_annotations = {
+}
+
+def IdAndProp__init__(self, dst=None, props=None,):
+  self.dst = dst
+  self.props = props
+
+IdAndProp.__init__ = IdAndProp__init__
+
+def IdAndProp__setstate__(self, state):
+  state.setdefault('dst', None)
+  state.setdefault('props', None)
+  self.__dict__ = state
+
+IdAndProp.__getstate__ = lambda self: self.__dict__.copy()
+IdAndProp.__setstate__ = IdAndProp__setstate__
+
 all_structs.append(EdgeData)
 EdgeData.thrift_spec = (
   None, # 0
   (1, TType.I32, 'type', None, None, 2, ), # 1
-  (2, TType.STRING, 'data', False, None, 2, ), # 2
+  None, # 2
+  (3, TType.LIST, 'edges', (TType.STRUCT,[IdAndProp, IdAndProp.thrift_spec, False]), None, 2, ), # 3
 )
 
 EdgeData.thrift_struct_annotations = {
@@ -7309,15 +7987,15 @@ EdgeData.thrift_struct_annotations = {
 EdgeData.thrift_field_annotations = {
 }
 
-def EdgeData__init__(self, type=None, data=None,):
+def EdgeData__init__(self, type=None, edges=None,):
   self.type = type
-  self.data = data
+  self.edges = edges
 
 EdgeData.__init__ = EdgeData__init__
 
 def EdgeData__setstate__(self, state):
   state.setdefault('type', None)
-  state.setdefault('data', None)
+  state.setdefault('edges', None)
   self.__dict__ = state
 
 EdgeData.__getstate__ = lambda self: self.__dict__.copy()
@@ -7378,6 +8056,32 @@ def VertexData__setstate__(self, state):
 VertexData.__getstate__ = lambda self: self.__dict__.copy()
 VertexData.__setstate__ = VertexData__setstate__
 
+all_structs.append(VertexIndexData)
+VertexIndexData.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'vertex_id', None, None, 2, ), # 1
+  (2, TType.STRING, 'props', False, None, 2, ), # 2
+)
+
+VertexIndexData.thrift_struct_annotations = {
+}
+VertexIndexData.thrift_field_annotations = {
+}
+
+def VertexIndexData__init__(self, vertex_id=None, props=None,):
+  self.vertex_id = vertex_id
+  self.props = props
+
+VertexIndexData.__init__ = VertexIndexData__init__
+
+def VertexIndexData__setstate__(self, state):
+  state.setdefault('vertex_id', None)
+  state.setdefault('props', None)
+  self.__dict__ = state
+
+VertexIndexData.__getstate__ = lambda self: self.__dict__.copy()
+VertexIndexData.__setstate__ = VertexIndexData__setstate__
+
 all_structs.append(ResponseCommon)
 ResponseCommon.thrift_spec = (
   None, # 0
@@ -7411,6 +8115,7 @@ QueryResponse.thrift_spec = (
   (2, TType.MAP, 'vertex_schema', (TType.I32,None,TType.STRUCT,[common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False]), None, 1, ), # 2
   (3, TType.MAP, 'edge_schema', (TType.I32,None,TType.STRUCT,[common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False]), None, 1, ), # 3
   (4, TType.LIST, 'vertices', (TType.STRUCT,[VertexData, VertexData.thrift_spec, False]), None, 1, ), # 4
+  (5, TType.I32, 'total_edges', None, None, 1, ), # 5
 )
 
 QueryResponse.thrift_struct_annotations = {
@@ -7418,11 +8123,12 @@ QueryResponse.thrift_struct_annotations = {
 QueryResponse.thrift_field_annotations = {
 }
 
-def QueryResponse__init__(self, result=None, vertex_schema=None, edge_schema=None, vertices=None,):
+def QueryResponse__init__(self, result=None, vertex_schema=None, edge_schema=None, vertices=None, total_edges=None,):
   self.result = result
   self.vertex_schema = vertex_schema
   self.edge_schema = edge_schema
   self.vertices = vertices
+  self.total_edges = total_edges
 
 QueryResponse.__init__ = QueryResponse__init__
 
@@ -7431,6 +8137,7 @@ def QueryResponse__setstate__(self, state):
   state.setdefault('vertex_schema', None)
   state.setdefault('edge_schema', None)
   state.setdefault('vertices', None)
+  state.setdefault('total_edges', None)
   self.__dict__ = state
 
 QueryResponse.__getstate__ = lambda self: self.__dict__.copy()
@@ -7517,32 +8224,6 @@ def QueryStatsResponse__setstate__(self, state):
 QueryStatsResponse.__getstate__ = lambda self: self.__dict__.copy()
 QueryStatsResponse.__setstate__ = QueryStatsResponse__setstate__
 
-all_structs.append(EdgeKeyResponse)
-EdgeKeyResponse.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'result', [ResponseCommon, ResponseCommon.thrift_spec, False], None, 0, ), # 1
-  (2, TType.LIST, 'edge_keys', (TType.STRUCT,[EdgeKey, EdgeKey.thrift_spec, False]), None, 1, ), # 2
-)
-
-EdgeKeyResponse.thrift_struct_annotations = {
-}
-EdgeKeyResponse.thrift_field_annotations = {
-}
-
-def EdgeKeyResponse__init__(self, result=None, edge_keys=None,):
-  self.result = result
-  self.edge_keys = edge_keys
-
-EdgeKeyResponse.__init__ = EdgeKeyResponse__init__
-
-def EdgeKeyResponse__setstate__(self, state):
-  state.setdefault('result', None)
-  state.setdefault('edge_keys', None)
-  self.__dict__ = state
-
-EdgeKeyResponse.__getstate__ = lambda self: self.__dict__.copy()
-EdgeKeyResponse.__setstate__ = EdgeKeyResponse__setstate__
-
 all_structs.append(Tag)
 Tag.thrift_spec = (
   None, # 0
@@ -7594,64 +8275,6 @@ def Vertex__setstate__(self, state):
 
 Vertex.__getstate__ = lambda self: self.__dict__.copy()
 Vertex.__setstate__ = Vertex__setstate__
-
-all_structs.append(EdgeKey)
-EdgeKey.thrift_spec = (
-  None, # 0
-  (1, TType.I64, 'src', None, None, 2, ), # 1
-  (2, TType.I32, 'edge_type', None, None, 2, ), # 2
-  (3, TType.I64, 'ranking', None, None, 2, ), # 3
-  (4, TType.I64, 'dst', None, None, 2, ), # 4
-)
-
-EdgeKey.thrift_struct_annotations = {
-}
-EdgeKey.thrift_field_annotations = {
-}
-
-def EdgeKey__init__(self, src=None, edge_type=None, ranking=None, dst=None,):
-  self.src = src
-  self.edge_type = edge_type
-  self.ranking = ranking
-  self.dst = dst
-
-EdgeKey.__init__ = EdgeKey__init__
-
-def EdgeKey__setstate__(self, state):
-  state.setdefault('src', None)
-  state.setdefault('edge_type', None)
-  state.setdefault('ranking', None)
-  state.setdefault('dst', None)
-  self.__dict__ = state
-
-EdgeKey.__getstate__ = lambda self: self.__dict__.copy()
-EdgeKey.__setstate__ = EdgeKey__setstate__
-
-all_structs.append(Edge)
-Edge.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'key', [EdgeKey, EdgeKey.thrift_spec, False], None, 2, ), # 1
-  (2, TType.STRING, 'props', False, None, 2, ), # 2
-)
-
-Edge.thrift_struct_annotations = {
-}
-Edge.thrift_field_annotations = {
-}
-
-def Edge__init__(self, key=None, props=None,):
-  self.key = key
-  self.props = props
-
-Edge.__init__ = Edge__init__
-
-def Edge__setstate__(self, state):
-  state.setdefault('key', None)
-  state.setdefault('props', None)
-  self.__dict__ = state
-
-Edge.__getstate__ = lambda self: self.__dict__.copy()
-Edge.__setstate__ = Edge__setstate__
 
 all_structs.append(GetNeighborsRequest)
 GetNeighborsRequest.thrift_spec = (
@@ -7810,63 +8433,31 @@ def AddEdgesRequest__setstate__(self, state):
 AddEdgesRequest.__getstate__ = lambda self: self.__dict__.copy()
 AddEdgesRequest.__setstate__ = AddEdgesRequest__setstate__
 
-all_structs.append(EdgeKeyRequest)
-EdgeKeyRequest.thrift_spec = (
+all_structs.append(DeleteVerticesRequest)
+DeleteVerticesRequest.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
-  (2, TType.I32, 'part_id', None, None, 2, ), # 2
-  (3, TType.I64, 'vid', None, None, 2, ), # 3
+  (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.I64,None)), None, 2, ), # 2
 )
 
-EdgeKeyRequest.thrift_struct_annotations = {
+DeleteVerticesRequest.thrift_struct_annotations = {
 }
-EdgeKeyRequest.thrift_field_annotations = {
+DeleteVerticesRequest.thrift_field_annotations = {
 }
 
-def EdgeKeyRequest__init__(self, space_id=None, part_id=None, vid=None,):
+def DeleteVerticesRequest__init__(self, space_id=None, parts=None,):
   self.space_id = space_id
-  self.part_id = part_id
-  self.vid = vid
+  self.parts = parts
 
-EdgeKeyRequest.__init__ = EdgeKeyRequest__init__
+DeleteVerticesRequest.__init__ = DeleteVerticesRequest__init__
 
-def EdgeKeyRequest__setstate__(self, state):
+def DeleteVerticesRequest__setstate__(self, state):
   state.setdefault('space_id', None)
-  state.setdefault('part_id', None)
-  state.setdefault('vid', None)
+  state.setdefault('parts', None)
   self.__dict__ = state
 
-EdgeKeyRequest.__getstate__ = lambda self: self.__dict__.copy()
-EdgeKeyRequest.__setstate__ = EdgeKeyRequest__setstate__
-
-all_structs.append(DeleteVertexRequest)
-DeleteVertexRequest.thrift_spec = (
-  None, # 0
-  (1, TType.I32, 'space_id', None, None, 2, ), # 1
-  (2, TType.I32, 'part_id', None, None, 2, ), # 2
-  (3, TType.I64, 'vid', None, None, 2, ), # 3
-)
-
-DeleteVertexRequest.thrift_struct_annotations = {
-}
-DeleteVertexRequest.thrift_field_annotations = {
-}
-
-def DeleteVertexRequest__init__(self, space_id=None, part_id=None, vid=None,):
-  self.space_id = space_id
-  self.part_id = part_id
-  self.vid = vid
-
-DeleteVertexRequest.__init__ = DeleteVertexRequest__init__
-
-def DeleteVertexRequest__setstate__(self, state):
-  state.setdefault('space_id', None)
-  state.setdefault('part_id', None)
-  state.setdefault('vid', None)
-  self.__dict__ = state
-
-DeleteVertexRequest.__getstate__ = lambda self: self.__dict__.copy()
-DeleteVertexRequest.__setstate__ = DeleteVertexRequest__setstate__
+DeleteVerticesRequest.__getstate__ = lambda self: self.__dict__.copy()
+DeleteVerticesRequest.__setstate__ = DeleteVerticesRequest__setstate__
 
 all_structs.append(DeleteEdgesRequest)
 DeleteEdgesRequest.thrift_spec = (
@@ -8600,6 +9191,7 @@ GetRequest.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
   (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRING,True)), None, 2, ), # 2
+  (3, TType.BOOL, 'return_partly', None, None, 2, ), # 3
 )
 
 GetRequest.thrift_struct_annotations = {
@@ -8607,15 +9199,17 @@ GetRequest.thrift_struct_annotations = {
 GetRequest.thrift_field_annotations = {
 }
 
-def GetRequest__init__(self, space_id=None, parts=None,):
+def GetRequest__init__(self, space_id=None, parts=None, return_partly=None,):
   self.space_id = space_id
   self.parts = parts
+  self.return_partly = return_partly
 
 GetRequest.__init__ = GetRequest__init__
 
 def GetRequest__setstate__(self, state):
   state.setdefault('space_id', None)
   state.setdefault('parts', None)
+  state.setdefault('return_partly', None)
   self.__dict__ = state
 
 GetRequest.__getstate__ = lambda self: self.__dict__.copy()
@@ -8831,6 +9425,131 @@ def DropCPRequest__setstate__(self, state):
 
 DropCPRequest.__getstate__ = lambda self: self.__dict__.copy()
 DropCPRequest.__setstate__ = DropCPRequest__setstate__
+
+all_structs.append(RebuildIndexRequest)
+RebuildIndexRequest.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'space_id', None, None, 2, ), # 1
+  (2, TType.LIST, 'parts', (TType.I32,None), None, 2, ), # 2
+  (3, TType.I32, 'index_id', None, None, 2, ), # 3
+  (4, TType.BOOL, 'is_offline', None, None, 2, ), # 4
+)
+
+RebuildIndexRequest.thrift_struct_annotations = {
+}
+RebuildIndexRequest.thrift_field_annotations = {
+}
+
+def RebuildIndexRequest__init__(self, space_id=None, parts=None, index_id=None, is_offline=None,):
+  self.space_id = space_id
+  self.parts = parts
+  self.index_id = index_id
+  self.is_offline = is_offline
+
+RebuildIndexRequest.__init__ = RebuildIndexRequest__init__
+
+def RebuildIndexRequest__setstate__(self, state):
+  state.setdefault('space_id', None)
+  state.setdefault('parts', None)
+  state.setdefault('index_id', None)
+  state.setdefault('is_offline', None)
+  self.__dict__ = state
+
+RebuildIndexRequest.__getstate__ = lambda self: self.__dict__.copy()
+RebuildIndexRequest.__setstate__ = RebuildIndexRequest__setstate__
+
+all_structs.append(LookUpVertexIndexResp)
+LookUpVertexIndexResp.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'result', [ResponseCommon, ResponseCommon.thrift_spec, False], None, 0, ), # 1
+  (2, TType.STRUCT, 'schema', [common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False], None, 1, ), # 2
+  (3, TType.LIST, 'rows', (TType.STRUCT,[VertexIndexData, VertexIndexData.thrift_spec, False]), None, 1, ), # 3
+)
+
+LookUpVertexIndexResp.thrift_struct_annotations = {
+}
+LookUpVertexIndexResp.thrift_field_annotations = {
+}
+
+def LookUpVertexIndexResp__init__(self, result=None, schema=None, rows=None,):
+  self.result = result
+  self.schema = schema
+  self.rows = rows
+
+LookUpVertexIndexResp.__init__ = LookUpVertexIndexResp__init__
+
+def LookUpVertexIndexResp__setstate__(self, state):
+  state.setdefault('result', None)
+  state.setdefault('schema', None)
+  state.setdefault('rows', None)
+  self.__dict__ = state
+
+LookUpVertexIndexResp.__getstate__ = lambda self: self.__dict__.copy()
+LookUpVertexIndexResp.__setstate__ = LookUpVertexIndexResp__setstate__
+
+all_structs.append(LookUpEdgeIndexResp)
+LookUpEdgeIndexResp.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'result', [ResponseCommon, ResponseCommon.thrift_spec, False], None, 0, ), # 1
+  (2, TType.STRUCT, 'schema', [common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False], None, 1, ), # 2
+  (3, TType.LIST, 'rows', (TType.STRUCT,[Edge, Edge.thrift_spec, False]), None, 1, ), # 3
+)
+
+LookUpEdgeIndexResp.thrift_struct_annotations = {
+}
+LookUpEdgeIndexResp.thrift_field_annotations = {
+}
+
+def LookUpEdgeIndexResp__init__(self, result=None, schema=None, rows=None,):
+  self.result = result
+  self.schema = schema
+  self.rows = rows
+
+LookUpEdgeIndexResp.__init__ = LookUpEdgeIndexResp__init__
+
+def LookUpEdgeIndexResp__setstate__(self, state):
+  state.setdefault('result', None)
+  state.setdefault('schema', None)
+  state.setdefault('rows', None)
+  self.__dict__ = state
+
+LookUpEdgeIndexResp.__getstate__ = lambda self: self.__dict__.copy()
+LookUpEdgeIndexResp.__setstate__ = LookUpEdgeIndexResp__setstate__
+
+all_structs.append(LookUpIndexRequest)
+LookUpIndexRequest.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'space_id', None, None, 2, ), # 1
+  (2, TType.LIST, 'parts', (TType.I32,None), None, 2, ), # 2
+  (3, TType.I32, 'index_id', None, None, 2, ), # 3
+  (4, TType.STRING, 'filter', False, None, 2, ), # 4
+  (5, TType.LIST, 'return_columns', (TType.STRING,True), None, 2, ), # 5
+)
+
+LookUpIndexRequest.thrift_struct_annotations = {
+}
+LookUpIndexRequest.thrift_field_annotations = {
+}
+
+def LookUpIndexRequest__init__(self, space_id=None, parts=None, index_id=None, filter=None, return_columns=None,):
+  self.space_id = space_id
+  self.parts = parts
+  self.index_id = index_id
+  self.filter = filter
+  self.return_columns = return_columns
+
+LookUpIndexRequest.__init__ = LookUpIndexRequest__init__
+
+def LookUpIndexRequest__setstate__(self, state):
+  state.setdefault('space_id', None)
+  state.setdefault('parts', None)
+  state.setdefault('index_id', None)
+  state.setdefault('filter', None)
+  state.setdefault('return_columns', None)
+  self.__dict__ = state
+
+LookUpIndexRequest.__getstate__ = lambda self: self.__dict__.copy()
+LookUpIndexRequest.__setstate__ = LookUpIndexRequest__setstate__
 
 fix_spec(all_structs)
 del all_structs

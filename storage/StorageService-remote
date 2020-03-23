@@ -48,9 +48,8 @@ FUNCTIONS = {
     'getEdgeProps': Function('getEdgeProps', 'StorageService', 'EdgePropResponse', [('EdgePropRequest', 'req', 'EdgePropRequest')]),
     'addVertices': Function('addVertices', 'StorageService', 'ExecResponse', [('AddVerticesRequest', 'req', 'AddVerticesRequest')]),
     'addEdges': Function('addEdges', 'StorageService', 'ExecResponse', [('AddEdgesRequest', 'req', 'AddEdgesRequest')]),
-    'getEdgeKeys': Function('getEdgeKeys', 'StorageService', 'EdgeKeyResponse', [('EdgeKeyRequest', 'req', 'EdgeKeyRequest')]),
     'deleteEdges': Function('deleteEdges', 'StorageService', 'ExecResponse', [('DeleteEdgesRequest', 'req', 'DeleteEdgesRequest')]),
-    'deleteVertex': Function('deleteVertex', 'StorageService', 'ExecResponse', [('DeleteVertexRequest', 'req', 'DeleteVertexRequest')]),
+    'deleteVertices': Function('deleteVertices', 'StorageService', 'ExecResponse', [('DeleteVerticesRequest', 'req', 'DeleteVerticesRequest')]),
     'updateVertex': Function('updateVertex', 'StorageService', 'UpdateResponse', [('UpdateVertexRequest', 'req', 'UpdateVertexRequest')]),
     'updateEdge': Function('updateEdge', 'StorageService', 'UpdateResponse', [('UpdateEdgeRequest', 'req', 'UpdateEdgeRequest')]),
     'scanEdge': Function('scanEdge', 'StorageService', 'ScanEdgeResponse', [('ScanEdgeRequest', 'req', 'ScanEdgeRequest')]),
@@ -66,11 +65,15 @@ FUNCTIONS = {
     'createCheckpoint': Function('createCheckpoint', 'StorageService', 'AdminExecResp', [('CreateCPRequest', 'req', 'CreateCPRequest')]),
     'dropCheckpoint': Function('dropCheckpoint', 'StorageService', 'AdminExecResp', [('DropCPRequest', 'req', 'DropCPRequest')]),
     'blockingWrites': Function('blockingWrites', 'StorageService', 'AdminExecResp', [('BlockingSignRequest', 'req', 'BlockingSignRequest')]),
+    'rebuildTagIndex': Function('rebuildTagIndex', 'StorageService', 'AdminExecResp', [('RebuildIndexRequest', 'req', 'RebuildIndexRequest')]),
+    'rebuildEdgeIndex': Function('rebuildEdgeIndex', 'StorageService', 'AdminExecResp', [('RebuildIndexRequest', 'req', 'RebuildIndexRequest')]),
     'put': Function('put', 'StorageService', 'ExecResponse', [('PutRequest', 'req', 'PutRequest')]),
     'get': Function('get', 'StorageService', 'GeneralResponse', [('GetRequest', 'req', 'GetRequest')]),
     'remove': Function('remove', 'StorageService', 'ExecResponse', [('RemoveRequest', 'req', 'RemoveRequest')]),
     'removeRange': Function('removeRange', 'StorageService', 'ExecResponse', [('RemoveRangeRequest', 'req', 'RemoveRangeRequest')]),
     'getUUID': Function('getUUID', 'StorageService', 'GetUUIDResp', [('GetUUIDReq', 'req', 'GetUUIDReq')]),
+    'lookUpVertexIndex': Function('lookUpVertexIndex', 'StorageService', 'LookUpVertexIndexResp', [('LookUpIndexRequest', 'req', 'LookUpIndexRequest')]),
+    'lookUpEdgeIndex': Function('lookUpEdgeIndex', 'StorageService', 'LookUpEdgeIndexResp', [('LookUpIndexRequest', 'req', 'LookUpIndexRequest')]),
 }
 
 SERVICE_NAMES = ['StorageService', ]

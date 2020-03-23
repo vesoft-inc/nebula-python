@@ -29,7 +29,7 @@ if not '__pypy__' in sys.builtin_module_names:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'SupportedType', 'ValueType', 'Value', 'ColumnDef', 'SchemaProp', 'Schema', 'HostAddr', 'Pair', 'IndexItem', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'VertexID', 'TagIndexID', 'EdgeIndexID', 'IPv4', 'Port', 'SchemaVer', 'UserID', 'ClusterID', 'IndexID']
+__all__ = ['UTF8STRINGS', 'SupportedType', 'RoleType', 'ValueType', 'Value', 'ColumnDef', 'SchemaProp', 'Schema', 'SchemaID', 'IndexItem', 'HostAddr', 'Pair', 'RoleItem', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'VertexID', 'IndexID', 'IPv4', 'Port', 'SchemaVer', 'ClusterID']
 
 class SupportedType:
   UNKNOWN = 0
@@ -76,6 +76,38 @@ class SupportedType:
     "DATE": 24,
     "DATETIME": 25,
     "PATH": 41,
+  }
+
+class RoleType:
+  """
+  * GOD is A global senior administrator.like root of Linux systems.
+  * ADMIN is an administrator for a given Graph Space.
+  * DBA is an schema administrator for a given Graph Space.
+  * USER is a normal user for a given Graph Space. A User can access (read and write) the data in the Graph Space.
+  * GUEST is a read-only role for a given Graph Space. A Guest cannot modify the data in the Graph Space.
+  * Refer to header file src/graph/PermissionManager.h for details.
+  
+  """
+  GOD = 1
+  ADMIN = 2
+  DBA = 3
+  USER = 4
+  GUEST = 5
+
+  _VALUES_TO_NAMES = {
+    1: "GOD",
+    2: "ADMIN",
+    3: "DBA",
+    4: "USER",
+    5: "GUEST",
+  }
+
+  _NAMES_TO_VALUES = {
+    "GOD": 1,
+    "ADMIN": 2,
+    "DBA": 3,
+    "USER": 4,
+    "GUEST": 5,
   }
 
 class ValueType:
@@ -698,6 +730,273 @@ class Schema:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class SchemaID(object):
+  """
+  Attributes:
+   - tag_id
+   - edge_type
+  """
+
+  thrift_spec = None
+  __init__ = None
+
+  __EMPTY__ = 0
+  TAG_ID = 1
+  EDGE_TYPE = 2
+  
+  @staticmethod
+  def isUnion():
+    return True
+
+  def get_tag_id(self):
+    assert self.field == 1
+    return self.value
+
+  def get_edge_type(self):
+    assert self.field == 2
+    return self.value
+
+  def set_tag_id(self, value):
+    self.field = 1
+    self.value = value
+
+  def set_edge_type(self, value):
+    self.field = 2
+    self.value = value
+
+  def getType(self):
+    return self.field
+
+  def __repr__(self):
+    value = pprint.pformat(self.value)
+    member = ''
+    if self.field == 1:
+      padding = ' ' * 7
+      value = padding.join(value.splitlines(True))
+      member = '\n    %s=%s' % ('tag_id', value)
+    if self.field == 2:
+      padding = ' ' * 10
+      value = padding.join(value.splitlines(True))
+      member = '\n    %s=%s' % ('edge_type', value)
+    return "%s(%s)" % (self.__class__.__name__, member)
+
+  def read(self, iprot):
+    self.field = 0
+    self.value = None
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+
+      if fid == 1:
+        if ftype == TType.I32:
+          tag_id = iprot.readI32()
+          assert self.field == 0 and self.value is None
+          self.set_tag_id(tag_id)
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I32:
+          edge_type = iprot.readI32()
+          assert self.field == 0 and self.value is None
+          self.set_edge_type(edge_type)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeUnionBegin('SchemaID')
+    if self.field == 1:
+      oprot.writeFieldBegin('tag_id', TType.I32, 1)
+      tag_id = self.value
+      oprot.writeI32(tag_id)
+      oprot.writeFieldEnd()
+    if self.field == 2:
+      oprot.writeFieldBegin('edge_type', TType.I32, 2)
+      edge_type = self.value
+      oprot.writeI32(edge_type)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeUnionEnd()
+  
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+class IndexItem:
+  """
+  Attributes:
+   - index_id
+   - index_name
+   - schema_id
+   - schema_name
+   - fields
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I32:
+          self.index_id = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.index_name = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRUCT:
+          self.schema_id = SchemaID()
+          self.schema_id.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.schema_name = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.LIST:
+          self.fields = []
+          (_etype11, _size8) = iprot.readListBegin()
+          if _size8 >= 0:
+            for _i12 in six.moves.range(_size8):
+              _elem13 = ColumnDef()
+              _elem13.read(iprot)
+              self.fields.append(_elem13)
+          else: 
+            while iprot.peekList():
+              _elem14 = ColumnDef()
+              _elem14.read(iprot)
+              self.fields.append(_elem14)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('IndexItem')
+    if self.index_id != None:
+      oprot.writeFieldBegin('index_id', TType.I32, 1)
+      oprot.writeI32(self.index_id)
+      oprot.writeFieldEnd()
+    if self.index_name != None:
+      oprot.writeFieldBegin('index_name', TType.STRING, 2)
+      oprot.writeString(self.index_name.encode('utf-8')) if UTF8STRINGS and not isinstance(self.index_name, bytes) else oprot.writeString(self.index_name)
+      oprot.writeFieldEnd()
+    if self.schema_id != None:
+      oprot.writeFieldBegin('schema_id', TType.STRUCT, 3)
+      self.schema_id.write(oprot)
+      oprot.writeFieldEnd()
+    if self.schema_name != None:
+      oprot.writeFieldBegin('schema_name', TType.STRING, 4)
+      oprot.writeString(self.schema_name.encode('utf-8')) if UTF8STRINGS and not isinstance(self.schema_name, bytes) else oprot.writeString(self.schema_name)
+      oprot.writeFieldEnd()
+    if self.fields != None:
+      oprot.writeFieldBegin('fields', TType.LIST, 5)
+      oprot.writeListBegin(TType.STRUCT, len(self.fields))
+      for iter15 in self.fields:
+        iter15.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.index_id is not None:
+      value = pprint.pformat(self.index_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    index_id=%s' % (value))
+    if self.index_name is not None:
+      value = pprint.pformat(self.index_name, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    index_name=%s' % (value))
+    if self.schema_id is not None:
+      value = pprint.pformat(self.schema_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    schema_id=%s' % (value))
+    if self.schema_name is not None:
+      value = pprint.pformat(self.schema_name, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    schema_name=%s' % (value))
+    if self.fields is not None:
+      value = pprint.pformat(self.fields, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    fields=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
 class HostAddr:
   """
   Attributes:
@@ -884,12 +1183,12 @@ class Pair:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class IndexItem:
+class RoleItem:
   """
   Attributes:
-   - index_id
-   - tagOrEdge
-   - cols
+   - user
+   - space_id
+   - role_type
   """
 
   thrift_spec = None
@@ -915,30 +1214,18 @@ class IndexItem:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.I32:
-          self.index_id = iprot.readI32()
+        if ftype == TType.STRING:
+          self.user = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.I32:
-          self.tagOrEdge = iprot.readI32()
+          self.space_id = iprot.readI32()
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.LIST:
-          self.cols = []
-          (_etype11, _size8) = iprot.readListBegin()
-          if _size8 >= 0:
-            for _i12 in six.moves.range(_size8):
-              _elem13 = ColumnDef()
-              _elem13.read(iprot)
-              self.cols.append(_elem13)
-          else: 
-            while iprot.peekList():
-              _elem14 = ColumnDef()
-              _elem14.read(iprot)
-              self.cols.append(_elem14)
-          iprot.readListEnd()
+        if ftype == TType.I32:
+          self.role_type = iprot.readI32()
         else:
           iprot.skip(ftype)
       else:
@@ -948,15 +1235,6 @@ class IndexItem:
     self.checkRequired()
 
   def checkRequired(self):
-    if self.index_id == None:
-      raise TProtocolException(TProtocolException.MISSING_REQUIRED_FIELD, "Required field 'index_id' was not found in serialized data! Struct: IndexItem")
-
-    if self.tagOrEdge == None:
-      raise TProtocolException(TProtocolException.MISSING_REQUIRED_FIELD, "Required field 'tagOrEdge' was not found in serialized data! Struct: IndexItem")
-
-    if self.cols == None:
-      raise TProtocolException(TProtocolException.MISSING_REQUIRED_FIELD, "Required field 'cols' was not found in serialized data! Struct: IndexItem")
-
     return
 
   def write(self, oprot):
@@ -966,21 +1244,18 @@ class IndexItem:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('IndexItem')
-    if self.index_id != None:
-      oprot.writeFieldBegin('index_id', TType.I32, 1)
-      oprot.writeI32(self.index_id)
+    oprot.writeStructBegin('RoleItem')
+    if self.user != None:
+      oprot.writeFieldBegin('user', TType.STRING, 1)
+      oprot.writeString(self.user.encode('utf-8')) if UTF8STRINGS and not isinstance(self.user, bytes) else oprot.writeString(self.user)
       oprot.writeFieldEnd()
-    if self.tagOrEdge != None:
-      oprot.writeFieldBegin('tagOrEdge', TType.I32, 2)
-      oprot.writeI32(self.tagOrEdge)
+    if self.space_id != None:
+      oprot.writeFieldBegin('space_id', TType.I32, 2)
+      oprot.writeI32(self.space_id)
       oprot.writeFieldEnd()
-    if self.cols != None:
-      oprot.writeFieldBegin('cols', TType.LIST, 3)
-      oprot.writeListBegin(TType.STRUCT, len(self.cols))
-      for iter15 in self.cols:
-        iter15.write(oprot)
-      oprot.writeListEnd()
+    if self.role_type != None:
+      oprot.writeFieldBegin('role_type', TType.I32, 3)
+      oprot.writeI32(self.role_type)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -988,18 +1263,18 @@ class IndexItem:
   def __repr__(self):
     L = []
     padding = ' ' * 4
-    if self.index_id is not None:
-      value = pprint.pformat(self.index_id, indent=0)
+    if self.user is not None:
+      value = pprint.pformat(self.user, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    index_id=%s' % (value))
-    if self.tagOrEdge is not None:
-      value = pprint.pformat(self.tagOrEdge, indent=0)
+      L.append('    user=%s' % (value))
+    if self.space_id is not None:
+      value = pprint.pformat(self.space_id, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    tagOrEdge=%s' % (value))
-    if self.cols is not None:
-      value = pprint.pformat(self.cols, indent=0)
+      L.append('    space_id=%s' % (value))
+    if self.role_type is not None:
+      value = pprint.pformat(self.role_type, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    cols=%s' % (value))
+      L.append('    role_type=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -1021,14 +1296,11 @@ TagID = UnimplementedTypedef()
 EdgeType = UnimplementedTypedef()
 EdgeRanking = UnimplementedTypedef()
 VertexID = UnimplementedTypedef()
-TagIndexID = UnimplementedTypedef()
-EdgeIndexID = UnimplementedTypedef()
+IndexID = UnimplementedTypedef()
 IPv4 = UnimplementedTypedef()
 Port = UnimplementedTypedef()
 SchemaVer = UnimplementedTypedef()
-UserID = UnimplementedTypedef()
 ClusterID = UnimplementedTypedef()
-IndexID = UnimplementedTypedef()
 all_structs.append(ValueType)
 ValueType.thrift_spec = (
   None, # 0
@@ -1187,6 +1459,67 @@ def Schema__setstate__(self, state):
 Schema.__getstate__ = lambda self: self.__dict__.copy()
 Schema.__setstate__ = Schema__setstate__
 
+all_structs.append(SchemaID)
+SchemaID.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'tag_id', None, None, 2, ), # 1
+  (2, TType.I32, 'edge_type', None, None, 2, ), # 2
+)
+
+SchemaID.thrift_struct_annotations = {
+}
+SchemaID.thrift_field_annotations = {
+}
+
+def SchemaID__init__(self, tag_id=None, edge_type=None,):
+  self.field = 0
+  self.value = None
+  if tag_id is not None:
+    assert self.field == 0 and self.value is None
+    self.field = 1
+    self.value = tag_id
+  if edge_type is not None:
+    assert self.field == 0 and self.value is None
+    self.field = 2
+    self.value = edge_type
+
+SchemaID.__init__ = SchemaID__init__
+
+all_structs.append(IndexItem)
+IndexItem.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'index_id', None, None, 2, ), # 1
+  (2, TType.STRING, 'index_name', True, None, 2, ), # 2
+  (3, TType.STRUCT, 'schema_id', [SchemaID, SchemaID.thrift_spec, True], None, 2, ), # 3
+  (4, TType.STRING, 'schema_name', True, None, 2, ), # 4
+  (5, TType.LIST, 'fields', (TType.STRUCT,[ColumnDef, ColumnDef.thrift_spec, False]), None, 2, ), # 5
+)
+
+IndexItem.thrift_struct_annotations = {
+}
+IndexItem.thrift_field_annotations = {
+}
+
+def IndexItem__init__(self, index_id=None, index_name=None, schema_id=None, schema_name=None, fields=None,):
+  self.index_id = index_id
+  self.index_name = index_name
+  self.schema_id = schema_id
+  self.schema_name = schema_name
+  self.fields = fields
+
+IndexItem.__init__ = IndexItem__init__
+
+def IndexItem__setstate__(self, state):
+  state.setdefault('index_id', None)
+  state.setdefault('index_name', None)
+  state.setdefault('schema_id', None)
+  state.setdefault('schema_name', None)
+  state.setdefault('fields', None)
+  self.__dict__ = state
+
+IndexItem.__getstate__ = lambda self: self.__dict__.copy()
+IndexItem.__setstate__ = IndexItem__setstate__
+
 all_structs.append(HostAddr)
 HostAddr.thrift_spec = (
   None, # 0
@@ -1239,34 +1572,34 @@ def Pair__setstate__(self, state):
 Pair.__getstate__ = lambda self: self.__dict__.copy()
 Pair.__setstate__ = Pair__setstate__
 
-all_structs.append(IndexItem)
-IndexItem.thrift_spec = (
+all_structs.append(RoleItem)
+RoleItem.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'index_id', None, None, 0, ), # 1
-  (2, TType.I32, 'tagOrEdge', None, None, 0, ), # 2
-  (3, TType.LIST, 'cols', (TType.STRUCT,[ColumnDef, ColumnDef.thrift_spec, False]), None, 0, ), # 3
+  (1, TType.STRING, 'user', True, None, 2, ), # 1
+  (2, TType.I32, 'space_id', None, None, 2, ), # 2
+  (3, TType.I32, 'role_type', RoleType, None, 2, ), # 3
 )
 
-IndexItem.thrift_struct_annotations = {
+RoleItem.thrift_struct_annotations = {
 }
-IndexItem.thrift_field_annotations = {
+RoleItem.thrift_field_annotations = {
 }
 
-def IndexItem__init__(self, index_id=None, tagOrEdge=None, cols=None,):
-  self.index_id = index_id
-  self.tagOrEdge = tagOrEdge
-  self.cols = cols
+def RoleItem__init__(self, user=None, space_id=None, role_type=None,):
+  self.user = user
+  self.space_id = space_id
+  self.role_type = role_type
 
-IndexItem.__init__ = IndexItem__init__
+RoleItem.__init__ = RoleItem__init__
 
-def IndexItem__setstate__(self, state):
-  state.setdefault('index_id', None)
-  state.setdefault('tagOrEdge', None)
-  state.setdefault('cols', None)
+def RoleItem__setstate__(self, state):
+  state.setdefault('user', None)
+  state.setdefault('space_id', None)
+  state.setdefault('role_type', None)
   self.__dict__ = state
 
-IndexItem.__getstate__ = lambda self: self.__dict__.copy()
-IndexItem.__setstate__ = IndexItem__setstate__
+RoleItem.__getstate__ = lambda self: self.__dict__.copy()
+RoleItem.__setstate__ = RoleItem__setstate__
 
 fix_spec(all_structs)
 del all_structs
