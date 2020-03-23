@@ -44,6 +44,8 @@ class ErrorCode:
   E_SYNTAX_ERROR = -7
   E_EXECUTION_ERROR = -8
   E_STATEMENT_EMTPY = -9
+  E_USER_NOT_FOUND = -10
+  E_BAD_PERMISSION = -11
 
   _VALUES_TO_NAMES = {
     0: "SUCCEEDED",
@@ -56,6 +58,8 @@ class ErrorCode:
     -7: "E_SYNTAX_ERROR",
     -8: "E_EXECUTION_ERROR",
     -9: "E_STATEMENT_EMTPY",
+    -10: "E_USER_NOT_FOUND",
+    -11: "E_BAD_PERMISSION",
   }
 
   _NAMES_TO_VALUES = {
@@ -69,6 +73,8 @@ class ErrorCode:
     "E_SYNTAX_ERROR": -7,
     "E_EXECUTION_ERROR": -8,
     "E_STATEMENT_EMTPY": -9,
+    "E_USER_NOT_FOUND": -10,
+    "E_BAD_PERMISSION": -11,
   }
 
 class YearMonth:

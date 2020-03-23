@@ -78,13 +78,6 @@ class Iface:
     """
     pass
 
-  def getEdgeKeys(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
   def deleteEdges(self, req=None):
     """
     Parameters:
@@ -92,7 +85,7 @@ class Iface:
     """
     pass
 
-  def deleteVertex(self, req=None):
+  def deleteVertices(self, req=None):
     """
     Parameters:
      - req
@@ -204,6 +197,20 @@ class Iface:
     """
     pass
 
+  def rebuildTagIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def rebuildEdgeIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def put(self, req=None):
     """
     Parameters:
@@ -233,6 +240,20 @@ class Iface:
     pass
 
   def getUUID(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def lookUpVertexIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def lookUpEdgeIndex(self, req=None):
     """
     Parameters:
      - req
@@ -283,13 +304,6 @@ class ContextIface:
     """
     pass
 
-  def getEdgeKeys(self, handler_ctx, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
   def deleteEdges(self, handler_ctx, req=None):
     """
     Parameters:
@@ -297,7 +311,7 @@ class ContextIface:
     """
     pass
 
-  def deleteVertex(self, handler_ctx, req=None):
+  def deleteVertices(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -409,6 +423,20 @@ class ContextIface:
     """
     pass
 
+  def rebuildTagIndex(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def rebuildEdgeIndex(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def put(self, handler_ctx, req=None):
     """
     Parameters:
@@ -438,6 +466,20 @@ class ContextIface:
     pass
 
   def getUUID(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def lookUpVertexIndex(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def lookUpEdgeIndex(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -1677,211 +1719,6 @@ def addEdges_result__setstate__(self, state):
 addEdges_result.__getstate__ = lambda self: self.__dict__.copy()
 addEdges_result.__setstate__ = addEdges_result__setstate__
 
-class getEdgeKeys_args:
-  """
-  Attributes:
-   - req
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      self.checkRequired()
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      self.checkRequired()
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.req = EdgeKeyRequest()
-          self.req.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-    self.checkRequired()
-
-  def checkRequired(self):
-    return
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('getEdgeKeys_args')
-    if self.req != None:
-      oprot.writeFieldBegin('req', TType.STRUCT, 1)
-      self.req.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.req is not None:
-      value = pprint.pformat(self.req, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    req=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(getEdgeKeys_args)
-getEdgeKeys_args.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'req', [EdgeKeyRequest, EdgeKeyRequest.thrift_spec, False], None, 2, ), # 1
-)
-
-getEdgeKeys_args.thrift_struct_annotations = {
-}
-getEdgeKeys_args.thrift_field_annotations = {
-}
-
-def getEdgeKeys_args__init__(self, req=None,):
-  self.req = req
-
-getEdgeKeys_args.__init__ = getEdgeKeys_args__init__
-
-def getEdgeKeys_args__setstate__(self, state):
-  state.setdefault('req', None)
-  self.__dict__ = state
-
-getEdgeKeys_args.__getstate__ = lambda self: self.__dict__.copy()
-getEdgeKeys_args.__setstate__ = getEdgeKeys_args__setstate__
-
-class getEdgeKeys_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      self.checkRequired()
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      self.checkRequired()
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.STRUCT:
-          self.success = EdgeKeyResponse()
-          self.success.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-    self.checkRequired()
-
-  def checkRequired(self):
-    return
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('getEdgeKeys_result')
-    if self.success != None:
-      oprot.writeFieldBegin('success', TType.STRUCT, 0)
-      self.success.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.success is not None:
-      value = pprint.pformat(self.success, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    success=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(getEdgeKeys_result)
-getEdgeKeys_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [EdgeKeyResponse, EdgeKeyResponse.thrift_spec, False], None, 2, ), # 0
-)
-
-getEdgeKeys_result.thrift_struct_annotations = {
-}
-getEdgeKeys_result.thrift_field_annotations = {
-}
-
-def getEdgeKeys_result__init__(self, success=None,):
-  self.success = success
-
-getEdgeKeys_result.__init__ = getEdgeKeys_result__init__
-
-def getEdgeKeys_result__setstate__(self, state):
-  state.setdefault('success', None)
-  self.__dict__ = state
-
-getEdgeKeys_result.__getstate__ = lambda self: self.__dict__.copy()
-getEdgeKeys_result.__setstate__ = getEdgeKeys_result__setstate__
-
 class deleteEdges_args:
   """
   Attributes:
@@ -2087,7 +1924,7 @@ def deleteEdges_result__setstate__(self, state):
 deleteEdges_result.__getstate__ = lambda self: self.__dict__.copy()
 deleteEdges_result.__setstate__ = deleteEdges_result__setstate__
 
-class deleteVertex_args:
+class deleteVertices_args:
   """
   Attributes:
    - req
@@ -2117,7 +1954,7 @@ class deleteVertex_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = DeleteVertexRequest()
+          self.req = DeleteVerticesRequest()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -2137,7 +1974,7 @@ class deleteVertex_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('deleteVertex_args')
+    oprot.writeStructBegin('deleteVertices_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -2167,30 +2004,30 @@ class deleteVertex_args:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(deleteVertex_args)
-deleteVertex_args.thrift_spec = (
+all_structs.append(deleteVertices_args)
+deleteVertices_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [DeleteVertexRequest, DeleteVertexRequest.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [DeleteVerticesRequest, DeleteVerticesRequest.thrift_spec, False], None, 2, ), # 1
 )
 
-deleteVertex_args.thrift_struct_annotations = {
+deleteVertices_args.thrift_struct_annotations = {
 }
-deleteVertex_args.thrift_field_annotations = {
+deleteVertices_args.thrift_field_annotations = {
 }
 
-def deleteVertex_args__init__(self, req=None,):
+def deleteVertices_args__init__(self, req=None,):
   self.req = req
 
-deleteVertex_args.__init__ = deleteVertex_args__init__
+deleteVertices_args.__init__ = deleteVertices_args__init__
 
-def deleteVertex_args__setstate__(self, state):
+def deleteVertices_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-deleteVertex_args.__getstate__ = lambda self: self.__dict__.copy()
-deleteVertex_args.__setstate__ = deleteVertex_args__setstate__
+deleteVertices_args.__getstate__ = lambda self: self.__dict__.copy()
+deleteVertices_args.__setstate__ = deleteVertices_args__setstate__
 
-class deleteVertex_result:
+class deleteVertices_result:
   """
   Attributes:
    - success
@@ -2240,7 +2077,7 @@ class deleteVertex_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('deleteVertex_result')
+    oprot.writeStructBegin('deleteVertices_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -2270,27 +2107,27 @@ class deleteVertex_result:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(deleteVertex_result)
-deleteVertex_result.thrift_spec = (
+all_structs.append(deleteVertices_result)
+deleteVertices_result.thrift_spec = (
   (0, TType.STRUCT, 'success', [ExecResponse, ExecResponse.thrift_spec, False], None, 2, ), # 0
 )
 
-deleteVertex_result.thrift_struct_annotations = {
+deleteVertices_result.thrift_struct_annotations = {
 }
-deleteVertex_result.thrift_field_annotations = {
+deleteVertices_result.thrift_field_annotations = {
 }
 
-def deleteVertex_result__init__(self, success=None,):
+def deleteVertices_result__init__(self, success=None,):
   self.success = success
 
-deleteVertex_result.__init__ = deleteVertex_result__init__
+deleteVertices_result.__init__ = deleteVertices_result__init__
 
-def deleteVertex_result__setstate__(self, state):
+def deleteVertices_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-deleteVertex_result.__getstate__ = lambda self: self.__dict__.copy()
-deleteVertex_result.__setstate__ = deleteVertex_result__setstate__
+deleteVertices_result.__getstate__ = lambda self: self.__dict__.copy()
+deleteVertices_result.__setstate__ = deleteVertices_result__setstate__
 
 class updateVertex_args:
   """
@@ -5367,6 +5204,416 @@ def blockingWrites_result__setstate__(self, state):
 blockingWrites_result.__getstate__ = lambda self: self.__dict__.copy()
 blockingWrites_result.__setstate__ = blockingWrites_result__setstate__
 
+class rebuildTagIndex_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = RebuildIndexRequest()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('rebuildTagIndex_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(rebuildTagIndex_args)
+rebuildTagIndex_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [RebuildIndexRequest, RebuildIndexRequest.thrift_spec, False], None, 2, ), # 1
+)
+
+rebuildTagIndex_args.thrift_struct_annotations = {
+}
+rebuildTagIndex_args.thrift_field_annotations = {
+}
+
+def rebuildTagIndex_args__init__(self, req=None,):
+  self.req = req
+
+rebuildTagIndex_args.__init__ = rebuildTagIndex_args__init__
+
+def rebuildTagIndex_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+rebuildTagIndex_args.__getstate__ = lambda self: self.__dict__.copy()
+rebuildTagIndex_args.__setstate__ = rebuildTagIndex_args__setstate__
+
+class rebuildTagIndex_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = AdminExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('rebuildTagIndex_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(rebuildTagIndex_result)
+rebuildTagIndex_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [AdminExecResp, AdminExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+rebuildTagIndex_result.thrift_struct_annotations = {
+}
+rebuildTagIndex_result.thrift_field_annotations = {
+}
+
+def rebuildTagIndex_result__init__(self, success=None,):
+  self.success = success
+
+rebuildTagIndex_result.__init__ = rebuildTagIndex_result__init__
+
+def rebuildTagIndex_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+rebuildTagIndex_result.__getstate__ = lambda self: self.__dict__.copy()
+rebuildTagIndex_result.__setstate__ = rebuildTagIndex_result__setstate__
+
+class rebuildEdgeIndex_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = RebuildIndexRequest()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('rebuildEdgeIndex_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(rebuildEdgeIndex_args)
+rebuildEdgeIndex_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [RebuildIndexRequest, RebuildIndexRequest.thrift_spec, False], None, 2, ), # 1
+)
+
+rebuildEdgeIndex_args.thrift_struct_annotations = {
+}
+rebuildEdgeIndex_args.thrift_field_annotations = {
+}
+
+def rebuildEdgeIndex_args__init__(self, req=None,):
+  self.req = req
+
+rebuildEdgeIndex_args.__init__ = rebuildEdgeIndex_args__init__
+
+def rebuildEdgeIndex_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+rebuildEdgeIndex_args.__getstate__ = lambda self: self.__dict__.copy()
+rebuildEdgeIndex_args.__setstate__ = rebuildEdgeIndex_args__setstate__
+
+class rebuildEdgeIndex_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = AdminExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('rebuildEdgeIndex_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(rebuildEdgeIndex_result)
+rebuildEdgeIndex_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [AdminExecResp, AdminExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+rebuildEdgeIndex_result.thrift_struct_annotations = {
+}
+rebuildEdgeIndex_result.thrift_field_annotations = {
+}
+
+def rebuildEdgeIndex_result__init__(self, success=None,):
+  self.success = success
+
+rebuildEdgeIndex_result.__init__ = rebuildEdgeIndex_result__init__
+
+def rebuildEdgeIndex_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+rebuildEdgeIndex_result.__getstate__ = lambda self: self.__dict__.copy()
+rebuildEdgeIndex_result.__setstate__ = rebuildEdgeIndex_result__setstate__
+
 class put_args:
   """
   Attributes:
@@ -6392,6 +6639,416 @@ def getUUID_result__setstate__(self, state):
 getUUID_result.__getstate__ = lambda self: self.__dict__.copy()
 getUUID_result.__setstate__ = getUUID_result__setstate__
 
+class lookUpVertexIndex_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = LookUpIndexRequest()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('lookUpVertexIndex_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(lookUpVertexIndex_args)
+lookUpVertexIndex_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [LookUpIndexRequest, LookUpIndexRequest.thrift_spec, False], None, 2, ), # 1
+)
+
+lookUpVertexIndex_args.thrift_struct_annotations = {
+}
+lookUpVertexIndex_args.thrift_field_annotations = {
+}
+
+def lookUpVertexIndex_args__init__(self, req=None,):
+  self.req = req
+
+lookUpVertexIndex_args.__init__ = lookUpVertexIndex_args__init__
+
+def lookUpVertexIndex_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+lookUpVertexIndex_args.__getstate__ = lambda self: self.__dict__.copy()
+lookUpVertexIndex_args.__setstate__ = lookUpVertexIndex_args__setstate__
+
+class lookUpVertexIndex_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = LookUpVertexIndexResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('lookUpVertexIndex_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(lookUpVertexIndex_result)
+lookUpVertexIndex_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [LookUpVertexIndexResp, LookUpVertexIndexResp.thrift_spec, False], None, 2, ), # 0
+)
+
+lookUpVertexIndex_result.thrift_struct_annotations = {
+}
+lookUpVertexIndex_result.thrift_field_annotations = {
+}
+
+def lookUpVertexIndex_result__init__(self, success=None,):
+  self.success = success
+
+lookUpVertexIndex_result.__init__ = lookUpVertexIndex_result__init__
+
+def lookUpVertexIndex_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+lookUpVertexIndex_result.__getstate__ = lambda self: self.__dict__.copy()
+lookUpVertexIndex_result.__setstate__ = lookUpVertexIndex_result__setstate__
+
+class lookUpEdgeIndex_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = LookUpIndexRequest()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('lookUpEdgeIndex_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(lookUpEdgeIndex_args)
+lookUpEdgeIndex_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [LookUpIndexRequest, LookUpIndexRequest.thrift_spec, False], None, 2, ), # 1
+)
+
+lookUpEdgeIndex_args.thrift_struct_annotations = {
+}
+lookUpEdgeIndex_args.thrift_field_annotations = {
+}
+
+def lookUpEdgeIndex_args__init__(self, req=None,):
+  self.req = req
+
+lookUpEdgeIndex_args.__init__ = lookUpEdgeIndex_args__init__
+
+def lookUpEdgeIndex_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+lookUpEdgeIndex_args.__getstate__ = lambda self: self.__dict__.copy()
+lookUpEdgeIndex_args.__setstate__ = lookUpEdgeIndex_args__setstate__
+
+class lookUpEdgeIndex_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = LookUpEdgeIndexResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('lookUpEdgeIndex_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(lookUpEdgeIndex_result)
+lookUpEdgeIndex_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [LookUpEdgeIndexResp, LookUpEdgeIndexResp.thrift_spec, False], None, 2, ), # 0
+)
+
+lookUpEdgeIndex_result.thrift_struct_annotations = {
+}
+lookUpEdgeIndex_result.thrift_field_annotations = {
+}
+
+def lookUpEdgeIndex_result__init__(self, success=None,):
+  self.success = success
+
+lookUpEdgeIndex_result.__init__ = lookUpEdgeIndex_result__init__
+
+def lookUpEdgeIndex_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+lookUpEdgeIndex_result.__getstate__ = lambda self: self.__dict__.copy()
+lookUpEdgeIndex_result.__setstate__ = lookUpEdgeIndex_result__setstate__
+
 class Client(Iface):
   def __enter__(self):
     return self
@@ -6587,36 +7244,6 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "addEdges failed: unknown result");
 
-  def getEdgeKeys(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    self.send_getEdgeKeys(req)
-    return self.recv_getEdgeKeys()
-
-  def send_getEdgeKeys(self, req=None):
-    self._oprot.writeMessageBegin('getEdgeKeys', TMessageType.CALL, self._seqid)
-    args = getEdgeKeys_args()
-    args.req = req
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_getEdgeKeys(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = getEdgeKeys_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success != None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "getEdgeKeys failed: unknown result");
-
   def deleteEdges(self, req=None):
     """
     Parameters:
@@ -6647,35 +7274,35 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "deleteEdges failed: unknown result");
 
-  def deleteVertex(self, req=None):
+  def deleteVertices(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_deleteVertex(req)
-    return self.recv_deleteVertex()
+    self.send_deleteVertices(req)
+    return self.recv_deleteVertices()
 
-  def send_deleteVertex(self, req=None):
-    self._oprot.writeMessageBegin('deleteVertex', TMessageType.CALL, self._seqid)
-    args = deleteVertex_args()
+  def send_deleteVertices(self, req=None):
+    self._oprot.writeMessageBegin('deleteVertices', TMessageType.CALL, self._seqid)
+    args = deleteVertices_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_deleteVertex(self, ):
+  def recv_deleteVertices(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = deleteVertex_result()
+    result = deleteVertices_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "deleteVertex failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "deleteVertices failed: unknown result");
 
   def updateVertex(self, req=None):
     """
@@ -7127,6 +7754,66 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "blockingWrites failed: unknown result");
 
+  def rebuildTagIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_rebuildTagIndex(req)
+    return self.recv_rebuildTagIndex()
+
+  def send_rebuildTagIndex(self, req=None):
+    self._oprot.writeMessageBegin('rebuildTagIndex', TMessageType.CALL, self._seqid)
+    args = rebuildTagIndex_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_rebuildTagIndex(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = rebuildTagIndex_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "rebuildTagIndex failed: unknown result");
+
+  def rebuildEdgeIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_rebuildEdgeIndex(req)
+    return self.recv_rebuildEdgeIndex()
+
+  def send_rebuildEdgeIndex(self, req=None):
+    self._oprot.writeMessageBegin('rebuildEdgeIndex', TMessageType.CALL, self._seqid)
+    args = rebuildEdgeIndex_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_rebuildEdgeIndex(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = rebuildEdgeIndex_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "rebuildEdgeIndex failed: unknown result");
+
   def put(self, req=None):
     """
     Parameters:
@@ -7277,6 +7964,66 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "getUUID failed: unknown result");
 
+  def lookUpVertexIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_lookUpVertexIndex(req)
+    return self.recv_lookUpVertexIndex()
+
+  def send_lookUpVertexIndex(self, req=None):
+    self._oprot.writeMessageBegin('lookUpVertexIndex', TMessageType.CALL, self._seqid)
+    args = lookUpVertexIndex_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_lookUpVertexIndex(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = lookUpVertexIndex_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "lookUpVertexIndex failed: unknown result");
+
+  def lookUpEdgeIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_lookUpEdgeIndex(req)
+    return self.recv_lookUpEdgeIndex()
+
+  def send_lookUpEdgeIndex(self, req=None):
+    self._oprot.writeMessageBegin('lookUpEdgeIndex', TMessageType.CALL, self._seqid)
+    args = lookUpEdgeIndex_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_lookUpEdgeIndex(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = lookUpEdgeIndex_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "lookUpEdgeIndex failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   _onewayMethods = ()
@@ -7298,12 +8045,10 @@ class Processor(Iface, TProcessor):
     self._priorityMap["addVertices"] = TPriority.NORMAL
     self._processMap["addEdges"] = Processor.process_addEdges
     self._priorityMap["addEdges"] = TPriority.NORMAL
-    self._processMap["getEdgeKeys"] = Processor.process_getEdgeKeys
-    self._priorityMap["getEdgeKeys"] = TPriority.NORMAL
     self._processMap["deleteEdges"] = Processor.process_deleteEdges
     self._priorityMap["deleteEdges"] = TPriority.NORMAL
-    self._processMap["deleteVertex"] = Processor.process_deleteVertex
-    self._priorityMap["deleteVertex"] = TPriority.NORMAL
+    self._processMap["deleteVertices"] = Processor.process_deleteVertices
+    self._priorityMap["deleteVertices"] = TPriority.NORMAL
     self._processMap["updateVertex"] = Processor.process_updateVertex
     self._priorityMap["updateVertex"] = TPriority.NORMAL
     self._processMap["updateEdge"] = Processor.process_updateEdge
@@ -7334,6 +8079,10 @@ class Processor(Iface, TProcessor):
     self._priorityMap["dropCheckpoint"] = TPriority.NORMAL
     self._processMap["blockingWrites"] = Processor.process_blockingWrites
     self._priorityMap["blockingWrites"] = TPriority.NORMAL
+    self._processMap["rebuildTagIndex"] = Processor.process_rebuildTagIndex
+    self._priorityMap["rebuildTagIndex"] = TPriority.NORMAL
+    self._processMap["rebuildEdgeIndex"] = Processor.process_rebuildEdgeIndex
+    self._priorityMap["rebuildEdgeIndex"] = TPriority.NORMAL
     self._processMap["put"] = Processor.process_put
     self._priorityMap["put"] = TPriority.NORMAL
     self._processMap["get"] = Processor.process_get
@@ -7344,6 +8093,10 @@ class Processor(Iface, TProcessor):
     self._priorityMap["removeRange"] = TPriority.NORMAL
     self._processMap["getUUID"] = Processor.process_getUUID
     self._priorityMap["getUUID"] = TPriority.NORMAL
+    self._processMap["lookUpVertexIndex"] = Processor.process_lookUpVertexIndex
+    self._priorityMap["lookUpVertexIndex"] = TPriority.NORMAL
+    self._processMap["lookUpEdgeIndex"] = Processor.process_lookUpEdgeIndex
+    self._priorityMap["lookUpEdgeIndex"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -7419,17 +8172,6 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
-  @process_method(getEdgeKeys_args, oneway=False)
-  def process_getEdgeKeys(self, args, handler_ctx):
-    result = getEdgeKeys_result()
-    try:
-      result.success = self._handler.getEdgeKeys(args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'getEdgeKeys', ex)
-      result = Thrift.TApplicationException(message=str(ex))
-    return result
-
   @process_method(deleteEdges_args, oneway=False)
   def process_deleteEdges(self, args, handler_ctx):
     result = deleteEdges_result()
@@ -7441,14 +8183,14 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
-  @process_method(deleteVertex_args, oneway=False)
-  def process_deleteVertex(self, args, handler_ctx):
-    result = deleteVertex_result()
+  @process_method(deleteVertices_args, oneway=False)
+  def process_deleteVertices(self, args, handler_ctx):
+    result = deleteVertices_result()
     try:
-      result.success = self._handler.deleteVertex(args.req)
+      result.success = self._handler.deleteVertices(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'deleteVertex', ex)
+      self._event_handler.handlerError(handler_ctx, 'deleteVertices', ex)
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
@@ -7617,6 +8359,28 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
+  @process_method(rebuildTagIndex_args, oneway=False)
+  def process_rebuildTagIndex(self, args, handler_ctx):
+    result = rebuildTagIndex_result()
+    try:
+      result.success = self._handler.rebuildTagIndex(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'rebuildTagIndex', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(rebuildEdgeIndex_args, oneway=False)
+  def process_rebuildEdgeIndex(self, args, handler_ctx):
+    result = rebuildEdgeIndex_result()
+    try:
+      result.success = self._handler.rebuildEdgeIndex(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'rebuildEdgeIndex', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
   @process_method(put_args, oneway=False)
   def process_put(self, args, handler_ctx):
     result = put_result()
@@ -7672,6 +8436,28 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
+  @process_method(lookUpVertexIndex_args, oneway=False)
+  def process_lookUpVertexIndex(self, args, handler_ctx):
+    result = lookUpVertexIndex_result()
+    try:
+      result.success = self._handler.lookUpVertexIndex(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'lookUpVertexIndex', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(lookUpEdgeIndex_args, oneway=False)
+  def process_lookUpEdgeIndex(self, args, handler_ctx):
+    result = lookUpEdgeIndex_result()
+    try:
+      result.success = self._handler.lookUpEdgeIndex(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'lookUpEdgeIndex', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
 Iface._processor_type = Processor
 
 class ContextProcessor(ContextIface, TProcessor):
@@ -7694,12 +8480,10 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["addVertices"] = TPriority.NORMAL
     self._processMap["addEdges"] = ContextProcessor.process_addEdges
     self._priorityMap["addEdges"] = TPriority.NORMAL
-    self._processMap["getEdgeKeys"] = ContextProcessor.process_getEdgeKeys
-    self._priorityMap["getEdgeKeys"] = TPriority.NORMAL
     self._processMap["deleteEdges"] = ContextProcessor.process_deleteEdges
     self._priorityMap["deleteEdges"] = TPriority.NORMAL
-    self._processMap["deleteVertex"] = ContextProcessor.process_deleteVertex
-    self._priorityMap["deleteVertex"] = TPriority.NORMAL
+    self._processMap["deleteVertices"] = ContextProcessor.process_deleteVertices
+    self._priorityMap["deleteVertices"] = TPriority.NORMAL
     self._processMap["updateVertex"] = ContextProcessor.process_updateVertex
     self._priorityMap["updateVertex"] = TPriority.NORMAL
     self._processMap["updateEdge"] = ContextProcessor.process_updateEdge
@@ -7730,6 +8514,10 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["dropCheckpoint"] = TPriority.NORMAL
     self._processMap["blockingWrites"] = ContextProcessor.process_blockingWrites
     self._priorityMap["blockingWrites"] = TPriority.NORMAL
+    self._processMap["rebuildTagIndex"] = ContextProcessor.process_rebuildTagIndex
+    self._priorityMap["rebuildTagIndex"] = TPriority.NORMAL
+    self._processMap["rebuildEdgeIndex"] = ContextProcessor.process_rebuildEdgeIndex
+    self._priorityMap["rebuildEdgeIndex"] = TPriority.NORMAL
     self._processMap["put"] = ContextProcessor.process_put
     self._priorityMap["put"] = TPriority.NORMAL
     self._processMap["get"] = ContextProcessor.process_get
@@ -7740,6 +8528,10 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["removeRange"] = TPriority.NORMAL
     self._processMap["getUUID"] = ContextProcessor.process_getUUID
     self._priorityMap["getUUID"] = TPriority.NORMAL
+    self._processMap["lookUpVertexIndex"] = ContextProcessor.process_lookUpVertexIndex
+    self._priorityMap["lookUpVertexIndex"] = TPriority.NORMAL
+    self._processMap["lookUpEdgeIndex"] = ContextProcessor.process_lookUpEdgeIndex
+    self._priorityMap["lookUpEdgeIndex"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -7815,17 +8607,6 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
-  @process_method(getEdgeKeys_args, oneway=False)
-  def process_getEdgeKeys(self, args, handler_ctx):
-    result = getEdgeKeys_result()
-    try:
-      result.success = self._handler.getEdgeKeys(handler_ctx, args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'getEdgeKeys', ex)
-      result = Thrift.TApplicationException(message=str(ex))
-    return result
-
   @process_method(deleteEdges_args, oneway=False)
   def process_deleteEdges(self, args, handler_ctx):
     result = deleteEdges_result()
@@ -7837,14 +8618,14 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
-  @process_method(deleteVertex_args, oneway=False)
-  def process_deleteVertex(self, args, handler_ctx):
-    result = deleteVertex_result()
+  @process_method(deleteVertices_args, oneway=False)
+  def process_deleteVertices(self, args, handler_ctx):
+    result = deleteVertices_result()
     try:
-      result.success = self._handler.deleteVertex(handler_ctx, args.req)
+      result.success = self._handler.deleteVertices(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'deleteVertex', ex)
+      self._event_handler.handlerError(handler_ctx, 'deleteVertices', ex)
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
@@ -8013,6 +8794,28 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
+  @process_method(rebuildTagIndex_args, oneway=False)
+  def process_rebuildTagIndex(self, args, handler_ctx):
+    result = rebuildTagIndex_result()
+    try:
+      result.success = self._handler.rebuildTagIndex(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'rebuildTagIndex', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(rebuildEdgeIndex_args, oneway=False)
+  def process_rebuildEdgeIndex(self, args, handler_ctx):
+    result = rebuildEdgeIndex_result()
+    try:
+      result.success = self._handler.rebuildEdgeIndex(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'rebuildEdgeIndex', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
   @process_method(put_args, oneway=False)
   def process_put(self, args, handler_ctx):
     result = put_result()
@@ -8065,6 +8868,28 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'getUUID', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(lookUpVertexIndex_args, oneway=False)
+  def process_lookUpVertexIndex(self, args, handler_ctx):
+    result = lookUpVertexIndex_result()
+    try:
+      result.success = self._handler.lookUpVertexIndex(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'lookUpVertexIndex', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(lookUpEdgeIndex_args, oneway=False)
+  def process_lookUpEdgeIndex(self, args, handler_ctx):
+    result = lookUpEdgeIndex_result()
+    try:
+      result.success = self._handler.lookUpEdgeIndex(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'lookUpEdgeIndex', ex)
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
