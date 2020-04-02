@@ -21,7 +21,6 @@ sys.path.insert(0, '../')
 from graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
 from nebula.Client import GraphClient
-from nebula.Common import *
 
 
 def get_port():
