@@ -1,5 +1,5 @@
 ## v1.0.0rc4(2020-03-23)
-Compatible the 1.0.0-rc4 version of nebula-graph
+Compatible with the 1.0.0-rc4 version of nebula-graph
 
 - New features
 	- None
@@ -8,7 +8,7 @@ Compatible the 1.0.0-rc4 version of nebula-graph
 	- Move `AuthException`, `ExecutionException` and `SimpleResponse` from `nebula/Client.py` to `nebula/Common.py`.  You need to add `from nebula.Common import *` in your project.
 
 ## v1.0.0-rc2-1(2019-12-05)
-Compatible the 1.0.0-rc2 and 1.0.0-rc3 version of nebula-graph
+Compatible with the 1.0.0-rc2 and 1.0.0-rc3 version of nebula-graph
 
 - New features
 	- None
@@ -16,7 +16,7 @@ Compatible the 1.0.0-rc2 and 1.0.0-rc3 version of nebula-graph
 	- Update thrift
 
 ## v1.0.0rc1(2019-11-27)
-Compatible the 1.0.0-rc1 version of nebula-graph
+Compatible with the 1.0.0-rc1 version of nebula-graph
 
 - New features
 	- Support to use with nebula-graph
