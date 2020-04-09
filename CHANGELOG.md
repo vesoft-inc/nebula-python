@@ -3,7 +3,7 @@ Compatible with the 1.0.0-rc4 version of nebula-graph
 
 - New features
 	- None
-- Change
+- Changes
 	- Delete the parameter `is_async` in `ConnectionPool`
 	- Move `AuthException`, `ExecutionException` and `SimpleResponse` from `nebula/Client.py` to `nebula/Common.py`.  You need to add `from nebula.Common import *` in your project.
 
@@ -12,7 +12,7 @@ Compatible with the 1.0.0-rc2 and 1.0.0-rc3 version of nebula-graph
 
 - New features
 	- None
-- Change
+- Changes
 	- Update thrift
 
 ## v1.0.0rc1(2019-11-27)
