@@ -3,7 +3,7 @@
 [![star this repo](http://githubbadges.com/star.svg?user=vesoft-inc&repo=nebula-python&style=default)](https://github.com/vesoft-inc/nebula-python)
 [![fork this repo](http://githubbadges.com/fork.svg?user=vesoft-inc&repo=nebula-python&style=default)](https://github.com/vesoft-inc/nebula-python/fork)
 
-This repository provides Nebula client API in Python.
+This repository provides Nebula client API in Python. **API is not thread-safe**.
 
 ## The directory structure
 
@@ -11,6 +11,7 @@ This repository provides Nebula client API in Python.
 |--nebula-python
     |
     |-- nebula                        // client code
+    |   |-- Common.py                 // define exception and simple response
     |   |-- Client.py                 // interfaces controlling nebula
     |   |-- ConnectionPool.py         // the connection pool that manages all the connections, users can specify the connection numbers and timeout when creating it
     |
@@ -85,6 +86,7 @@ There are three major modules:
 - ConnectionPool.py
 - Client.py
 - ttypes.py
+- Common.py
 
 Please refer to the [sample code](examples/ClientExample.py) on detail usage.
 If you want to run the sample code, please install `prettytable` via pip.
