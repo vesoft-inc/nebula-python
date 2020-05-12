@@ -6,6 +6,7 @@
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
 
+from graph.ttypes import ErrorCode
 from .Common import *
 
 
@@ -20,6 +21,7 @@ class GraphClient(object):
         self._pool = pool
         self._client = self._pool.get_connection()
         self._session_id = 0
+        self._retry_num = 3
 
     def authenticate(self, user, password):
         """authenticate to graph server
@@ -62,6 +64,13 @@ class GraphClient(object):
 
         try:
             resp = self._client.execute(self._session_id, statement)
+            retry_num = self._retry_num;
+            if resp.error_code != ErrorCode.SUCCEEDED:
+                while retry_num > 0:
+                    retry_num -= 1
+                    resp = self._client.execute(self._session_id, statement)
+                    if resp.error_code == ErrorCode.SUCCEEDED:
+                        return SimpleResponse(resp.error_code, resp.error_msg)
             return SimpleResponse(resp.error_code, resp.error_msg)
         except Exception as x:
             raise ExecutionException("Execute `{}' failed: {}".format(statement, x))
