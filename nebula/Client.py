@@ -6,9 +6,9 @@
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
 
-from graph.ttypes import ErrorCode
 from .Common import *
-
+from graph.ttypes import ErrorCode
+from thrift.transport.TTransport import TTransportException
 
 class GraphClient(object):
 
@@ -22,6 +22,8 @@ class GraphClient(object):
         self._client = self._pool.get_connection()
         self._session_id = 0
         self._retry_num = 3
+        self._user = None
+        self._password = None
 
     def authenticate(self, user, password):
         """authenticate to graph server
@@ -38,11 +40,15 @@ class GraphClient(object):
         if self._client is None:
             raise AuthException("No client")
 
+        self._user = user
+        self._password = password
+
         try:
             resp = self._client.authenticate(user, password)
             if resp.error_code:
                 return resp
             else:
+                self._is_ok = True
                 self._session_id = resp.session_id
                 print("client: %d authenticate succeed" % self._session_id)
             return resp
@@ -63,6 +69,10 @@ class GraphClient(object):
             raise ExecutionException("No client")
 
         try:
+            if not self._is_ok:
+                if not self.reconnect():
+                    raise ExecutionException("Execute `{}' failed: {}".format(statement,
+                                                                              'reconnect failed'))
             resp = self._client.execute(self._session_id, statement)
             retry_num = self._retry_num;
             if resp.error_code != ErrorCode.SUCCEEDED:
@@ -72,6 +82,9 @@ class GraphClient(object):
                     if resp.error_code == ErrorCode.SUCCEEDED:
                         return SimpleResponse(resp.error_code, resp.error_msg)
             return SimpleResponse(resp.error_code, resp.error_msg)
+        except TTransportException as x:
+            self._is_ok = False
+            raise ExecutionException("Execute `{}' failed: {}".format(statement, x))
         except Exception as x:
             raise ExecutionException("Execute `{}' failed: {}".format(statement, x))
 
@@ -111,9 +124,24 @@ class GraphClient(object):
         except Exception as x:
             raise Exception('SignOut failed: {}'.format(x))
 
-    def is_none(self):
-        """is_none: determine if the client creation was successful
+    def reconnect(self):
+        """reconnect: reconnect the server
         Returns:
             True or False
         """
-        return self._client is None
+        try:
+            self._client._iprot.trans.open()
+            if self._user is None or self._password is None:
+                self._is_ok = True
+                return True
+            resp = self._client.authenticate(self._user, self._password)
+            if resp.error_code != ErrorCode.SUCCEEDED:
+                return False
+            else:
+                self._session_id = resp.session_id
+                print("client: %d authenticate succeed" % self._session_id)
+            self._is_ok = True
+            return True
+        except Exception as x:
+            print(x)
+            return False
