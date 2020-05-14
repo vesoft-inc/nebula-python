@@ -1385,7 +1385,10 @@ class ExecutionResponse:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRING:
-          self.error_msg = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+          try:
+            self.error_msg = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+          except Exception:
+            self.error_msg = 'Unknow error'
         else:
           iprot.skip(ftype)
       elif fid == 4:
