@@ -95,14 +95,18 @@ class ConnectionPool(object):
             self._semaphore.release()
 
     def _create_connection(self):
-        transport = TSocket.TSocket(self._ip, self._port)
-        if self._timeout > 0:
-            transport.setTimeout(self._timeout)
-        transport = TTransport.TBufferedTransport(transport)
-        protocol = TBinaryProtocol.TBinaryProtocol(transport)
-        transport.open()
-        connection = GraphService.Client(protocol)
-        return connection
+        try:
+            transport = TSocket.TSocket(self._ip, self._port)
+            if self._timeout > 0:
+                transport.setTimeout(self._timeout)
+            transport = TTransport.TBufferedTransport(transport)
+            protocol = TBinaryProtocol.TBinaryProtocol(transport)
+            transport.open()
+            connection = GraphService.Client(protocol)
+            return connection
+        except Exception as ex:
+            print(ex)
+            return None
 
     def _close_connection(self, conn):
         try:
