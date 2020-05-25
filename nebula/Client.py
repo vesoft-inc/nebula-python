@@ -25,6 +25,7 @@ class GraphClient(object):
         self._retry_num = 3
         self._user = None
         self._password = None
+        self._space = None
         self._lock = threading.Lock()
 
     def authenticate(self, user, password):
@@ -138,6 +139,7 @@ class GraphClient(object):
             True or False
         """
         try:
+            self._client._iprot.trans.close()
             self._client._iprot.trans.open()
             if self._user is None or self._password is None:
                 self._is_ok = True
@@ -148,11 +150,22 @@ class GraphClient(object):
             else:
                 self._session_id = resp.session_id
                 print("client: %d authenticate succeed" % self._session_id)
+            if self._space is None:
+                self._is_ok = True
+                return True
+            resp = self._client.execute(self._session_id, 'USE {}'.format(self._space));
+            if resp.error_code != ErrorCode.SUCCEEDED:
+                return False
             self._is_ok = True
             return True
         except Exception as x:
             print(x)
             return False
+
+    def set_space(self, space):
+        """set_space: set the space when reconnect need it
+        """
+        self._space = space
 
     def is_none(self):
         """is_none: determine if the client creation was successful
