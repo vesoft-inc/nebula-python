@@ -1,3 +1,12 @@
+## v1.0.0(2020-06-08)
+- Compatible with the 1.0.0 version of nebula-graph
+
+- New features
+    - reconnect
+        - Users need to call GraphClient's set_space() to set the space which is used after the session reconnects.
+    - thread-safety
+        - The **GraphClient** is thread-safety.
+
 ## v1.0.0rc4(2020-03-23)
 Compatible with the 1.0.0-rc4 version of nebula-graph
 
