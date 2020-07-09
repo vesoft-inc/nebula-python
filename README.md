@@ -96,7 +96,7 @@ If you want to run the sample code, please install `prettytable` via pip.
     - The default connection number of the connection pool is **two**
     - The default timeout of connection is **1000ms**
     - When the created clients exceed the number of connections in the connection pool, the clients that exceed the number of connections will enter the wait state, waiting for the previous clients to release before continuing
-  - Step2: create a client through the connection pool, and call `GraphClient.set_space` to set the space which will be by reconnection when connection is brocken.
+  - Step2:  create a client through the connection pool, and call `GraphClient.set_space` to set the space which will be used by reconnecting when the connection is broken
   - Step3: authenticate
   - Step4: execute/execute\_query
   - Step5: return the client to pool and close pool
