@@ -73,6 +73,8 @@ def main_test():
                 (threading.current_thread().getName(), space_name))
         # Get one client
         client = GraphClient(connection_pool)
+        # when connection is broken use the following space to set the current session's space
+        client.set_space(space_name)
         auth_resp = client.authenticate('user', 'password')
         if auth_resp.error_code:
             raise AuthException("Auth failed")
