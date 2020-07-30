@@ -36,12 +36,18 @@ class NullType:
   NaN = 1
   BAD_DATA = 2
   BAD_TYPE = 3
+  ERR_OVERFLOW = 4
+  UNKNOWN_PROP = 5
+  DIV_BY_ZERO = 6
 
   _VALUES_TO_NAMES = {
     0: "__NULL__",
     1: "NaN",
     2: "BAD_DATA",
     3: "BAD_TYPE",
+    4: "ERR_OVERFLOW",
+    5: "UNKNOWN_PROP",
+    6: "DIV_BY_ZERO",
   }
 
   _NAMES_TO_VALUES = {
@@ -49,6 +55,9 @@ class NullType:
     "NaN": 1,
     "BAD_DATA": 2,
     "BAD_TYPE": 3,
+    "ERR_OVERFLOW": 4,
+    "UNKNOWN_PROP": 5,
+    "DIV_BY_ZERO": 6,
   }
 
 class Date:
