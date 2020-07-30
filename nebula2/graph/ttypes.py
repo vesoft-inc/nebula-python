@@ -31,7 +31,7 @@ if not '__pypy__' in sys.builtin_module_names:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'ErrorCode', 'PlanFormat', 'ProfilingStats', 'PlanNodeBranchInfo', 'PlanNodeDescription', 'PlanDescription', 'ExecutionResponse', 'AuthResponse']
+__all__ = ['UTF8STRINGS', 'ErrorCode', 'ProfilingStats', 'PlanNodeBranchInfo', 'PlanNodeDescription', 'PlanDescription', 'ExecutionResponse', 'AuthResponse']
 
 class ErrorCode:
   SUCCEEDED = 0
@@ -44,6 +44,7 @@ class ErrorCode:
   E_SYNTAX_ERROR = -7
   E_EXECUTION_ERROR = -8
   E_STATEMENT_EMTPY = -9
+  E_SEMANTIC_ERROR = -10
 
   _VALUES_TO_NAMES = {
     0: "SUCCEEDED",
@@ -56,6 +57,7 @@ class ErrorCode:
     -7: "E_SYNTAX_ERROR",
     -8: "E_EXECUTION_ERROR",
     -9: "E_STATEMENT_EMTPY",
+    -10: "E_SEMANTIC_ERROR",
   }
 
   _NAMES_TO_VALUES = {
@@ -69,20 +71,7 @@ class ErrorCode:
     "E_SYNTAX_ERROR": -7,
     "E_EXECUTION_ERROR": -8,
     "E_STATEMENT_EMTPY": -9,
-  }
-
-class PlanFormat:
-  ROW = 1
-  DOT = 2
-
-  _VALUES_TO_NAMES = {
-    1: "ROW",
-    2: "DOT",
-  }
-
-  _NAMES_TO_VALUES = {
-    "ROW": 1,
-    "DOT": 2,
+    "E_SEMANTIC_ERROR": -10,
   }
 
 class ProfilingStats:
@@ -91,6 +80,7 @@ class ProfilingStats:
    - rows
    - exec_duration_in_us
    - total_duration_in_us
+   - other_stats
   """
 
   thrift_spec = None
@@ -128,6 +118,23 @@ class ProfilingStats:
       elif fid == 3:
         if ftype == TType.I64:
           self.total_duration_in_us = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.MAP:
+          self.other_stats = {}
+          (_ktype1, _vtype2, _size0 ) = iprot.readMapBegin() 
+          if _size0 >= 0:
+            for _i4 in six.moves.range(_size0):
+              _key5 = iprot.readString()
+              _val6 = iprot.readString()
+              self.other_stats[_key5] = _val6
+          else: 
+            while iprot.peekMap():
+              _key7 = iprot.readString()
+              _val8 = iprot.readString()
+              self.other_stats[_key7] = _val8
+          iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -168,6 +175,14 @@ class ProfilingStats:
       oprot.writeFieldBegin('total_duration_in_us', TType.I64, 3)
       oprot.writeI64(self.total_duration_in_us)
       oprot.writeFieldEnd()
+    if self.other_stats != None:
+      oprot.writeFieldBegin('other_stats', TType.MAP, 4)
+      oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.other_stats))
+      for kiter9,viter10 in self.other_stats.items():
+        oprot.writeString(kiter9)
+        oprot.writeString(viter10)
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -186,6 +201,10 @@ class ProfilingStats:
       value = pprint.pformat(self.total_duration_in_us, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    total_duration_in_us=%s' % (value))
+    if self.other_stats is not None:
+      value = pprint.pformat(self.other_stats, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    other_stats=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -352,34 +371,34 @@ class PlanNodeDescription:
       elif fid == 4:
         if ftype == TType.MAP:
           self.description = {}
-          (_ktype1, _vtype2, _size0 ) = iprot.readMapBegin() 
-          if _size0 >= 0:
-            for _i4 in six.moves.range(_size0):
-              _key5 = iprot.readString()
-              _val6 = iprot.readString()
-              self.description[_key5] = _val6
+          (_ktype12, _vtype13, _size11 ) = iprot.readMapBegin() 
+          if _size11 >= 0:
+            for _i15 in six.moves.range(_size11):
+              _key16 = iprot.readString()
+              _val17 = iprot.readString()
+              self.description[_key16] = _val17
           else: 
             while iprot.peekMap():
-              _key7 = iprot.readString()
-              _val8 = iprot.readString()
-              self.description[_key7] = _val8
+              _key18 = iprot.readString()
+              _val19 = iprot.readString()
+              self.description[_key18] = _val19
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       elif fid == 5:
         if ftype == TType.LIST:
           self.profiles = []
-          (_etype12, _size9) = iprot.readListBegin()
-          if _size9 >= 0:
-            for _i13 in six.moves.range(_size9):
-              _elem14 = ProfilingStats()
-              _elem14.read(iprot)
-              self.profiles.append(_elem14)
+          (_etype23, _size20) = iprot.readListBegin()
+          if _size20 >= 0:
+            for _i24 in six.moves.range(_size20):
+              _elem25 = ProfilingStats()
+              _elem25.read(iprot)
+              self.profiles.append(_elem25)
           else: 
             while iprot.peekList():
-              _elem15 = ProfilingStats()
-              _elem15.read(iprot)
-              self.profiles.append(_elem15)
+              _elem26 = ProfilingStats()
+              _elem26.read(iprot)
+              self.profiles.append(_elem26)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -392,15 +411,15 @@ class PlanNodeDescription:
       elif fid == 7:
         if ftype == TType.LIST:
           self.dependencies = []
-          (_etype19, _size16) = iprot.readListBegin()
-          if _size16 >= 0:
-            for _i20 in six.moves.range(_size16):
-              _elem21 = iprot.readI64()
-              self.dependencies.append(_elem21)
+          (_etype30, _size27) = iprot.readListBegin()
+          if _size27 >= 0:
+            for _i31 in six.moves.range(_size27):
+              _elem32 = iprot.readI64()
+              self.dependencies.append(_elem32)
           else: 
             while iprot.peekList():
-              _elem22 = iprot.readI64()
-              self.dependencies.append(_elem22)
+              _elem33 = iprot.readI64()
+              self.dependencies.append(_elem33)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -445,16 +464,16 @@ class PlanNodeDescription:
     if self.description != None:
       oprot.writeFieldBegin('description', TType.MAP, 4)
       oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.description))
-      for kiter23,viter24 in self.description.items():
-        oprot.writeString(kiter23)
-        oprot.writeString(viter24)
+      for kiter34,viter35 in self.description.items():
+        oprot.writeString(kiter34)
+        oprot.writeString(viter35)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.profiles != None:
       oprot.writeFieldBegin('profiles', TType.LIST, 5)
       oprot.writeListBegin(TType.STRUCT, len(self.profiles))
-      for iter25 in self.profiles:
-        iter25.write(oprot)
+      for iter36 in self.profiles:
+        iter36.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.branch_info != None:
@@ -464,8 +483,8 @@ class PlanNodeDescription:
     if self.dependencies != None:
       oprot.writeFieldBegin('dependencies', TType.LIST, 7)
       oprot.writeListBegin(TType.I64, len(self.dependencies))
-      for iter26 in self.dependencies:
-        oprot.writeI64(iter26)
+      for iter37 in self.dependencies:
+        oprot.writeI64(iter37)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -550,40 +569,40 @@ class PlanDescription:
       if fid == 1:
         if ftype == TType.LIST:
           self.plan_node_descs = []
-          (_etype30, _size27) = iprot.readListBegin()
-          if _size27 >= 0:
-            for _i31 in six.moves.range(_size27):
-              _elem32 = PlanNodeDescription()
-              _elem32.read(iprot)
-              self.plan_node_descs.append(_elem32)
+          (_etype41, _size38) = iprot.readListBegin()
+          if _size38 >= 0:
+            for _i42 in six.moves.range(_size38):
+              _elem43 = PlanNodeDescription()
+              _elem43.read(iprot)
+              self.plan_node_descs.append(_elem43)
           else: 
             while iprot.peekList():
-              _elem33 = PlanNodeDescription()
-              _elem33.read(iprot)
-              self.plan_node_descs.append(_elem33)
+              _elem44 = PlanNodeDescription()
+              _elem44.read(iprot)
+              self.plan_node_descs.append(_elem44)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.MAP:
           self.node_index_map = {}
-          (_ktype35, _vtype36, _size34 ) = iprot.readMapBegin() 
-          if _size34 >= 0:
-            for _i38 in six.moves.range(_size34):
-              _key39 = iprot.readI64()
-              _val40 = iprot.readI64()
-              self.node_index_map[_key39] = _val40
+          (_ktype46, _vtype47, _size45 ) = iprot.readMapBegin() 
+          if _size45 >= 0:
+            for _i49 in six.moves.range(_size45):
+              _key50 = iprot.readI64()
+              _val51 = iprot.readI64()
+              self.node_index_map[_key50] = _val51
           else: 
             while iprot.peekMap():
-              _key41 = iprot.readI64()
-              _val42 = iprot.readI64()
-              self.node_index_map[_key41] = _val42
+              _key52 = iprot.readI64()
+              _val53 = iprot.readI64()
+              self.node_index_map[_key52] = _val53
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.I32:
-          self.format = iprot.readI32()
+        if ftype == TType.STRING:
+          self.format = iprot.readString()
         else:
           iprot.skip(ftype)
       else:
@@ -615,21 +634,21 @@ class PlanDescription:
     if self.plan_node_descs != None:
       oprot.writeFieldBegin('plan_node_descs', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.plan_node_descs))
-      for iter43 in self.plan_node_descs:
-        iter43.write(oprot)
+      for iter54 in self.plan_node_descs:
+        iter54.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.node_index_map != None:
       oprot.writeFieldBegin('node_index_map', TType.MAP, 2)
       oprot.writeMapBegin(TType.I64, TType.I64, len(self.node_index_map))
-      for kiter44,viter45 in self.node_index_map.items():
-        oprot.writeI64(kiter44)
-        oprot.writeI64(viter45)
+      for kiter55,viter56 in self.node_index_map.items():
+        oprot.writeI64(kiter55)
+        oprot.writeI64(viter56)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.format != None:
-      oprot.writeFieldBegin('format', TType.I32, 3)
-      oprot.writeI32(self.format)
+      oprot.writeFieldBegin('format', TType.STRING, 3)
+      oprot.writeString(self.format)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -937,6 +956,7 @@ ProfilingStats.thrift_spec = (
   (1, TType.I64, 'rows', None, None, 0, ), # 1
   (2, TType.I64, 'exec_duration_in_us', None, None, 0, ), # 2
   (3, TType.I64, 'total_duration_in_us', None, None, 0, ), # 3
+  (4, TType.MAP, 'other_stats', (TType.STRING,False,TType.STRING,False), None, 1, ), # 4
 )
 
 ProfilingStats.thrift_struct_annotations = {
@@ -944,10 +964,11 @@ ProfilingStats.thrift_struct_annotations = {
 ProfilingStats.thrift_field_annotations = {
 }
 
-def ProfilingStats__init__(self, rows=None, exec_duration_in_us=None, total_duration_in_us=None,):
+def ProfilingStats__init__(self, rows=None, exec_duration_in_us=None, total_duration_in_us=None, other_stats=None,):
   self.rows = rows
   self.exec_duration_in_us = exec_duration_in_us
   self.total_duration_in_us = total_duration_in_us
+  self.other_stats = other_stats
 
 ProfilingStats.__init__ = ProfilingStats__init__
 
@@ -955,6 +976,7 @@ def ProfilingStats__setstate__(self, state):
   state.setdefault('rows', None)
   state.setdefault('exec_duration_in_us', None)
   state.setdefault('total_duration_in_us', None)
+  state.setdefault('other_stats', None)
   self.__dict__ = state
 
 ProfilingStats.__getstate__ = lambda self: self.__dict__.copy()
@@ -1032,7 +1054,7 @@ PlanDescription.thrift_spec = (
   None, # 0
   (1, TType.LIST, 'plan_node_descs', (TType.STRUCT,[PlanNodeDescription, PlanNodeDescription.thrift_spec, False]), None, 0, ), # 1
   (2, TType.MAP, 'node_index_map', (TType.I64,None,TType.I64,None), None, 0, ), # 2
-  (3, TType.I32, 'format', PlanFormat,   1, 0, ), # 3
+  (3, TType.STRING, 'format', False, None, 0, ), # 3
 )
 
 PlanDescription.thrift_struct_annotations = {
@@ -1040,7 +1062,7 @@ PlanDescription.thrift_struct_annotations = {
 PlanDescription.thrift_field_annotations = {
 }
 
-def PlanDescription__init__(self, plan_node_descs=None, node_index_map=None, format=PlanDescription.thrift_spec[3][4],):
+def PlanDescription__init__(self, plan_node_descs=None, node_index_map=None, format=None,):
   self.plan_node_descs = plan_node_descs
   self.node_index_map = node_index_map
   self.format = format
@@ -1050,7 +1072,7 @@ PlanDescription.__init__ = PlanDescription__init__
 def PlanDescription__setstate__(self, state):
   state.setdefault('plan_node_descs', None)
   state.setdefault('node_index_map', None)
-  state.setdefault('format',   1)
+  state.setdefault('format', None)
   self.__dict__ = state
 
 PlanDescription.__getstate__ = lambda self: self.__dict__.copy()
