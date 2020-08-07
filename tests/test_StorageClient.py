@@ -16,15 +16,13 @@ import os
 import time
 import threading
 
+sys.path.insert(0, '../')
 from storage.ttypes import EntryId
 from storage.ttypes import PropDef
 from storage.ttypes import PropOwner
 from storage.ttypes import ResultCode
 from storage.ttypes import ErrorCode
 from common.ttypes import HostAddr
-
-sys.path.insert(0, '../')
-
 from graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
 from nebula.Client import GraphClient
