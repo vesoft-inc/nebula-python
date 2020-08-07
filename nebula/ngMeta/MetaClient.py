@@ -1,7 +1,15 @@
+# --coding:utf-8--
+#
+# Copyright (c) 2019 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+
 import random
 import socket
 import struct
-
+import six
+import threading
 from thrift.transport import TTransport
 from thrift.transport import TSocket
 from thrift.protocol import TBinaryProtocol
@@ -25,6 +33,21 @@ from meta.ttypes import ListTagsReq
 from meta.ttypes import ListTagsResp
 from meta.ttypes import TagItem
 
+if six.PY3:
+    Timer = threading.Timer
+else:
+    Timer = threading._Timer
+
+class RepeatTimer(Timer):
+    def __init__(self, interval, function):
+        Timer.__init__(self, interval, function)
+        self.daemon = True # set the RepeatTimer thread as a daemon thread, so it can end when main thread ends
+    
+    def run(self):
+        while not self.finished.wait(self.interval):
+            #print('daemon: ', self.daemon)
+            self.function(*self.args, **self.kwargs)
+
 class MetaClient:
     def __init__(self, addresses, timeout=1000,
                 connectionRetry=3, executionRetry=3):
@@ -36,11 +59,11 @@ class MetaClient:
         self.spacePartLocation = {} # map<spaceName, map<partId, list<address>>>
         self.spacePartLeader = {} # map<spaceName, map<partId, leader'saddress>>
         self.spaceTagItems = {} # map<spaceName, map<TagItem.tag_name, TagItem>>
-        self.spaceEdgeItems = {} # map<spaceName, map<edgeItem.edge_name, edgeItem>
-        self.tagNameMap = {} # map<spaceName, map<TagItem.tag_id, TagItem.tag_name>
-        self.edgeNameMap = {}
-        self.metaClient = None
-
+        self.spaceEdgeItems = {} # map<spaceName, map<edgeItem.edge_name, edgeItem>>
+        self.tagNameMap = {} # map<spaceName, map<TagItem.tag_id, TagItem.tag_name>>
+        self.edgeNameMap = {} # map<spaceName, map<edgeItem.edge_name, edgeItem>>
+        self.client = None
+   
     def connect(self):
         while self.connectionRetry > 0:
             code = self.doConnect(self.addresses)
@@ -59,8 +82,14 @@ class MetaClient:
         tTransport = TTransport.TBufferedTransport(tTransport)
         tProtocol = TBinaryProtocol.TBinaryProtocol(tTransport)
         tTransport.open()
-        self.metaClient = Client(tProtocol)
+        self.client = Client(tProtocol)
+        self.updateSchemas()
+        RepeatTimer(2, self.updateSchemas).start() # call updatSchemas() every 2 seconds
+        
+        return 0
 
+    def updateSchemas(self):
+        print('threading active_count: ', threading.active_count())
         for spaceIdName in self.listSpaces():
             spaceName = spaceIdName.name # class IdName
             self.spaceNameMap[spaceName] = spaceIdName.id.get_space_id()
@@ -85,9 +114,7 @@ class MetaClient:
                 edgesName[edgeItem.edge_type] = edgeItem.edge_name
             self.spaceEdgeItems[spaceName] = edges
             self.edgeNameMap[spaceName] = edgesName
-        # Get part leader
-        self.getSpacePartLeader()
-
+        self.setSpacePartLeader()
         return 0
 
     def getSpaceIdFromCache(self, spaceName):
@@ -106,11 +133,11 @@ class MetaClient:
     def updateSpacePartLeader(self, spaceName, partId, leader):
         self.spacePartLeader[spaceName][partId] = leader
 
-    def getSpacePartLeader(self):
+    def setSpacePartLeader(self):
         listHostsReq = ListHostsReq()
-        listHostsResp = self.metaClient.listHosts(listHostsReq)
+        listHostsResp = self.client.listHosts(listHostsReq)
         if listHostsResp.code != ErrorCode.SUCCEEDED:
-            print('getSpacePartLeader error, eror code: ', listHostsResp.code)
+            print('setSpacePartLeader error, eror code: ', listHostsResp.code)
             return None
 
         for hostItem in listHostsResp.hosts:
@@ -120,11 +147,10 @@ class MetaClient:
             for space, partIds in hostItem.leader_parts.items():
                 for partId in partIds:
                     self.spacePartLeader[space][partId] = leader
-        #print('getSpacePartLeader: ', self.spacePartLeader)
 
     def listSpaces(self):
         listSpacesReq = ListSpacesReq()
-        listSpacesResp = self.metaClient.listSpaces(listSpacesReq)
+        listSpacesResp = self.client.listSpaces(listSpacesReq)
         if listSpacesResp.code == ErrorCode.SUCCEEDED:
             return listSpacesResp.spaces########## spaceNameID--> IdName
         else:
@@ -133,7 +159,7 @@ class MetaClient:
 
     def getPartFromCache(self, spaceName, part):
         if spaceName not in self.spacePartLocation.keys():
-            return None
+            self.spacePartLocation[spaceName] = self.getPartsAlloc(spaceName)
         partsAlloc = self.spacePartLocation[spaceName]
         if partsAlloc is None or part not in partsAlloc.keys():
             return None
@@ -144,7 +170,7 @@ class MetaClient:
         if spaceId == -1:
             return None
         getPartsAllocReq = GetPartsAllocReq(spaceId)
-        getPartsAllocResp = self.metaClient.getPartsAlloc(getPartsAllocReq)
+        getPartsAllocResp = self.client.getPartsAlloc(getPartsAllocReq)
 
         if getPartsAllocResp.code == ErrorCode.SUCCEEDED:
             addressMap = {}
@@ -173,15 +199,9 @@ class MetaClient:
         return None
     
     def getTagItemFromCache(self, spaceName, tagName):
-        if spaceName not in self.spaceTagItems.keys():
-            tags = {}
-            for tagItem in self.getTags(spaceName):
-                tags[tagItem.tag_name] = tagItem
-            self.spaceTagItems[spaceName] = tags
-
-        tagItems = self.spaceTagItems[spaceName]
-        if tagName in tagItems.keys(): 
-            return tagItems[tagName]
+        if spaceName in self.spaceTagItems.keys() and tagName in self.spaceTagItems[spaceName].keys():
+            return self.spaceTagItems[spaceName][tagName]
+        
         return None
 
     def getTagNameFromCache(self, spaceName, tagId):
@@ -197,7 +217,7 @@ class MetaClient:
         if spaceId == -1:
             return None
         listTagsReq = ListTagsReq(spaceId)
-        listTagsResp = self.metaClient.listTags(listTagsReq)
+        listTagsResp = self.client.listTags(listTagsReq)
         
         if listTagsResp.code == ErrorCode.SUCCEEDED:
             return listTagsResp.tags
@@ -205,10 +225,10 @@ class MetaClient:
             print('get tags error, error code: ', listTagsResp.code)
             return None
 
-    def getTag(self, spaceName, tagName):
+    def getTag(self, spaceName, tagName, version=-1):
         spaceId = self.getSpaceIdFromCache(spaceName)
-        getTagReq = GetTagReq(spaceId, tagName, -1)
-        getTagResp = self.metaClient.getTag(getTagReq)
+        getTagReq = GetTagReq(spaceId, tagName, version)
+        getTagResp = self.client.getTag(getTagReq)
 
         if getTagResp.code == ErrorCode.SUCCEEDED:
             return getTagResp.schema
@@ -217,12 +237,15 @@ class MetaClient:
 
     def getTagSchema(self, spaceName, tagName, version=-1):
         spaceId = self.getSpaceIdFromCache(spaceName)
+        print('spaceId: ', spaceId)
+        if spaceId == -1:
+            return None
         getTagReq = GetTagReq(spaceId, tagName, version)
-        getTagResp = self.metaClient.getTag(getTagReq)
+        getTagResp = self.client.getTag(getTagReq)
         result = {}
         for columnDef in getTagResp.schema.columns:
-            result[columnDef.name] = columnDef.type.type # 需要将type convert to Class
-
+            result[columnDef.name] = columnDef.type.type
+        print('result: ', result)
         return result
 
     def getEdgeItemFromCache(self, spaceName, edgeName):
@@ -251,19 +274,19 @@ class MetaClient:
         if spaceId == -1:
             return None
         listEdgesReq = ListEdgesReq(spaceId)
-        listEdgesResp =self.metaClient.listEdges(listEdgesReq)
+        listEdgesResp =self.client.listEdges(listEdgesReq)
         if listEdgesResp.code == ErrorCode.SUCCEEDED:
             return listEdgesResp.edges
         else:
             print('get tags error, error code: ', listEdgesResp.code)
             return None
 
-    def getEdge(self, spaceName, edgeName):
+    def getEdge(self, spaceName, edgeName, version=-1):
         spaceId = self.getSpaceIdFromCache(spaceName)
         if spaceId == -1:
             return None
-        getEdgeReq = GetEdgeReq(spaceId, edgeName, -1)
-        getEdgeResp = self.metaClient.getEdge(getEdgeReq)
+        getEdgeReq = GetEdgeReq(spaceId, edgeName, version)
+        getEdgeResp = self.client.getEdge(getEdgeReq)
         if getEdgeResp.code == ErrorCode.SUCCEEDED:
             return getEdgeResp.Schema
         else:
@@ -275,9 +298,10 @@ class MetaClient:
         if spaceId == -1:
             return None
         getEdgeReq = GetEdgeReq(spaceId, edgeName, version)
-        getEdgeResp = self.metaClient.getEdge(getEdgeReq)
+        getEdgeResp = self.client.getEdge(getEdgeReq)
         result = {}
         for columnDef in getEdgeResp.schema.columns:
             result[columnDef.name] = columnDef.type.type
-
+        print('edge sapcId: ', spaceId)
+        print(result)
         return result

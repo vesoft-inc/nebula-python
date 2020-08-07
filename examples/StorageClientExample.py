@@ -1,4 +1,18 @@
+# --coding:utf-8--
+#
+# Copyright (c) 2019 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+
+"""
+Nebula StorageClient example.
+"""
+
 import sys, getopt
+
+sys.path.insert(0, '../')
+
 from nebula.ngMeta.MetaClient import MetaClient
 from nebula.ngStorage.StorageClient import StorageClient
 from nebula.ngStorage.ngProcessor.ScanEdgeProcessor import ScanEdgeProcessor

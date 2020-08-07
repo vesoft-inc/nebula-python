@@ -1,5 +1,13 @@
+# --coding:utf-8--
+#
+# Copyright (c) 2019 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+
 from enum import Enum
 import struct
+import six
 
 class PropertyDef:
     PropertyType = Enum('PropertyType', ('UNKNOWN', 'BOOL', 'INT', 'VID', 'FLOAT', 'DOUBLE', \
@@ -49,39 +57,47 @@ class RowReader:
         self.fieldNum = len(self.defs)
 
     def decodeValue(self, value, schemaVersion=None):
-            if schemaVersion is None:
-                schemaVersion = self.schemaVersion
-            self.offset = 0
+        if schemaVersion is None:
+            schemaVersion = self.schemaVersion
+        self.offset = 0
+        # need to check if value is valid
+        if six.PY2:
+            blkOffBytesNum = ord(value[0]) & 0x07 + 1
+            verBytesNum = ord(value[0]) >> 5
+        else:
             blkOffBytesNum = value[0] & 0x07 + 1
             verBytesNum = value[0] >> 5
-            self.offset += 1
-            ver = 0
-            if verBytesNum > 0:
-                for i in range(verBytesNum):
-                    ver |= value[self.offset] << 8
-                    self.offSet += 1
-            # print('blkOffBytesNum: ', blkOffBytesNum, ' verBytesNum: ', verBytesNum, ' ver: ', ver, ' schemaVersion: ', schemaVersion)
-            if ver != schemaVersion:
-                raise Exception('parsed version %d is not equal to version %d provided', ver, schemaVersion)
-            self.offset += blkOffBytesNum * (self.fieldNum // 16)
-            properties = []
-            for i in range(len(self.defs)):
-                field = self.defs[i][0]
-                propertyType = self.defs[i][1]
-                if propertyType == PropertyDef.PropertyType.BOOL:
-                    properties.append(self.getBoolProperty(field, value))
-                elif propertyType == PropertyDef.PropertyType.INT:
-                    properties.append(self.getIntProperty(field, value))
-                elif propertyType == PropertyDef.PropertyType.FLOAT: #unused now
-                    properties.append(self.getFloatProperty(field, value))
-                elif propertyType == PropertyDef.PropertyType.DOUBLE:
-                    properties.append(self.getDoubleProperty(field, value))
-                elif propertyType == PropertyDef.PropertyType.STRING:
-                    properties.append(self.getStringProperty(field, value))
+        self.offset += 1
+        ver = 0
+        if verBytesNum > 0:
+            for i in range(verBytesNum):
+                if six.PY2:
+                    ver |= ord(value[self.offset]) << 8
                 else:
-                    raise Exception('Invalid propertyType in schema: ', propertyType)
+                    ver |= value[self.offset] << 8
+                self.offSet += 1
+        # print('blkOffBytesNum: ', blkOffBytesNum, ' verBytesNum: ', verBytesNum, ' ver: ', ver, ' schemaVersion: ', schemaVersion)
+        if ver != schemaVersion:
+            raise Exception('parsed version %d is not equal to version %d provided', ver, schemaVersion)
+        self.offset += blkOffBytesNum * (self.fieldNum // 16)
+        properties = []
+        for i in range(len(self.defs)):
+            field = self.defs[i][0]
+            propertyType = self.defs[i][1]
+            if propertyType == PropertyDef.PropertyType.BOOL:
+                properties.append(self.getBoolProperty(field, value))
+            elif propertyType == PropertyDef.PropertyType.INT:
+                properties.append(self.getIntProperty(field, value))
+            elif propertyType == PropertyDef.PropertyType.FLOAT: #unused now
+                properties.append(self.getFloatProperty(field, value))
+            elif propertyType == PropertyDef.PropertyType.DOUBLE:
+                properties.append(self.getDoubleProperty(field, value))
+            elif propertyType == PropertyDef.PropertyType.STRING:
+                properties.append(self.getStringProperty(field, value))
+            else:
+                raise Exception('Invalid propertyType in schema: ', propertyType)
 
-            return properties
+        return properties
 
     def edgeKey(self, srcId, edgeType, dstId):
         properties = []
@@ -107,7 +123,10 @@ class RowReader:
         return row.properties[index]
 
     def getBoolProperty(self, name, value):
-        val = value[self.offset] != 0x00
+        if six.PY2:
+            val = ord(value[self.offset]) != 0x00
+        else:
+            val = value[self.offset] != 0x00
         self.offset += 1
         return Property(PropertyDef.PropertyType.BOOL, name, val)
 
@@ -127,7 +146,11 @@ class RowReader:
 
     def getStringProperty(self, name, value):
         strLen = self.readCompressedInt(value)
-        val = str(value[self.offset:self.offset+strLen], 'utf-8')
+        #val = value[self.offset:self.offset+strLen].decode(encoding='utf-8')
+        if six.PY2:
+            val = str(value[self.offset:self.offset+strLen])
+        else:
+            val = str(value[self.offset:self.offset+strLen], encoding='utf-8')
         self.offset += strLen
         return Property(PropertyDef.PropertyType.STRING, name, val)
     

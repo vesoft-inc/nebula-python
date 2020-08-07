@@ -1,3 +1,10 @@
+# --coding:utf-8--
+#
+# Copyright (c) 2020 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+
 import socket
 import struct
 import random
@@ -32,9 +39,12 @@ class Iterator:
 
   def hasNext(self):
     if self._hasnext is None:
-      try: self._thenext = next(self.it)
-      except StopIteration: self._hasnext = False
-      else: self._hasnext = True
+      try: 
+          self._thenext = next(self.it)
+      except StopIteration: 
+          self._hasnext = False
+      else: 
+          self._hasnext = True
     return self._hasnext
 
 
@@ -117,7 +127,9 @@ class ScanSpaceEdgeResponseIter:
 
     def next(self):
         if self.scanEdgeResponseIter is None or not self.scanEdgeResponseIter.hasNext():
-            part = self.partIdsIter.next() # 判断part.hasNext()??? is None?
+            part = self.partIdsIter.next()
+            if part is None:
+                return None
             leader = self.clientDad.getLeader(self.space, part)
             if leader is None:
                 raise Exception('part %s not found in space %s' % (part, self.space))
@@ -149,7 +161,10 @@ class ScanSpaceVertexResponseIter:
 
     def next(self):
         if self.scanVertexResponseIter is None or not self.scanVertexResponseIter.hasNext():
-            part = self.partIdsIter.next() # 判断part.hasNext()??? is None?
+            part = self.partIdsIter.next()
+            if part is None:
+                return None
+            print('part: ', part)
             leader = self.clientDad.getLeader(self.space, part)
             if leader is None:
                 raise Exception('part %s not found in space %s' % (part, self.space))
@@ -220,7 +235,8 @@ class StorageClient:
     def scanPartVertex(self, space, part, returnCols, allCols, limit, startTime, endTime):
         spaceId = self.metaClient.getSpaceIdFromCache(space)
         columns = self.getVertexReturnCols(space, returnCols)
-        scanVertexRequest = ScanVertexRequest(spaceId, part, None, columns, allCols, limit, startTime, endTie)
+        scanVertexRequest = ScanVertexRequest(spaceId, part, None, columns, allCols, limit, startTime, endTime)
+        leader = self.getLeader(space, part)
         if leader is None:
             raise Exception('part %s not found in space %s' % (part, space))
         return self.doScanVertex(space, leader, scanVertexRequest)
@@ -288,7 +304,7 @@ class StorageClient:
                     host = socket.inet_ntoa(struct.pack('I',socket.htonl(hostAddr.ip & 0xffffffff)))
                     port = hostAddr.port
                     newLeader = (host, port)
-                    self.updateLeader(space, code.part_id, newLeader)
+                    self.updateLeader(space, resultCode.part_id, newLeader)
                     if newLeader in self.clients.keys():
                         newClient = self.clients[newLeader]
                     else:
