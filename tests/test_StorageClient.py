@@ -109,9 +109,9 @@ def test_handleResultCodes():
 
 
 host = '127.0.0.1'
-meta_port = 45159
-graph_port = 36159
-storage_port = 44159
+meta_port = 45500
+graph_port = 3699
+storage_port = 44500
 spaceName = 'test_storage'
 prepare()
 metaClient = MetaClient([('127.0.0.1', meta_port)])
