@@ -25,7 +25,7 @@ from nebula.Common import *
 
 
 def get_port():
-    return 36159
+    return 3699
 
 
 def create_pool(port):

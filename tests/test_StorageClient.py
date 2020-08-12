@@ -66,7 +66,7 @@ def test_scanVertex():
     assert result is not None and result.next().vertex_data is not None
 
 def test_scanPartEdge():
-    result = storageClient.scanPartEdge(spaceName, 1, {'follow':['degree']}, True, 100, 0, sys.maxsize) 
+    result = storageClient.scanPartEdge(spaceName, 1, {'follow':['degree']}, True, 100, 0, sys.maxsize)
     assert result is not None and result.next().edge_data is not None
 
 def test_scanPartVertex():
