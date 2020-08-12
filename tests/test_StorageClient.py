@@ -30,34 +30,39 @@ from nebula.Common import *
 from nebula.ngStorage.StorageClient import StorageClient
 from nebula.ngMeta.MetaClient import MetaClient
 
-def prepare():
-    connection_pool = ConnectionPool(host, graph_port)
-    client = GraphClient(connection_pool)
-    if client is None:
-        print('Error: None GraphClient')
+
+def test_prepare():
+    try:
+        client = GraphClient(ConnectionPool(host, graph_port))
+        if client is None:
+            print('Error: None GraphClient')
+            assert False
+            return
+        resp = client.authenticate('user', 'password')
+        assert resp.error_code == 0, resp.error_msg
+        resp = client.execute('DROP SPACE IF EXISTS %s' % spaceName)
+        assert resp.error_code == 0, resp.error_msg
+        resp = client.execute('CREATE SPACE %s(partition_num=1)' % spaceName)
+        assert resp.error_code == 0, resp.error_msg
+        time.sleep(5)
+        resp = client.execute('USE %s' % spaceName)
+        assert resp.error_code == 0, resp.error_msg
+        time.sleep(5)
+        resp = client.execute('CREATE TAG player(name string, age int)')
+        assert resp.error_code == 0, resp.error_msg
+        resp = client.execute('CREATE EDGE follow(degree double)')
+        assert resp.error_code == 0, resp.error_msg
+        time.sleep(12)
+        resp = client.execute('INSERT VERTEX player(name, age) VALUES 1:(\'Bob\', 18)')
+        assert resp.error_code == 0, resp.error_msg
+        resp = client.execute('INSERT VERTEX player(name, age) VALUES 2:(\'Tome\', 22)')
+        assert resp.error_code == 0, resp.error_msg
+        resp = client.execute('INSERT EDGE follow(degree) VALUES 1->2:(94.7)')
+        assert resp.error_code == 0, resp.error_msg
+    except Exception as ex:
+        print(ex)
+        client.sign_out()
         assert False
-        return
-    resp = client.authenticate('user', 'password')
-    assert resp.error_code == 0, resp.error_msg
-    resp = client.execute('DROP SPACE IF EXISTS %s' % spaceName)
-    assert resp.error_code == 0, resp.error_msg
-    resp = client.execute('CREATE SPACE %s(partition_num=1)' % spaceName)
-    assert resp.error_code == 0, resp.error_msg
-    time.sleep(5)
-    resp = client.execute('USE %s' % spaceName)
-    assert resp.error_code == 0, resp.error_msg
-    time.sleep(5)
-    resp = client.execute('CREATE TAG player(name string, age int)')
-    assert resp.error_code == 0, resp.error_msg
-    resp = client.execute('CREATE EDGE follow(degree double)')
-    assert resp.error_code == 0, resp.error_msg
-    time.sleep(12)
-    resp = client.execute('INSERT VERTEX player(name, age) VALUES 1:(\'Bob\', 18)')
-    assert resp.error_code == 0, resp.error_msg
-    resp = client.execute('INSERT VERTEX player(name, age) VALUES 2:(\'Tome\', 22)')
-    assert resp.error_code == 0, resp.error_msg
-    resp = client.execute('INSERT EDGE follow(degree) VALUES 1->2:(94.7)')
-    assert resp.error_code == 0, resp.error_msg
 
 def test_scanEdge():
     result = storageClient.scanEdge(spaceName, {'follow':['degree']}, True, 100, 0, sys.maxsize)
@@ -113,7 +118,6 @@ meta_port = 45500
 graph_port = 3699
 storage_port = 44500
 spaceName = 'test_storage'
-prepare()
 metaClient = MetaClient([('127.0.0.1', meta_port)])
 metaClient.connect()
 storageClient = StorageClient(metaClient)
