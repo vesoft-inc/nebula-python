@@ -33,8 +33,10 @@ from nebula.ngMeta.MetaClient import MetaClient
 def prepare():
     connection_pool = ConnectionPool(host, graph_port)
     client = GraphClient(connection_pool)
-    if client.is_none():
-        raise AuthException('Connect failed')
+    if client is None:
+        print('Error: None GraphClient')
+        assert False
+        return
     resp = client.authenticate('user', 'password')
     assert resp.error_code == 0, resp.error_msg
     resp = client.execute('DROP SPACE IF EXISTS %s' % spaceName)
