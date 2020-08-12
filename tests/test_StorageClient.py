@@ -118,6 +118,6 @@ meta_port = 45500
 graph_port = 3699
 storage_port = 44500
 spaceName = 'test_storage'
-metaClient = MetaClient([('127.0.0.1', meta_port)])
+metaClient = MetaClient([(host, meta_port)])
 metaClient.connect()
 storageClient = StorageClient(metaClient)
