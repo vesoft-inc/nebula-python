@@ -1349,6 +1349,7 @@ class ExecutionResponse:
    - column_names
    - rows
    - space_name
+   - warning_msg
   """
 
   thrift_spec = None
@@ -1385,10 +1386,7 @@ class ExecutionResponse:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRING:
-          try:
-            self.error_msg = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
-          except Exception:
-            self.error_msg = 'Unknow error'
+          self.error_msg = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
         else:
           iprot.skip(ftype)
       elif fid == 4:
@@ -1426,6 +1424,11 @@ class ExecutionResponse:
       elif fid == 6:
         if ftype == TType.STRING:
           self.space_name = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.STRING:
+          self.warning_msg = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
         else:
           iprot.skip(ftype)
       else:
@@ -1481,6 +1484,10 @@ class ExecutionResponse:
       oprot.writeFieldBegin('space_name', TType.STRING, 6)
       oprot.writeString(self.space_name.encode('utf-8')) if UTF8STRINGS and not isinstance(self.space_name, bytes) else oprot.writeString(self.space_name)
       oprot.writeFieldEnd()
+    if self.warning_msg != None:
+      oprot.writeFieldBegin('warning_msg', TType.STRING, 7)
+      oprot.writeString(self.warning_msg.encode('utf-8')) if UTF8STRINGS and not isinstance(self.warning_msg, bytes) else oprot.writeString(self.warning_msg)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -1511,6 +1518,10 @@ class ExecutionResponse:
       value = pprint.pformat(self.space_name, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    space_name=%s' % (value))
+    if self.warning_msg is not None:
+      value = pprint.pformat(self.warning_msg, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    warning_msg=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -1979,6 +1990,7 @@ ExecutionResponse.thrift_spec = (
   (4, TType.LIST, 'column_names', (TType.STRING,False), None, 1, ), # 4
   (5, TType.LIST, 'rows', (TType.STRUCT,[RowValue, RowValue.thrift_spec, False]), None, 1, ), # 5
   (6, TType.STRING, 'space_name', True, None, 1, ), # 6
+  (7, TType.STRING, 'warning_msg', True, None, 1, ), # 7
 )
 
 ExecutionResponse.thrift_struct_annotations = {
@@ -1986,13 +1998,14 @@ ExecutionResponse.thrift_struct_annotations = {
 ExecutionResponse.thrift_field_annotations = {
 }
 
-def ExecutionResponse__init__(self, error_code=None, latency_in_us=None, error_msg=None, column_names=None, rows=None, space_name=None,):
+def ExecutionResponse__init__(self, error_code=None, latency_in_us=None, error_msg=None, column_names=None, rows=None, space_name=None, warning_msg=None,):
   self.error_code = error_code
   self.latency_in_us = latency_in_us
   self.error_msg = error_msg
   self.column_names = column_names
   self.rows = rows
   self.space_name = space_name
+  self.warning_msg = warning_msg
 
 ExecutionResponse.__init__ = ExecutionResponse__init__
 
@@ -2003,6 +2016,7 @@ def ExecutionResponse__setstate__(self, state):
   state.setdefault('column_names', None)
   state.setdefault('rows', None)
   state.setdefault('space_name', None)
+  state.setdefault('warning_msg', None)
   self.__dict__ = state
 
 ExecutionResponse.__getstate__ = lambda self: self.__dict__.copy()
