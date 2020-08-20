@@ -110,3 +110,4 @@ If you want to run the sample code, please install `prettytable` via pip.
 | 1.0.0-rc2-1 | 1.0.0-rc2 / 1.0.0-rc3 |
 | 1.0.0rc4 | 1.0.0-rc4 |
 | 1.0.0.post0 | >= 1.0.0 |
+| 1.0.2 | >= 1.0.2 |
