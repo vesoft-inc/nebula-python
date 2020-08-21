@@ -1,12 +1,12 @@
 # --coding:utf-8--
 #
-# Copyright (c) 2019 vesoft inc. All rights reserved.
+# Copyright (c) 2020 vesoft inc. All rights reserved.
 #
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
 """
-Nebula Client example.
+Nebula Client 2.0 example.
 """
 
 import sys
@@ -14,33 +14,37 @@ import time
 import threading
 import prettytable
 
-from graph import ttypes
-from nebula.ConnectionPool import ConnectionPool
-from nebula.Client import GraphClient
-from nebula.Common import *
+sys.path.insert(0, '../')
+
+from nebula2.common import ttypes as CommonTtypes
+from nebula2.graph import ttypes
+from nebula2.ConnectionPool import ConnectionPool
+from nebula2.Client import GraphClient
+from nebula2.Common import *
 
 
-def print_value(column_names, rows):
+def print_value(data):
     output_table = prettytable.PrettyTable()
-    output_table.field_names = column_names
-    for row in rows:
+    output_table.field_names = data.column_names
+    for row in data.rows:
         value_list = []
-        for col in row.columns:
-            if col.getType() == ttypes.ColumnValue.__EMPTY__:
-                print('ERROR: type is empty')
-                return
-            elif col.getType() == ttypes.ColumnValue.BOOL_VAL:
-                value_list.append(col.get_bool_val())
-            elif col.getType() == ttypes.ColumnValue.INTEGER:
-                value_list.append(col.get_integer())
-            elif col.getType() == ttypes.ColumnValue.ID:
-                value_list.append(col.get_id())
-            elif col.getType() == ttypes.ColumnValue.STR:
-                value_list.append(col.get_str().decode('utf-8'))
-            elif col.getType() == ttypes.ColumnValue.DOUBLE_PRECISION:
-                value_list.append(col.get_double_precision())
-            elif col.getType() == ttypes.ColumnValue.TIMESTAMP:
-                value_list.append(col.get_timestamp())
+        for col in row.values:
+            if col.getType() == CommonTtypes.Value.__EMPTY__:
+                value_list.append('__EMPTY__')
+            elif col.getType() == CommonTtypes.Value.NVAL:
+                value_list.append('__NULL__')
+            elif col.getType() == CommonTtypes.Value.BVAL:
+                value_list.append(col.get_bVal())
+            elif col.getType() == CommonTtypes.Value.IVAL:
+                value_list.append(col.get_iVal())
+            elif col.getType() == CommonTtypes.Value.FVAL:
+                value_list.append(col.get_fVal())
+            elif col.getType() == CommonTtypes.Value.SVAL:
+                value_list.append(col.get_sVal().decode('utf-8'))
+            elif col.getType() == CommonTtypes.Type.DVAL:
+                value_list.append(col.get_dVal().decode('utf-8'))
+            elif col.getType() == CommonTtypes.Type.DATETIME:
+                value_list.append(col.get_tVal())
             else:
                 print('ERROR: Type unsupported')
                 return
@@ -52,7 +56,7 @@ def do_simple_execute(client, cmd):
     print("do execute %s" %cmd)
     resp = client.execute(cmd)
     if resp.error_code != 0:
-        print('Execute failed: %s, error msg: %s' % (cmd, resp.error_msg))
+        print('Execute failed: %s, error msg: %s' % (cmd, resp.error_msg.decode('utf-8')))
         raise ExecutionException('Execute failed: %s, error msg: %s' % (cmd, resp.error_msg))
 
 
@@ -73,43 +77,38 @@ def main_test():
                 (threading.current_thread().getName(), space_name))
         # Get one client
         client = GraphClient(connection_pool)
-        # when connection is broken use the following space to set the current session's space
-        client.set_space(space_name)
         auth_resp = client.authenticate('user', 'password')
         if auth_resp.error_code:
             raise AuthException("Auth failed")
 
-        query_resp = client.execute_query('SHOW SPACES')
-        if has_space(query_resp.rows, space_name):
-            print('has %s, drop it' % space_name)
-            do_simple_execute(client, 'DROP SPACE %s' % space_name)
-
         # Create space mySpace
-        do_simple_execute(client, 'CREATE SPACE %s'
+        do_simple_execute(client, 'CREATE SPACE IF NOT EXISTS %s'
                           % space_name)
+
+        time.sleep(5)
 
         do_simple_execute(client, 'USE %s' % space_name)
         time.sleep(1)
 
         # Create tag and edge
-        do_simple_execute(client, 'CREATE TAG person(name string, age int); '
-                                  'CREATE EDGE like(likeness double)')
+        do_simple_execute(client, 'CREATE TAG IF NOT EXISTS person(name string, age int); ')
 
+        do_simple_execute(client, 'CREATE EDGE IF NOT EXISTS like(likeness double)')
         # It should large than the cycle of loading the schema
         time.sleep(6)
 
         # Insert vertex and edge
-        do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES 1:(\'Bob\', 10)')
-        do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES 2:(\'Lily\', 9)')
-        do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES 3:(\'Tom\', 10)')
-        do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES 4:(\'Jerry\', 13);INSERT VERTEX person(name, age) VALUES 5:(\'John\', 11)')
-        do_simple_execute(client, 'INSERT EDGE like(likeness) VALUES 1->2:(80.0)')
-        do_simple_execute(client, 'INSERT EDGE like(likeness) VALUES 1->3:(70.0)')
-        do_simple_execute(client, 'INSERT EDGE like(likeness) VALUES 2->4:(84.0), 3->5:(68.3), 1->5:(97.2)')
+        do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES \'Bob\':(\'Bob\', 10)')
+        do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES \'Lily\':(\'Lily\', 9)')
+        do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES \'Tom\':(\'Tom\', 10)')
+        do_simple_execute(client, 'INSERT VERTEX person(name, age) VALUES \'Jerry\':(\'Jerry\', 13), \'John\':(\'John\', 11)')
+        do_simple_execute(client, 'INSERT EDGE like(likeness) VALUES \'Bob\'->\'Lily\':(80.0)')
+        do_simple_execute(client, 'INSERT EDGE like(likeness) VALUES \'Bob\'->\'Tom\':(70.0)')
+        do_simple_execute(client, 'INSERT EDGE like(likeness) VALUES \'Lily\'->\'Jerry\':(84.0), \'Tom\'->\'Jerry\':(68.3), \'Bob\'->\'John\':(97.2)')
 
         # Query data
-        query_resp = client.execute_query('GO FROM 1 OVER like YIELD $$.person.name, '
-                                          '$$.person.age, like.likeness')
+        query_resp = client.execute_query('GO FROM \"Bob\" OVER like YIELD $^.person.name, '
+                                          '$^.person.age, like.likeness')
         if query_resp.error_code:
             print('Execute failed: %s' % query_resp.error_msg)
             exit(1)
@@ -117,7 +116,7 @@ def main_test():
         # Print the result of query
         print(' \n====== The query result of thread[%s]======\n '
               % threading.current_thread().getName())
-        print_value(query_resp.column_names, query_resp.rows)
+        print_value(query_resp.data)
         client.sign_out()
     except Exception as x:
         print(x)
