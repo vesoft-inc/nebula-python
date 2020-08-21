@@ -1,39 +1,32 @@
-# nebula-python
+# nebula2-python
 
 [![star this repo](http://githubbadges.com/star.svg?user=vesoft-inc&repo=nebula-python&style=default)](https://github.com/vesoft-inc/nebula-python)
 [![fork this repo](http://githubbadges.com/fork.svg?user=vesoft-inc&repo=nebula-python&style=default)](https://github.com/vesoft-inc/nebula-python/fork)
 
-This repository provides Nebula client API in Python.
+This repository provides Nebula2 client API in Python.
 
 ## The directory structure
 
 ```text
 |--nebula-python
     |
-    |-- nebula                        // client code
+    |-- nebula2
     |   |-- Common.py                 // define exception and simple response
     |   |-- Client.py                 // interfaces controlling nebula
     |   |-- ConnectionPool.py         // the connection pool that manages all the connections, users can specify the connection numbers and timeout when creating it
-    |
-    |-- common                        // the common data types
-    |
-    |-- graph                         // data types and client interfaces to interact with graphd
-    |
-    |-- meta                          // data types and client interfaces to interact with metad
-    |
-    |-- storage                       // data types and client interfaces to interact with storaged
+    |   |-- common                    // the common data types
+    |   |-- graph                     // data types and client interfaces to interact with graphd
+    |   |-- meta                      // data types and client interfaces to interact with metad
+    |   |__ storage                   // data types and client interfaces to interact with storaged
     |
     |__ thrift                        // the socket implementation code
     |
     |-- examples
     |   |__ ClientExample.py          // the example code
     |
-    |-- tests
-    |   |__ test_client.py            // the test code
-    |
     |-- setup.py                      // used to install or package
     |
-    |-- README.md                     // the introduce of nebula-python
+    |-- README.md                     // the introduce of nebula2-python
     |
     |__ LICENSES                      // license file
 ```
@@ -45,7 +38,7 @@ This repository provides Nebula client API in Python.
 - Cloning
 
 ```bash
-git clone https://github.com/vesoft-inc/nebula-python.git
+git clone -b 2.0 https://github.com/vesoft-inc/nebula-python.git
 cd nebula-python
 ```
 
@@ -106,8 +99,3 @@ If you want to run the sample code, please install `prettytable` via pip.
 
 | Nebula-Python Version | NebulaGraph Version |
 |---|---|
-| 1.0.0rc1  | 1.0.0-rc1 |
-| 1.0.0-rc2-1 | 1.0.0-rc2 / 1.0.0-rc3 |
-| 1.0.0rc4 | 1.0.0-rc4 |
-| 1.0.0.post0 | >= 1.0.0 |
-| 1.0.2 | >= 1.0.2 |
