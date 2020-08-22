@@ -1,6 +1,6 @@
 # --coding:utf-8--
 #
-# Copyright (c) 2019 vesoft inc. All rights reserved.
+# Copyright (c) 2020 vesoft inc. All rights reserved.
 #
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
@@ -11,7 +11,7 @@ import six
 
 class PropertyDef:
     PropertyType = Enum('PropertyType', ('UNKNOWN', 'BOOL', 'INT', 'VID', 'FLOAT', 'DOUBLE', \
-        'STRING', 'VERTEX_ID', 'TAG_ID', 'SRC_ID', 'EDGE_TYPE', 'EDGE_RANK', 'DST_ID'))
+        'STRING', 'TIMESTAMP', 'VERTEX_ID', 'TAG_ID', 'SRC_ID', 'EDGE_TYPE', 'EDGE_RANK', 'DST_ID'))
 
     def __init__(self, propertyType, name):
         self.propertyType = propertyType
@@ -22,15 +22,15 @@ class Property:
     def __init__(self, propertyType, name, value):
         self.propertyDef = PropertyDef(propertyType, name)
         self.value = value
-    
+
     def getType(self):
         return self.propertyDef.type
-    
+
     def getName(self):
         return self.propertyDef.name
-    
+
     def getValue(self):
-        return self.value 
+        return self.value
 
 class Row:
     def __init__(self, defaultProperties, properties):
@@ -47,9 +47,12 @@ class RowReader:
         self.propertyTypes = []
         self.offset = 0
 
+        propTypeMap = {0: PropertyDef.PropertyType.UNKNOWN, 1: PropertyDef.PropertyType.BOOL, 2: PropertyDef.PropertyType.INT,
+            3: PropertyDef.PropertyType.VID, 4: PropertyDef.PropertyType.FLOAT, 5: PropertyDef.PropertyType.DOUBLE,
+            6: PropertyDef.PropertyType.STRING, 21: PropertyDef.PropertyType.TIMESTAMP}
         idx = 0
         for columnDef in schema.columns:
-            propertyType = PropertyDef.PropertyType(columnDef.type.type+1) # ColumnDef is in common/ttypes.py
+            propertyType = propTypeMap[columnDef.type.type] # ColumnDef is in common/ttypes.py
             columnName = columnDef.name
             self.defs.append((columnName, propertyType))
             self.propertyNameIndex[columnName] = idx
@@ -76,7 +79,6 @@ class RowReader:
                 else:
                     ver |= value[self.offset] << 8
                 self.offSet += 1
-        # print('blkOffBytesNum: ', blkOffBytesNum, ' verBytesNum: ', verBytesNum, ' ver: ', ver, ' schemaVersion: ', schemaVersion)
         if ver != schemaVersion:
             raise Exception('parsed version %d is not equal to version %d provided', ver, schemaVersion)
         self.offset += blkOffBytesNum * (self.fieldNum // 16)
@@ -94,6 +96,8 @@ class RowReader:
                 properties.append(self.getDoubleProperty(field, value))
             elif propertyType == PropertyDef.PropertyType.STRING:
                 properties.append(self.getStringProperty(field, value))
+            elif propertyType == PropertyDef.PropertyType.TIMESTAMP:
+                properties.append(self.getTimeStampProperty(field, value))
             else:
                 raise Exception('Invalid propertyType in schema: ', propertyType)
 
@@ -134,6 +138,11 @@ class RowReader:
         val = self.readCompressedInt(value)
         return Property(PropertyDef.PropertyType.INT, name, val)  #### 字节流解析出data
 
+    def getTimeStampProperty(self, name, value):
+        val = self.readCompressedInt(value)
+        # val = datetime.fromtimestamp(val)
+        return Property(PropertyDef.PropertyType.TIMESTAMP, name, val)
+
     def getFloatProperty(self, name, value):
         val = struct.unpack_from('<f', value, self.offset)[0]
         self.offset += 4
@@ -146,14 +155,13 @@ class RowReader:
 
     def getStringProperty(self, name, value):
         strLen = self.readCompressedInt(value)
-        #val = value[self.offset:self.offset+strLen].decode(encoding='utf-8')
         if six.PY2:
             val = str(value[self.offset:self.offset+strLen])
         else:
             val = str(value[self.offset:self.offset+strLen], encoding='utf-8')
         self.offset += strLen
         return Property(PropertyDef.PropertyType.STRING, name, val)
-    
+
     def readCompressedInt(self, value):
         shift = 0
         val = 0
@@ -161,7 +169,6 @@ class RowReader:
         byteV = 0
         while curOff < len(value):
             byteV = struct.unpack_from('b', value, curOff)[0]
-            #print('curByte: ', value[curOff], 'byteV: ', byteV)
             if byteV >= 0:
                 break
             val |= (byteV & 0x7f) << shift
@@ -171,7 +178,6 @@ class RowReader:
             return None
         val |= byteV << shift
         curOff += 1
-        #print('readCompressedInt: ', value[self.offset:curOff], 'val is: ', val)
         self.offset = curOff
         return val
 

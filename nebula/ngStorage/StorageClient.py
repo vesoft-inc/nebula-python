@@ -26,7 +26,7 @@ class Iterator:
     self.it = iter(it)
     self._hasnext = None
 
-  def __iter__(self): 
+  def __iter__(self):
       return self
 
   def next(self):
@@ -39,11 +39,11 @@ class Iterator:
 
   def hasNext(self):
     if self._hasnext is None:
-      try: 
+      try:
           self._thenext = next(self.it)
-      except StopIteration: 
+      except StopIteration:
           self._hasnext = False
-      else: 
+      else:
           self._hasnext = True
     return self._hasnext
 
@@ -64,18 +64,18 @@ class ScanEdgeResponseIter:
     def next(self):
         self.scanEdgeRequest.cursor = self.cursor
         scanEdgeResponse = self.client.scanEdge(self.scanEdgeRequest)
-        assert(scanEdgeResponse is not None), 'scanEdgeReponse is none'
+        if scanEdgeResponse is None:
+            raise Exception('scanEdgeResponse is None')
         self.cursor = scanEdgeResponse.next_cursor
         self.haveNext = scanEdgeResponse.has_next
 
         if not self.clientDad.isSuccessfully(scanEdgeResponse):
-            print('scanEdgeResponse is not successfully, failed_codes: ', scanEdgeResponse.result.failed_codes)
             self.leader, self.client = self.clientDad.handleResultCodes(scanEdgeResponse.result.failed_codes, self.space)
             self.haveNext = False
             return None
         else:
             return scanEdgeResponse
-        
+
         return None
 
 
@@ -95,7 +95,8 @@ class ScanVertexResponseIter:
     def next(self):
         self.scanVertexRequest.cursor = self.cursor
         scanVertexResponse = self.client.scanVertex(self.scanVertexRequest)
-        assert(scanVertexResponse is not None), 'scanVertexReponse is none'
+        if scanVertexResponse is None:
+            raise Exception('scanVertexReponse is None')
         self.cursor = scanVertexResponse.next_cursor
         self.haveNext = scanVertexResponse.has_next
 
@@ -140,7 +141,7 @@ class ScanSpaceEdgeResponseIter:
             scanEdgeRequest = ScanEdgeRequest(spaceId, part, None, colums, self.allCols, self.limit, self.startTime, self.endTime)
             self.scanEdgeResponseIter = self.clientDad.doScanEdge(self.space, leader, scanEdgeRequest)
             assert(self.scanEdgeResponseIter is not None), 'scanEdgeResponseIter is None'
-        
+
         return self.scanEdgeResponseIter.next()
 
 
@@ -164,7 +165,6 @@ class ScanSpaceVertexResponseIter:
             part = self.partIdsIter.next()
             if part is None:
                 return None
-            print('part: ', part)
             leader = self.clientDad.getLeader(self.space, part)
             if leader is None:
                 raise Exception('part %s not found in space %s' % (part, self.space))
@@ -205,7 +205,6 @@ class StorageClient:
     def doConnect(self, address):
         host = address[0]
         port = address[1]
-        #print('StorageClient is connect to: tTransport ip: %s, port: %s' % (host, port))
         tTransport = TSocket.TSocket(host, port)
         tTransport.setTimeout(self.timeout)
         tTransport = TTransport.TBufferedTransport(tTransport)
@@ -217,7 +216,7 @@ class StorageClient:
         partIds = self.metaClient.getPartsAllocFromCache()[space].keys()
         partIdsIter = Iterator(partIds)
         return ScanSpaceEdgeResponseIter(self, space, partIdsIter, returnCols, allCols, limit, startTime, endTime)
-   
+
     def scanPartEdge(self, space, part, returnCols, allCols, limit, startTime, endTime):
         spaceId = self.metaClient.getSpaceIdFromCache(space)
         columns = self.getEdgeReturnCols(space, returnCols)
@@ -231,7 +230,7 @@ class StorageClient:
         partIds = self.metaClient.getPartsAllocFromCache()[space].keys()
         partIdsIter = Iterator(partIds)
         return ScanSpaceVertexResponseIter(self, space, partIdsIter, returnCols, allCols, limit, startTime, endTime)
-    
+
     def scanPartVertex(self, space, part, returnCols, allCols, limit, startTime, endTime):
         spaceId = self.metaClient.getSpaceIdFromCache(space)
         columns = self.getVertexReturnCols(space, returnCols)
@@ -249,7 +248,7 @@ class StorageClient:
             return None
 
         return ScanEdgeResponseIter(self, space, leader, scanEdgeRequest, client)
-    
+
     def doScanVertex(self, space, leader, scanVertexRequest):
         client = self.connect(leader)
         if client is None:
@@ -273,7 +272,7 @@ class StorageClient:
                 propDefs.append(propDef)
             columns[edgeType] = propDefs
         return columns
-    
+
     def getVertexReturnCols(self, space, returnCols):
         columns = {}
         for tagName, propNames in returnCols.items():
@@ -291,7 +290,7 @@ class StorageClient:
 
     def getLeader(self, spaceName, part):
         return self.metaClient.getSpacePartLeaderFromCache(spaceName, part)
-    
+
     def updateLeader(self, spaceName, partId, leader):
         self.metaClient.updateSpacePartLeader(spaceName, partId, leader)
 
@@ -310,7 +309,7 @@ class StorageClient:
                     else:
                         newClient = None
                     return newLeader, newClient
-        
+
         return None, None
 
     def isSuccessfully(self, response):

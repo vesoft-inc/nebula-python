@@ -1,6 +1,6 @@
 # --coding:utf-8--
 #
-# Copyright (c) 2019 vesoft inc. All rights reserved.
+# Copyright (c) 2020 vesoft inc. All rights reserved.
 #
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
@@ -29,7 +29,7 @@ class ScanVertexProcessor:
                 tagItem = self.metaClient.getTagItemFromCache(spaceName, tagName)
                 schemaVersion = tagItem.version
                 rowReaders[tagId] = RowReader(schema, schemaVersion)
-                rows[tagName] = [] ###
+                rows[tagName] = []
                 tagIdNameMap[tagId] = tagName
         else:
             print('scanVertexResponse.vertex_schema is None')

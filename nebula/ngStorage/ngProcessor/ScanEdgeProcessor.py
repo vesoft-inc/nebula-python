@@ -1,6 +1,6 @@
 # --coding:utf-8--
 #
-# Copyright (c) 2019 vesoft inc. All rights reserved.
+# Copyright (c) 2020 vesoft inc. All rights reserved.
 #
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
@@ -27,7 +27,7 @@ class ScanEdgeProcessor:
                 edgeItem = self.metaClient.getEdgeItemFromCache(spaceName, edgeName)
                 schemaVersion = edgeItem.version
                 rowReaders[edgeType] = RowReader(schema, schemaVersion)
-                rows[edgeName] = [] ###
+                rows[edgeName] = []
                 edgeTypeNameMap[edgeType] = edgeName
         else:
             print('scanEdgeResponse.edge_schema is None')
