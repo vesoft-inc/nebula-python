@@ -59,7 +59,6 @@ class ConnectionPool(object):
         """
         self._semaphore.acquire()
         if self._closed:
-            print('ERROR: connection pool closed')
             return None
         try:
             return self._connection_queue.get(block=False)
@@ -70,7 +69,6 @@ class ConnectionPool(object):
                 self._semaphore.release()
                 return None
         except Exception as ex:
-            print(ex)
             return None
 
     def return_connection(self, conn):
@@ -105,7 +103,6 @@ class ConnectionPool(object):
             connection = GraphService.Client(protocol)
             return connection
         except Exception as ex:
-            print(ex)
             return None
 
     def _close_connection(self, conn):
