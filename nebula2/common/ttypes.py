@@ -39,6 +39,7 @@ class NullType:
   ERR_OVERFLOW = 4
   UNKNOWN_PROP = 5
   DIV_BY_ZERO = 6
+  OUT_OF_RANGE = 7
 
   _VALUES_TO_NAMES = {
     0: "__NULL__",
@@ -48,6 +49,7 @@ class NullType:
     4: "ERR_OVERFLOW",
     5: "UNKNOWN_PROP",
     6: "DIV_BY_ZERO",
+    7: "OUT_OF_RANGE",
   }
 
   _NAMES_TO_VALUES = {
@@ -58,6 +60,7 @@ class NullType:
     "ERR_OVERFLOW": 4,
     "UNKNOWN_PROP": 5,
     "DIV_BY_ZERO": 6,
+    "OUT_OF_RANGE": 7,
   }
 
 class Date:
