@@ -38,7 +38,7 @@ This repository provides Nebula2 client API in Python.
 - Cloning
 
 ```bash
-git clone -b 2.0 https://github.com/vesoft-inc/nebula-python.git
+git clone -b v2.0 https://github.com/vesoft-inc/nebula-python.git
 cd nebula-python
 ```
 
