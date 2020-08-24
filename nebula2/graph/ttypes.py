@@ -31,7 +31,7 @@ if not '__pypy__' in sys.builtin_module_names:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'ErrorCode', 'ProfilingStats', 'PlanNodeBranchInfo', 'PlanNodeDescription', 'PlanDescription', 'ExecutionResponse', 'AuthResponse']
+__all__ = ['UTF8STRINGS', 'ErrorCode', 'ProfilingStats', 'PlanNodeBranchInfo', 'Pair', 'PlanNodeDescription', 'PlanDescription', 'ExecutionResponse', 'AuthResponse']
 
 class ErrorCode:
   SUCCEEDED = 0
@@ -44,7 +44,9 @@ class ErrorCode:
   E_SYNTAX_ERROR = -7
   E_EXECUTION_ERROR = -8
   E_STATEMENT_EMTPY = -9
-  E_SEMANTIC_ERROR = -10
+  E_USER_NOT_FOUND = -10
+  E_BAD_PERMISSION = -11
+  E_SEMANTIC_ERROR = -12
 
   _VALUES_TO_NAMES = {
     0: "SUCCEEDED",
@@ -57,7 +59,9 @@ class ErrorCode:
     -7: "E_SYNTAX_ERROR",
     -8: "E_EXECUTION_ERROR",
     -9: "E_STATEMENT_EMTPY",
-    -10: "E_SEMANTIC_ERROR",
+    -10: "E_USER_NOT_FOUND",
+    -11: "E_BAD_PERMISSION",
+    -12: "E_SEMANTIC_ERROR",
   }
 
   _NAMES_TO_VALUES = {
@@ -71,7 +75,9 @@ class ErrorCode:
     "E_SYNTAX_ERROR": -7,
     "E_EXECUTION_ERROR": -8,
     "E_STATEMENT_EMTPY": -9,
-    "E_SEMANTIC_ERROR": -10,
+    "E_USER_NOT_FOUND": -10,
+    "E_BAD_PERMISSION": -11,
+    "E_SEMANTIC_ERROR": -12,
   }
 
 class ProfilingStats:
@@ -319,6 +325,105 @@ class PlanNodeBranchInfo:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class Pair:
+  """
+  Attributes:
+   - key
+   - value
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.key = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.value = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    if self.key == None:
+      raise TProtocolException(TProtocolException.MISSING_REQUIRED_FIELD, "Required field 'key' was not found in serialized data! Struct: Pair")
+
+    if self.value == None:
+      raise TProtocolException(TProtocolException.MISSING_REQUIRED_FIELD, "Required field 'value' was not found in serialized data! Struct: Pair")
+
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('Pair')
+    if self.key != None:
+      oprot.writeFieldBegin('key', TType.STRING, 1)
+      oprot.writeString(self.key)
+      oprot.writeFieldEnd()
+    if self.value != None:
+      oprot.writeFieldBegin('value', TType.STRING, 2)
+      oprot.writeString(self.value)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.key is not None:
+      value = pprint.pformat(self.key, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    key=%s' % (value))
+    if self.value is not None:
+      value = pprint.pformat(self.value, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    value=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
 class PlanNodeDescription:
   """
   Attributes:
@@ -369,36 +474,36 @@ class PlanNodeDescription:
         else:
           iprot.skip(ftype)
       elif fid == 4:
-        if ftype == TType.MAP:
-          self.description = {}
-          (_ktype12, _vtype13, _size11 ) = iprot.readMapBegin() 
+        if ftype == TType.LIST:
+          self.description = []
+          (_etype14, _size11) = iprot.readListBegin()
           if _size11 >= 0:
             for _i15 in six.moves.range(_size11):
-              _key16 = iprot.readString()
-              _val17 = iprot.readString()
-              self.description[_key16] = _val17
+              _elem16 = Pair()
+              _elem16.read(iprot)
+              self.description.append(_elem16)
           else: 
-            while iprot.peekMap():
-              _key18 = iprot.readString()
-              _val19 = iprot.readString()
-              self.description[_key18] = _val19
-          iprot.readMapEnd()
+            while iprot.peekList():
+              _elem17 = Pair()
+              _elem17.read(iprot)
+              self.description.append(_elem17)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       elif fid == 5:
         if ftype == TType.LIST:
           self.profiles = []
-          (_etype23, _size20) = iprot.readListBegin()
-          if _size20 >= 0:
-            for _i24 in six.moves.range(_size20):
-              _elem25 = ProfilingStats()
-              _elem25.read(iprot)
-              self.profiles.append(_elem25)
+          (_etype21, _size18) = iprot.readListBegin()
+          if _size18 >= 0:
+            for _i22 in six.moves.range(_size18):
+              _elem23 = ProfilingStats()
+              _elem23.read(iprot)
+              self.profiles.append(_elem23)
           else: 
             while iprot.peekList():
-              _elem26 = ProfilingStats()
-              _elem26.read(iprot)
-              self.profiles.append(_elem26)
+              _elem24 = ProfilingStats()
+              _elem24.read(iprot)
+              self.profiles.append(_elem24)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -411,15 +516,15 @@ class PlanNodeDescription:
       elif fid == 7:
         if ftype == TType.LIST:
           self.dependencies = []
-          (_etype30, _size27) = iprot.readListBegin()
-          if _size27 >= 0:
-            for _i31 in six.moves.range(_size27):
-              _elem32 = iprot.readI64()
-              self.dependencies.append(_elem32)
+          (_etype28, _size25) = iprot.readListBegin()
+          if _size25 >= 0:
+            for _i29 in six.moves.range(_size25):
+              _elem30 = iprot.readI64()
+              self.dependencies.append(_elem30)
           else: 
             while iprot.peekList():
-              _elem33 = iprot.readI64()
-              self.dependencies.append(_elem33)
+              _elem31 = iprot.readI64()
+              self.dependencies.append(_elem31)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -462,18 +567,17 @@ class PlanNodeDescription:
       oprot.writeString(self.output_var)
       oprot.writeFieldEnd()
     if self.description != None:
-      oprot.writeFieldBegin('description', TType.MAP, 4)
-      oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.description))
-      for kiter34,viter35 in self.description.items():
-        oprot.writeString(kiter34)
-        oprot.writeString(viter35)
-      oprot.writeMapEnd()
+      oprot.writeFieldBegin('description', TType.LIST, 4)
+      oprot.writeListBegin(TType.STRUCT, len(self.description))
+      for iter32 in self.description:
+        iter32.write(oprot)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.profiles != None:
       oprot.writeFieldBegin('profiles', TType.LIST, 5)
       oprot.writeListBegin(TType.STRUCT, len(self.profiles))
-      for iter36 in self.profiles:
-        iter36.write(oprot)
+      for iter33 in self.profiles:
+        iter33.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.branch_info != None:
@@ -483,8 +587,8 @@ class PlanNodeDescription:
     if self.dependencies != None:
       oprot.writeFieldBegin('dependencies', TType.LIST, 7)
       oprot.writeListBegin(TType.I64, len(self.dependencies))
-      for iter37 in self.dependencies:
-        oprot.writeI64(iter37)
+      for iter34 in self.dependencies:
+        oprot.writeI64(iter34)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -569,34 +673,34 @@ class PlanDescription:
       if fid == 1:
         if ftype == TType.LIST:
           self.plan_node_descs = []
-          (_etype41, _size38) = iprot.readListBegin()
-          if _size38 >= 0:
-            for _i42 in six.moves.range(_size38):
-              _elem43 = PlanNodeDescription()
-              _elem43.read(iprot)
-              self.plan_node_descs.append(_elem43)
+          (_etype38, _size35) = iprot.readListBegin()
+          if _size35 >= 0:
+            for _i39 in six.moves.range(_size35):
+              _elem40 = PlanNodeDescription()
+              _elem40.read(iprot)
+              self.plan_node_descs.append(_elem40)
           else: 
             while iprot.peekList():
-              _elem44 = PlanNodeDescription()
-              _elem44.read(iprot)
-              self.plan_node_descs.append(_elem44)
+              _elem41 = PlanNodeDescription()
+              _elem41.read(iprot)
+              self.plan_node_descs.append(_elem41)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.MAP:
           self.node_index_map = {}
-          (_ktype46, _vtype47, _size45 ) = iprot.readMapBegin() 
-          if _size45 >= 0:
-            for _i49 in six.moves.range(_size45):
-              _key50 = iprot.readI64()
-              _val51 = iprot.readI64()
-              self.node_index_map[_key50] = _val51
+          (_ktype43, _vtype44, _size42 ) = iprot.readMapBegin() 
+          if _size42 >= 0:
+            for _i46 in six.moves.range(_size42):
+              _key47 = iprot.readI64()
+              _val48 = iprot.readI64()
+              self.node_index_map[_key47] = _val48
           else: 
             while iprot.peekMap():
-              _key52 = iprot.readI64()
-              _val53 = iprot.readI64()
-              self.node_index_map[_key52] = _val53
+              _key49 = iprot.readI64()
+              _val50 = iprot.readI64()
+              self.node_index_map[_key49] = _val50
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -634,16 +738,16 @@ class PlanDescription:
     if self.plan_node_descs != None:
       oprot.writeFieldBegin('plan_node_descs', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.plan_node_descs))
-      for iter54 in self.plan_node_descs:
-        iter54.write(oprot)
+      for iter51 in self.plan_node_descs:
+        iter51.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.node_index_map != None:
       oprot.writeFieldBegin('node_index_map', TType.MAP, 2)
       oprot.writeMapBegin(TType.I64, TType.I64, len(self.node_index_map))
-      for kiter55,viter56 in self.node_index_map.items():
-        oprot.writeI64(kiter55)
-        oprot.writeI64(viter56)
+      for kiter52,viter53 in self.node_index_map.items():
+        oprot.writeI64(kiter52)
+        oprot.writeI64(viter53)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.format != None:
@@ -692,6 +796,7 @@ class ExecutionResponse:
    - space_name
    - error_msg
    - plan_desc
+   - comment
   """
 
   thrift_spec = None
@@ -748,6 +853,11 @@ class ExecutionResponse:
           self.plan_desc.read(iprot)
         else:
           iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.STRING:
+          self.comment = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -795,6 +905,10 @@ class ExecutionResponse:
       oprot.writeFieldBegin('plan_desc', TType.STRUCT, 6)
       self.plan_desc.write(oprot)
       oprot.writeFieldEnd()
+    if self.comment != None:
+      oprot.writeFieldBegin('comment', TType.STRING, 7)
+      oprot.writeString(self.comment)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -825,6 +939,10 @@ class ExecutionResponse:
       value = pprint.pformat(self.plan_desc, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    plan_desc=%s' % (value))
+    if self.comment is not None:
+      value = pprint.pformat(self.comment, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    comment=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -1008,13 +1126,39 @@ def PlanNodeBranchInfo__setstate__(self, state):
 PlanNodeBranchInfo.__getstate__ = lambda self: self.__dict__.copy()
 PlanNodeBranchInfo.__setstate__ = PlanNodeBranchInfo__setstate__
 
+all_structs.append(Pair)
+Pair.thrift_spec = (
+  None, # 0
+  (1, TType.STRING, 'key', False, None, 0, ), # 1
+  (2, TType.STRING, 'value', False, None, 0, ), # 2
+)
+
+Pair.thrift_struct_annotations = {
+}
+Pair.thrift_field_annotations = {
+}
+
+def Pair__init__(self, key=None, value=None,):
+  self.key = key
+  self.value = value
+
+Pair.__init__ = Pair__init__
+
+def Pair__setstate__(self, state):
+  state.setdefault('key', None)
+  state.setdefault('value', None)
+  self.__dict__ = state
+
+Pair.__getstate__ = lambda self: self.__dict__.copy()
+Pair.__setstate__ = Pair__setstate__
+
 all_structs.append(PlanNodeDescription)
 PlanNodeDescription.thrift_spec = (
   None, # 0
   (1, TType.STRING, 'name', False, None, 0, ), # 1
   (2, TType.I64, 'id', None, None, 0, ), # 2
   (3, TType.STRING, 'output_var', False, None, 0, ), # 3
-  (4, TType.MAP, 'description', (TType.STRING,False,TType.STRING,False), None, 1, ), # 4
+  (4, TType.LIST, 'description', (TType.STRUCT,[Pair, Pair.thrift_spec, False]), None, 1, ), # 4
   (5, TType.LIST, 'profiles', (TType.STRUCT,[ProfilingStats, ProfilingStats.thrift_spec, False]), None, 1, ), # 5
   (6, TType.STRUCT, 'branch_info', [PlanNodeBranchInfo, PlanNodeBranchInfo.thrift_spec, False], None, 1, ), # 6
   (7, TType.LIST, 'dependencies', (TType.I64,None), None, 1, ), # 7
@@ -1087,6 +1231,7 @@ ExecutionResponse.thrift_spec = (
   (4, TType.STRING, 'space_name', False, None, 1, ), # 4
   (5, TType.STRING, 'error_msg', False, None, 1, ), # 5
   (6, TType.STRUCT, 'plan_desc', [PlanDescription, PlanDescription.thrift_spec, False], None, 1, ), # 6
+  (7, TType.STRING, 'comment', False, None, 1, ), # 7
 )
 
 ExecutionResponse.thrift_struct_annotations = {
@@ -1094,13 +1239,14 @@ ExecutionResponse.thrift_struct_annotations = {
 ExecutionResponse.thrift_field_annotations = {
 }
 
-def ExecutionResponse__init__(self, error_code=None, latency_in_us=None, data=None, space_name=None, error_msg=None, plan_desc=None,):
+def ExecutionResponse__init__(self, error_code=None, latency_in_us=None, data=None, space_name=None, error_msg=None, plan_desc=None, comment=None,):
   self.error_code = error_code
   self.latency_in_us = latency_in_us
   self.data = data
   self.space_name = space_name
   self.error_msg = error_msg
   self.plan_desc = plan_desc
+  self.comment = comment
 
 ExecutionResponse.__init__ = ExecutionResponse__init__
 
@@ -1111,6 +1257,7 @@ def ExecutionResponse__setstate__(self, state):
   state.setdefault('space_name', None)
   state.setdefault('error_msg', None)
   state.setdefault('plan_desc', None)
+  state.setdefault('comment', None)
   self.__dict__ = state
 
 ExecutionResponse.__getstate__ = lambda self: self.__dict__.copy()
