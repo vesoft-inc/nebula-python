@@ -42,7 +42,7 @@ class GraphClient(object):
         """
         with self._lock:
             if self._client is None:
-                raise AuthException("No client")
+                raise AuthException("No clients are available")
 
             self._user = user
             self._password = password
@@ -54,7 +54,6 @@ class GraphClient(object):
                 else:
                     self._is_ok = True
                     self._session_id = resp.session_id
-                    print("client: %d authenticate succeed" % self._session_id)
                 return resp
             except Exception as x:
                 raise AuthException("Auth failed: {}".format(x))
@@ -71,7 +70,7 @@ class GraphClient(object):
         """
         with self._lock:
             if self._client is None:
-                raise ExecutionException("No client")
+                raise ExecutionException("No clients are available")
 
             try:
                 if not self._is_ok:
@@ -108,7 +107,7 @@ class GraphClient(object):
         """
         with self._lock:
             if self._client is None:
-                raise ExecutionException("No client")
+                raise ExecutionException("No clients are available")
 
             try:
                 return self._client.execute(self._session_id, statement)
@@ -126,8 +125,6 @@ class GraphClient(object):
                 return
 
             try:
-                if self._session_id is not None:
-                    print('client: %d sign out' % self._session_id)
                 self._client.signout(self._session_id)
                 self._pool.return_connection(self._client)
             except Exception as x:
@@ -149,7 +146,6 @@ class GraphClient(object):
                 return False
             else:
                 self._session_id = resp.session_id
-                print("client: %d authenticate succeed" % self._session_id)
             if self._space is None:
                 self._is_ok = True
                 return True
@@ -159,7 +155,6 @@ class GraphClient(object):
             self._is_ok = True
             return True
         except Exception as x:
-            print(x)
             return False
 
     def set_space(self, space):

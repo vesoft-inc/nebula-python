@@ -27,8 +27,6 @@ class AsyncGraphClient(object):
         protocol = TBinaryProtocol.TBinaryProtocol(transport)
         transport.open()
         self._client = AsyncGraphService.Client(protocol)
-        if self._client is None:
-            print('client is None')
         self._iprot = protocol
         self._session_id = 0
         self._reqid_callback = {}
@@ -58,7 +56,6 @@ class AsyncGraphClient(object):
             resp = fut.result()
             if resp.error_code == 0:
                 self._session_id = resp.session_id
-                print("client: %d authenticate succeed" % self._session_id)
             return resp
         except Exception as x:
             raise AuthException("Auth failed: {}".format(x))
@@ -78,7 +75,6 @@ class AsyncGraphClient(object):
             raise ExecutionException("No client")
 
         try:
-            print('async_execute: %s' % statement)
             fut = self._client.execute(self._session_id, statement)
             if callback is None:
                 return
@@ -113,7 +109,6 @@ class AsyncGraphClient(object):
             raise ExecutionException("No client")
 
         try:
-            print('async_execute_query: %s' % statement)
             fut = self._client.execute(self._session_id, statement)
             if callback is None:
                 return
@@ -137,7 +132,6 @@ class AsyncGraphClient(object):
 
         try:
             if self._session_id != 0:
-                print('client: %d sign out' % self._session_id)
                 self._client.signout(self._session_id)
         except Exception as x:
             raise Exception("SignOut failed: {}".format(x))
