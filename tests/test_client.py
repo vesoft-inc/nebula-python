@@ -1,6 +1,6 @@
 # --coding:utf-8--
 #
-# Copyright (c) 2019 vesoft inc. All rights reserved.
+# Copyright (c) 2020 vesoft inc. All rights reserved.
 #
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
@@ -32,7 +32,7 @@ def get_port():
     if len(port_str) != 0 and len(port_str) < 7:
         port = int(port_str[0:-1])
     return port
-    return 3699
+
 
 def create_pool(port):
     return ConnectionPool('127.0.0.1', port)
