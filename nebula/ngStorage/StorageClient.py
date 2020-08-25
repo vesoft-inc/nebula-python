@@ -23,7 +23,7 @@ from storage.ttypes import ErrorCode
 
 class Iterator:
   def __init__(self, it=None):
-    self.it = iter(it)
+    self._it = iter(it)
     self._hasnext = None
 
   def __iter__(self):
@@ -33,14 +33,14 @@ class Iterator:
     if self._hasnext:
       result = self._thenext
     else:
-      result = next(self.it)
+      result = next(self._it)
     self._hasnext = None
     return result
 
-  def hasNext(self):
+  def has_next(self):
     if self._hasnext is None:
       try:
-          self._thenext = next(self.it)
+          self._thenext = next(self._it)
       except StopIteration:
           self._hasnext = False
       else:
@@ -49,268 +49,270 @@ class Iterator:
 
 
 class ScanEdgeResponseIter:
-    def __init__(self, clientDad, space, leader, scanEdgeRequest, client):
-        self.clientDad = clientDad
-        self.space = space
-        self.leader = leader
-        self.scanEdgeRequest = scanEdgeRequest
-        self.client = client
-        self.cursor = None
-        self.haveNext = True
+    def __init__(self, client_dad, space, leader, scan_edge_request, client):
+        self._client_dad = client_dad
+        self._space = space
+        self._leader = leader
+        self._scan_edge_request = scan_edge_request
+        self._client = client
+        self._cursor = None
+        self._have_next = True
 
-    def hasNext(self):
-        return self.haveNext
+    def has_next(self):
+        return self._have_next
 
     def next(self):
-        self.scanEdgeRequest.cursor = self.cursor
-        scanEdgeResponse = self.client.scanEdge(self.scanEdgeRequest)
-        if scanEdgeResponse is None:
-            raise Exception('scanEdgeResponse is None')
-        self.cursor = scanEdgeResponse.next_cursor
-        self.haveNext = scanEdgeResponse.has_next
+        self._scan_edge_request.cursor = self._cursor
+        scan_edge_response = self._client.scanEdge(self._scan_edge_request)
+        if scan_edge_response is None:
+            raise Exception('scan_edge_response is None')
+        self._cursor = scan_edge_response.next_cursor
+        self._have_next = scan_edge_response.has_next
 
-        if not self.clientDad.isSuccessfully(scanEdgeResponse):
-            self.leader, self.client = self.clientDad.handleResultCodes(scanEdgeResponse.result.failed_codes, self.space)
-            self.haveNext = False
+        if not self._client_dad.is_successfully(scan_edge_response):
+            self._leader, self._client = self._client_dad.handle_result_codes(scan_edge_response.result.failed_codes, self._space)
+            self._haveNext = False
             return None
         else:
-            return scanEdgeResponse
+            return scan_edge_response
 
         return None
 
 
 class ScanVertexResponseIter:
-    def __init__(self, clientDad, space, leader, scanVertexRequest, client):
-        self.clientDad = clientDad
-        self.space = space
-        self.leader = leader
-        self.scanVertexRequest = scanVertexRequest
-        self.client = client
-        self.cursor = None
-        self.haveNext = True
+    def __init__(self, client_dad, space, leader, scan_vertex_request, client):
+        self._client_dad = client_dad
+        self._space = space
+        self._leader = leader
+        self._scan_vertex_request = scan_vertex_request
+        self._client = client
+        self._cursor = None
+        self._have_next = True
 
-    def hasNext(self):
-        return self.haveNext
+    def has_next(self):
+        return self._haveNext
 
     def next(self):
-        self.scanVertexRequest.cursor = self.cursor
-        scanVertexResponse = self.client.scanVertex(self.scanVertexRequest)
-        if scanVertexResponse is None:
-            raise Exception('scanVertexReponse is None')
-        self.cursor = scanVertexResponse.next_cursor
-        self.haveNext = scanVertexResponse.has_next
+        self._scan_vertex_request.cursor = self._cursor
+        scan_vertex_response = self._client.scanVertex(self._scan_vertex_request)
+        if scan_vertex_response is None:
+            raise Exception('scan_vertex_reponse is None')
+        self._cursor = scan_vertex_response.next_cursor
+        self._haveNext = scan_vertex_response.has_next
 
-        if not self.clientDad.isSuccessfully(scanVertexResponse):
-            print('scanVertexResponse is not successfully, failed_codes: ', scanVertexResponse.result.failed_codes)
-            self.leader, self.client = self.clientDad.handleResultCodes(scanVertexResponse.result.failed_codes, self.space)
-            self.haveNext = False
+        if not self._client_dad.is_successfully(scan_vertex_response):
+            print('scan_vertex_response is not successfully, failed_codes: ', scan_vertex_response.result.failed_codes)
+            self._leader, self._client = self._client_dad.handle_result_codes(scan_vertex_response.result.failed_codes, self._space)
+            self._have_next = False
             return None
         else:
-            return scanVertexResponse
+            return scan_vertex_response
 
         return None
 
 
 class ScanSpaceEdgeResponseIter:
-    def __init__(self, clientDad, space, partIdsIter, returnCols, allCols, limit, startTime, endTime):
-        self.clientDad = clientDad
-        self.scanEdgeResponseIter = None
-        self.space = space
-        self.partIdsIter = partIdsIter
-        self.returnCols = returnCols
-        self.allCols = allCols
-        self.limit = limit
-        self.startTime = startTime
-        self.endTime = endTime
+    def __init__(self, client_dad, space, part_ids_iter, return_cols, all_cols, limit, start_time, end_time):
+        self._client_dad = client_dad
+        self._scan_edge_response_iter = None
+        self._space = space
+        self._part_ids_iter = part_ids_iter
+        self._return_cols = return_cols
+        self._all_cols = all_cols
+        self._limit = limit
+        self._start_time = start_time
+        self._end_time = end_time
 
-    def hasNext(self):
-        return self.partIdsIter.hasNext() or self.scanEdgeResponseIter.hasNext()
+    def has_next(self):
+        return self._part_ids_iter.has_next() or self._scan_edge_response_iter.has_next()
 
     def next(self):
-        if self.scanEdgeResponseIter is None or not self.scanEdgeResponseIter.hasNext():
-            part = self.partIdsIter.next()
+        if self._scan_edge_response_iter is None or not self._scan_edge_response_iter.has_next():
+            part = self._part_ids_iter.next()
             if part is None:
                 return None
-            leader = self.clientDad.getLeader(self.space, part)
+            leader = self._client_dad.get_leader(self._space, part)
             if leader is None:
-                raise Exception('part %s not found in space %s' % (part, self.space))
-            spaceId = self.clientDad.metaClient.getSpaceIdFromCache(self.space)
-            if spaceId == -1:
-                raise Exception('space %s not found' % self.space)
-            colums = self.clientDad.getEdgeReturnCols(self.space, self.returnCols)
-            scanEdgeRequest = ScanEdgeRequest(spaceId, part, None, colums, self.allCols, self.limit, self.startTime, self.endTime)
-            self.scanEdgeResponseIter = self.clientDad.doScanEdge(self.space, leader, scanEdgeRequest)
-            assert(self.scanEdgeResponseIter is not None), 'scanEdgeResponseIter is None'
+                raise Exception('part %s not found in space %s' % (part, self._space))
+            space_id = self._client_dad._meta_client.get_space_id_from_cache(self._space)
+            if space_id == -1:
+                raise Exception('space %s not found' % self._space)
+            colums = self._client_dad.get_edge_return_cols(self._space, self._return_cols)
+            scan_edge_request = ScanEdgeRequest(space_id, part, None, colums, self._all_cols, self._limit, self._start_time, self._end_time)
+            self._scan_edge_response_iter = self._client_dad.do_scan_edge(self._space, leader, scan_edge_request)
+            if self._scan_edge_response_iter is None:
+                raise Exception('scan_edge_response_iter is None')
 
-        return self.scanEdgeResponseIter.next()
+        return self._scan_edge_response_iter.next()
 
 
 class ScanSpaceVertexResponseIter:
-    def __init__(self, clientDad, space, partIdsIter, returnCols, allCols, limit, startTime, endTime):
-        self.clientDad = clientDad
-        self.scanVertexResponseIter = None
-        self.space = space
-        self.partIdsIter = partIdsIter
-        self.returnCols = returnCols
-        self.allCols = allCols
-        self.limit = limit
-        self.startTime = startTime
-        self.endTime = endTime
+    def __init__(self, client_dad, space, part_ids_iter, return_cols, all_cols, limit, start_time, end_time):
+        self._client_dad = client_dad
+        self._scan_vertex_response_iter = None
+        self._space = space
+        self._part_ids_iter = part_ids_iter
+        self._return_cols = return_cols
+        self._all_cols = all_cols
+        self._limit = limit
+        self._start_time = start_time
+        self._end_time = end_time
 
-    def hasNext(self):
-        return self.partIdsIter.hasNext() or self.scanVertexResponseIter.hasNext()
+    def has_next(self):
+        return self._part_ids_iter.has_next() or self._scan_vertex_response_iter.has_next()
 
     def next(self):
-        if self.scanVertexResponseIter is None or not self.scanVertexResponseIter.hasNext():
-            part = self.partIdsIter.next()
+        if self._scan_vertex_response_iter is None or not self._scan_vertex_response_iter.has_next():
+            part = self._part_ids_iter.next()
             if part is None:
                 return None
-            leader = self.clientDad.getLeader(self.space, part)
+            leader = self._client_dad.get_leader(self._space, part)
             if leader is None:
-                raise Exception('part %s not found in space %s' % (part, self.space))
-            spaceId = self.clientDad.metaClient.getSpaceIdFromCache(self.space)
-            if spaceId == -1:
-                raise Exception('space %s not found' % self.space)
-            colums = self.clientDad.getVertexReturnCols(self.space, self.returnCols)
-            scanVertexRequest = ScanVertexRequest(spaceId, part, None, colums, self.allCols, self.limit, self.startTime, self.endTime)
-            self.scanVertexResponseIter = self.clientDad.doScanVertex(self.space, leader, scanVertexRequest)
-            assert(self.scanVertexResponseIter is not None), 'scanVertexResponseIter is None'
+                raise Exception('part %s not found in space %s' % (part, self._space))
+            space_id = self._client_dad._meta_client.get_space_id_from_cache(self._space)
+            if space_id == -1:
+                raise Exception('space %s not found' % self._space)
+            colums = self._client_dad.get_vertex_return_cols(self._space, self._return_cols)
+            scan_vertex_request = ScanVertexRequest(space_id, part, None, colums, self._all_cols, self._limit, self._start_time, self._end_time)
+            self._scan_vertex_response_iter = self._client_dad.do_scan_vertex(self._space, leader, scan_vertex_request)
+            if self._scan_vertex_response_iter is None:
+                raise Exception('scan_vertex_response_iter is None')
 
-        return self.scanVertexResponseIter.next()
+        return self._scan_vertex_response_iter.next()
 
 
 class StorageClient:
-    def __init__(self, metaClient):
-        self.metaClient = metaClient
-        self.clients = {}
-        self.leaders = {}
-        self.timeout = 1000
+    def __init__(self, meta_client):
+        self._meta_client = meta_client
+        self._clients = {}
+        self._leaders = {}
+        self._timeout = 1000
 
     def connect(self, address):
-        if address not in self.clients.keys():
-            client = self.doConnect(address)
-            self.clients[address] = client
+        if address not in self._clients.keys():
+            client = self.do_connect(address)
+            self._clients[address] = client
             return client
         else:
-            return self.clients[address]
+            return self._clients[address]
 
-    def disConnect(self, address):
-        self.clients.remove(address)
+    def disconnect(self, address):
+        self._clients.remove(address)
 
-    def doConnects(self, addresses):
+    def do_connects(self, addresses):
         for address in addresses:
-            client = self.doConnect(address)
-            self.clients[address] = client
+            client = self.do_connect(address)
+            self._clients[address] = client
 
-    def doConnect(self, address):
+    def do_connect(self, address):
         host = address[0]
         port = address[1]
-        tTransport = TSocket.TSocket(host, port)
-        tTransport.setTimeout(self.timeout)
-        tTransport = TTransport.TBufferedTransport(tTransport)
-        tProtocol = TBinaryProtocol.TBinaryProtocol(tTransport)
-        tTransport.open()
-        return Client(tProtocol)
+        transport = TSocket.TSocket(host, port)
+        transport.setTimeout(self._timeout)
+        transport = TTransport.TBufferedTransport(transport)
+        protocol = TBinaryProtocol.TBinaryProtocol(transport)
+        transport.open()
+        return Client(protocol)
 
-    def scanEdge(self, space, returnCols, allCols, limit, startTime, endTime):
-        partIds = self.metaClient.getPartsAllocFromCache()[space].keys()
-        partIdsIter = Iterator(partIds)
-        return ScanSpaceEdgeResponseIter(self, space, partIdsIter, returnCols, allCols, limit, startTime, endTime)
+    def scan_edge(self, space, return_cols, all_cols, limit, start_time, end_time):
+        part_ids = self._meta_client.get_parts_alloc_from_cache()[space].keys()
+        part_ids_iter = Iterator(part_ids)
+        return ScanSpaceEdgeResponseIter(self, space, part_ids_iter, return_cols, all_cols, limit, start_time, end_time)
 
-    def scanPartEdge(self, space, part, returnCols, allCols, limit, startTime, endTime):
-        spaceId = self.metaClient.getSpaceIdFromCache(space)
-        columns = self.getEdgeReturnCols(space, returnCols)
-        scanEdgeRequest = ScanEdgeRequest(spaceId, part, None, columns, allCols, limit, startTime, endTime)
-        leader = self.getLeader(space, part)
+    def scan_part_edge(self, space, part, return_cols, all_cols, limit, start_time, end_time):
+        space_id = self._meta_client.get_space_id_from_cache(space)
+        columns = self.get_edge_return_cols(space, return_cols)
+        scan_edge_request = ScanEdgeRequest(space_id, part, None, columns, all_cols, limit, start_time, end_time)
+        leader = self.get_leader(space, part)
         if leader is None:
             raise Exception('part %s not found in space %s' % (part, space))
-        return self.doScanEdge(space, leader, scanEdgeRequest)
+        return self.do_scan_edge(space, leader, scan_edge_request)
 
-    def scanVertex(self, space, returnCols, allCols, limit, startTime, endTime):
-        partIds = self.metaClient.getPartsAllocFromCache()[space].keys()
-        partIdsIter = Iterator(partIds)
-        return ScanSpaceVertexResponseIter(self, space, partIdsIter, returnCols, allCols, limit, startTime, endTime)
+    def scan_vertex(self, space, return_cols, all_cols, limit, start_time, end_time):
+        part_ids = self._meta_client.get_parts_alloc_from_cache()[space].keys()
+        part_ids_iter = Iterator(part_ids)
+        return ScanSpaceVertexResponseIter(self, space, part_ids_iter, return_cols, all_cols, limit, start_time, end_time)
 
-    def scanPartVertex(self, space, part, returnCols, allCols, limit, startTime, endTime):
-        spaceId = self.metaClient.getSpaceIdFromCache(space)
-        columns = self.getVertexReturnCols(space, returnCols)
-        scanVertexRequest = ScanVertexRequest(spaceId, part, None, columns, allCols, limit, startTime, endTime)
-        leader = self.getLeader(space, part)
+    def scan_part_vertex(self, space, part, return_cols, all_cols, limit, start_time, end_time):
+        space_id = self._meta_client.get_space_id_from_cache(space)
+        columns = self.get_vertex_return_cols(space, return_cols)
+        scan_vertex_request = ScanVertexRequest(space_id, part, None, columns, all_cols, limit, start_time, end_time)
+        leader = self.get_leader(space, part)
         if leader is None:
             raise Exception('part %s not found in space %s' % (part, space))
-        return self.doScanVertex(space, leader, scanVertexRequest)
+        return self.do_scan_vertex(space, leader, scan_vertex_request)
 
-    def doScanEdge(self, space, leader, scanEdgeRequest):
+    def do_scan_edge(self, space, leader, scan_edge_request):
         client = self.connect(leader)
         if client is None:
             print('cannot connect to leader:', leader)
-            self.disConnect(leader)
+            self.disconnect(leader)
             return None
 
-        return ScanEdgeResponseIter(self, space, leader, scanEdgeRequest, client)
+        return ScanEdgeResponseIter(self, space, leader, scan_edge_request, client)
 
-    def doScanVertex(self, space, leader, scanVertexRequest):
+    def do_scan_vertex(self, space, leader, scan_vertex_request):
         client = self.connect(leader)
         if client is None:
             print('cannot connect to leader:', leader)
-            self.disConnect(leader)
+            self.disconnect(leader)
             return None
 
-        return ScanVertexResponseIter(self, space, leader, scanVertexRequest, client)
+        return ScanVertexResponseIter(self, space, leader, scan_vertex_request, client)
 
-    def getEdgeReturnCols(self, space, returnCols):
+    def get_edge_return_cols(self, space, return_cols):
         columns = {}
-        for edgeName, propNames in returnCols.items():
-            edgeItem = self.metaClient.getEdgeItemFromCache(space, edgeName)
-            if edgeItem is None:
-                raise Exception('edge %s not found in space %s' % (edgeName, space))
-            edgeType = edgeItem.edge_type
-            entryId = EntryId(edge_type=edgeType)
-            propDefs = []
-            for propName in propNames:
-                propDef = PropDef(PropOwner.EDGE, entryId, propName)
-                propDefs.append(propDef)
-            columns[edgeType] = propDefs
+        for edge_name, prop_names in return_cols.items():
+            edge_item = self._meta_client.get_edge_item_from_cache(space, edge_name)
+            if edge_item is None:
+                raise Exception('edge %s not found in space %s' % (edge_name, space))
+            edge_type = edge_item.edge_type
+            entry_id = EntryId(edge_type=edge_type)
+            prop_defs = []
+            for prop_name in prop_names:
+                prop_def = PropDef(PropOwner.EDGE, entry_id, prop_name)
+                prop_defs.append(prop_def)
+            columns[edge_type] = prop_defs
         return columns
 
-    def getVertexReturnCols(self, space, returnCols):
+    def get_vertex_return_cols(self, space, return_cols):
         columns = {}
-        for tagName, propNames in returnCols.items():
-            tagItem = self.metaClient.getTagItemFromCache(space, tagName)
-            if tagItem is None:
-                raise Exception('tag %s not found in space %s' % (tagName, space))
-            tagId = tagItem.tag_id
-            entryId = EntryId(tag_id=tagId)
-            propDefs = []
-            for propName in propNames:
-                propDef = PropDef(PropOwner.SOURCE, entryId, propName)
-                propDefs.append(propDef)
-            columns[tagId] = propDefs
+        for tag_name, prop_names in return_cols.items():
+            tag_item = self._meta_client.get_tag_item_from_cache(space, tag_name)
+            if tag_item is None:
+                raise Exception('tag %s not found in space %s' % (tag_name, space))
+            tag_id = tag_item.tag_id
+            entry_id = EntryId(tag_id=tag_id)
+            prop_defs = []
+            for prop_name in prop_names:
+                prop_def = PropDef(PropOwner.SOURCE, entry_id, prop_name)
+                prop_defs.append(prop_def)
+            columns[tag_id] = prop_defs
         return columns
 
-    def getLeader(self, spaceName, part):
-        return self.metaClient.getSpacePartLeaderFromCache(spaceName, part)
+    def get_leader(self, space_name, part):
+        return self._meta_client.get_space_part_leader_from_cache(space_name, part)
 
-    def updateLeader(self, spaceName, partId, leader):
-        self.metaClient.updateSpacePartLeader(spaceName, partId, leader)
+    def update_leader(self, space_name, part_id, leader):
+        self._meta_client.update_space_part_leader(space_name, part_id, leader)
 
-    def handleResultCodes(self, failedCodes, space):
-        for resultCode in failedCodes:
-            if resultCode.code == ErrorCode.E_LEADER_CHANGED:
-                print('ErrorCode.E_LEADER_CHANGED, leader changed to :', resultCode.leader)
-                hostAddr = resultCode.leader
-                if hostAddr is not None and hostAddr.ip != 0 and hostAddr.port != 0:
-                    host = socket.inet_ntoa(struct.pack('I',socket.htonl(hostAddr.ip & 0xffffffff)))
-                    port = hostAddr.port
-                    newLeader = (host, port)
-                    self.updateLeader(space, resultCode.part_id, newLeader)
-                    if newLeader in self.clients.keys():
-                        newClient = self.clients[newLeader]
+    def handle_result_codes(self, failed_codes, space):
+        for result_code in failed_codes:
+            if result_code.code == ErrorCode.E_LEADER_CHANGED:
+                print('ErrorCode.E_LEADER_CHANGED, leader changed to :', result_code.leader)
+                host_addr = result_code.leader
+                if host_addr is not None and host_addr.ip != 0 and host_addr.port != 0:
+                    host = socket.inet_ntoa(struct.pack('I',socket.htonl(host_addr.ip & 0xffffffff)))
+                    port = host_addr.port
+                    new_leader = (host, port)
+                    self.update_leader(space, result_code.part_id, new_leader)
+                    if new_leader in self._clients.keys():
+                        new_client = self._clients[new_leader]
                     else:
-                        newClient = None
-                    return newLeader, newClient
+                        new_client = None
+                    return new_leader, new_client
 
         return None, None
 
-    def isSuccessfully(self, response):
+    def is_successfully(self, response):
         return len(response.result.failed_codes) == 0

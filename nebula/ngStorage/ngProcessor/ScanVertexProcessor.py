@@ -13,39 +13,39 @@ from nebula.ngData.data import RowReader
 from nebula.ngData.data import Result
 
 class ScanVertexProcessor:
-    def __init__(self, metaClient):
-        self.metaClient = metaClient
+    def __init__(self, meta_client):
+        self._meta_client = meta_client
 
-    def process(self, spaceName, scanVertexResponse):
-        if scanVertexResponse is None:
-            print('process: scanVertexResponse is None')
+    def process(self, space_name, scan_vertex_response):
+        if scan_vertex_response is None:
+            print('process: scan_vertex_response is None')
             return None
-        rowReaders = {}
+        row_readers = {}
         rows = {}
-        tagIdNameMap = {}
-        if scanVertexResponse.vertex_schema is not None:
-            for tagId, schema in scanVertexResponse.vertex_schema.items():
-                tagName = self.metaClient.getTagNameFromCache(spaceName, tagId)
-                tagItem = self.metaClient.getTagItemFromCache(spaceName, tagName)
-                schemaVersion = tagItem.version
-                rowReaders[tagId] = RowReader(schema, schemaVersion)
-                rows[tagName] = []
-                tagIdNameMap[tagId] = tagName
+        tag_id_name_map = {}
+        if scan_vertex_response.vertex_schema is not None:
+            for tag_id, schema in scan_vertex_response.vertex_schema.items():
+                tag_name = self._meta_client.get_tag_name_from_cache(space_name, tag_id)
+                tag_item = self._meta_client.get_tag_item_from_cache(space_name, tag_name)
+                schema_version = tag_item.version
+                row_readers[tag_id] = RowReader(schema, schema_version)
+                rows[tag_name] = []
+                tag_id_name_map[tag_id] = tag_name
         else:
-            print('scanVertexResponse.vertex_schema is None')
+            print('scan_vertex_response.vertex_schema is None')
 
-        if scanVertexResponse.vertex_data is not None:
-            for scanTag in scanVertexResponse.vertex_data:
-                tagId = scanTag.tagId
-                if tagId not in rowReaders.keys():
+        if scan_vertex_response.vertex_data is not None:
+            for scan_tag in scan_vertex_response.vertex_data:
+                tag_id = scan_tag.tagId
+                if tag_id not in row_readers.keys():
                     continue
 
-                rowReader = rowReaders[tagId]
-                defaultProperties = rowReader.vertexKey(scanTag.vertexId, scanTag.tagId)
-                properties = rowReader.decodeValue(scanTag.value)
-                tagName = tagIdNameMap[tagId]
-                rows[tagName].append(Row(defaultProperties, properties))
+                row_reader = row_readers[tag_id]
+                default_properties = row_reader.vertex_key(scan_tag.vertexId, scan_tag.tagId)
+                properties = row_reader.decode_value(scan_tag.value)
+                tag_name = tag_id_name_map[tag_id]
+                rows[tag_name].append(Row(default_properties, properties))
         else:
-            print('scanVertexResponse.vertex_data is None')
+            print('scan_vertex_response.vertex_data is None')
 
         return Result(rows)

@@ -49,251 +49,251 @@ class RepeatTimer(Timer):
 
 class MetaClient:
     def __init__(self, addresses, timeout=1000,
-                connectionRetry=3, executionRetry=3):
-        self.addresses = addresses
-        self.timeout = timeout
-        self.connectionRetry = connectionRetry
-        self.executionRetry = executionRetry
-        self.spaceNameMap = {} # map<spaceName, spaceId>
-        self.spacePartLocation = {} # map<spaceName, map<partId, list<address>>>
-        self.spacePartLeader = {} # map<spaceName, map<partId, leader'saddress>>
-        self.spaceTagItems = {} # map<spaceName, map<TagItem.tag_name, TagItem>>
-        self.spaceEdgeItems = {} # map<spaceName, map<edgeItem.edge_name, edgeItem>>
-        self.tagNameMap = {} # map<spaceName, map<TagItem.tag_id, TagItem.tag_name>>
-        self.edgeNameMap = {} # map<spaceName, map<edgeItem.edge_name, edgeItem>>
-        self.client = None
+                connection_retry=3, execution_retry=3):
+        self._addresses = addresses
+        self._timeout = timeout
+        self._connection_retry = connection_retry
+        self._execution_retry = execution_retry
+        self._space_name_map = {} # map<space_name, space_id>
+        self._space_part_location = {} # map<space_name, map<part_id, list<address>>>
+        self._space_part_leader = {} # map<space_name, map<part_id, leader'saddress>>
+        self._space_tag_items = {} # map<space_name, map<tag_item.tag_name, tag_item>>
+        self._space_edge_items = {} # map<space_name, map<edge_item.edge_name, edge_item>>
+        self._tag_name_map = {} # map<space_name, map<tag_item.tag_id, tag_item.tag_name>>
+        self._edge_name_map = {} # map<space_name, map<edge_item.edge_name, edge_item>>
+        self._client = None
 
     def connect(self):
-        while self.connectionRetry > 0:
-            code = self.doConnect(self.addresses)
+        while self._connection_retry > 0:
+            code = self.do_connect(self._addresses)
             if code == 0:
                 return ErrorCode.SUCCEEDED
-            self.connectionRetry -= 1
+            self._connection_retry -= 1
         return ErrorCode.E_FAIL_TO_CONNECT
 
-    def doConnect(self, addresses):
+    def do_connect(self, addresses):
         address = addresses[random.randint(0, len(addresses)-1)]
         host = address[0]
         port = address[1]
-        tTransport = TSocket.TSocket(host, port)
-        tTransport.setTimeout(self.timeout)
-        tTransport = TTransport.TBufferedTransport(tTransport)
-        tProtocol = TBinaryProtocol.TBinaryProtocol(tTransport)
-        tTransport.open()
-        self.client = Client(tProtocol)
-        self.updateSchemas()
-        RepeatTimer(2, self.updateSchemas).start() # call updatSchemas() every 2 seconds
+        transport = TSocket.TSocket(host, port)
+        transport.setTimeout(self._timeout)
+        transport = TTransport.TBufferedTransport(transport)
+        protocol = TBinaryProtocol.TBinaryProtocol(transport)
+        transport.open()
+        self._client = Client(protocol)
+        self.update_schemas()
+        RepeatTimer(2, self.update_schemas).start() # call updatSchemas() every 2 seconds
 
         return 0
 
-    def updateSchemas(self):
-        for spaceIdName in self.listSpaces():
-            spaceName = spaceIdName.name # class IdName
-            self.spaceNameMap[spaceName] = spaceIdName.id.get_space_id()
-            self.spacePartLocation[spaceName] = self.getPartsAlloc(spaceName)
-            self.spacePartLeader[spaceName] = {}
+    def update_schemas(self):
+        for space_id_name in self.list_spaces():
+            space_name = space_id_name.name # class IdName
+            self._space_name_map[space_name] = space_id_name.id.get_space_id()
+            self._space_part_location[space_name] = self.get_parts_alloc(space_name)
+            self._space_part_leader[space_name] = {}
             # Loading tag schema's cache
             tags = {}
-            tagsName = {}
-            for tagItem in self.getTags(spaceName):
-                tags[tagItem.tag_name] = tagItem
-                tagsName[tagItem.tag_id] = tagItem.tag_name
+            tags_name = {}
+            for tag_item in self.get_tags(space_name):
+                tags[tag_item.tag_name] = tag_item
+                tags_name[tag_item.tag_id] = tag_item.tag_name
 
-            self.spaceTagItems[spaceName] = tags
-            self.tagNameMap[spaceName] = tagsName
+            self._space_tag_items[space_name] = tags
+            self._tag_name_map[space_name] = tags_name
 
             # Loading edge schema's cache
             edges = {}
-            edgesName = {}
-            for edgeItem in self.getEdges(spaceName):
-                edges[edgeItem.edge_name] = edgeItem
-                edgesName[edgeItem.edge_type] = edgeItem.edge_name
-            self.spaceEdgeItems[spaceName] = edges
-            self.edgeNameMap[spaceName] = edgesName
-        self.setSpacePartLeader()
+            edges_name = {}
+            for edge_item in self.get_edges(space_name):
+                edges[edge_item.edge_name] = edge_item
+                edges_name[edge_item.edge_type] = edge_item.edge_name
+            self._space_edge_items[space_name] = edges
+            self._edge_name_map[space_name] = edges_name
+        self.set_space_part_leader()
         return 0
 
-    def getSpaceIdFromCache(self, spaceName):
-        if spaceName not in self.spaceNameMap.keys():
+    def get_space_id_from_cache(self, space_name):
+        if space_name not in self._space_name_map.keys():
             return -1
         else:
-            return self.spaceNameMap[spaceName]
+            return self._space_name_map[space_name]
 
-    def getSpacePartLeaderFromCache(self, spaceName, partId):
-        if spaceName not in self.spacePartLeader.keys():
+    def get_space_part_leader_from_cache(self, space_name, part_id):
+        if space_name not in self._space_part_leader.keys():
             return None
-        if partId not in self.spacePartLeader[spaceName].keys():
+        if part_id not in self._space_part_leader[space_name].keys():
             return None
-        return self.spacePartLeader[spaceName][partId]
+        return self._space_part_leader[space_name][part_id]
 
-    def updateSpacePartLeader(self, spaceName, partId, leader):
-        self.spacePartLeader[spaceName][partId] = leader
+    def update_space_part_leader(self, space_name, part_id, leader):
+        self._space_part_leader[space_name][part_id] = leader
 
-    def setSpacePartLeader(self):
-        listHostsReq = ListHostsReq()
-        listHostsResp = self.client.listHosts(listHostsReq)
-        if listHostsResp.code != ErrorCode.SUCCEEDED:
-            print('setSpacePartLeader error, eror code: ', listHostsResp.code)
+    def set_space_part_leader(self):
+        list_hosts_req = ListHostsReq()
+        list_hosts_resp = self._client.listHosts(list_hosts_req)
+        if list_hosts_resp.code != ErrorCode.SUCCEEDED:
+            print('set_space_part_leader error, eror code: ', list_hosts_resp.code)
             return None
 
-        for hostItem in listHostsResp.hosts:
-            host = socket.inet_ntoa(struct.pack('I',socket.htonl(hostItem.hostAddr.ip & 0xffffffff)))
-            port = hostItem.hostAddr.port
+        for host_item in list_hosts_resp.hosts:
+            host = socket.inet_ntoa(struct.pack('I',socket.htonl(host_item.hostAddr.ip & 0xffffffff)))
+            port = host_item.hostAddr.port
             leader = (host, port)
-            for space, partIds in hostItem.leader_parts.items():
-                for partId in partIds:
-                    self.spacePartLeader[space][partId] = leader
+            for space, part_ids in host_item.leader_parts.items():
+                for part_id in part_ids:
+                    self._space_part_leader[space][part_id] = leader
 
-    def listSpaces(self):
-        listSpacesReq = ListSpacesReq()
-        listSpacesResp = self.client.listSpaces(listSpacesReq)
-        if listSpacesResp.code == ErrorCode.SUCCEEDED:
-            return listSpacesResp.spaces # spaceNameID--> IdName
+    def list_spaces(self):
+        list_spaces_req = ListSpacesReq()
+        list_spaces_resp = self._client.listSpaces(list_spaces_req)
+        if list_spaces_resp.code == ErrorCode.SUCCEEDED:
+            return list_spaces_resp.spaces # space_nameID--> IdName
         else:
-            print('list spaces error, error code: ', listSpacesResp.code)
+            print('list spaces error, error code: ', list_spaces_resp.code)
             return None
 
-    def getPartFromCache(self, spaceName, part):
-        if spaceName not in self.spacePartLocation.keys():
-            self.spacePartLocation[spaceName] = self.getPartsAlloc(spaceName)
-        partsAlloc = self.spacePartLocation[spaceName]
-        if partsAlloc is None or part not in partsAlloc.keys():
+    def get_part_from_cache(self, space_name, part):
+        if space_name not in self._space_part_location.keys():
+            self._space_part_location[space_name] = self.get_parts_alloc(space_name)
+        parts_alloc = self._space_part_location[space_name]
+        if parts_alloc is None or part not in parts_alloc.keys():
             return None
-        return partsAlloc[part]
+        return parts_alloc[part]
 
-    def getPartsAlloc(self, spaceName):
-        spaceId = self.getSpaceIdFromCache(spaceName)
-        if spaceId == -1:
+    def get_parts_alloc(self, space_name):
+        space_id = self.get_space_id_from_cache(space_name)
+        if space_id == -1:
             return None
-        getPartsAllocReq = GetPartsAllocReq(spaceId)
-        getPartsAllocResp = self.client.getPartsAlloc(getPartsAllocReq)
+        get_parts_alloc_req = GetPartsAllocReq(space_id)
+        get_parts_alloc_resp = self._client.getPartsAlloc(get_parts_alloc_req)
 
-        if getPartsAllocResp.code == ErrorCode.SUCCEEDED:
-            addressMap = {}
-            for partId, hostAddrs in getPartsAllocResp.parts.items():
+        if get_parts_alloc_resp.code == ErrorCode.SUCCEEDED:
+            address_map = {}
+            for part_id, host_addrs in get_parts_alloc_resp.parts.items():
                 addresses = []
-                for hostAddr in hostAddrs:
-                    host = socket.inet_ntoa(struct.pack('I',socket.htonl(hostAddr.ip & 0xffffffff)))
-                    port = hostAddr.port
+                for host_addr in host_addrs:
+                    host = socket.inet_ntoa(struct.pack('I',socket.htonl(host_addr.ip & 0xffffffff)))
+                    port = host_addr.port
                     addresses.append((host, port))
-                addressMap[partId] = addresses
+                address_map[part_id] = addresses
 
-            return addressMap
+            return address_map
         else:
-            print("get parts alloc error, error code: ", getPartsAllocResp.code)
+            print("get parts alloc error, error code: ", getParts_alloc_resp.code)
             return None
 
-    def getPartsAllocFromCache(self):
-        return self.spacePartLocation
+    def get_parts_alloc_from_cache(self):
+        return self._space_part_location
 
-    def getPartAllocFromCache(self, spaceName, part):
-        if spaceName in self.spacePartLocation.keys():
-            partsAlloc = self.spacePartLocation[spaceName]
-            if part in partsAlloc.keys():
-                return partsAlloc[part]
+    def get_part_alloc_from_cache(self, space_name, part):
+        if space_name in self._space_part_location.keys():
+            parts_alloc = self._space_part_location[space_name]
+            if part in parts_alloc.keys():
+                return parts_alloc[part]
 
         return None
 
-    def getTagItemFromCache(self, spaceName, tagName):
-        if spaceName in self.spaceTagItems.keys() and tagName in self.spaceTagItems[spaceName].keys():
-            return self.spaceTagItems[spaceName][tagName]
+    def get_tag_item_from_cache(self, space_name, tag_name):
+        if space_name in self._space_tag_items.keys() and tag_name in self._space_tag_items[space_name].keys():
+            return self._space_tag_items[space_name][tag_name]
 
         return None
 
-    def getTagNameFromCache(self, spaceName, tagId):
-        if spaceName in self.tagNameMap.keys():
-            tagNames = self.tagNameMap[spaceName]
-            if tagId in tagNames.keys():
-                return tagNames[tagId]
+    def get_tag_name_from_cache(self, space_name, tag_id):
+        if space_name in self._tag_name_map.keys():
+            tag_names = self._tag_name_map[space_name]
+            if tag_id in tag_names.keys():
+                return tag_names[tag_id]
 
         return None
 
-    def getTags(self, spaceName):
-        spaceId = self.getSpaceIdFromCache(spaceName)
-        if spaceId == -1:
+    def get_tags(self, space_name):
+        space_id = self.get_space_id_from_cache(space_name)
+        if space_id == -1:
             return None
-        listTagsReq = ListTagsReq(spaceId)
-        listTagsResp = self.client.listTags(listTagsReq)
+        list_tags_req = ListTagsReq(space_id)
+        list_tags_resp = self._client.listTags(list_tags_req)
 
-        if listTagsResp.code == ErrorCode.SUCCEEDED:
-            return listTagsResp.tags
+        if list_tags_resp.code == ErrorCode.SUCCEEDED:
+            return list_tags_resp.tags
         else:
-            print('get tags error, error code: ', listTagsResp.code)
+            print('get tags error, error code: ', list_tags_resp.code)
             return None
 
-    def getTag(self, spaceName, tagName, version=-1):
-        spaceId = self.getSpaceIdFromCache(spaceName)
-        getTagReq = GetTagReq(spaceId, tagName, version)
-        getTagResp = self.client.getTag(getTagReq)
+    def get_tag(self, space_name, tag_name, version=-1):
+        space_id = self.get_space_id_from_cache(space_name)
+        get_tag_req = GetTagReq(space_id, tag_name, version)
+        get_tag_resp = self._client.getTag(get_tag_req)
 
-        if getTagResp.code == ErrorCode.SUCCEEDED:
-            return getTagResp.schema
+        if get_tag_resp.code == ErrorCode.SUCCEEDED:
+            return get_tag_resp.schema
         else:
             return None
 
-    def getTagSchema(self, spaceName, tagName, version=-1):
-        spaceId = self.getSpaceIdFromCache(spaceName)
-        if spaceId == -1:
+    def get_tag_schema(self, space_name, tag_name, version=-1):
+        space_id = self.get_space_id_from_cache(space_name)
+        if space_id == -1:
             return None
-        getTagReq = GetTagReq(spaceId, tagName, version)
-        getTagResp = self.client.getTag(getTagReq)
+        get_tag_req = GetTagReq(space_id, tag_name, version)
+        get_tag_resp = self._client.getTag(get_tag_req)
         result = {}
-        for columnDef in getTagResp.schema.columns:
-            result[columnDef.name] = columnDef.type.type
+        for column_def in get_tag_resp.schema.columns:
+            result[column_def.name] = column_def.type.type
         return result
 
-    def getEdgeItemFromCache(self, spaceName, edgeName):
-        if spaceName not in self.spaceEdgeItems.keys():
+    def get_edge_item_from_cache(self, space_name, edge_name):
+        if space_name not in self._space_edge_items.keys():
             edges = {}
-            for edgeItem in self.getEdges(spaceName):
-                edges[edgeItem.edge_name] = edgeItem
-            self.spaceEdgeItems[spaceName] = edges
+            for edge_item in self.getEdges(space_name):
+                edges[edge_item.edge_name] = edge_item
+            self._space_edge_items[space_name] = edges
 
-        edgeItems = self.spaceEdgeItems[spaceName]
-        if edgeName in edgeItems.keys():
-            return edgeItems[edgeName]
+        edge_items = self._space_edge_items[space_name]
+        if edge_name in edge_items.keys():
+            return edge_items[edge_name]
         else:
             return None
 
-    def getEdgeNameFromCache(self, spaceName, edgeType):
-        if spaceName in self.edgeNameMap.keys():
-            edgeNames = self.edgeNameMap[spaceName]
-            if edgeType in edgeNames.keys():
-                return edgeNames[edgeType]
+    def get_edge_name_from_cache(self, space_name, edge_type):
+        if space_name in self._edge_name_map.keys():
+            edge_names = self._edge_name_map[space_name]
+            if edge_type in edge_names.keys():
+                return edge_names[edge_type]
 
         return None
 
-    def getEdges(self, spaceName):
-        spaceId = self.getSpaceIdFromCache(spaceName)
-        if spaceId == -1:
+    def get_edges(self, space_name):
+        space_id = self.get_space_id_from_cache(space_name)
+        if space_id == -1:
             return None
-        listEdgesReq = ListEdgesReq(spaceId)
-        listEdgesResp =self.client.listEdges(listEdgesReq)
-        if listEdgesResp.code == ErrorCode.SUCCEEDED:
-            return listEdgesResp.edges
+        list_edges_req = ListEdgesReq(space_id)
+        list_edges_resp =self._client.listEdges(list_edges_req)
+        if list_edges_resp.code == ErrorCode.SUCCEEDED:
+            return list_edges_resp.edges
         else:
-            print('get tags error, error code: ', listEdgesResp.code)
+            print('get tags error, error code: ', list_edges_resp.code)
             return None
 
-    def getEdge(self, spaceName, edgeName, version=-1):
-        spaceId = self.getSpaceIdFromCache(spaceName)
-        if spaceId == -1:
+    def get_edge(self, space_name, edge_name, version=-1):
+        space_id = self.get_space_id_from_cache(space_name)
+        if space_id == -1:
             return None
-        getEdgeReq = GetEdgeReq(spaceId, edgeName, version)
-        getEdgeResp = self.client.getEdge(getEdgeReq)
-        if getEdgeResp.code == ErrorCode.SUCCEEDED:
-            return getEdgeResp.Schema
+        get_edge_req = GetEdgeReq(space_id, edge_name, version)
+        get_edge_resp = self._client.getEdge(get_edge_req)
+        if get_edge_resp.code == ErrorCode.SUCCEEDED:
+            return get_edge_resp.Schema
         else:
-            print('get edge error, error code: ', getEdgeResp.code)
+            print('get edge error, error code: ', get_edge_resp.code)
             return None
 
-    def getEdgeSchema(self, spaceName, edgeName, version=-1):
-        spaceId = self.getSpaceIdFromCache(spaceName)
-        if spaceId == -1:
+    def get_edge_schema(self, space_name, edge_name, version=-1):
+        space_id = self.get_space_id_from_cache(space_name)
+        if space_id == -1:
             return None
-        getEdgeReq = GetEdgeReq(spaceId, edgeName, version)
-        getEdgeResp = self.client.getEdge(getEdgeReq)
+        get_edge_req = GetEdgeReq(space_id, edge_name, version)
+        get_edge_resp = self._client.getEdge(get_edge_req)
         result = {}
-        for columnDef in getEdgeResp.schema.columns:
-            result[columnDef.name] = columnDef.type.type
+        for column_def in get_edge_resp.schema.columns:
+            result[column_def.name] = column_def.type.type
         return result

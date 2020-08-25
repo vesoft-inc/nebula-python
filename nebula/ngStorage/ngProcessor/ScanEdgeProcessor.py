@@ -13,37 +13,37 @@ from nebula.ngData.data import RowReader
 from nebula.ngData.data import Result
 
 class ScanEdgeProcessor:
-    def __init__(self, metaClient):
-        self.metaClient = metaClient
+    def __init__(self, meta_client):
+        self._meta_client = meta_client
 
-    def process(self, spaceName, scanEdgeResponse):
-        rowReaders = {}
+    def process(self, space_name, scan_edge_response):
+        row_readers = {}
         rows = {}
-        edgeTypeNameMap = {}
+        edge_type_name_map = {}
 
-        if scanEdgeResponse.edge_schema is not None:
-            for edgeType, schema in scanEdgeResponse.edge_schema.items():
-                edgeName = self.metaClient.getEdgeNameFromCache(spaceName, edgeType)
-                edgeItem = self.metaClient.getEdgeItemFromCache(spaceName, edgeName)
-                schemaVersion = edgeItem.version
-                rowReaders[edgeType] = RowReader(schema, schemaVersion)
-                rows[edgeName] = []
-                edgeTypeNameMap[edgeType] = edgeName
+        if scan_edge_response.edge_schema is not None:
+            for edge_type, schema in scan_edge_response.edge_schema.items():
+                edge_name = self._meta_client.get_edge_name_from_cache(space_name, edge_type)
+                edge_item = self._meta_client.get_edge_item_from_cache(space_name, edge_name)
+                schema_version = edge_item.version
+                row_readers[edge_type] = RowReader(schema, schema_version)
+                rows[edge_name] = []
+                edge_type_name_map[edge_type] = edge_name
         else:
-            print('scanEdgeResponse.edge_schema is None')
+            print('scan_edge_response.edge_schema is None')
 
-        if scanEdgeResponse.edge_data is not None:
-            for scanEdge in scanEdgeResponse.edge_data:
-                edgeType = scanEdge.type
-                if edgeType not in rowReaders.keys():
+        if scan_edge_response.edge_data is not None:
+            for scan_edge in scan_edge_response.edge_data:
+                edge_type = scan_edge.type
+                if edge_type not in row_readers.keys():
                     continue
 
-                rowReader = rowReaders[edgeType]
-                defaultProperties = rowReader.edgeKey(scanEdge.src, scanEdge.type, scanEdge.dst)
-                properties = rowReader.decodeValue(scanEdge.value)
-                edgeName = edgeTypeNameMap[edgeType]
-                rows[edgeName].append(Row(defaultProperties, properties))
+                row_reader = row_readers[edge_type]
+                default_properties = row_reader.edge_key(scan_edge.src, scan_edge.type, scan_edge.dst)
+                properties = row_reader.decode_value(scan_edge.value)
+                edge_name = edge_type_name_map[edge_type]
+                rows[edge_name].append(Row(default_properties, properties))
         else:
-            print('scanEdgeResponse.edge_data is None')
+            print('scan_edge_response.edge_data is None')
 
         return Result(rows)

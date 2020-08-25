@@ -20,99 +20,99 @@ from nebula.ngStorage.ngProcessor.ScanEdgeProcessor import ScanEdgeProcessor
 from nebula.ngStorage.ngProcessor.ScanVertexProcessor import ScanVertexProcessor
 
 
-def scanEdge(space, returnCols, allCols):
-    scanEdgeResponseIter = storageClient.scanEdge(space, returnCols, allCols, 100, 0, sys.maxsize)
-    scanEdgeResponse = scanEdgeResponseIter.next()
-    if scanEdgeResponse is None:
-        print('scanEdgeResponse is None')
+def scan_edge(space, return_cols, all_cols):
+    scan_edge_response_iter = storage_client.scan_edge(space, return_cols, all_cols, 100, 0, sys.maxsize)
+    scan_edge_response = scan_edge_response_iter.next()
+    if scan_edge_response is None:
+        print('scan_edge_response is None')
         return
-    processEdge(space, scanEdgeResponse)
-    while scanEdgeResponseIter.hasNext():
-        scanEdgeResponse = scanEdgeResponseIter.next()
-        if scanEdgeResponse is None:
+    process_edge(space, scan_edge_response)
+    while scan_edge_response_iter.has_next():
+        scan_edge_response = scan_edge_response_iter.next()
+        if scan_edge_response is None:
             print("Error occurs while scaning edge")
             break
-        processEdge(space, scanEdgeResponse)
+        process_edge(space, scan_edge_response)
 
-def scanVertex(space, returnCols, allCols):
-    scanVertexResponseIter = storageClient.scanVertex(space, returnCols, allCols, 100, 0, sys.maxsize)
-    scanVertexResponse = scanVertexResponseIter.next()
-    if scanVertexResponse is None:
-        print('scanVertexResponse is None')
+def scan_vertex(space, return_cols, all_cols):
+    scan_vertex_response_iter = storage_client.scan_vertex(space, return_cols, all_cols, 100, 0, sys.maxsize)
+    scan_vertex_response = scan_vertex_response_iter.next()
+    if scan_vertex_response is None:
+        print('scan_vertex_vesponse is None')
         return
-    processVertex(space, scanVertexResponse)
-    while scanVertexResponseIter.hasNext():
-        scanVertexResponse = scanVertexResponseIter.next()
-        if scanVertexResponse is None:
+    process_vertex(space, scan_vertex_response)
+    while scan_vertex_response_iter.has_next():
+        scan_vertex_response = scan_vertex_response_iter.next()
+        if scan_vertex_response is None:
             print("Error occurs while scaning vertex")
             break
-        processVertex(space, scanVertexResponse)
+        process_vertex(space, scan_vertex_response)
 
-def processEdge(space, scanEdgeResponse):
-    result = scanEdgeProcessor.process(space, scanEdgeResponse)
+def process_edge(space, scan_edge_response):
+    result = scan_edge_processor.process(space, scan_edge_response)
     # Get the corresponding rows by edgeName
-    for edgeName, edgeRows in result.rows.items():
-        for row in edgeRows:
-
-            srcId = row.defaultProperties[0].getValue()
-            dstId = row.defaultProperties[2].getValue()
+    for edge_name, edge_rows in result._rows.items():
+        for row in edge_rows:
+            srcId = row._default_properties[0].get_value()
+            dstId = row._default_properties[2].get_value()
+            print(srcId,'->', dstId)
             props = {}
-            for prop in row.properties:
-                propName = prop.getName()
-                propValue = prop.getValue()
-                props[propName] = propValue
+            for prop in row._properties:
+                prop_name = prop.get_name()
+                prop_value = prop.get_value()
+                props[prop_name] = prop_value
             print(props)
 
-def processVertex(space, scanVertexResponse):
-    result = scanVertexProcessor.process(space, scanVertexResponse)
+def process_vertex(space, scan_vertex_response):
+    result = scan_vertex_processor.process(space, scan_vertex_response)
     if result is None:
         return None
-    for tagName, tagRows in result.rows.items():
-        for row in tagRows:
-            vid = row.defaultProperties[0].getValue()
+    for tag_name, tag_rows in result._rows.items():
+        for row in tag_rows:
+            vid = row._default_properties[0].get_value()
             props = {}
-            for prop in row.properties:
-                propName = prop.getName()
-                propValue = prop.getValue()
-                props[propName] = propValue
+            for prop in row._properties:
+                prop_name = prop.get_name()
+                prop_value = prop.get_value()
+                props[prop_name] = prop_value
             print(props)
 
-def getReturnCols(space):
-    tagItems = metaClient.getTags(space)
-    vertexReturnCols = {}
-    if tagItems is None:
+def get_return_cols(space):
+    tag_items = meta_client.get_tags(space)
+    vertex_return_cols = {}
+    if tag_items is None:
         print('tags not found in space ', space)
     else:
-        for tagItem in tagItems:
-            tagName = tagItem.tag_name
-            vertexReturnCols[tagName] = metaClient.getTagSchema(space, tagName).keys()
-    edgeItems = metaClient.getEdges(space)
-    edgeReturnCols = {}
-    if edgeItems is None:
+        for tag_item in tag_items:
+            tag_name = tag_item.tag_name
+            vertex_return_cols[tag_name] = meta_client.get_tag_schema(space, tag_name).keys()
+    edge_items = meta_client.get_edges(space)
+    edge_return_cols = {}
+    if edge_items is None:
         print('edges not found in space ', space)
     else:
-        for edgeItem in edgeItems:
-            edgeName = edgeItem.edge_name
-            edgeReturnCols[edgeName] = metaClient.getEdgeSchema(space, edgeName).keys()
+        for edge_item in edge_items:
+            edge_name = edge_item.edge_name
+            edge_return_cols[edge_name] = meta_client.get_edge_schema(space, edge_name).keys()
 
-    return vertexReturnCols, edgeReturnCols
+    return vertex_return_cols, edge_return_cols
 
 
 if __name__ == '__main__':
-    metaClient = MetaClient([(sys.argv[1], sys.argv[2])])
-    code =  metaClient.connect()
+    meta_client = MetaClient([(sys.argv[1], sys.argv[2])])
+    code =  meta_client.connect()
     if code == ErrorCode.E_FAIL_TO_CONNECT:
         raise Exception('connect to %s:%d failed' % (sys.argv[1], sys.argv[2]))
-    storageClient = StorageClient(metaClient)
-    scanEdgeProcessor = ScanEdgeProcessor(metaClient)
-    scanVertexProcessor = ScanVertexProcessor(metaClient)
+    storage_client = StorageClient(meta_client)
+    scan_edge_processor = ScanEdgeProcessor(meta_client)
+    scan_vertex_processor = ScanVertexProcessor(meta_client)
 
-    spaceToRead = sys.argv[3]
-    vertexReturnCols, edgeReturnCols = getReturnCols(spaceToRead)
-    allCols = True
+    space_to_read = sys.argv[3]
+    vertex_return_cols, edge_return_cols = get_return_cols(space_to_read)
+    all_cols = True
 
-    if spaceToRead not in metaClient.getPartsAllocFromCache().keys():
-        raise Exception('spaceToRead %s is not found in nebula' % spaceToRead)
+    if space_to_read not in meta_client.get_parts_alloc_from_cache().keys():
+        raise Exception('spaceToRead %s is not found in nebula' % space_to_read)
     else:
-        scanVertex(spaceToRead, vertexReturnCols, allCols)
-        scanEdge(spaceToRead, edgeReturnCols, allCols)
+        scan_vertex(space_to_read, vertex_return_cols, all_cols)
+        scan_edge(space_to_read, edge_return_cols, all_cols)

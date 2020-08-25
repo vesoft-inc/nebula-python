@@ -7,7 +7,7 @@
 
 
 """
-Nebula StorageClient tests.
+Nebula storage_client tests.
 """
 
 import pytest
@@ -40,12 +40,12 @@ def test_prepare():
             return
         resp = client.authenticate('user', 'password')
         assert resp.error_code == 0, resp.error_msg
-        resp = client.execute('DROP SPACE IF EXISTS %s' % spaceName)
+        resp = client.execute('DROP SPACE IF EXISTS %s' % space_name)
         assert resp.error_code == 0, resp.error_msg
-        resp = client.execute('CREATE SPACE %s(partition_num=1)' % spaceName)
+        resp = client.execute('CREATE SPACE %s(partition_num=1)' % space_name)
         assert resp.error_code == 0, resp.error_msg
         time.sleep(5)
-        resp = client.execute('USE %s' % spaceName)
+        resp = client.execute('USE %s' % space_name)
         assert resp.error_code == 0, resp.error_msg
         time.sleep(5)
         resp = client.execute('CREATE TAG player(name string, age int)')
@@ -64,51 +64,51 @@ def test_prepare():
         client.sign_out()
         assert False
 
-def test_scanEdge():
-    result = storageClient.scanEdge(spaceName, {'follow':['degree']}, True, 100, 0, sys.maxsize)
+def test_scan_edge():
+    result = storage_client.scan_edge(space_name, {'follow':['degree']}, True, 100, 0, sys.maxsize)
     assert result is not None and result.next().edge_data is not None
 
-def test_scanVertex():
-    result = storageClient.scanVertex(spaceName, {'player':['name', 'age']}, True, 100, 0, sys.maxsize)
+def test_scan_vertex():
+    result = storage_client.scan_vertex(space_name, {'player':['name', 'age']}, True, 100, 0, sys.maxsize)
     assert result is not None and result.next().vertex_data is not None
 
-def test_scanPartEdge():
-    result = storageClient.scanPartEdge(spaceName, 1, {'follow':['degree']}, True, 100, 0, sys.maxsize)
+def test_scan_part_edge():
+    result = storage_client.scan_part_edge(space_name, 1, {'follow':['degree']}, True, 100, 0, sys.maxsize)
     assert result is not None and result.next().edge_data is not None
 
-def test_scanPartVertex():
-    result = storageClient.scanPartVertex(spaceName, 1, {'player':['name', 'age']}, True, 100, 0, sys.maxsize)
+def test_scan_part_vertex():
+    result = storage_client.scan_part_vertex(space_name, 1, {'player':['name', 'age']}, True, 100, 0, sys.maxsize)
     assert result is not None and result.next().vertex_data is not None
 
-def test_getTagSchema():
-    result = metaClient.getTagSchema(spaceName, 'player')
+def test_get_tag_schema():
+    result = meta_client.get_tag_schema(space_name, 'player')
     expect = {'name':6, 'age':2}
     assert result == expect
 
-def test_getEdgeSchema():
-    result = metaClient.getEdgeSchema(spaceName, 'follow')
+def test_get_edge_schema():
+    result = meta_client.get_edge_schema(space_name, 'follow')
     expect = {'degree': 5}
     assert result == expect
 
-def test_getEdgeReturnCols():
-    edgeItem = metaClient.getEdgeItemFromCache(spaceName, 'follow')
-    edgeType = edgeItem.edge_type
-    entryId = EntryId(edge_type=edgeType)
-    result = storageClient.getEdgeReturnCols(spaceName, {'follow':['degree']})
-    expect = {edgeType:[PropDef(PropOwner.EDGE, entryId, 'degree')]}
+def test_get_edge_return_cols():
+    edge_item = meta_client.get_edge_item_from_cache(space_name, 'follow')
+    edge_type = edge_item.edge_type
+    entry_id = EntryId(edge_type=edge_type)
+    result = storage_client.get_edge_return_cols(space_name, {'follow':['degree']})
+    expect = {edge_type:[PropDef(PropOwner.EDGE, entry_id, 'degree')]}
     assert result == expect
 
-def test_getVertexReturnCols():
-    tagItem = metaClient.getTagItemFromCache(spaceName, 'player')
-    tagId = tagItem.tag_id
-    entryId = EntryId(tag_id=tagId)
-    result = storageClient.getVertexReturnCols(spaceName, {'player':['name', 'age']})
-    expect = {tagId:[PropDef(PropOwner.SOURCE, entryId, 'name'), PropDef(PropOwner.SOURCE, entryId, 'age')]}
+def test_get_vertex_return_cols():
+    tag_item = meta_client.get_tag_item_from_cache(space_name, 'player')
+    tag_id = tag_item.tag_id
+    entry_id = EntryId(tag_id=tag_id)
+    result = storage_client.get_vertex_return_cols(space_name, {'player':['name', 'age']})
+    expect = {tag_id:[PropDef(PropOwner.SOURCE, entry_id, 'name'), PropDef(PropOwner.SOURCE, entry_id, 'age')]}
     assert result == expect
 
-def test_handleResultCodes():
-    failedCodes = [ResultCode(code=ErrorCode.E_LEADER_CHANGED, part_id=1, leader=HostAddr(ip=2130706433, port=storage_port))]
-    result, _ = storageClient.handleResultCodes(failedCodes, spaceName)
+def test_handle_result_codes():
+    failed_codes = [ResultCode(code=ErrorCode.E_LEADER_CHANGED, part_id=1, leader=HostAddr(ip=2130706433, port=storage_port))]
+    result, _ = storage_client.handle_result_codes(failed_codes, space_name)
     expect = (host, storage_port)
     assert result == expect
 
@@ -117,7 +117,7 @@ host = '127.0.0.1'
 meta_port = 45500
 graph_port = 3699
 storage_port = 44500
-spaceName = 'test_storage'
-metaClient = MetaClient([(host, meta_port)])
-metaClient.connect()
-storageClient = StorageClient(metaClient)
+space_name = 'test_storage'
+meta_client = MetaClient([(host, meta_port)])
+meta_client.connect()
+storage_client = StorageClient(meta_client)
