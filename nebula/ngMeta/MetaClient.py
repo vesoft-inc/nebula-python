@@ -75,14 +75,19 @@ class MetaClient:
         address = addresses[random.randint(0, len(addresses)-1)]
         host = address[0]
         port = address[1]
-        transport = TSocket.TSocket(host, port)
-        transport.setTimeout(self._timeout)
-        transport = TTransport.TBufferedTransport(transport)
-        protocol = TBinaryProtocol.TBinaryProtocol(transport)
-        transport.open()
-        self._client = Client(protocol)
-        self.update_schemas()
-        RepeatTimer(2, self.update_schemas).start() # call updatSchemas() every 2 seconds
+        try:
+            transport = TSocket.TSocket(host, port)
+            transport.setTimeout(self._timeout)
+            transport = TTransport.TBufferedTransport(transport)
+            protocol = TBinaryProtocol.TBinaryProtocol(transport)
+            transport.open()
+        except Exception as x:
+            print(x)
+            return -1
+        else:
+            self._client = Client(protocol)
+            self.update_schemas()
+            RepeatTimer(2, self.update_schemas).start() # call updatSchemas() every 2 seconds
 
         return 0
 

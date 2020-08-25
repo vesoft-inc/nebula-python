@@ -207,12 +207,17 @@ class StorageClient:
     def do_connect(self, address):
         host = address[0]
         port = address[1]
-        transport = TSocket.TSocket(host, port)
-        transport.setTimeout(self._timeout)
-        transport = TTransport.TBufferedTransport(transport)
-        protocol = TBinaryProtocol.TBinaryProtocol(transport)
-        transport.open()
-        return Client(protocol)
+        try:
+            transport = TSocket.TSocket(host, port)
+            transport.setTimeout(self._timeout)
+            transport = TTransport.TBufferedTransport(transport)
+            protocol = TBinaryProtocol.TBinaryProtocol(transport)
+            transport.open()
+        except Exception as x:
+            print(x)
+            return None
+        else:
+            return Client(protocol)
 
     def scan_edge(self, space, return_cols, all_cols, limit, start_time, end_time):
         part_ids = self._meta_client.get_parts_alloc_from_cache()[space].keys()
