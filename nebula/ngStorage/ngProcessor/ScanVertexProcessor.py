@@ -14,9 +14,21 @@ from nebula.ngData.data import Result
 
 class ScanVertexProcessor:
     def __init__(self, meta_client):
+        """Initializer
+        Arguments:
+            - meta_client: an initialized MetaClient
+        Returns: emtpy
+        """
         self._meta_client = meta_client
 
     def process(self, space_name, scan_vertex_response):
+        """ process the ScanVertexResponse
+        Arguments:
+            - space_name: name of the space
+            - scan_vertex_response: response of the storage server
+        Returns:
+            - result: a dataset of tags and its property values
+        """
         if scan_vertex_response is None:
             print('process: scan_vertex_response is None')
             return None
@@ -41,7 +53,8 @@ class ScanVertexProcessor:
                     continue
 
                 row_reader = row_readers[tag_id]
-                default_properties = row_reader.vertex_key(scan_tag.vertexId, scan_tag.tagId)
+                tag_name = self._meta_client.get_tag_name_from_cache(space_name, tag_id)
+                default_properties = row_reader.vertex_key(scan_tag.vertexId, tag_name)
                 properties = row_reader.decode_value(scan_tag.value)
                 tag_name = tag_id_name_map[tag_id]
                 rows[tag_name].append(Row(default_properties, properties))

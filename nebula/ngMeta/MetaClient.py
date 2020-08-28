@@ -49,11 +49,17 @@ class RepeatTimer(Timer):
 
 class MetaClient:
     def __init__(self, addresses, timeout=1000,
-                connection_retry=3, execution_retry=3):
+                connection_retry=3):
+        """Initializer
+        Arguments:
+            - addresses: meta server addresses
+            - timeout: maximum connection timeout
+            - connection_retry: maximum number of connection retries
+        Returns: empty
+        """
         self._addresses = addresses
         self._timeout = timeout
         self._connection_retry = connection_retry
-        self._execution_retry = execution_retry
         self._space_name_map = {} # map<space_name, space_id>
         self._space_part_location = {} # map<space_name, map<part_id, list<address>>>
         self._space_part_leader = {} # map<space_name, map<part_id, leader'saddress>>
@@ -64,6 +70,11 @@ class MetaClient:
         self._client = None
 
     def connect(self):
+        """connect to meta servers
+        Arguments: emtpy
+        Returns:
+            - error_code: the code indicates whether the connection is successful
+        """
         while self._connection_retry > 0:
             code = self.do_connect(self._addresses)
             if code == 0:
@@ -81,15 +92,13 @@ class MetaClient:
             transport = TTransport.TBufferedTransport(transport)
             protocol = TBinaryProtocol.TBinaryProtocol(transport)
             transport.open()
-        except Exception as x:
-            print(x)
-            return -1
-        else:
             self._client = Client(protocol)
             self.update_schemas()
             RepeatTimer(2, self.update_schemas).start() # call updatSchemas() every 2 seconds
-
-        return 0
+            return 0
+        except Exception as x:
+            print(x)
+            return -1
 
     def update_schemas(self):
         for space_id_name in self.list_spaces():
@@ -115,16 +124,30 @@ class MetaClient:
                 edges_name[edge_item.edge_type] = edge_item.edge_name
             self._space_edge_items[space_name] = edges
             self._edge_name_map[space_name] = edges_name
+
+        # Update leader of partions
         self.set_space_part_leader()
-        return 0
 
     def get_space_id_from_cache(self, space_name):
+        """get space id of the space
+        Arguments:
+            - space_name: name of the space
+        Returns:
+            - space_id: id of the space
+        """
         if space_name not in self._space_name_map.keys():
             return -1
         else:
             return self._space_name_map[space_name]
 
     def get_space_part_leader_from_cache(self, space_name, part_id):
+        """get leader of the partion
+        Arguments:
+            - space_name: name of the space
+            - part_id: id of the partition
+        Returns:
+            - leader address of the partition
+        """
         if space_name not in self._space_part_leader.keys():
             return None
         if part_id not in self._space_part_leader[space_name].keys():
@@ -150,21 +173,36 @@ class MetaClient:
                     self._space_part_leader[space][part_id] = leader
 
     def list_spaces(self):
+        """list all of the spaces
+        Arguments: empty
+        Returns:
+            - spaces: IdName of all spaces
+            IdName's attributes:
+                - id
+                - name
+        """
         list_spaces_req = ListSpacesReq()
         list_spaces_resp = self._client.listSpaces(list_spaces_req)
         if list_spaces_resp.code == ErrorCode.SUCCEEDED:
-            return list_spaces_resp.spaces # space_nameID--> IdName
+            return list_spaces_resp.spaces # IdName
         else:
             print('list spaces error, error code: ', list_spaces_resp.code)
             return None
 
-    def get_part_from_cache(self, space_name, part):
-        if space_name not in self._space_part_location.keys():
-            self._space_part_location[space_name] = self.get_parts_alloc(space_name)
-        parts_alloc = self._space_part_location[space_name]
-        if parts_alloc is None or part not in parts_alloc.keys():
-            return None
-        return parts_alloc[part]
+    def get_part_alloc_from_cache(self, space_name, part_id):
+        """get addresses of the partition
+        Arguments:
+            - space_name: name of the space
+            - part_id: id of the partition
+        Returns:
+            - addresses: addresses of the partition
+        """
+        if space_name in self._space_part_location.keys():
+            parts_alloc = self._space_part_location[space_name]
+            if part_id in parts_alloc.keys():
+                return parts_alloc[part]
+
+        return None
 
     def get_parts_alloc(self, space_name):
         space_id = self.get_space_id_from_cache(space_name)
@@ -189,23 +227,39 @@ class MetaClient:
             return None
 
     def get_parts_alloc_from_cache(self):
+        """ get addresses of partitions of spaces
+        Arguments: empty
+        Returns:
+            - space_part_location: map<space_name, map<part_id, list<address>>>
+        """
         return self._space_part_location
 
-    def get_part_alloc_from_cache(self, space_name, part):
-        if space_name in self._space_part_location.keys():
-            parts_alloc = self._space_part_location[space_name]
-            if part in parts_alloc.keys():
-                return parts_alloc[part]
-
-        return None
-
     def get_tag_item_from_cache(self, space_name, tag_name):
+        """ get TagItem of the tag
+        Arguments:
+            - space_name: name of the space
+            - tag_name: name of the tag
+        Returns:
+            - TagItem
+            TagItem's attributes:
+                - tag_id
+                - tag_name
+                - version
+                - schema
+        """
         if space_name in self._space_tag_items.keys() and tag_name in self._space_tag_items[space_name].keys():
             return self._space_tag_items[space_name][tag_name]
 
         return None
 
     def get_tag_name_from_cache(self, space_name, tag_id):
+        """ get tag_name of the tag
+        Arguments:
+            - space_name: name of the space
+            - tag_id: id of the tag
+        Returns:
+            - tag_name: name of the tag
+        """
         if space_name in self._tag_name_map.keys():
             tag_names = self._tag_name_map[space_name]
             if tag_id in tag_names.keys():
@@ -214,6 +268,17 @@ class MetaClient:
         return None
 
     def get_tags(self, space_name):
+        """ get TagItems of the space
+        Arguments:
+            - space_name: name of the space
+        Returns:
+            - tags: TagItems
+            TagItem's attributes:
+                - tag_id
+                - tag_name
+                - version
+                - schema
+        """
         space_id = self.get_space_id_from_cache(space_name)
         if space_id == -1:
             return None
@@ -227,6 +292,17 @@ class MetaClient:
             return None
 
     def get_tag(self, space_name, tag_name, version=-1):
+        """ get tag schema of the given version
+        Arguments:
+            - space_name: name of the space
+            - tag_name: name of the tag
+            - version: version of the tag schema
+        Returns:
+            - Schema: tag schema of the given version
+            Schema's attributes:
+                - columns
+                - schema_prop
+        """
         space_id = self.get_space_id_from_cache(space_name)
         get_tag_req = GetTagReq(space_id, tag_name, version)
         get_tag_resp = self._client.getTag(get_tag_req)
@@ -237,6 +313,14 @@ class MetaClient:
             return None
 
     def get_tag_schema(self, space_name, tag_name, version=-1):
+        """ get tag schema columns of the given version
+        Arguments:
+            - space_name: name of the space
+            - tag_name: name of the tag
+            - version: version of the tag schema
+        Returns:
+            - result: columns of the tag schema
+        """
         space_id = self.get_space_id_from_cache(space_name)
         if space_id == -1:
             return None
@@ -248,6 +332,18 @@ class MetaClient:
         return result
 
     def get_edge_item_from_cache(self, space_name, edge_name):
+        """ get EdgeItem of the edge
+        Arguments:
+            - space_name: name of the space
+            - edge_name: name of the edge
+        Returns:
+            - EdgeItem
+            EdgeItem's attributes:
+                - edge_type
+                - edge_name
+                - version
+                - schema
+        """
         if space_name not in self._space_edge_items.keys():
             edges = {}
             for edge_item in self.getEdges(space_name):
@@ -261,6 +357,13 @@ class MetaClient:
             return None
 
     def get_edge_name_from_cache(self, space_name, edge_type):
+        """ get edge name of the edge
+        Arguments:
+            - space_name: name of the space
+            - edge_type: edge type of the edge
+        Returns:
+            - edge_name: name of the edge
+        """
         if space_name in self._edge_name_map.keys():
             edge_names = self._edge_name_map[space_name]
             if edge_type in edge_names.keys():
@@ -269,6 +372,17 @@ class MetaClient:
         return None
 
     def get_edges(self, space_name):
+        """ get EdgeItems of the space
+        Arguments:
+            - space_name: name of the space
+        Returns:
+            - edges: EdgeItems
+            EdgeItem's attributes:
+                - edge_type
+                - edge_name
+                - version
+                - schema
+        """
         space_id = self.get_space_id_from_cache(space_name)
         if space_id == -1:
             return None
@@ -281,6 +395,17 @@ class MetaClient:
             return None
 
     def get_edge(self, space_name, edge_name, version=-1):
+        """ get edge schema of the given version
+        Arguments:
+            - space_name: name of the space
+            - edge_name: name of the edge
+            - version: version of the edge schema
+        Returns:
+            - schema of the edge
+            Schema's attributes:
+                - columns
+                - schema_prop
+        """
         space_id = self.get_space_id_from_cache(space_name)
         if space_id == -1:
             return None
@@ -293,6 +418,14 @@ class MetaClient:
             return None
 
     def get_edge_schema(self, space_name, edge_name, version=-1):
+        """ get edge schema columns of the given version
+        Arguments:
+            - space_name: name of the space
+            - edge_name: name of the edge
+            - version: version of the edge schema
+        Returns:
+            - result: columns of the edge schema
+        """
         space_id = self.get_space_id_from_cache(space_name)
         if space_id == -1:
             return None

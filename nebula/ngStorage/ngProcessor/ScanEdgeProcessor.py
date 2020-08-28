@@ -14,9 +14,21 @@ from nebula.ngData.data import Result
 
 class ScanEdgeProcessor:
     def __init__(self, meta_client):
+        """Initializer
+        Arguments:
+            - meta_client: an initialized MetaClient
+        Returns: emtpy
+        """
         self._meta_client = meta_client
 
     def process(self, space_name, scan_edge_response):
+        """ process the ScanEdgeResponse
+        Arguments:
+            - space_name: name of the space
+            - scan_edge_response: response of storage server
+        Returns:
+            - result: a dataset of edges and its property values
+        """
         row_readers = {}
         rows = {}
         edge_type_name_map = {}
@@ -39,7 +51,8 @@ class ScanEdgeProcessor:
                     continue
 
                 row_reader = row_readers[edge_type]
-                default_properties = row_reader.edge_key(scan_edge.src, scan_edge.type, scan_edge.dst)
+                edge_name = self._meta_client.get_edge_name_from_cache(space_name, edge_type)
+                default_properties = row_reader.edge_key(scan_edge.src, edge_name, scan_edge.dst)
                 properties = row_reader.decode_value(scan_edge.value)
                 edge_name = edge_type_name_map[edge_type]
                 rows[edge_name].append(Row(default_properties, properties))

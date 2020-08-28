@@ -183,12 +183,23 @@ class ScanSpaceVertexResponseIter:
 
 class StorageClient:
     def __init__(self, meta_client):
+        """Initializer
+        Arguments:
+            - meta_clent: an initialized MetaClient
+        Returns: empty
+        """
         self._meta_client = meta_client
         self._clients = {}
         self._leaders = {}
         self._timeout = 1000
 
     def connect(self, address):
+        """ connect to storage server
+        Arguments:
+            - address: the address of the storage servers
+        Returns:
+            - client: a storage client object
+        """
         if address not in self._clients.keys():
             client = self.do_connect(address)
             self._clients[address] = client
@@ -213,18 +224,39 @@ class StorageClient:
             transport = TTransport.TBufferedTransport(transport)
             protocol = TBinaryProtocol.TBinaryProtocol(transport)
             transport.open()
+            return Client(protocol)
         except Exception as x:
             print(x)
             return None
-        else:
-            return Client(protocol)
 
     def scan_edge(self, space, return_cols, all_cols, limit, start_time, end_time):
+        """ scan edges of a space
+        Arguments:
+            - space: name of the space to scan
+            - return_cols: the edge's attribute columns to be returned
+            - all_cols: whether to return all attribute columns.
+            - limit: maximum number of data returned
+            - start_time: start time of the edge data to return
+            - end_time: end time of the edge data to return
+        Returns:
+            - iter: an iterator that can traverse all scanned edge data
+        """
         part_ids = self._meta_client.get_parts_alloc_from_cache()[space].keys()
         part_ids_iter = Iterator(part_ids)
         return ScanSpaceEdgeResponseIter(self, space, part_ids_iter, return_cols, all_cols, limit, start_time, end_time)
 
     def scan_part_edge(self, space, part, return_cols, all_cols, limit, start_time, end_time):
+        """ scan edges of a partition
+        Arguments:
+            - space: name of the space to scan
+            - return_cols: the edge's attribute columns to be returned
+            - all_cols: whether to return all attribute columns.
+            - limit: maximum number of data returned
+            - start_time: start time of the edge data to return
+            - end_time: end time of the edge data to return
+        Returns:
+            - iter: an iterator that can traverse all scanned edge data
+        """
         space_id = self._meta_client.get_space_id_from_cache(space)
         columns = self.get_edge_return_cols(space, return_cols)
         scan_edge_request = ScanEdgeRequest(space_id, part, None, columns, all_cols, limit, start_time, end_time)
@@ -234,11 +266,33 @@ class StorageClient:
         return self.do_scan_edge(space, leader, scan_edge_request)
 
     def scan_vertex(self, space, return_cols, all_cols, limit, start_time, end_time):
+        """ scan vertexes of a space
+        Arguments:
+            - space: name of the space to scan
+            - return_cols: the tag's attribute columns to be returned
+            - all_cols: whether to return all attribute columns.
+            - limit: maximum number of data returned
+            - start_time: start time of the vertex data to return
+            - end_time: end time of the vertex data to return
+        Returns:
+            - iter: an iterator that can traverse all scanned vertex data
+        """
         part_ids = self._meta_client.get_parts_alloc_from_cache()[space].keys()
         part_ids_iter = Iterator(part_ids)
         return ScanSpaceVertexResponseIter(self, space, part_ids_iter, return_cols, all_cols, limit, start_time, end_time)
 
     def scan_part_vertex(self, space, part, return_cols, all_cols, limit, start_time, end_time):
+        """ scan vertexes of a partition
+        Arguments:
+            - space: name of the space to scan
+            - return_cols: the tag's attribute columns to be returned
+            - all_cols: whether to return all attribute columns.
+            - limit: maximum number of data returned
+            - start_time: start time of the vertex data to return
+            - end_time: end time of the vertex data to return
+        Returns:
+            - iter: an iterator that can traverse all scanned vertex data
+        """
         space_id = self._meta_client.get_space_id_from_cache(space)
         columns = self.get_vertex_return_cols(space, return_cols)
         scan_vertex_request = ScanVertexRequest(space_id, part, None, columns, all_cols, limit, start_time, end_time)
