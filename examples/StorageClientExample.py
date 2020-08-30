@@ -10,6 +10,7 @@ Nebula StorageClient example.
 """
 
 import sys, getopt
+import networkx as nx
 from meta.ttypes import ErrorCode
 
 sys.path.insert(0, '../')
@@ -62,6 +63,8 @@ def process_edge(space, scan_edge_response):
                 prop_value = prop.get_value()
                 props[prop_name] = prop_value
             print(props)
+            # add edge and its properties to Graph G in NetworkX
+            G.add_edges_from([(srcId, dstId, props)])
 
 def process_vertex(space, scan_vertex_response):
     result = scan_vertex_processor.process(space, scan_vertex_response)
@@ -76,6 +79,8 @@ def process_vertex(space, scan_vertex_response):
                 prop_value = prop.get_value()
                 props[prop_name] = prop_value
             print(props)
+            # add node and its properties to Graph G in NetworkX
+            G.add_nodes_from([(vid, props)])
 
 def get_return_cols(space):
     tag_items = meta_client.get_tags(space)
@@ -116,6 +121,8 @@ if __name__ == '__main__':
     vertex_return_cols, edge_return_cols = get_return_cols(space_to_read)
     all_cols = True
 
+    # initialize a Graph in NetworkX
+    G = nx.Graph()
     if space_to_read not in meta_client.get_parts_alloc_from_cache().keys():
         raise Exception('spaceToRead %s is not found in nebula' % space_to_read)
     else:
