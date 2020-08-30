@@ -104,7 +104,7 @@ def get_return_cols(space):
 
 
 if __name__ == '__main__':
-    # initialize a MetaClient to establish connections with meta servers
+    # initialize a MetaClient to establish a connection with the meta server
     meta_client = MetaClient([(sys.argv[1], sys.argv[2])])
     code =  meta_client.connect()
     if code == ErrorCode.E_FAIL_TO_CONNECT:
