@@ -23,11 +23,6 @@ from nebula.ngStorage.ngProcessor.ScanVertexProcessor import ScanVertexProcessor
 
 def scan_edge(space, return_cols, all_cols):
     scan_edge_response_iter = storage_client.scan_edge(space, return_cols, all_cols, 100, 0, sys.maxsize)
-    scan_edge_response = scan_edge_response_iter.next()
-    if scan_edge_response is None:
-        print('scan_edge_response is None')
-        return
-    process_edge(space, scan_edge_response)
     while scan_edge_response_iter.has_next():
         scan_edge_response = scan_edge_response_iter.next()
         if scan_edge_response is None:
@@ -37,11 +32,6 @@ def scan_edge(space, return_cols, all_cols):
 
 def scan_vertex(space, return_cols, all_cols):
     scan_vertex_response_iter = storage_client.scan_vertex(space, return_cols, all_cols, 100, 0, sys.maxsize)
-    scan_vertex_response = scan_vertex_response_iter.next()
-    if scan_vertex_response is None:
-        print('scan_vertex_vesponse is None')
-        return
-    process_vertex(space, scan_vertex_response)
     while scan_vertex_response_iter.has_next():
         scan_vertex_response = scan_vertex_response_iter.next()
         if scan_vertex_response is None:

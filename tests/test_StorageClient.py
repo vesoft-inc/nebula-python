@@ -102,11 +102,7 @@ def check_result(result, expect):
     return True
 
 def get_result(space, scan_response_iter, is_edge):
-    scan_response = scan_response_iter.next()
-    if scan_response is None:
-        assert False
     result = {}
-    result.update(process_response(space, scan_response, is_edge))
     while scan_response_iter.has_next():
         scan_response = scan_response_iter.next()
         if scan_response is None:

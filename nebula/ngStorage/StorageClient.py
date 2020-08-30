@@ -71,7 +71,7 @@ class ScanEdgeResponseIter:
 
         if not self._client_dad.is_successfully(scan_edge_response):
             self._leader, self._client = self._client_dad.handle_result_codes(scan_edge_response.result.failed_codes, self._space)
-            self._haveNext = False
+            self._have_next = False
             return None
         else:
             return scan_edge_response
@@ -90,7 +90,7 @@ class ScanVertexResponseIter:
         self._have_next = True
 
     def has_next(self):
-        return self._haveNext
+        return self._have_next
 
     def next(self):
         self._scan_vertex_request.cursor = self._cursor
@@ -98,7 +98,7 @@ class ScanVertexResponseIter:
         if scan_vertex_response is None:
             raise Exception('scan_vertex_reponse is None')
         self._cursor = scan_vertex_response.next_cursor
-        self._haveNext = scan_vertex_response.has_next
+        self._have_next = scan_vertex_response.has_next
 
         if not self._client_dad.is_successfully(scan_vertex_response):
             print('scan_vertex_response is not successfully, failed_codes: ', scan_vertex_response.result.failed_codes)
