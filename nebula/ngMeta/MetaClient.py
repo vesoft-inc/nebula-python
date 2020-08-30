@@ -291,7 +291,7 @@ class MetaClient:
             print('get tags error, error code: ', list_tags_resp.code)
             return None
 
-    def get_tag(self, space_name, tag_name, version=-1):
+    def get_tag(self, space_name, tag_name, version=0):
         """ get tag schema of the given version
         Arguments:
             - space_name: name of the space
@@ -312,7 +312,7 @@ class MetaClient:
         else:
             return None
 
-    def get_tag_schema(self, space_name, tag_name, version=-1):
+    def get_tag_schema(self, space_name, tag_name, version=0):
         """ get tag schema columns of the given version
         Arguments:
             - space_name: name of the space
@@ -394,7 +394,7 @@ class MetaClient:
             print('get tags error, error code: ', list_edges_resp.code)
             return None
 
-    def get_edge(self, space_name, edge_name, version=-1):
+    def get_edge(self, space_name, edge_name, version=0):
         """ get edge schema of the given version
         Arguments:
             - space_name: name of the space
@@ -417,7 +417,7 @@ class MetaClient:
             print('get edge error, error code: ', get_edge_resp.code)
             return None
 
-    def get_edge_schema(self, space_name, edge_name, version=-1):
+    def get_edge_schema(self, space_name, edge_name, version=0):
         """ get edge schema columns of the given version
         Arguments:
             - space_name: name of the space
