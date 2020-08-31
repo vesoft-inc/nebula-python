@@ -108,30 +108,25 @@ def get_result(space, scan_response_iter, is_edge):
         scan_response = scan_response_iter.next()
         if scan_response is None:
             assert False
-        result.update(process_response(space, scan_response, is_edge))
+        if is_edge:
+            data = scan_edge_processor.process(space, scan_response)
+        else:
+            data = scan_vertex_processor.process(space, scan_response)
+        for name, rows in data._rows.items():
+            if name not in result.keys():
+                result[name] = []
+            for row in rows:
+                props = {}
+                for prop in row._default_properties:
+                    props[prop.get_name()] = prop.get_value()
+                for prop in row._properties:
+                    props[prop.get_name()] = prop.get_value()
+                result[name].append(props)
     return result
-
-def process_response(space, scan_response, is_edge):
-    if is_edge:
-        result = scan_edge_processor.process(space, scan_response)
-    else:
-        result = scan_vertex_processor.process(space, scan_response)
-    datas = {}
-    for name, rows in result._rows.items():
-        data = []
-        for row in rows:
-            props = {}
-            for prop in row._default_properties:
-                props[prop.get_name()] = prop.get_value()
-            for prop in row._properties:
-                props[prop.get_name()] = prop.get_value()
-            data.append(props)
-        datas[name] = data
-    return datas
 
 def ts(date_str):
     dt = datetime.datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
-    return dt.replace(tzinfo=datetime.timezone.utc).timestamp()
+    return int(dt.replace(tzinfo=datetime.timezone.utc).timestamp())
 
 def test_scan_edge():
     scan_edge_response_iter = storage_client.scan_edge(space_name, {'follow': ['degree', 'likeness'], 'serve': ['start', 'end']}, True, 100, 0, sys.maxsize)

@@ -53,10 +53,9 @@ class ScanVertexProcessor:
                     continue
 
                 row_reader = row_readers[tag_id]
-                tag_name = self._meta_client.get_tag_name_from_cache(space_name, tag_id)
+                tag_name = tag_id_name_map[tag_id]
                 default_properties = row_reader.vertex_key(scan_tag.vertexId, tag_name)
                 properties = row_reader.decode_value(scan_tag.value)
-                tag_name = tag_id_name_map[tag_id]
                 rows[tag_name].append(Row(default_properties, properties))
         else:
             print('scan_vertex_response.vertex_data is None')
