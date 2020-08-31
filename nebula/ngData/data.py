@@ -147,7 +147,6 @@ class RowReader:
 
     def get_timestamp_property(self, name, value):
         val = self.read_compressed_int(value)
-        val = datetime.utcfromtimestamp(val).__str__()
         return Property(SupportedType.TIMESTAMP, name, val)
 
     def get_float_property(self, name, value):

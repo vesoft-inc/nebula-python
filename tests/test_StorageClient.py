@@ -15,6 +15,7 @@ import sys
 import os
 import time
 import threading
+import datetime
 
 sys.path.insert(0, '../')
 from storage.ttypes import EntryId
@@ -128,14 +129,18 @@ def process_response(space, scan_response, is_edge):
         datas[name] = data
     return datas
 
+def ts(date_str):
+    dt = datetime.datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
+    return dt.replace(tzinfo=datetime.timezone.utc).timestamp()
+
 def test_scan_edge():
     scan_edge_response_iter = storage_client.scan_edge(space_name, {'follow': ['degree', 'likeness'], 'serve': ['start', 'end']}, True, 100, 0, sys.maxsize)
     result = get_result(space_name, scan_edge_response_iter, True)
     expect = {'follow': [{'_src': 101, '_edge': 'follow', '_dst': 102, 'degree': 94.7, 'likeness': 45},
                          {'_src': 102, '_edge': 'follow', '_dst': 103, 'degree': 86.3, 'likeness': 79}],
-              'serve':  [{'_src': 101, '_edge': 'serve', '_dst': 201, 'start': '2001-09-01 08:00:00', 'end': '2010-09-01 08:00:00'},
-                         {'_src': 102, '_edge': 'serve', '_dst': 202, 'start': '1998-08-22 06:45:54', 'end': '2020-01-23 17:23:35'},
-                         {'_src': 103, '_edge': 'serve', '_dst': 201, 'start': '2006-11-18 13:28:29', 'end': '2009-12-12 12:21:46'}]}
+              'serve':  [{'_src': 101, '_edge': 'serve', '_dst': 201, 'start': ts('2001-09-01 08:00:00'), 'end': ts('2010-09-01 08:00:00')},
+                         {'_src': 102, '_edge': 'serve', '_dst': 202, 'start': ts('1998-08-22 06:45:54'), 'end': ts('2020-01-23 17:23:35')},
+                         {'_src': 103, '_edge': 'serve', '_dst': 201, 'start': ts('2006-11-18 13:28:29'), 'end': ts('2009-12-12 12:21:46')}]}
     assert check_result(result, expect)
 
 def test_scan_vertex():
@@ -153,9 +158,9 @@ def test_scan_part_edge():
     result = get_result(space_name, scan_edge_response_iter, True)
     expect = {'follow': [{'_src': 101, '_edge': 'follow', '_dst': 102, 'degree': 94.7, 'likeness': 45},
                          {'_src': 102, '_edge': 'follow', '_dst': 103, 'degree': 86.3, 'likeness': 79}],
-              'serve':  [{'_src': 101, '_edge': 'serve', '_dst': 201, 'start': '2001-09-01 08:00:00', 'end': '2010-09-01 08:00:00'},
-                         {'_src': 102, '_edge': 'serve', '_dst': 202, 'start': '1998-08-22 06:45:54', 'end': '2020-01-23 17:23:35'},
-                         {'_src': 103, '_edge': 'serve', '_dst': 201, 'start': '2006-11-18 13:28:29', 'end': '2009-12-12 12:21:46'}]}
+              'serve':  [{'_src': 101, '_edge': 'serve', '_dst': 201, 'start': ts('2001-09-01 08:00:00'), 'end': ts('2010-09-01 08:00:00')},
+                         {'_src': 102, '_edge': 'serve', '_dst': 202, 'start': ts('1998-08-22 06:45:54'), 'end': ts('2020-01-23 17:23:35')},
+                         {'_src': 103, '_edge': 'serve', '_dst': 201, 'start': ts('2006-11-18 13:28:29'), 'end': ts('2009-12-12 12:21:46')}]}
     assert check_result(result, expect)
 
 def test_scan_part_vertex():
