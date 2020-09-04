@@ -94,6 +94,15 @@ def get_return_cols(space):
 
 
 if __name__ == '__main__':
+    """ You can run this example with the following command:
+        python StorageClientExample.py meta_server_ip meta_server_port space_name_to_read
+        Arguments:
+            - meta_server_ip: ip of the meta server(NOT GRAPH SERVER)
+            - meta_server_port: listening port of the meta server(NOT GRAPH SERVER)
+            - space_name_to_read: name of space to be scanned
+        For example:
+            python StorageClientExample.py 192.168.8.5 45500 nba
+     """
     # initialize a MetaClient to establish a connection with the meta server
     meta_client = MetaClient([(sys.argv[1], sys.argv[2])])
     code =  meta_client.connect()
@@ -120,3 +129,6 @@ if __name__ == '__main__':
         scan_vertex(space_to_read, vertex_return_cols, all_cols)
         # scan edge data
         scan_edge(space_to_read, edge_return_cols, all_cols)
+
+    # print the pagerank value of each node in Graph G of NetworkX
+    print(nx.pagerank(G))
