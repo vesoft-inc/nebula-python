@@ -51,10 +51,9 @@ class ScanEdgeProcessor:
                     continue
 
                 row_reader = row_readers[edge_type]
-                edge_name = self._meta_client.get_edge_name_from_cache(space_name, edge_type)
+                edge_name = edge_type_name_map[edge_type]
                 default_properties = row_reader.edge_key(scan_edge.src, edge_name, scan_edge.dst)
                 properties = row_reader.decode_value(scan_edge.value)
-                edge_name = edge_type_name_map[edge_type]
                 rows[edge_name].append(Row(default_properties, properties))
         else:
             print('scan_edge_response.edge_data is None')
