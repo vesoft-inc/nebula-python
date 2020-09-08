@@ -24,6 +24,7 @@ from nebula.ngStorage.ngProcessor.ScanVertexProcessor import ScanVertexProcessor
 
 def scan_edge(space, return_cols, all_cols):
     scan_edge_response_iter = storage_client.scan_edge(space, return_cols, all_cols, 100, 0, sys.maxsize)
+    print('############## scanned edge data ##############')
     while scan_edge_response_iter.has_next():
         scan_edge_response = scan_edge_response_iter.next()
         if scan_edge_response is None:
@@ -33,6 +34,7 @@ def scan_edge(space, return_cols, all_cols):
 
 def scan_vertex(space, return_cols, all_cols):
     scan_vertex_response_iter = storage_client.scan_vertex(space, return_cols, all_cols, 100, 0, sys.maxsize)
+    print('############# scanned vertex data #############')
     while scan_vertex_response_iter.has_next():
         scan_vertex_response = scan_vertex_response_iter.next()
         if scan_vertex_response is None:
@@ -42,7 +44,9 @@ def scan_vertex(space, return_cols, all_cols):
 
 def process_edge(space, scan_edge_response):
     result = scan_edge_processor.process(space, scan_edge_response)
-    # Get the corresponding rows by edgeName
+    if result is None:
+        return None
+    # Get the corresponding rows by edge name
     for edge_name, edge_rows in result._rows.items():
         for row in edge_rows:
             srcId = row._default_properties[0].get_value()
@@ -61,6 +65,7 @@ def process_vertex(space, scan_vertex_response):
     result = scan_vertex_processor.process(space, scan_vertex_response)
     if result is None:
         return None
+    # Get the corresponding rows by tag name
     for tag_name, tag_rows in result._rows.items():
         for row in tag_rows:
             vid = row._default_properties[0].get_value()
@@ -103,6 +108,10 @@ if __name__ == '__main__':
             - space_name_to_read: name of space to be scanned
         For example:
             python StorageClientExample.py 192.168.8.5 45500 nba
+
+        WARNING: If no data is printed after running this example, it may be because flag enable_multi_versions is false.
+        You need to execute the following command in nebula console, and insert data again, then run this example again:
+            update configs storage:enable_multi_versions=True
     """
     try:
         # initialize a MetaClient to establish a connection with the meta server
@@ -133,6 +142,7 @@ if __name__ == '__main__':
             scan_edge(space_to_read, edge_return_cols, all_cols)
 
         # print the pagerank value of each node in Graph G of NetworkX
+        print('pagerank value of each node in Graph G of NetworkX')
         print(nx.pagerank(G))
 
     except Exception as x:
