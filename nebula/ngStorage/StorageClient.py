@@ -208,7 +208,10 @@ class StorageClient:
             return self._clients[address]
 
     def disconnect(self, address):
-        self._clients.remove(address)
+        if address in self._clients.keys():
+            del self._clients[address]
+        else:
+            print(address, ' not exists')
 
     def do_connects(self, addresses):
         for address in addresses:

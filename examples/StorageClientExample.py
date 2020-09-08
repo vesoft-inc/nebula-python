@@ -11,6 +11,7 @@ Nebula StorageClient example.
 
 import sys, getopt
 import networkx as nx
+import traceback
 from meta.ttypes import ErrorCode
 
 sys.path.insert(0, '../')
@@ -102,33 +103,39 @@ if __name__ == '__main__':
             - space_name_to_read: name of space to be scanned
         For example:
             python StorageClientExample.py 192.168.8.5 45500 nba
-     """
-    # initialize a MetaClient to establish a connection with the meta server
-    meta_client = MetaClient([(sys.argv[1], sys.argv[2])])
-    code =  meta_client.connect()
-    if code == ErrorCode.E_FAIL_TO_CONNECT:
-        raise Exception('connect to %s:%d failed' % (sys.argv[1], sys.argv[2]))
-    # initialize a StorageClient
-    storage_client = StorageClient(meta_client)
-    # initialize a ScanEdgeProcessor to process scanned edge data
-    scan_edge_processor = ScanEdgeProcessor(meta_client)
-    # initialize a ScanVertexProcessor to process scanned vertex data
-    scan_vertex_processor = ScanVertexProcessor(meta_client)
+    """
+    try:
+        # initialize a MetaClient to establish a connection with the meta server
+        meta_client = MetaClient([(sys.argv[1], sys.argv[2])])
+        code =  meta_client.connect()
+        if code == ErrorCode.E_FAIL_TO_CONNECT:
+            raise Exception('connect to %s:%s failed' % (sys.argv[1], sys.argv[2]))
+        # initialize a StorageClient
+        storage_client = StorageClient(meta_client)
+        # initialize a ScanEdgeProcessor to process scanned edge data
+        scan_edge_processor = ScanEdgeProcessor(meta_client)
+        # initialize a ScanVertexProcessor to process scanned vertex data
+        scan_vertex_processor = ScanVertexProcessor(meta_client)
 
-    space_to_read = sys.argv[3]
-    # get argument return_cols, which is used in function scan_edge, scan_vertex, scan_part_edge, scan_part_vertex
-    vertex_return_cols, edge_return_cols = get_return_cols(space_to_read)
-    all_cols = True
+        space_to_read = sys.argv[3]
+        # get argument return_cols, which is used in function scan_edge, scan_vertex, scan_part_edge, scan_part_vertex
+        vertex_return_cols, edge_return_cols = get_return_cols(space_to_read)
+        all_cols = True
 
-    # initialize a Graph in NetworkX
-    G = nx.Graph()
-    if space_to_read not in meta_client.get_parts_alloc_from_cache().keys():
-        raise Exception('spaceToRead %s is not found in nebula' % space_to_read)
-    else:
-        # scan vertex data
-        scan_vertex(space_to_read, vertex_return_cols, all_cols)
-        # scan edge data
-        scan_edge(space_to_read, edge_return_cols, all_cols)
+        # initialize a Graph in NetworkX
+        G = nx.Graph()
+        if space_to_read not in meta_client.get_parts_alloc_from_cache().keys():
+            raise Exception('spaceToRead %s is not found in nebula' % space_to_read)
+        else:
+            # scan vertex data
+            scan_vertex(space_to_read, vertex_return_cols, all_cols)
+            # scan edge data
+            scan_edge(space_to_read, edge_return_cols, all_cols)
 
-    # print the pagerank value of each node in Graph G of NetworkX
-    print(nx.pagerank(G))
+        # print the pagerank value of each node in Graph G of NetworkX
+        print(nx.pagerank(G))
+
+    except Exception as x:
+        print(x)
+        print('============ traceback =============')
+        traceback.print_exc()
