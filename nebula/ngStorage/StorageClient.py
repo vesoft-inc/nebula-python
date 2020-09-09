@@ -293,7 +293,9 @@ class StorageClient:
         Arguments:
             - space: name of the space to scan
             - return_cols: the tag's attribute columns to be returned
-            - all_cols: whether to return all attribute columns.
+            - all_cols: whether to return all attribute columns
+              When all_cols is True, return all attribute columns,
+              and when all_cols is False, just return attribute columns which specified in return_cols
             - limit: maximum number of data returned
             - start_time: start time of the vertex data to return
             - end_time: end time of the vertex data to return
