@@ -5,6 +5,8 @@
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
+import logging
+
 from meta.MetaService import Client
 from storage.ttypes import ScanEdgeResponse
 
@@ -42,7 +44,7 @@ class ScanEdgeProcessor:
                 rows[edge_name] = []
                 edge_type_name_map[edge_type] = edge_name
         else:
-            print('scan_edge_response.edge_schema is None')
+            logging.info('scan_edge_response.edge_schema is None')
 
         if scan_edge_response.edge_data is not None:
             for scan_edge in scan_edge_response.edge_data:
@@ -56,6 +58,6 @@ class ScanEdgeProcessor:
                 properties = row_reader.decode_value(scan_edge.value)
                 rows[edge_name].append(Row(default_properties, properties))
         else:
-            print('scan_edge_response.edge_data is None')
+            logging.info('scan_edge_response.edge_data is None')
 
         return Result(rows)

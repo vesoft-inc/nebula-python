@@ -8,6 +8,7 @@
 import socket
 import struct
 import random
+import logging
 
 from thrift.transport import TTransport
 from thrift.transport import TSocket
@@ -101,7 +102,7 @@ class ScanVertexResponseIter:
         self._have_next = scan_vertex_response.has_next
 
         if not self._client_dad.is_successfully(scan_vertex_response):
-            print('scan_vertex_response is not successfully, failed_codes: ', scan_vertex_response.result.failed_codes)
+            logging.info('scan_vertex_response is not successfully, failed_codes: ', scan_vertex_response.result.failed_codes)
             self._leader, self._client = self._client_dad.handle_result_codes(scan_vertex_response.result.failed_codes, self._space)
             self._have_next = False
             return None
@@ -212,14 +213,9 @@ class StorageClient:
                     self._clients[address] = client
                     return client
                 retry -= 1
+            return None
         else:
             return self._clients[address]
-
-    def disconnect(self, address):
-        if address in self._clients.keys():
-            del self._clients[address]
-        else:
-            print(address, ' not exists')
 
     def do_connects(self, addresses):
         for address in addresses:
@@ -237,7 +233,7 @@ class StorageClient:
             transport.open()
             return Client(protocol)
         except Exception as x:
-            print(x)
+            logging.exception(x)
             return None
 
     def scan_edge(self, space, return_cols, all_cols, limit, start_time, end_time):
@@ -315,8 +311,7 @@ class StorageClient:
     def do_scan_edge(self, space, leader, scan_edge_request):
         client = self.connect(leader)
         if client is None:
-            print('cannot connect to leader:', leader)
-            self.disconnect(leader)
+            logging.fatal('cannot connect to leader:', leader)
             return None
 
         return ScanEdgeResponseIter(self, space, leader, scan_edge_request, client)
@@ -324,8 +319,7 @@ class StorageClient:
     def do_scan_vertex(self, space, leader, scan_vertex_request):
         client = self.connect(leader)
         if client is None:
-            print('cannot connect to leader:', leader)
-            self.disconnect(leader)
+            logging.fatal('cannot connect to leader:', leader)
             return None
 
         return ScanVertexResponseIter(self, space, leader, scan_vertex_request, client)
@@ -369,7 +363,7 @@ class StorageClient:
     def handle_result_codes(self, failed_codes, space):
         for result_code in failed_codes:
             if result_code.code == ErrorCode.E_LEADER_CHANGED:
-                print('ErrorCode.E_LEADER_CHANGED, leader changed to :', result_code.leader)
+                logging.info('ErrorCode.E_LEADER_CHANGED, leader changed to :', result_code.leader)
                 host_addr = result_code.leader
                 if host_addr is not None and host_addr.ip != 0 and host_addr.port != 0:
                     host = socket.inet_ntoa(struct.pack('I',socket.htonl(host_addr.ip & 0xffffffff)))

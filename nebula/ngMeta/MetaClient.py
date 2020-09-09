@@ -10,6 +10,7 @@ import socket
 import struct
 import six
 import threading
+import logging
 from thrift.transport import TTransport
 from thrift.transport import TSocket
 from thrift.protocol import TBinaryProtocol
@@ -63,10 +64,10 @@ class MetaClient:
         self._space_name_map = {} # map<space_name, space_id>
         self._space_part_location = {} # map<space_name, map<part_id, list<address>>>
         self._space_part_leader = {} # map<space_name, map<part_id, leader'saddress>>
-        self._space_tag_items = {} # map<space_name, map<tag_item.tag_name, tag_item>>
-        self._space_edge_items = {} # map<space_name, map<edge_item.edge_name, edge_item>>
-        self._tag_name_map = {} # map<space_name, map<tag_item.tag_id, tag_item.tag_name>>
-        self._edge_name_map = {} # map<space_name, map<edge_item.edge_name, edge_item>>
+        self._space_tag_items = {} # map<space_name, map<tag_name, tag_item>>
+        self._space_edge_items = {} # map<space_name, map<edge_name, edge_item>>
+        self._tag_name_map = {} # map<space_name, map<tag_id, tag_item.tag_name>>
+        self._edge_name_map = {} # map<space_name, map<edge_name, edge_item>>
         self._client = None
 
     def connect(self):
@@ -98,7 +99,7 @@ class MetaClient:
             RepeatTimer(2, self.update_schemas).start() # call updatSchemas() every 2 seconds
             return 0
         except Exception as x:
-            print(x)
+            logging.exception(x)
             return -1
 
     def update_schemas(self):
@@ -128,6 +129,18 @@ class MetaClient:
 
         # Update leader of partions
         self.set_space_part_leader()
+
+    def get_tags_name(self, space_name):
+        if space_name in self._space_tag_items.keys():
+            return self._space_tag_items[space_name].keys()
+
+        return None
+
+    def get_edges_name(self, space_name):
+        if space_name in self._space_edge_items.keys():
+            return self._space_edge_items[space_name].keys()
+
+        return None
 
     def get_space_id_from_cache(self, space_name):
         """get space id of the space
@@ -162,7 +175,7 @@ class MetaClient:
         list_hosts_req = ListHostsReq()
         list_hosts_resp = self._client.listHosts(list_hosts_req)
         if list_hosts_resp.code != ErrorCode.SUCCEEDED:
-            print('set_space_part_leader error, eror code: ', list_hosts_resp.code)
+            logging.error('set_space_part_leader error, eror code: ', list_hosts_resp.code)
             return None
 
         for host_item in list_hosts_resp.hosts:
@@ -187,7 +200,7 @@ class MetaClient:
         if list_spaces_resp.code == ErrorCode.SUCCEEDED:
             return list_spaces_resp.spaces # IdName
         else:
-            print('list spaces error, error code: ', list_spaces_resp.code)
+            logging.error('list spaces error, error code: ', list_spaces_resp.code)
             return None
 
     def get_part_alloc_from_cache(self, space_name, part_id):
@@ -224,7 +237,7 @@ class MetaClient:
 
             return address_map
         else:
-            print("get parts alloc error, error code: ", getParts_alloc_resp.code)
+            logging.error("get parts alloc error, error code: ", getParts_alloc_resp.code)
             return None
 
     def get_parts_alloc_from_cache(self):
@@ -289,7 +302,7 @@ class MetaClient:
         if list_tags_resp.code == ErrorCode.SUCCEEDED:
             return list_tags_resp.tags
         else:
-            print('get tags error, error code: ', list_tags_resp.code)
+            logging.error('get tags error, error code: ', list_tags_resp.code)
             return None
 
     def get_tag(self, space_name, tag_name, version=0):
@@ -392,7 +405,7 @@ class MetaClient:
         if list_edges_resp.code == ErrorCode.SUCCEEDED:
             return list_edges_resp.edges
         else:
-            print('get tags error, error code: ', list_edges_resp.code)
+            logging.error('get tags error, error code: ', list_edges_resp.code)
             return None
 
     def get_edge(self, space_name, edge_name, version=0):
@@ -415,7 +428,7 @@ class MetaClient:
         if get_edge_resp.code == ErrorCode.SUCCEEDED:
             return get_edge_resp.Schema
         else:
-            print('get edge error, error code: ', get_edge_resp.code)
+            logging.error('get edge error, error code: ', get_edge_resp.code)
             return None
 
     def get_edge_schema(self, space_name, edge_name, version=0):

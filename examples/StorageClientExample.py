@@ -11,7 +11,7 @@ Nebula StorageClient example.
 
 import sys, getopt
 import networkx as nx
-import traceback
+import logging
 from meta.ttypes import ErrorCode
 
 sys.path.insert(0, '../')
@@ -28,7 +28,7 @@ def scan_edge(space, return_cols, all_cols):
     while scan_edge_response_iter.has_next():
         scan_edge_response = scan_edge_response_iter.next()
         if scan_edge_response is None:
-            print("Error occurs while scaning edge")
+            logging.error("Error occurs while scaning edge")
             break
         process_edge(space, scan_edge_response)
 
@@ -38,7 +38,7 @@ def scan_vertex(space, return_cols, all_cols):
     while scan_vertex_response_iter.has_next():
         scan_vertex_response = scan_vertex_response_iter.next()
         if scan_vertex_response is None:
-            print("Error occurs while scaning vertex")
+            logging.error("Error occurs while scaning vertex")
             break
         process_vertex(space, scan_vertex_response)
 
@@ -78,23 +78,18 @@ def process_vertex(space, scan_vertex_response):
             # add node and its properties to Graph G in NetworkX
             G.add_nodes_from([(vid, props)])
 
+
 def get_return_cols(space):
-    tag_items = meta_client.get_tags(space)
     vertex_return_cols = {}
-    if tag_items is None:
-        print('tags not found in space ', space)
-    else:
-        for tag_item in tag_items:
-            tag_name = tag_item.tag_name
-            vertex_return_cols[tag_name] = meta_client.get_tag_schema(space, tag_name).keys()
-    edge_items = meta_client.get_edges(space)
     edge_return_cols = {}
-    if edge_items is None:
-        print('edges not found in space ', space)
-    else:
-        for edge_item in edge_items:
-            edge_name = edge_item.edge_name
-            edge_return_cols[edge_name] = meta_client.get_edge_schema(space, edge_name).keys()
+
+    tags_name = meta_client.get_tags_name(space)
+    for tag_name in tags_name:
+        vertex_return_cols[tag_name] = []
+
+    edges_name = meta_client.get_edges_name(space)
+    for edge_name in edges_name:
+        edge_return_cols[edge_name] = []
 
     return vertex_return_cols, edge_return_cols
 
@@ -127,25 +122,23 @@ if __name__ == '__main__':
         scan_vertex_processor = ScanVertexProcessor(meta_client)
 
         space_to_read = sys.argv[3]
+        if space_to_read not in meta_client.get_parts_alloc_from_cache().keys():
+            raise Exception('spaceToRead %s is not found in nebula graph' % space_to_read)
+
         # get argument return_cols, which is used in function scan_edge, scan_vertex, scan_part_edge, scan_part_vertex
         vertex_return_cols, edge_return_cols = get_return_cols(space_to_read)
         all_cols = True
 
         # initialize a Graph in NetworkX
         G = nx.Graph()
-        if space_to_read not in meta_client.get_parts_alloc_from_cache().keys():
-            raise Exception('spaceToRead %s is not found in nebula' % space_to_read)
-        else:
-            # scan vertex data
-            scan_vertex(space_to_read, vertex_return_cols, all_cols)
-            # scan edge data
-            scan_edge(space_to_read, edge_return_cols, all_cols)
+        # scan vertex data
+        scan_vertex(space_to_read, vertex_return_cols, all_cols)
+        # scan edge data
+        scan_edge(space_to_read, edge_return_cols, all_cols)
 
         # print the pagerank value of each node in Graph G of NetworkX
         print('\npagerank value of each node in Graph G of NetworkX:')
         print(nx.pagerank(G))
 
     except Exception as x:
-        print(x)
-        print('============ traceback =============')
-        traceback.print_exc()
+        logging.exception(x)
