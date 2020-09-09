@@ -182,16 +182,20 @@ class ScanSpaceVertexResponseIter:
 
 
 class StorageClient:
-    def __init__(self, meta_client):
+    def __init__(self, meta_client, timeout=1000,
+            connection_retry=3):
         """Initializer
         Arguments:
             - meta_clent: an initialized MetaClient
+            - timeout: maximum connection timeout in millisecond
+            - connection_retry: maximum number of connection retries
         Returns: empty
         """
         self._meta_client = meta_client
         self._clients = {}
         self._leaders = {}
-        self._timeout = 1000
+        self._timeout = timeout
+        self._connection_retry = connection_retry
 
     def connect(self, address):
         """ connect to storage server
@@ -200,15 +204,22 @@ class StorageClient:
         Returns:
             - client: a storage client object
         """
+        retry = self._connection_retry
         if address not in self._clients.keys():
-            client = self.do_connect(address)
-            self._clients[address] = client
-            return client
+            while retry > 0:
+                client = self.do_connect(address)
+                if client != None:
+                    self._clients[address] = client
+                    return client
+                retry -= 1
         else:
             return self._clients[address]
 
     def disconnect(self, address):
-        self._clients.remove(address)
+        if address in self._clients.keys():
+            del self._clients[address]
+        else:
+            print(address, ' not exists')
 
     def do_connects(self, addresses):
         for address in addresses:

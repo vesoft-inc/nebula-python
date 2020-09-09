@@ -53,7 +53,7 @@ class MetaClient:
         """Initializer
         Arguments:
             - addresses: meta server addresses
-            - timeout: maximum connection timeout
+            - timeout: maximum connection timeout in millisecond
             - connection_retry: maximum number of connection retries
         Returns: empty
         """
@@ -75,11 +75,12 @@ class MetaClient:
         Returns:
             - error_code: the code indicates whether the connection is successful
         """
-        while self._connection_retry > 0:
+        retry = self._connection_retry
+        while retry > 0:
             code = self.do_connect(self._addresses)
             if code == 0:
                 return ErrorCode.SUCCEEDED
-            self._connection_retry -= 1
+            retry -= 1
         return ErrorCode.E_FAIL_TO_CONNECT
 
     def do_connect(self, addresses):
