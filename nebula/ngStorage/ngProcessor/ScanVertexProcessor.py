@@ -5,6 +5,8 @@
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
+import logging
+
 from meta.MetaService import Client
 from storage.ttypes import ScanVertexResponse
 
@@ -30,7 +32,7 @@ class ScanVertexProcessor:
             - result: a dataset of tags and its property values
         """
         if scan_vertex_response is None:
-            print('process: scan_vertex_response is None')
+            logging.info('process: scan_vertex_response is None')
             return None
         row_readers = {}
         rows = {}
@@ -44,7 +46,7 @@ class ScanVertexProcessor:
                 rows[tag_name] = []
                 tag_id_name_map[tag_id] = tag_name
         else:
-            print('scan_vertex_response.vertex_schema is None')
+            logging.info('scan_vertex_response.vertex_schema is None')
 
         if scan_vertex_response.vertex_data is not None:
             for scan_tag in scan_vertex_response.vertex_data:
@@ -58,6 +60,6 @@ class ScanVertexProcessor:
                 properties = row_reader.decode_value(scan_tag.value)
                 rows[tag_name].append(Row(default_properties, properties))
         else:
-            print('scan_vertex_response.vertex_data is None')
+            logging.info('scan_vertex_response.vertex_data is None')
 
         return Result(rows)
