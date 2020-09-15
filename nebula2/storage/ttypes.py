@@ -2203,8 +2203,9 @@ class NewVertex:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.STRING:
-          self.id = iprot.readString()
+        if ftype == TType.STRUCT:
+          self.id = nebula2.common.ttypes.Value()
+          self.id.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 2:
@@ -2242,8 +2243,8 @@ class NewVertex:
       return
     oprot.writeStructBegin('NewVertex')
     if self.id != None:
-      oprot.writeFieldBegin('id', TType.STRING, 1)
-      oprot.writeString(self.id)
+      oprot.writeFieldBegin('id', TType.STRUCT, 1)
+      self.id.write(oprot)
       oprot.writeFieldEnd()
     if self.tags != None:
       oprot.writeFieldBegin('tags', TType.LIST, 2)
@@ -2313,8 +2314,9 @@ class EdgeKey:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.STRING:
-          self.src = iprot.readString()
+        if ftype == TType.STRUCT:
+          self.src = nebula2.common.ttypes.Value()
+          self.src.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 2:
@@ -2328,8 +2330,9 @@ class EdgeKey:
         else:
           iprot.skip(ftype)
       elif fid == 4:
-        if ftype == TType.STRING:
-          self.dst = iprot.readString()
+        if ftype == TType.STRUCT:
+          self.dst = nebula2.common.ttypes.Value()
+          self.dst.read(iprot)
         else:
           iprot.skip(ftype)
       else:
@@ -2350,8 +2353,8 @@ class EdgeKey:
       return
     oprot.writeStructBegin('EdgeKey')
     if self.src != None:
-      oprot.writeFieldBegin('src', TType.STRING, 1)
-      oprot.writeString(self.src)
+      oprot.writeFieldBegin('src', TType.STRUCT, 1)
+      self.src.write(oprot)
       oprot.writeFieldEnd()
     if self.edge_type != None:
       oprot.writeFieldBegin('edge_type', TType.I32, 2)
@@ -2362,8 +2365,8 @@ class EdgeKey:
       oprot.writeI64(self.ranking)
       oprot.writeFieldEnd()
     if self.dst != None:
-      oprot.writeFieldBegin('dst', TType.STRING, 4)
-      oprot.writeString(self.dst)
+      oprot.writeFieldBegin('dst', TType.STRUCT, 4)
+      self.dst.write(oprot)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -2936,11 +2939,13 @@ class DeleteVerticesRequest:
               (_etype292, _size289) = iprot.readListBegin()
               if _size289 >= 0:
                 for _i293 in six.moves.range(_size289):
-                  _elem294 = iprot.readString()
+                  _elem294 = nebula2.common.ttypes.Value()
+                  _elem294.read(iprot)
                   _val288.append(_elem294)
               else: 
                 while iprot.peekList():
-                  _elem295 = iprot.readString()
+                  _elem295 = nebula2.common.ttypes.Value()
+                  _elem295.read(iprot)
                   _val288.append(_elem295)
               iprot.readListEnd()
               self.parts[_key287] = _val288
@@ -2951,11 +2956,13 @@ class DeleteVerticesRequest:
               (_etype301, _size298) = iprot.readListBegin()
               if _size298 >= 0:
                 for _i302 in six.moves.range(_size298):
-                  _elem303 = iprot.readString()
+                  _elem303 = nebula2.common.ttypes.Value()
+                  _elem303.read(iprot)
                   _val297.append(_elem303)
               else: 
                 while iprot.peekList():
-                  _elem304 = iprot.readString()
+                  _elem304 = nebula2.common.ttypes.Value()
+                  _elem304.read(iprot)
                   _val297.append(_elem304)
               iprot.readListEnd()
               self.parts[_key296] = _val297
@@ -2988,9 +2995,9 @@ class DeleteVerticesRequest:
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
       for kiter305,viter306 in self.parts.items():
         oprot.writeI32(kiter305)
-        oprot.writeListBegin(TType.STRING, len(viter306))
+        oprot.writeListBegin(TType.STRUCT, len(viter306))
         for iter307 in viter306:
-          oprot.writeString(iter307)
+          iter307.write(oprot)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -3402,8 +3409,9 @@ class UpdateVertexRequest:
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.STRING:
-          self.vertex_id = iprot.readString()
+        if ftype == TType.STRUCT:
+          self.vertex_id = nebula2.common.ttypes.Value()
+          self.vertex_id.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 4:
@@ -3482,8 +3490,8 @@ class UpdateVertexRequest:
       oprot.writeI32(self.part_id)
       oprot.writeFieldEnd()
     if self.vertex_id != None:
-      oprot.writeFieldBegin('vertex_id', TType.STRING, 3)
-      oprot.writeString(self.vertex_id)
+      oprot.writeFieldBegin('vertex_id', TType.STRUCT, 3)
+      self.vertex_id.write(oprot)
       oprot.writeFieldEnd()
     if self.tag_id != None:
       oprot.writeFieldBegin('tag_id', TType.I32, 4)
@@ -7510,7 +7518,7 @@ NewTag.__setstate__ = NewTag__setstate__
 all_structs.append(NewVertex)
 NewVertex.thrift_spec = (
   None, # 0
-  (1, TType.STRING, 'id', False, None, 2, ), # 1
+  (1, TType.STRUCT, 'id', [nebula2.common.ttypes.Value, nebula2.common.ttypes.Value.thrift_spec, True], None, 2, ), # 1
   (2, TType.LIST, 'tags', (TType.STRUCT,[NewTag, NewTag.thrift_spec, False]), None, 2, ), # 2
 )
 
@@ -7536,10 +7544,10 @@ NewVertex.__setstate__ = NewVertex__setstate__
 all_structs.append(EdgeKey)
 EdgeKey.thrift_spec = (
   None, # 0
-  (1, TType.STRING, 'src', False, None, 2, ), # 1
+  (1, TType.STRUCT, 'src', [nebula2.common.ttypes.Value, nebula2.common.ttypes.Value.thrift_spec, True], None, 2, ), # 1
   (2, TType.I32, 'edge_type', None, None, 2, ), # 2
   (3, TType.I64, 'ranking', None, None, 2, ), # 3
-  (4, TType.STRING, 'dst', False, None, 2, ), # 4
+  (4, TType.STRUCT, 'dst', [nebula2.common.ttypes.Value, nebula2.common.ttypes.Value.thrift_spec, True], None, 2, ), # 4
 )
 
 EdgeKey.thrift_struct_annotations = {
@@ -7659,7 +7667,7 @@ all_structs.append(DeleteVerticesRequest)
 DeleteVerticesRequest.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
-  (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRING,False)), None, 2, ), # 2
+  (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRUCT,[nebula2.common.ttypes.Value, nebula2.common.ttypes.Value.thrift_spec, True])), None, 2, ), # 2
 )
 
 DeleteVerticesRequest.thrift_struct_annotations = {
@@ -7764,7 +7772,7 @@ UpdateVertexRequest.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
   (2, TType.I32, 'part_id', None, None, 2, ), # 2
-  (3, TType.STRING, 'vertex_id', False, None, 2, ), # 3
+  (3, TType.STRUCT, 'vertex_id', [nebula2.common.ttypes.Value, nebula2.common.ttypes.Value.thrift_spec, True], None, 2, ), # 3
   (4, TType.I32, 'tag_id', None, None, 0, ), # 4
   (5, TType.LIST, 'updated_props', (TType.STRUCT,[UpdatedProp, UpdatedProp.thrift_spec, False]), None, 2, ), # 5
   (6, TType.BOOL, 'insertable', None, False, 1, ), # 6
