@@ -463,7 +463,7 @@ class Value(object):
    - fVal
    - sVal
    - dVal
-   - tmVal
+   - tVal
    - dtVal
    - vVal
    - eVal
@@ -484,7 +484,7 @@ class Value(object):
   FVAL = 4
   SVAL = 5
   DVAL = 6
-  TMVAL = 7
+  TVAL = 7
   DTVAL = 8
   VVAL = 9
   EVAL = 10
@@ -522,7 +522,7 @@ class Value(object):
     assert self.field == 6
     return self.value
 
-  def get_tmVal(self):
+  def get_tVal(self):
     assert self.field == 7
     return self.value
 
@@ -582,7 +582,7 @@ class Value(object):
     self.field = 6
     self.value = value
 
-  def set_tmVal(self, value):
+  def set_tVal(self, value):
     self.field = 7
     self.value = value
 
@@ -649,9 +649,9 @@ class Value(object):
       value = padding.join(value.splitlines(True))
       member = '\n    %s=%s' % ('dVal', value)
     if self.field == 7:
-      padding = ' ' * 6
+      padding = ' ' * 5
       value = padding.join(value.splitlines(True))
-      member = '\n    %s=%s' % ('tmVal', value)
+      member = '\n    %s=%s' % ('tVal', value)
     if self.field == 8:
       padding = ' ' * 6
       value = padding.join(value.splitlines(True))
@@ -748,10 +748,10 @@ class Value(object):
           iprot.skip(ftype)
       elif fid == 7:
         if ftype == TType.STRUCT:
-          tmVal = Time()
-          tmVal.read(iprot)
+          tVal = Time()
+          tVal.read(iprot)
           assert self.field == 0 and self.value is None
-          self.set_tmVal(tmVal)
+          self.set_tVal(tVal)
         else:
           iprot.skip(ftype)
       elif fid == 8:
@@ -862,9 +862,9 @@ class Value(object):
       dVal.write(oprot)
       oprot.writeFieldEnd()
     if self.field == 7:
-      oprot.writeFieldBegin('tmVal', TType.STRUCT, 7)
-      tmVal = self.value
-      tmVal.write(oprot)
+      oprot.writeFieldBegin('tVal', TType.STRUCT, 7)
+      tVal = self.value
+      tVal.write(oprot)
       oprot.writeFieldEnd()
     if self.field == 8:
       oprot.writeFieldBegin('dtVal', TType.STRUCT, 8)
@@ -2376,7 +2376,7 @@ Value.thrift_spec = (
   (4, TType.DOUBLE, 'fVal', None, None, 2, ), # 4
   (5, TType.STRING, 'sVal', False, None, 2, ), # 5
   (6, TType.STRUCT, 'dVal', [Date, Date.thrift_spec, False], None, 2, ), # 6
-  (7, TType.STRUCT, 'tmVal', [Time, Time.thrift_spec, False], None, 2, ), # 7
+  (7, TType.STRUCT, 'tVal', [Time, Time.thrift_spec, False], None, 2, ), # 7
   (8, TType.STRUCT, 'dtVal', [DateTime, DateTime.thrift_spec, False], None, 2, ), # 8
   (9, TType.STRUCT, 'vVal', [Vertex, Vertex.thrift_spec, False], None, 2, ), # 9
   (10, TType.STRUCT, 'eVal', [Edge, Edge.thrift_spec, False], None, 2, ), # 10
@@ -2414,7 +2414,7 @@ Value.thrift_field_annotations = {
   },
 }
 
-def Value__init__(self, nVal=None, bVal=None, iVal=None, fVal=None, sVal=None, dVal=None, tmVal=None, dtVal=None, vVal=None, eVal=None, pVal=None, lVal=None, mVal=None, uVal=None, gVal=None,):
+def Value__init__(self, nVal=None, bVal=None, iVal=None, fVal=None, sVal=None, dVal=None, tVal=None, dtVal=None, vVal=None, eVal=None, pVal=None, lVal=None, mVal=None, uVal=None, gVal=None,):
   self.field = 0
   self.value = None
   if nVal is not None:
@@ -2441,10 +2441,10 @@ def Value__init__(self, nVal=None, bVal=None, iVal=None, fVal=None, sVal=None, d
     assert self.field == 0 and self.value is None
     self.field = 6
     self.value = dVal
-  if tmVal is not None:
+  if tVal is not None:
     assert self.field == 0 and self.value is None
     self.field = 7
-    self.value = tmVal
+    self.value = tVal
   if dtVal is not None:
     assert self.field == 0 and self.value is None
     self.field = 8
