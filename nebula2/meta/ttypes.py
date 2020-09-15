@@ -31,7 +31,7 @@ if not '__pypy__' in sys.builtin_module_names:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'ErrorCode', 'AlterSchemaOp', 'RoleType', 'PropertyType', 'HostStatus', 'SnapshotStatus', 'AdminJobOp', 'AdminCmd', 'JobStatus', 'ListHostType', 'HostRole', 'TaskResult', 'ConfigModule', 'ConfigMode', 'ID', 'ColumnDef', 'SchemaProp', 'Schema', 'IdName', 'SpaceProperties', 'SpaceItem', 'TagItem', 'AlterSchemaItem', 'EdgeItem', 'SchemaID', 'IndexItem', 'HostItem', 'UserItem', 'RoleItem', 'ExecResp', 'AdminJobReq', 'JobDesc', 'TaskDesc', 'AdminJobResult', 'AdminJobResp', 'CreateSpaceReq', 'DropSpaceReq', 'ListSpacesReq', 'ListSpacesResp', 'GetSpaceReq', 'GetSpaceResp', 'CreateTagReq', 'AlterTagReq', 'DropTagReq', 'ListTagsReq', 'ListTagsResp', 'GetTagReq', 'GetTagResp', 'CreateEdgeReq', 'AlterEdgeReq', 'GetEdgeReq', 'GetEdgeResp', 'DropEdgeReq', 'ListEdgesReq', 'ListEdgesResp', 'ListHostsReq', 'ListHostsResp', 'PartItem', 'ListPartsReq', 'ListPartsResp', 'GetPartsAllocReq', 'GetPartsAllocResp', 'MultiPutReq', 'GetReq', 'GetResp', 'MultiGetReq', 'MultiGetResp', 'RemoveReq', 'RemoveRangeReq', 'ScanReq', 'ScanResp', 'HBResp', 'HBReq', 'CreateTagIndexReq', 'DropTagIndexReq', 'GetTagIndexReq', 'GetTagIndexResp', 'ListTagIndexesReq', 'ListTagIndexesResp', 'CreateEdgeIndexReq', 'DropEdgeIndexReq', 'GetEdgeIndexReq', 'GetEdgeIndexResp', 'ListEdgeIndexesReq', 'ListEdgeIndexesResp', 'RebuildIndexReq', 'CreateUserReq', 'DropUserReq', 'AlterUserReq', 'GrantRoleReq', 'RevokeRoleReq', 'ListUsersReq', 'ListUsersResp', 'ListRolesReq', 'ListRolesResp', 'GetUserRolesReq', 'ChangePasswordReq', 'BalanceReq', 'BalanceTask', 'BalanceResp', 'LeaderBalanceReq', 'ConfigItem', 'RegConfigReq', 'GetConfigReq', 'GetConfigResp', 'SetConfigReq', 'ListConfigsReq', 'ListConfigsResp', 'CreateSnapshotReq', 'DropSnapshotReq', 'ListSnapshotsReq', 'Snapshot', 'ListSnapshotsResp', 'ListIndexStatusReq', 'IndexStatus', 'ListIndexStatusResp', 'SchemaVer', 'ClusterID']
+__all__ = ['UTF8STRINGS', 'ErrorCode', 'AlterSchemaOp', 'RoleType', 'PropertyType', 'HostStatus', 'SnapshotStatus', 'AdminJobOp', 'AdminCmd', 'JobStatus', 'ListHostType', 'HostRole', 'TaskResult', 'ConfigModule', 'ConfigMode', 'ID', 'ColumnDef', 'SchemaProp', 'Schema', 'IdName', 'SpaceDesc', 'SpaceItem', 'TagItem', 'AlterSchemaItem', 'EdgeItem', 'SchemaID', 'IndexItem', 'HostItem', 'UserItem', 'RoleItem', 'ExecResp', 'AdminJobReq', 'JobDesc', 'TaskDesc', 'AdminJobResult', 'AdminJobResp', 'CreateSpaceReq', 'DropSpaceReq', 'ListSpacesReq', 'ListSpacesResp', 'GetSpaceReq', 'GetSpaceResp', 'CreateTagReq', 'AlterTagReq', 'DropTagReq', 'ListTagsReq', 'ListTagsResp', 'GetTagReq', 'GetTagResp', 'CreateEdgeReq', 'AlterEdgeReq', 'GetEdgeReq', 'GetEdgeResp', 'DropEdgeReq', 'ListEdgesReq', 'ListEdgesResp', 'ListHostsReq', 'ListHostsResp', 'PartItem', 'ListPartsReq', 'ListPartsResp', 'GetPartsAllocReq', 'GetPartsAllocResp', 'MultiPutReq', 'GetReq', 'GetResp', 'MultiGetReq', 'MultiGetResp', 'RemoveReq', 'RemoveRangeReq', 'ScanReq', 'ScanResp', 'HBResp', 'HBReq', 'CreateTagIndexReq', 'DropTagIndexReq', 'GetTagIndexReq', 'GetTagIndexResp', 'ListTagIndexesReq', 'ListTagIndexesResp', 'CreateEdgeIndexReq', 'DropEdgeIndexReq', 'GetEdgeIndexReq', 'GetEdgeIndexResp', 'ListEdgeIndexesReq', 'ListEdgeIndexesResp', 'RebuildIndexReq', 'CreateUserReq', 'DropUserReq', 'AlterUserReq', 'GrantRoleReq', 'RevokeRoleReq', 'ListUsersReq', 'ListUsersResp', 'ListRolesReq', 'ListRolesResp', 'GetUserRolesReq', 'ChangePasswordReq', 'BalanceReq', 'BalanceTask', 'BalanceResp', 'LeaderBalanceReq', 'ConfigItem', 'RegConfigReq', 'GetConfigReq', 'GetConfigResp', 'SetConfigReq', 'ListConfigsReq', 'ListConfigsResp', 'CreateSnapshotReq', 'DropSnapshotReq', 'ListSnapshotsReq', 'Snapshot', 'ListSnapshotsResp', 'ListIndexStatusReq', 'IndexStatus', 'ListIndexStatusResp', 'SchemaVer', 'ClusterID']
 
 class ErrorCode:
   SUCCEEDED = 0
@@ -1074,15 +1074,16 @@ class IdName:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class SpaceProperties:
+class SpaceDesc:
   """
   Attributes:
    - space_name
    - partition_num
    - replica_factor
-   - vid_size
    - charset_name
    - collate_name
+   - vid_size
+   - vid_type
   """
 
   thrift_spec = None
@@ -1123,18 +1124,23 @@ class SpaceProperties:
         else:
           iprot.skip(ftype)
       elif fid == 4:
-        if ftype == TType.I32:
-          self.vid_size = iprot.readI32()
-        else:
-          iprot.skip(ftype)
-      elif fid == 5:
         if ftype == TType.STRING:
           self.charset_name = iprot.readString()
         else:
           iprot.skip(ftype)
-      elif fid == 6:
+      elif fid == 5:
         if ftype == TType.STRING:
           self.collate_name = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.I16:
+          self.vid_size = iprot.readI16()
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.I32:
+          self.vid_type = iprot.readI32()
         else:
           iprot.skip(ftype)
       else:
@@ -1153,7 +1159,7 @@ class SpaceProperties:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('SpaceProperties')
+    oprot.writeStructBegin('SpaceDesc')
     if self.space_name != None:
       oprot.writeFieldBegin('space_name', TType.STRING, 1)
       oprot.writeString(self.space_name)
@@ -1166,17 +1172,21 @@ class SpaceProperties:
       oprot.writeFieldBegin('replica_factor', TType.I32, 3)
       oprot.writeI32(self.replica_factor)
       oprot.writeFieldEnd()
-    if self.vid_size != None:
-      oprot.writeFieldBegin('vid_size', TType.I32, 4)
-      oprot.writeI32(self.vid_size)
-      oprot.writeFieldEnd()
     if self.charset_name != None:
-      oprot.writeFieldBegin('charset_name', TType.STRING, 5)
+      oprot.writeFieldBegin('charset_name', TType.STRING, 4)
       oprot.writeString(self.charset_name)
       oprot.writeFieldEnd()
     if self.collate_name != None:
-      oprot.writeFieldBegin('collate_name', TType.STRING, 6)
+      oprot.writeFieldBegin('collate_name', TType.STRING, 5)
       oprot.writeString(self.collate_name)
+      oprot.writeFieldEnd()
+    if self.vid_size != None:
+      oprot.writeFieldBegin('vid_size', TType.I16, 6)
+      oprot.writeI16(self.vid_size)
+      oprot.writeFieldEnd()
+    if self.vid_type != None:
+      oprot.writeFieldBegin('vid_type', TType.I32, 7)
+      oprot.writeI32(self.vid_type)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -1196,10 +1206,6 @@ class SpaceProperties:
       value = pprint.pformat(self.replica_factor, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    replica_factor=%s' % (value))
-    if self.vid_size is not None:
-      value = pprint.pformat(self.vid_size, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    vid_size=%s' % (value))
     if self.charset_name is not None:
       value = pprint.pformat(self.charset_name, indent=0)
       value = padding.join(value.splitlines(True))
@@ -1208,6 +1214,14 @@ class SpaceProperties:
       value = pprint.pformat(self.collate_name, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    collate_name=%s' % (value))
+    if self.vid_size is not None:
+      value = pprint.pformat(self.vid_size, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    vid_size=%s' % (value))
+    if self.vid_type is not None:
+      value = pprint.pformat(self.vid_type, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    vid_type=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -1259,7 +1273,7 @@ class SpaceItem:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.properties = SpaceProperties()
+          self.properties = SpaceDesc()
           self.properties.read(iprot)
         else:
           iprot.skip(ftype)
@@ -3238,7 +3252,7 @@ class CreateSpaceReq:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.properties = SpaceProperties()
+          self.properties = SpaceDesc()
           self.properties.read(iprot)
         else:
           iprot.skip(ftype)
@@ -11892,49 +11906,52 @@ def IdName__setstate__(self, state):
 IdName.__getstate__ = lambda self: self.__dict__.copy()
 IdName.__setstate__ = IdName__setstate__
 
-all_structs.append(SpaceProperties)
-SpaceProperties.thrift_spec = (
+all_structs.append(SpaceDesc)
+SpaceDesc.thrift_spec = (
   None, # 0
   (1, TType.STRING, 'space_name', False, None, 2, ), # 1
-  (2, TType.I32, 'partition_num', None, None, 2, ), # 2
-  (3, TType.I32, 'replica_factor', None, None, 2, ), # 3
-  (4, TType.I32, 'vid_size', None, 8, 2, ), # 4
-  (5, TType.STRING, 'charset_name', False, None, 2, ), # 5
-  (6, TType.STRING, 'collate_name', False, None, 2, ), # 6
+  (2, TType.I32, 'partition_num', None, 0, 2, ), # 2
+  (3, TType.I32, 'replica_factor', None, 0, 2, ), # 3
+  (4, TType.STRING, 'charset_name', False, None, 2, ), # 4
+  (5, TType.STRING, 'collate_name', False, None, 2, ), # 5
+  (6, TType.I16, 'vid_size', None, 8, 2, ), # 6
+  (7, TType.I32, 'vid_type', PropertyType,   7, 2, ), # 7
 )
 
-SpaceProperties.thrift_struct_annotations = {
+SpaceDesc.thrift_struct_annotations = {
 }
-SpaceProperties.thrift_field_annotations = {
+SpaceDesc.thrift_field_annotations = {
 }
 
-def SpaceProperties__init__(self, space_name=None, partition_num=None, replica_factor=None, vid_size=SpaceProperties.thrift_spec[4][4], charset_name=None, collate_name=None,):
+def SpaceDesc__init__(self, space_name=None, partition_num=SpaceDesc.thrift_spec[2][4], replica_factor=SpaceDesc.thrift_spec[3][4], charset_name=None, collate_name=None, vid_size=SpaceDesc.thrift_spec[6][4], vid_type=SpaceDesc.thrift_spec[7][4],):
   self.space_name = space_name
   self.partition_num = partition_num
   self.replica_factor = replica_factor
-  self.vid_size = vid_size
   self.charset_name = charset_name
   self.collate_name = collate_name
+  self.vid_size = vid_size
+  self.vid_type = vid_type
 
-SpaceProperties.__init__ = SpaceProperties__init__
+SpaceDesc.__init__ = SpaceDesc__init__
 
-def SpaceProperties__setstate__(self, state):
+def SpaceDesc__setstate__(self, state):
   state.setdefault('space_name', None)
-  state.setdefault('partition_num', None)
-  state.setdefault('replica_factor', None)
-  state.setdefault('vid_size', 8)
+  state.setdefault('partition_num', 0)
+  state.setdefault('replica_factor', 0)
   state.setdefault('charset_name', None)
   state.setdefault('collate_name', None)
+  state.setdefault('vid_size', 8)
+  state.setdefault('vid_type',   7)
   self.__dict__ = state
 
-SpaceProperties.__getstate__ = lambda self: self.__dict__.copy()
-SpaceProperties.__setstate__ = SpaceProperties__setstate__
+SpaceDesc.__getstate__ = lambda self: self.__dict__.copy()
+SpaceDesc.__setstate__ = SpaceDesc__setstate__
 
 all_structs.append(SpaceItem)
 SpaceItem.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
-  (2, TType.STRUCT, 'properties', [SpaceProperties, SpaceProperties.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'properties', [SpaceDesc, SpaceDesc.thrift_spec, False], None, 2, ), # 2
 )
 
 SpaceItem.thrift_struct_annotations = {
@@ -12410,7 +12427,7 @@ AdminJobResp.__setstate__ = AdminJobResp__setstate__
 all_structs.append(CreateSpaceReq)
 CreateSpaceReq.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'properties', [SpaceProperties, SpaceProperties.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'properties', [SpaceDesc, SpaceDesc.thrift_spec, False], None, 2, ), # 1
   (2, TType.BOOL, 'if_not_exists', None, None, 2, ), # 2
 )
 
