@@ -1,3 +1,12 @@
+## v1.1.0(2020-09-21)
+- Compatible with the 1.1.0 version of nebula-graph
+
+- New features
+    - Support using storage client to scan vertices and scan edges
+- Changes
+    - The `ExecutionResponse` add optional `warning_msg`
+    - Delete the debug log
+
 ## v1.0.0(2020-06-08)
 - Compatible with the 1.0.0 version of nebula-graph
 

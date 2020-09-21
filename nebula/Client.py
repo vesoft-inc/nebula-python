@@ -27,6 +27,7 @@ class GraphClient(object):
         self._password = None
         self._space = None
         self._lock = threading.Lock()
+        self._is_ok = False
 
     def authenticate(self, user, password):
         """authenticate to graph server
