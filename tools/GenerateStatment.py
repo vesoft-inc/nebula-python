@@ -5,13 +5,6 @@
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
-import sys
-import time
-import threading
-import prettytable
-
-sys.path.insert(0, '../')
-
 from graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
 from nebula.Client import GraphClient
@@ -67,7 +60,7 @@ class Generator(object):
 
         for tag in tags:
             resp = self.execute("SHOW CREATE TAG {};".format(tag))
-            self._stmts.append(resp.rows[0].columns[1].get_str().decode('utf-8').replace('\n', ''))
+            self._stmts.append(resp.rows[0].columns[1].get_str().decode('utf-8').replace('\n', '') + ';')
 
     def generate_edge_statment(self):
         resp = self.execute("SHOW EDGES;")
@@ -81,7 +74,7 @@ class Generator(object):
 
         for edge in edges:
             resp = self.execute("SHOW CREATE EDGE {};".format(edge))
-            self._stmts.append(resp.rows[0].columns[1].get_str().decode('utf-8').replace('\n', ''))
+            self._stmts.append(resp.rows[0].columns[1].get_str().decode('utf-8').replace('\n', '') + ';')
 
     def generate_tag_index_statment(self):
         resp = self.execute("SHOW TAG INDEXES;")
@@ -95,7 +88,7 @@ class Generator(object):
 
         for index in tag_indexes:
             resp = self.execute("SHOW CREATE TAG INDEX {};".format(index))
-            self._stmts.append(resp.rows[0].columns[1].get_str().decode('utf-8').replace('\n', ''))
+            self._stmts.append(resp.rows[0].columns[1].get_str().decode('utf-8').replace('\n', '') + ';')
 
     def generate_edge_index_statment(self):
         resp = self.execute("SHOW EDGE INDEXES;")
@@ -109,7 +102,7 @@ class Generator(object):
 
         for index in edge_indexes:
             resp = self.execute("SHOW CREATE EDGE INDEX {};".format(index))
-            self._stmts.append(resp.rows[0].columns[1].get_str().decode('utf-8').replace('\n', ''))
+            self._stmts.append(resp.rows[0].columns[1].get_str().decode('utf-8').replace('\n', '') + ';')
 
     def generate_configs_statment(self):
         resp = self.execute("SHOW CONFIGS;")
@@ -126,7 +119,10 @@ class Generator(object):
                 configs.append((module, config, col_val.get_integer()))
             elif col_val.getType() == ttypes.ColumnValue.STR:
                 configs.append((module, config,
-                                col_val.get_str().decode('utf-8').replace('\n', '').replace(':', '=').replace('"', '')))
+                                col_val.get_str().decode('utf-8').
+                                replace('\n', '').
+                                replace(':', '=').
+                                replace('"', '') + ';'))
             elif col_val.getType() == ttypes.ColumnValue.DOUBLE_PRECISION:
                 configs.append((module, config, col_val.get_double_precision()))
             else:
@@ -144,7 +140,7 @@ class Generator(object):
 
     def execute(self, stmt):
         resp = self._client.execute_query(stmt)
-        if resp.error_code != 0:
+        if resp.error_code != ttypes.ErrorCode.SUCCEEDED:
             print("Execute `SHOW SPACES' failed: ".format(resp.error_msg))
             exit(1)
         return resp
@@ -158,13 +154,14 @@ class Generator(object):
         for stmt in self._stmts:
             f.write(stmt + '\n')
         f.close()
+        print('The generated nGQLs file is ./{}'.format(statement_file))
 
 
 if __name__ == '__main__':
     '''
         Usage: 
         Step1: pip3 install nebula-python
-        Step2: python3 GenerateStatment.py --ip=127.0.0.1 -port=3699
+        Step2: python3 GenerateStatment.py --ip=127.0.0.1 --port=3699
         You can find a file Nebula_Statments.txt under current directory
     '''
     from optparse import OptionParser
