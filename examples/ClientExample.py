@@ -77,9 +77,9 @@ def main_test():
                 (threading.current_thread().getName(), space_name))
         # Get one client
         client = GraphClient(connection_pool)
-        auth_resp = client.authenticate('user', 'password')
+        auth_resp = client.authenticate('root', 'nebula')
         if auth_resp.error_code:
-            raise AuthException("Auth failed")
+            raise AuthException("Auth failed {}".format(auth_resp.error_msg))
 
         # Create space mySpace
         do_simple_execute(client, 'CREATE SPACE IF NOT EXISTS %s'

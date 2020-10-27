@@ -6,6 +6,7 @@
 
 import sys
 import threading
+import socket
 
 from thrift.transport import TSocket
 from thrift.transport import TTransport
@@ -19,11 +20,11 @@ class ConnectionPool(object):
     DEFAULT_CONNECT_SIZE = 2
 
     def __init__(self,
-                 ip,
+                 host,
                  port,
                  socket_num=DEFAULT_CONNECT_SIZE,
                  network_timeout=DEFAULT_TIMEOUT):
-        self._ip = ip
+        self._ip = socket.gethostbyname(host)
         self._port = port
 
         self._timeout = network_timeout
