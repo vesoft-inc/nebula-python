@@ -15,6 +15,7 @@ import logging
 from meta.ttypes import ErrorCode
 
 sys.path.insert(0, '../')
+sys.path.insert(0, '../fbthrift')
 
 from nebula.ngMeta.MetaClient import MetaClient
 from nebula.ngStorage.StorageClient import StorageClient

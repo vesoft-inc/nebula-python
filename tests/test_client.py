@@ -17,6 +17,7 @@ import time
 import threading
 
 sys.path.insert(0, '../')
+sys.path.insert(0, '../fbthrift')
 
 from graph import ttypes
 from nebula.ConnectionPool import ConnectionPool

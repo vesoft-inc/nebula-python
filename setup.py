@@ -23,7 +23,7 @@ setup(
     packages=find_packages(),
     platforms=["2.7, 3.5, 3.7"],
     package_dir={'nebula': 'nebula',
-                 'thirft': 'thirft',
+                 'fbthirft': 'fbthirft',
                  'common': 'common',
                  'graph': 'graph'},
 )
