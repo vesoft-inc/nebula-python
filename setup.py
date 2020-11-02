@@ -22,8 +22,5 @@ setup(
                       'futures; python_version == "2.7"'],
     packages=find_packages(),
     platforms=["2.7, 3.5, 3.7"],
-    package_dir={'nebula': 'nebula',
-                 'fbthirft': 'fbthirft',
-                 'common': 'common',
-                 'graph': 'graph'},
+    package_dir={'nebula': 'nebula'},
 )
