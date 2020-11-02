@@ -18,7 +18,6 @@ import threading
 import datetime
 
 sys.path.insert(0, '../')
-sys.path.insert(0, '../fbthrift')
 
 from storage.ttypes import EntryId
 from storage.ttypes import PropDef

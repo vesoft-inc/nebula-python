@@ -15,12 +15,7 @@ import asyncio
 import prettytable
 import datetime
 
-import os
-import fbthrift
-fbthrift_path = os.path.dirname(fbthrift.__file__)
-sys.path.insert(0, fbthrift_path)
-
-from graph import ttypes
+from nebula.graph import ttypes
 from nebula.AsyncClient import AsyncGraphClient
 from nebula.Common import *
 

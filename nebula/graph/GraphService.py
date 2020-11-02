@@ -13,7 +13,7 @@ from thrift.protocol.TProtocol import TProtocolException
 
 
 from .ttypes import *
-import common.ttypes
+import nebula.common.ttypes
 
 from thrift.Thrift import TProcessor
 import pprint
@@ -33,13 +33,6 @@ if not '__pypy__' in sys.builtin_module_names:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-import thrift
-if six.PY3 and not thrift.trollius:
-  import asyncio
-  from thrift.util.asyncio import call_as_future
-else:
-  import trollius as asyncio
-  from thrift.util.trollius import call_as_future
 from thrift.util.Decorators import *
 
 class Iface:
@@ -639,11 +632,19 @@ execute_result.__getstate__ = lambda self: self.__dict__.copy()
 execute_result.__setstate__ = execute_result__setstate__
 
 class Client(Iface):
-  def __init__(self, oprot, loop=None):
-    self._oprot = oprot
-    self._loop = loop or asyncio.get_event_loop()
+  def __enter__(self):
+    return self
+
+  def __exit__(self, type, value, tb):
+    self._iprot.trans.close()
+    if self._iprot is not self._oprot:
+      self._oprot.trans.close()
+
+  def __init__(self, iprot, oprot=None):
+    self._iprot = self._oprot = iprot
+    if oprot != None:
+      self._oprot = oprot
     self._seqid = 0
-    self._futures = {}
 
   def authenticate(self, username=None, password=None):
     """
@@ -651,10 +652,8 @@ class Client(Iface):
      - username
      - password
     """
-    self._seqid += 1
-    fut = self._futures[self._seqid] = asyncio.Future(loop=self._loop)
     self.send_authenticate(username, password)
-    return fut
+    return self.recv_authenticate()
 
   def send_authenticate(self, username=None, password=None):
     self._oprot.writeMessageBegin('authenticate', TMessageType.CALL, self._seqid)
@@ -665,40 +664,26 @@ class Client(Iface):
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_authenticate(self, iprot, mtype, rseqid):
-    try:
-        fut = self._futures.pop(rseqid)
-    except KeyError:
-        return   # request timed out
+  def recv_authenticate(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
-      x.read(iprot)
-      iprot.readMessageEnd()
-      fut.set_exception(x)
-      return
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
     result = authenticate_result()
-    try:
-      result.read(iprot)
-    except Exception as e:
-      fut.set_exception(e)
-      return
-    iprot.readMessageEnd()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
     if result.success != None:
-      fut.set_result(result.success)
-      return
-    fut.set_exception(TApplicationException(TApplicationException.MISSING_RESULT, "authenticate failed: unknown result"))
-    return
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "authenticate failed: unknown result");
 
   def signout(self, sessionId=None):
     """
     Parameters:
      - sessionId
     """
-    self._seqid += 1
-    fut = self._futures[self._seqid] = asyncio.Future(loop=self._loop)
     self.send_signout(sessionId)
-    fut.set_result(None)
-    return fut
 
   def send_signout(self, sessionId=None):
     self._oprot.writeMessageBegin('signout', TMessageType.CALL, self._seqid)
@@ -713,10 +698,8 @@ class Client(Iface):
      - sessionId
      - stmt
     """
-    self._seqid += 1
-    fut = self._futures[self._seqid] = asyncio.Future(loop=self._loop)
     self.send_execute(sessionId, stmt)
-    return fut
+    return self.recv_execute()
 
   def send_execute(self, sessionId=None, stmt=None):
     self._oprot.writeMessageBegin('execute', TMessageType.CALL, self._seqid)
@@ -727,38 +710,27 @@ class Client(Iface):
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_execute(self, iprot, mtype, rseqid):
-    try:
-        fut = self._futures.pop(rseqid)
-    except KeyError:
-        return   # request timed out
+  def recv_execute(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
-      x.read(iprot)
-      iprot.readMessageEnd()
-      fut.set_exception(x)
-      return
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
     result = execute_result()
-    try:
-      result.read(iprot)
-    except Exception as e:
-      fut.set_exception(e)
-      return
-    iprot.readMessageEnd()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
     if result.success != None:
-      fut.set_result(result.success)
-      return
-    fut.set_exception(TApplicationException(TApplicationException.MISSING_RESULT, "execute failed: unknown result"))
-    return
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "execute failed: unknown result");
 
 
 class Processor(Iface, TProcessor):
   _onewayMethods = ("signout",)
 
-  def __init__(self, handler, loop=None):
+  def __init__(self, handler):
     TProcessor.__init__(self)
     self._handler = handler
-    self._loop = loop or asyncio.get_event_loop()
     self._processMap = {}
     self._priorityMap = {}
     self._processMap["authenticate"] = Processor.process_authenticate
@@ -773,46 +745,48 @@ class Processor(Iface, TProcessor):
     l.extend(Processor._onewayMethods)
     return tuple(l)
 
-  @process_main(asyncio=True)
+  @process_main()
   def process(self,): pass
 
-  @process_method(authenticate_args, oneway=False, asyncio=True)
-  def process_authenticate(self, args, handler_ctx, seqid, oprot, fn_name):
+  @process_method(authenticate_args, oneway=False)
+  def process_authenticate(self, args, handler_ctx):
     result = authenticate_result()
-    if should_run_on_thread(self._handler.authenticate):
-      fut = self._loop.run_in_executor(None, self._handler.authenticate, args.username, args.password)
-    else:
-      fut = call_as_future(self._handler.authenticate, self._loop, args.username, args.password)
-    fut.add_done_callback(lambda f: write_results_after_future(result, self._event_handler, handler_ctx, seqid, oprot, fn_name, {}, f))
-    return fut
+    try:
+      result.success = self._handler.authenticate(args.username, args.password)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'authenticate', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
 
-  @process_method(signout_args, oneway=True, asyncio=True)
-  def process_signout(self, args, handler_ctx, seqid, oprot, fn_name):
-    if should_run_on_thread(self._handler.signout):
-      fut = self._loop.run_in_executor(None, self._handler.signout, args.sessionId)
-    else:
-      fut = call_as_future(self._handler.signout, self._loop, args.sessionId)
-    return fut
+  @process_method(signout_args, oneway=True)
+  def process_signout(self, args, handler_ctx):
+    try:
+      self._handler.signout(args.sessionId)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'signout', ex)
+      result = Thrift.TApplicationException(message=str(ex))
 
-  @process_method(execute_args, oneway=False, asyncio=True)
-  def process_execute(self, args, handler_ctx, seqid, oprot, fn_name):
+  @process_method(execute_args, oneway=False)
+  def process_execute(self, args, handler_ctx):
     result = execute_result()
-    if should_run_on_thread(self._handler.execute):
-      fut = self._loop.run_in_executor(None, self._handler.execute, args.sessionId, args.stmt)
-    else:
-      fut = call_as_future(self._handler.execute, self._loop, args.sessionId, args.stmt)
-    fut.add_done_callback(lambda f: write_results_after_future(result, self._event_handler, handler_ctx, seqid, oprot, fn_name, {}, f))
-    return fut
+    try:
+      result.success = self._handler.execute(args.sessionId, args.stmt)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'execute', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
 
 Iface._processor_type = Processor
 
 class ContextProcessor(ContextIface, TProcessor):
   _onewayMethods = ("signout",)
 
-  def __init__(self, handler, loop=None):
+  def __init__(self, handler):
     TProcessor.__init__(self)
     self._handler = handler
-    self._loop = loop or asyncio.get_event_loop()
     self._processMap = {}
     self._priorityMap = {}
     self._processMap["authenticate"] = ContextProcessor.process_authenticate
@@ -827,36 +801,39 @@ class ContextProcessor(ContextIface, TProcessor):
     l.extend(ContextProcessor._onewayMethods)
     return tuple(l)
 
-  @process_main(asyncio=True)
+  @process_main()
   def process(self,): pass
 
-  @process_method(authenticate_args, oneway=False, asyncio=True)
-  def process_authenticate(self, args, handler_ctx, seqid, oprot, fn_name):
+  @process_method(authenticate_args, oneway=False)
+  def process_authenticate(self, args, handler_ctx):
     result = authenticate_result()
-    if should_run_on_thread(self._handler.authenticate):
-      fut = self._loop.run_in_executor(None, self._handler.authenticate, handler_ctx, args.username, args.password)
-    else:
-      fut = call_as_future(self._handler.authenticate, self._loop, handler_ctx, args.username, args.password)
-    fut.add_done_callback(lambda f: write_results_after_future(result, self._event_handler, handler_ctx, seqid, oprot, fn_name, {}, f))
-    return fut
+    try:
+      result.success = self._handler.authenticate(handler_ctx, args.username, args.password)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'authenticate', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
 
-  @process_method(signout_args, oneway=True, asyncio=True)
-  def process_signout(self, args, handler_ctx, seqid, oprot, fn_name):
-    if should_run_on_thread(self._handler.signout):
-      fut = self._loop.run_in_executor(None, self._handler.signout, handler_ctx, args.sessionId)
-    else:
-      fut = call_as_future(self._handler.signout, self._loop, handler_ctx, args.sessionId)
-    return fut
+  @process_method(signout_args, oneway=True)
+  def process_signout(self, args, handler_ctx):
+    try:
+      self._handler.signout(handler_ctx, args.sessionId)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'signout', ex)
+      result = Thrift.TApplicationException(message=str(ex))
 
-  @process_method(execute_args, oneway=False, asyncio=True)
-  def process_execute(self, args, handler_ctx, seqid, oprot, fn_name):
+  @process_method(execute_args, oneway=False)
+  def process_execute(self, args, handler_ctx):
     result = execute_result()
-    if should_run_on_thread(self._handler.execute):
-      fut = self._loop.run_in_executor(None, self._handler.execute, handler_ctx, args.sessionId, args.stmt)
-    else:
-      fut = call_as_future(self._handler.execute, self._loop, handler_ctx, args.sessionId, args.stmt)
-    fut.add_done_callback(lambda f: write_results_after_future(result, self._event_handler, handler_ctx, seqid, oprot, fn_name, {}, f))
-    return fut
+    try:
+      result.success = self._handler.execute(handler_ctx, args.sessionId, args.stmt)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'execute', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
 
 ContextIface._processor_type = ContextProcessor
 

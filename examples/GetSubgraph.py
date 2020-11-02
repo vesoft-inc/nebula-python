@@ -13,14 +13,8 @@ import sys
 import time
 import concurrent.futures
 import traceback
-
-import os
-import fbthrift
-fbthrift_path = os.path.dirname(fbthrift.__file__)
-sys.path.insert(0, fbthrift_path)
-
 from concurrent.futures import ThreadPoolExecutor
-from graph import ttypes
+from nebula.graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
 from nebula.Client import GraphClient, ExecutionException
 

@@ -13,7 +13,7 @@ from thrift.protocol.TProtocol import TProtocolException
 
 
 from .ttypes import *
-import common.ttypes
+import nebula.common.ttypes
 
 from thrift.Thrift import TProcessor
 import pprint

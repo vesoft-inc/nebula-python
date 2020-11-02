@@ -72,8 +72,7 @@ FUNCTIONS = {
     'remove': Function('remove', 'StorageService', 'ExecResponse', [('RemoveRequest', 'req', 'RemoveRequest')]),
     'removeRange': Function('removeRange', 'StorageService', 'ExecResponse', [('RemoveRangeRequest', 'req', 'RemoveRangeRequest')]),
     'getUUID': Function('getUUID', 'StorageService', 'GetUUIDResp', [('GetUUIDReq', 'req', 'GetUUIDReq')]),
-    'lookUpVertexIndex': Function('lookUpVertexIndex', 'StorageService', 'LookUpVertexIndexResp', [('LookUpIndexRequest', 'req', 'LookUpIndexRequest')]),
-    'lookUpEdgeIndex': Function('lookUpEdgeIndex', 'StorageService', 'LookUpEdgeIndexResp', [('LookUpIndexRequest', 'req', 'LookUpIndexRequest')]),
+    'lookUpIndex': Function('lookUpIndex', 'StorageService', 'LookUpIndexResp', [('LookUpIndexRequest', 'req', 'LookUpIndexRequest')]),
 }
 
 SERVICE_NAMES = ['StorageService', ]
