@@ -94,7 +94,7 @@ If you want to run the sample code, please install `prettytable` and `networkx` 
 ### Steps to create a client
   - Step1: create a connection pool
     - The default connection number of the connection pool is **two**
-    - The default timeout of connection is **1000ms**
+    - The default timeout of connection is **1000ms**, **0** means no timeout
     - When the created clients exceed the number of connections in the connection pool, the clients that exceed the number of connections will enter the wait state, waiting for the previous clients to release before continuing
   - Step2:  create a client through the connection pool, and call `GraphClient.set_space` to set the space which will be used by reconnecting when the connection is broken
   - Step3: authenticate
