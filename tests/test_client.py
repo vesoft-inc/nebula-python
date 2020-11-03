@@ -19,7 +19,7 @@ import threading
 sys.path.insert(0, '../')
 
 
-from graph import ttypes
+from nebula.graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
 from nebula.Client import GraphClient
 from nebula.Common import *
