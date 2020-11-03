@@ -1,3 +1,13 @@
+## v1.1.1(2020-11-03)
+- Compatible with the 1.1.0 version of nebula-graph
+
+- New features
+    - None
+    
+- Changes
+    - Modify the package graph/common/meta/storage/thrift to nebula,
+    - Users need to modify `from graph import ttypes` to `from nebula.graph import ttypes`
+    
 ## v1.1.0(2020-09-21)
 - Compatible with the 1.1.0 version of nebula-graph
 

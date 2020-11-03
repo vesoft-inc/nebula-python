@@ -18,14 +18,10 @@ import threading
 import datetime
 
 sys.path.insert(0, '../')
-from storage.ttypes import EntryId
-from storage.ttypes import PropDef
-from storage.ttypes import PropOwner
-from storage.ttypes import ResultCode
-from storage.ttypes import ErrorCode
-from common.ttypes import HostAddr
-from common.ttypes import SupportedType
-from graph import ttypes
+
+from nebula.storage.ttypes import *
+from nebula.common.ttypes import *
+from nebula.graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
 from nebula.Client import GraphClient
 from nebula.Common import *

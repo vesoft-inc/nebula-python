@@ -8,8 +8,8 @@
 
 import threading
 from .Common import *
-from graph.ttypes import ErrorCode
-from thrift.transport.TTransport import TTransportException
+from nebula.graph.ttypes import ErrorCode
+from nebula.thrift.transport.TTransport import TTransportException
 
 class GraphClient(object):
 

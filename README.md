@@ -10,20 +10,22 @@ This repository provides Nebula client API in Python.
 ```text
 |--nebula-python
     |
-    |-- nebula                        // client code
+    |-- nebula
     |   |-- Common.py                 // define exception and simple response
+    |   |
     |   |-- Client.py                 // interfaces controlling nebula
+    |   |
     |   |-- ConnectionPool.py         // the connection pool that manages all the connections, users can specify the connection numbers and timeout when creating it
-    |
-    |-- common                        // the common data types
-    |
-    |-- graph                         // data types and client interfaces to interact with graphd
-    |
-    |-- meta                          // data types and client interfaces to interact with metad
-    |
-    |-- storage                       // data types and client interfaces to interact with storaged
-    |
-    |__ thrift                        // the socket implementation code
+    |   |
+    |   |-- common                    // the common data types
+    |   |
+    |   |-- graph                     // data types and client interfaces to interact with graphd
+    |   |
+    |   |-- meta                      // data types and client interfaces to interact with metad
+    |   |
+    |   |-- storage                   // data types and client interfaces to interact with storaged
+    |   |
+    |   |__ thrift                    // the socket implementation code
     |
     |-- examples
     |   |__ ClientExample.py          // the example code
@@ -83,10 +85,10 @@ sudo pip install nebula-python
 
 There are three major modules:
 
-- ConnectionPool.py
-- Client.py
-- ttypes.py
-- Common.py
+- nebula/ConnectionPool.py
+- nebula/Client.py
+- nebula/Common.py
+- nebula/graph/ttypes.py
 
 Please refer to the [sample code](examples/ClientExample.py) on detail usage.
 If you want to run the sample code, please install `prettytable` and `networkx` via pip.
@@ -101,6 +103,19 @@ If you want to run the sample code, please install `prettytable` and `networkx` 
   - Step4: execute/execute\_query
   - Step5: return the client to pool and close pool
 
+### Quick Example
+```python
+from nebula.graph import ttypes
+from nebula.ConnectionPool import ConnectionPool
+from nebula.Client import GraphClient
+
+connection_pool = ConnectionPool('127.0.0.1', 3699)
+client = GraphClient(connection_pool)
+auth_resp = client.authenticate('user', 'password')
+query_resp = client.execute_query('SHOW SPACES')
+client.sign_out()
+connection_pool.close()
+```
 
 ## How to choose nebula-python
 
@@ -109,5 +124,6 @@ If you want to run the sample code, please install `prettytable` and `networkx` 
 | 1.0.0rc1  | 1.0.0-rc1 |
 | 1.0.0-rc2-1 | 1.0.0-rc2 / 1.0.0-rc3 |
 | 1.0.0rc4 | 1.0.0-rc4 |
-| 1.0.0.post0 | >= 1.0.0 |
-| 1.1.0 | >= 1.1.0 |
+| 1.0.0.post0 | \>= 1.0.0 |
+| 1.1.0 | \>= 1.1.0 |
+| 1.1.1 | \>= 1.1.0 |

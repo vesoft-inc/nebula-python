@@ -12,10 +12,10 @@ Nebula StorageClient example.
 import sys, getopt
 import networkx as nx
 import logging
-from meta.ttypes import ErrorCode
 
 sys.path.insert(0, '../')
 
+from nebula.meta.ttypes import ErrorCode
 from nebula.ngMeta.MetaClient import MetaClient
 from nebula.ngStorage.StorageClient import StorageClient
 from nebula.ngStorage.ngProcessor.ScanEdgeProcessor import ScanEdgeProcessor

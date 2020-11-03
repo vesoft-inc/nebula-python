@@ -14,7 +14,7 @@ import time
 import concurrent.futures
 import traceback
 from concurrent.futures import ThreadPoolExecutor
-from graph import ttypes
+from nebula.graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
 from nebula.Client import GraphClient, ExecutionException
 

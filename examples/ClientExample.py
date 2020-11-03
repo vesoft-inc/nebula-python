@@ -14,7 +14,7 @@ import time
 import threading
 import prettytable
 
-from graph import ttypes
+from nebula.graph import ttypes
 from nebula.ConnectionPool import ConnectionPool
 from nebula.Client import GraphClient
 from nebula.Common import *

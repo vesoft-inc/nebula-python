@@ -12,7 +12,7 @@ from thrift.Thrift import *
 from thrift.protocol.TProtocol import TProtocolException
 
 
-import common.ttypes
+import nebula.common.ttypes
 
 
 import pprint
@@ -58,7 +58,7 @@ class ErrorCode:
   E_NO_VALID_HOST = -37
   E_CORRUPTTED_BALANCE_PLAN = -38
   E_INVALID_PASSWORD = -41
-  E_INPROPER_ROLE = -42
+  E_IMPROPER_ROLE = -42
   E_INVALID_PARTITION_NUM = -43
   E_INVALID_REPLICA_FACTOR = -44
   E_INVALID_CHARSET = -45
@@ -95,7 +95,7 @@ class ErrorCode:
     -37: "E_NO_VALID_HOST",
     -38: "E_CORRUPTTED_BALANCE_PLAN",
     -41: "E_INVALID_PASSWORD",
-    -42: "E_INPROPER_ROLE",
+    -42: "E_IMPROPER_ROLE",
     -43: "E_INVALID_PARTITION_NUM",
     -44: "E_INVALID_REPLICA_FACTOR",
     -45: "E_INVALID_CHARSET",
@@ -133,7 +133,7 @@ class ErrorCode:
     "E_NO_VALID_HOST": -37,
     "E_CORRUPTTED_BALANCE_PLAN": -38,
     "E_INVALID_PASSWORD": -41,
-    "E_INPROPER_ROLE": -42,
+    "E_IMPROPER_ROLE": -42,
     "E_INVALID_PARTITION_NUM": -43,
     "E_INVALID_REPLICA_FACTOR": -44,
     "E_INVALID_CHARSET": -45,
@@ -900,7 +900,7 @@ class TagItem:
           iprot.skip(ftype)
       elif fid == 4:
         if ftype == TType.STRUCT:
-          self.schema = common.ttypes.Schema()
+          self.schema = nebula.common.ttypes.Schema()
           self.schema.read(iprot)
         else:
           iprot.skip(ftype)
@@ -1010,7 +1010,7 @@ class AlterSchemaItem:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.schema = common.ttypes.Schema()
+          self.schema = nebula.common.ttypes.Schema()
           self.schema.read(iprot)
         else:
           iprot.skip(ftype)
@@ -1116,7 +1116,7 @@ class EdgeItem:
           iprot.skip(ftype)
       elif fid == 4:
         if ftype == TType.STRUCT:
-          self.schema = common.ttypes.Schema()
+          self.schema = nebula.common.ttypes.Schema()
           self.schema.read(iprot)
         else:
           iprot.skip(ftype)
@@ -1223,7 +1223,7 @@ class HostItem:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.hostAddr = common.ttypes.HostAddr()
+          self.hostAddr = nebula.common.ttypes.HostAddr()
           self.hostAddr.read(iprot)
         else:
           iprot.skip(ftype)
@@ -1433,7 +1433,7 @@ class ExecResp:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -1994,7 +1994,7 @@ class TaskDesc:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.host = common.ttypes.HostAddr()
+          self.host = nebula.common.ttypes.HostAddr()
           self.host.read(iprot)
         else:
           iprot.skip(ftype)
@@ -2292,7 +2292,7 @@ class AdminJobResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -2462,7 +2462,7 @@ class ListSpacesResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -2664,7 +2664,7 @@ class GetSpaceResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -2779,7 +2779,7 @@ class CreateTagReq:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRUCT:
-          self.schema = common.ttypes.Schema()
+          self.schema = nebula.common.ttypes.Schema()
           self.schema.read(iprot)
         else:
           iprot.skip(ftype)
@@ -2918,7 +2918,7 @@ class AlterTagReq:
           iprot.skip(ftype)
       elif fid == 4:
         if ftype == TType.STRUCT:
-          self.schema_prop = common.ttypes.SchemaProp()
+          self.schema_prop = nebula.common.ttypes.SchemaProp()
           self.schema_prop.read(iprot)
         else:
           iprot.skip(ftype)
@@ -3218,7 +3218,7 @@ class ListTagsResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -3448,13 +3448,13 @@ class GetTagResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRUCT:
-          self.schema = common.ttypes.Schema()
+          self.schema = nebula.common.ttypes.Schema()
           self.schema.read(iprot)
         else:
           iprot.skip(ftype)
@@ -3563,7 +3563,7 @@ class CreateEdgeReq:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRUCT:
-          self.schema = common.ttypes.Schema()
+          self.schema = nebula.common.ttypes.Schema()
           self.schema.read(iprot)
         else:
           iprot.skip(ftype)
@@ -3702,7 +3702,7 @@ class AlterEdgeReq:
           iprot.skip(ftype)
       elif fid == 4:
         if ftype == TType.STRUCT:
-          self.schema_prop = common.ttypes.SchemaProp()
+          self.schema_prop = nebula.common.ttypes.SchemaProp()
           self.schema_prop.read(iprot)
         else:
           iprot.skip(ftype)
@@ -3923,13 +3923,13 @@ class GetEdgeResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRUCT:
-          self.schema = common.ttypes.Schema()
+          self.schema = nebula.common.ttypes.Schema()
           self.schema.read(iprot)
         else:
           iprot.skip(ftype)
@@ -4218,7 +4218,7 @@ class ListEdgesResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -4402,7 +4402,7 @@ class ListHostsResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -4526,7 +4526,7 @@ class PartItem:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -4536,12 +4536,12 @@ class PartItem:
           (_etype135, _size132) = iprot.readListBegin()
           if _size132 >= 0:
             for _i136 in six.moves.range(_size132):
-              _elem137 = common.ttypes.HostAddr()
+              _elem137 = nebula.common.ttypes.HostAddr()
               _elem137.read(iprot)
               self.peers.append(_elem137)
           else: 
             while iprot.peekList():
-              _elem138 = common.ttypes.HostAddr()
+              _elem138 = nebula.common.ttypes.HostAddr()
               _elem138.read(iprot)
               self.peers.append(_elem138)
           iprot.readListEnd()
@@ -4553,12 +4553,12 @@ class PartItem:
           (_etype142, _size139) = iprot.readListBegin()
           if _size139 >= 0:
             for _i143 in six.moves.range(_size139):
-              _elem144 = common.ttypes.HostAddr()
+              _elem144 = nebula.common.ttypes.HostAddr()
               _elem144.read(iprot)
               self.losts.append(_elem144)
           else: 
             while iprot.peekList():
-              _elem145 = common.ttypes.HostAddr()
+              _elem145 = nebula.common.ttypes.HostAddr()
               _elem145.read(iprot)
               self.losts.append(_elem145)
           iprot.readListEnd()
@@ -4792,7 +4792,7 @@ class ListPartsResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -4994,7 +4994,7 @@ class GetPartsAllocResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -5009,12 +5009,12 @@ class GetPartsAllocResp:
               (_etype174, _size171) = iprot.readListBegin()
               if _size171 >= 0:
                 for _i175 in six.moves.range(_size171):
-                  _elem176 = common.ttypes.HostAddr()
+                  _elem176 = nebula.common.ttypes.HostAddr()
                   _elem176.read(iprot)
                   _val170.append(_elem176)
               else: 
                 while iprot.peekList():
-                  _elem177 = common.ttypes.HostAddr()
+                  _elem177 = nebula.common.ttypes.HostAddr()
                   _elem177.read(iprot)
                   _val170.append(_elem177)
               iprot.readListEnd()
@@ -5026,12 +5026,12 @@ class GetPartsAllocResp:
               (_etype183, _size180) = iprot.readListBegin()
               if _size180 >= 0:
                 for _i184 in six.moves.range(_size180):
-                  _elem185 = common.ttypes.HostAddr()
+                  _elem185 = nebula.common.ttypes.HostAddr()
                   _elem185.read(iprot)
                   _val179.append(_elem185)
               else: 
                 while iprot.peekList():
-                  _elem186 = common.ttypes.HostAddr()
+                  _elem186 = nebula.common.ttypes.HostAddr()
                   _elem186.read(iprot)
                   _val179.append(_elem186)
               iprot.readListEnd()
@@ -5148,12 +5148,12 @@ class MultiPutReq:
           (_etype193, _size190) = iprot.readListBegin()
           if _size190 >= 0:
             for _i194 in six.moves.range(_size190):
-              _elem195 = common.ttypes.Pair()
+              _elem195 = nebula.common.ttypes.Pair()
               _elem195.read(iprot)
               self.pairs.append(_elem195)
           else: 
             while iprot.peekList():
-              _elem196 = common.ttypes.Pair()
+              _elem196 = nebula.common.ttypes.Pair()
               _elem196.read(iprot)
               self.pairs.append(_elem196)
           iprot.readListEnd()
@@ -5346,7 +5346,7 @@ class GetResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -5560,7 +5560,7 @@ class MultiGetResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -5988,7 +5988,7 @@ class ScanResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -6110,7 +6110,7 @@ class HBResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -6232,7 +6232,7 @@ class HBReq:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.host = common.ttypes.HostAddr()
+          self.host = nebula.common.ttypes.HostAddr()
           self.host.read(iprot)
         else:
           iprot.skip(ftype)
@@ -6740,13 +6740,13 @@ class GetTagIndexResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRUCT:
-          self.item = common.ttypes.IndexItem()
+          self.item = nebula.common.ttypes.IndexItem()
           self.item.read(iprot)
         else:
           iprot.skip(ftype)
@@ -6928,7 +6928,7 @@ class ListTagIndexesResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -6938,12 +6938,12 @@ class ListTagIndexesResp:
           (_etype259, _size256) = iprot.readListBegin()
           if _size256 >= 0:
             for _i260 in six.moves.range(_size256):
-              _elem261 = common.ttypes.IndexItem()
+              _elem261 = nebula.common.ttypes.IndexItem()
               _elem261.read(iprot)
               self.items.append(_elem261)
           else: 
             while iprot.peekList():
-              _elem262 = common.ttypes.IndexItem()
+              _elem262 = nebula.common.ttypes.IndexItem()
               _elem262.read(iprot)
               self.items.append(_elem262)
           iprot.readListEnd()
@@ -7399,13 +7399,13 @@ class GetEdgeIndexResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRUCT:
-          self.item = common.ttypes.IndexItem()
+          self.item = nebula.common.ttypes.IndexItem()
           self.item.read(iprot)
         else:
           iprot.skip(ftype)
@@ -7587,7 +7587,7 @@ class ListEdgeIndexesResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -7597,12 +7597,12 @@ class ListEdgeIndexesResp:
           (_etype275, _size272) = iprot.readListBegin()
           if _size272 >= 0:
             for _i276 in six.moves.range(_size272):
-              _elem277 = common.ttypes.IndexItem()
+              _elem277 = nebula.common.ttypes.IndexItem()
               _elem277.read(iprot)
               self.items.append(_elem277)
           else: 
             while iprot.peekList():
-              _elem278 = common.ttypes.IndexItem()
+              _elem278 = nebula.common.ttypes.IndexItem()
               _elem278.read(iprot)
               self.items.append(_elem278)
           iprot.readListEnd()
@@ -8103,7 +8103,7 @@ class GrantRoleReq:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.role_item = common.ttypes.RoleItem()
+          self.role_item = nebula.common.ttypes.RoleItem()
           self.role_item.read(iprot)
         else:
           iprot.skip(ftype)
@@ -8183,7 +8183,7 @@ class RevokeRoleReq:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.role_item = common.ttypes.RoleItem()
+          self.role_item = nebula.common.ttypes.RoleItem()
           self.role_item.read(iprot)
         else:
           iprot.skip(ftype)
@@ -8331,7 +8331,7 @@ class ListUsersResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -8613,7 +8613,7 @@ class ListRolesResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -8623,12 +8623,12 @@ class ListRolesResp:
           (_etype294, _size291) = iprot.readListBegin()
           if _size291 >= 0:
             for _i295 in six.moves.range(_size291):
-              _elem296 = common.ttypes.RoleItem()
+              _elem296 = nebula.common.ttypes.RoleItem()
               _elem296.read(iprot)
               self.roles.append(_elem296)
           else: 
             while iprot.peekList():
-              _elem297 = common.ttypes.RoleItem()
+              _elem297 = nebula.common.ttypes.RoleItem()
               _elem297.read(iprot)
               self.roles.append(_elem297)
           iprot.readListEnd()
@@ -8853,12 +8853,12 @@ class BalanceReq:
           (_etype302, _size299) = iprot.readListBegin()
           if _size299 >= 0:
             for _i303 in six.moves.range(_size299):
-              _elem304 = common.ttypes.HostAddr()
+              _elem304 = nebula.common.ttypes.HostAddr()
               _elem304.read(iprot)
               self.host_del.append(_elem304)
           else: 
             while iprot.peekList():
-              _elem305 = common.ttypes.HostAddr()
+              _elem305 = nebula.common.ttypes.HostAddr()
               _elem305.read(iprot)
               self.host_del.append(_elem305)
           iprot.readListEnd()
@@ -9078,7 +9078,7 @@ class BalanceResp:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -9579,7 +9579,7 @@ class GetConfigResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -9889,7 +9889,7 @@ class ListConfigsResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -10320,7 +10320,7 @@ class ListSnapshotsResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -10615,7 +10615,7 @@ class ListIndexStatusResp:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.leader = common.ttypes.HostAddr()
+          self.leader = nebula.common.ttypes.HostAddr()
           self.leader.read(iprot)
         else:
           iprot.skip(ftype)
@@ -10835,7 +10835,7 @@ TagItem.thrift_spec = (
   (1, TType.I32, 'tag_id', None, None, 2, ), # 1
   (2, TType.STRING, 'tag_name', True, None, 2, ), # 2
   (3, TType.I64, 'version', None, None, 2, ), # 3
-  (4, TType.STRUCT, 'schema', [common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False], None, 2, ), # 4
+  (4, TType.STRUCT, 'schema', [nebula.common.ttypes.Schema, nebula.common.ttypes.Schema.thrift_spec, False], None, 2, ), # 4
 )
 
 TagItem.thrift_struct_annotations = {
@@ -10865,7 +10865,7 @@ all_structs.append(AlterSchemaItem)
 AlterSchemaItem.thrift_spec = (
   None, # 0
   (1, TType.I32, 'op', AlterSchemaOp, None, 2, ), # 1
-  (2, TType.STRUCT, 'schema', [common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'schema', [nebula.common.ttypes.Schema, nebula.common.ttypes.Schema.thrift_spec, False], None, 2, ), # 2
 )
 
 AlterSchemaItem.thrift_struct_annotations = {
@@ -10893,7 +10893,7 @@ EdgeItem.thrift_spec = (
   (1, TType.I32, 'edge_type', None, None, 2, ), # 1
   (2, TType.STRING, 'edge_name', True, None, 2, ), # 2
   (3, TType.I64, 'version', None, None, 2, ), # 3
-  (4, TType.STRUCT, 'schema', [common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False], None, 2, ), # 4
+  (4, TType.STRUCT, 'schema', [nebula.common.ttypes.Schema, nebula.common.ttypes.Schema.thrift_spec, False], None, 2, ), # 4
 )
 
 EdgeItem.thrift_struct_annotations = {
@@ -10922,7 +10922,7 @@ EdgeItem.__setstate__ = EdgeItem__setstate__
 all_structs.append(HostItem)
 HostItem.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'hostAddr', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'hostAddr', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 1
   (2, TType.I32, 'status', HostStatus, None, 2, ), # 2
   (3, TType.MAP, 'leader_parts', (TType.STRING,True,TType.LIST,(TType.I32,None)), None, 2, ), # 3
   (4, TType.MAP, 'all_parts', (TType.STRING,True,TType.LIST,(TType.I32,None)), None, 2, ), # 4
@@ -10956,7 +10956,7 @@ ExecResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'id', [ID, ID.thrift_spec, True], None, 2, ), # 2
-  (3, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 3
+  (3, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 3
 )
 
 ExecResp.thrift_struct_annotations = {
@@ -11100,7 +11100,7 @@ all_structs.append(TaskDesc)
 TaskDesc.thrift_spec = (
   None, # 0
   (1, TType.I32, 'task_id', None, None, 2, ), # 1
-  (2, TType.STRUCT, 'host', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'host', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.I32, 'status', JobStatus, None, 2, ), # 3
   (4, TType.I64, 'start_time', None, None, 2, ), # 4
   (5, TType.I64, 'stop_time', None, None, 2, ), # 5
@@ -11170,7 +11170,7 @@ all_structs.append(AdminJobResp)
 AdminJobResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'result', [AdminJobResult, AdminJobResult.thrift_spec, False], None, 2, ), # 3
 )
 
@@ -11208,7 +11208,7 @@ all_structs.append(ListSpacesResp)
 ListSpacesResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'spaces', (TType.STRUCT,[IdName, IdName.thrift_spec, False]), None, 2, ), # 3
 )
 
@@ -11260,7 +11260,7 @@ all_structs.append(GetSpaceResp)
 GetSpaceResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'item', [SpaceItem, SpaceItem.thrift_spec, False], None, 2, ), # 3
 )
 
@@ -11290,7 +11290,7 @@ CreateTagReq.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
   (2, TType.STRING, 'tag_name', True, None, 2, ), # 2
-  (3, TType.STRUCT, 'schema', [common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False], None, 2, ), # 3
+  (3, TType.STRUCT, 'schema', [nebula.common.ttypes.Schema, nebula.common.ttypes.Schema.thrift_spec, False], None, 2, ), # 3
   (4, TType.BOOL, 'if_not_exists', None, None, 2, ), # 4
 )
 
@@ -11323,7 +11323,7 @@ AlterTagReq.thrift_spec = (
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
   (2, TType.STRING, 'tag_name', True, None, 2, ), # 2
   (3, TType.LIST, 'tag_items', (TType.STRUCT,[AlterSchemaItem, AlterSchemaItem.thrift_spec, False]), None, 2, ), # 3
-  (4, TType.STRUCT, 'schema_prop', [common.ttypes.SchemaProp, common.ttypes.SchemaProp.thrift_spec, False], None, 2, ), # 4
+  (4, TType.STRUCT, 'schema_prop', [nebula.common.ttypes.SchemaProp, nebula.common.ttypes.SchemaProp.thrift_spec, False], None, 2, ), # 4
 )
 
 AlterTagReq.thrift_struct_annotations = {
@@ -11405,7 +11405,7 @@ all_structs.append(ListTagsResp)
 ListTagsResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'tags', (TType.STRUCT,[TagItem, TagItem.thrift_spec, False]), None, 2, ), # 3
 )
 
@@ -11463,8 +11463,8 @@ all_structs.append(GetTagResp)
 GetTagResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
-  (3, TType.STRUCT, 'schema', [common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False], None, 2, ), # 3
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.STRUCT, 'schema', [nebula.common.ttypes.Schema, nebula.common.ttypes.Schema.thrift_spec, False], None, 2, ), # 3
 )
 
 GetTagResp.thrift_struct_annotations = {
@@ -11493,7 +11493,7 @@ CreateEdgeReq.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
   (2, TType.STRING, 'edge_name', True, None, 2, ), # 2
-  (3, TType.STRUCT, 'schema', [common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False], None, 2, ), # 3
+  (3, TType.STRUCT, 'schema', [nebula.common.ttypes.Schema, nebula.common.ttypes.Schema.thrift_spec, False], None, 2, ), # 3
   (4, TType.BOOL, 'if_not_exists', None, None, 2, ), # 4
 )
 
@@ -11526,7 +11526,7 @@ AlterEdgeReq.thrift_spec = (
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
   (2, TType.STRING, 'edge_name', True, None, 2, ), # 2
   (3, TType.LIST, 'edge_items', (TType.STRUCT,[AlterSchemaItem, AlterSchemaItem.thrift_spec, False]), None, 2, ), # 3
-  (4, TType.STRUCT, 'schema_prop', [common.ttypes.SchemaProp, common.ttypes.SchemaProp.thrift_spec, False], None, 2, ), # 4
+  (4, TType.STRUCT, 'schema_prop', [nebula.common.ttypes.SchemaProp, nebula.common.ttypes.SchemaProp.thrift_spec, False], None, 2, ), # 4
 )
 
 AlterEdgeReq.thrift_struct_annotations = {
@@ -11585,8 +11585,8 @@ all_structs.append(GetEdgeResp)
 GetEdgeResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
-  (3, TType.STRUCT, 'schema', [common.ttypes.Schema, common.ttypes.Schema.thrift_spec, False], None, 2, ), # 3
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.STRUCT, 'schema', [nebula.common.ttypes.Schema, nebula.common.ttypes.Schema.thrift_spec, False], None, 2, ), # 3
 )
 
 GetEdgeResp.thrift_struct_annotations = {
@@ -11666,7 +11666,7 @@ all_structs.append(ListEdgesResp)
 ListEdgesResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'edges', (TType.STRUCT,[EdgeItem, EdgeItem.thrift_spec, False]), None, 2, ), # 3
 )
 
@@ -11704,7 +11704,7 @@ all_structs.append(ListHostsResp)
 ListHostsResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'hosts', (TType.STRUCT,[HostItem, HostItem.thrift_spec, False]), None, 2, ), # 3
 )
 
@@ -11733,9 +11733,9 @@ all_structs.append(PartItem)
 PartItem.thrift_spec = (
   None, # 0
   (1, TType.I32, 'part_id', None, None, 0, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 1, ), # 2
-  (3, TType.LIST, 'peers', (TType.STRUCT,[common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False]), None, 0, ), # 3
-  (4, TType.LIST, 'losts', (TType.STRUCT,[common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False]), None, 0, ), # 4
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 1, ), # 2
+  (3, TType.LIST, 'peers', (TType.STRUCT,[nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False]), None, 0, ), # 3
+  (4, TType.LIST, 'losts', (TType.STRUCT,[nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False]), None, 0, ), # 4
 )
 
 PartItem.thrift_struct_annotations = {
@@ -11791,7 +11791,7 @@ all_structs.append(ListPartsResp)
 ListPartsResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'parts', (TType.STRUCT,[PartItem, PartItem.thrift_spec, False]), None, 2, ), # 3
 )
 
@@ -11843,8 +11843,8 @@ all_structs.append(GetPartsAllocResp)
 GetPartsAllocResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
-  (3, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRUCT,[common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False])), None, 2, ), # 3
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRUCT,[nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False])), None, 2, ), # 3
 )
 
 GetPartsAllocResp.thrift_struct_annotations = {
@@ -11872,7 +11872,7 @@ all_structs.append(MultiPutReq)
 MultiPutReq.thrift_spec = (
   None, # 0
   (1, TType.STRING, 'segment', True, None, 2, ), # 1
-  (2, TType.LIST, 'pairs', (TType.STRUCT,[common.ttypes.Pair, common.ttypes.Pair.thrift_spec, False]), None, 2, ), # 2
+  (2, TType.LIST, 'pairs', (TType.STRUCT,[nebula.common.ttypes.Pair, nebula.common.ttypes.Pair.thrift_spec, False]), None, 2, ), # 2
 )
 
 MultiPutReq.thrift_struct_annotations = {
@@ -11924,7 +11924,7 @@ all_structs.append(GetResp)
 GetResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRING, 'value', True, None, 2, ), # 3
 )
 
@@ -11979,7 +11979,7 @@ all_structs.append(MultiGetResp)
 MultiGetResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'values', (TType.STRING,True), None, 2, ), # 3
 )
 
@@ -12092,7 +12092,7 @@ all_structs.append(ScanResp)
 ScanResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'values', (TType.STRING,True), None, 2, ), # 3
 )
 
@@ -12121,7 +12121,7 @@ all_structs.append(HBResp)
 HBResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.I64, 'cluster_id', None, None, 2, ), # 3
   (4, TType.I64, 'last_update_time_in_ms', None, None, 2, ), # 4
 )
@@ -12153,7 +12153,7 @@ all_structs.append(HBReq)
 HBReq.thrift_spec = (
   None, # 0
   (1, TType.BOOL, 'in_storaged', None, None, 2, ), # 1
-  (2, TType.STRUCT, 'host', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'host', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.I64, 'cluster_id', None, None, 2, ), # 3
   (4, TType.MAP, 'leader_partIds', (TType.I32,None,TType.LIST,(TType.I32,None)), None, 1, ), # 4
 )
@@ -12275,8 +12275,8 @@ all_structs.append(GetTagIndexResp)
 GetTagIndexResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
-  (3, TType.STRUCT, 'item', [common.ttypes.IndexItem, common.ttypes.IndexItem.thrift_spec, False], None, 2, ), # 3
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.STRUCT, 'item', [nebula.common.ttypes.IndexItem, nebula.common.ttypes.IndexItem.thrift_spec, False], None, 2, ), # 3
 )
 
 GetTagIndexResp.thrift_struct_annotations = {
@@ -12327,8 +12327,8 @@ all_structs.append(ListTagIndexesResp)
 ListTagIndexesResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
-  (3, TType.LIST, 'items', (TType.STRUCT,[common.ttypes.IndexItem, common.ttypes.IndexItem.thrift_spec, False]), None, 2, ), # 3
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.LIST, 'items', (TType.STRUCT,[nebula.common.ttypes.IndexItem, nebula.common.ttypes.IndexItem.thrift_spec, False]), None, 2, ), # 3
 )
 
 ListTagIndexesResp.thrift_struct_annotations = {
@@ -12446,8 +12446,8 @@ all_structs.append(GetEdgeIndexResp)
 GetEdgeIndexResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
-  (3, TType.STRUCT, 'item', [common.ttypes.IndexItem, common.ttypes.IndexItem.thrift_spec, False], None, 2, ), # 3
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.STRUCT, 'item', [nebula.common.ttypes.IndexItem, nebula.common.ttypes.IndexItem.thrift_spec, False], None, 2, ), # 3
 )
 
 GetEdgeIndexResp.thrift_struct_annotations = {
@@ -12498,8 +12498,8 @@ all_structs.append(ListEdgeIndexesResp)
 ListEdgeIndexesResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
-  (3, TType.LIST, 'items', (TType.STRUCT,[common.ttypes.IndexItem, common.ttypes.IndexItem.thrift_spec, False]), None, 2, ), # 3
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.LIST, 'items', (TType.STRUCT,[nebula.common.ttypes.IndexItem, nebula.common.ttypes.IndexItem.thrift_spec, False]), None, 2, ), # 3
 )
 
 ListEdgeIndexesResp.thrift_struct_annotations = {
@@ -12636,7 +12636,7 @@ AlterUserReq.__setstate__ = AlterUserReq__setstate__
 all_structs.append(GrantRoleReq)
 GrantRoleReq.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'role_item', [common.ttypes.RoleItem, common.ttypes.RoleItem.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'role_item', [nebula.common.ttypes.RoleItem, nebula.common.ttypes.RoleItem.thrift_spec, False], None, 2, ), # 1
 )
 
 GrantRoleReq.thrift_struct_annotations = {
@@ -12659,7 +12659,7 @@ GrantRoleReq.__setstate__ = GrantRoleReq__setstate__
 all_structs.append(RevokeRoleReq)
 RevokeRoleReq.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'role_item', [common.ttypes.RoleItem, common.ttypes.RoleItem.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'role_item', [nebula.common.ttypes.RoleItem, nebula.common.ttypes.RoleItem.thrift_spec, False], None, 2, ), # 1
 )
 
 RevokeRoleReq.thrift_struct_annotations = {
@@ -12692,7 +12692,7 @@ all_structs.append(ListUsersResp)
 ListUsersResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.MAP, 'users', (TType.STRING,True,TType.STRING,True), None, 2, ), # 3
 )
 
@@ -12767,8 +12767,8 @@ all_structs.append(ListRolesResp)
 ListRolesResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
-  (3, TType.LIST, 'roles', (TType.STRUCT,[common.ttypes.RoleItem, common.ttypes.RoleItem.thrift_spec, False]), None, 2, ), # 3
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.LIST, 'roles', (TType.STRUCT,[nebula.common.ttypes.RoleItem, nebula.common.ttypes.RoleItem.thrift_spec, False]), None, 2, ), # 3
 )
 
 ListRolesResp.thrift_struct_annotations = {
@@ -12826,7 +12826,7 @@ BalanceReq.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 1, ), # 1
   (2, TType.I64, 'id', None, None, 1, ), # 2
-  (3, TType.LIST, 'host_del', (TType.STRUCT,[common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False]), None, 1, ), # 3
+  (3, TType.LIST, 'host_del', (TType.STRUCT,[nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False]), None, 1, ), # 3
   (4, TType.BOOL, 'stop', None, None, 1, ), # 4
 )
 
@@ -12884,7 +12884,7 @@ BalanceResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
   (2, TType.I64, 'id', None, None, 2, ), # 2
-  (3, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 3
+  (3, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 3
   (4, TType.LIST, 'tasks', (TType.STRUCT,[BalanceTask, BalanceTask.thrift_spec, False]), None, 2, ), # 4
 )
 
@@ -13005,7 +13005,7 @@ all_structs.append(GetConfigResp)
 GetConfigResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'items', (TType.STRUCT,[ConfigItem, ConfigItem.thrift_spec, False]), None, 2, ), # 3
 )
 
@@ -13086,7 +13086,7 @@ all_structs.append(ListConfigsResp)
 ListConfigsResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'items', (TType.STRUCT,[ConfigItem, ConfigItem.thrift_spec, False]), None, 2, ), # 3
 )
 
@@ -13185,7 +13185,7 @@ all_structs.append(ListSnapshotsResp)
 ListSnapshotsResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'snapshots', (TType.STRUCT,[Snapshot, Snapshot.thrift_spec, False]), None, 2, ), # 3
 )
 
@@ -13263,7 +13263,7 @@ all_structs.append(ListIndexStatusResp)
 ListIndexStatusResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
-  (2, TType.STRUCT, 'leader', [common.ttypes.HostAddr, common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (2, TType.STRUCT, 'leader', [nebula.common.ttypes.HostAddr, nebula.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'statuses', (TType.STRUCT,[IndexStatus, IndexStatus.thrift_spec, False]), None, 2, ), # 3
 )
 

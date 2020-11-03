@@ -7,11 +7,11 @@
 import sys
 import threading
 
-from thrift.transport import TSocket
-from thrift.transport import TTransport
-from thrift.protocol import TBinaryProtocol
+from nebula.thrift.transport import TSocket
+from nebula.thrift.transport import TTransport
+from nebula.thrift.protocol import TBinaryProtocol
 
-from graph import GraphService
+from nebula.graph import GraphService
 
 
 class ConnectionPool(object):

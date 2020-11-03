@@ -15,7 +15,7 @@ import asyncio
 import prettytable
 import datetime
 
-from graph import ttypes
+from nebula.graph import ttypes
 from nebula.AsyncClient import AsyncGraphClient
 from nebula.Common import *
 
