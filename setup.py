@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='nebula-python',
-    version="1.1.0",
+    version="1.1.1",
     license = "Apache 2.0 + Common Clause 1.0",
     description='Python client for Nebula Graph',
     url='https://github.com/vesoft-inc/nebula-python',
