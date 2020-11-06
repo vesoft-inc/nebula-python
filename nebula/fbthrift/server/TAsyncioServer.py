@@ -57,8 +57,8 @@ def ThriftAsyncServerFactory(
     ssl is an instance of ssl.SSLContext. If None (default) or False SSL/TLS is
     not used.
 
-    event_handler must be a subclass of fbthrift.server.TServer. If None,
-    fbthrift.server.TServer.TServerEventHandler is used. Specify a custom handler
+    event_handler must be a subclass of thrift.server.TServer. If None,
+    thrift.server.TServer.TServerEventHandler is used. Specify a custom handler
     for custom event handling (e.g. handling new connections)
 
     Notes about the processor method handling:

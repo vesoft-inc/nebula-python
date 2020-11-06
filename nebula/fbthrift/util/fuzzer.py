@@ -425,7 +425,7 @@ class FuzzerConfiguration(object):
 
 
 class Service(object):
-    """Wrapper for a fbthrift service"""
+    """Wrapper for a thrift service"""
     def __init__(self, ttypes_module, constants_module, service_module):
         self.ttypes = ttypes_module
         self.constants = constants_module
@@ -439,12 +439,12 @@ class Service(object):
         """Load a service's methods.
 
         If exclude_ifaces is not None, it should be a collection and only
-        the method from nebula.fbthrift interfaces not included in that collection will
+        the method from thrift interfaces not included in that collection will
         be considered."""
 
         exclude_ifaces = exclude_ifaces or []
 
-        # Can only have single inheritance in fbthrift
+        # Can only have single inheritance in thrift
         thrift_inheritance_chain = self.service.Iface.__mro__
 
         methods = {}
@@ -741,7 +741,7 @@ class FuzzTester(object):
                 method_name, FuzzTester.Result.UserDefinedException)
             if self.config.loglevel == "DEBUG":
                 with self.timer.time(method_name, "Logging"):
-                    logging.debug("Got fbthrift exception: %r" % e)
+                    logging.debug("Got thrift exception: %r" % e)
                     logging.debug("Exception thrown by call: %s" % (
                         self._call_string(method_name, kwargs)))
 

@@ -224,7 +224,7 @@ def write_result(result, reply_type, seqid,
         oprot.trans.flush()
 
     except Exception as e:
-        # Handle any fbthrift serialization exceptions
+        # Handle any thrift serialization exceptions
 
         # Transport is likely in a messed up state. Some data may already have
         # been written and it may not be possible to recover. Doing nothing

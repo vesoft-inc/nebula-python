@@ -1,5 +1,5 @@
 """
-Classes for generating random values for fbthrift types
+Classes for generating random values for thrift types
 """
 
 from __future__ import absolute_import
@@ -44,7 +44,7 @@ class BaseRandomizer(object):
 
     Class Attributes:
 
-    name (str): The name of the fbthrift type.
+    name (str): The name of the thrift type.
 
     ttype (int (enum)): The attribute of Thrift.TTypes corresponding to the type
 
@@ -54,7 +54,7 @@ class BaseRandomizer(object):
     Instance Attributes:
 
     spec_args (tuple): The Thrift spec_args tuple. Provides additional
-    information about the field beyond fbthrift type.
+    information about the field beyond thrift type.
 
     state (RandomizerState): State attributes to be preserved across randomizer
     components in recursive and nested randomizer structures. Includes
@@ -80,7 +80,7 @@ class BaseRandomizer(object):
         """
         Get the name of this type that should be used to index into the
         type constraint stack dictionary. For basic types, it should
-        be the name of the fbthrift type. For collection types it should
+        be the name of the thrift type. For collection types it should
         include <brackets> with the element type. For user-defined types
         it should be the user-defined name.
         """
@@ -88,7 +88,7 @@ class BaseRandomizer(object):
 
     def __init__(self, spec_args, state, constraints):
         """
-        spec_args: fbthrift arguments for this field
+        spec_args: thrift arguments for this field
         state: RandomizerState instance
         constraints: dict of constraints specific to this randomizer
         """
@@ -205,7 +205,7 @@ class BaseRandomizer(object):
         Seeds must be specified as JSON, so they may not always match
         the type that this randomizer is expected to generate. This method
         converts the result of json.loads(seed) to a value with the expected
-        fbthrift type.
+        thrift type.
 
         For example,
         an int seed may be "3", which evaluates to 3. A Point struct seed may
@@ -704,7 +704,7 @@ class StructRandomizer(BaseRandomizer):
         return INFINITY
 
     def _field_is_required(self, required_value):
-        """Enum defined in /fbthrift/compiler/parse/t_field.h:
+        """Enum defined in /thrift/compiler/parse/t_field.h:
 
         T_REQUIRED = 0
         T_OPTIONAL = 1

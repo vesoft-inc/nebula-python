@@ -58,7 +58,7 @@ class TMessageType:
 
 
 class TPriority:
-    """ apache::fbthrift::concurrency::PRIORITY """
+    """ apache::thrift::concurrency::PRIORITY """
     HIGH_IMPORTANT = 0
     HIGH = 1
     IMPORTANT = 2
@@ -79,7 +79,7 @@ class TRequestContext:
 
 
 class TProcessorEventHandler:
-    """Event handler for fbthrift processors"""
+    """Event handler for thrift processors"""
     # TODO: implement asyncComplete for Twisted
 
     def getHandlerContext(self, fn_name, server_context):
@@ -110,7 +110,7 @@ class TProcessorEventHandler:
         """Called if (and only if) the handler threw an unexpected exception.
 
         Note that this method is NOT called if the handler threw an
-        exception that is declared in the fbthrift service specification"""
+        exception that is declared in the thrift service specification"""
         pass
 
 
@@ -226,7 +226,7 @@ class TProcessor:
             oprot.trans.flush()
 
         except Exception as e:
-            # Handle any fbthrift serialization exceptions
+            # Handle any thrift serialization exceptions
 
             # Transport is likely in a messed up state. Some data may already have
             # been written and it may not be possible to recover. Doing nothing
@@ -248,7 +248,7 @@ class TProcessor:
 
 class TException(Exception):
 
-    """Base class for all fbthrift exceptions."""
+    """Base class for all thrift exceptions."""
 
     # BaseException.message is deprecated in Python v[2.6,3.0)
     if (2, 6, 0) <= sys.version_info < (3, 0):
@@ -267,7 +267,7 @@ class TException(Exception):
 
 class TApplicationException(TException):
 
-    """Application level fbthrift exceptions."""
+    """Application level thrift exceptions."""
 
     UNKNOWN = 0
     UNKNOWN_METHOD = 1

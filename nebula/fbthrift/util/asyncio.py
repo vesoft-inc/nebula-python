@@ -42,7 +42,7 @@ def create_client(
         client_type=None
 ):
     """
-    create an asyncio fbthrift client and return an async context
+    create an asyncio thrift client and return an async context
     manager that can be used as follows:
 
     async with create_client(smc2_client, port=1421) as smc:
@@ -58,7 +58,7 @@ def create_client(
     with (yield from create_client(smc2_client, port=1421) as smc:
         yield from smc.getStatus()
 
-    :param client_klass: fbthrift Client class
+    :param client_klass: thrift Client class
     :param host: hostname/ip, None = loopback
     :param port: port number
     :param sock: socket.socket object

@@ -188,7 +188,7 @@ class ThriftSpec():
 
 class StructSpec(ThriftSpec):
     '''
-    Wraps thrift_spec of a fbthrift struct.
+    Wraps thrift_spec of a thrift struct.
     '''
     def readFieldBegin(self, fname, guess_func):
         field_spec = None

@@ -133,7 +133,7 @@ class THttpClient(TTransportBase):
         if not self.__custom_headers or 'Host' not in self.__custom_headers:
             self.__http.putheader('Host', self.http_host)
 
-        self.__http.putheader('Content-Type', 'application/x-fbthrift')
+        self.__http.putheader('Content-Type', 'application/x-thrift')
         self.__http.putheader('Content-Length', str(len(data)))
 
         if not self.__custom_headers or 'User-Agent' not in \

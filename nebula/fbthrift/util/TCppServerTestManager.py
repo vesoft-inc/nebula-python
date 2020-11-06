@@ -16,7 +16,7 @@ class TCppServerTestManager(object):
     Basic example:
 
         from mylib import MyServiceHandler
-        from nebula.fbthrift.util.TCppServerTestManager import TCppServerTestManager
+        from thrift.util.TCppServerTestManager import TCppServerTestManager
 
         class MyServiceTest(unittest.TestCase)
 
@@ -24,7 +24,7 @@ class TCppServerTestManager(object):
                 handler = MyServiceHandler()  # derived from MyService.Iface
                 with TCppServerTestManager(handler) as server:
                     host, port = server.addr()
-                    # Talk to the server using fbthrift in here....
+                    # Talk to the server using thrift in here....
 
     See the unit-tests for this class for better-worked-out examples.
     """

@@ -32,7 +32,7 @@ StructField = namedtuple('StructField',
 
 def create_client(client_klass, host=None, port=None, client_type=None):
     """
-    Given a fbthrift client class, and a host/port
+    Given a thrift client class, and a host/port
     return a client using HeaderTransport
     """
     from nebula.fbthrift.transport.TSocket import TSocket
@@ -50,7 +50,7 @@ def create_client(client_klass, host=None, port=None, client_type=None):
 
 def parse_struct_spec(struct):
     """
-    Given a fbthrift struct return a generator of parsed field information
+    Given a thrift struct return a generator of parsed field information
 
     StructField fields:
         id - the field number
@@ -61,7 +61,7 @@ def parse_struct_spec(struct):
         req_type - the field required setting
             (0: Required, 1: Optional, 2: Optional IN, Required OUT)
 
-    :param struct: a fbthrift struct
+    :param struct: a thrift struct
     :return: a generator of StructField tuples
     """
     for field in struct.thrift_spec:
@@ -73,7 +73,7 @@ def parse_struct_spec(struct):
 def struct_to_dict(struct, defaults=False):
     """
     Given a Thrift Struct convert it into a dict
-    :param struct: a fbthrift struct
+    :param struct: a thrift struct
     :param defaults: return default values
     :return: OrderedDict
     """

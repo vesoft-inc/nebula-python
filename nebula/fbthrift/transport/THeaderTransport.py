@@ -618,5 +618,5 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         # Prepare a response header, to be sent later.
         self.send_response(200)
-        self.send_header("content-type", "application/x-fbthrift")
+        self.send_header("content-type", "application/x-thrift")
         self.end_headers()

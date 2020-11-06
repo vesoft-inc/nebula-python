@@ -25,7 +25,7 @@ from __future__ import unicode_literals
 from nebula.fbthrift.Thrift import TType
 
 import logging
-_log = logging.getLogger('fbthrift.validator')
+_log = logging.getLogger('thrift.validator')
 
 import sys
 if sys.version_info[0] >= 3:
@@ -54,7 +54,7 @@ class TValidator:
 
     def validate(self, msg):
         if not hasattr(msg, 'thrift_spec'):
-            _log.error("Not a valid fbthrift object")
+            _log.error("Not a valid thrift object")
             return False
 
         name = msg.__class__.__name__
@@ -62,7 +62,7 @@ class TValidator:
 
     def check_basic(self, name, value, thrift_type):
         if thrift_type not in self.tinfo:
-            _log.warn("%s Unrecognized fbthrift type %d. No validation done!",
+            _log.warn("%s Unrecognized thrift type %d. No validation done!",
                     name, thrift_type)
             return True
 
@@ -125,7 +125,7 @@ class TValidator:
     def check_struct(self, name, value, specs):
         _log.debug('%s - STRUCT check:', name)
         if specs is None:
-            _log.error("%s - Empty fbthrift specs, can not be validated", name)
+            _log.error("%s - Empty thrift specs, can not be validated", name)
             return False
 
         ok = True
