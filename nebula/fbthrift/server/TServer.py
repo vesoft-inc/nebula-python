@@ -49,7 +49,7 @@ class TConnectionContext:
 
 
 class TRpcConnectionContext(TConnectionContext):
-    """Connection context class for fbthrift RPC calls"""
+    """Connection context class for thrift RPC calls"""
     def __init__(self, client_socket, iprot=None, oprot=None):
         """Initializer.
 

@@ -23,13 +23,13 @@ def create_client(client_klass,
                   timeouts=None,
                   client_type=None):
     """
-    create a Trollius fbthrift client and return a context manager for it
+    create a Trollius thrift client and return a context manager for it
     This is a coroutine
-    :param client_klass: fbthrift Client class
+    :param client_klass: thrift Client class
     :param host: hostname/ip, None = loopback
     :param port: port number
     :param loop: Trollius event loop
-    :returns: a Context manager which provides the fbthrift client
+    :returns: a Context manager which provides the thrift client
     """
     if not loop:
         loop = asyncio.get_event_loop()
@@ -47,7 +47,7 @@ def create_client(client_klass,
 
 
 def call_as_future(callable, loop, *args, **kwargs):
-    """This is a copy of fbthrift.util.asyncio. So, let's consider unifying them.
+    """This is a copy of thrift.util.asyncio. So, let's consider unifying them.
 
         call_as_future(callable, *args, **kwargs) -> trollius.Task
 
