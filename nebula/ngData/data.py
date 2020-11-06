@@ -85,7 +85,7 @@ class RowReader:
                     ver |= ord(value[self._offset]) << 8
                 else:
                     ver |= value[self._offset] << 8
-                self._offSet += 1
+                self._offset += 1
         if ver != schema_version:
             raise Exception('parsed version %d is not equal to version %d provided', ver, schema_version)
         self._offset += blk_off_bytes_num * (self._field_num // 16)
