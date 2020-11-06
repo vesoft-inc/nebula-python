@@ -7,8 +7,8 @@
 
 import logging
 
-from meta.MetaService import Client
-from storage.ttypes import ScanVertexResponse
+from nebula.meta.MetaService import Client
+from nebula.storage.ttypes import ScanVertexResponse
 
 from nebula.ngData.data import Row
 from nebula.ngData.data import RowReader

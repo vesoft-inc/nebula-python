@@ -15,24 +15,24 @@ from nebula.fbthrift.transport import TTransport
 from nebula.fbthrift.transport import TSocket
 from nebula.fbthrift.protocol import TBinaryProtocol
 
-from meta.MetaService import Client
-from meta.ttypes import EdgeItem
-from meta.ttypes import ErrorCode
-from meta.ttypes import GetEdgeReq
-from meta.ttypes import GetEdgeResp
-from meta.ttypes import GetPartsAllocReq
-from meta.ttypes import GetPartsAllocResp
-from meta.ttypes import GetTagReq
-from meta.ttypes import GetTagResp
-from meta.ttypes import ListHostsReq
-from meta.ttypes import ListHostsResp
-from meta.ttypes import ListEdgesReq
-from meta.ttypes import ListEdgesResp
-from meta.ttypes import ListSpacesReq
-from meta.ttypes import ListSpacesResp
-from meta.ttypes import ListTagsReq
-from meta.ttypes import ListTagsResp
-from meta.ttypes import TagItem
+from nebula.meta.MetaService import Client
+from nebula.meta.ttypes import EdgeItem
+from nebula.meta.ttypes import ErrorCode
+from nebula.meta.ttypes import GetEdgeReq
+from nebula.meta.ttypes import GetEdgeResp
+from nebula.meta.ttypes import GetPartsAllocReq
+from nebula.meta.ttypes import GetPartsAllocResp
+from nebula.meta.ttypes import GetTagReq
+from nebula.meta.ttypes import GetTagResp
+from nebula.meta.ttypes import ListHostsReq
+from nebula.meta.ttypes import ListHostsResp
+from nebula.meta.ttypes import ListEdgesReq
+from nebula.meta.ttypes import ListEdgesResp
+from nebula.meta.ttypes import ListSpacesReq
+from nebula.meta.ttypes import ListSpacesResp
+from nebula.meta.ttypes import ListTagsReq
+from nebula.meta.ttypes import ListTagsResp
+from nebula.meta.ttypes import TagItem
 
 if six.PY3:
     Timer = threading.Timer
