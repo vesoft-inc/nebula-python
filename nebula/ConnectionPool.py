@@ -7,9 +7,9 @@
 import sys
 import threading
 
-from nebula.thrift.transport import TSocket
-from nebula.thrift.transport import TTransport
-from nebula.thrift.protocol import TBinaryProtocol
+from nebula.fbthrift.transport import TSocket
+from nebula.fbthrift.transport import TTransport
+from nebula.fbthrift.protocol import TBinaryProtocol
 
 from nebula.graph import GraphService
 
@@ -72,7 +72,7 @@ class ConnectionPool(object):
             return None
 
     def return_connection(self, conn):
-        """ return a thrift connection to the pool.
+        """ return a fbthrift connection to the pool.
         Returns: None
         """
         if self._closed:

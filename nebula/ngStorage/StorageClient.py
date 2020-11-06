@@ -10,9 +10,9 @@ import struct
 import random
 import logging
 
-from thrift.transport import TTransport
-from thrift.transport import TSocket
-from thrift.protocol import TBinaryProtocol
+from nebula.fbthrift.transport import TTransport
+from nebula.fbthrift.transport import TSocket
+from nebula.fbthrift.protocol import TBinaryProtocol
 
 from storage.StorageService import Client
 from storage.ttypes import EntryId

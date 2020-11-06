@@ -7,9 +7,9 @@
 
 from __future__ import absolute_import
 import six
-from thrift.util.Recursive import fix_spec
-from thrift.Thrift import *
-from thrift.protocol.TProtocol import TProtocolException
+from nebula.fbthrift.util.Recursive import fix_spec
+from nebula.fbthrift.Thrift import *
+from nebula.fbthrift.protocol.TProtocol import TProtocolException
 
 
 

@@ -7,33 +7,33 @@
 
 from __future__ import absolute_import
 import six
-from thrift.util.Recursive import fix_spec
-from thrift.Thrift import *
-from thrift.protocol.TProtocol import TProtocolException
+from nebula.fbthrift.util.Recursive import fix_spec
+from nebula.fbthrift.Thrift import *
+from nebula.fbthrift.protocol.TProtocol import TProtocolException
 
 
 from .ttypes import *
 import nebula.common.ttypes
 
-from thrift.Thrift import TProcessor
+from nebula.fbthrift.Thrift import TProcessor
 import pprint
 import warnings
-from thrift import Thrift
-from thrift.transport import TTransport
-from thrift.protocol import TBinaryProtocol
-from thrift.protocol import TCompactProtocol
-from thrift.protocol import THeaderProtocol
+from nebula.fbthrift import Thrift
+from nebula.fbthrift.transport import TTransport
+from nebula.fbthrift.protocol import TBinaryProtocol
+from nebula.fbthrift.protocol import TCompactProtocol
+from nebula.fbthrift.protocol import THeaderProtocol
 fastproto = None
 if not '__pypy__' in sys.builtin_module_names:
   try:
-    from thrift.protocol import fastproto
+    from nebula.fbthrift.protocol import fastproto
   except:
     pass
 
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-from thrift.util.Decorators import *
+from nebula.fbthrift.util.Decorators import *
 
 class Iface:
   def getBound(self, req=None):

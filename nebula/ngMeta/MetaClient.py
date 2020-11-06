@@ -11,9 +11,9 @@ import struct
 import six
 import threading
 import logging
-from thrift.transport import TTransport
-from thrift.transport import TSocket
-from thrift.protocol import TBinaryProtocol
+from nebula.fbthrift.transport import TTransport
+from nebula.fbthrift.transport import TSocket
+from nebula.fbthrift.protocol import TBinaryProtocol
 
 from meta.MetaService import Client
 from meta.ttypes import EdgeItem
