@@ -8,9 +8,9 @@
 import asyncio
 
 from .Common import *
-from nebula.thrift.transport import TSocket
-from nebula.thrift.transport import TTransport
-from nebula.thrift.protocol import TBinaryProtocol
+from nebula.fbthrift.transport import TSocket
+from nebula.fbthrift.transport import TTransport
+from nebula.fbthrift.protocol import TBinaryProtocol
 
 from nebula.graph import AsyncGraphService
 

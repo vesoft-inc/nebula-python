@@ -38,8 +38,8 @@ if (not sys.argv[0].endswith("par") and
 from . import MetaService
 from . import ttypes
 
-from thrift.util.remote import Function
-from thrift.remote import Remote
+from nebula.fbthrift.util.remote import Function
+from nebula.fbthrift.remote import Remote
 
 FUNCTIONS = {
     'createSpace': Function('createSpace', 'MetaService', 'ExecResp', [('CreateSpaceReq', 'req', 'CreateSpaceReq')]),

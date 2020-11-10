@@ -10,17 +10,17 @@ import struct
 import random
 import logging
 
-from thrift.transport import TTransport
-from thrift.transport import TSocket
-from thrift.protocol import TBinaryProtocol
+from nebula.fbthrift.transport import TTransport
+from nebula.fbthrift.transport import TSocket
+from nebula.fbthrift.protocol import TBinaryProtocol
 
-from storage.StorageService import Client
-from storage.ttypes import EntryId
-from storage.ttypes import PropDef
-from storage.ttypes import PropOwner
-from storage.ttypes import ScanEdgeRequest
-from storage.ttypes import ScanVertexRequest
-from storage.ttypes import ErrorCode
+from nebula.storage.StorageService import Client
+from nebula.storage.ttypes import EntryId
+from nebula.storage.ttypes import PropDef
+from nebula.storage.ttypes import PropOwner
+from nebula.storage.ttypes import ScanEdgeRequest
+from nebula.storage.ttypes import ScanVertexRequest
+from nebula.storage.ttypes import ErrorCode
 
 class Iterator:
   def __init__(self, it=None):

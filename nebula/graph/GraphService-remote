@@ -38,8 +38,8 @@ if (not sys.argv[0].endswith("par") and
 from . import GraphService
 from . import ttypes
 
-from thrift.util.remote import Function
-from thrift.remote import Remote
+from nebula.fbthrift.util.remote import Function
+from nebula.fbthrift.remote import Remote
 
 FUNCTIONS = {
     'authenticate': Function('authenticate', 'GraphService', 'AuthResponse', [('string', 'username', 'string'), ('string', 'password', 'string')]),
