@@ -36,6 +36,6 @@ jobs:
         sleep 10
         popd
         popd
-        cd python/tests
+        cd tests
         pytest -s -v
 
