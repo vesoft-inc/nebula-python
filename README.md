@@ -28,11 +28,11 @@ This directory provides Nebula client API in Python. It used to connect NebulaGr
     |
     |-- setup.py                      // used to install or package
     |
-    |__ README.md                     // the introduce of nebula2-python
+    |__ README.md                     // the introduce of nebula-python 2.0
 
 ```
 
-## How to get nebula2-python
+## How to get nebula-python 2.0
 
 ### Option One: cloning from GitHub
 
@@ -60,7 +60,7 @@ When your environment cannot access `pypi`, you need to manually install the fol
 ### Option Two: using pip
 
 ```python
-pip install nebula2-python
+pip install nebula-python=='2.0.0b'
 ```
 
 ## Quick Example
@@ -93,7 +93,7 @@ connection_pool.close()
 
 ## How to choose nebula-python
 
-| Nebula2-Python Version | NebulaGraph Version |
+| Nebula-Python Version | NebulaGraph Version |
 |---|---|
-| 2.0.0beta  | 2.0.0beta |
+| 2.0.0b  | 2.0.0beta |
 
