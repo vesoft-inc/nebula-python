@@ -175,6 +175,15 @@ class TestSession(TestCase):
         self.pool._check_delay = 2
         assert self.pool.init(self.addresses, self.configs)
         assert self.pool.connnects() == 2
+        assert self.pool.in_used_connects() == 0
+
+    def test_release_by_del(self):
+        def get_local_session(pool):
+            session = pool.get_session('root', 'nebula')
+            assert pool.in_used_connects() == 1
+
+        get_local_session(self.pool)
+        self.pool.in_used_connects() == 0
 
     def test_reconnect(self):
         try:
@@ -247,3 +256,4 @@ def test_multi_thread():
 
     pool.close()
     assert success_flag
+

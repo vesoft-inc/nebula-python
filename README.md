@@ -95,5 +95,5 @@ connection_pool.close()
 
 | Nebula2-Python Version | NebulaGraph Version |
 |---|---|
-| 2.0.0-alpha  | 2.0.0-alpha |
+| 2.0.0beta  | 2.0.0beta |
 

@@ -29,8 +29,8 @@ class ResultSet(object):
         return self._resp.error_code
 
     def space_name(self):
-        if self._resp.error_msg is None:
-            return None
+        if self._resp.space_name is None:
+            return ''
         return self._resp.space_name.decode(self._decode_type)
 
     def error_msg(self):
