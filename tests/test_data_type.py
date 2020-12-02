@@ -10,6 +10,8 @@ import sys
 import os
 from datetime import date
 
+from nebula2.Exception import InvalidKeyException
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
@@ -211,13 +213,16 @@ class TesValueWrapper(TestBaseCase):
 
         list_val = value_wrapper.as_list()
         assert isinstance(list_val, list)
+        expect_result = [ValueWrapper(ttypes.Value(sVal=b"word")),
+                         ValueWrapper(ttypes.Value(sVal=b"car"))]
+        assert list_val == expect_result
 
     def test_as_set(self):
         value = ttypes.Value()
         str_val1 = ttypes.Value()
         str_val1.set_sVal(b"word")
         str_val2 = ttypes.Value()
-        str_val2.set_uVal(b"car")
+        str_val2.set_sVal(b"car")
         set_val = Set()
         set_val.values = set()
         set_val.values.add(str_val1)
@@ -228,6 +233,10 @@ class TesValueWrapper(TestBaseCase):
 
         set_val = value_wrapper.as_set()
         assert isinstance(set_val, set)
+        expect_result = set()
+        expect_result.add(ValueWrapper(ttypes.Value(sVal=b"word")))
+        expect_result.add(ValueWrapper(ttypes.Value(sVal=b"car")))
+        assert set_val == expect_result
 
     def test_as_map(self):
         value = ttypes.Value()
@@ -241,6 +250,10 @@ class TesValueWrapper(TestBaseCase):
 
         map_val = value_wrapper.as_map()
         assert isinstance(map_val, dict)
+        expect_result = dict()
+        expect_result["a"] = ValueWrapper(ttypes.Value(sVal=b"word"))
+        expect_result["b"] = ValueWrapper(ttypes.Value(sVal=b"car"))
+        assert map_val == expect_result
 
     def test_as_node(self):
         value = ttypes.Value()
@@ -351,6 +364,8 @@ class TestResultset(TestBaseCase):
         assert result.comment() == "Permission"
         assert result.error_msg() == "Permission"
         assert result.error_code() == graphTtype.ErrorCode.E_BAD_PERMISSION
+        assert result.plan_desc() is None
+        assert result.latency() == 100
         assert not result.is_empty()
         assert not result.is_succeeded()
         assert result.keys() == ["col1_empty",
@@ -370,10 +385,23 @@ class TestResultset(TestBaseCase):
                                  "col15_path"]
         assert result.col_size() == 15
         assert result.row_size() == 1
+
+        # test column_values
         assert len(result.column_values("col6_string")) == 1
+        assert result.column_values("col6_string")[0].is_string()
+        assert result.column_values("col6_string")[0].as_string() == "hello world"
+        # test row_values
         assert len(result.row_values(0)) == 15
+        assert result.row_values(0)[5].is_string()
+        assert result.row_values(0)[5].as_string() == "hello world"
+
+        # test rows
         assert len(result.rows()) == 1
+        assert len(result.rows()[0].values) == 15
+        assert isinstance(result.rows()[0].values[0], Value)
         assert isinstance(result.get_row_types(), list)
+
+        # test get_row_types
         assert result.get_row_types() == [ttypes.Value.__EMPTY__,
                                           ttypes.Value.NVAL,
                                           ttypes.Value.BVAL,
@@ -389,3 +417,53 @@ class TestResultset(TestBaseCase):
                                           ttypes.Value.VVAL,
                                           ttypes.Value.EVAL,
                                           ttypes.Value.PVAL]
+
+        # test record
+        for record in result:
+            record.size() == 15
+
+            # test values()
+            values = record.values()
+            assert len(record.values()) == 15
+            assert record.values()[0].is_empty()
+            assert record.values()[5].is_string()
+            assert record.values()[5].is_string()
+            assert record.values()[5].as_string() == "hello world"
+
+            # test get_value()
+            assert record.get_value(0).is_empty()
+            assert values[0].is_empty()
+            assert record.get_value(1).is_null()
+
+            # test get_value_by_key()
+            assert record.get_value_by_key('col2_null').is_null()
+            assert record.get_value_by_key('col3_bool').is_bool()
+            assert not record.get_value_by_key('col3_bool').as_bool()
+
+            # get_value_by_key with not exited key
+            try:
+                record.get_value_by_key('not existed')
+                assert False, 'Not expect here'
+            except InvalidKeyException as e:
+                assert True
+                assert e.message == "KeyError: `not existed'"
+            assert values[1].is_null()
+            assert record.get_value(2).is_bool()
+            assert not record.get_value(2).as_bool()
+            assert record.get_value(2).is_bool()
+            assert record.get_value(3).is_int()
+            assert record.get_value(3).as_int() == 100
+            assert record.get_value(4).is_double()
+            assert record.get_value(4).as_double() == 10.01
+            assert record.get_value(5).is_string()
+            assert record.get_value(5).as_string() == "hello world"
+            assert record.get_value(6).is_list()
+            assert record.get_value(7).is_set()
+            assert record.get_value(8).is_map()
+            assert record.get_value(9).is_time()
+            assert record.get_value(10).is_date()
+            assert record.get_value(11).is_datetime()
+            assert record.get_value(12).is_vertex()
+            assert record.get_value(13).is_edge()
+            assert record.get_value(14).is_path()
+
