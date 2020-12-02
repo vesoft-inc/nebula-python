@@ -6,6 +6,7 @@
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
+
 from nebula2.common import ttypes
 from nebula2.Exception import (
     InvalidValueTypeException,
@@ -30,22 +31,30 @@ class Record(object):
         return len(self._names)
 
     def get_value(self, index):
-        '''
+        """
         get value by index
         :return: Value
-        '''
+        """
         if index >= len(self._names):
             raise OutOfRangeException()
         return self._record[index]
 
-    def get_value(self, key):
-        '''
+    def get_value_by_key(self, key):
+        """
         get value by key
         :return: Value
-        '''
-        if key not in self._names:
+        """
+        try:
+            return self._record[self._names.index(key)]
+        except Exception:
             raise InvalidKeyException(key)
-        return self._record[self._names[key]]
+
+    def keys(self):
+        """
+        keys()
+        :return: the col name of the recod
+        """
+        return self._names
 
     def values(self):
         return self._record
@@ -86,7 +95,7 @@ class DataSetWrapper(object):
         return self._data_set.rows
 
     def get_row_types(self):
-        '''
+        """
         Get row types
         :param empty
         :return: list<int>
@@ -106,27 +115,27 @@ class DataSetWrapper(object):
           ttypes.Value.MVAL = 13
           ttypes.Value.UVAL = 14
           ttypes.Value.GVAL = 15
-        '''
+        """
         if len(self._data_set.rows) == 0:
             return []
         return [(value.getType()) for value in self._data_set.rows[0].values]
 
     def row_values(self, row_index):
-        '''
+        """
         Get row values
         :param index: the Record index
         :return: list<ValueWrapper>
-        '''
+        """
         if row_index >= len(self._data_set.rows):
             raise OutOfRangeException()
         return [(ValueWrapper(value)) for value in self._data_set.rows[row_index].values]
 
     def column_values(self, key):
-        '''
+        """
         get column values
         :param key: the col name
         :return: list<ValueWrapper>
-        '''
+        """
         if key not in self._column_names:
             raise InvalidKeyException(key)
 
@@ -138,12 +147,15 @@ class DataSetWrapper(object):
     def __next__(self):
         '''
         The record iterator
-        :return: recode
+        :return: record
         '''
         if len(self._data_set.rows) == 0 or self._pos >= len(self._data_set.rows) - 1:
             raise StopIteration
         self._pos = self._pos + 1
         return Record(self._data_set.rows[self._pos].values, self._column_names)
+
+    def __repr__(self):
+        return "{}({})".format(self.__class__.__name__, self._data_set)
 
 
 class ValueWrapper(object):
@@ -266,8 +278,8 @@ class ValueWrapper(object):
         if self._value.getType() == ttypes.Value.MVAL:
             result = {}
             kvs = self._value.get_mVal()
-            for key in kvs:
-                result[key] = ValueWrapper(kvs[key])
+            for key in kvs.keys():
+                result[key.decode(self._decode_type)] = ValueWrapper(kvs[key])
             return result
         raise InvalidValueTypeException("expect map type, but is " + self._get_type_name())
 
@@ -340,9 +352,18 @@ class ValueWrapper(object):
             return self.as_set() == o.as_set()
         elif self.is_map():
             return self.as_map() == o.as_map()
+        elif self.is_vertex():
+            return self.as_node() == o.as_node()
+        elif self.is_edge():
+            return self.as_relationship() == o.as_relationship()
+        elif self.is_path():
+            return self.as_path() == o.as_path()
         else:
             raise RuntimeError('Unsupported type:{} to compare'.format(self._get_type_name()))
         return False
+
+    def __repr__(self):
+        return "{}({})".format(self.__class__.__name__, self._value)
 
     def __hash__(self):
         return self._value.__hash__()

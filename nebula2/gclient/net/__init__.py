@@ -353,7 +353,7 @@ class Connection(object):
         except TTransportException as te:
             if te.type == TTransportException.END_OF_FILE:
                 self.close()
-            raise IOErrorException(IOErrorException.E_CONNECT_BROKEN)
+            raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
 
     def execute(self, session_id, stmt):
         try:
@@ -362,7 +362,7 @@ class Connection(object):
         except TTransportException as te:
             if te.type == TTransportException.END_OF_FILE:
                 self.close()
-            raise IOErrorException(IOErrorException.E_CONNECT_BROKEN)
+            raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
 
     def signout(self, session_id):
         try:

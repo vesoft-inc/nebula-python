@@ -10,10 +10,10 @@ from setuptools import setup, find_packages
 
 setup(
     name='nebula2-python',
-    version="v2.0.0beta",
+    version='2.0.0-be',
     license="Apache 2.0 + Common Clause 1.0",
     description='Python client for Nebula Graph V2.0',
-    url='https://github.com/vesoft-inc/nebula-clients',
+    url='https://github.com/vesoft-inc/nebula-python',
     install_requires=['httplib2',
                       'future',
                       'six',
