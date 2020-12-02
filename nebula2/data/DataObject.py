@@ -49,6 +49,13 @@ class Record(object):
         except Exception:
             raise InvalidKeyException(key)
 
+    def keys(self):
+        """
+        keys()
+        :return: the col name of the recod
+        """
+        return self._names
+
     def values(self):
         return self._record
 

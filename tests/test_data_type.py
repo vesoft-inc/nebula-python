@@ -10,12 +10,12 @@ import sys
 import os
 from datetime import date
 
-from nebula2.Exception import InvalidKeyException
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
+from nebula2.Exception import InvalidKeyException
 from nebula2.common.ttypes import Value, NullType, Time, DateTime, Set
 from nebula2.common import ttypes
 from nebula2.graph import ttypes as graphTtype
@@ -368,21 +368,22 @@ class TestResultset(TestBaseCase):
         assert result.latency() == 100
         assert not result.is_empty()
         assert not result.is_succeeded()
-        assert result.keys() == ["col1_empty",
-                                 "col2_null",
-                                 "col3_bool",
-                                 "col4_int",
-                                 "col5_double",
-                                 "col6_string",
-                                 "col7_list",
-                                 "col8_set",
-                                 "col9_map",
-                                 "col10_time",
-                                 "col11_date",
-                                 "col12_datetime",
-                                 "col13_vertex",
-                                 "col14_edge",
-                                 "col15_path"]
+        expect_keys = ["col1_empty",
+                       "col2_null",
+                       "col3_bool",
+                       "col4_int",
+                       "col5_double",
+                       "col6_string",
+                       "col7_list",
+                       "col8_set",
+                       "col9_map",
+                       "col10_time",
+                       "col11_date",
+                       "col12_datetime",
+                       "col13_vertex",
+                       "col14_edge",
+                       "col15_path"]
+        assert result.keys() == expect_keys
         assert result.col_size() == 15
         assert result.row_size() == 1
 
@@ -422,6 +423,8 @@ class TestResultset(TestBaseCase):
         for record in result:
             record.size() == 15
 
+            # test keys()
+            assert record.keys() == expect_keys
             # test values()
             values = record.values()
             assert len(record.values()) == 15
