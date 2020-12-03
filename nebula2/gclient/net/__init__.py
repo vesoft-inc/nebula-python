@@ -120,7 +120,6 @@ class ConnectionPool(object):
         self._pos = -1
         self._check_delay = 60  # unit seconds
         self._close = False
-        self._init = False
 
     def __del__(self):
         self.close()
@@ -134,7 +133,7 @@ class ConnectionPool(object):
         """
         if self._close:
             logging.error('The pool has init or closed.')
-            return False
+            raise RuntimeError('The pool has init or closed.')
         self._configs = configs
         for address in addresses:
             if address not in self._addresses:
@@ -142,9 +141,10 @@ class ConnectionPool(object):
                     ip = socket.gethostbyname(address[0])
                 except Exception:
                     raise InValidHostname(str(address[0]))
-                self._addresses.append((ip, address[1]))
-            self._addresses_status[address] = self.S_BAD
-            self._connections[address] = deque()
+                ip_port = (ip, address[1])
+                self._addresses.append(ip_port)
+                self._addresses_status[ip_port] = self.S_BAD
+                self._connections[ip_port] = deque()
 
         # detect the services
         self._period_detect()
@@ -152,7 +152,7 @@ class ConnectionPool(object):
         # init min connections
         ok_num = self.get_ok_servers_num()
         if ok_num < len(self._addresses):
-            return False
+            raise RuntimeError('The services status exception: {}'.format(self._get_services_status()))
 
         conns_per_address = int(self._configs.min_connection_pool_size / ok_num)
         for addr in self._addresses:
@@ -160,7 +160,6 @@ class ConnectionPool(object):
                 connection = Connection()
                 connection.open(addr[0], addr[1], self._configs.timeout)
                 self._connections[addr].append(connection)
-        self._init = True
         return True
 
     def get_session(self, user_name, password, retry_connect=True):
@@ -215,13 +214,15 @@ class ConnectionPool(object):
                             logging.info('Get connection to {}'.format(addr))
                             return connection
                     else:
-                        for connection in self._connections[addr]:
+                        for connection in list(self._connections[addr]):
                             if not connection.is_used:
                                 self._connections[addr].remove(connection)
                     try_count = try_count + 1
                 return None
             except Exception as ex:
                 logging.error('Get connection failed: {}'.format(ex))
+                import traceback
+                print(traceback.format_exc())
                 return None
 
     def ping(self, address):
@@ -236,7 +237,7 @@ class ConnectionPool(object):
             conn.close()
             return True
         except Exception as ex:
-            logging.error('Connect {}:{} failed: {}'.format(address[0], address[1], ex))
+            logging.warning('Connect {}:{} failed: {}'.format(address[0], address[1], ex))
             return False
 
     def close(self):
@@ -286,6 +287,15 @@ class ConnectionPool(object):
             if self._addresses_status[addr] == self.S_OK:
                 count = count + 1
         return count
+
+    def _get_services_status(self):
+        msg_list = []
+        for addr in self._addresses_status.keys():
+            status = 'OK'
+            if self._addresses_status[addr] != self.S_OK:
+                status = 'BAD'
+            msg_list.append('[services: {}, status: {}]'.format(addr, status))
+        return ', '.join(msg_list)
 
     def update_servers_status(self):
         """

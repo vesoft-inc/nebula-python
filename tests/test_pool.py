@@ -17,55 +17,15 @@ sys.path.insert(0, root_dir)
 
 from unittest import TestCase
 
-from nebula2.gclient.net import (
-    Connection,
-    ConnectionPool
-)
+from nebula2.gclient.net import ConnectionPool
 
-from nebula2.graph import ttypes
 from nebula2.Config import Config
 
 from nebula2.Exception import (
     NotValidConnectionException,
     InValidHostname,
-    IOErrorException)
-
-
-class TestConnection(TestCase):
-    def test_create(self):
-        try:
-            conn = Connection()
-            conn.open('127.0.0.1', 3699, 1000)
-            session_id = conn.authenticate('root', 'nebula')
-            assert session_id != 0
-            conn.close()
-        except Exception as ex:
-            assert False, ex
-
-    def test_release(self):
-        try:
-            conn = Connection()
-            conn.open('127.0.0.1', 3699, 1000)
-            session_id = conn.authenticate('root', 'nebula')
-            assert session_id != 0
-            resp = conn.execute(session_id, 'SHOW SPACES')
-            assert resp.error_code == ttypes.ErrorCode.SUCCEEDED, resp.error_msg
-            conn.signout(session_id)
-            resp = conn.execute(session_id, 'SHOW SPACES')
-            assert resp.error_code != ttypes.ErrorCode.SUCCEEDED
-        except Exception as ex:
-            assert False, ex
-
-    def test_close(self):
-        conn = Connection()
-        conn.open('127.0.0.1', 3699, 1000)
-        session_id = conn.authenticate('root', 'nebula')
-        assert session_id != 0
-        conn.close()
-        try:
-            conn.authenticate('root', 'nebula')
-        except IOErrorException:
-            assert True
+    IOErrorException
+)
 
 
 class TestConnectionPool(TestCase):
@@ -80,6 +40,18 @@ class TestConnectionPool(TestCase):
         self.pool = ConnectionPool()
         assert self.pool.init(self.addresses, self.configs)
         assert self.pool.connnects() == 2
+
+    def test_right_hostname(self):
+        pool = ConnectionPool()
+        assert pool.init([('localhost', 3699)], Config())
+
+    def test_wrong_hostname(self):
+        pool = ConnectionPool()
+        try:
+            pool.init([('wrong_host', 3699)], Config())
+            assert False
+        except InValidHostname:
+            assert True
 
     def test_ping(self):
         assert self.pool.ping(('127.0.0.1', 3699))
@@ -97,7 +69,11 @@ class TestConnectionPool(TestCase):
         pool2 = ConnectionPool()
         addresses = list()
         addresses.append(('127.0.0.1', 3800))
-        assert not pool2.init(addresses, Config())
+        try:
+            pool2.init(addresses, Config())
+            assert False
+        except Exception:
+            assert True
 
         # init failed, hostname not existed
         try:
@@ -158,44 +134,6 @@ class TestConnectionPool(TestCase):
             assert True
         except Exception as e:
             assert False, "We don't expect reach here:".format(e)
-
-
-class TestSession(TestCase):
-    @classmethod
-    def setup_class(self):
-        self.addresses = list()
-        self.addresses.append(('127.0.0.1', 3699))
-        self.addresses.append(('127.0.0.1', 3700))
-        self.user_name = 'root'
-        self.password = 'nebula'
-        self.configs = Config()
-        self.configs.min_connection_pool_size = 2
-        self.configs.max_connection_pool_size = 4
-        self.pool = ConnectionPool()
-        self.pool._check_delay = 2
-        assert self.pool.init(self.addresses, self.configs)
-        assert self.pool.connnects() == 2
-        assert self.pool.in_used_connects() == 0
-
-    def test_release_by_del(self):
-        def get_local_session(pool):
-            session = pool.get_session('root', 'nebula')
-            assert pool.in_used_connects() == 1
-
-        get_local_session(self.pool)
-        self.pool.in_used_connects() == 0
-
-    def test_reconnect(self):
-        try:
-            import time
-            session = self.pool.get_session('root', 'nebula')
-            for i in range(0, 30):
-                session.execute('SHOW SPACES')
-                time.sleep(2)
-            new_session = self.pool.get_session('root', 'nebula')
-            new_session.execute('SHOW SPACES')
-        except Exception:
-            assert False
 
 
 def test_multi_thread():
