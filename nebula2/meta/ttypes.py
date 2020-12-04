@@ -365,13 +365,22 @@ class JobStatus:
 
 class ListHostType:
   ALLOC = 0
+  GRAPH = 1
+  META = 2
+  STORAGE = 3
 
   _VALUES_TO_NAMES = {
     0: "ALLOC",
+    1: "GRAPH",
+    2: "META",
+    3: "STORAGE",
   }
 
   _NAMES_TO_VALUES = {
     "ALLOC": 0,
+    "GRAPH": 1,
+    "META": 2,
+    "STORAGE": 3,
   }
 
 class HostRole:
@@ -5659,7 +5668,6 @@ class ListHostsReq:
   """
   Attributes:
    - type
-   - role
   """
 
   thrift_spec = None
@@ -5689,11 +5697,6 @@ class ListHostsReq:
           self.type = iprot.readI32()
         else:
           iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.I32:
-          self.role = iprot.readI32()
-        else:
-          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -5715,10 +5718,6 @@ class ListHostsReq:
       oprot.writeFieldBegin('type', TType.I32, 1)
       oprot.writeI32(self.type)
       oprot.writeFieldEnd()
-    if self.role != None:
-      oprot.writeFieldBegin('role', TType.I32, 2)
-      oprot.writeI32(self.role)
-      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -5729,10 +5728,6 @@ class ListHostsReq:
       value = pprint.pformat(self.type, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    type=%s' % (value))
-    if self.role is not None:
-      value = pprint.pformat(self.role, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    role=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -16376,7 +16371,6 @@ all_structs.append(ListHostsReq)
 ListHostsReq.thrift_spec = (
   None, # 0
   (1, TType.I32, 'type', ListHostType, None, 2, ), # 1
-  (2, TType.I32, 'role', HostRole, None, 1, ), # 2
 )
 
 ListHostsReq.thrift_struct_annotations = {
@@ -16384,15 +16378,13 @@ ListHostsReq.thrift_struct_annotations = {
 ListHostsReq.thrift_field_annotations = {
 }
 
-def ListHostsReq__init__(self, type=None, role=None,):
+def ListHostsReq__init__(self, type=None,):
   self.type = type
-  self.role = role
 
 ListHostsReq.__init__ = ListHostsReq__init__
 
 def ListHostsReq__setstate__(self, state):
   state.setdefault('type', None)
-  state.setdefault('role', None)
   self.__dict__ = state
 
 ListHostsReq.__getstate__ = lambda self: self.__dict__.copy()
