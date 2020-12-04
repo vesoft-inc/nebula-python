@@ -16,7 +16,7 @@ root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
 from nebula2.Exception import InvalidKeyException
-from nebula2.common.ttypes import Value, NullType, Time, DateTime, Set
+from nebula2.common.ttypes import Value, NullType, Time, DateTime, Set, Date, List, Map
 from nebula2.common import ttypes
 from nebula2.graph import ttypes as graphTtype
 from unittest import TestCase
@@ -25,8 +25,8 @@ from nebula2.data.DataObject import (
     ValueWrapper,
     Node,
     Relationship,
-    Path
-)
+    PathWrapper,
+    TimeWrapper, DateTimeWrapper, DateWrapper, Null)
 
 
 class TestBaseCase(TestCase):
@@ -128,7 +128,9 @@ class TestBaseCase(TestCase):
         str_val1.set_sVal(b"word")
         str_val2 = ttypes.Value()
         str_val2.set_sVal(b"car")
-        value7.set_lVal([str_val1, str_val2])
+        list_val = List()
+        list_val.values = [str_val1, str_val2]
+        value7.set_lVal(list_val)
         row.values.append(value7)
         value8 = ttypes.Value()
         set_val = Set()
@@ -138,7 +140,9 @@ class TestBaseCase(TestCase):
         value8.set_uVal(set_val)
         row.values.append(value8)
         value9 = ttypes.Value()
-        value9.set_mVal({b"a": str_val1, b"b": str_val2})
+        map = Map()
+        map.kvs = {b"a": str_val1, b"b": str_val2}
+        value9.set_mVal(map)
         row.values.append(value9)
         value10 = ttypes.Value()
         value10.set_tVal(Time(10, 10, 10, 10000))
@@ -207,7 +211,9 @@ class TesValueWrapper(TestBaseCase):
         str_val1.set_sVal(b"word")
         str_val2 = ttypes.Value()
         str_val2.set_sVal(b"car")
-        value.set_lVal([str_val1, str_val2])
+        val_list = List()
+        val_list.values = [str_val1, str_val2]
+        value.set_lVal(val_list)
         value_wrapper = ValueWrapper(value)
         assert value_wrapper.is_list()
 
@@ -244,7 +250,9 @@ class TesValueWrapper(TestBaseCase):
         str_val1.set_sVal(b"word")
         str_val2 = ttypes.Value()
         str_val2.set_sVal(b"car")
-        value.set_mVal({b"a": str_val1, b"b": str_val2})
+        map_val = Map()
+        map_val.kvs = {b"a": str_val1, b"b": str_val2}
+        value.set_mVal(map_val)
         value_wrapper = ValueWrapper(value)
         assert value_wrapper.is_map()
 
@@ -254,6 +262,61 @@ class TesValueWrapper(TestBaseCase):
         expect_result["a"] = ValueWrapper(ttypes.Value(sVal=b"word"))
         expect_result["b"] = ValueWrapper(ttypes.Value(sVal=b"car"))
         assert map_val == expect_result
+
+    def test_as_time(self):
+        time = Time()
+        time.hour = 10
+        time.minute = 20
+        time.sec = 10
+        time.microsec = 100
+        value = ttypes.Value(tVal = time)
+        value_wrapper = ValueWrapper(value)
+        assert value_wrapper.is_time()
+
+        time_val = value_wrapper.as_time()
+        assert isinstance(time_val, TimeWrapper)
+        assert time_val.get_hour() == 10
+        assert time_val.get_minute() == 20
+        assert time_val.get_sec() == 10
+        assert time_val.get_microsec() == 100
+        assert '10:20:10.000100' == str(time_val)
+
+    def test_as_date(self):
+        date = Date()
+        date.year = 220
+        date.month = 2
+        date.day = 10
+        value = ttypes.Value(dVal=date)
+        value_wrapper = ValueWrapper(value)
+        assert value_wrapper.is_date()
+
+        date_val = value_wrapper.as_date()
+        assert isinstance(date_val, DateWrapper)
+        assert date_val.get_year() == 220
+        assert date_val.get_month() == 2
+        assert date_val.get_day() == 10
+        assert '220-02-10' == str(date_val)
+
+    def test_as_datetime(self):
+        datetime = DateTime()
+        datetime.year = 123
+        datetime.month = 2
+        datetime.day = 1
+        datetime.hour = 10
+        datetime.minute = 20
+        datetime.sec = 10
+        datetime.microsec = 100
+        value = ttypes.Value(dtVal=datetime)
+        value_wrapper = ValueWrapper(value)
+        assert value_wrapper.is_datetime()
+
+        datetime_val = value_wrapper.as_datetime()
+        assert isinstance(datetime_val, DateTimeWrapper)
+        assert datetime_val.get_hour() == 10
+        assert datetime_val.get_minute() == 20
+        assert datetime_val.get_sec() == 10
+        assert datetime_val.get_microsec() == 100
+        assert '123-02-01T10:20:10.000100' == str(datetime_val)
 
     def test_as_node(self):
         value = ttypes.Value()
@@ -280,7 +343,7 @@ class TesValueWrapper(TestBaseCase):
         assert vaue_wrapper.is_path()
 
         node = vaue_wrapper.as_path()
-        assert isinstance(node, Path)
+        assert isinstance(node, PathWrapper)
 
 
 class TestNode(TestBaseCase):
@@ -328,7 +391,7 @@ class TestRelationship(TestBaseCase):
 
 class TestPath(TestBaseCase):
     def test_path_api(self):
-        path = Path(self.get_path_value(b'Tom'))
+        path = PathWrapper(self.get_path_value(b'Tom'))
         assert Node(self.get_vertex_value(b'Tom')) == path.start_node()
 
         assert 5 == path.length()
@@ -420,7 +483,9 @@ class TestResultset(TestBaseCase):
                                           ttypes.Value.PVAL]
 
         # test record
+        in_use = False
         for record in result:
+            in_use = True
             record.size() == 15
 
             # test keys()
@@ -437,6 +502,8 @@ class TestResultset(TestBaseCase):
             assert record.get_value(0).is_empty()
             assert values[0].is_empty()
             assert record.get_value(1).is_null()
+            assert record.get_value(1).as_null() == Null(Null.BAD_DATA)
+            assert str(record.get_value(1).as_null()) == 'BAD_DATA'
 
             # test get_value_by_key()
             assert record.get_value_by_key('col2_null').is_null()
@@ -469,4 +536,12 @@ class TestResultset(TestBaseCase):
             assert record.get_value(12).is_vertex()
             assert record.get_value(13).is_edge()
             assert record.get_value(14).is_path()
+        assert in_use
+
+        # test use iterator again
+        in_use = False
+        for record in result:
+            in_use = True
+            record.size() == 15
+        assert in_use
 
