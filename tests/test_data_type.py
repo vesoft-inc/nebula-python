@@ -30,7 +30,8 @@ from nebula2.data.DataObject import (
     DateTimeWrapper,
     DateWrapper,
     Null,
-    Segment
+    Segment,
+    DataSetWrapper
 )
 
 
