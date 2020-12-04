@@ -153,14 +153,12 @@ def test_multi_thread():
         try:
             session = pool.get_session('root', 'nebula')
             if session is None:
-                print("ERROR: None client")
                 success_flag = False
                 return
             space_name = 'space_' + threading.current_thread().getName()
 
             session.execute('DROP SPACE %s' % space_name)
             resp = session.execute('CREATE SPACE IF NOT EXISTS %s' % space_name)
-            print(resp)
             if not resp.is_succeeded():
                 raise RuntimeError('CREATE SPACE failed: {}'.format(resp.error_msg()))
 

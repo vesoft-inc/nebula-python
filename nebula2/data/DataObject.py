@@ -13,6 +13,7 @@ from nebula2.Exception import (
     InvalidKeyException,
     OutOfRangeException
 )
+from nebula2.common.ttypes import NullType
 
 
 class Record(object):
@@ -60,7 +61,7 @@ class Record(object):
         return self._record
 
     def __repr__(self):
-        return "{}({})".format(self.__class__.__name__, self._record)
+        return "{}".format('\n'.join(self._record))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -142,20 +143,46 @@ class DataSetWrapper(object):
         return [(ValueWrapper(row.values[self._key_indexes[key]])) for row in self._data_set.rows]
 
     def __iter__(self):
+        self._pos = -1
         return self
 
     def __next__(self):
-        '''
+        """
         The record iterator
         :return: record
-        '''
+        """
         if len(self._data_set.rows) == 0 or self._pos >= len(self._data_set.rows) - 1:
             raise StopIteration
         self._pos = self._pos + 1
         return Record(self._data_set.rows[self._pos].values, self._column_names)
 
     def __repr__(self):
-        return "{}({})".format(self.__class__.__name__, self._data_set)
+        data_str = []
+        for i in range(self.get_row_size()):
+            data_str.append(str(self.row_values(i)))
+        name_str = ','.join(self._column_names)
+        value_str = ','.join(data_str)
+        return 'keys: {}, values: {}'.format(name_str, value_str)
+
+
+class Null(object):
+    __NULL__ = NullType.__NULL__
+    NaN = NullType.NaN
+    BAD_DATA = NullType.BAD_DATA
+    BAD_TYPE = NullType.BAD_TYPE
+    ERR_OVERFLOW = NullType.ERR_OVERFLOW
+    UNKNOWN_PROP = NullType.UNKNOWN_PROP
+    DIV_BY_ZERO = NullType.DIV_BY_ZERO
+    OUT_OF_RANGE = NullType.OUT_OF_RANGE
+
+    def __init__(self, type):
+        self._type = type
+
+    def __repr__(self):
+        return NullType._VALUES_TO_NAMES[self._type]
+
+    def __eq__(self, other):
+        return self._type == other._type
 
 
 class ValueWrapper(object):
@@ -194,24 +221,24 @@ class ValueWrapper(object):
         return self._value.getType() == ttypes.Value.MVAL
 
     def is_time(self):
-        '''
+        """
         TODO: Need to wrapper TimeWrapper
         :return: ttypes.Time
-        '''
+        """
         return self._value.getType() == ttypes.Value.TVAL
 
     def is_date(self):
-        '''
+        """
         TODO: Need to wrapper DateWrapper
         :return: ttypes.Date
-        '''
+        """
         return self._value.getType() == ttypes.Value.DVAL
 
     def is_datetime(self):
-        '''
+        """
         TODO: Need to wrapper DateTimeWrapper
         :return: ttypes.DateTime
-        '''
+        """
         return self._value.getType() == ttypes.Value.DTVAL
 
     def is_vertex(self):
@@ -222,6 +249,14 @@ class ValueWrapper(object):
 
     def is_path(self):
         return self._value.getType() == ttypes.Value.PVAL
+
+    def as_null(self):
+        """
+        :return: Null
+        """
+        if self._value.getType() == ttypes.Value.NVAL:
+            return Null(self._value.get_nVal())
+        raise InvalidValueTypeException("expect NULL type, but is " + self._get_type_name())
 
     def as_bool(self):
         if self._value.getType() == ttypes.Value.BVAL:
@@ -245,23 +280,23 @@ class ValueWrapper(object):
 
     def as_time(self):
         if self._value.getType() == ttypes.Value.TVAL:
-            return self._value.get_tVal()
+            return TimeWrapper(self._value.get_tVal())
         raise InvalidValueTypeException("expect time type, but is " + self._get_type_name())
 
     def as_date(self):
         if self._value.getType() == ttypes.Value.DVAL:
-            return self._value.get_dVal()
+            return DateWrapper(self._value.get_dVal())
         raise InvalidValueTypeException("expect date type, but is " + self._get_type_name())
 
     def as_datetime(self):
         if self._value.getType() == ttypes.Value.DTVAL:
-            return self._value.get_dtVal()
+            return DateTimeWrapper(self._value.get_dtVal())
         raise InvalidValueTypeException("expect datetime type, but is " + self._get_type_name())
 
     def as_list(self):
         if self._value.getType() == ttypes.Value.LVAL:
             result = []
-            for val in self._value.get_lVal():
+            for val in self._value.get_lVal().values:
                 result.append(ValueWrapper(val))
             return result
         raise InvalidValueTypeException("expect list type, but is " + self._get_type_name())
@@ -277,7 +312,7 @@ class ValueWrapper(object):
     def as_map(self):
         if self._value.getType() == ttypes.Value.MVAL:
             result = {}
-            kvs = self._value.get_mVal()
+            kvs = self._value.get_mVal().kvs
             for key in kvs.keys():
                 result[key.decode(self._decode_type)] = ValueWrapper(kvs[key])
             return result
@@ -295,7 +330,7 @@ class ValueWrapper(object):
 
     def as_path(self):
         if self._value.getType() == ttypes.Value.PVAL:
-            return Path(self._value.get_pVal())
+            return PathWrapper(self._value.get_pVal())
         raise InvalidValueTypeException("expect path type, but is " + self._get_type_name())
 
     def _get_type_name(self):
@@ -363,10 +398,128 @@ class ValueWrapper(object):
         return False
 
     def __repr__(self):
-        return "{}({})".format(self.__class__.__name__, self._value)
+        if self.is_empty():
+            return '__EMPTY__'
+        elif self.is_null():
+            return str(self.as_null())
+        elif self.is_bool():
+            return 'True' if self.as_bool() else 'False'
+        elif self.is_int():
+            return str(self.as_int())
+        elif self.is_double():
+            return str(self.as_double())
+        elif self.is_string():
+            return '\"{}\"'.format(self.as_string())
+        elif self.is_list():
+            return str(self.as_list())
+        elif self.is_set():
+            return str(self.as_set())
+        elif self.is_map():
+            return str(self.as_map())
+        elif self.is_vertex():
+            return str(self.as_node())
+        elif self.is_edge():
+            return str(self.as_relationship())
+        elif self.is_path():
+            return str(self.as_path())
+        elif self.is_time():
+            return str(self.as_time())
+        elif self.is_date():
+            return str(self.as_date())
+        elif self.is_datetime():
+            return str(self.as_datetime())
+        else:
+            raise RuntimeError('Unsupported type:{} to compare'.format(self._get_type_name()))
+        return False
 
     def __hash__(self):
         return self._value.__hash__()
+
+
+class TimeWrapper(object):
+    def __init__(self, time, time_zone='+08:00'):
+        self._time = time
+        self._time_zone = time_zone
+
+    def get_hour(self):
+        return self._time.hour
+
+    def get_minute(self):
+        return self._time.minute
+
+    def get_sec(self):
+        return self._time.sec
+
+    def get_microsec(self):
+        return self._time.microsec
+
+    def get_time(self):
+        return self._time
+
+    def __repr__(self):
+        return "%02d:%02d:%02d.%06d" % (self._time.hour,
+                                        self._time.minute,
+                                        self._time.sec,
+                                        self._time.microsec)
+
+
+class DateWrapper(object):
+    def __init__(self, date):
+        self._date = date
+
+    def get_year(self):
+        return self._date.year
+
+    def get_month(self):
+        return self._date.month
+
+    def get_day(self):
+        return self._date.day
+
+    def get_date(self):
+        return self._date
+
+    def __repr__(self):
+        return "%d-%02d-%02d" % (self._date.year, self._date.month, self._date.day)
+
+
+class DateTimeWrapper(object):
+    def __init__(self, date_time, time_zone='+08:00'):
+        self._date_time = date_time
+        self._time_zone = time_zone
+
+    def get_year(self):
+        return self._date_time.year
+
+    def get_month(self):
+        return self._date_time.month
+
+    def get_day(self):
+        return self._date_time.day
+
+    def get_hour(self):
+        return self._date_time.hour
+
+    def get_minute(self):
+        return self._date_time.minute
+
+    def get_sec(self):
+        return self._date_time.sec
+
+    def get_microsec(self):
+        return self._date_time.microsec
+
+    def get_datetime(self):
+        return self._date_time
+
+    def __repr__(self):
+        return "%d-%02d-%02dT%02d:%02d:%02d.%06d" % (self._date_time.year,
+                                                     self._date_time.month,
+                                                     self._date_time.day,
+                                                     self._date_time.hour,
+                                                     self._date_time.minute,
+                                                     self._date_time.sec,
+                                                     self._date_time.microsec)
 
 
 class GenValue(object):
@@ -438,10 +591,9 @@ class Node(object):
 
     def __repr__(self):
         tag_str_list = list()
-        for tag in self._value.tags:
-            tag_str_list.append('{' + 'tag_name: {}'.format(tag.name)
-                                + ', props: {}'.format(tag.props) + '}')
-        return '{%s}([%s]:{%s})' % (self.__class__.__name__, self._value.vid, ','.join(tag_str_list))
+        for tag in self._tag_indexes.keys():
+            tag_str_list.append(':{}{}'.format(tag, self.propertys(tag)))
+        return '(\'{}\' {})'.format(self.get_id(), ' '.join(tag_str_list))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -483,13 +635,11 @@ class Relationship(object):
         return [(ValueWrapper(value)) for value in self._value.props.values]
 
     def __repr__(self):
-        return "{}([{}-[{}({})]->{}@{}]:{})".format(self.__class__.__name__,
-                                                    self._value.src,
-                                                    self._value.name,
-                                                    self._value.type,
-                                                    self._value.dst,
-                                                    self._value.ranking,
-                                                    self._value.props)
+        return "({})-[:{}@{}{}]->({})".format(self.start_vertex_id(),
+                                              self.edge_name(),
+                                              self.ranking(),
+                                              self.propertys(),
+                                              self.end_vertex_id())
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -503,20 +653,22 @@ class Relationship(object):
         return not (self == other)
 
 
-class Segment(object):
+class Segment:
     start_node = None
     end_node = None
     relationship = None
 
     def __repr__(self):
-        return "{}(start_node: {}, relations: {}, end_node: {})".format(self.__class__.__name__,
-                                                                        self.start_node,
-                                                                        self.relationship,
-                                                                        self.end_node)
+        return "{}-[:{}@{}{}]->{}".format(self.start_node,
+                                          self.relationship.edge_name(),
+                                          self.relationship.ranking(),
+                                          self.relationship.propertys(),
+                                          self.end_node)
 
 
-class Path(object):
-    def __init__(self, path):
+class PathWrapper(object):
+    def __init__(self, path, decode_type='utf-8'):
+        self._decode_type = decode_type
         self._nodes = list()
         self._segments = list()
         self._relationships = list()
@@ -586,7 +738,28 @@ class Path(object):
         return self._segments
 
     def __repr__(self):
-        return "{}(segments: {})".format(self.__class__.__name__, self._segments)
+        edge_strs = []
+        for step in self._path.steps:
+            relationship = Relationship(GenValue.gen_edge(step.dst.vid,
+                                                          step.dst.vid,
+                                                          type,
+                                                          step.name,
+                                                          step.ranking,
+                                                          step.props))
+            edge_str = ''
+            if step.type > 0:
+                edge_str = '-[:{}@{}{}]->{}'.format(relationship.edge_name(),
+                                                    relationship.ranking(),
+                                                    relationship.propertys(),
+                                                    Node(step.dst))
+            else:
+                edge_str = '<-[:{}@{}{}]-{}'.format(relationship.edge_name(),
+                                                    relationship.ranking(),
+                                                    relationship.propertys(),
+                                                    Node(step.dst))
+
+            edge_strs.append(edge_str)
+        return '{}{}'.format(Node(self._path.src), ''.join(edge_strs))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):

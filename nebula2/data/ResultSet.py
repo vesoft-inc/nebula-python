@@ -13,9 +13,9 @@ from nebula2.data.DataObject import DataSetWrapper
 
 class ResultSet(object):
     def __init__(self, resp, decode_type='utf-8'):
-        '''
+        """
         get data from ResultSet
-        '''
+        """
         self._decode_type = decode_type
         self._resp = resp
         self._data_set_wrapper = None
@@ -44,9 +44,9 @@ class ResultSet(object):
         return self._resp.comment.decode(self._decode_type)
 
     def latency(self):
-        '''
+        """
         unit us
-        '''
+        """
         return self._resp.latency_in_us
 
     def plan_desc(self):
@@ -56,31 +56,31 @@ class ResultSet(object):
         return self._data_set_wrapper is None or self._data_set_wrapper.get_row_size() == 0
 
     def keys(self):
-        '''
+        """
         get colNames
-        '''
+        """
         if self._data_set_wrapper is None:
             return []
         return self._data_set_wrapper.get_col_names()
 
     def row_size(self):
-        '''
+        """
         get one row size
-        '''
+        """
         if self._data_set_wrapper is None:
             return 0
         return len(self._data_set_wrapper.get_rows())
 
     def col_size(self):
-        '''
+        """
         get one col size
-        '''
+        """
         if self._data_set_wrapper is None:
             return 0
         return len(self._data_set_wrapper.get_col_names())
 
     def get_row_types(self):
-        '''
+        """
         Get row types
         :param empty
         :return: list<int>
@@ -100,37 +100,36 @@ class ResultSet(object):
           ttypes.Value.MVAL = 13
           ttypes.Value.UVAL = 14
           ttypes.Value.GVAL = 15
-        '''
+        """
         if self._data_set_wrapper is None:
             return []
         return self._data_set_wrapper.get_row_types()
 
     def row_values(self, row_index):
-        '''
+        """
         Get row values
         :param index: the Record index
         :return: list<ValueWrapper>
-        '''
+        """
         if self._data_set_wrapper is None:
             return []
         return self._data_set_wrapper.row_values(row_index)
 
     def column_values(self, key):
-        '''
+        """
         get column values
         :param key: the col name
         :return: list<ValueWrapper>
-        '''
+        """
         if self._data_set_wrapper is None:
             return []
         return self._data_set_wrapper.column_values(key)
 
     def rows(self):
-        '''
+        """
         get all rows
-        :param key: empty
         :return: list<Row>
-        '''
+        """
         if self._data_set_wrapper is None:
             return []
         return self._data_set_wrapper.get_rows()
@@ -139,7 +138,7 @@ class ResultSet(object):
         return iter(self._data_set_wrapper)
 
     def __repr__(self):
-        return "{}({})".format(self.__class__.__name__, self._resp)
+        return "{}({})".format(self.__class__.__name__, self._data_set_wrapper)
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
