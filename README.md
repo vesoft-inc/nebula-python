@@ -69,7 +69,7 @@ pip install nebula2-python
 ## Quick example
 
 ```python
-from nebula2.net import ConnectionPool
+from nebula2.gclient.net import ConnectionPool
 from nebula2.Config import Config
 
 # define a config
@@ -84,7 +84,8 @@ ok = connection_pool.init([('127.0.0.1', 3699)], config)
 session = connection_pool.get_session('root', 'nebula')
 
 # show hosts
-result = session.execute('SHOW HOSTS')
+resp = result = session.execute('SHOW HOSTS')
+print(resp)
 
 # release session
 session.release()

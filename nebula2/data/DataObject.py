@@ -160,9 +160,8 @@ class DataSetWrapper(object):
         data_str = []
         for i in range(self.get_row_size()):
             data_str.append(str(self.row_values(i)))
-        name_str = ','.join(self._column_names)
         value_str = ','.join(data_str)
-        return 'keys: {}, values: {}'.format(name_str, value_str)
+        return 'keys: {}, values: {}'.format(self._column_names, value_str)
 
 
 class Null(object):
