@@ -8,7 +8,7 @@
 
 import sys
 import os
-
+import time
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
@@ -21,7 +21,7 @@ from nebula2.mclient import MetaCache
 
 class TestMetaCache(object):
     @classmethod
-    def setup_class(self):
+    def setup_class(cls):
         # create schema
         try:
             conn = Connection()
@@ -39,9 +39,10 @@ class TestMetaCache(object):
                                 'CREATE EDGE IF NOT EXISTS edge22(name string);')
             assert resp.error_code == 0
             conn.close()
-            self.meta_cache = MetaCache([('127.0.0.1', 45500),
-                                         ('127.0.0.1', 45501),
-                                         ('127.0.0.1', 45501)], 50000)
+            time.sleep(10)
+            cls.meta_cache = MetaCache([('127.0.0.1', 45500),
+                                        ('127.0.0.1', 45501),
+                                        ('127.0.0.1', 45501)], 50000)
         except Exception as x:
             import traceback
             print(traceback.format_exc())
