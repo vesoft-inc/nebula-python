@@ -145,8 +145,9 @@ class MetaCache(object):
         tag_items = {}
         edge_items = {}
 
-    def __init__(self, meta_addrs, timeout=2000, decode_type='utf-8'):
+    def __init__(self, meta_addrs, timeout=2000, load_period=10, decode_type='utf-8'):
         self._decode_type = decode_type
+        self._load_period = load_period
         self._lock = RLock()
         self._meta_client = MetaClient(meta_addrs, timeout)
         self._meta_client.open()
@@ -155,7 +156,13 @@ class MetaCache(object):
         self._storage_leader = {}
 
         # load meta data
+        self._period_update_meta_data()
+
+    def _period_update_meta_data(self):
         self._load_all()
+        timer = threading.Timer(self._load_period, self._period_update_meta_data)
+        timer.setDaemon(True)
+        timer.start()
 
     def _load_all(self):
         try:
@@ -169,8 +176,19 @@ class MetaCache(object):
                 tags = self._meta_client.list_tags(space_id)
                 edges = self._meta_client.list_edges(space_id)
                 for tag in tags:
-                    space_cache.tag_items[tag.tag_name.decode(self._decode_type)] = tag
+                    tag_name = tag.tag_name.decode(self._decode_type)
+                    if tag_name not in space_cache.tag_items.keys():
+                        space_cache.tag_items[tag_name] = tag
+                    else:
+                        if space_cache.tag_items[tag_name].version < tag.version:
+                            space_cache.tag_items[tag_name] = tag
                 for edge in edges:
+                    edge_name = edge.edge_name.decode(self._decode_type)
+                    if edge_name not in space_cache.edge_items.keys():
+                        space_cache.edge_items[edge_name] = edge
+                    else:
+                        if space_cache.edge_items[edge_name].version < edge.version:
+                            space_cache.edge_items[edge_name] = edge
                     space_cache.edge_items[edge.edge_name.decode(self._decode_type)] = edge
                 space_caches[space.name.decode(self._decode_type)] = space_cache
 
@@ -204,66 +222,67 @@ class MetaCache(object):
         return self._storage_addrs
 
     def get_tag_id(self, space_name, tag_name):
-        '''
+        """
         get_tag_id
         :param space_name:
         :param tag_name:
-        :return:
-        '''
+        :return: tag_id
+        """
         with self._lock:
-            tag_items = self._get_tag_item(space_name, tag_name)
-            return tag_items.tag_id
+            tag_item = self._get_tag_item(space_name, tag_name)
+            return tag_item.tag_id
 
     def get_edge_type(self, space_name, edge_name):
-        '''
+        """
         get_edge_type
         :param space_name:
         :param edge_name:
-        :return:
-        '''
+        :return: edge_type
+        """
         with self._lock:
-            if space_name not in self._space_caches.keys():
-                raise RuntimeError("Space name:{} is not found".format(space_name))
-            space_cache = self._space_caches[space_name]
-            if edge_name not in space_cache.edge_items.keys():
-                raise RuntimeError("Edge name:{} is not found".format(edge_name))
             edge_item = self._get_edge_item(space_name, edge_name)
             return edge_item.edge_type
 
     def get_space_id(self, space_name):
-        '''
+        """
         get_space_id
         :param space_name:
-        :return:
-        '''
+        :return: space_id
+        """
         with self._lock:
             if space_name not in self._space_caches.keys():
-                raise RuntimeError("{} is not found".format(space_name))
+                self._load_all()
+                if space_name not in self._space_caches.keys():
+                    raise RuntimeError("{} is not found".format(space_name))
             return self._space_caches[space_name].space_id
 
     def get_tag_schema(self, space_name, tag_name):
-        '''
+        """
         get_tag_schema
         :param space_name:
         :param tag_name:
-        :return:
-        '''
-        with self._lock:
-            tag_item = self._get_tag_item(space_name, tag_name)
-            return tag_item.schema
+        :return: schema
+        """
+        tag_item = self._get_tag_item(space_name, tag_name)
+        return tag_item.schema
 
     def get_edge_schema(self, space_name, edge_name):
-        '''
+        """
         get_edge_schema
         :param space_name:
         :param edge_name:
-        :return:
-        '''
-        with self._lock:
-            edge_item = self._get_edge_item(space_name, edge_name)
-            return edge_item.schema
+        :return: schema
+        """
+        edge_item = self._get_edge_item(space_name, edge_name)
+        return edge_item.schema
 
     def get_part_leader(self, space_name, part_id):
+        """
+
+        :param space_name:
+        :param part_id:
+        :return: storage ip port: HostAddr
+        """
         part_leaders = self.get_part_leaders(space_name)
         if part_id not in part_leaders.keys():
             raise RuntimeError("Part id:{} is not found".format(part_id))
@@ -272,33 +291,45 @@ class MetaCache(object):
     def get_part_leaders(self, space_name):
         with self._lock:
             if space_name not in self._storage_leader.keys():
-                raise RuntimeError("Space name:{} is not found".format(space_name))
+                self._load_all()
+                if space_name not in self._storage_leader.keys():
+                    raise RuntimeError("Space name:{} is not found".format(space_name))
             return self._storage_leader[space_name]
 
     def _get_tag_item(self, space_name, tag_name):
-        if space_name not in self._space_caches.keys():
-            raise RuntimeError("Space name:{} is not found".format(space_name))
-        space_cache = self._space_caches[space_name]
-        if tag_name not in space_cache.tag_items.keys():
-            raise RuntimeError("Tag name:{} is not found".format(tag_name))
-        return space_cache.tag_items[tag_name]
+        with self._lock:
+            if space_name not in self._space_caches.keys():
+                self._load_all()
+                if space_name not in self._space_caches.keys():
+                    raise RuntimeError("Space name:{} is not found".format(space_name))
+            space_cache = self._space_caches[space_name]
+            if tag_name not in space_cache.tag_items.keys():
+                self._load_all()
+                if tag_name not in space_cache.tag_items.keys():
+                    raise RuntimeError("Tag name:{} is not found".format(tag_name))
+            return space_cache.tag_items[tag_name]
 
     def _get_edge_item(self, space_name, edge_name):
-        if space_name not in self._space_caches.keys():
-            raise RuntimeError("Space name:{} is not found".format(space_name))
-        space_cache = self._space_caches[space_name]
-        if edge_name not in space_cache.edge_items.keys():
-            raise RuntimeError("Edge name:{} is not found".format(edge_name))
-        return space_cache.edge_items[edge_name]
+        with self._lock:
+            if space_name not in self._space_caches.keys():
+                self._load_all()
+                if space_name not in self._space_caches.keys():
+                    raise RuntimeError("Space name:{} is not found".format(space_name))
+            space_cache = self._space_caches[space_name]
+            if edge_name not in space_cache.edge_items.keys():
+                self._load_all()
+                if edge_name not in space_cache.edge_items.keys():
+                    raise RuntimeError("Edge name:{} is not found".format(edge_name))
+            return space_cache.edge_items[edge_name]
 
     def update_storage_leader(self, space_name, part_id, address):
-        '''
+        """
         if the storage leader change, storage client need to call this function
         :param space_name:
         :param part_id:
         :param address: HostAddr
-        :return:
-        '''
+        :return: coid
+        """
         with self._lock:
             if space_name not in self._storage_leader.keys():
                 logging.error("Space name:{} is not found".format(space_name))

@@ -52,15 +52,36 @@ class TestMetaCache(object):
         space_id2 = self.meta_cache.get_space_id('test_meta_cache2')
         assert 0 < space_id1 < space_id2
 
+        # test not existed
+        try:
+            space_id = self.meta_cache.get_tag_id('test_meta_cache1', 'space_not_existed')
+            assert False
+        except Exception:
+            assert True
+
     def test_get_tag_id(self):
         tag_id1 = self.meta_cache.get_tag_id('test_meta_cache1', 'tag11')
         tag_id2 = self.meta_cache.get_tag_id('test_meta_cache2', 'tag22')
         assert 0 < tag_id1 < tag_id2
 
+        # test not existed
+        try:
+            tag_id = self.meta_cache.get_tag_id('test_meta_cache1', 'tag_not_existed')
+            assert False
+        except Exception:
+            assert True
+
     def test_get_edge_type(self):
         edge_id1 = self.meta_cache.get_edge_type('test_meta_cache1', 'edge11')
         edge_id2 = self.meta_cache.get_edge_type('test_meta_cache2', 'edge22')
         assert 0 < edge_id1 < edge_id2
+
+        # test not existed
+        try:
+            edge_id = self.meta_cache.get_edge_type('test_meta_cache1', 'edge_not_existed')
+            assert False
+        except Exception:
+            assert True
 
     def test_get_tag_schema(self):
         tag_schema1 = self.meta_cache.get_tag_schema('test_meta_cache1', 'tag11')
@@ -72,6 +93,13 @@ class TestMetaCache(object):
         assert tag_schema2.columns[0].type.type == ttypes.PropertyType.STRING
         assert tag_schema2.columns[0].type.type_length == 0
 
+        # test not existed
+        try:
+            tag_item = self.meta_cache.get_tag_schema('test_meta_cache1', 'tag_not_existed')
+            assert False
+        except Exception:
+            assert True
+
     def test_get_edge_schema(self):
         edge_schema1 = self.meta_cache.get_edge_schema('test_meta_cache1', 'edge11')
         edge_schema2 = self.meta_cache.get_edge_schema('test_meta_cache2', 'edge22')
@@ -81,6 +109,13 @@ class TestMetaCache(object):
         assert edge_schema2.columns[0].name.decode('utf-8') == 'name'
         assert edge_schema2.columns[0].type.type == ttypes.PropertyType.STRING
         assert edge_schema2.columns[0].type.type_length == 0
+
+        # test not existed
+        try:
+            edge_item = self.meta_cache.get_edge_schema('test_meta_cache1', 'edge_not_existed')
+            assert False
+        except Exception:
+            assert True
 
     def test_get_part_leader(self):
         address = self.meta_cache.get_part_leader('test_meta_cache1', 1)
