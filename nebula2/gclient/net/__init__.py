@@ -118,7 +118,7 @@ class ConnectionPool(object):
         self._configs = None
         self._lock = RLock()
         self._pos = -1
-        self._check_delay = 60  # unit seconds
+        self._check_delay = 5 * 60  # unit seconds
         self._close = False
 
     def __del__(self):
@@ -324,6 +324,8 @@ class ConnectionPool(object):
                             conns.remove(connection)
 
     def _period_detect(self):
+        if self._close:
+            return
         self.update_servers_status()
         self._remove_idle_unusable_connection()
         timer = threading.Timer(self._check_delay, self._period_detect)
