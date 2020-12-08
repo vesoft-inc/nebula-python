@@ -29,7 +29,7 @@ if not '__pypy__' in sys.builtin_module_names:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'NullType', 'Date', 'Time', 'DateTime', 'Value', 'List', 'Map', 'Set', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'VertexID', 'Timestamp', 'IndexID', 'Port']
+__all__ = ['UTF8STRINGS', 'NullType', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'VertexID', 'Timestamp', 'IndexID', 'Port']
 
 class NullType:
   __NULL__ = 0
@@ -788,7 +788,7 @@ class Value(object):
           iprot.skip(ftype)
       elif fid == 12:
         if ftype == TType.STRUCT:
-          lVal = List()
+          lVal = NList()
           lVal.read(iprot)
           assert self.field == 0 and self.value is None
           self.set_lVal(lVal)
@@ -796,7 +796,7 @@ class Value(object):
           iprot.skip(ftype)
       elif fid == 13:
         if ftype == TType.STRUCT:
-          mVal = Map()
+          mVal = NMap()
           mVal.read(iprot)
           assert self.field == 0 and self.value is None
           self.set_mVal(mVal)
@@ -804,7 +804,7 @@ class Value(object):
           iprot.skip(ftype)
       elif fid == 14:
         if ftype == TType.STRUCT:
-          uVal = Set()
+          uVal = NSet()
           uVal.read(iprot)
           assert self.field == 0 and self.value is None
           self.set_uVal(uVal)
@@ -918,7 +918,7 @@ class Value(object):
   def __ne__(self, other):
     return not (self == other)
 
-class List:
+class NList:
   """
   Attributes:
    - values
@@ -979,7 +979,7 @@ class List:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('List')
+    oprot.writeStructBegin('NList')
     if self.values != None:
       oprot.writeFieldBegin('values', TType.LIST, 1)
       oprot.writeListBegin(TType.STRUCT, len(self.values))
@@ -1012,7 +1012,7 @@ class List:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class Map:
+class NMap:
   """
   Attributes:
    - kvs
@@ -1075,7 +1075,7 @@ class Map:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('Map')
+    oprot.writeStructBegin('NMap')
     if self.kvs != None:
       oprot.writeFieldBegin('kvs', TType.MAP, 1)
       oprot.writeMapBegin(TType.STRING, TType.STRUCT, len(self.kvs))
@@ -1109,7 +1109,7 @@ class Map:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class Set:
+class NSet:
   """
   Attributes:
    - values
@@ -1170,7 +1170,7 @@ class Set:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('Set')
+    oprot.writeStructBegin('NSet')
     if self.values != None:
       oprot.writeFieldBegin('values', TType.SET, 1)
       oprot.writeSetBegin(TType.STRUCT, len(self.values))
@@ -2381,9 +2381,9 @@ Value.thrift_spec = (
   (9, TType.STRUCT, 'vVal', [Vertex, Vertex.thrift_spec, False], None, 2, ), # 9
   (10, TType.STRUCT, 'eVal', [Edge, Edge.thrift_spec, False], None, 2, ), # 10
   (11, TType.STRUCT, 'pVal', [Path, Path.thrift_spec, False], None, 2, ), # 11
-  (12, TType.STRUCT, 'lVal', [List, List.thrift_spec, False], None, 2, ), # 12
-  (13, TType.STRUCT, 'mVal', [Map, Map.thrift_spec, False], None, 2, ), # 13
-  (14, TType.STRUCT, 'uVal', [Set, Set.thrift_spec, False], None, 2, ), # 14
+  (12, TType.STRUCT, 'lVal', [NList, NList.thrift_spec, False], None, 2, ), # 12
+  (13, TType.STRUCT, 'mVal', [NMap, NMap.thrift_spec, False], None, 2, ), # 13
+  (14, TType.STRUCT, 'uVal', [NSet, NSet.thrift_spec, False], None, 2, ), # 14
   (15, TType.STRUCT, 'gVal', [DataSet, DataSet.thrift_spec, False], None, 2, ), # 15
 )
 
@@ -2480,77 +2480,77 @@ def Value__init__(self, nVal=None, bVal=None, iVal=None, fVal=None, sVal=None, d
 
 Value.__init__ = Value__init__
 
-all_structs.append(List)
-List.thrift_spec = (
+all_structs.append(NList)
+NList.thrift_spec = (
   None, # 0
   (1, TType.LIST, 'values', (TType.STRUCT,[Value, Value.thrift_spec, True]), None, 2, ), # 1
 )
 
-List.thrift_struct_annotations = {
+NList.thrift_struct_annotations = {
   "cpp.type": """nebula::List""",
 }
-List.thrift_field_annotations = {
+NList.thrift_field_annotations = {
 }
 
-def List__init__(self, values=None,):
+def NList__init__(self, values=None,):
   self.values = values
 
-List.__init__ = List__init__
+NList.__init__ = NList__init__
 
-def List__setstate__(self, state):
+def NList__setstate__(self, state):
   state.setdefault('values', None)
   self.__dict__ = state
 
-List.__getstate__ = lambda self: self.__dict__.copy()
-List.__setstate__ = List__setstate__
+NList.__getstate__ = lambda self: self.__dict__.copy()
+NList.__setstate__ = NList__setstate__
 
-all_structs.append(Map)
-Map.thrift_spec = (
+all_structs.append(NMap)
+NMap.thrift_spec = (
   None, # 0
   (1, TType.MAP, 'kvs', (TType.STRING,False,TType.STRUCT,[Value, Value.thrift_spec, True]), None, 2, ), # 1
 )
 
-Map.thrift_struct_annotations = {
+NMap.thrift_struct_annotations = {
   "cpp.type": """nebula::Map""",
 }
-Map.thrift_field_annotations = {
+NMap.thrift_field_annotations = {
 }
 
-def Map__init__(self, kvs=None,):
+def NMap__init__(self, kvs=None,):
   self.kvs = kvs
 
-Map.__init__ = Map__init__
+NMap.__init__ = NMap__init__
 
-def Map__setstate__(self, state):
+def NMap__setstate__(self, state):
   state.setdefault('kvs', None)
   self.__dict__ = state
 
-Map.__getstate__ = lambda self: self.__dict__.copy()
-Map.__setstate__ = Map__setstate__
+NMap.__getstate__ = lambda self: self.__dict__.copy()
+NMap.__setstate__ = NMap__setstate__
 
-all_structs.append(Set)
-Set.thrift_spec = (
+all_structs.append(NSet)
+NSet.thrift_spec = (
   None, # 0
   (1, TType.SET, 'values', (TType.STRUCT,[Value, Value.thrift_spec, True]), None, 2, ), # 1
 )
 
-Set.thrift_struct_annotations = {
+NSet.thrift_struct_annotations = {
   "cpp.type": """nebula::Set""",
 }
-Set.thrift_field_annotations = {
+NSet.thrift_field_annotations = {
 }
 
-def Set__init__(self, values=None,):
+def NSet__init__(self, values=None,):
   self.values = values
 
-Set.__init__ = Set__init__
+NSet.__init__ = NSet__init__
 
-def Set__setstate__(self, state):
+def NSet__setstate__(self, state):
   state.setdefault('values', None)
   self.__dict__ = state
 
-Set.__getstate__ = lambda self: self.__dict__.copy()
-Set.__setstate__ = Set__setstate__
+NSet.__getstate__ = lambda self: self.__dict__.copy()
+NSet.__setstate__ = NSet__setstate__
 
 all_structs.append(Row)
 Row.thrift_spec = (

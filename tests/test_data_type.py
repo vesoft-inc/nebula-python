@@ -16,7 +16,7 @@ root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
 from nebula2.Exception import InvalidKeyException
-from nebula2.common.ttypes import Value, NullType, Time, DateTime, Set, Date, List, Map
+from nebula2.common.ttypes import Value, NullType, Time, DateTime, NSet, Date, NList, NMap
 from nebula2.common import ttypes
 from nebula2.graph import ttypes as graphTtype
 from unittest import TestCase
@@ -128,19 +128,19 @@ class TestBaseCase(TestCase):
         str_val1.set_sVal(b"word")
         str_val2 = ttypes.Value()
         str_val2.set_sVal(b"car")
-        list_val = List()
+        list_val = NList()
         list_val.values = [str_val1, str_val2]
         value7.set_lVal(list_val)
         row.values.append(value7)
         value8 = ttypes.Value()
-        set_val = Set()
+        set_val = NSet()
         set_val.values = set()
         set_val.values.add(str_val1)
         set_val.values.add(str_val2)
         value8.set_uVal(set_val)
         row.values.append(value8)
         value9 = ttypes.Value()
-        map = Map()
+        map = NMap()
         map.kvs = {b"a": str_val1, b"b": str_val2}
         value9.set_mVal(map)
         row.values.append(value9)
@@ -211,7 +211,7 @@ class TesValueWrapper(TestBaseCase):
         str_val1.set_sVal(b"word")
         str_val2 = ttypes.Value()
         str_val2.set_sVal(b"car")
-        val_list = List()
+        val_list = NList()
         val_list.values = [str_val1, str_val2]
         value.set_lVal(val_list)
         value_wrapper = ValueWrapper(value)
@@ -229,7 +229,7 @@ class TesValueWrapper(TestBaseCase):
         str_val1.set_sVal(b"word")
         str_val2 = ttypes.Value()
         str_val2.set_sVal(b"car")
-        set_val = Set()
+        set_val = NSet()
         set_val.values = set()
         set_val.values.add(str_val1)
         set_val.values.add(str_val2)
@@ -250,7 +250,7 @@ class TesValueWrapper(TestBaseCase):
         str_val1.set_sVal(b"word")
         str_val2 = ttypes.Value()
         str_val2.set_sVal(b"car")
-        map_val = Map()
+        map_val = NMap()
         map_val.kvs = {b"a": str_val1, b"b": str_val2}
         value.set_mVal(map_val)
         value_wrapper = ValueWrapper(value)
