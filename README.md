@@ -1,7 +1,10 @@
 # nebula-python
 
-This directory provides Nebula client API in Python. It used to connect NebulaGraph2.0.
+This directory holds the Python API for Nebula Graph. It is used to connect with Nebula Graph 2.0.
 
+## Before you start
+
+Before you start, please read this section to choose the right branch for you. In branch v1.0, the API works only for Nebula Graph 1.0. In the master branch, the API works only for Nebula Graph 2.0.
 
 ## The directory structure
 
@@ -9,9 +12,9 @@ This directory provides Nebula client API in Python. It used to connect NebulaGr
 |--nebula-python
     |
     |-- nebula2                       // client code
-    |   |-- common                 
-    |   |-- data                
-    |   |-- graph        
+    |   |-- common
+    |   |-- data
+    |   |-- graph
     |   |-- meta
     |   |-- net                       // the net code for graph client
     |   |-- storage
@@ -28,15 +31,15 @@ This directory provides Nebula client API in Python. It used to connect NebulaGr
     |
     |-- setup.py                      // used to install or package
     |
-    |__ README.md                     // the introduce of nebula2-python
+    |__ README.md                     // the introduction of nebula2-python
 
 ```
 
 ## How to get nebula2-python
 
-### Option One: cloning from GitHub
+### Option one: clone from GitHub
 
-- Cloning
+- Clone from GitHub
 
 ```bash
 git clone https://github.com/vesoft-inc/nebula-python.git
@@ -49,7 +52,7 @@ cd nebula-python
 sudo python3 setup.py install
 ```
 
-When your environment cannot access `pypi`, you need to manually install the following packages.
+When your environment cannot access `pypi`, you need to install the following packages manually.
 
 - django-import-export
 - future
@@ -57,14 +60,14 @@ When your environment cannot access `pypi`, you need to manually install the fol
 - httplib2
 - futures   # python2.x is needed
 
-### Option Two: using pip
+### Option two: using pip
 
 ```python
 pip install nebula2-python
 ```
 
-## Quick Example
-  
+## Quick example
+
 ```python
 from nebula2.net import ConnectionPool
 from nebula2.Config import Config
@@ -89,7 +92,6 @@ session.release()
 # close the pool
 connection_pool.close()
 ```
-
 
 ## How to choose nebula-python
 
