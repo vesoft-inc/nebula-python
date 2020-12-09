@@ -17,7 +17,7 @@ sys.path.insert(0, root_dir)
 
 from unittest import TestCase
 
-from nebula2.gclient.net import ConnectionPool
+from nebula2.gclient.net import ConnectionPool, ping
 
 from nebula2.Config import Config
 
@@ -35,17 +35,21 @@ class TestConnectionPool(TestCase):
         self.addresses.append(('127.0.0.1', 3699))
         self.addresses.append(('127.0.0.1', 3700))
         self.configs = Config()
+        self.configs.idle_time = 2
         self.configs.min_connection_pool_size = 2
         self.configs.max_connection_pool_size = 4
         self.pool = ConnectionPool()
+        self.pool.T_CHECK_PERIOD = 3
         assert self.pool.init(self.addresses, self.configs)
-        assert self.pool.connnects() == 2
+        assert self.pool.active_conn_num() == 2
+        assert self.pool.idle_conn_num() == 2
+        assert self.pool.in_used_conn_num() == 0
 
-    def test_right_hostname(self):
+    def test_1_right_hostname(self):
         pool = ConnectionPool()
         assert pool.init([('localhost', 3699)], Config())
 
-    def test_wrong_hostname(self):
+    def test_2_wrong_hostname(self):
         pool = ConnectionPool()
         try:
             pool.init([('wrong_host', 3699)], Config())
@@ -53,11 +57,11 @@ class TestConnectionPool(TestCase):
         except InValidHostname:
             assert True
 
-    def test_ping(self):
-        assert self.pool.ping(('127.0.0.1', 3699))
-        assert self.pool.ping(('127.0.0.1', 5000)) is False
+    def test_3_ping(self):
+        assert ping(('127.0.0.1', 3699))
+        assert ping(('127.0.0.1', 5000)) is False
 
-    def test_init_failed(self):
+    def test_4_init_failed(self):
         # init succeeded
         pool1 = ConnectionPool()
         addresses = list()
@@ -84,7 +88,7 @@ class TestConnectionPool(TestCase):
         except InValidHostname:
             assert True, "We expected get the exception"
 
-    def test_get_session(self):
+    def test_5_get_session(self):
         # get session succeeded
         sessions = list()
         for num in range(0, self.configs.max_connection_pool_size):
@@ -99,13 +103,13 @@ class TestConnectionPool(TestCase):
         except NotValidConnectionException:
             assert True
 
-        assert self.pool.in_used_connects() == 4
+        assert self.pool.in_used_conn_num() == 4
         # release session
         for session in sessions:
             session.release()
 
-        assert self.pool.in_used_connects() == 0
-
+        assert self.pool.in_used_conn_num() == 0
+        sessions.clear()
         # test get session after release
         for num in range(0, self.configs.max_connection_pool_size - 1):
             session = self.pool.get_session('root', 'nebula')
@@ -113,9 +117,22 @@ class TestConnectionPool(TestCase):
             assert resp.is_succeeded()
             sessions.append(session)
 
-        assert self.pool.in_used_connects() == 3
+        assert self.pool.in_used_conn_num() == 3
 
-    def test_stop_close(self):
+        for session in sessions:
+            session.release()
+
+        assert self.pool.in_used_conn_num() == 0
+        assert self.pool.idle_conn_num() == 4
+        assert self.pool.active_conn_num() == 4
+
+    def test_6_remove_idle_connection(self):
+        time.sleep(5)
+        assert self.pool.in_used_conn_num() == 0
+        assert self.pool.idle_conn_num() == 2
+        assert self.pool.active_conn_num() == 2
+
+    def test_7_stop_close(self):
         session = self.pool.get_session('root', 'nebula')
         assert session is not None
         resp = session.execute('SHOW SPACES')

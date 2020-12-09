@@ -6,15 +6,16 @@
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
-
-import threading
+import queue
 import logging
+import threading
 import time
 import socket
 
-from collections import deque
 from threading import RLock
-
+from typing import Dict
+from nebula2.Config import Config
+from nebula2.common.ttypes import HostAddr
 from thrift.transport import TSocket, TTransport
 from thrift.transport.TTransport import TTransportException
 from thrift.protocol import TBinaryProtocol
@@ -33,16 +34,21 @@ from nebula2.Exception import (
 
 from nebula2.data.ResultSet import ResultSet
 
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s]:%(message)s')
+logging.basicConfig(level=logging.INFO,
+                    format='[%(asctime)s] [%(filename)s:%(lineno)s]:%(message)s')
 
 
 class Session(object):
-    def __init__(self, connection, session_id, pool, retry_connect=True):
+    def __init__(self, address, session_id, pool, retry_connect=True):
         self.session_id = session_id
-        self._connection = connection
+        self._address = address
+        self._connection = None
         self._timezone = 0
         self._pool = pool
         self._retry_connect = retry_connect
+        self._lock = threading.RLock()
+        self._do_execute = False
+        self._do_safe_execute = False
 
     def execute(self, stmt):
         """
@@ -50,17 +56,25 @@ class Session(object):
         :param stmt: the ngql
         :return: ResultSet
         """
-        if self._connection is None:
-            raise RuntimeError('The session has released')
+        with self._lock:
+            if self._do_safe_execute:
+                raise IOErrorException(
+                    IOErrorException.E_UNKNOWN,
+                    'The session is already called safe_execute, '
+                    'You can only use execute or safe_execute in the session')
+            self._do_execute = True
         try:
+            if self._connection is None:
+                self._connection = self._pool.get_connection(self._address)
             return ResultSet(self._connection.execute(self.session_id, stmt))
         except IOErrorException as ie:
             if ie.type == IOErrorException.E_CONNECT_BROKEN:
-                self._pool.update_servers_status()
+                self._pool.set_invalidate_connection(self._connection)
                 if self._retry_connect:
                     if not self._reconnect():
                         logging.warning('Retry connect failed')
-                        raise IOErrorException(IOErrorException.E_ALL_BROKEN, 'All connections are broken')
+                        raise IOErrorException(IOErrorException.E_ALL_BROKEN,
+                                               'All connections are broken')
                     try:
                         return ResultSet(self._connection.execute(self.session_id, stmt))
                     except Exception:
@@ -69,14 +83,56 @@ class Session(object):
         except Exception:
             raise
 
+    def safe_execute(self, stmt):
+        """
+        safe_execute: it can use by multi thread. and every call,
+        it will use a connection get from the pool
+        :param stmt: the ngql
+        :return: ResultSet
+        """
+        with self._lock:
+            if self._do_execute:
+                raise IOErrorException(
+                    IOErrorException.E_UNKNOWN,
+                    'The session is already called execute, '
+                    'You can only use execute or safe_execute in the session')
+            self._do_safe_execute = True
+        connection = None
+        try:
+            if self._address is None:
+                raise IOErrorException(IOErrorException.E_UNKNOWN, 'Input none address')
+            connection = self._pool.get_connection(self._address)
+            return ResultSet(connection.execute(self.session_id, stmt))
+        except IOErrorException as ie:
+            if ie.type == IOErrorException.E_CONNECT_BROKEN:
+                self._pool.set_invalidate_connection(connection)
+                connection = None
+                if self._retry_connect:
+                    try_count = self._pool.can_use_num()
+                    while try_count > 0:
+                        try_count = try_count - 1
+                        connection = self._pool.get_connection()
+                        if connection is None:
+                            continue
+                        if connection.ping():
+                            self._connection = connection
+                            self._address = self._connection.get_address()
+                            return ResultSet(connection.execute(self.session_id, stmt))
+            raise
+        except Exception:
+            raise
+        finally:
+            if connection is not None:
+                self._pool.return_connection(connection)
+
     def release(self):
         """
         release the connection to pool
         """
         if self._connection is None:
-            return
+            self._connection = self._pool.get_connection(self._address)
         self._connection.signout(self.session_id)
-        self._connection.is_used = False
+        self._pool.return_connection(self._connection)
         self._connection = None
 
     def ping(self):
@@ -90,41 +146,57 @@ class Session(object):
 
     def _reconnect(self):
         try:
-            conn = self._pool.get_connection()
-            if conn is None:
-                return False
-            self._connection = conn
+            self._pool.set_invalidate_connection(self._connection)
+            self._connection = None
+            try_count = self._pool.can_use_num()
+            while try_count > 0:
+                try_count = try_count - 1
+                conn = self._pool.get_connection()
+                if conn is None:
+                    return False
+                if conn.ping():
+                    self._connection = conn
+                    self._address = self._connection.get_address()
+                    return True
         except NotValidConnectionException:
             return False
         return True
 
     def __del__(self):
+        logging.debug("Call __del__ to release()")
         self.release()
 
 
 class ConnectionPool(object):
     S_OK = 0
     S_BAD = 1
+    T_CHECK_PERIOD = 5 * 60  # unit seconds
 
     def __init__(self):
         # all addresses of servers
         self._addresses = list()
-
-        # server's status
-        self._addresses_status = dict()
-
         # all connections
         self._connections = dict()
+        # the config of pool
         self._configs = None
         self._lock = RLock()
-        self._pos = -1
-        self._check_delay = 5 * 60  # unit seconds
         self._close = False
+        self._load_balance = None
+        # the conn in use
+        self._in_use_conn_num = 0
+        # the return conn num
+        self._return_conn_num = 0
+        # the active conn num
+        self._active_conn_num = 0
+        # the idle conn num
+        self._idle_conn_num = 0
+        # the max conn num
+        self._max_conn_num = 0
 
     def __del__(self):
         self.close()
 
-    def init(self, addresses, configs):
+    def init(self, addresses, configs=Config()):
         """
         init the connection pool
         :param addresses: the graphd servers' addresses
@@ -134,6 +206,7 @@ class ConnectionPool(object):
         if self._close:
             logging.error('The pool has init or closed.')
             raise RuntimeError('The pool has init or closed.')
+
         self._configs = configs
         for address in addresses:
             if address not in self._addresses:
@@ -143,23 +216,27 @@ class ConnectionPool(object):
                     raise InValidHostname(str(address[0]))
                 ip_port = (ip, address[1])
                 self._addresses.append(ip_port)
-                self._addresses_status[ip_port] = self.S_BAD
-                self._connections[ip_port] = deque()
+                self._connections[ip_port] = queue.Queue(
+                    self._configs.max_connection_pool_size)
 
-        # detect the services
-        self._period_detect()
+        self._load_balance = RoundRobinLoadBalance(self._addresses, self)
 
-        # init min connections
-        ok_num = self.get_ok_servers_num()
-        if ok_num < len(self._addresses):
-            raise RuntimeError('The services status exception: {}'.format(self._get_services_status()))
+        self._load_balance.update_servers_status()
+        if not self._load_balance.is_ok():
+            raise RuntimeError('The services status exception: {}'.format(
+                self._load_balance.get_services_status()))
 
-        conns_per_address = int(self._configs.min_connection_pool_size / ok_num)
-        for addr in self._addresses:
-            for i in range(0, conns_per_address):
+        if self._configs.min_connection_pool_size > 0:
+            for i in range(0, self._configs.min_connection_pool_size):
+                addr = self._load_balance.get_address()
                 connection = Connection()
                 connection.open(addr[0], addr[1], self._configs.timeout)
-                self._connections[addr].append(connection)
+                self._connections[addr].put(connection)
+        self._idle_conn_num = self._configs.min_connection_pool_size
+        self._active_conn_num = self._configs.min_connection_pool_size
+        self._max_conn_num = self._configs.max_connection_pool_size
+
+        self._period_check()
         return True
 
     def get_session(self, user_name, password, retry_connect=True):
@@ -170,75 +247,64 @@ class ConnectionPool(object):
         :param retry_connect: if auto retry connect
         :return: void
         """
-        connection = self.get_connection()
+        connection = self.get_connection(None)
         if connection is None:
             raise NotValidConnectionException()
         try:
             session_id = connection.authenticate(user_name, password)
-            return Session(connection, session_id, self, retry_connect)
+            return Session(connection.get_address(),
+                           session_id,
+                           self,
+                           retry_connect)
         except Exception:
             raise
+        finally:
+            self.return_connection(connection)
 
-    def get_connection(self):
+    def get_connection(self, key: HostAddr = None):
         """
         get available connection
+        :type key: object
         :return: Connection Object
         """
+        new_key = key
+        if new_key is None:
+            new_key = self._load_balance.get_address()
+        if new_key is None:
+            raise IOErrorException(IOErrorException.E_ALL_BROKEN,
+                                   'All server is broken')
         with self._lock:
-            if self._close:
-                logging.error('The pool is closed')
-                raise NotValidConnectionException()
-
+            is_succeed = False
+            if new_key not in self._connections.keys():
+                raise IOErrorException(IOErrorException.E_UNKNOWN,
+                                       'Use the unknown key: {}'.format(new_key))
             try:
-                ok_num = self.get_ok_servers_num()
-                if ok_num == 0:
-                    return None
-                max_con_per_address = int(self._configs.max_connection_pool_size / ok_num)
-                try_count = 0
-                while try_count <= len(self._addresses):
-                    self._pos = (self._pos + 1) % len(self._addresses)
-                    addr = self._addresses[self._pos]
-                    if self._addresses_status[addr] == self.S_OK:
-                        for connection in self._connections[addr]:
-                            if not connection.is_used:
-                                if connection.ping():
-                                    connection.is_used = True
-                                    logging.info('Get connection to {}'.format(addr))
-                                    return connection
+                if self._close:
+                    logging.error('The pool is closed')
+                    raise NotValidConnectionException()
 
-                        if len(self._connections[addr]) < max_con_per_address:
-                            connection = Connection()
-                            connection.open(addr[0], addr[1], self._configs.timeout)
-                            connection.is_used = True
-                            self._connections[addr].append(connection)
-                            logging.info('Get connection to {}'.format(addr))
-                            return connection
-                    else:
-                        for connection in list(self._connections[addr]):
-                            if not connection.is_used:
-                                self._connections[addr].remove(connection)
-                    try_count = try_count + 1
-                return None
-            except Exception as ex:
-                logging.error('Get connection failed: {}'.format(ex))
-                import traceback
-                print(traceback.format_exc())
-                return None
+                if self._idle_conn_num <= 0 \
+                        and self._active_conn_num >= self._max_conn_num:
+                    raise NotValidConnectionException()
+                if self._idle_conn_num > 0:
+                    if self._connections[new_key].qsize() > 0:
+                        self._idle_conn_num -= 1
+                        is_succeed = True
+                        return self._connections[new_key].get(block=False)
+                    elif self._active_conn_num < self._max_conn_num:
+                        self._create_connection(new_key)
+                        is_succeed = True
+                        return self._connections[new_key].get(block=False)
 
-    def ping(self, address):
-        """
-        check the server is ok
-        :param address: the server address want to connect
-        :return: True or False
-        """
-        try:
-            conn = Connection()
-            conn.open(address[0], address[1], 1000)
-            conn.close()
-            return True
-        except Exception as ex:
-            logging.warning('Connect {}:{} failed: {}'.format(address[0], address[1], ex))
-            return False
+                if self._active_conn_num < self._max_conn_num:
+                    self._create_connection(new_key)
+                    is_succeed = True
+                    return self._connections[new_key].get(block=False)
+            except Exception as e:
+                raise e
+            finally:
+                if is_succeed:
+                    self._in_use_conn_num += 1
 
     def close(self):
         """
@@ -246,91 +312,112 @@ class ConnectionPool(object):
         :return: void
         """
         with self._lock:
-            for addr in self._connections.keys():
-                for connection in self._connections[addr]:
-                    if connection.is_used:
-                        logging.error('The connection using by someone, but now want to close it')
-                    connection.close()
-            self._close = True
+            try:
+                for addr in self._connections.keys():
+                    for i in range(0, self._connections[addr].qsize()):
+                        self._connections[addr].get(block=False).close()
+            except Exception as e:
+                logging.warning(e)
+            finally:
+                self._close = True
 
-    def connnects(self):
+    def idle_conn_num(self):
+        """
+        get the number of idle connections
+        :return: int
+        """
+        with self._lock:
+            return self._idle_conn_num
+
+    def active_conn_num(self):
         """
         get the number of existing connections
         :return: int
         """
         with self._lock:
-            count = 0
-            for addr in self._connections.keys():
-                count = count + len(self._connections[addr])
-            return count
+            return self._active_conn_num
 
-    def in_used_connects(self):
+    def in_used_conn_num(self):
         """
         get the number of the used connections
         :return: int
         """
         with self._lock:
-            count = 0
-            for addr in self._connections.keys():
-                for connection in self._connections[addr]:
-                    if connection.is_used:
-                        count = count + 1
-            return count
+            return self._in_use_conn_num
 
-    def get_ok_servers_num(self):
+    def can_use_num(self):
         """
-        get the number of the ok servers
+        get the can use number of the pool
         :return: int
         """
-        count = 0
-        for addr in self._addresses_status.keys():
-            if self._addresses_status[addr] == self.S_OK:
-                count = count + 1
-        return count
+        with self._lock:
+            return self._max_conn_num - self._active_conn_num + self._idle_conn_num
 
-    def _get_services_status(self):
-        msg_list = []
-        for addr in self._addresses_status.keys():
-            status = 'OK'
-            if self._addresses_status[addr] != self.S_OK:
-                status = 'BAD'
-            msg_list.append('[services: {}, status: {}]'.format(addr, status))
-        return ', '.join(msg_list)
-
-    def update_servers_status(self):
+    def return_connection(self, connection):
         """
-        update the servers' status
+        return the connection to the pool
+        :param connection:
+        :return:
         """
-        for address in self._addresses:
-            if self.ping(address):
-                self._addresses_status[address] = self.S_OK
-            else:
-                self._addresses_status[address] = self.S_BAD
+        with self._lock:
+            if connection.get_address() not in self._connections.keys():
+                return
+            connection.reset()
+            self._connections[connection.get_address()].put(connection)
+            self._idle_conn_num += 1
+            self._in_use_conn_num -= 1
 
-    def _remove_idle_unusable_connection(self):
-        if self._configs.idle_time == 0:
+    def _remove_idle_connection(self):
+        if self._configs.idle_time <= 0:
             return
         with self._lock:
-            for addr in self._connections.keys():
-                conns = self._connections[addr]
-                for connection in conns:
-                    if not connection.is_used:
-                        if not connection.ping():
-                            logging.debug('Remove the not unusable connection to {}'.format(connection.get_address()))
-                            conns.remove(connection)
+            if self._idle_conn_num > self._configs.min_connection_pool_size:
+                for key in self._connections.keys():
+                    connection = self._connections[key].get(block=False)
+                    count = self._connections[key].qsize()
+                    while count > 0:
+                        count = count - 1
+                        if connection.idle_time() >= self._configs.idle_time:
+                            logging.info(
+                                'Remove the idle connection for address:{}'.format(key))
+                            self._active_conn_num -= 1
+                            self._idle_conn_num -= 1
                             continue
-                        if self._configs.idle_time != 0 and connection.idle_time() > self._configs.idle_time:
-                            logging.debug('Remove the idle connection to {}'.format(connection.get_address()))
-                            conns.remove(connection)
+                        else:
+                            self._connections[key].put(connection)
 
-    def _period_detect(self):
+    def _period_check(self):
         if self._close:
             return
-        self.update_servers_status()
-        self._remove_idle_unusable_connection()
-        timer = threading.Timer(self._check_delay, self._period_detect)
+        self._remove_idle_connection()
+        timer = threading.Timer(self.T_CHECK_PERIOD, self._period_check)
         timer.setDaemon(True)
         timer.start()
+
+    def set_invalidate_connection(self, connection):
+        with self._lock:
+            if connection.get_address() not in self._connections.keys():
+                return
+            connection.close()
+            self._active_conn_num -= 1
+            self._in_use_conn_num -= 1
+            self._load_balance.update_servers_status()
+
+    def _create_connection(self, key: HostAddr):
+        connection = Connection()
+        connection.open(key[0], key[1], self._configs.timeout)
+        self._connections[key].put(connection)
+        self._active_conn_num += 1
+
+
+def ping(addr, timeout=3000):
+    try:
+        connection = Connection()
+        connection.open(addr[0], addr[1], timeout)
+        connection.close()
+        return True
+    except Exception:
+        return False
 
 
 class Connection(object):
@@ -385,7 +472,6 @@ class Connection(object):
 
     def close(self):
         """
-
         :return: void
         """
         try:
@@ -410,9 +496,56 @@ class Connection(object):
         self.start_use_time = time.time()
 
     def idle_time(self):
-        if not self.is_used:
-            return 0
         return time.time() - self.start_use_time
 
     def get_address(self):
         return (self._ip, self._port)
+
+
+class RoundRobinLoadBalance(object):
+    S_OK = 0
+    S_BAD = 1
+
+    def __init__(self, servers_addresses, pool):
+        self._servers_addresses = servers_addresses
+        self._servers_status = {}
+        self._pos = 0
+        self._period_time = 5 * 60
+        self._pool = pool
+        self._servers_status: Dict[HostAddr, int]
+        for addr in self._servers_addresses:
+            self._servers_status[addr] = self.S_BAD
+
+    def get_address(self):
+        try_count = 0
+        while try_count < len(self._servers_addresses):
+            new_pos = self._pos % len(self._servers_addresses)
+            addr = self._servers_addresses[new_pos]
+            try_count = try_count + 1
+            self._pos = self._pos + 1
+            if self._servers_status[addr] == self.S_OK:
+                return addr
+        self._pos = self._pos + 1
+        return None
+
+    def update_servers_status(self):
+        for addr in self._servers_addresses:
+            if ping(addr):
+                self._servers_status[addr] = self.S_OK
+            else:
+                self._servers_status[addr] = self.S_BAD
+
+    def is_ok(self):
+        for addr in self._servers_status:
+            if self._servers_status[addr] == self.S_BAD:
+                return False
+        return True
+
+    def get_services_status(self):
+        msg_list = []
+        for addr in self._servers_status.keys():
+            status = 'OK'
+            if self._servers_status[addr] != self.S_OK:
+                status = 'BAD'
+            msg_list.append('[services: {}, status: {}]'.format(addr, status))
+        return ', '.join(msg_list)
