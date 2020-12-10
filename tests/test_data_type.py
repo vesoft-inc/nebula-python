@@ -26,7 +26,12 @@ from nebula2.data.DataObject import (
     Node,
     Relationship,
     PathWrapper,
-    TimeWrapper, DateTimeWrapper, DateWrapper, Null, Segment)
+    TimeWrapper,
+    DateTimeWrapper,
+    DateWrapper,
+    Null,
+    Segment
+)
 
 
 class TestBaseCase(TestCase):
