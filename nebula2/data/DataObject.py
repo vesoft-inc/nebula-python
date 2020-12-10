@@ -665,6 +665,13 @@ class Segment:
                                           self.relationship.propertys(),
                                           self.end_node)
 
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return self.start_node == other.start_node \
+               and self.end_node == other.end_node \
+               and self.relationship == other.relationship
+
 
 class PathWrapper(object):
     def __init__(self, path, decode_type='utf-8'):
@@ -712,7 +719,7 @@ class PathWrapper(object):
             self._segments.append(segment)
 
     def __iter__(self):
-        return self._segments.popleft()
+        return iter(self._segments)
 
     def start_node(self):
         if len(self._nodes) == 0:
@@ -765,7 +772,7 @@ class PathWrapper(object):
         if not isinstance(other, self.__class__):
             return False
 
-        return self.__dict__ == other.__dict__
+        return self._segments == other.segments()
 
     def __ne__(self, other):
         return not (self == other)
