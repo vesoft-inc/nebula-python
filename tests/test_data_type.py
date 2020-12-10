@@ -26,7 +26,12 @@ from nebula2.data.DataObject import (
     Node,
     Relationship,
     PathWrapper,
-    TimeWrapper, DateTimeWrapper, DateWrapper, Null)
+    TimeWrapper,
+    DateTimeWrapper,
+    DateWrapper,
+    Null,
+    Segment
+)
 
 
 class TestBaseCase(TestCase):
@@ -392,7 +397,8 @@ class TestRelationship(TestBaseCase):
 class TestPath(TestBaseCase):
     def test_path_api(self):
         path = PathWrapper(self.get_path_value(b'Tom'))
-        assert Node(self.get_vertex_value(b'Tom')) == path.start_node()
+        tom_node = Node(self.get_vertex_value(b'Tom'))
+        assert tom_node == path.start_node()
 
         assert 5 == path.length()
 
@@ -405,8 +411,9 @@ class TestPath(TestBaseCase):
         for i in range(0, 5):
             nodes.append(Node(self.get_vertex_value(('vertex'.format(i)).encode('utf-8'))))
 
+        first_relationship = Relationship(self.get_edge_value(b'Tom', b'vertex0'))
         relationships = list()
-        relationships.append(Relationship(self.get_edge_value(b'Tom', b'vertex0')))
+        relationships.append(first_relationship)
         for i in range(0, 4):
             if i % 2 == 0:
                 relationships.append(Relationship(
@@ -418,6 +425,20 @@ class TestPath(TestBaseCase):
                                         ('vertex{}'.format(i + 1)).encode('utf-8'))))
 
         assert relationships == path.relationships()
+
+        # test segment equal
+        segment = Segment()
+        segment.start_node = tom_node
+        segment.relationship = first_relationship
+        segment.end_node = Node(self.get_vertex_value(b'vertex0'))
+
+        # test equal
+        assert path.segments()[0] == segment
+        count = 0
+        for segment in path:
+            count += 1
+            print(segment)
+        assert count == 5
 
 
 class TestResultset(TestBaseCase):
