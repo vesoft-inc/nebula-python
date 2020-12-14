@@ -84,8 +84,8 @@ ok = connection_pool.init([('127.0.0.1', 3699)], config)
 session = connection_pool.get_session('root', 'nebula')
 
 # show hosts
-resp = result = session.execute('SHOW HOSTS')
-print(resp)
+result = session.execute('SHOW HOSTS')
+print(result)
 
 # release session
 session.release()
