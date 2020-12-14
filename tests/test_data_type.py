@@ -53,10 +53,14 @@ class TestBaseCase(TestCase):
         return vertex
 
     @classmethod
-    def get_edge_value(self, src_id, dst_id):
+    def get_edge_value(self, src_id, dst_id, is_reverse=False):
         edge = ttypes.Edge()
-        edge.src = src_id
-        edge.dst = dst_id
+        if not is_reverse:
+            edge.src = src_id
+            edge.dst = dst_id
+        else:
+            edge.src = dst_id
+            edge.dst = src_id
         edge.type = 1
         edge.name = b'classmate'
         edge.ranking = 100
@@ -340,13 +344,26 @@ class TesValueWrapper(TestBaseCase):
         assert isinstance(node, Node)
 
     def test_as_relationship(self):
-        value = ttypes.Value()
-        value.set_eVal(self.get_edge_value(b'Tom', b'Lily'))
+        value = ttypes.Value(eVal=self.get_edge_value(b'Tom', b'Lily'))
         value_wrapper = ValueWrapper(value)
         assert value_wrapper.is_edge()
 
         relationship = value_wrapper.as_relationship()
         assert isinstance(relationship, Relationship)
+
+        # test with reversely
+        reversely_value = ttypes.Value(eVal=self.get_edge_value(b'Lily', b'Tom', True))
+        reversely_value_wrapper = ValueWrapper(reversely_value)
+        reversely_relationship = reversely_value_wrapper.as_relationship()
+        assert isinstance(reversely_relationship, Relationship)
+        assert reversely_relationship == relationship
+
+        # test with reversely no equal
+        reversely_value = ttypes.Value(eVal=self.get_edge_value(b'Tom', b'Lily', True))
+        reversely_value_wrapper = ValueWrapper(reversely_value)
+        reversely_relationship = reversely_value_wrapper.as_relationship()
+        assert isinstance(reversely_relationship, Relationship)
+        assert reversely_relationship != relationship
 
     def test_as_path(self):
         value = ttypes.Value()

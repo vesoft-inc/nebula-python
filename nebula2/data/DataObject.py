@@ -644,10 +644,16 @@ class Relationship(object):
         self._value = edge
 
     def start_vertex_id(self):
-        return self._value.src.decode(self._decode_type)
+        if self._value.type > 0:
+            return self._value.src.decode(self._decode_type)
+        else:
+            return self._value.dst.decode(self._decode_type)
 
     def end_vertex_id(self):
-        return self._value.dst.decode(self._decode_type)
+        if self._value.type > 0:
+            return self._value.dst.decode(self._decode_type)
+        else:
+            return self._value.src.decode(self._decode_type)
 
     def edge_name(self):
         return self._value.name.decode(self._decode_type)
