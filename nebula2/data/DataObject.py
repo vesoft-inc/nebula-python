@@ -160,9 +160,8 @@ class DataSetWrapper(object):
         data_str = []
         for i in range(self.get_row_size()):
             data_str.append(str(self.row_values(i)))
-        name_str = ','.join(self._column_names)
         value_str = ','.join(data_str)
-        return 'keys: {}, values: {}'.format(name_str, value_str)
+        return 'keys: {}, values: {}'.format(self._column_names, value_str)
 
 
 class Null(object):
@@ -371,8 +370,10 @@ class ValueWrapper(object):
             return False
         if self.get_value().getType() != o.get_value().getType():
             return False
-        if self.is_null():
-            return o.is_null()
+        if self.is_empty():
+            return o.is_empty()
+        elif self.is_null():
+            return self.as_null() == o.as_null()
         elif self.is_bool():
             return self.as_bool() == o.as_bool()
         elif self.is_int():
@@ -393,6 +394,12 @@ class ValueWrapper(object):
             return self.as_relationship() == o.as_relationship()
         elif self.is_path():
             return self.as_path() == o.as_path()
+        elif self.is_time():
+            return self.as_time() == self.as_time()
+        elif self.is_date():
+            return self.as_date() == self.as_date()
+        elif self.is_datetime():
+            return self.as_datetime() == self.as_datetime()
         else:
             raise RuntimeError('Unsupported type:{} to compare'.format(self._get_type_name()))
         return False
@@ -456,6 +463,14 @@ class TimeWrapper(object):
     def get_time(self):
         return self._time
 
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return self._time.hour == other.get_hour() and \
+               self._time.minute == other.get_minute() and \
+               self._time.sec == other.get_sec() and \
+               self._time.microsec == self.get_microsec()
+
     def __repr__(self):
         return "%02d:%02d:%02d.%06d" % (self._time.hour,
                                         self._time.minute,
@@ -478,6 +493,13 @@ class DateWrapper(object):
 
     def get_date(self):
         return self._date
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return self._date.year == other.get_year() and \
+               self._date.month == other.get_month() and \
+               self._date.day == other.get_day()
 
     def __repr__(self):
         return "%d-%02d-%02d" % (self._date.year, self._date.month, self._date.day)
@@ -511,6 +533,17 @@ class DateTimeWrapper(object):
 
     def get_datetime(self):
         return self._date_time
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return self._date_time.year == other.get_year() and \
+               self._date_time.month == other.get_month() and \
+               self._date_time.day == other.get_day() and \
+               self._date_time.hour == other.get_hour() and \
+               self._date_time.minute == other.get_minute() and \
+               self._date_time.sec == other.get_sec() and \
+               self._date_time.microsec == other.get_microsec()
 
     def __repr__(self):
         return "%d-%02d-%02dT%02d:%02d:%02d.%06d" % (self._date_time.year,
@@ -611,10 +644,16 @@ class Relationship(object):
         self._value = edge
 
     def start_vertex_id(self):
-        return self._value.src.decode(self._decode_type)
+        if self._value.type > 0:
+            return self._value.src.decode(self._decode_type)
+        else:
+            return self._value.dst.decode(self._decode_type)
 
     def end_vertex_id(self):
-        return self._value.dst.decode(self._decode_type)
+        if self._value.type > 0:
+            return self._value.dst.decode(self._decode_type)
+        else:
+            return self._value.src.decode(self._decode_type)
 
     def edge_name(self):
         return self._value.name.decode(self._decode_type)
