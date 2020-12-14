@@ -1,0 +1,258 @@
+#!/usr/bin/env python
+# --coding:utf-8--
+
+# Copyright (c) 2020 vesoft inc. All rights reserved.
+#
+# This source code is licensed under Apache 2.0 License,
+# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+
+from nebula2.common import ttypes
+from nebula2.common.ttypes import Vertex, Tag, Edge
+from nebula2.data.DataObject import (
+    DataSetWrapper,
+    Node,
+    ValueWrapper,
+    Relationship
+)
+
+
+class VertexData(object):
+    PROP_START_INDEX = 2
+
+    def __init__(self,
+                 row,
+                 col_names,
+                 tag_name,
+                 decode_type='utf-8'):
+        """
+        1. First column is vertex id
+        2. Second column is tag id
+        """
+        if len(row.values) != len(col_names):
+            raise RuntimeError(
+                'Input row size is not equal with the col name size, {} != {}'
+                    .format(row.values, col_names))
+        self._row = row
+        self._decode_type = decode_type
+        self._col_names = col_names
+        self._tag_name = tag_name
+
+    def get_id(self):
+        if len(self._row.values) < 1:
+            raise RuntimeError('The row value is bad format, '
+                               'get vertex id failed: len is {}'
+                               .format(len(self._row.values)))
+        assert self._row.values[0].getType() == ttypes.Value.SVAL
+        return self._row.values[0].get_sVal().decode(self._decode_type)
+
+    def as_node(self):
+        """
+        convert the vertex data to structure Node
+        :return: Node
+        """
+        if len(self._row.values) < self.PROP_START_INDEX:
+            raise RuntimeError('The row value is bad format, '
+                               'as node failed: len is {}'
+                               .format(len(self._row.values)))
+
+        vertex = Vertex()
+        vertex.tags = []
+        vertex.vid = self._row.values[0].get_sVal()
+        tag = Tag()
+        tag.name = self._tag_name
+        tag.props = {}
+        index = self.PROP_START_INDEX
+        while index < len(self._col_names):
+            tag.props[self._col_names[index]] = self._row.values[index]
+            index = index + 1
+        vertex.tags.append(tag)
+
+        return Node(vertex, self._decode_type)
+
+    def get_prop_values(self):
+        """
+        get all prop values from the vertex data
+        :return: list<ValueWrapper>
+        """
+        index = self.PROP_START_INDEX
+        prop_values = []
+        while index < len(self._row.values):
+            prop_values.append(ValueWrapper(self._row.values[index],
+                                            self._decode_type))
+            index = index + 1
+        return prop_values
+
+    def __repr__(self):
+        return str(self.as_node())
+
+
+class EdgeData(object):
+    PROP_START_INDEX = 4
+
+    def __init__(self,
+                 row,
+                 col_names,
+                 edge_name,
+                 decode_type='utf-8'):
+        """
+        1. First column is src id
+        2. Second column is edge type
+        3. Third column is edge rank
+        4. Fourth column is dst id
+        """
+        if len(row.values) != len(col_names):
+            raise RuntimeError('Input row size is not equal '
+                               'with the col name size, {} != {}'
+                               .format(len(row.values), len(col_names)))
+        self._row = row
+        self._decode_type = decode_type
+        self._col_names = col_names
+        self._edge_name = edge_name
+
+    def get_src_id(self):
+        if len(self._row.values) < 1:
+            raise RuntimeError('The row value is bad format, '
+                               'get edge src id failed: len is {}'
+                               .format(len(self._row.values)))
+        assert self._row.values[0].getType() == ttypes.Value.SVAL
+        return self._row.values[0].get_sVal().decode(self._decode_type)
+
+    @property
+    def get_edge_name(self):
+        if len(self._row.values) < 2:
+            raise RuntimeError('The row value is bad format, '
+                               'get edge edge type failed: len is {}'
+                               .format(len(self._row.values)))
+        return self._edge_name
+
+    def get_ranking(self):
+        if len(self._row.values) < 3:
+            raise RuntimeError('The row value is bad format, '
+                               'get edge ranking failed: len is {}'
+                               .format(len(self._row.values)))
+        assert self._row.values[2].getType() == ttypes.Value.IVAL
+        return self._row.values[2].get_iVal()
+
+    def get_dst_id(self):
+        if len(self._row.values) < 4:
+            raise RuntimeError('The row value is bad format, '
+                               'get edge dst id failed: len is {}'
+                               .format(len(self._row.values)))
+        assert self._row.values[3].getType() == ttypes.Value.SVAL
+        return self._row.values[3].get_sVal().decode(self._decode_type)
+
+    def as_relationship(self):
+        """
+        convert the edge data to structure Relationship
+        :return: Node
+        """
+        if len(self._row.values) < self.PROP_START_INDEX:
+            raise RuntimeError('The row value is bad format, '
+                               'as relationship failed: len is {}'
+                               .format(len(self._row.values)))
+        edge = Edge()
+        edge.src = self._row.values[0].get_sVal()
+        edge.type = self._row.values[1].get_iVal()
+        edge.name = self._edge_name
+        edge.ranking = self._row.values[2].get_iVal()
+        edge.dst = self._row.values[3].get_sVal()
+        edge.props = {}
+        index = self.PROP_START_INDEX
+        while index < len(self._col_names):
+            edge.props[self._col_names[index]] = self._row.values[index]
+            index = index + 1
+
+        return Relationship(edge, self._decode_type)
+
+    def get_prop_values(self):
+        """
+        get all prop values from the edge data
+        :return: list<ValueWrapper>
+        """
+        index = self.PROP_START_INDEX
+        prop_values = []
+        while index < len(self._row.values):
+            prop_values.append(ValueWrapper(self._row.values[index]))
+            index = index + 1
+        return prop_values
+
+    def __repr__(self):
+        return str(self.as_relationship())
+
+
+class BaseResult(object):
+    def __init__(self,
+                 data_sets: list,
+                 schema_name,
+                 decode_type='utf-8',
+                 is_vertex=True):
+        assert data_sets is not None
+        self.is_vertex = is_vertex
+        self._data_sets = data_sets
+        self._decode_type = decode_type
+        self._pos = -1
+        self._data_set_pos = 0
+        self._table_pos = -1
+        self._size = 0
+        self._schema_name = schema_name
+        for data_set in self._data_sets:
+            self._size += len(data_set.rows)
+
+    def get_data_set(self):
+        """
+        get_data_set: return the origin values, the string type is binary
+        :return: DataSet
+        """
+        result = None
+        for data_set in self._data_sets:
+            if result is None:
+                result = data_set
+                continue
+            if len(data_set.column_names) != len(result.column_names):
+                raise RuntimeError('Multi DataSets are different col size')
+            result.rows.extend(data_set.rows)
+
+        return result
+
+    def get_data_set_wrapper(self):
+        """
+        get_data_set_wrapper:
+        :return: DataSetWrapper
+        """
+        result = None
+        for data_set in self._data_sets:
+            if result is None:
+                result = data_set
+                continue
+            if len(data_set.column_names) != len(result.column_names):
+                raise RuntimeError('Multi DataSets are different col size')
+            result.rows.extend(data_set.rows)
+
+        return DataSetWrapper(result, self._decode_type)
+
+    def __repr__(self):
+        return str(self._data_sets)
+
+    def __iter__(self):
+        self._pos = -1
+        return self
+
+    def __next__(self):
+        """
+        The VertexData or EdgeData iterator
+        :return: VertexData or EdgeData Iterator
+        """
+        if len(self._data_sets) == 0 or self._pos >= self._size - 1:
+            raise StopIteration
+        self._pos += 1
+        self._table_pos += 1
+        if self._table_pos >= len(self._data_sets[self._data_set_pos].rows):
+            self._table_pos = 0
+            self._data_set_pos += 1
+        col_names = self._data_sets[self._data_set_pos].column_names
+        row = self._data_sets[self._data_set_pos].rows[self._table_pos]
+        if self.is_vertex:
+            return VertexData(row, col_names, self._schema_name, self._decode_type)
+        else:
+            return EdgeData(row, col_names, self._schema_name, self._decode_type)
+

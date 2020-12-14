@@ -151,4 +151,20 @@ class TestMetaCache(object):
         expected_hosts = [44500, 44500, 44500]
         assert ports == expected_hosts
 
+    def test_get_part_alloc(self):
+        part_alloc = self.meta_cache.get_part_alloc('test_meta_cache1')
+        assert len(part_alloc) == 100
+
+        expected_parts = [i for i in range(1, 101)]
+        parts = [part for part in part_alloc]
+        assert sorted(expected_parts) == sorted(parts)
+
+        hosts = [addr.host for addr in part_alloc[1]]
+        expected_hosts = ['storaged0', 'storaged1', 'storaged2']
+        assert sorted(hosts) == sorted(expected_hosts)
+
+        ports = [addr.port for addr in part_alloc[1]]
+        expected_ports = [44500, 44500, 44500]
+        assert sorted(ports) == sorted(expected_ports)
+
 

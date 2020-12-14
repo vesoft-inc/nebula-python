@@ -11,7 +11,13 @@ import socket
 import threading
 
 from _thread import RLock
-from nebula2.Exception import InValidHostname
+from nebula2.Exception import (
+    InValidHostname,
+    PartNotFoundException,
+    SpaceNotFoundException,
+    TagNotFoundException,
+    EdgeNotFoundException
+)
 from nebula2.common.ttypes import HostAddr
 from nebula2.meta.ttypes import (
     ListTagsReq,
@@ -19,8 +25,8 @@ from nebula2.meta.ttypes import (
     ListSpacesReq,
     GetPartsAllocReq,
     ErrorCode,
-    ListHostsReq, HostRole)
-
+    ListHostsReq
+)
 from nebula2.meta import (
     ttypes,
     MetaService
@@ -33,7 +39,7 @@ from thrift.protocol import TBinaryProtocol
 class MetaClient(object):
     def __init__(self, addresses, timeout):
         if len(addresses) == 0:
-            raise RuntimeError("")
+            raise RuntimeError('Input empty addresses')
         self._addresses = []
         self._timeout = timeout
 
@@ -45,6 +51,7 @@ class MetaClient(object):
             self._addresses.append((ip, address[1]))
         self._leader = self._addresses[0]
         self._connection = None
+        self._lock = RLock()
 
     def open(self):
         try:
@@ -60,63 +67,68 @@ class MetaClient(object):
             raise
 
     def list_tags(self, space_id):
-        if self._connection is None:
-            raise RuntimeError('The connection is no open')
-        req = ListTagsReq()
-        req.space_id = space_id
-        resp = self._connection.listTags(req)
-        if resp.code != ErrorCode.SUCCEEDED:
-            self.update_leader()
-            raise RuntimeError("List tags from space id:{} failed, error code: {}"
-                               .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
-        return resp.tags
+        with self._lock:
+            if self._connection is None:
+                raise RuntimeError('The connection is no open')
+            req = ListTagsReq()
+            req.space_id = space_id
+            resp = self._connection.listTags(req)
+            if resp.code != ErrorCode.SUCCEEDED:
+                self.update_leader()
+                raise RuntimeError("List tags from space id:{} failed, error code: {}"
+                                   .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+            return resp.tags
 
     def list_edges(self, space_id):
-        if self._connection is None:
-            raise RuntimeError('The connection is no open')
-        req = ListEdgesReq()
-        req.space_id = space_id
-        resp = self._connection.listEdges(req)
-        if resp.code != ErrorCode.SUCCEEDED:
-            self.update_leader()
-            raise RuntimeError("List edges from space id:{} failed, error code: {}"
-                               .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
-        return resp.edges
+        with self._lock:
+            if self._connection is None:
+                raise RuntimeError('The connection is no open')
+            req = ListEdgesReq()
+            req.space_id = space_id
+            resp = self._connection.listEdges(req)
+            if resp.code != ErrorCode.SUCCEEDED:
+                self.update_leader()
+                raise RuntimeError("List edges from space id:{} failed, error code: {}"
+                                   .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+            return resp.edges
 
     def list_spaces(self):
-        if self._connection is None:
-            raise RuntimeError('The connection is no open')
-        req = ListSpacesReq()
-        resp = self._connection.listSpaces(req)
-        if resp.code != ErrorCode.SUCCEEDED:
-            self.update_leader()
-            raise RuntimeError("List spaces failed, error code: {}"
-                               .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
-        return resp.spaces
+        with self._lock:
+            if self._connection is None:
+                raise RuntimeError('The connection is no open')
+            req = ListSpacesReq()
+            resp = self._connection.listSpaces(req)
+            if resp.code != ErrorCode.SUCCEEDED:
+                self.update_leader()
+                raise RuntimeError("List spaces failed, error code: {}"
+                                   .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
+            return resp.spaces
 
     def list_hosts(self):
-        if self._connection is None:
-            raise RuntimeError('The connection is no open')
-        req = ListHostsReq()
-        # req.role = HostRole.STORAGE
-        resp = self._connection.listHosts(req)
-        if resp.code != ErrorCode.SUCCEEDED:
-            self.update_leader()
-            raise RuntimeError("List spaces failed, error code: {}"
-                               .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
-        return resp.hosts
+        with self._lock:
+            if self._connection is None:
+                raise RuntimeError('The connection is no open')
+            req = ListHostsReq()
+            # req.role = HostRole.STORAGE
+            resp = self._connection.listHosts(req)
+            if resp.code != ErrorCode.SUCCEEDED:
+                self.update_leader()
+                raise RuntimeError("List spaces failed, error code: {}"
+                                   .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
+            return resp.hosts
 
     def get_parts_alloc(self, space_id):
-        if self._connection is None:
-            raise RuntimeError('The connection is no open')
-        req = GetPartsAllocReq()
-        req.space_id = space_id
-        resp = self._connection.getPartsAlloc(req)
-        if resp.code != ErrorCode.SUCCEEDED:
-            self.update_leader()
-            raise RuntimeError("List parts from space id:{} failed, error code: {}"
-                               .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
-        return resp.parts
+        with self._lock:
+            if self._connection is None:
+                raise RuntimeError('The connection is no open')
+            req = GetPartsAllocReq()
+            req.space_id = space_id
+            resp = self._connection.getPartsAlloc(req)
+            if resp.code != ErrorCode.SUCCEEDED:
+                self.update_leader()
+                raise RuntimeError("List parts from space id:{} failed, error code: {}"
+                                   .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+            return resp.parts
 
     def close(self):
         try:
@@ -129,8 +141,9 @@ class MetaClient(object):
         if resp.code == ErrorCode.E_LEADER_CHANGED:
             try:
                 if resp.leader is not None:
-                    self._leader = (resp.leader.host, resp.leader.port)
-                    self.open()
+                    with self._lock:
+                        self._leader = (resp.leader.host, resp.leader.port)
+                        self.open()
             except Exception as e:
                 logging.error(e)
 
@@ -139,11 +152,21 @@ class MetaClient(object):
 
 
 class MetaCache(object):
-    class SpaceCache(object):
-        space_id = 0
-        space_name = ''
-        tag_items = {}
-        edge_items = {}
+    class SpaceCache:
+        def __init__(self):
+            self.space_id = 0
+            self.space_name = ''
+            self.tag_items = {}
+            self.edge_items = {}
+            self.parts_alloc = {}
+
+        def __repr__(self):
+            return 'space_id: {}, space_name: {}, tag_items: {}, edge_items: {}, parts_alloc: {}'\
+                .format(self.space_id,
+                        self.space_name,
+                        self.tag_items,
+                        self.edge_items,
+                        self.parts_alloc)
 
     def __init__(self, meta_addrs, timeout=2000, load_period=10, decode_type='utf-8'):
         self._decode_type = decode_type
@@ -152,13 +175,20 @@ class MetaCache(object):
         self._meta_client = MetaClient(meta_addrs, timeout)
         self._meta_client.open()
         self._space_caches = {}
+        self._space_id_names = {}
         self._storage_addrs = []
         self._storage_leader = {}
+        self._close = False
 
         # load meta data
-        self._period_update_meta_data()
+        self._load_all()
+
+    def __del__(self):
+        self._close = True
 
     def _period_update_meta_data(self):
+        if self._close:
+            return
         self._load_all()
         timer = threading.Timer(self._load_period, self._period_update_meta_data)
         timer.setDaemon(True)
@@ -168,13 +198,16 @@ class MetaCache(object):
         try:
             spaces = self._meta_client.list_spaces()
             space_caches = {}
+            space_id_names = {}
             for space in spaces:
                 space_id = space.id.get_space_id()
                 space_cache = MetaCache.SpaceCache()
                 space_cache.space_id = space_id
                 space_cache.space_name = space.name.decode('utf-8')
+                space_id_names[space_id] = space_cache.space_name
                 tags = self._meta_client.list_tags(space_id)
                 edges = self._meta_client.list_edges(space_id)
+                parts_alloc = self._meta_client.get_parts_alloc(space_id)
                 for tag in tags:
                     tag_name = tag.tag_name.decode(self._decode_type)
                     if tag_name not in space_cache.tag_items.keys():
@@ -190,25 +223,26 @@ class MetaCache(object):
                         if space_cache.edge_items[edge_name].version < edge.version:
                             space_cache.edge_items[edge_name] = edge
                     space_cache.edge_items[edge.edge_name.decode(self._decode_type)] = edge
+                space_cache.parts_alloc = parts_alloc
                 space_caches[space.name.decode(self._decode_type)] = space_cache
 
             hosts = self._meta_client.list_hosts()
             storage_addrs = []
-            storage_part_leaders = {}
             for host_item in hosts:
                 storage_addrs.append(host_item.hostAddr)
-                leader_parts = host_item.leader_parts
-                for space_name in leader_parts.keys():
-                    decode_space_name = space_name.decode(self._decode_type)
-                    if decode_space_name not in storage_part_leaders.keys():
-                        storage_part_leaders[decode_space_name] = {}
-                    for part in leader_parts[space_name]:
-                        storage_part_leaders[decode_space_name][part] = host_item.hostAddr
 
             with self._lock:
                 self._storage_addrs = storage_addrs
                 self._space_caches = space_caches
-                self._storage_leader = storage_part_leaders
+                self._space_id_names = space_id_names
+                for space_name in self._space_caches.keys():
+                    if space_name in self._storage_leader.keys():
+                        continue
+                    parts_alloc = self._space_caches[space_name].parts_alloc
+                    self._storage_leader[space_name] = {}
+                    for part_id in parts_alloc:
+                        self._storage_leader[space_name][part_id] = parts_alloc[part_id][0]
+
         except Exception as x:
             logging.error('Update meta data failed: {}'.format(x))
             import traceback
@@ -216,7 +250,6 @@ class MetaCache(object):
 
     def get_all_storage_addrs(self):
         """
-
         :return: list[HostAddr]
         """
         return self._storage_addrs
@@ -253,7 +286,7 @@ class MetaCache(object):
             if space_name not in self._space_caches.keys():
                 self._load_all()
                 if space_name not in self._space_caches.keys():
-                    raise RuntimeError("{} is not found".format(space_name))
+                    raise SpaceNotFoundException(space_name)
             return self._space_caches[space_name].space_id
 
     def get_tag_schema(self, space_name, tag_name):
@@ -285,7 +318,7 @@ class MetaCache(object):
         """
         part_leaders = self.get_part_leaders(space_name)
         if part_id not in part_leaders.keys():
-            raise RuntimeError("Part id:{} is not found".format(part_id))
+            raise PartNotFoundException(part_id)
         return part_leaders[part_id]
 
     def get_part_leaders(self, space_name):
@@ -293,51 +326,67 @@ class MetaCache(object):
             if space_name not in self._storage_leader.keys():
                 self._load_all()
                 if space_name not in self._storage_leader.keys():
-                    raise RuntimeError("Space name:{} is not found".format(space_name))
+                    raise SpaceNotFoundException(space_name)
             return self._storage_leader[space_name]
+
+    def get_part_alloc(self, space_name):
+        with self._lock:
+            if space_name not in self._space_caches.keys():
+                self._load_all()
+                if space_name not in self._space_caches.keys():
+                    raise SpaceNotFoundException(space_name)
+            return self._space_caches[space_name].parts_alloc
 
     def _get_tag_item(self, space_name, tag_name):
         with self._lock:
             if space_name not in self._space_caches.keys():
                 self._load_all()
                 if space_name not in self._space_caches.keys():
-                    raise RuntimeError("Space name:{} is not found".format(space_name))
-            space_cache = self._space_caches[space_name]
-            if tag_name not in space_cache.tag_items.keys():
+                    raise SpaceNotFoundException(space_name)
+            space_info = self._space_caches[space_name]
+            if tag_name not in space_info.tag_items.keys():
                 self._load_all()
-                if tag_name not in space_cache.tag_items.keys():
-                    raise RuntimeError("Tag name:{} is not found".format(tag_name))
-            return space_cache.tag_items[tag_name]
+                if tag_name not in space_info.tag_items.keys():
+                    raise TagNotFoundException(tag_name)
+            return space_info.tag_items[tag_name]
 
     def _get_edge_item(self, space_name, edge_name):
         with self._lock:
             if space_name not in self._space_caches.keys():
                 self._load_all()
                 if space_name not in self._space_caches.keys():
-                    raise RuntimeError("Space name:{} is not found".format(space_name))
-            space_cache = self._space_caches[space_name]
-            if edge_name not in space_cache.edge_items.keys():
+                    raise SpaceNotFoundException(space_name)
+            space_info = self._space_caches[space_name]
+            if edge_name not in space_info.edge_items.keys():
                 self._load_all()
-                if edge_name not in space_cache.edge_items.keys():
-                    raise RuntimeError("Edge name:{} is not found".format(edge_name))
-            return space_cache.edge_items[edge_name]
+                if edge_name not in space_info.edge_items.keys():
+                    raise EdgeNotFoundException(edge_name)
+            return space_info.edge_items[edge_name]
 
-    def update_storage_leader(self, space_name, part_id, address):
+    def update_storage_leader(self, space_id, part_id, address: HostAddr):
         """
         if the storage leader change, storage client need to call this function
-        :param space_name:
+        :param space_id:
         :param part_id:
-        :param address: HostAddr
+        :param address: HostAddr, if the address is None, it means the leader can't connect,
+        choose the peer as leader
         :return: coid
         """
         with self._lock:
-            if space_name not in self._storage_leader.keys():
-                logging.error("Space name:{} is not found".format(space_name))
+            if space_id not in self._space_id_names.keys():
+                logging.error("Space name:{} is not found".format(space_id))
                 return
+            space_name = self._space_id_names.get(space_id)
             if part_id not in self._storage_leader[space_name].keys():
                 logging.error("part_id:{} is not found".format(space_name))
                 return
-            if isinstance(address, HostAddr):
+            if address is not None:
                 self._storage_leader[space_name][part_id] = address
+                return
+            part_addresses = self._space_caches[space_name].parts_alloc.get(part_id)
+            for part_addr in part_addresses:
+                if part_addr == address:
+                    continue
+                self._storage_leader[space_name][part_id] = part_addr
 
 
