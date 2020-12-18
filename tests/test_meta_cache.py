@@ -120,7 +120,7 @@ class TestMetaCache(object):
 
     def test_get_part_leader(self):
         address = self.meta_cache.get_part_leader('test_meta_cache1', 1)
-        assert address.host.find('storaged') == 0
+        assert address.host.find('172.28.2') == 0
         assert address.port == 44500
 
     def test_get_part_leaders(self):
@@ -132,7 +132,7 @@ class TestMetaCache(object):
         assert sorted(parts) == sorted(expected_parts)
 
         for part in part_addresses.keys():
-            assert part_addresses[part].host in ['storaged0', 'storaged1', 'storaged2']
+            assert part_addresses[part].host in ['172.28.2.1', '172.28.2.2', '172.28.2.3']
 
         ports = [part_addresses[part].port for part in part_addresses.keys()]
         expected_hosts = [44500 for i in range(1, 101)]
@@ -142,7 +142,7 @@ class TestMetaCache(object):
         addresses = self.meta_cache.get_all_storage_addrs()
         assert len(addresses) == 3
         hosts = [addr.host for addr in addresses]
-        expected_hosts = ['storaged0', 'storaged1', 'storaged2']
+        expected_hosts = ['172.28.2.1', '172.28.2.2', '172.28.2.3']
         hosts = sorted(hosts)
         expected_hosts = sorted(expected_hosts)
         assert hosts == expected_hosts
@@ -160,7 +160,7 @@ class TestMetaCache(object):
         assert sorted(expected_parts) == sorted(parts)
 
         hosts = [addr.host for addr in part_alloc[1]]
-        expected_hosts = ['storaged0', 'storaged1', 'storaged2']
+        expected_hosts = ['172.28.2.1', '172.28.2.2', '172.28.2.3']
         assert sorted(hosts) == sorted(expected_hosts)
 
         ports = [addr.port for addr in part_alloc[1]]

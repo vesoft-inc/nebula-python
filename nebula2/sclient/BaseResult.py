@@ -228,6 +228,8 @@ class BaseResult(object):
                 raise RuntimeError('Multi DataSets are different col size')
             result.rows.extend(data_set.rows)
 
+        if result is None:
+            return None
         return DataSetWrapper(result, self._decode_type)
 
     def __repr__(self):

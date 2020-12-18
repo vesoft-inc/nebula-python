@@ -119,9 +119,13 @@ class ScanResult(object):
                         result.extend(data_sets)
             self._parts_manager.reset_jobs()
         if len(exceptions) == 0:
-            if self._is_vertex:
-                return VertexResult(result, self._schema_name, self._decode_type)
+            if len(result) == 0:
+                logging.warning('Get empty result')
+                return None
             else:
-                return EdgeResult(result, self._schema_name, self._decode_type)
+                if self._is_vertex:
+                    return VertexResult(result, self._schema_name, self._decode_type)
+                else:
+                    return EdgeResult(result, self._schema_name, self._decode_type)
         else:
             raise exceptions[0]

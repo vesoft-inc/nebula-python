@@ -154,7 +154,7 @@ def do_scan_job(storage_connection,
                     resp = storage_connection.scan_vertex(req)
                 else:
                     resp = storage_connection.scan_edge(req)
-                logging.debug('Scan <==== get resp'.format(resp))
+                logging.debug('Scan <==== get resp: {}'.format(resp))
                 if len(resp.result.failed_parts) != 0:
                     if resp.result.failed_parts[0].code == ErrorCode.E_LEADER_CHANGED:
                         if resp.result.failed_parts[0].leader is None:

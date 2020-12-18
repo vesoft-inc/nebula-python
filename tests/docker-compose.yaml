@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   metad0:
-    image: vesoft/nebula-metad:v2-preview-nightly
+    image: vesoft/nebula-metad:v2-nightly
     environment:
       USER: root
       TZ:   "${TZ}"
@@ -25,9 +25,8 @@ services:
       - 11000
       - 11002
     volumes:
-      - ./data/meta0:/data/meta
-      - /Users/laura/workproject/myfork/nebula-python:/home/python
-      - ./logs/meta0:/logs
+      - ./data/meta0:/data/meta:Z
+      - ./logs/meta0:/logs:Z
     networks:
       nebula-net:
         ipv4_address: 172.28.1.1
@@ -36,7 +35,7 @@ services:
       - SYS_PTRACE
 
   metad1:
-    image: vesoft/nebula-metad:v2-preview-nightly
+    image: vesoft/nebula-metad:v2-nightly
     environment:
       USER: root
       TZ:   "${TZ}"
@@ -60,8 +59,8 @@ services:
       - 11000
       - 11002
     volumes:
-      - ./data/meta1:/data/meta
-      - ./logs/meta1:/logs
+      - ./data/meta1:/data/meta:Z
+      - ./logs/meta1:/logs:Z
     networks:
       nebula-net:
         ipv4_address: 172.28.1.2
@@ -70,7 +69,7 @@ services:
       - SYS_PTRACE
 
   metad2:
-    image: vesoft/nebula-metad:v2-preview-nightly
+    image: vesoft/nebula-metad:v2-nightly
     environment:
       USER: root
       TZ:   "${TZ}"
@@ -94,8 +93,8 @@ services:
       - 11000
       - 11002
     volumes:
-      - ./data/meta2:/data/meta
-      - ./logs/meta2:/logs
+      - ./data/meta2:/data/meta:Z
+      - ./logs/meta2:/logs:Z
     networks:
       nebula-net:
         ipv4_address: 172.28.1.3
@@ -104,7 +103,7 @@ services:
       - SYS_PTRACE
 
   storaged0:
-    image: vesoft/nebula-storaged:v2-preview-nightly
+    image: vesoft/nebula-storaged:v2-nightly
     environment:
       USER: root
       TZ:   "${TZ}"
@@ -132,8 +131,8 @@ services:
       - 12000
       - 12002
     volumes:
-      - ./data/storage0:/data/storage
-      - ./logs/storage0:/logs
+      - ./data/storage0:/data/storage:Z
+      - ./logs/storage0:/logs:Z
     networks:
       nebula-net:
         ipv4_address: 172.28.2.1
@@ -142,7 +141,7 @@ services:
       - SYS_PTRACE
 
   storaged1:
-    image: vesoft/nebula-storaged:v2-preview-nightly
+    image: vesoft/nebula-storaged:v2-nightly
     environment:
       USER: root
       TZ:   "${TZ}"
@@ -170,8 +169,8 @@ services:
       - 12000
       - 12002
     volumes:
-      - ./data/storage1:/data/storage
-      - ./logs/storage1:/logs
+      - ./data/storage1:/data/storage:Z
+      - ./logs/storage1:/logs:Z
     networks:
       nebula-net:
         ipv4_address: 172.28.2.2
@@ -180,7 +179,7 @@ services:
       - SYS_PTRACE
 
   storaged2:
-    image: vesoft/nebula-storaged:v2-preview-nightly
+    image: vesoft/nebula-storaged:v2-nightly
     environment:
       USER: root
       TZ:   "${TZ}"
@@ -208,8 +207,8 @@ services:
       - 12000
       - 12002
     volumes:
-      - ./data/storage2:/data/storage
-      - ./logs/storage2:/logs
+      - ./data/storage2:/data/storage:Z
+      - ./logs/storage2:/logs:Z
     networks:
       nebula-net:
         ipv4_address: 172.28.2.3
@@ -218,7 +217,7 @@ services:
       - SYS_PTRACE
 
   graphd0:
-    image: vesoft/nebula-graphd:v2-preview-nightly
+    image: vesoft/nebula-graphd:v2-nightly
     environment:
       USER: root
       TZ:   "${TZ}"
@@ -244,7 +243,7 @@ services:
       - 13000
       - 13002
     volumes:
-      - ./logs/graph0:/logs
+      - ./logs/graph0:/logs:Z
     networks:
       nebula-net:
         ipv4_address: 172.28.3.1
@@ -253,7 +252,7 @@ services:
       - SYS_PTRACE
 
   graphd1:
-    image: vesoft/nebula-graphd:v2-preview-nightly
+    image: vesoft/nebula-graphd:v2-nightly
     environment:
       USER: root
       TZ:   "${TZ}"
@@ -279,7 +278,7 @@ services:
       - 13000
       - 13002
     volumes:
-      - ./logs/graph1:/logs
+      - ./logs/graph1:/logs:Z
     networks:
       nebula-net:
         ipv4_address: 172.28.3.2
@@ -288,7 +287,7 @@ services:
       - SYS_PTRACE
 
   graphd2:
-    image: vesoft/nebula-graphd:v2-preview-nightly
+    image: vesoft/nebula-graphd:v2-nightly
     environment:
       USER: root
       TZ:   "${TZ}"
@@ -314,7 +313,7 @@ services:
       - 13000
       - 13002
     volumes:
-      - ./logs/graph2:/logs
+      - ./logs/graph2:/logs:Z
     networks:
       nebula-net:
         ipv4_address: 172.28.3.3

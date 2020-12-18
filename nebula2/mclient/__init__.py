@@ -186,14 +186,6 @@ class MetaCache(object):
     def __del__(self):
         self._close = True
 
-    def _period_update_meta_data(self):
-        if self._close:
-            return
-        self._load_all()
-        timer = threading.Timer(self._load_period, self._period_update_meta_data)
-        timer.setDaemon(True)
-        timer.start()
-
     def _load_all(self):
         try:
             spaces = self._meta_client.list_spaces()
