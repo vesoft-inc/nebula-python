@@ -35,12 +35,12 @@ class ResultSet(object):
 
     def error_msg(self):
         if self._resp.error_msg is None:
-            return None
+            return ''
         return self._resp.error_msg.decode(self._decode_type)
 
     def comment(self):
         if self._resp.error_msg is None:
-            return None
+            return ''
         return self._resp.comment.decode(self._decode_type)
 
     def latency(self):
