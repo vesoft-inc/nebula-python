@@ -30,12 +30,7 @@ jobs:
         pushd tmp
         git clone -b v2-preview https://github.com/vesoft-inc/nebula-docker-compose.git
         pushd nebula-docker-compose/
-        sed -i '0,/\- 3699/s/\- 3699/\- "3700:3699"/' docker-compose.yaml
-        sed -i '0,/\- 3699/s/\- 3699/\- "3701:3699"/' docker-compose.yaml
-        sed -i '0,/\- 45500/s/\- 45500/\- "45500:45500"/' docker-compose.yaml
-        sed -i '0,/\- 45500/s/\- 45500/\- "45501:45500"/' docker-compose.yaml
-        sed -i '0,/\- 45500/s/\- 45500/\- "45502:45500"/' docker-compose.yaml
-
+        cp ../../tests/docker-compose.yaml ./
         docker-compose up -d
         sleep 10
         popd

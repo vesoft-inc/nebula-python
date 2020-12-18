@@ -58,7 +58,7 @@ class TestGraphStorageClient(object):
                                    session_id,
                                    'CREATE SPACE IF NOT EXISTS test_graph_storage_client('
                                    'PARTITION_NUM=10,'
-                                   'REPLICA_FACTOR=3,'
+                                   'REPLICA_FACTOR=1,'
                                    'vid_type=FIXED_STRING(20));'
                                    'USE test_graph_storage_client;'
                                    'CREATE TAG IF NOT EXISTS person(name string, age int);'
