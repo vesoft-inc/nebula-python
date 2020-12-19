@@ -23,9 +23,8 @@ from nebula2.sclient.BaseResult import (
 
 
 class VertexResult(BaseResult):
-    def __init__(self, data_sets, schema_name, decode_type='utf-8'):
+    def __init__(self, data_sets, decode_type='utf-8'):
         super().__init__(data_sets=data_sets,
-                         schema_name=schema_name,
                          decode_type=decode_type,
                          is_vertex=True)
 
@@ -37,15 +36,16 @@ class VertexResult(BaseResult):
         nodes = []
         for data_set in self._data_sets:
             for row in data_set.rows:
-                vertex_data = VertexData(row, data_set.column_names, self._decode_type)
+                vertex_data = VertexData(row,
+                                         data_set.column_names,
+                                         self._decode_type)
                 nodes.append(vertex_data.as_node())
         return nodes
 
 
 class EdgeResult(BaseResult):
-    def __init__(self, data_sets: list, edge_name, decode_type='utf-8'):
+    def __init__(self, data_sets: list, decode_type='utf-8'):
         super().__init__(data_sets=data_sets,
-                         schema_name=edge_name,
                          decode_type=decode_type,
                          is_vertex=False)
 
@@ -69,11 +69,9 @@ class ScanResult(object):
                  graph_storage_client,
                  req,
                  part_addrs,
-                 schema_name,
                  partial_success=False,
                  is_vertex=True,
                  decode_type='utf-8'):
-        self._schema_name = schema_name.encode('utf-8')
         self._is_vertex = is_vertex
         self._decode_type = decode_type
         self._data_sets = []
@@ -124,8 +122,8 @@ class ScanResult(object):
                 return None
             else:
                 if self._is_vertex:
-                    return VertexResult(result, self._schema_name, self._decode_type)
+                    return VertexResult(result, self._decode_type)
                 else:
-                    return EdgeResult(result, self._schema_name, self._decode_type)
+                    return EdgeResult(result, self._decode_type)
         else:
             raise exceptions[0]

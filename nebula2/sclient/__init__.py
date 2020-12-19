@@ -8,7 +8,6 @@
 
 import copy
 import logging
-import time
 from threading import RLock, Condition
 
 from nebula2.common.ttypes import HostAddr
@@ -129,19 +128,12 @@ def do_scan_job(storage_connection,
                 partial_success=False):
     data_sets = []
     req = copy.deepcopy(in_req)
-    # because storage not return the column names, here fill the column name
-    if scan_vertex:
-        column_names = [b'id', b'tag_id']
-    else:
-        column_names = [b'src_id', b'type', b'ranking', b'dst_id']
-    column_names.extend(req.return_columns.props)
     while True:
         is_finished = False  # the part without next, it means is finished
         if parts_manager.is_finish():
             break
         part_info = parts_manager.get_part(storage_connection.storage_addr())
         if part_info is None:
-            # TODO: USE conditional variable
             parts_manager.wait_task()
             continue
         else:
@@ -186,20 +178,20 @@ def do_scan_job(storage_connection,
                     logging.debug("Get next next_cursor: {}".format(resp.next_cursor))
                 else:
                     is_finished = True
-                # TODO: The storage need to given column_names
-                # if len(resp.edge_data.column_names) != 0:
                 if scan_vertex:
                     logging.debug("resp.vertex_data size: {}".format(len(resp.vertex_data.rows)))
+                    if len(resp.vertex_data.column_names) == 0:
+                        return 'Part id: {} return empty column names'.format(part_info.part_id)
                     if len(resp.vertex_data.rows) == 0:
                         continue
                     data_sets.append(resp.vertex_data)
                 else:
                     logging.debug("resp.edge_data size: {}".format(len(resp.edge_data.rows)))
+                    if len(resp.edge_data.column_names) == 0:
+                        return 'Part id: {} return empty column names'.format(part_info.part_id)
                     if len(resp.edge_data.rows) == 0:
                         continue
                     data_sets.append(resp.edge_data)
-                # TODO: if storage return column_names, here need to delete
-                data_sets[len(data_sets) - 1].column_names = column_names
             except Exception as e:
                 import traceback
                 logging.error(traceback.format_exc())

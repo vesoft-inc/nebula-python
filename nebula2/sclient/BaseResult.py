@@ -17,16 +17,17 @@ from nebula2.data.DataObject import (
 
 
 class VertexData(object):
-    PROP_START_INDEX = 2
+    PROP_START_INDEX = 1
 
     def __init__(self,
                  row,
                  col_names,
-                 tag_name,
                  decode_type='utf-8'):
         """
-        1. First column is vertex id
-        2. Second column is tag id
+        the format is
+        '''
+        |tag_name._vid|tag_name.prop1|tag_name.prop2|
+        '''
         """
         if len(row.values) != len(col_names):
             raise RuntimeError(
@@ -34,8 +35,16 @@ class VertexData(object):
                     .format(row.values, col_names))
         self._row = row
         self._decode_type = decode_type
-        self._col_names = col_names
-        self._tag_name = tag_name
+        self._col_names = []
+        self._tag_name = ''
+        for col_name in col_names:
+            names = col_name.split(b'.')
+            if len(names) != 2:
+                raise RuntimeError('Input wrong col name format of tag')
+            self._col_names.append(names[1])
+            self._tag_name = names[0]
+
+        print(self._col_names)
 
     def get_id(self):
         if len(self._row.values) < 1:
@@ -92,13 +101,12 @@ class EdgeData(object):
     def __init__(self,
                  row,
                  col_names,
-                 edge_name,
                  decode_type='utf-8'):
         """
-        1. First column is src id
-        2. Second column is edge type
-        3. Third column is edge rank
-        4. Fourth column is dst id
+        the format is
+        '''
+        |edge_name._src|edge_name._type|edge_name._rank|edge_name._dst|edge_name.prop1|edge_name.prop2|
+        '''
         """
         if len(row.values) != len(col_names):
             raise RuntimeError('Input row size is not equal '
@@ -106,8 +114,14 @@ class EdgeData(object):
                                .format(len(row.values), len(col_names)))
         self._row = row
         self._decode_type = decode_type
-        self._col_names = col_names
-        self._edge_name = edge_name
+        self._col_names = []
+        self._edge_name = ''
+        for col_name in col_names:
+            names = col_name.split(b'.')
+            if len(names) != 2:
+                raise RuntimeError('Input wrong col name format of edge')
+            self._col_names.append(names[1])
+            self._edge_name = names[0]
 
     def get_src_id(self):
         if len(self._row.values) < 1:
@@ -117,13 +131,8 @@ class EdgeData(object):
         assert self._row.values[0].getType() == ttypes.Value.SVAL
         return self._row.values[0].get_sVal().decode(self._decode_type)
 
-    @property
     def get_edge_name(self):
-        if len(self._row.values) < 2:
-            raise RuntimeError('The row value is bad format, '
-                               'get edge edge type failed: len is {}'
-                               .format(len(self._row.values)))
-        return self._edge_name
+        return self._edge_name.decode(self._decode_type)
 
     def get_ranking(self):
         if len(self._row.values) < 3:
@@ -183,7 +192,6 @@ class EdgeData(object):
 class BaseResult(object):
     def __init__(self,
                  data_sets: list,
-                 schema_name,
                  decode_type='utf-8',
                  is_vertex=True):
         assert data_sets is not None
@@ -194,7 +202,6 @@ class BaseResult(object):
         self._data_set_pos = 0
         self._table_pos = -1
         self._size = 0
-        self._schema_name = schema_name
         for data_set in self._data_sets:
             self._size += len(data_set.rows)
 
@@ -254,7 +261,7 @@ class BaseResult(object):
         col_names = self._data_sets[self._data_set_pos].column_names
         row = self._data_sets[self._data_set_pos].rows[self._table_pos]
         if self.is_vertex:
-            return VertexData(row, col_names, self._schema_name, self._decode_type)
+            return VertexData(row, col_names, self._decode_type)
         else:
-            return EdgeData(row, col_names, self._schema_name, self._decode_type)
+            return EdgeData(row, col_names, self._decode_type)
 

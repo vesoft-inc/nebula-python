@@ -22,6 +22,12 @@ from nebula2.storage.ttypes import (
     EdgeProp
 )
 
+kVid = b'_vid'
+kSrc = b'_src'
+kType = b'_type'
+kRank = b'_rank'
+kDst = b'_dst'
+
 
 class GraphStorageClient(object):
     DEFAULT_START_TIME = 0
@@ -63,7 +69,6 @@ class GraphStorageClient(object):
                     space_name,
                     tag_name,
                     prop_names=[],
-                    no_columns=False,
                     limit=DEFAULT_LIMIT,
                     start_time=DEFAULT_START_TIME,
                     end_time=DEFAULT_END_TIME,
@@ -73,10 +78,9 @@ class GraphStorageClient(object):
                     partial_success=False):
         """
         scan_vertex
-        :param prop_names:
-        :param tag_name:
+        :param prop_names: if given empty, return all property
+        :param tag_name: the tag name
         :param space_name: the space name
-        :param no_columns: only return the vertex id
         :param limit: the max vertex number from one storaged
         :param start_time: the min version of vertex
         :param end_time: the max version of vertex
@@ -93,7 +97,6 @@ class GraphStorageClient(object):
                                  part_leaders,
                                  tag_name,
                                  prop_names,
-                                 no_columns,
                                  limit,
                                  start_time,
                                  end_time,
@@ -107,7 +110,6 @@ class GraphStorageClient(object):
                               part,
                               tag_name,
                               prop_names=[],
-                              no_columns=False,
                               limit=DEFAULT_LIMIT,
                               start_time=DEFAULT_START_TIME,
                               end_time=DEFAULT_END_TIME,
@@ -117,11 +119,10 @@ class GraphStorageClient(object):
                               partial_success=False):
         """
         scan_vertex_with_part
-        :param prop_names:
-        :param tag_name:
+        :param prop_names: if given empty, return all property
+        :param tag_name: the tag name
         :type part: part id
         :param space_name: the space name
-        :param no_columns: only return the vertex id
         :param limit: the max vertex number from one storaged
         :param start_time: the min version of vertex
         :param end_time: the max version of vertex
@@ -139,7 +140,6 @@ class GraphStorageClient(object):
                                  part_leaders,
                                  tag_name,
                                  prop_names,
-                                 no_columns,
                                  limit,
                                  start_time,
                                  end_time,
@@ -153,7 +153,6 @@ class GraphStorageClient(object):
                      part_leaders,
                      tag_name,
                      prop_names,
-                     no_columns,
                      limit,
                      start_time,
                      end_time,
@@ -165,11 +164,10 @@ class GraphStorageClient(object):
         tag_id = self._meta_cache.get_tag_id(space_name, tag_name)
         vertex_prop: VertexProp = VertexProp()
         vertex_prop.tag = tag_id
-        vertex_prop.props = []
+        vertex_prop.props = [kVid]
         for prop_name in prop_names:
             vertex_prop.props.append(prop_name.encode('utf-8'))
 
-        # When storage return column names, here need delete
         if len(prop_names) == 0:
             schema = self._meta_cache.get_tag_schema(space_name, tag_name)
             for col in schema.columns:
@@ -179,7 +177,6 @@ class GraphStorageClient(object):
         req.space_id = space_id
         req.part_id = 0
         req.return_columns = vertex_prop
-        req.no_columns = no_columns
         req.limit = limit
         req.start_time = start_time
         req.end_time = end_time
@@ -189,7 +186,6 @@ class GraphStorageClient(object):
         return ScanResult(self,
                           req=req,
                           part_addrs=part_leaders,
-                          schema_name=tag_name,
                           is_vertex=True,
                           partial_success=partial_success)
 
@@ -197,7 +193,6 @@ class GraphStorageClient(object):
                   space_name,
                   edge_name,
                   prop_names=[],
-                  no_columns=False,
                   limit=DEFAULT_LIMIT,
                   start_time=DEFAULT_START_TIME,
                   end_time=DEFAULT_END_TIME,
@@ -208,10 +203,9 @@ class GraphStorageClient(object):
         """
 
         scan_edge
-        :param prop_names:
-        :param edge_name:
+        :param prop_names: if given empty, return all property
+        :param edge_name: the edge name
         :param space_name: the space name
-        :param no_columns: only return the edge key
         :param limit: the max vertex number from one storaged
         :param start_time: the min version of vertex
         :param end_time: the max version of vertex
@@ -228,7 +222,6 @@ class GraphStorageClient(object):
                                part_leaders,
                                edge_name,
                                prop_names,
-                               no_columns,
                                limit,
                                start_time,
                                end_time,
@@ -240,9 +233,8 @@ class GraphStorageClient(object):
     def scan_edge_with_part(self,
                             space_name,
                             part,
-                            tag_name,
+                            edge_name,
                             prop_names=[],
-                            no_columns=False,
                             limit=DEFAULT_LIMIT,
                             start_time=DEFAULT_START_TIME,
                             end_time=DEFAULT_END_TIME,
@@ -253,9 +245,8 @@ class GraphStorageClient(object):
         """
         :param space_name: the space name
         :param part: the partition num of the given space
-        :type prop_names: object
-        :param tag_name:
-        :param no_columns: only return the edge key
+        :type prop_names: if given empty, return all property
+        :param edge_name: the edge name
         :param limit: the max vertex number from one storaged
         :param start_time: the min version of edge
         :param end_time: the max version of edge
@@ -270,9 +261,8 @@ class GraphStorageClient(object):
         part_leaders = {part: self._meta_cache.get_part_leader(space_name, part)}
         return self._scan_edge(space_name,
                                part_leaders,
-                               tag_name,
+                               edge_name,
                                prop_names,
-                               no_columns,
                                limit,
                                start_time,
                                end_time,
@@ -286,7 +276,6 @@ class GraphStorageClient(object):
                    part_leaders,
                    edge_name,
                    prop_names,
-                   no_columns,
                    limit,
                    start_time,
                    end_time,
@@ -298,7 +287,7 @@ class GraphStorageClient(object):
         edge_type = self._meta_cache.get_edge_type(space_name, edge_name)
         edge_prop = EdgeProp()
         edge_prop.type = edge_type
-        edge_prop.props = []
+        edge_prop.props = [kSrc, kType, kRank, kDst]
 
         for prop_name in prop_names:
             edge_prop.props.append(prop_name.encode('utf-8'))
@@ -313,7 +302,6 @@ class GraphStorageClient(object):
         req.space_id = space_id
         req.part_id = 0
         req.return_columns = edge_prop
-        req.no_columns = no_columns
         req.limit = limit
         req.start_time = start_time
         req.end_time = end_time
@@ -323,7 +311,6 @@ class GraphStorageClient(object):
         return ScanResult(self,
                           req=req,
                           part_addrs=part_leaders,
-                          schema_name=edge_name,
                           is_vertex=False,
                           partial_success=partial_success)
 

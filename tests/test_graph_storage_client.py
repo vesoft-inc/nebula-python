@@ -51,7 +51,7 @@ class TestGraphStorageClient(object):
     def setup_class(cls):
         try:
             conn = Connection()
-            conn.open('172.28.3.1', 3699, 1000)
+            conn.open('172.28.3.1', 3699, 3000)
             session_id = conn.authenticate('root', 'nebula')
             assert session_id != 0
             cls.execute_with_retry(conn,
@@ -126,8 +126,10 @@ class TestGraphStorageClient(object):
         # test get_data_set
         data_set = result.get_data_set_wrapper()
         assert data_set.get_row_size() == 10
-        assert data_set.get_col_names() == ['id', 'tag_id', 'name', 'age']
-        assert data_set.get_row_size() > 0
+        assert data_set.get_col_names() == ['person._vid', 'person.name', 'person.age']
+
+        # test as nodes
+        assert len(result.as_nodes()) >= 10
 
         # test iterator and VertexData
         count = 0
@@ -203,13 +205,15 @@ class TestGraphStorageClient(object):
         result = resp.next()
         data_set = result.get_data_set_wrapper()
         assert data_set.get_row_size() == 10
-        assert data_set.get_col_names() == ['src_id',
-                                            'type',
-                                            'ranking',
-                                            'dst_id',
-                                            'start',
-                                            'end']
-        assert data_set.get_row_size() > 0
+        assert data_set.get_col_names() == ['friend._src',
+                                            'friend._type',
+                                            'friend._rank',
+                                            'friend._dst',
+                                            'friend.start',
+                                            'friend.end']
+        # test as edge
+        assert len(result.as_relationships()) >= 10
+
         # test iterator
         count = 0
         for edge in result:
@@ -220,6 +224,13 @@ class TestGraphStorageClient(object):
             assert relationship.edge_name() == 'friend'
             assert relationship.start_vertex_id().find('person') >= 0
             assert relationship.end_vertex_id().find('person') >= 0
+            # test get_prop_values
+            prop_values = edge.get_prop_values()
+            assert len(prop_values) == 2
+            assert prop_values[0].is_int()
+            assert prop_values[0].is_int() < 2010
+            assert prop_values[1].is_int()
+            assert prop_values[1].as_int() >= 2010
         assert count > 1
 
     def test_scan_edge(self):

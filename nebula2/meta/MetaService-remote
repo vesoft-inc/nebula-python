@@ -109,6 +109,8 @@ FUNCTIONS = {
     'dropZoneFromGroup': Function('dropZoneFromGroup', 'MetaService', 'ExecResp', [('DropZoneFromGroupReq', 'req', 'DropZoneFromGroupReq')]),
     'getGroup': Function('getGroup', 'MetaService', 'GetGroupResp', [('GetGroupReq', 'req', 'GetGroupReq')]),
     'listGroups': Function('listGroups', 'MetaService', 'ListGroupsResp', [('ListGroupsReq', 'req', 'ListGroupsReq')]),
+    'createBackup': Function('createBackup', 'MetaService', 'CreateBackupResp', [('CreateBackupReq', 'req', 'CreateBackupReq')]),
+    'restoreMeta': Function('restoreMeta', 'MetaService', 'ExecResp', [('RestoreMetaReq', 'req', 'RestoreMetaReq')]),
     'addListener': Function('addListener', 'MetaService', 'ExecResp', [('AddListenerReq', 'req', 'AddListenerReq')]),
     'removeListener': Function('removeListener', 'MetaService', 'ExecResp', [('RemoveListenerReq', 'req', 'RemoveListenerReq')]),
     'listListener': Function('listListener', 'MetaService', 'ListListenerResp', [('ListListenerReq', 'req', 'ListListenerReq')]),
