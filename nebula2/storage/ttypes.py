@@ -3892,8 +3892,9 @@ class GetUUIDResp:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.STRING:
-          self.id = iprot.readString()
+        if ftype == TType.STRUCT:
+          self.id = nebula2.common.ttypes.Value()
+          self.id.read(iprot)
         else:
           iprot.skip(ftype)
       else:
@@ -3921,8 +3922,8 @@ class GetUUIDResp:
       self.result.write(oprot)
       oprot.writeFieldEnd()
     if self.id != None:
-      oprot.writeFieldBegin('id', TType.STRING, 2)
-      oprot.writeString(self.id)
+      oprot.writeFieldBegin('id', TType.STRUCT, 2)
+      self.id.write(oprot)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -9238,7 +9239,7 @@ all_structs.append(GetUUIDResp)
 GetUUIDResp.thrift_spec = (
   None, # 0
   (1, TType.STRUCT, 'result', [ResponseCommon, ResponseCommon.thrift_spec, False], None, 0, ), # 1
-  (2, TType.STRING, 'id', False, None, 2, ), # 2
+  (2, TType.STRUCT, 'id', [nebula2.common.ttypes.Value, nebula2.common.ttypes.Value.thrift_spec, True], None, 2, ), # 2
 )
 
 GetUUIDResp.thrift_struct_annotations = {

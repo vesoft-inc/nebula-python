@@ -621,7 +621,11 @@ class Node(object):
             self._tag_indexes[tag.name.decode(self._decode_type)] = index
 
     def get_id(self):
-        return self._value.vid.decode(self._decode_type)
+        """
+        get vertex id
+        :return: ValueWrapper
+        """
+        return ValueWrapper(self._value.vid, self._decode_type)
 
     def tags(self):
         return list(self._tag_indexes.keys())
@@ -655,7 +659,7 @@ class Node(object):
         tag_str_list = list()
         for tag in self._tag_indexes.keys():
             tag_str_list.append(':{}{}'.format(tag, self.propertys(tag)))
-        return '(\'{}\' {})'.format(self.get_id(), ' '.join(tag_str_list))
+        return '(\'{}\' {})'.format(str(self.get_id()), ' '.join(tag_str_list))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -673,16 +677,24 @@ class Relationship(object):
         self._value = edge
 
     def start_vertex_id(self):
+        """
+        get start vid
+        :return: ValueWrapper
+        """
         if self._value.type > 0:
-            return self._value.src.decode(self._decode_type)
+            return ValueWrapper(self._value.src, self._decode_type)
         else:
-            return self._value.dst.decode(self._decode_type)
+            return ValueWrapper(self._value.dst, self._decode_type)
 
     def end_vertex_id(self):
+        """
+        get end vid
+        :return: ValueWrapper
+        """
         if self._value.type > 0:
-            return self._value.dst.decode(self._decode_type)
+            return ValueWrapper(self._value.dst, self._decode_type)
         else:
-            return self._value.src.decode(self._decode_type)
+            return ValueWrapper(self._value.src, self._decode_type)
 
     def edge_name(self):
         return self._value.name.decode(self._decode_type)
@@ -703,11 +715,11 @@ class Relationship(object):
         return [(ValueWrapper(value)) for value in self._value.props.values]
 
     def __repr__(self):
-        return "({})-[:{}@{}{}]->({})".format(self.start_vertex_id(),
+        return "({})-[:{}@{}{}]->({})".format(str(self.start_vertex_id()),
                                               self.edge_name(),
                                               self.ranking(),
                                               self.propertys(),
-                                              self.end_vertex_id())
+                                              str(self.end_vertex_id()))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):

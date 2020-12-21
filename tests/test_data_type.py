@@ -39,7 +39,7 @@ class TestBaseCase(TestCase):
     @classmethod
     def get_vertex_value(self, vid):
         vertex = ttypes.Vertex()
-        vertex.vid = vid
+        vertex.vid = ttypes.Value(sVal=vid)
         vertex.tags = list()
         for i in range(0, 3):
             tag = ttypes.Tag()
@@ -56,11 +56,11 @@ class TestBaseCase(TestCase):
     def get_edge_value(self, src_id, dst_id, is_reverse=False):
         edge = ttypes.Edge()
         if not is_reverse:
-            edge.src = src_id
-            edge.dst = dst_id
+            edge.src = ttypes.Value(sVal=src_id)
+            edge.dst = ttypes.Value(sVal=dst_id)
         else:
-            edge.src = dst_id
-            edge.dst = src_id
+            edge.src = ttypes.Value(sVal=dst_id)
+            edge.dst = ttypes.Value(sVal=src_id)
         edge.type = 1
         edge.name = b'classmate'
         edge.ranking = 100
@@ -380,7 +380,7 @@ class TestNode(TestBaseCase):
         test_set = set()
         test_set.add(Value())
         node = Node(self.get_vertex_value(b'Tom'))
-        assert 'Tom' == node.get_id()
+        assert 'Tom' == node.get_id().as_string()
 
         assert node.has_tag('tag2')
 
@@ -400,9 +400,9 @@ class TestRelationship(TestBaseCase):
     def test_relationship_api(self):
         relationship = Relationship(self.get_edge_value(b'Tom', b'Lily'))
 
-        assert 'Tom' == relationship.start_vertex_id()
+        assert 'Tom' == relationship.start_vertex_id().as_string()
 
-        assert 'Lily' == relationship.end_vertex_id()
+        assert 'Lily' == relationship.end_vertex_id().as_string()
 
         assert 100 == relationship.ranking()
 
