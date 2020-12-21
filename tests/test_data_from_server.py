@@ -10,15 +10,26 @@ import sys
 import os
 import time
 
-from nebula.graph import ttypes
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
 from nebula2.Config import Config
-from nebula2.common.ttypes import DateTime, Date, Time
-from nebula2.data.DataObject import DateTimeWrapper, DateWrapper, TimeWrapper, Null
+from nebula2.common.ttypes import (
+    DateTime,
+    Date,
+    Time
+)
+
+from nebula2.graph import ttypes
+from nebula2.data.DataObject import (
+    DateTimeWrapper,
+    DateWrapper,
+    TimeWrapper,
+    Null
+)
+
 from nebula2.gclient.net import ConnectionPool
 
 from unittest import TestCase
@@ -203,5 +214,16 @@ class TestBaseCase(TestCase):
         assert 1 == resp.row_size()
         assert resp.row_values(0)[0].is_path()
         path = resp.row_values(0)[0].as_path()
-        print(str(path))
-        assert '("Bob")-[:friend@0]->("Lily")<-[:friend@0]-("Jerry")' == str(path)
+        expected_str = '("Bob" :student{name: "Bob"} ' \
+                       ':person{hobby: __NULL__, expend: 100.0, book_num: 100, ' \
+                       'property: 1000.0, grade: 3, child_name: "Hello Worl", ' \
+                       'start_school: 2017-09-10, friends: 10, ' \
+                       'morning: 07:10:00.000000, first_out_city: 1111, ' \
+                       'name: "Bob", age: 10, birthday: 2010-09-10T10:08:02.000000, is_girl: False})' \
+                       '-[:friend@0{end_year: 2020, start_year: 2018}]->' \
+                       '("Lily" :student{name: "Lily"} ' \
+                       ':person{is_girl: False, birthday: 2010-09-10T10:08:02.000000, age: 9, ' \
+                       'book_num: 100, grade: 3, property: 1000.0, hobby: __NULL__, expend: 100.0, ' \
+                       'start_school: 2017-09-10, child_name: "Hello Worl", morning: 07:10:00.000000, ' \
+                       'friends: 10, first_out_city: 1111, name: "Lily"})'
+        assert expected_str == str(path)

@@ -659,7 +659,7 @@ class Node(object):
         tag_str_list = list()
         for tag in self._tag_indexes.keys():
             prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.propertys(tag).items()]
-            tag_str_list.append(':%s{%s}' % (tag, prop_strs))
+            tag_str_list.append(':%s{%s}' % (tag, ', '.join(prop_strs)))
         return '(\"{}\" {})'.format(self.get_id(), ' '.join(tag_str_list))
 
     def __eq__(self, other):
@@ -838,10 +838,10 @@ class PathWrapper(object):
             edge_str = ''
             prop_strs = ['%s: %s' % (key, str(val)) for key, val in relationship.propertys().items()]
             if step.type > 0:
-                edge_str = '-[:{}@{}{}]->{}'.format(relationship.edge_name(),
-                                                    relationship.ranking(),
-                                                    relationship.propertys(),
-                                                    Node(step.dst))
+                edge_str = '-[:%s@%d{%s}]->%s' % (relationship.edge_name(),
+                                                  relationship.ranking(),
+                                                  ', '.join(prop_strs),
+                                                  Node(step.dst))
             else:
                 edge_str = "<-[:%s@%d{%s}]-%s" % (relationship.edge_name(),
                                                   relationship.ranking(),
