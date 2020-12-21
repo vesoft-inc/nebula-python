@@ -31,6 +31,30 @@ class AuthFailedException(Exception):
         self.message = 'Auth failed: {}'.format(message)
 
 
+class TagNotFoundException(Exception):
+    def __init__(self, name):
+        Exception.__init__(self)
+        self.message = 'Tag:{} not found'.format(name)
+
+
+class EdgeNotFoundException(Exception):
+    def __init__(self, name):
+        Exception.__init__(self)
+        self.message = 'Edge:{} not found'.format(name)
+
+
+class SpaceNotFoundException(Exception):
+    def __init__(self, name):
+        Exception.__init__(self, name)
+        self.message = 'Space:{} not found'.format(name)
+
+
+class PartNotFoundException(Exception):
+    def __init__(self, part):
+        Exception.__init__(self)
+        self.message = 'Partition:{} not found'.format(part)
+
+
 class NotValidConnectionException(Exception):
     def __init__(self):
         Exception.__init__(self)

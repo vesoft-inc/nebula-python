@@ -29,7 +29,7 @@ if not '__pypy__' in sys.builtin_module_names:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'NullType', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'VertexID', 'Timestamp', 'IndexID', 'Port']
+__all__ = ['UTF8STRINGS', 'NullType', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'PartitionBackupInfo', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'VertexID', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port']
 
 class NullType:
   __NULL__ = 0
@@ -2253,12 +2253,204 @@ class KeyValue:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class LogInfo:
+  """
+  Attributes:
+   - log_id
+   - term_id
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.log_id = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I64:
+          self.term_id = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('LogInfo')
+    if self.log_id != None:
+      oprot.writeFieldBegin('log_id', TType.I64, 1)
+      oprot.writeI64(self.log_id)
+      oprot.writeFieldEnd()
+    if self.term_id != None:
+      oprot.writeFieldBegin('term_id', TType.I64, 2)
+      oprot.writeI64(self.term_id)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.log_id is not None:
+      value = pprint.pformat(self.log_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    log_id=%s' % (value))
+    if self.term_id is not None:
+      value = pprint.pformat(self.term_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    term_id=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class PartitionBackupInfo:
+  """
+  Attributes:
+   - info
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.MAP:
+          self.info = {}
+          (_ktype101, _vtype102, _size100 ) = iprot.readMapBegin() 
+          if _size100 >= 0:
+            for _i104 in six.moves.range(_size100):
+              _key105 = iprot.readI32()
+              _val106 = LogInfo()
+              _val106.read(iprot)
+              self.info[_key105] = _val106
+          else: 
+            while iprot.peekMap():
+              _key107 = iprot.readI32()
+              _val108 = LogInfo()
+              _val108.read(iprot)
+              self.info[_key107] = _val108
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('PartitionBackupInfo')
+    if self.info != None:
+      oprot.writeFieldBegin('info', TType.MAP, 1)
+      oprot.writeMapBegin(TType.I32, TType.STRUCT, len(self.info))
+      for kiter109,viter110 in self.info.items():
+        oprot.writeI32(kiter109)
+        viter110.write(oprot)
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.info is not None:
+      value = pprint.pformat(self.info, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    info=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
 GraphSpaceID = UnimplementedTypedef()
 PartitionID = UnimplementedTypedef()
 TagID = UnimplementedTypedef()
 EdgeType = UnimplementedTypedef()
 EdgeRanking = UnimplementedTypedef()
 VertexID = UnimplementedTypedef()
+LogID = UnimplementedTypedef()
+TermID = UnimplementedTypedef()
 Timestamp = UnimplementedTypedef()
 IndexID = UnimplementedTypedef()
 Port = UnimplementedTypedef()
@@ -2812,6 +3004,55 @@ def KeyValue__setstate__(self, state):
 
 KeyValue.__getstate__ = lambda self: self.__dict__.copy()
 KeyValue.__setstate__ = KeyValue__setstate__
+
+all_structs.append(LogInfo)
+LogInfo.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'log_id', None, None, 2, ), # 1
+  (2, TType.I64, 'term_id', None, None, 2, ), # 2
+)
+
+LogInfo.thrift_struct_annotations = {
+}
+LogInfo.thrift_field_annotations = {
+}
+
+def LogInfo__init__(self, log_id=None, term_id=None,):
+  self.log_id = log_id
+  self.term_id = term_id
+
+LogInfo.__init__ = LogInfo__init__
+
+def LogInfo__setstate__(self, state):
+  state.setdefault('log_id', None)
+  state.setdefault('term_id', None)
+  self.__dict__ = state
+
+LogInfo.__getstate__ = lambda self: self.__dict__.copy()
+LogInfo.__setstate__ = LogInfo__setstate__
+
+all_structs.append(PartitionBackupInfo)
+PartitionBackupInfo.thrift_spec = (
+  None, # 0
+  (1, TType.MAP, 'info', (TType.I32,None,TType.STRUCT,[LogInfo, LogInfo.thrift_spec, False]), None, 2, ), # 1
+)
+
+PartitionBackupInfo.thrift_struct_annotations = {
+}
+PartitionBackupInfo.thrift_field_annotations = {
+}
+
+def PartitionBackupInfo__init__(self, info=None,):
+  self.info = info
+
+PartitionBackupInfo.__init__ = PartitionBackupInfo__init__
+
+def PartitionBackupInfo__setstate__(self, state):
+  state.setdefault('info', None)
+  self.__dict__ = state
+
+PartitionBackupInfo.__getstate__ = lambda self: self.__dict__.copy()
+PartitionBackupInfo.__setstate__ = PartitionBackupInfo__setstate__
 
 fix_spec(all_structs)
 del all_structs

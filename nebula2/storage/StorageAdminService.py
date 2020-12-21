@@ -1615,7 +1615,7 @@ class createCheckpoint_result:
         break
       if fid == 0:
         if ftype == TType.STRUCT:
-          self.success = AdminExecResp()
+          self.success = CreateCPResp()
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
@@ -1667,7 +1667,7 @@ class createCheckpoint_result:
 
 all_structs.append(createCheckpoint_result)
 createCheckpoint_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [AdminExecResp, AdminExecResp.thrift_spec, False], None, 2, ), # 0
+  (0, TType.STRUCT, 'success', [CreateCPResp, CreateCPResp.thrift_spec, False], None, 2, ), # 0
 )
 
 createCheckpoint_result.thrift_struct_annotations = {
