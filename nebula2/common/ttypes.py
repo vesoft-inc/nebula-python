@@ -29,7 +29,7 @@ if not '__pypy__' in sys.builtin_module_names:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'NullType', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'PartitionBackupInfo', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'VertexID', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port']
+__all__ = ['UTF8STRINGS', 'NullType', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'PartitionBackupInfo', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port']
 
 class NullType:
   __NULL__ = 0
@@ -1559,8 +1559,9 @@ class Vertex:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.STRING:
-          self.vid = iprot.readString()
+        if ftype == TType.STRUCT:
+          self.vid = Value()
+          self.vid.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 2:
@@ -1598,8 +1599,8 @@ class Vertex:
       return
     oprot.writeStructBegin('Vertex')
     if self.vid != None:
-      oprot.writeFieldBegin('vid', TType.STRING, 1)
-      oprot.writeString(self.vid)
+      oprot.writeFieldBegin('vid', TType.STRUCT, 1)
+      self.vid.write(oprot)
       oprot.writeFieldEnd()
     if self.tags != None:
       oprot.writeFieldBegin('tags', TType.LIST, 2)
@@ -1671,13 +1672,15 @@ class Edge:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.STRING:
-          self.src = iprot.readString()
+        if ftype == TType.STRUCT:
+          self.src = Value()
+          self.src.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.STRING:
-          self.dst = iprot.readString()
+        if ftype == TType.STRUCT:
+          self.dst = Value()
+          self.dst.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -1732,12 +1735,12 @@ class Edge:
       return
     oprot.writeStructBegin('Edge')
     if self.src != None:
-      oprot.writeFieldBegin('src', TType.STRING, 1)
-      oprot.writeString(self.src)
+      oprot.writeFieldBegin('src', TType.STRUCT, 1)
+      self.src.write(oprot)
       oprot.writeFieldEnd()
     if self.dst != None:
-      oprot.writeFieldBegin('dst', TType.STRING, 2)
-      oprot.writeString(self.dst)
+      oprot.writeFieldBegin('dst', TType.STRUCT, 2)
+      self.dst.write(oprot)
       oprot.writeFieldEnd()
     if self.type != None:
       oprot.writeFieldBegin('type', TType.I32, 3)
@@ -2448,7 +2451,6 @@ PartitionID = UnimplementedTypedef()
 TagID = UnimplementedTypedef()
 EdgeType = UnimplementedTypedef()
 EdgeRanking = UnimplementedTypedef()
-VertexID = UnimplementedTypedef()
 LogID = UnimplementedTypedef()
 TermID = UnimplementedTypedef()
 Timestamp = UnimplementedTypedef()
@@ -2825,7 +2827,7 @@ Tag.__setstate__ = Tag__setstate__
 all_structs.append(Vertex)
 Vertex.thrift_spec = (
   None, # 0
-  (1, TType.STRING, 'vid', False, None, 2, ), # 1
+  (1, TType.STRUCT, 'vid', [Value, Value.thrift_spec, True], None, 2, ), # 1
   (2, TType.LIST, 'tags', (TType.STRUCT,[Tag, Tag.thrift_spec, False]), None, 2, ), # 2
 )
 
@@ -2852,8 +2854,8 @@ Vertex.__setstate__ = Vertex__setstate__
 all_structs.append(Edge)
 Edge.thrift_spec = (
   None, # 0
-  (1, TType.STRING, 'src', False, None, 2, ), # 1
-  (2, TType.STRING, 'dst', False, None, 2, ), # 2
+  (1, TType.STRUCT, 'src', [Value, Value.thrift_spec, True], None, 2, ), # 1
+  (2, TType.STRUCT, 'dst', [Value, Value.thrift_spec, True], None, 2, ), # 2
   (3, TType.I32, 'type', None, None, 2, ), # 3
   (4, TType.STRING, 'name', False, None, 2, ), # 4
   (5, TType.I64, 'ranking', None, None, 2, ), # 5
