@@ -660,7 +660,7 @@ class Node(object):
         for tag in self._tag_indexes.keys():
             prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.propertys(tag).items()]
             tag_str_list.append(':%s{%s}' % (tag, ', '.join(prop_strs)))
-        return '(\"{}\" {})'.format(self.get_id(), ' '.join(tag_str_list))
+        return '({} {})'.format(str(self.get_id()), ' '.join(tag_str_list))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -717,11 +717,11 @@ class Relationship(object):
 
     def __repr__(self):
         prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.propertys().items()]
-        return "(\"%s\")-[:%s@%d{%s}]->(\"%s\")" % (self.start_vertex_id(),
-                                                    self.edge_name(),
-                                                    self.ranking(),
-                                                    ', '.join(prop_strs),
-                                                    self.end_vertex_id())
+        return "(%s)-[:%s@%d{%s}]->(%s)" % (str(self.start_vertex_id()),
+                                            self.edge_name(),
+                                            self.ranking(),
+                                            ', '.join(prop_strs),
+                                            str(self.end_vertex_id()))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
