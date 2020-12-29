@@ -16,7 +16,16 @@ root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
 from nebula2.Exception import InvalidKeyException
-from nebula2.common.ttypes import Value, NullType, Time, DateTime, NSet, Date, NList, NMap
+from nebula2.common.ttypes import (
+    Value,
+    NullType,
+    Time,
+    DateTime,
+    NSet,
+    Date,
+    NList,
+    NMap
+)
 from nebula2.common import ttypes
 from nebula2.graph import ttypes as graphTtype
 from unittest import TestCase

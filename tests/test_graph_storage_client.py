@@ -136,7 +136,7 @@ class TestGraphStorageClient(object):
         for vertex in result:
             count += 1
             assert isinstance(vertex, VertexData)
-            assert vertex.get_id().find('person') >= 0
+            assert vertex.get_id().as_string().find('person') >= 0
             # test get_prop_values
             prop_values = vertex.get_prop_values()
             assert len(prop_values) == 2
@@ -149,7 +149,7 @@ class TestGraphStorageClient(object):
             node = vertex.as_node()
             assert node.prop_names('person') == ['name', 'age']
             assert node.tags() == ['person']
-            assert node.get_id().find('person') >= 0
+            assert node.get_id().as_string().find('person') >= 0
         assert count > 1
 
     def test_scan_vertex(self):
@@ -222,8 +222,8 @@ class TestGraphStorageClient(object):
             relationship = edge.as_relationship()
             assert relationship.keys() == ['start', 'end']
             assert relationship.edge_name() == 'friend'
-            assert relationship.start_vertex_id().find('person') >= 0
-            assert relationship.end_vertex_id().find('person') >= 0
+            assert relationship.start_vertex_id().as_string().find('person') >= 0
+            assert relationship.end_vertex_id().as_string().find('person') >= 0
             # test get_prop_values
             prop_values = edge.get_prop_values()
             assert len(prop_values) == 2

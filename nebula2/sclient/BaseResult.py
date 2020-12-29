@@ -44,15 +44,12 @@ class VertexData(object):
             self._col_names.append(names[1])
             self._tag_name = names[0]
 
-        print(self._col_names)
-
     def get_id(self):
         if len(self._row.values) < 1:
             raise RuntimeError('The row value is bad format, '
                                'get vertex id failed: len is {}'
                                .format(len(self._row.values)))
-        assert self._row.values[0].getType() == ttypes.Value.SVAL
-        return self._row.values[0].get_sVal().decode(self._decode_type)
+        return ValueWrapper(self._row.values[0], self._decode_type)
 
     def as_node(self):
         """
@@ -66,7 +63,7 @@ class VertexData(object):
 
         vertex = Vertex()
         vertex.tags = []
-        vertex.vid = self._row.values[0].get_sVal()
+        vertex.vid = self._row.values[0]
         tag = Tag()
         tag.name = self._tag_name
         tag.props = {}
@@ -128,8 +125,7 @@ class EdgeData(object):
             raise RuntimeError('The row value is bad format, '
                                'get edge src id failed: len is {}'
                                .format(len(self._row.values)))
-        assert self._row.values[0].getType() == ttypes.Value.SVAL
-        return self._row.values[0].get_sVal().decode(self._decode_type)
+        return ValueWrapper(self._row.values[0], self._decode_type)
 
     def get_edge_name(self):
         return self._edge_name.decode(self._decode_type)
@@ -148,7 +144,7 @@ class EdgeData(object):
                                'get edge dst id failed: len is {}'
                                .format(len(self._row.values)))
         assert self._row.values[3].getType() == ttypes.Value.SVAL
-        return self._row.values[3].get_sVal().decode(self._decode_type)
+        return ValueWrapper(self._row.values[3], self._decode_type)
 
     def as_relationship(self):
         """
@@ -160,11 +156,11 @@ class EdgeData(object):
                                'as relationship failed: len is {}'
                                .format(len(self._row.values)))
         edge = Edge()
-        edge.src = self._row.values[0].get_sVal()
+        edge.src = self._row.values[0]
         edge.type = self._row.values[1].get_iVal()
         edge.name = self._edge_name
         edge.ranking = self._row.values[2].get_iVal()
-        edge.dst = self._row.values[3].get_sVal()
+        edge.dst = self._row.values[3]
         edge.props = {}
         index = self.PROP_START_INDEX
         while index < len(self._col_names):

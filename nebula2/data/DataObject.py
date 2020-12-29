@@ -658,8 +658,9 @@ class Node(object):
     def __repr__(self):
         tag_str_list = list()
         for tag in self._tag_indexes.keys():
-            tag_str_list.append(':{}{}'.format(tag, self.propertys(tag)))
-        return '(\'{}\' {})'.format(str(self.get_id()), ' '.join(tag_str_list))
+            prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.propertys(tag).items()]
+            tag_str_list.append(':%s{%s}' % (tag, ', '.join(prop_strs)))
+        return '({} {})'.format(str(self.get_id()), ' '.join(tag_str_list))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -715,11 +716,12 @@ class Relationship(object):
         return [(ValueWrapper(value)) for value in self._value.props.values]
 
     def __repr__(self):
-        return "({})-[:{}@{}{}]->({})".format(str(self.start_vertex_id()),
-                                              self.edge_name(),
-                                              self.ranking(),
-                                              self.propertys(),
-                                              str(self.end_vertex_id()))
+        prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.propertys().items()]
+        return "(%s)-[:%s@%d{%s}]->(%s)" % (str(self.start_vertex_id()),
+                                            self.edge_name(),
+                                            self.ranking(),
+                                            ', '.join(prop_strs),
+                                            str(self.end_vertex_id()))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -834,16 +836,17 @@ class PathWrapper(object):
                                                           step.ranking,
                                                           step.props))
             edge_str = ''
+            prop_strs = ['%s: %s' % (key, str(val)) for key, val in relationship.propertys().items()]
             if step.type > 0:
-                edge_str = '-[:{}@{}{}]->{}'.format(relationship.edge_name(),
-                                                    relationship.ranking(),
-                                                    relationship.propertys(),
-                                                    Node(step.dst))
+                edge_str = '-[:%s@%d{%s}]->%s' % (relationship.edge_name(),
+                                                  relationship.ranking(),
+                                                  ', '.join(prop_strs),
+                                                  Node(step.dst))
             else:
-                edge_str = '<-[:{}@{}{}]-{}'.format(relationship.edge_name(),
-                                                    relationship.ranking(),
-                                                    relationship.propertys(),
-                                                    Node(step.dst))
+                edge_str = "<-[:%s@%d{%s}]-%s" % (relationship.edge_name(),
+                                                  relationship.ranking(),
+                                                  ', '.join(prop_strs),
+                                                  Node(step.dst))
 
             edge_strs.append(edge_str)
         return '{}{}'.format(Node(self._path.src), ''.join(edge_strs))
