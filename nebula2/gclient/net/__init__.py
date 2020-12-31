@@ -15,9 +15,9 @@ import socket
 from collections import deque
 from threading import RLock
 
-from thrift.transport import TSocket, TTransport
-from thrift.transport.TTransport import TTransportException
-from thrift.protocol import TBinaryProtocol
+from nebula2.fbthrift.transport import TSocket, TTransport
+from nebula2.fbthrift.transport.TTransport import TTransportException
+from nebula2.fbthrift.protocol import TBinaryProtocol
 
 from nebula2.graph import (
     ttypes,

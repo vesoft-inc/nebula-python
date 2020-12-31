@@ -12,8 +12,8 @@ import socket
 from nebula2.Exception import InValidHostname
 from nebula2.storage import GraphStorageService
 from nebula2.storage.ttypes import ScanVertexRequest, ScanEdgeRequest
-from thrift.transport import TSocket, TTransport
-from thrift.protocol import TBinaryProtocol
+from nebula2.fbthrift.transport import TSocket, TTransport
+from nebula2.fbthrift.protocol import TBinaryProtocol
 
 
 class GraphStorageConnection(object):

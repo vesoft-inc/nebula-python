@@ -32,8 +32,8 @@ from nebula2.meta import (
     MetaService
 )
 
-from thrift.transport import TSocket, TTransport
-from thrift.protocol import TBinaryProtocol
+from nebula2.fbthrift.transport import TSocket, TTransport
+from nebula2.fbthrift.protocol import TBinaryProtocol
 
 
 class MetaClient(object):
