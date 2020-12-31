@@ -9,7 +9,6 @@
 import sys
 import time
 
-sys.path.insert(0, '../')
 
 from nebula2.gclient.net import ConnectionPool
 from nebula2.Config import Config
