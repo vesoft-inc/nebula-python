@@ -12,6 +12,7 @@ Before you start, please read this section to choose the right branch for you. I
 |--nebula-python
     |
     |-- nebula2                       // client code
+    |   |-- thrift                    // the thrift lib code
     |   |-- common
     |   |-- data
     |   |-- graph
@@ -20,8 +21,6 @@ Before you start, please read this section to choose the right branch for you. I
     |   |-- storage
     |   |-- Config.py                 // the pool config
     |   |__ Exception.py              // the define exception
-    |
-    |-- thrift                        // the thrift lib code
     |
     |-- examples
     |   |-- MultiThreadExample.py     // the multi thread example
