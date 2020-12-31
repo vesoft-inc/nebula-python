@@ -12,7 +12,7 @@ Before you start, please read this section to choose the right branch for you. I
 |--nebula-python
     |
     |-- nebula2                       // client code
-    |   |-- thrift                    // the thrift lib code
+    |   |-- fbthrift                  // the fbthrift lib code
     |   |-- common
     |   |-- data
     |   |-- graph

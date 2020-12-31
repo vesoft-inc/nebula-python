@@ -7,9 +7,9 @@
 
 from __future__ import absolute_import
 import six
-from thrift.util.Recursive import fix_spec
-from thrift.Thrift import *
-from thrift.protocol.TProtocol import TProtocolException
+from nebula2.fbthrift.util.Recursive import fix_spec
+from nebula2.fbthrift.Thrift import *
+from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
 import nebula2.common.ttypes
@@ -17,21 +17,21 @@ import nebula2.common.ttypes
 
 import pprint
 import warnings
-from thrift import Thrift
-from thrift.transport import TTransport
-from thrift.protocol import TBinaryProtocol
-from thrift.protocol import TCompactProtocol
-from thrift.protocol import THeaderProtocol
+from nebula2.fbthrift import Thrift
+from nebula2.fbthrift.transport import TTransport
+from nebula2.fbthrift.protocol import TBinaryProtocol
+from nebula2.fbthrift.protocol import TCompactProtocol
+from nebula2.fbthrift.protocol import THeaderProtocol
 fastproto = None
 if not '__pypy__' in sys.builtin_module_names:
   try:
-    from thrift.protocol import fastproto
+    from nebula2.fbthrift.protocol import fastproto
   except:
     pass
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'ErrorCode', 'AlterSchemaOp', 'RoleType', 'PropertyType', 'IsolationLevel', 'HostStatus', 'SnapshotStatus', 'AdminJobOp', 'AdminCmd', 'JobStatus', 'ListHostType', 'HostRole', 'TaskResult', 'ConfigModule', 'ConfigMode', 'ListenerType', 'FTServiceType', 'ID', 'ColumnTypeDef', 'ColumnDef', 'SchemaProp', 'Schema', 'IdName', 'SpaceDesc', 'SpaceItem', 'TagItem', 'AlterSchemaItem', 'EdgeItem', 'SchemaID', 'IndexItem', 'HostItem', 'UserItem', 'RoleItem', 'ExecResp', 'AdminJobReq', 'JobDesc', 'TaskDesc', 'AdminJobResult', 'AdminJobResp', 'StatisItem', 'CreateSpaceReq', 'DropSpaceReq', 'ListSpacesReq', 'ListSpacesResp', 'GetSpaceReq', 'GetSpaceResp', 'CreateTagReq', 'AlterTagReq', 'DropTagReq', 'ListTagsReq', 'ListTagsResp', 'GetTagReq', 'GetTagResp', 'CreateEdgeReq', 'AlterEdgeReq', 'GetEdgeReq', 'GetEdgeResp', 'DropEdgeReq', 'ListEdgesReq', 'ListEdgesResp', 'ListHostsReq', 'ListHostsResp', 'PartItem', 'ListPartsReq', 'ListPartsResp', 'GetPartsAllocReq', 'GetPartsAllocResp', 'MultiPutReq', 'GetReq', 'GetResp', 'MultiGetReq', 'MultiGetResp', 'RemoveReq', 'RemoveRangeReq', 'ScanReq', 'ScanResp', 'HBResp', 'HBReq', 'IndexFieldDef', 'CreateTagIndexReq', 'DropTagIndexReq', 'GetTagIndexReq', 'GetTagIndexResp', 'ListTagIndexesReq', 'ListTagIndexesResp', 'CreateEdgeIndexReq', 'DropEdgeIndexReq', 'GetEdgeIndexReq', 'GetEdgeIndexResp', 'ListEdgeIndexesReq', 'ListEdgeIndexesResp', 'RebuildIndexReq', 'CreateUserReq', 'DropUserReq', 'AlterUserReq', 'GrantRoleReq', 'RevokeRoleReq', 'ListUsersReq', 'ListUsersResp', 'ListRolesReq', 'ListRolesResp', 'GetUserRolesReq', 'ChangePasswordReq', 'BalanceReq', 'BalanceTask', 'BalanceResp', 'LeaderBalanceReq', 'ConfigItem', 'RegConfigReq', 'GetConfigReq', 'GetConfigResp', 'SetConfigReq', 'ListConfigsReq', 'ListConfigsResp', 'CreateSnapshotReq', 'DropSnapshotReq', 'ListSnapshotsReq', 'Snapshot', 'ListSnapshotsResp', 'ListIndexStatusReq', 'IndexStatus', 'ListIndexStatusResp', 'AddZoneReq', 'DropZoneReq', 'AddHostIntoZoneReq', 'DropHostFromZoneReq', 'GetZoneReq', 'GetZoneResp', 'ListZonesReq', 'Zone', 'ListZonesResp', 'AddGroupReq', 'DropGroupReq', 'AddZoneIntoGroupReq', 'DropZoneFromGroupReq', 'GetGroupReq', 'GetGroupResp', 'ListGroupsReq', 'Group', 'ListGroupsResp', 'AddListenerReq', 'RemoveListenerReq', 'ListListenerReq', 'ListenerInfo', 'ListListenerResp', 'GetStatisReq', 'GetStatisResp', 'CheckpointInfo', 'SpaceBackupInfo', 'BackupMeta', 'CreateBackupReq', 'CreateBackupResp', 'HostPair', 'RestoreMetaReq', 'FTClient', 'SignInFTServiceReq', 'SignOutFTServiceReq', 'ListFTClientsReq', 'ListFTClientsResp', 'SchemaVer', 'ClusterID']
+__all__ = ['UTF8STRINGS', 'ErrorCode', 'AlterSchemaOp', 'RoleType', 'PropertyType', 'IsolationLevel', 'HostStatus', 'SnapshotStatus', 'AdminJobOp', 'AdminCmd', 'JobStatus', 'ListHostType', 'HostRole', 'TaskResult', 'ConfigModule', 'ConfigMode', 'ListenerType', 'FTServiceType', 'ID', 'ColumnTypeDef', 'ColumnDef', 'SchemaProp', 'Schema', 'IdName', 'SpaceDesc', 'SpaceItem', 'TagItem', 'AlterSchemaItem', 'EdgeItem', 'SchemaID', 'IndexItem', 'HostItem', 'UserItem', 'RoleItem', 'ExecResp', 'AdminJobReq', 'JobDesc', 'TaskDesc', 'AdminJobResult', 'AdminJobResp', 'StatisItem', 'CreateSpaceReq', 'DropSpaceReq', 'ListSpacesReq', 'ListSpacesResp', 'GetSpaceReq', 'GetSpaceResp', 'CreateTagReq', 'AlterTagReq', 'DropTagReq', 'ListTagsReq', 'ListTagsResp', 'GetTagReq', 'GetTagResp', 'CreateEdgeReq', 'AlterEdgeReq', 'GetEdgeReq', 'GetEdgeResp', 'DropEdgeReq', 'ListEdgesReq', 'ListEdgesResp', 'ListHostsReq', 'ListHostsResp', 'PartItem', 'ListPartsReq', 'ListPartsResp', 'GetPartsAllocReq', 'GetPartsAllocResp', 'MultiPutReq', 'GetReq', 'GetResp', 'MultiGetReq', 'MultiGetResp', 'RemoveReq', 'RemoveRangeReq', 'ScanReq', 'ScanResp', 'HBResp', 'HBReq', 'IndexFieldDef', 'CreateTagIndexReq', 'DropTagIndexReq', 'GetTagIndexReq', 'GetTagIndexResp', 'ListTagIndexesReq', 'ListTagIndexesResp', 'CreateEdgeIndexReq', 'DropEdgeIndexReq', 'GetEdgeIndexReq', 'GetEdgeIndexResp', 'ListEdgeIndexesReq', 'ListEdgeIndexesResp', 'RebuildIndexReq', 'CreateUserReq', 'DropUserReq', 'AlterUserReq', 'GrantRoleReq', 'RevokeRoleReq', 'ListUsersReq', 'ListUsersResp', 'ListRolesReq', 'ListRolesResp', 'GetUserRolesReq', 'ChangePasswordReq', 'BalanceReq', 'BalanceTask', 'BalanceResp', 'LeaderBalanceReq', 'ConfigItem', 'RegConfigReq', 'GetConfigReq', 'GetConfigResp', 'SetConfigReq', 'ListConfigsReq', 'ListConfigsResp', 'CreateSnapshotReq', 'DropSnapshotReq', 'ListSnapshotsReq', 'Snapshot', 'ListSnapshotsResp', 'ListIndexStatusReq', 'IndexStatus', 'ListIndexStatusResp', 'AddZoneReq', 'DropZoneReq', 'AddHostIntoZoneReq', 'DropHostFromZoneReq', 'GetZoneReq', 'GetZoneResp', 'ListZonesReq', 'Zone', 'ListZonesResp', 'AddGroupReq', 'DropGroupReq', 'AddZoneIntoGroupReq', 'DropZoneFromGroupReq', 'GetGroupReq', 'GetGroupResp', 'ListGroupsReq', 'Group', 'ListGroupsResp', 'AddListenerReq', 'RemoveListenerReq', 'ListListenerReq', 'ListenerInfo', 'ListListenerResp', 'GetStatisReq', 'GetStatisResp', 'CheckpointInfo', 'SpaceBackupInfo', 'BackupMeta', 'CreateBackupReq', 'CreateBackupResp', 'HostPair', 'RestoreMetaReq', 'FTClient', 'SignInFTServiceReq', 'SignOutFTServiceReq', 'ListFTClientsReq', 'ListFTClientsResp', 'Session', 'CreateSessionReq', 'CreateSessionResp', 'UpdateSessionsReq', 'ListSessionsReq', 'ListSessionsResp', 'GetSessionReq', 'GetSessionResp', 'RemoveSessionReq', 'SchemaVer', 'ClusterID']
 
 class ErrorCode:
   SUCCEEDED = 0
@@ -57,6 +57,7 @@ class ErrorCode:
   E_NO_RUNNING_BALANCE_PLAN = -36
   E_NO_VALID_HOST = -37
   E_CORRUPTTED_BALANCE_PLAN = -38
+  E_NO_INVALID_BALANCE_PLAN = -39
   E_INVALID_PASSWORD = -41
   E_IMPROPER_ROLE = -42
   E_INVALID_PARTITION_NUM = -43
@@ -103,6 +104,7 @@ class ErrorCode:
     -36: "E_NO_RUNNING_BALANCE_PLAN",
     -37: "E_NO_VALID_HOST",
     -38: "E_CORRUPTTED_BALANCE_PLAN",
+    -39: "E_NO_INVALID_BALANCE_PLAN",
     -41: "E_INVALID_PASSWORD",
     -42: "E_IMPROPER_ROLE",
     -43: "E_INVALID_PARTITION_NUM",
@@ -150,6 +152,7 @@ class ErrorCode:
     "E_NO_RUNNING_BALANCE_PLAN": -36,
     "E_NO_VALID_HOST": -37,
     "E_CORRUPTTED_BALANCE_PLAN": -38,
+    "E_NO_INVALID_BALANCE_PLAN": -39,
     "E_INVALID_PASSWORD": -41,
     "E_IMPROPER_ROLE": -42,
     "E_INVALID_PARTITION_NUM": -43,
@@ -10334,6 +10337,7 @@ class BalanceReq:
    - id
    - host_del
    - stop
+   - reset
   """
 
   thrift_spec = None
@@ -10390,6 +10394,11 @@ class BalanceReq:
           self.stop = iprot.readBool()
         else:
           iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.BOOL:
+          self.reset = iprot.readBool()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -10426,6 +10435,10 @@ class BalanceReq:
       oprot.writeFieldBegin('stop', TType.BOOL, 4)
       oprot.writeBool(self.stop)
       oprot.writeFieldEnd()
+    if self.reset != None:
+      oprot.writeFieldBegin('reset', TType.BOOL, 5)
+      oprot.writeBool(self.reset)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -10448,6 +10461,10 @@ class BalanceReq:
       value = pprint.pformat(self.stop, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    stop=%s' % (value))
+    if self.reset is not None:
+      value = pprint.pformat(self.reset, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    reset=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -15889,6 +15906,978 @@ class ListFTClientsResp:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class Session:
+  """
+  Attributes:
+   - session_id
+   - create_time
+   - update_time
+   - user_name
+   - space_name
+   - graph_addr
+   - timezone
+   - client_ip
+   - configs
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.session_id = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I64:
+          self.create_time = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I64:
+          self.update_time = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.user_name = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.STRING:
+          self.space_name = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.STRUCT:
+          self.graph_addr = nebula2.common.ttypes.HostAddr()
+          self.graph_addr.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 7:
+        if ftype == TType.I32:
+          self.timezone = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 8:
+        if ftype == TType.STRING:
+          self.client_ip = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 9:
+        if ftype == TType.MAP:
+          self.configs = {}
+          (_ktype541, _vtype542, _size540 ) = iprot.readMapBegin() 
+          if _size540 >= 0:
+            for _i544 in six.moves.range(_size540):
+              _key545 = iprot.readString()
+              _val546 = nebula2.common.ttypes.Value()
+              _val546.read(iprot)
+              self.configs[_key545] = _val546
+          else: 
+            while iprot.peekMap():
+              _key547 = iprot.readString()
+              _val548 = nebula2.common.ttypes.Value()
+              _val548.read(iprot)
+              self.configs[_key547] = _val548
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('Session')
+    if self.session_id != None:
+      oprot.writeFieldBegin('session_id', TType.I64, 1)
+      oprot.writeI64(self.session_id)
+      oprot.writeFieldEnd()
+    if self.create_time != None:
+      oprot.writeFieldBegin('create_time', TType.I64, 2)
+      oprot.writeI64(self.create_time)
+      oprot.writeFieldEnd()
+    if self.update_time != None:
+      oprot.writeFieldBegin('update_time', TType.I64, 3)
+      oprot.writeI64(self.update_time)
+      oprot.writeFieldEnd()
+    if self.user_name != None:
+      oprot.writeFieldBegin('user_name', TType.STRING, 4)
+      oprot.writeString(self.user_name)
+      oprot.writeFieldEnd()
+    if self.space_name != None:
+      oprot.writeFieldBegin('space_name', TType.STRING, 5)
+      oprot.writeString(self.space_name)
+      oprot.writeFieldEnd()
+    if self.graph_addr != None:
+      oprot.writeFieldBegin('graph_addr', TType.STRUCT, 6)
+      self.graph_addr.write(oprot)
+      oprot.writeFieldEnd()
+    if self.timezone != None:
+      oprot.writeFieldBegin('timezone', TType.I32, 7)
+      oprot.writeI32(self.timezone)
+      oprot.writeFieldEnd()
+    if self.client_ip != None:
+      oprot.writeFieldBegin('client_ip', TType.STRING, 8)
+      oprot.writeString(self.client_ip)
+      oprot.writeFieldEnd()
+    if self.configs != None:
+      oprot.writeFieldBegin('configs', TType.MAP, 9)
+      oprot.writeMapBegin(TType.STRING, TType.STRUCT, len(self.configs))
+      for kiter549,viter550 in self.configs.items():
+        oprot.writeString(kiter549)
+        viter550.write(oprot)
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.session_id is not None:
+      value = pprint.pformat(self.session_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    session_id=%s' % (value))
+    if self.create_time is not None:
+      value = pprint.pformat(self.create_time, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    create_time=%s' % (value))
+    if self.update_time is not None:
+      value = pprint.pformat(self.update_time, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    update_time=%s' % (value))
+    if self.user_name is not None:
+      value = pprint.pformat(self.user_name, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    user_name=%s' % (value))
+    if self.space_name is not None:
+      value = pprint.pformat(self.space_name, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    space_name=%s' % (value))
+    if self.graph_addr is not None:
+      value = pprint.pformat(self.graph_addr, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    graph_addr=%s' % (value))
+    if self.timezone is not None:
+      value = pprint.pformat(self.timezone, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    timezone=%s' % (value))
+    if self.client_ip is not None:
+      value = pprint.pformat(self.client_ip, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    client_ip=%s' % (value))
+    if self.configs is not None:
+      value = pprint.pformat(self.configs, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    configs=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class CreateSessionReq:
+  """
+  Attributes:
+   - user
+   - graph_addr
+   - client_ip
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.user = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRUCT:
+          self.graph_addr = nebula2.common.ttypes.HostAddr()
+          self.graph_addr.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.client_ip = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('CreateSessionReq')
+    if self.user != None:
+      oprot.writeFieldBegin('user', TType.STRING, 1)
+      oprot.writeString(self.user)
+      oprot.writeFieldEnd()
+    if self.graph_addr != None:
+      oprot.writeFieldBegin('graph_addr', TType.STRUCT, 2)
+      self.graph_addr.write(oprot)
+      oprot.writeFieldEnd()
+    if self.client_ip != None:
+      oprot.writeFieldBegin('client_ip', TType.STRING, 3)
+      oprot.writeString(self.client_ip)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.user is not None:
+      value = pprint.pformat(self.user, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    user=%s' % (value))
+    if self.graph_addr is not None:
+      value = pprint.pformat(self.graph_addr, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    graph_addr=%s' % (value))
+    if self.client_ip is not None:
+      value = pprint.pformat(self.client_ip, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    client_ip=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class CreateSessionResp:
+  """
+  Attributes:
+   - code
+   - leader
+   - session
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I32:
+          self.code = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRUCT:
+          self.leader = nebula2.common.ttypes.HostAddr()
+          self.leader.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRUCT:
+          self.session = Session()
+          self.session.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('CreateSessionResp')
+    if self.code != None:
+      oprot.writeFieldBegin('code', TType.I32, 1)
+      oprot.writeI32(self.code)
+      oprot.writeFieldEnd()
+    if self.leader != None:
+      oprot.writeFieldBegin('leader', TType.STRUCT, 2)
+      self.leader.write(oprot)
+      oprot.writeFieldEnd()
+    if self.session != None:
+      oprot.writeFieldBegin('session', TType.STRUCT, 3)
+      self.session.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.code is not None:
+      value = pprint.pformat(self.code, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    code=%s' % (value))
+    if self.leader is not None:
+      value = pprint.pformat(self.leader, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    leader=%s' % (value))
+    if self.session is not None:
+      value = pprint.pformat(self.session, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    session=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class UpdateSessionsReq:
+  """
+  Attributes:
+   - sessions
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.sessions = []
+          (_etype554, _size551) = iprot.readListBegin()
+          if _size551 >= 0:
+            for _i555 in six.moves.range(_size551):
+              _elem556 = Session()
+              _elem556.read(iprot)
+              self.sessions.append(_elem556)
+          else: 
+            while iprot.peekList():
+              _elem557 = Session()
+              _elem557.read(iprot)
+              self.sessions.append(_elem557)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('UpdateSessionsReq')
+    if self.sessions != None:
+      oprot.writeFieldBegin('sessions', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRUCT, len(self.sessions))
+      for iter558 in self.sessions:
+        iter558.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.sessions is not None:
+      value = pprint.pformat(self.sessions, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    sessions=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class ListSessionsReq:
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('ListSessionsReq')
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class ListSessionsResp:
+  """
+  Attributes:
+   - code
+   - leader
+   - sessions
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I32:
+          self.code = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRUCT:
+          self.leader = nebula2.common.ttypes.HostAddr()
+          self.leader.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.LIST:
+          self.sessions = []
+          (_etype562, _size559) = iprot.readListBegin()
+          if _size559 >= 0:
+            for _i563 in six.moves.range(_size559):
+              _elem564 = Session()
+              _elem564.read(iprot)
+              self.sessions.append(_elem564)
+          else: 
+            while iprot.peekList():
+              _elem565 = Session()
+              _elem565.read(iprot)
+              self.sessions.append(_elem565)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('ListSessionsResp')
+    if self.code != None:
+      oprot.writeFieldBegin('code', TType.I32, 1)
+      oprot.writeI32(self.code)
+      oprot.writeFieldEnd()
+    if self.leader != None:
+      oprot.writeFieldBegin('leader', TType.STRUCT, 2)
+      self.leader.write(oprot)
+      oprot.writeFieldEnd()
+    if self.sessions != None:
+      oprot.writeFieldBegin('sessions', TType.LIST, 3)
+      oprot.writeListBegin(TType.STRUCT, len(self.sessions))
+      for iter566 in self.sessions:
+        iter566.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.code is not None:
+      value = pprint.pformat(self.code, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    code=%s' % (value))
+    if self.leader is not None:
+      value = pprint.pformat(self.leader, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    leader=%s' % (value))
+    if self.sessions is not None:
+      value = pprint.pformat(self.sessions, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    sessions=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class GetSessionReq:
+  """
+  Attributes:
+   - session_id
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.session_id = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('GetSessionReq')
+    if self.session_id != None:
+      oprot.writeFieldBegin('session_id', TType.I64, 1)
+      oprot.writeI64(self.session_id)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.session_id is not None:
+      value = pprint.pformat(self.session_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    session_id=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class GetSessionResp:
+  """
+  Attributes:
+   - code
+   - leader
+   - session
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I32:
+          self.code = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRUCT:
+          self.leader = nebula2.common.ttypes.HostAddr()
+          self.leader.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRUCT:
+          self.session = Session()
+          self.session.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('GetSessionResp')
+    if self.code != None:
+      oprot.writeFieldBegin('code', TType.I32, 1)
+      oprot.writeI32(self.code)
+      oprot.writeFieldEnd()
+    if self.leader != None:
+      oprot.writeFieldBegin('leader', TType.STRUCT, 2)
+      self.leader.write(oprot)
+      oprot.writeFieldEnd()
+    if self.session != None:
+      oprot.writeFieldBegin('session', TType.STRUCT, 3)
+      self.session.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.code is not None:
+      value = pprint.pformat(self.code, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    code=%s' % (value))
+    if self.leader is not None:
+      value = pprint.pformat(self.leader, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    leader=%s' % (value))
+    if self.session is not None:
+      value = pprint.pformat(self.session, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    session=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class RemoveSessionReq:
+  """
+  Attributes:
+   - session_id
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.session_id = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('RemoveSessionReq')
+    if self.session_id != None:
+      oprot.writeFieldBegin('session_id', TType.I64, 1)
+      oprot.writeI64(self.session_id)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.session_id is not None:
+      value = pprint.pformat(self.session_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    session_id=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
 SchemaVer = UnimplementedTypedef()
 ClusterID = UnimplementedTypedef()
 all_structs.append(ID)
@@ -18363,6 +19352,7 @@ BalanceReq.thrift_spec = (
   (2, TType.I64, 'id', None, None, 1, ), # 2
   (3, TType.LIST, 'host_del', (TType.STRUCT,[nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False]), None, 1, ), # 3
   (4, TType.BOOL, 'stop', None, None, 1, ), # 4
+  (5, TType.BOOL, 'reset', None, None, 1, ), # 5
 )
 
 BalanceReq.thrift_struct_annotations = {
@@ -18370,11 +19360,12 @@ BalanceReq.thrift_struct_annotations = {
 BalanceReq.thrift_field_annotations = {
 }
 
-def BalanceReq__init__(self, space_id=None, id=None, host_del=None, stop=None,):
+def BalanceReq__init__(self, space_id=None, id=None, host_del=None, stop=None, reset=None,):
   self.space_id = space_id
   self.id = id
   self.host_del = host_del
   self.stop = stop
+  self.reset = reset
 
 BalanceReq.__init__ = BalanceReq__init__
 
@@ -18383,6 +19374,7 @@ def BalanceReq__setstate__(self, state):
   state.setdefault('id', None)
   state.setdefault('host_del', None)
   state.setdefault('stop', None)
+  state.setdefault('reset', None)
   self.__dict__ = state
 
 BalanceReq.__getstate__ = lambda self: self.__dict__.copy()
@@ -19731,6 +20723,247 @@ def ListFTClientsResp__setstate__(self, state):
 
 ListFTClientsResp.__getstate__ = lambda self: self.__dict__.copy()
 ListFTClientsResp.__setstate__ = ListFTClientsResp__setstate__
+
+all_structs.append(Session)
+Session.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'session_id', None, None, 2, ), # 1
+  (2, TType.I64, 'create_time', None, None, 2, ), # 2
+  (3, TType.I64, 'update_time', None, None, 2, ), # 3
+  (4, TType.STRING, 'user_name', False, None, 2, ), # 4
+  (5, TType.STRING, 'space_name', False, None, 2, ), # 5
+  (6, TType.STRUCT, 'graph_addr', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 6
+  (7, TType.I32, 'timezone', None, None, 2, ), # 7
+  (8, TType.STRING, 'client_ip', False, None, 2, ), # 8
+  (9, TType.MAP, 'configs', (TType.STRING,False,TType.STRUCT,[nebula2.common.ttypes.Value, nebula2.common.ttypes.Value.thrift_spec, True]), None, 2, ), # 9
+)
+
+Session.thrift_struct_annotations = {
+}
+Session.thrift_field_annotations = {
+}
+
+def Session__init__(self, session_id=None, create_time=None, update_time=None, user_name=None, space_name=None, graph_addr=None, timezone=None, client_ip=None, configs=None,):
+  self.session_id = session_id
+  self.create_time = create_time
+  self.update_time = update_time
+  self.user_name = user_name
+  self.space_name = space_name
+  self.graph_addr = graph_addr
+  self.timezone = timezone
+  self.client_ip = client_ip
+  self.configs = configs
+
+Session.__init__ = Session__init__
+
+def Session__setstate__(self, state):
+  state.setdefault('session_id', None)
+  state.setdefault('create_time', None)
+  state.setdefault('update_time', None)
+  state.setdefault('user_name', None)
+  state.setdefault('space_name', None)
+  state.setdefault('graph_addr', None)
+  state.setdefault('timezone', None)
+  state.setdefault('client_ip', None)
+  state.setdefault('configs', None)
+  self.__dict__ = state
+
+Session.__getstate__ = lambda self: self.__dict__.copy()
+Session.__setstate__ = Session__setstate__
+
+all_structs.append(CreateSessionReq)
+CreateSessionReq.thrift_spec = (
+  None, # 0
+  (1, TType.STRING, 'user', False, None, 2, ), # 1
+  (2, TType.STRUCT, 'graph_addr', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.STRING, 'client_ip', False, None, 2, ), # 3
+)
+
+CreateSessionReq.thrift_struct_annotations = {
+}
+CreateSessionReq.thrift_field_annotations = {
+}
+
+def CreateSessionReq__init__(self, user=None, graph_addr=None, client_ip=None,):
+  self.user = user
+  self.graph_addr = graph_addr
+  self.client_ip = client_ip
+
+CreateSessionReq.__init__ = CreateSessionReq__init__
+
+def CreateSessionReq__setstate__(self, state):
+  state.setdefault('user', None)
+  state.setdefault('graph_addr', None)
+  state.setdefault('client_ip', None)
+  self.__dict__ = state
+
+CreateSessionReq.__getstate__ = lambda self: self.__dict__.copy()
+CreateSessionReq.__setstate__ = CreateSessionReq__setstate__
+
+all_structs.append(CreateSessionResp)
+CreateSessionResp.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.STRUCT, 'session', [Session, Session.thrift_spec, False], None, 2, ), # 3
+)
+
+CreateSessionResp.thrift_struct_annotations = {
+}
+CreateSessionResp.thrift_field_annotations = {
+}
+
+def CreateSessionResp__init__(self, code=None, leader=None, session=None,):
+  self.code = code
+  self.leader = leader
+  self.session = session
+
+CreateSessionResp.__init__ = CreateSessionResp__init__
+
+def CreateSessionResp__setstate__(self, state):
+  state.setdefault('code', None)
+  state.setdefault('leader', None)
+  state.setdefault('session', None)
+  self.__dict__ = state
+
+CreateSessionResp.__getstate__ = lambda self: self.__dict__.copy()
+CreateSessionResp.__setstate__ = CreateSessionResp__setstate__
+
+all_structs.append(UpdateSessionsReq)
+UpdateSessionsReq.thrift_spec = (
+  None, # 0
+  (1, TType.LIST, 'sessions', (TType.STRUCT,[Session, Session.thrift_spec, False]), None, 2, ), # 1
+)
+
+UpdateSessionsReq.thrift_struct_annotations = {
+}
+UpdateSessionsReq.thrift_field_annotations = {
+}
+
+def UpdateSessionsReq__init__(self, sessions=None,):
+  self.sessions = sessions
+
+UpdateSessionsReq.__init__ = UpdateSessionsReq__init__
+
+def UpdateSessionsReq__setstate__(self, state):
+  state.setdefault('sessions', None)
+  self.__dict__ = state
+
+UpdateSessionsReq.__getstate__ = lambda self: self.__dict__.copy()
+UpdateSessionsReq.__setstate__ = UpdateSessionsReq__setstate__
+
+all_structs.append(ListSessionsReq)
+ListSessionsReq.thrift_spec = (
+)
+
+ListSessionsReq.thrift_struct_annotations = {
+}
+ListSessionsReq.thrift_field_annotations = {
+}
+
+all_structs.append(ListSessionsResp)
+ListSessionsResp.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.LIST, 'sessions', (TType.STRUCT,[Session, Session.thrift_spec, False]), None, 2, ), # 3
+)
+
+ListSessionsResp.thrift_struct_annotations = {
+}
+ListSessionsResp.thrift_field_annotations = {
+}
+
+def ListSessionsResp__init__(self, code=None, leader=None, sessions=None,):
+  self.code = code
+  self.leader = leader
+  self.sessions = sessions
+
+ListSessionsResp.__init__ = ListSessionsResp__init__
+
+def ListSessionsResp__setstate__(self, state):
+  state.setdefault('code', None)
+  state.setdefault('leader', None)
+  state.setdefault('sessions', None)
+  self.__dict__ = state
+
+ListSessionsResp.__getstate__ = lambda self: self.__dict__.copy()
+ListSessionsResp.__setstate__ = ListSessionsResp__setstate__
+
+all_structs.append(GetSessionReq)
+GetSessionReq.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'session_id', None, None, 2, ), # 1
+)
+
+GetSessionReq.thrift_struct_annotations = {
+}
+GetSessionReq.thrift_field_annotations = {
+}
+
+def GetSessionReq__init__(self, session_id=None,):
+  self.session_id = session_id
+
+GetSessionReq.__init__ = GetSessionReq__init__
+
+def GetSessionReq__setstate__(self, state):
+  state.setdefault('session_id', None)
+  self.__dict__ = state
+
+GetSessionReq.__getstate__ = lambda self: self.__dict__.copy()
+GetSessionReq.__setstate__ = GetSessionReq__setstate__
+
+all_structs.append(GetSessionResp)
+GetSessionResp.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.STRUCT, 'session', [Session, Session.thrift_spec, False], None, 2, ), # 3
+)
+
+GetSessionResp.thrift_struct_annotations = {
+}
+GetSessionResp.thrift_field_annotations = {
+}
+
+def GetSessionResp__init__(self, code=None, leader=None, session=None,):
+  self.code = code
+  self.leader = leader
+  self.session = session
+
+GetSessionResp.__init__ = GetSessionResp__init__
+
+def GetSessionResp__setstate__(self, state):
+  state.setdefault('code', None)
+  state.setdefault('leader', None)
+  state.setdefault('session', None)
+  self.__dict__ = state
+
+GetSessionResp.__getstate__ = lambda self: self.__dict__.copy()
+GetSessionResp.__setstate__ = GetSessionResp__setstate__
+
+all_structs.append(RemoveSessionReq)
+RemoveSessionReq.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'session_id', None, None, 2, ), # 1
+)
+
+RemoveSessionReq.thrift_struct_annotations = {
+}
+RemoveSessionReq.thrift_field_annotations = {
+}
+
+def RemoveSessionReq__init__(self, session_id=None,):
+  self.session_id = session_id
+
+RemoveSessionReq.__init__ = RemoveSessionReq__init__
+
+def RemoveSessionReq__setstate__(self, state):
+  state.setdefault('session_id', None)
+  self.__dict__ = state
+
+RemoveSessionReq.__getstate__ = lambda self: self.__dict__.copy()
+RemoveSessionReq.__setstate__ = RemoveSessionReq__setstate__
 
 fix_spec(all_structs)
 del all_structs
