@@ -11,26 +11,27 @@ Before you start, please read this section to choose the right branch for you. I
 ```text
 |--nebula-python
     |
-    |-- nebula2                       // client code
-    |   |-- fbthrift                  // the fbthrift lib code
-    |   |-- common
-    |   |-- data
-    |   |-- graph
-    |   |-- meta
-    |   |-- net                       // the net code for graph client
-    |   |-- storage
-    |   |-- Config.py                 // the pool config
-    |   |__ Exception.py              // the define exception
-    |
+    |-- nebula2                               // client code
+    |   |-- fbthrift                          // the fbthrift lib code
+    |   |-- common           
+    |   |-- data           
+    |   |-- graph           
+    |   |-- meta           
+    |   |-- net                               // the net code for graph client
+    |   |-- storage           
+    |   |-- Config.py                         // the pool config
+    |   |__ Exception.py                      // the define exception
+    |           
     |-- examples
-    |   |-- MultiThreadExample.py     // the multi thread example
-    |   |__ SimpleExample.py          // the simple example
+    |   |-- GraphClientMultiThreadExample.py  // the multi thread example
+    |   |-- GraphClientSimpleExample.py       // the simple example
+    |   |__ ScanVertexEdgeExample.py                   
     |
-    |-- tests                         // the test code
-    |
-    |-- setup.py                      // used to install or package
-    |
-    |__ README.md                     // the introduction of nebula2-python
+    |-- tests                                 // the test code
+    |                      
+    |-- setup.py                              // used to install or package
+    |                      
+    |__ README.md                             // the introduction of nebula2-python
 
 ```
 
@@ -65,7 +66,7 @@ When your environment cannot access `pypi`, you need to install the following pa
 pip install nebula2-python
 ```
 
-## Quick example
+## Quick example to use graph-cleint to connect graphd
 
 ```python
 from nebula2.gclient.net import ConnectionPool
@@ -82,8 +83,11 @@ ok = connection_pool.init([('127.0.0.1', 3699)], config)
 # get session from the pool
 session = connection_pool.get_session('root', 'nebula')
 
-# show hosts
-result = session.execute('SHOW HOSTS')
+# select space
+session.execute('USE nba')
+
+# show tags
+result = session.execute('SHOW TAGS')
 print(result)
 
 # release session
@@ -93,9 +97,42 @@ session.release()
 connection_pool.close()
 ```
 
+## Quick example to use storage-cleint to scan vertex and edge
+
+You should make sure the scan client can connect to the address of storage which see from `SHOW HOSTS` 
+
+```python
+from nebula2.mclient import MetaCache
+from nebula2.sclient.GraphStorageClient import GraphStorageClient
+
+# the metad servers's address
+meta_cache = MetaCache([('172.28.1.1', 45500),
+                        ('172.28.1.2', 45500),
+                        ('172.28.1.3', 45500)],
+                       50000)
+graph_storage_client = GraphStorageClient(meta_cache)
+
+resp = graph_storage_client.scan_vertex(
+        space_name='ScanSpace',
+        tag_name='person')
+while resp.has_next():
+    result = resp.next()
+    for vertex_data in result:
+        print(vertex_data)
+        
+resp = graph_storage_client.scan_edge(
+    space_name='ScanSpace',
+    edge_name='friend')
+while resp.has_next():
+    result = resp.next()
+    for edge_data in result:
+        print(edge_data)
+```
+
 ## How to choose nebula-python
 
 | Nebula2-Python Version | NebulaGraph Version |
 |---|---|
 | 2.0.0.post1  | 2.0.0beta |
+| 2.0.0rc1  | 2.0.0-RC1 |
 

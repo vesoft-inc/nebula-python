@@ -21,7 +21,7 @@ if __name__ == '__main__':
         config.max_connection_pool_size = 2
         # init connection pool
         connection_pool = ConnectionPool()
-        assert connection_pool.init([('127.0.0.1', 3700), ('127.0.0.1', 3699)], config)
+        assert connection_pool.init([('127.0.0.1', 3699)], config)
 
         # get session from the pool
         client = connection_pool.get_session('root', 'nebula')
@@ -29,6 +29,8 @@ if __name__ == '__main__':
 
         client.execute('CREATE SPACE IF NOT EXISTS test; USE test;'
                        'CREATE TAG IF NOT EXISTS person(name string, age int);')
+        resp = client.execute('SHOW CREATE TAG person;')
+        print(resp)
 
         # insert data need to sleep after create schema
         time.sleep(6)

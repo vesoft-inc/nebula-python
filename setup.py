@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='nebula2-python',
-    version='2.0.0-1',
+    version='2.0.0rc1',
     license="Apache 2.0 + Common Clause 1.0",
     author='vesoft-inc',
     author_email='info@vesoft.com',

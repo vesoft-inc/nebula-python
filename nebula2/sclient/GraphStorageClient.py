@@ -43,6 +43,9 @@ class GraphStorageClient(object):
     def get_conns(self):
         return self._connections
 
+    def __del__(self):
+        self.close()
+
     def close(self):
         try:
             for conn in self._connections:

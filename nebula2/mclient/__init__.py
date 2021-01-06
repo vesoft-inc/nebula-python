@@ -183,8 +183,13 @@ class MetaCache(object):
         # load meta data
         self._load_all()
 
-    def __del__(self):
+    def close(self):
         self._close = True
+        if self._meta_client is not None:
+            self._meta_client.close()
+
+    def __del__(self):
+        self.close()
 
     def _load_all(self):
         try:
