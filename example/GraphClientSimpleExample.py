@@ -29,8 +29,6 @@ if __name__ == '__main__':
 
         client.execute('CREATE SPACE IF NOT EXISTS test; USE test;'
                        'CREATE TAG IF NOT EXISTS person(name string, age int);')
-        resp = client.execute('SHOW CREATE TAG person;')
-        print(resp)
 
         # insert data need to sleep after create schema
         time.sleep(6)
