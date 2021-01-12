@@ -13,16 +13,18 @@ statement_file = 'nebula_statments.txt'
 
 
 class Generator(object):
-    def __init__(self, ip, port):
-        connection_pool = ConnectionPool(ip, port, 1, 0)
+    def __init__(self):
+        connection_pool = ConnectionPool(options.ip, options.port, 1, 0)
         self._client = GraphClient(connection_pool)
-        self._client.authenticate('root', 'nebula')
+        self._client.authenticate(options.user, options.password)
         self._spaces = []
         self._stmts = []
 
     def start(self):
-        self.generate_space_statment()
-        self.generate_configs_statment()
+        if options.type != 'config':
+            self.generate_space_statment()
+        if options.type == 'all' or options.type == 'config':
+            self.generate_configs_statment()
 
     def generate_space_statment(self):
         resp = self.execute("SHOW SPACES;")
@@ -36,17 +38,22 @@ class Generator(object):
         for space in self._spaces:
             self._stmts.append('\n')
             self._stmts.append('#  ============ Space[{}] ========='.format(space))
+            if options.type == 'all' or options.type == 'space':
+                resp = self.execute("SHOW CREATE SPACE {};".format(space))
+                self._stmts.append(resp.rows[0].columns[1].get_str().decode('utf-8').replace('\n', ''))
 
-            resp = self.execute("SHOW CREATE SPACE {};".format(space))
-            self._stmts.append(resp.rows[0].columns[1].get_str().decode('utf-8').replace('\n', ''))
+            if options.type == 'space':
+                continue
+
             self.execute("USE {};".format(space))
-
             self._stmts.append('USE {};'.format(space))
 
-            self.generate_tag_statment()
-            self.generate_edge_statment()
-            self.generate_tag_index_statment()
-            self.generate_edge_index_statment()
+            if options.type == 'all' or options.type == 'schema':
+                self.generate_tag_statment()
+                self.generate_edge_statment()
+            if options.type == 'all' or options.type == 'index':
+                self.generate_tag_index_statment()
+                self.generate_edge_index_statment()
 
     def generate_tag_statment(self):
         resp = self.execute("SHOW TAGS;")
@@ -161,7 +168,7 @@ if __name__ == '__main__':
     '''
         Usage: 
         Step1: pip3 install nebula-python
-        Step2: python3 GenerateStatment.py --ip=127.0.0.1 --port=3699
+        Step2: python3 GenerateNgql.py --ip=127.0.0.1 --port=3699 --user=root --password=nebula --type=<all/index/schema>
         You can find a file Nebula_Statments.txt under current directory
     '''
     from optparse import OptionParser
@@ -174,11 +181,27 @@ if __name__ == '__main__':
                           dest='port',
                           default='',
                           help='port of the graphd')
+    opt_parser.add_option("--user",
+                          dest='user',
+                          default='root',
+                          help='the user name to authenticate')
+    opt_parser.add_option("--password",
+                          dest='password',
+                          default='',
+                          help='the user name to authenticate')
+    opt_parser.add_option("--type",
+                          dest='type',
+                          default='all',
+                          help='generate the ngql from given type')
 
     (options, args) = opt_parser.parse_args()
+    supported_type = ['all', 'index', 'schema', 'config', 'space']
+    if options.type not in supported_type:
+        print('Given wrong type: %s, must be one of %s' % (options.type, supported_type))
+        exit(1)
 
     print('Nebula graph address {}:{}'.format(options.ip, options.port))
-    generator = Generator(options.ip, options.port)
+    generator = Generator()
     generator.start()
     # generator.print()
     generator.save_to_file()
