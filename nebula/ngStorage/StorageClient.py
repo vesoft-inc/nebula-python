@@ -344,10 +344,10 @@ class StorageClient:
     def get_vertex_return_cols(self, space, return_cols):
         columns = {}
         for tag_name, prop_names in return_cols.items():
-            tag_item = self._meta_client.get_tag_item_from_cache(space, tag_name)
-            if tag_item is None:
+            tag_items = self._meta_client.get_tag_item_from_cache(space, tag_name)
+            if tag_items is None:
                 raise Exception('tag %s not found in space %s' % (tag_name, space))
-            tag_id = tag_item.tag_id
+            tag_id = tag_items[-1].tag_id
             entry_id = EntryId(tag_id=tag_id)
             prop_defs = []
             for prop_name in prop_names:

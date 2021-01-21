@@ -10,6 +10,14 @@ import struct
 import six
 from datetime import datetime
 
+DEFAULT_VALUE_OF_PROPTYPE = {
+    SupportedType.BOOL: False,
+    SupportedType.INT: 0,
+    SupportedType.FLOAT: 0.0,
+    SupportedType.DOUBLE: 0.0,
+    SupportedType.STRING: "",
+    SupportedType.TIMESTAMP: 0
+  }
 class PropertyDef:
     def __init__(self, property_type, name):
         self._property_type = property_type
@@ -37,38 +45,44 @@ class Row:
 
 
 class RowReader:
-    def __init__(self, schema, schema_version=0):
+    def __init__(self, schemas, version=-1):
         """Initalizer
         Arguments:
-            - schema: schema of tag or edge
-            - schema_version: version of schema
+            - schemas: schemas of all versions
+            - version: wanted schema version
         Returns: emtpy
         """
-        self._schema_version = schema_version
-        self._defs = []
-        self._field_num = 0
+        self._schemas = schemas
+        if version == -1:
+            self._version = sorted(schemas.keys())[-1] # get the latest schema version
+        else:
+            self._version = version
+        self._defs = {}
+        self._field_num = {}
         self._property_name_index = {}
         self._property_types = []
         self._offset = 0
 
-        idx = 0
-        for column_def in schema.columns:
-            property_type = column_def.type.type
-            column_name = column_def.name
-            self._defs.append((column_name, property_type))
-            self._property_name_index[column_name] = idx
-            idx += 1
-        self._field_num = len(self._defs)
+        for schema_version, schema in schemas.items():
+            schema_defs = []
+            property_name_index = {}
+            idx = 0
+            for column_def in schema.columns:
+                property_type = column_def.type.type
+                column_name = column_def.name
+                schema_defs.append((column_name, property_type))
+                property_name_index[column_name] = idx
+                idx += 1
+            self._property_name_index[schema_version] = property_name_index
+            self._defs[schema_version] = schema_defs
+            self._field_num[schema_version] = len(schema_defs)
 
-    def decode_value(self, value, schema_version=None):
+    def decode_value(self, value):
         """ decode data
         Arguments:
             - value: data value scanned from the storage server
-            - schema_version: version of schema
         Returns: decoded property values
         """
-        if schema_version is None:
-            schema_version = self._schema_version
         self._offset = 0
         # need to check if value is valid
         if six.PY2:
@@ -82,33 +96,40 @@ class RowReader:
         if ver_bytes_num > 0:
             for i in range(ver_bytes_num):
                 if six.PY2:
-                    ver |= ord(value[self._offset]) << 8
+                    ver |= ord(value[self._offset])
                 else:
-                    ver |= value[self._offset] << 8
+                    ver |= value[self._offset]
                 self._offset += 1
-        if ver != schema_version:
-            raise Exception('parsed version %d is not equal to version %d provided', ver, schema_version)
-        self._offset += blk_off_bytes_num * (self._field_num // 16)
-        properties = []
-        for i in range(len(self._defs)):
-            field = self._defs[i][0]
-            property_type = self._defs[i][1]
+        self._offset += blk_off_bytes_num * (self._field_num[ver] // 16)
+        properties = {}
+        for i in range(len(self._defs[ver])):
+            field = self._defs[ver][i][0]
+            property_type = self._defs[ver][i][1]
             if property_type == SupportedType.BOOL:
-                properties.append(self.get_bool_property(field, value))
+                properties[field] = self.get_bool_property(field, value)
             elif property_type == SupportedType.INT:
-                properties.append(self.get_int_property(field, value))
+                properties[field] = self.get_int_property(field, value)
             elif property_type == SupportedType.FLOAT: #unused now
-                properties.append(self.get_float_property(field, value))
+                properties[field] = self.get_float_property(field, value)
             elif property_type == SupportedType.DOUBLE:
-                properties.append(self.get_double_property(field, value))
+                properties[field] = self.get_double_property(field, value)
             elif property_type == SupportedType.STRING:
-                properties.append(self.get_string_property(field, value))
+                properties[field] = self.get_string_property(field, value)
             elif property_type == SupportedType.TIMESTAMP:
-                properties.append(self.get_timestamp_property(field, value))
+                properties[field] = self.get_timestamp_property(field, value)
             else:
                 raise Exception('Unsupported propertyType in schema: ', property_type)
 
-        return properties
+        returned_props = []
+        for defs in self._defs[self._version]:
+            prop_name = defs[0]
+            prop_type = defs[1]
+            if prop_name in properties.keys():
+                returned_props.append(properties[prop_name])
+            else:
+                returned_props.append(Property(prop_type, prop_name, DEFAULT_VALUE_OF_PROPTYPE[prop_type]))
+
+        return returned_props
 
     def edge_key(self, srcId, edgeName, dstId):
         properties = []
@@ -123,10 +144,10 @@ class RowReader:
         properties.append(Property(SupportedType.STRING, "_tag", tagName))
         return properties
 
-    def get_property(self, row, name):
-        if name not in property_name_index.keys():
+    def get_property(self, row, name, version):
+        if name not in self._property_name_index[version].keys():
             return None
-        return row.properties[property_name_index[name]]
+        return row.properties[self._property_name_index[version][name]]
 
     def get_property_by_index(self, row, index):
         if index < 0 or index >= len(row.get_properties()):

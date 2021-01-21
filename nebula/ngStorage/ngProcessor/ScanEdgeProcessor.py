@@ -36,11 +36,13 @@ class ScanEdgeProcessor:
         edge_type_name_map = {}
 
         if scan_edge_response.edge_schema is not None:
-            for edge_type, schema in scan_edge_response.edge_schema.items():
+            for edge_type, _ in scan_edge_response.edge_schema.items():
                 edge_name = self._meta_client.get_edge_name_from_cache(space_name, edge_type)
-                edge_item = self._meta_client.get_edge_item_from_cache(space_name, edge_name)
-                schema_version = edge_item.version
-                row_readers[edge_type] = RowReader(schema, schema_version)
+                edge_items = self._meta_client.get_edge_item_from_cache(space_name, edge_name)
+                schemas = {}
+                for edge_item in edge_items:
+                    schemas[edge_item.version] = edge_item.schema
+                row_readers[edge_type] = RowReader(schemas)
                 rows[edge_name] = []
                 edge_type_name_map[edge_type] = edge_name
         else:

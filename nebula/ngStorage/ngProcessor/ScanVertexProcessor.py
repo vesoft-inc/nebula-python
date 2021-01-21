@@ -38,11 +38,13 @@ class ScanVertexProcessor:
         rows = {}
         tag_id_name_map = {}
         if scan_vertex_response.vertex_schema is not None:
-            for tag_id, schema in scan_vertex_response.vertex_schema.items():
+            for tag_id, _ in scan_vertex_response.vertex_schema.items():
                 tag_name = self._meta_client.get_tag_name_from_cache(space_name, tag_id)
-                tag_item = self._meta_client.get_tag_item_from_cache(space_name, tag_name)
-                schema_version = tag_item.version
-                row_readers[tag_id] = RowReader(schema, schema_version)
+                tag_items = self._meta_client.get_tag_item_from_cache(space_name, tag_name)
+                schemas = {}
+                for tag_item in tag_items:
+                    schemas[tag_item.version] = tag_item.schema
+                row_readers[tag_id] = RowReader(schemas)
                 rows[tag_name] = []
                 tag_id_name_map[tag_id] = tag_name
         else:

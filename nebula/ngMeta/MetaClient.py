@@ -64,8 +64,8 @@ class MetaClient:
         self._space_name_map = {} # map<space_name, space_id>
         self._space_part_location = {} # map<space_name, map<part_id, list<address>>>
         self._space_part_leader = {} # map<space_name, map<part_id, leader'saddress>>
-        self._space_tag_items = {} # map<space_name, map<tag_name, tag_item>>
-        self._space_edge_items = {} # map<space_name, map<edge_name, edge_item>>
+        self._space_tag_items = {} # map<space_name, map<tag_name, list<tag_item>>>
+        self._space_edge_items = {} # map<space_name, map<edge_name, list<edge_item>>>
         self._tag_name_map = {} # map<space_name, map<tag_id, tag_item.tag_name>>
         self._edge_name_map = {} # map<space_name, map<edge_name, edge_item>>
         self._client = None
@@ -112,9 +112,11 @@ class MetaClient:
             tags = {}
             tags_name = {}
             for tag_item in self.get_tags(space_name):
-                tags[tag_item.tag_name] = tag_item
+                if tag_item.tag_name in tags.keys():
+                    tags[tag_item.tag_name].append(tag_item)
+                else:
+                    tags[tag_item.tag_name] = [tag_item]
                 tags_name[tag_item.tag_id] = tag_item.tag_name
-
             self._space_tag_items[space_name] = tags
             self._tag_name_map[space_name] = tags_name
 
@@ -122,7 +124,10 @@ class MetaClient:
             edges = {}
             edges_name = {}
             for edge_item in self.get_edges(space_name):
-                edges[edge_item.edge_name] = edge_item
+                if edge_item.edge_name in edges.keys():
+                    edges[edge_item.edge_name].append(edge_item)
+                else:
+                    edges[edge_item.edge_name] = []
                 edges_name[edge_item.edge_type] = edge_item.edge_name
             self._space_edge_items[space_name] = edges
             self._edge_name_map[space_name] = edges_name
@@ -214,7 +219,7 @@ class MetaClient:
         if space_name in self._space_part_location.keys():
             parts_alloc = self._space_part_location[space_name]
             if part_id in parts_alloc.keys():
-                return parts_alloc[part]
+                return parts_alloc[part_id]
 
         return None
 
@@ -305,7 +310,7 @@ class MetaClient:
             logging.error('get tags error, error code: ', list_tags_resp.code)
             return None
 
-    def get_tag(self, space_name, tag_name, version=0):
+    def get_tag(self, space_name, tag_name, version=-1):
         """ get tag schema of the given version
         Arguments:
             - space_name: name of the space
@@ -320,13 +325,14 @@ class MetaClient:
         space_id = self.get_space_id_from_cache(space_name)
         get_tag_req = GetTagReq(space_id, tag_name, version)
         get_tag_resp = self._client.getTag(get_tag_req)
+        # print('get_tag_resp', get_tag_resp)
 
         if get_tag_resp.code == ErrorCode.SUCCEEDED:
             return get_tag_resp.schema
         else:
             return None
 
-    def get_tag_schema(self, space_name, tag_name, version=0):
+    def get_tag_schema(self, space_name, tag_name, version=-1):
         """ get tag schema columns of the given version
         Arguments:
             - space_name: name of the space
@@ -408,7 +414,7 @@ class MetaClient:
             logging.error('get tags error, error code: ', list_edges_resp.code)
             return None
 
-    def get_edge(self, space_name, edge_name, version=0):
+    def get_edge(self, space_name, edge_name, version=-1):
         """ get edge schema of the given version
         Arguments:
             - space_name: name of the space
@@ -431,7 +437,7 @@ class MetaClient:
             logging.error('get edge error, error code: ', get_edge_resp.code)
             return None
 
-    def get_edge_schema(self, space_name, edge_name, version=0):
+    def get_edge_schema(self, space_name, edge_name, version=-1):
         """ get edge schema columns of the given version
         Arguments:
             - space_name: name of the space
