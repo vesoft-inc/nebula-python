@@ -123,6 +123,7 @@ FUNCTIONS = {
     'listSessions': Function('listSessions', 'MetaService', 'ListSessionsResp', [('ListSessionsReq', 'req', 'ListSessionsReq')]),
     'getSession': Function('getSession', 'MetaService', 'GetSessionResp', [('GetSessionReq', 'req', 'GetSessionReq')]),
     'removeSession': Function('removeSession', 'MetaService', 'ExecResp', [('RemoveSessionReq', 'req', 'RemoveSessionReq')]),
+    'reportTaskFinish': Function('reportTaskFinish', 'MetaService', 'ExecResp', [('ReportTaskReq', 'req', 'ReportTaskReq')]),
 }
 
 SERVICE_NAMES = ['MetaService', ]
