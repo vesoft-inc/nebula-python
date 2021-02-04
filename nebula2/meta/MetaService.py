@@ -603,6 +603,13 @@ class Iface:
     """
     pass
 
+  def reportTaskFinish(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
 
 class ContextIface:
   def createSpace(self, handler_ctx, req=None):
@@ -1166,6 +1173,13 @@ class ContextIface:
     pass
 
   def removeSession(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def reportTaskFinish(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -17780,6 +17794,211 @@ def removeSession_result__setstate__(self, state):
 removeSession_result.__getstate__ = lambda self: self.__dict__.copy()
 removeSession_result.__setstate__ = removeSession_result__setstate__
 
+class reportTaskFinish_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = ReportTaskReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('reportTaskFinish_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(reportTaskFinish_args)
+reportTaskFinish_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [ReportTaskReq, ReportTaskReq.thrift_spec, False], None, 2, ), # 1
+)
+
+reportTaskFinish_args.thrift_struct_annotations = {
+}
+reportTaskFinish_args.thrift_field_annotations = {
+}
+
+def reportTaskFinish_args__init__(self, req=None,):
+  self.req = req
+
+reportTaskFinish_args.__init__ = reportTaskFinish_args__init__
+
+def reportTaskFinish_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+reportTaskFinish_args.__getstate__ = lambda self: self.__dict__.copy()
+reportTaskFinish_args.__setstate__ = reportTaskFinish_args__setstate__
+
+class reportTaskFinish_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      self.checkRequired()
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      self.checkRequired()
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+    self.checkRequired()
+
+  def checkRequired(self):
+    return
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('reportTaskFinish_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(reportTaskFinish_result)
+reportTaskFinish_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+reportTaskFinish_result.thrift_struct_annotations = {
+}
+reportTaskFinish_result.thrift_field_annotations = {
+}
+
+def reportTaskFinish_result__init__(self, success=None,):
+  self.success = success
+
+reportTaskFinish_result.__init__ = reportTaskFinish_result__init__
+
+def reportTaskFinish_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+reportTaskFinish_result.__getstate__ = lambda self: self.__dict__.copy()
+reportTaskFinish_result.__setstate__ = reportTaskFinish_result__setstate__
+
 class Client(Iface):
   def __enter__(self):
     return self
@@ -20225,6 +20444,36 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "removeSession failed: unknown result");
 
+  def reportTaskFinish(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_reportTaskFinish(req)
+    return self.recv_reportTaskFinish()
+
+  def send_reportTaskFinish(self, req=None):
+    self._oprot.writeMessageBegin('reportTaskFinish', TMessageType.CALL, self._seqid)
+    args = reportTaskFinish_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_reportTaskFinish(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = reportTaskFinish_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "reportTaskFinish failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   _onewayMethods = ()
@@ -20396,6 +20645,8 @@ class Processor(Iface, TProcessor):
     self._priorityMap["getSession"] = TPriority.NORMAL
     self._processMap["removeSession"] = Processor.process_removeSession
     self._priorityMap["removeSession"] = TPriority.NORMAL
+    self._processMap["reportTaskFinish"] = Processor.process_reportTaskFinish
+    self._priorityMap["reportTaskFinish"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -21296,6 +21547,17 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=str(ex))
     return result
 
+  @process_method(reportTaskFinish_args, oneway=False)
+  def process_reportTaskFinish(self, args, handler_ctx):
+    result = reportTaskFinish_result()
+    try:
+      result.success = self._handler.reportTaskFinish(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'reportTaskFinish', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
 Iface._processor_type = Processor
 
 class ContextProcessor(ContextIface, TProcessor):
@@ -21468,6 +21730,8 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["getSession"] = TPriority.NORMAL
     self._processMap["removeSession"] = ContextProcessor.process_removeSession
     self._priorityMap["removeSession"] = TPriority.NORMAL
+    self._processMap["reportTaskFinish"] = ContextProcessor.process_reportTaskFinish
+    self._priorityMap["reportTaskFinish"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -22365,6 +22629,17 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'removeSession', ex)
+      result = Thrift.TApplicationException(message=str(ex))
+    return result
+
+  @process_method(reportTaskFinish_args, oneway=False)
+  def process_reportTaskFinish(self, args, handler_ctx):
+    result = reportTaskFinish_result()
+    try:
+      result.success = self._handler.reportTaskFinish(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'reportTaskFinish', ex)
       result = Thrift.TApplicationException(message=str(ex))
     return result
 

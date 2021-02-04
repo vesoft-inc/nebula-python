@@ -4783,8 +4783,8 @@ class ScanVertexRequest:
         else:
           iprot.skip(ftype)
       elif fid == 5:
-        if ftype == TType.I32:
-          self.limit = iprot.readI32()
+        if ftype == TType.I64:
+          self.limit = iprot.readI64()
         else:
           iprot.skip(ftype)
       elif fid == 6:
@@ -4846,8 +4846,8 @@ class ScanVertexRequest:
       self.return_columns.write(oprot)
       oprot.writeFieldEnd()
     if self.limit != None:
-      oprot.writeFieldBegin('limit', TType.I32, 5)
-      oprot.writeI32(self.limit)
+      oprot.writeFieldBegin('limit', TType.I64, 5)
+      oprot.writeI64(self.limit)
       oprot.writeFieldEnd()
     if self.start_time != None:
       oprot.writeFieldBegin('start_time', TType.I64, 6)
@@ -5115,8 +5115,8 @@ class ScanEdgeRequest:
         else:
           iprot.skip(ftype)
       elif fid == 5:
-        if ftype == TType.I32:
-          self.limit = iprot.readI32()
+        if ftype == TType.I64:
+          self.limit = iprot.readI64()
         else:
           iprot.skip(ftype)
       elif fid == 6:
@@ -5178,8 +5178,8 @@ class ScanEdgeRequest:
       self.return_columns.write(oprot)
       oprot.writeFieldEnd()
     if self.limit != None:
-      oprot.writeFieldBegin('limit', TType.I32, 5)
-      oprot.writeI32(self.limit)
+      oprot.writeFieldBegin('limit', TType.I64, 5)
+      oprot.writeI64(self.limit)
       oprot.writeFieldEnd()
     if self.start_time != None:
       oprot.writeFieldBegin('start_time', TType.I64, 6)
@@ -9448,7 +9448,7 @@ ScanVertexRequest.thrift_spec = (
   (2, TType.I32, 'part_id', None, None, 2, ), # 2
   (3, TType.STRING, 'cursor', False, None, 1, ), # 3
   (4, TType.STRUCT, 'return_columns', [VertexProp, VertexProp.thrift_spec, False], None, 2, ), # 4
-  (5, TType.I32, 'limit', None, None, 2, ), # 5
+  (5, TType.I64, 'limit', None, None, 2, ), # 5
   (6, TType.I64, 'start_time', None, None, 1, ), # 6
   (7, TType.I64, 'end_time', None, None, 1, ), # 7
   (8, TType.STRING, 'filter', False, None, 1, ), # 8
@@ -9530,7 +9530,7 @@ ScanEdgeRequest.thrift_spec = (
   (2, TType.I32, 'part_id', None, None, 2, ), # 2
   (3, TType.STRING, 'cursor', False, None, 1, ), # 3
   (4, TType.STRUCT, 'return_columns', [EdgeProp, EdgeProp.thrift_spec, False], None, 2, ), # 4
-  (5, TType.I32, 'limit', None, None, 2, ), # 5
+  (5, TType.I64, 'limit', None, None, 2, ), # 5
   (6, TType.I64, 'start_time', None, None, 1, ), # 6
   (7, TType.I64, 'end_time', None, None, 1, ), # 7
   (8, TType.STRING, 'filter', False, None, 1, ), # 8

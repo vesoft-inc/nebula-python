@@ -116,7 +116,9 @@ class TestBaseCase(TestCase):
             cls.pool.close()
 
     def test_base_type(self):
-        resp = self.session.execute('FETCH PROP ON person "Bob"')
+        resp = self.session.execute('FETCH PROP ON person "Bob" YIELD person.name, person.age, person.grade,'
+                                    'person.friends, person.book_num, person.birthday, person.start_school, person.morning, '
+                                    'person.property, person.is_girl, person.child_name, person.expend, person.first_out_city, person.hobby')
         assert resp.is_succeeded(), resp.error_msg()
         assert '' == resp.error_msg()
         assert resp.latency() > 0
