@@ -7,6 +7,7 @@
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
 
+import contextlib
 import threading
 import logging
 import time
@@ -178,6 +179,30 @@ class ConnectionPool(object):
             return Session(connection, session_id, self, retry_connect)
         except Exception:
             raise
+
+    @contextlib.contextmanager
+    def session_context(self, *args, **kwargs):
+        """
+        session_context is to be used with a contextlib.contextmanager.
+        It returns a connection session from the pool, with same params
+        as the method get_session().
+
+        When session_context is exited, the connection will be released.
+
+        :param user_name:
+        :param password:
+        :param retry_connect: if auto retry connect
+        :return: contextlib._GeneratorContextManager
+        """
+        session = None
+        try:
+            session = self.get_session(*args, **kwargs)
+            yield session
+        except Exception:
+            raise
+        finally:
+            if session:
+                session.release()
 
     def get_connection(self):
         """
