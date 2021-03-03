@@ -48,7 +48,7 @@ class TestSession(TestCase):
             session = self.pool.get_session('root', 'nebula')
             for i in range(0, 5):
                 if i == 3:
-                    os.system('docker stop nebula-docker-compose_graphd_1')
+                    os.system('docker stop nebula-docker-compose_graphd0_1')
                     os.system('docker stop nebula-docker-compose_graphd1_1')
                     time.sleep(3)
                 resp = session.execute('SHOW SPACES')
@@ -63,6 +63,12 @@ class TestSession(TestCase):
         except Exception as e:
             assert False, e
         finally:
-            os.system('docker start nebula-docker-compose_graphd_1')
+            os.system('docker start nebula-docker-compose_graphd0_1')
             os.system('docker start nebula-docker-compose_graphd1_1')
             time.sleep(5)
+
+    def test_3_session_context(self):
+        in_used_connects = self.pool.in_used_connects()
+        with self.pool.session_context('root', 'nebula') as session:
+            assert self.pool.in_used_connects() == in_used_connects + 1
+        assert self.pool.in_used_connects() == in_used_connects
