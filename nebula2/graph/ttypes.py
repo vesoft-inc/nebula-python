@@ -649,6 +649,7 @@ class PlanDescription:
    - plan_node_descs
    - node_index_map
    - format
+   - optimize_time_in_us
   """
 
   thrift_spec = None
@@ -712,6 +713,11 @@ class PlanDescription:
           self.format = iprot.readString()
         else:
           iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.I32:
+          self.optimize_time_in_us = iprot.readI32()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -727,6 +733,9 @@ class PlanDescription:
 
     if self.format == None:
       raise TProtocolException(TProtocolException.MISSING_REQUIRED_FIELD, "Required field 'format' was not found in serialized data! Struct: PlanDescription")
+
+    if self.optimize_time_in_us == None:
+      raise TProtocolException(TProtocolException.MISSING_REQUIRED_FIELD, "Required field 'optimize_time_in_us' was not found in serialized data! Struct: PlanDescription")
 
     return
 
@@ -757,6 +766,10 @@ class PlanDescription:
       oprot.writeFieldBegin('format', TType.STRING, 3)
       oprot.writeString(self.format)
       oprot.writeFieldEnd()
+    if self.optimize_time_in_us != None:
+      oprot.writeFieldBegin('optimize_time_in_us', TType.I32, 4)
+      oprot.writeI32(self.optimize_time_in_us)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -775,6 +788,10 @@ class PlanDescription:
       value = pprint.pformat(self.format, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    format=%s' % (value))
+    if self.optimize_time_in_us is not None:
+      value = pprint.pformat(self.optimize_time_in_us, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    optimize_time_in_us=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -1206,6 +1223,7 @@ PlanDescription.thrift_spec = (
   (1, TType.LIST, 'plan_node_descs', (TType.STRUCT,[PlanNodeDescription, PlanNodeDescription.thrift_spec, False]), None, 0, ), # 1
   (2, TType.MAP, 'node_index_map', (TType.I64,None,TType.I64,None), None, 0, ), # 2
   (3, TType.STRING, 'format', False, None, 0, ), # 3
+  (4, TType.I32, 'optimize_time_in_us', None, None, 0, ), # 4
 )
 
 PlanDescription.thrift_struct_annotations = {
@@ -1214,10 +1232,11 @@ PlanDescription.thrift_struct_annotations = {
 PlanDescription.thrift_field_annotations = {
 }
 
-def PlanDescription__init__(self, plan_node_descs=None, node_index_map=None, format=None,):
+def PlanDescription__init__(self, plan_node_descs=None, node_index_map=None, format=None, optimize_time_in_us=None,):
   self.plan_node_descs = plan_node_descs
   self.node_index_map = node_index_map
   self.format = format
+  self.optimize_time_in_us = optimize_time_in_us
 
 PlanDescription.__init__ = PlanDescription__init__
 
@@ -1225,6 +1244,7 @@ def PlanDescription__setstate__(self, state):
   state.setdefault('plan_node_descs', None)
   state.setdefault('node_index_map', None)
   state.setdefault('format', None)
+  state.setdefault('optimize_time_in_us', None)
   self.__dict__ = state
 
 PlanDescription.__getstate__ = lambda self: self.__dict__.copy()
