@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
     # init connection pool
     connection_pool = ConnectionPool()
-    assert connection_pool.init([('127.0.0.1', 3699), ('127.0.0.1', 3700)], config)
+    assert connection_pool.init([('127.0.0.1', 9669), ('127.0.0.1', 9670)], config)
 
     # Use multi thread and reuse the session three times
     for count in range(0, 3):

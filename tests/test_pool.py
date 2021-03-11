@@ -32,8 +32,8 @@ class TestConnectionPool(TestCase):
     @classmethod
     def setup_class(self):
         self.addresses = list()
-        self.addresses.append(('127.0.0.1', 3699))
-        self.addresses.append(('127.0.0.1', 3700))
+        self.addresses.append(('127.0.0.1', 9669))
+        self.addresses.append(('127.0.0.1', 9670))
         self.configs = Config()
         self.configs.min_connection_pool_size = 2
         self.configs.max_connection_pool_size = 4
@@ -43,26 +43,26 @@ class TestConnectionPool(TestCase):
 
     def test_right_hostname(self):
         pool = ConnectionPool()
-        assert pool.init([('localhost', 3699)], Config())
+        assert pool.init([('localhost', 9669)], Config())
 
     def test_wrong_hostname(self):
         pool = ConnectionPool()
         try:
-            pool.init([('wrong_host', 3699)], Config())
+            pool.init([('wrong_host', 9669)], Config())
             assert False
         except InValidHostname:
             assert True
 
     def test_ping(self):
-        assert self.pool.ping(('127.0.0.1', 3699))
+        assert self.pool.ping(('127.0.0.1', 9669))
         assert self.pool.ping(('127.0.0.1', 5000)) is False
 
     def test_init_failed(self):
         # init succeeded
         pool1 = ConnectionPool()
         addresses = list()
-        addresses.append(('127.0.0.1', 3699))
-        addresses.append(('127.0.0.1', 3700))
+        addresses.append(('127.0.0.1', 9669))
+        addresses.append(('127.0.0.1', 9670))
         assert pool1.init(addresses, Config())
 
         # init failed, connected failed
@@ -138,7 +138,7 @@ class TestConnectionPool(TestCase):
 
 def test_multi_thread():
     # Test multi thread
-    addresses = [('127.0.0.1', 3699), ('127.0.0.1', 3700)]
+    addresses = [('127.0.0.1', 9669), ('127.0.0.1', 9670)]
     configs = Config()
     configs.max_connection_pool_size = 4
     pool = ConnectionPool()

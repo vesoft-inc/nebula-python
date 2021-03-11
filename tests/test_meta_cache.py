@@ -25,7 +25,7 @@ class TestMetaCache(object):
         # create schema
         try:
             conn = Connection()
-            conn.open('127.0.0.1', 3699, 1000)
+            conn.open('127.0.0.1', 9669, 1000)
             session_id = conn.authenticate('root', 'nebula')
             assert session_id != 0
             resp = conn.execute(session_id,
@@ -40,9 +40,9 @@ class TestMetaCache(object):
             assert resp.error_code == 0
             conn.close()
             time.sleep(10)
-            cls.meta_cache = MetaCache([('127.0.0.1', 45500),
-                                        ('127.0.0.1', 45501),
-                                        ('127.0.0.1', 45501)], 50000)
+            cls.meta_cache = MetaCache([('127.0.0.1', 9559),
+                                        ('127.0.0.1', 9560),
+                                        ('127.0.0.1', 9560)], 50000)
         except Exception as x:
             import traceback
             print(traceback.format_exc())
@@ -121,7 +121,7 @@ class TestMetaCache(object):
     def test_get_part_leader(self):
         address = self.meta_cache.get_part_leader('test_meta_cache1', 1)
         assert address.host.find('172.28.2') == 0
-        assert address.port == 44500
+        assert address.port == 9779
 
     def test_get_part_leaders(self):
         part_addresses = self.meta_cache.get_part_leaders('test_meta_cache1')
@@ -135,7 +135,7 @@ class TestMetaCache(object):
             assert part_addresses[part].host in ['172.28.2.1', '172.28.2.2', '172.28.2.3']
 
         ports = [part_addresses[part].port for part in part_addresses.keys()]
-        expected_hosts = [44500 for i in range(1, 101)]
+        expected_hosts = [9779 for i in range(1, 101)]
         assert ports == expected_hosts
 
     def test_get_all_storage_addrs(self):
@@ -148,7 +148,7 @@ class TestMetaCache(object):
         assert hosts == expected_hosts
 
         ports = [addr.port for addr in addresses]
-        expected_hosts = [44500, 44500, 44500]
+        expected_hosts = [9779, 9779, 9779]
         assert ports == expected_hosts
 
     def test_get_part_alloc(self):
@@ -164,7 +164,7 @@ class TestMetaCache(object):
         assert sorted(hosts) == sorted(expected_hosts)
 
         ports = [addr.port for addr in part_alloc[1]]
-        expected_ports = [44500, 44500, 44500]
+        expected_ports = [9779, 9779, 9779]
         assert sorted(ports) == sorted(expected_ports)
 
 

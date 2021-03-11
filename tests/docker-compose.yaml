@@ -6,14 +6,15 @@ services:
       USER: root
       TZ:   "${TZ}"
     command:
-      - --meta_server_addrs=172.28.1.1:45500,172.28.1.2:45500,172.28.1.3:45500
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
       - --local_ip=172.28.1.1
       - --ws_ip=172.28.1.1
-      - --port=45500
+      - --port=9559
       - --data_path=/data/meta
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
+      - --heartbeat_interval_secs=2
     healthcheck:
       test: ["CMD", "curl", "-f", "http://172.28.1.1:11000/status"]
       interval: 30s
@@ -21,7 +22,7 @@ services:
       retries: 3
       start_period: 20s
     ports:
-      - "45500:45500"
+      - "9559:9559"
       - 11000
       - 11002
     volumes:
@@ -40,14 +41,15 @@ services:
       USER: root
       TZ:   "${TZ}"
     command:
-      - --meta_server_addrs=172.28.1.1:45500,172.28.1.2:45500,172.28.1.3:45500
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
       - --local_ip=172.28.1.2
       - --ws_ip=172.28.1.2
-      - --port=45500
+      - --port=9559
       - --data_path=/data/meta
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
+      - --heartbeat_interval_secs=2
     healthcheck:
       test: ["CMD", "curl", "-f", "http://172.28.1.2:11000/status"]
       interval: 30s
@@ -55,7 +57,7 @@ services:
       retries: 3
       start_period: 20s
     ports:
-      - "45501:45500"
+      - "9560:9559"
       - 11000
       - 11002
     volumes:
@@ -74,14 +76,15 @@ services:
       USER: root
       TZ:   "${TZ}"
     command:
-      - --meta_server_addrs=172.28.1.1:45500,172.28.1.2:45500,172.28.1.3:45500
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
       - --local_ip=172.28.1.3
       - --ws_ip=172.28.1.3
-      - --port=45500
+      - --port=9559
       - --data_path=/data/meta
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
+      - --heartbeat_interval_secs=2
     healthcheck:
       test: ["CMD", "curl", "-f", "http://172.28.1.3:11000/status"]
       interval: 30s
@@ -89,7 +92,7 @@ services:
       retries: 3
       start_period: 20s
     ports:
-      - "45502:45500"
+      - "9561:9559"
       - 11000
       - 11002
     volumes:
@@ -108,14 +111,15 @@ services:
       USER: root
       TZ:   "${TZ}"
     command:
-      - --meta_server_addrs=172.28.1.1:45500,172.28.1.2:45500,172.28.1.3:45500
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
       - --local_ip=172.28.2.1
       - --ws_ip=172.28.2.1
-      - --port=44500
+      - --port=9779
       - --data_path=/data/storage
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
+      - --heartbeat_interval_secs=2
     depends_on:
       - metad0
       - metad1
@@ -127,7 +131,7 @@ services:
       retries: 3
       start_period: 20s
     ports:
-      - "44500:44500"
+      - "9779:9779"
       - 12000
       - 12002
     volumes:
@@ -146,14 +150,15 @@ services:
       USER: root
       TZ:   "${TZ}"
     command:
-      - --meta_server_addrs=172.28.1.1:45500,172.28.1.2:45500,172.28.1.3:45500
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
       - --local_ip=172.28.2.2
       - --ws_ip=172.28.2.2
-      - --port=44500
+      - --port=9779
       - --data_path=/data/storage
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
+      - --heartbeat_interval_secs=2
     depends_on:
       - metad0
       - metad1
@@ -165,7 +170,7 @@ services:
       retries: 3
       start_period: 20s
     ports:
-      - "44501:44500"
+      - "9780:9779"
       - 12000
       - 12002
     volumes:
@@ -184,14 +189,15 @@ services:
       USER: root
       TZ:   "${TZ}"
     command:
-      - --meta_server_addrs=172.28.1.1:45500,172.28.1.2:45500,172.28.1.3:45500
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
       - --local_ip=172.28.2.3
       - --ws_ip=172.28.2.3
-      - --port=44500
+      - --port=9779
       - --data_path=/data/storage
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
+      - --heartbeat_interval_secs=2
     depends_on:
       - metad0
       - metad1
@@ -203,7 +209,7 @@ services:
       retries: 3
       start_period: 20s
     ports:
-      - "44502:44500"
+      - "9781:9779"
       - 12000
       - 12002
     volumes:
@@ -222,12 +228,13 @@ services:
       USER: root
       TZ:   "${TZ}"
     command:
-      - --meta_server_addrs=172.28.1.1:45500,172.28.1.2:45500,172.28.1.3:45500
-      - --port=3699
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --port=9669
       - --ws_ip=172.28.3.1
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
+      - --heartbeat_interval_secs=2
     depends_on:
       - metad0
       - metad1
@@ -239,7 +246,7 @@ services:
       retries: 3
       start_period: 20s
     ports:
-      - "3699:3699"
+      - "9669:9669"
       - 13000
       - 13002
     volumes:
@@ -257,12 +264,13 @@ services:
       USER: root
       TZ:   "${TZ}"
     command:
-      - --meta_server_addrs=172.28.1.1:45500,172.28.1.2:45500,172.28.1.3:45500
-      - --port=3699
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --port=9669
       - --ws_ip=172.28.3.2
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
+      - --heartbeat_interval_secs=2
     depends_on:
       - metad0
       - metad1
@@ -274,7 +282,7 @@ services:
       retries: 3
       start_period: 20s
     ports:
-      - "3700:3699"
+      - "9670:9669"
       - 13000
       - 13002
     volumes:
@@ -292,12 +300,13 @@ services:
       USER: root
       TZ:   "${TZ}"
     command:
-      - --meta_server_addrs=172.28.1.1:45500,172.28.1.2:45500,172.28.1.3:45500
-      - --port=3699
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --port=9669
       - --ws_ip=172.28.3.3
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
+      - --heartbeat_interval_secs=2
     depends_on:
       - metad0
       - metad1
@@ -309,7 +318,7 @@ services:
       retries: 3
       start_period: 20s
     ports:
-      - "3701:3699"
+      - "9671:9669"
       - 13000
       - 13002
     volumes:

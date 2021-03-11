@@ -78,7 +78,7 @@ config.max_connection_pool_size = 10
 # init connection pool
 connection_pool = ConnectionPool()
 # if the given servers are ok, return true, else return false
-ok = connection_pool.init([('127.0.0.1', 3699)], config)
+ok = connection_pool.init([('127.0.0.1', 9669)], config)
 
 # option 1 control the connection release yourself
 # get session from the pool
@@ -113,9 +113,9 @@ from nebula2.mclient import MetaCache
 from nebula2.sclient.GraphStorageClient import GraphStorageClient
 
 # the metad servers's address
-meta_cache = MetaCache([('172.28.1.1', 45500),
-                        ('172.28.1.2', 45500),
-                        ('172.28.1.3', 45500)],
+meta_cache = MetaCache([('172.28.1.1', 9559),
+                        ('172.28.1.2', 9559),
+                        ('172.28.1.3', 9559)],
                        50000)
 graph_storage_client = GraphStorageClient(meta_cache)
 
