@@ -350,6 +350,8 @@ class AdminCmd:
   REBUILD_EDGE_INDEX = 3
   STATS = 4
   DATA_BALANCE = 5
+  DOWELOAD = 6
+  INGEST = 7
   UNKNOWN = 99
 
   _VALUES_TO_NAMES = {
@@ -359,6 +361,8 @@ class AdminCmd:
     3: "REBUILD_EDGE_INDEX",
     4: "STATS",
     5: "DATA_BALANCE",
+    6: "DOWELOAD",
+    7: "INGEST",
     99: "UNKNOWN",
   }
 
@@ -369,6 +373,8 @@ class AdminCmd:
     "REBUILD_EDGE_INDEX": 3,
     "STATS": 4,
     "DATA_BALANCE": 5,
+    "DOWELOAD": 6,
+    "INGEST": 7,
     "UNKNOWN": 99,
   }
 
