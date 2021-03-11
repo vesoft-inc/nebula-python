@@ -51,7 +51,7 @@ class TestGraphStorageClient(object):
     def setup_class(cls):
         try:
             conn = Connection()
-            conn.open('172.28.3.1', 3699, 3000)
+            conn.open('172.28.3.1', 9669, 3000)
             session_id = conn.authenticate('root', 'nebula')
             assert session_id != 0
             cls.execute_with_retry(conn,
@@ -80,9 +80,9 @@ class TestGraphStorageClient(object):
                 cls.execute_with_retry(conn, session_id, cmd)
             conn.close()
 
-            meta_cache = MetaCache([('172.28.1.1', 45500),
-                                    ('172.28.1.2', 45500),
-                                    ('172.28.1.3', 45500)],
+            meta_cache = MetaCache([('172.28.1.1', 9559),
+                                    ('172.28.1.2', 9559),
+                                    ('172.28.1.3', 9559)],
                                    50000)
             cls.graph_storage_client = GraphStorageClient(meta_cache)
 

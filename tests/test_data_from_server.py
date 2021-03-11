@@ -44,7 +44,7 @@ class TestBaseCase(TestCase):
         configs = Config()
         configs.max_connection_pool_size = 1
         cls.pool = ConnectionPool()
-        cls.pool.init([('127.0.0.1', 3701)], configs)
+        cls.pool.init([('127.0.0.1', 9671)], configs)
         cls.session = cls.pool.get_session('root', 'nebula')
         resp = cls.session.execute(
             '''

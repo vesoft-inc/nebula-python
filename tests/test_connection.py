@@ -23,7 +23,7 @@ class TestConnection(TestCase):
     def test_create(self):
         try:
             conn = Connection()
-            conn.open('127.0.0.1', 3699, 1000)
+            conn.open('127.0.0.1', 9669, 1000)
             session_id = conn.authenticate('root', 'nebula')
             assert session_id != 0
             conn.close()
@@ -33,7 +33,7 @@ class TestConnection(TestCase):
     def test_release(self):
         try:
             conn = Connection()
-            conn.open('127.0.0.1', 3699, 1000)
+            conn.open('127.0.0.1', 9669, 1000)
             session_id = conn.authenticate('root', 'nebula')
             assert session_id != 0
             resp = conn.execute(session_id, 'SHOW SPACES')
@@ -46,7 +46,7 @@ class TestConnection(TestCase):
 
     def test_close(self):
         conn = Connection()
-        conn.open('127.0.0.1', 3699, 1000)
+        conn.open('127.0.0.1', 9669, 1000)
         session_id = conn.authenticate('root', 'nebula')
         assert session_id != 0
         conn.close()

@@ -24,7 +24,7 @@ def prepare_data():
     # init connection pool
     connection_pool = ConnectionPool()
     # the graphd server's address
-    assert connection_pool.init([('172.28.3.1', 3699)], config)
+    assert connection_pool.init([('172.28.3.1', 9669)], config)
     client = connection_pool.get_session('root', 'nebula')
     client.execute('CREATE SPACE IF NOT EXISTS ScanSpace('
                    'PARTITION_NUM=10,'
@@ -126,9 +126,9 @@ if __name__ == '__main__':
     graph_storage_client = None
     try:
         # the metad servers's address
-        meta_cache = MetaCache([('172.28.1.1', 45500),
-                                ('172.28.1.2', 45500),
-                                ('172.28.1.3', 45500)],
+        meta_cache = MetaCache([('172.28.1.1', 9559),
+                                ('172.28.1.2', 9559),
+                                ('172.28.1.3', 9559)],
                                50000)
         graph_storage_client = GraphStorageClient(meta_cache)
         prepare_data()
