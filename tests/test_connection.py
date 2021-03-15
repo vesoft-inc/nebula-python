@@ -41,6 +41,7 @@ class TestConnection(TestCase):
             conn.signout(session_id)
             resp = conn.execute(session_id, 'SHOW SPACES')
             assert resp.error_code != ttypes.ErrorCode.SUCCEEDED
+            conn.close()
         except Exception as ex:
             assert False, ex
 
