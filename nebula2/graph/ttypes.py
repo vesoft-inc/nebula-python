@@ -7,9 +7,9 @@
 
 from __future__ import absolute_import
 import six
-from nebula2.fbthrift.util.Recursive import fix_spec
-from nebula2.fbthrift.Thrift import *
-from nebula2.fbthrift.protocol.TProtocol import TProtocolException
+from thrift.util.Recursive import fix_spec
+from thrift.Thrift import *
+from thrift.protocol.TProtocol import TProtocolException
 
 
 import nebula2.common.ttypes
@@ -17,15 +17,15 @@ import nebula2.common.ttypes
 
 import pprint
 import warnings
-from nebula2.fbthrift import Thrift
-from nebula2.fbthrift.transport import TTransport
-from nebula2.fbthrift.protocol import TBinaryProtocol
-from nebula2.fbthrift.protocol import TCompactProtocol
-from nebula2.fbthrift.protocol import THeaderProtocol
+from thrift import Thrift
+from thrift.transport import TTransport
+from thrift.protocol import TBinaryProtocol
+from thrift.protocol import TCompactProtocol
+from thrift.protocol import THeaderProtocol
 fastproto = None
 if not '__pypy__' in sys.builtin_module_names:
   try:
-    from nebula2.fbthrift.protocol import fastproto
+    from thrift.protocol import fastproto
   except:
     pass
 all_structs = []
@@ -48,6 +48,7 @@ class ErrorCode:
   E_BAD_PERMISSION = -11
   E_SEMANTIC_ERROR = -12
   E_TOO_MANY_CONNECTIONS = -13
+  E_PARTIAL_SUCCEEDED = -14
 
   _VALUES_TO_NAMES = {
     0: "SUCCEEDED",
@@ -64,6 +65,7 @@ class ErrorCode:
     -11: "E_BAD_PERMISSION",
     -12: "E_SEMANTIC_ERROR",
     -13: "E_TOO_MANY_CONNECTIONS",
+    -14: "E_PARTIAL_SUCCEEDED",
   }
 
   _NAMES_TO_VALUES = {
@@ -81,6 +83,7 @@ class ErrorCode:
     "E_BAD_PERMISSION": -11,
     "E_SEMANTIC_ERROR": -12,
     "E_TOO_MANY_CONNECTIONS": -13,
+    "E_PARTIAL_SUCCEEDED": -14,
   }
 
 class ProfilingStats:
