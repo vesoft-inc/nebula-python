@@ -28,7 +28,7 @@ if (not sys.argv[0].endswith("par") and
         print("""WARNING
         You are trying to run *-remote.py which is
         incorrect as the paths are not set up correctly.
-        Instead, you should generate your thrift file with
+        Instead, you should generate your fbthrift file with
         thrift_library and then run the resulting
         *-remote.par.
         For more information, please read
@@ -38,8 +38,8 @@ if (not sys.argv[0].endswith("par") and
 from . import GraphStorageService
 from . import ttypes
 
-from thrift.util.remote import Function
-from thrift.remote import Remote
+from nebula2.fbthrift.util.remote import Function
+from nebula2.fbthrift.remote import Remote
 
 FUNCTIONS = {
     'getNeighbors': Function('getNeighbors', 'GraphStorageService', 'GetNeighborsResponse', [('GetNeighborsRequest', 'req', 'GetNeighborsRequest')]),
