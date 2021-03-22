@@ -141,5 +141,6 @@ while resp.has_next():
 | Nebula2-Python Version | NebulaGraph Version |
 |---|---|
 | 2.0.0.post1  | 2.0.0beta |
-| 2.0.0rc1  | 2.0.0-RC1 |
+| 2.0.0rc1  | 2.0.0-rc1 |
+| 2.0.0ga  | 2.0.0-ga |
 

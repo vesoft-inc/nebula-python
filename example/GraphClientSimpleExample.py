@@ -6,9 +6,7 @@
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
-import sys
 import time
-
 
 from nebula2.gclient.net import ConnectionPool
 from nebula2.Config import Config
@@ -34,10 +32,20 @@ if __name__ == '__main__':
         time.sleep(6)
 
         # insert vertex
-        resp = client.execute('INSERT VERTEX person(name, age) VALUES "Bob":("Bob", 10)')
+        resp = client.execute('INSERT VERTEX person(name, age) VALUES "Bob":("Bob", 10), "Lily":("Lily", 9)')
+        assert resp.is_succeeded(), resp.error_msg()
+
+        # Insert edges
+        client.execute('INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
+        assert resp.is_succeeded(), resp.error_msg()
+
         assert resp.is_succeeded(), resp.error_msg()
 
         resp = client.execute('FETCH PROP ON person "Bob"')
+        assert resp.is_succeeded(), resp.error_msg()
+        print_resp(resp)
+
+        resp = client.execute('FETCH PROP ON like "Bob"->"Lily"')
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
 

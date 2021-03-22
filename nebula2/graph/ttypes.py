@@ -48,6 +48,7 @@ class ErrorCode:
   E_BAD_PERMISSION = -11
   E_SEMANTIC_ERROR = -12
   E_TOO_MANY_CONNECTIONS = -13
+  E_PARTIAL_SUCCEEDED = -14
 
   _VALUES_TO_NAMES = {
     0: "SUCCEEDED",
@@ -64,6 +65,7 @@ class ErrorCode:
     -11: "E_BAD_PERMISSION",
     -12: "E_SEMANTIC_ERROR",
     -13: "E_TOO_MANY_CONNECTIONS",
+    -14: "E_PARTIAL_SUCCEEDED",
   }
 
   _NAMES_TO_VALUES = {
@@ -81,6 +83,7 @@ class ErrorCode:
     "E_BAD_PERMISSION": -11,
     "E_SEMANTIC_ERROR": -12,
     "E_TOO_MANY_CONNECTIONS": -13,
+    "E_PARTIAL_SUCCEEDED": -14,
   }
 
 class ProfilingStats:
