@@ -66,7 +66,7 @@ When your environment cannot access `pypi`, you need to install the following pa
 pip install nebula2-python==$version
 ```
 
-## Quick example to use graph-cleint to connect graphd
+## Quick example to use graph-client to connect graphd
 
 ```python
 from nebula2.gclient.net import ConnectionPool
