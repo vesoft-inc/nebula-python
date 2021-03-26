@@ -30,7 +30,7 @@ from nebula2.Exception import (
 
 class TestConnectionPool(TestCase):
     @classmethod
-    def setup_class(self):
+    def setUpClass(self):
         self.addresses = list()
         self.addresses.append(('127.0.0.1', 9669))
         self.addresses.append(('127.0.0.1', 9670))

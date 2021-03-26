@@ -22,7 +22,7 @@ from nebula2.Config import Config
 
 class TestSession(TestCase):
     @classmethod
-    def setup_class(self):
+    def setUpClass(self):
         self.user_name = 'root'
         self.password = 'nebula'
         self.configs = Config()
