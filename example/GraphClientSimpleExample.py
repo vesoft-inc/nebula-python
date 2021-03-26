@@ -39,8 +39,6 @@ if __name__ == '__main__':
         client.execute('INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
         assert resp.is_succeeded(), resp.error_msg()
 
-        assert resp.is_succeeded(), resp.error_msg()
-
         resp = client.execute('FETCH PROP ON person "Bob"')
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
