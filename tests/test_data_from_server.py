@@ -229,3 +229,7 @@ class TestBaseCase(TestCase):
                        'start_school: 2017-09-10, child_name: "Hello Worl", morning: 07:10:00.000000, ' \
                        'friends: 10, first_out_city: 1111, name: "Lily"})'
         assert expected_str == str(path)
+
+        assert resp.whole_latency() > 100
+
+

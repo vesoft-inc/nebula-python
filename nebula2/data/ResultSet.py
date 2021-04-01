@@ -12,13 +12,14 @@ from nebula2.data.DataObject import DataSetWrapper
 
 
 class ResultSet(object):
-    def __init__(self, resp, decode_type='utf-8'):
+    def __init__(self, resp, _all_latency, decode_type='utf-8'):
         """
         get data from ResultSet
         """
         self._decode_type = decode_type
         self._resp = resp
         self._data_set_wrapper = None
+        self._all_latency = _all_latency;
         if self._resp.data is not None:
             self._data_set_wrapper = DataSetWrapper(resp.data, self._decode_type)
 
@@ -45,9 +46,15 @@ class ResultSet(object):
 
     def latency(self):
         """
-        unit us
+        the server's latency, unit us
         """
         return self._resp.latency_in_us
+
+    def whole_latency(self):
+        """
+        the whole latency of the query
+        """
+        return self._all_latency
 
     def plan_desc(self):
         return self._resp.plan_desc
