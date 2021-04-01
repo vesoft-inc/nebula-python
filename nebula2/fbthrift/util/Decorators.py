@@ -1,21 +1,18 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
 #
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements. See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership. The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied. See the License for the
-# specific language governing permissions and limitations
-# under the License.
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
 
 from __future__ import absolute_import
 from __future__ import division
@@ -71,11 +68,12 @@ def make_unknown_function_exception(name):
     )
 
 
-def process_main(twisted=False, asyncio=False):
+def process_main(asyncio=False):
     """Decorator for process method."""
     if asyncio and six.PY3:
         from asyncio import Future
     elif asyncio:
+        # pyre-fixme[21]: Could not find module `trollius`.
         from trollius import Future
 
     def _decorator(func):
@@ -84,16 +82,13 @@ def process_main(twisted=False, asyncio=False):
             name, seqid = self.readMessageBegin(iprot)
             if self.doesKnowFunction(name):
                 ret = self.callFunction(name, seqid, iprot, oprot, server_ctx)
-                if twisted or asyncio:
+                if asyncio:
                     return ret   # a Deferred/Future
 
                 return True
             self.skipMessageStruct(iprot)
             exc = make_unknown_function_exception(name)
             self.writeException(oprot, name, seqid, exc)
-            if twisted:
-                from twisted.internet import defer
-                return defer.succeed(None)
             if asyncio:
                 fut = Future(loop=self._loop)
                 fut.set_result(None)
@@ -140,7 +135,7 @@ def reset_request_context(processor):
         processor._handler.setRequestContext(None)
 
 
-def process_method(argtype, oneway=False, twisted=False, asyncio=False):
+def process_method(argtype, oneway=False, asyncio=False):
     """Decorator for process_xxx methods."""
     def _decorator(func):
         def nested(self, seqid, iprot, oprot, server_ctx):
@@ -164,7 +159,7 @@ def process_method(argtype, oneway=False, twisted=False, asyncio=False):
                 if not oneway:
                     self.writeException(oprot, fn_name, seqid, result)
             else:
-                if asyncio or twisted:
+                if asyncio:
                     return func(self, args, handler_ctx, seqid, oprot, fn_name)
 
                 result = func(self, args, handler_ctx)
@@ -321,7 +316,7 @@ def write_results_after_future(
             reply_type = TMessageType.REPLY
         except TException as e:
             for exc_name, exc_type in known_exceptions.items():
-                if type(e) is exc_type:
+                if isinstance(e, exc_type):
                     setattr(result, exc_name, e)
                     reply_type = TMessageType.REPLY
                     event_handler.handlerException(handler_ctx, fn_name, e)
@@ -335,28 +330,6 @@ def write_results_after_future(
 
     write_result(result, reply_type, seqid,
                  event_handler, handler_ctx, fn_name, oprot)
-
-
-def write_results_success_callback(func):
-    """Decorator for twisted write_results_success_xxx methods.
-       No need to call func so it can be empty.
-    """
-    def nested(self, success, result, seqid, oprot, handler_ctx):
-        fn_name = func.__name__.split('_', 3)[-1]
-        result.success = success
-        self.writeReply(oprot, handler_ctx, fn_name, seqid, result)
-
-    return nested
-
-
-def write_results_exception_callback(func):
-    """Decorator for twisted write_results_exception_xxx methods."""
-    def nested(self, error, result, seqid, oprot, handler_ctx):
-        fn_name = func.__name__.split('_', 3)[-1]
-        _, result = func(self, error, result, handler_ctx)
-        self.writeReply(oprot, handler_ctx, fn_name, seqid, result)
-
-    return nested
 
 
 @contextlib.contextmanager

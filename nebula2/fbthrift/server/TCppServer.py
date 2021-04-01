@@ -1,3 +1,17 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -87,10 +101,8 @@ class _ProcessorAdapter(object):
             should_sample = self._shouldSample()
 
             timestamps = CallTimestamps()
-            timestamps.processBegin = 0
-            timestamps.processEnd = 0
             if self.observer and should_sample:
-                timestamps.processBegin = int(time.time() * 10**6)
+                timestamps.setProcessBeginNow()
 
             write_buf = TMemoryBuffer()
             trans = THeaderTransport(write_buf)
@@ -116,7 +128,7 @@ class _ProcessorAdapter(object):
 
             if self.observer:
                 if should_sample:
-                    timestamps.processEnd = int(time.time() * 10**6)
+                    timestamps.setProcessEndNow()
 
                 # This only bumps counters if `processBegin != 0` and
                 # `processEnd != 0` and these will only be non-zero if
@@ -175,7 +187,6 @@ class TSSLConfig(object):
         self.verify = SSLVerifyPeerEnum.VERIFY
         self.ssl_policy = SSLPolicy.PERMITTED
         self.ticket_file_path = ''
-        self.alpn_protocols = []
         self.session_context = None
         self.ssl_version = None
 
@@ -215,6 +226,7 @@ class TSSLCacheOptions(object):
         self.ssl_cache_timeout_seconds = 86400
         self.max_ssl_cache_size = 20480
         self.ssl_cache_flush_size = 200
+        self.ssl_handshake_validity_seconds = 259200
 
 
 class TCppServer(CppServerWrapper, TServer):
@@ -224,6 +236,7 @@ class TCppServer(CppServerWrapper, TServer):
         self.setAdapter(_ProcessorAdapter(self.processor))
         self._setup_done = False
         self.serverEventHandler = None
+        self.setWrapperName("TCppServer-py")
 
     def setAdapter(self, adapter):
         self.processorAdapter = adapter
@@ -252,6 +265,9 @@ class TCppServer(CppServerWrapper, TServer):
     def setFastOpenOptions(self, enabled, tfo_max_queue):
         self.setCppFastOpenOptions(enabled, tfo_max_queue)
 
+    def useExistingSocket(self, socket):
+        self.useCppExistingSocket(socket)
+
     def getTicketSeeds(self):
         return self.getCppTicketSeeds()
 
@@ -259,8 +275,6 @@ class TCppServer(CppServerWrapper, TServer):
         if self._setup_done:
             return
         CppServerWrapper.setup(self)
-        # Task expire isn't supported in Python
-        CppServerWrapper.setTaskExpireTime(self, 0)
         if self.serverEventHandler is not None:
             self.serverEventHandler.preServe(self.getAddress())
         self._setup_done = True

@@ -30,7 +30,7 @@ if (not sys.argv[0].endswith("par") and
         print("""WARNING
         You are trying to run *-fuzzer.py which is
         incorrect as the paths are not set up correctly.
-        Instead, you should generate your fbthrift file with
+        Instead, you should generate your thrift file with
         thrift_library and then run the resulting
         *-fuzzer.par.
         For more information, please read
@@ -42,4 +42,4 @@ from . import ttypes
 from . import constants
 
 import nebula2.fbthrift.util.fuzzer
-nebula2.fbthrift.util.fuzzer.fuzz_service(MetaService, ttypes, constants)
+thrift.util.fuzzer.fuzz_service(MetaService, ttypes, constants)

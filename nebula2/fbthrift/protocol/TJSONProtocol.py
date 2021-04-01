@@ -1,28 +1,26 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
 #
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements. See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership. The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied. See the License for the
-# specific language governing permissions and limitations
-# under the License.
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
 
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from .TProtocol import TProtocolBase, TProtocolException, TType
+from nebula2.fbthrift.protocol.TProtocol import TProtocolBase, TProtocolException
+from nebula2.fbthrift.Thrift import TType
 import json, base64, sys
 
 __all__ = ['TJSONProtocol', 'TJSONProtocolFactory']
@@ -100,6 +98,10 @@ class JSONPairContext(JSONBaseContext):
 
     def doIO(self, function):
         if self.first is True:
+            # Ignore extra commas at field start. Once context stack handling
+            # fix is fully rolled out this can be removed.
+            if self.protocol.reader.peek() == COMMA:
+                self.protocol.readJSONSyntaxChar(COMMA)
             self.first = False
             self.colon = True
         else:
@@ -142,14 +144,15 @@ class LookaheadReader():
 
 class TJSONProtocolBase(TProtocolBase):
 
-    def __init__(self, trans):
+    def __init__(self, trans, validJSON=True):
         TProtocolBase.__init__(self, trans)
+        self.validJSON = validJSON
         self.resetWriteContext()
         self.resetReadContext()
 
     def resetWriteContext(self):
-        self.contextStack = []
         self.context = JSONBaseContext(self)
+        self.contextStack = [self.context]
 
     def resetReadContext(self):
         self.resetWriteContext()
@@ -161,6 +164,8 @@ class TJSONProtocolBase(TProtocolBase):
 
     def popContext(self):
         self.contextStack.pop()
+        if self.validJSON:
+            self.context = self.contextStack[-1]
 
     def writeJSONString(self, string):
         # Python 3 JSON will not serialize bytes
@@ -460,7 +465,7 @@ class TJSONProtocol(TJSONProtocolBase):
         self.writeJSONNumber(1 if boolean is True else 0)
 
     def writeInteger(self, integer):
-        self.writeJSONNumber(integer)
+        self.writeJSONNumber(int(integer))
     writeByte = writeInteger
     writeI16 = writeInteger
     writeI32 = writeInteger
@@ -479,9 +484,11 @@ class TJSONProtocol(TJSONProtocolBase):
         self.writeJSONBase64(binary)
 
 class TJSONProtocolFactory:
-    def __init__(self):
-        # type: () -> None
-        pass
+    # validJSON specifies whether to emit valid JSON or possibly invalid but
+    # backward-compatible one.
+    def __init__(self, validJSON=True):
+        # type: (bool) -> None
+        self.validJSON = validJSON
 
     def getProtocol(self, trans):
-        return TJSONProtocol(trans)
+        return TJSONProtocol(trans, self.validJSON)

@@ -1,36 +1,38 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
 #
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements. See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership. The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied. See the License for the
-# specific language governing permissions and limitations
-# under the License.
-#
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-from collections import namedtuple, OrderedDict
-from future.utils import iteritems
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
+
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from collections import OrderedDict, namedtuple
 
 from nebula2.fbthrift.Thrift import TType
 
-__all__ = ['create_client', 'Serializer', 'struct_to_dict', 'parse_struct_spec']
-StructField = namedtuple('StructField',
-                         'id type name type_args default req_type')
+
+__all__ = ["create_client", "Serializer", "struct_to_dict", "parse_struct_spec"]
+StructField = namedtuple("StructField", "id type name type_args default req_type")
 
 
-def create_client(client_klass, host=None, port=None, client_type=None):
+def create_client(
+    client_klass,
+    host=None,
+    port=None,
+    client_type=None,
+    path=None,
+    timeout=None,
+):
     """
     Given a thrift client class, and a host/port
     return a client using HeaderTransport
@@ -38,11 +40,14 @@ def create_client(client_klass, host=None, port=None, client_type=None):
     from nebula2.fbthrift.transport.TSocket import TSocket
     from nebula2.fbthrift.protocol.THeaderProtocol import THeaderProtocol
 
-    sock = TSocket(host=host, port=port)
+    sock = TSocket(host=host, port=port, unix_socket=path)
+    sock.setTimeout(timeout)
     protocol = THeaderProtocol(
         sock,
-        client_types=client_type,  # We accept the same as our inital send_
-        client_type=client_type  # Used for the inital send_
+        client_types=[client_type]
+        if client_type
+        else None,  # We accept the same as our inital send_
+        client_type=client_type,  # Used for the inital send_
     )
     sock.open()
     return client_klass(protocol)
@@ -96,16 +101,16 @@ def struct_to_dict(struct, defaults=False):
                     sub_dict = struct_to_dict(value, defaults=defaults)
                     if sub_dict or defaults:  # Do not include empty sub structs
                         adict[field.name] = sub_dict
-            elif field.type == TType.LIST or field.type == TType.SET:
-                sub_list = __list_to_dict(value,
-                                          field.type_args,
-                                          defaults=defaults)
+            elif field.type == TType.LIST:
+                sub_list = __list_to_dict(value, field.type_args, defaults=defaults)
                 if sub_list or defaults:
                     adict[field.name] = sub_list
+            elif field.type == TType.SET:
+                sub_set = __set_to_dict(value, field.type_args, defaults=defaults)
+                if sub_set or defaults:
+                    adict[field.name] = sub_set
             elif field.type == TType.MAP:
-                sub_map = __map_to_dict(value,
-                                        field.type_args,
-                                        defaults=defaults)
+                sub_map = __map_to_dict(value, field.type_args, defaults=defaults)
                 if sub_map or defaults:
                     adict[field.name] = sub_map
             else:
@@ -121,7 +126,7 @@ def __list_to_dict(alist, type_args, defaults=False):
     convert it into a dict
     :param alist: a list or set
     :param defaults: return default values
-    :return: OrderedDict
+    :return: List
     """
     if not alist:
         return alist
@@ -129,26 +134,59 @@ def __list_to_dict(alist, type_args, defaults=False):
     element_type = type_args[0]
     if element_type == TType.STRUCT:
         return [struct_to_dict(element, defaults=defaults) for element in alist]
-    if element_type == TType.LIST or element_type == TType.SET:
-        sub_list = [__list_to_dict(element, type_args[1], defaults=defaults)
-                    for element in alist]
-        return set(sub_list) if element_type == TType.SET else sub_list
+    if element_type == TType.LIST:
+        return [
+            __list_to_dict(element, type_args[1], defaults=defaults)
+            for element in alist
+        ]
+    if element_type == TType.SET:
+        return [
+            __set_to_dict(element, type_args[1], defaults=defaults) for element in alist
+        ]
     else:
         return alist
+
+
+def __set_to_dict(aset, type_args, defaults=False):
+    """
+    Given a python set-like collection, potentially containing Thrift Structs
+    and recursively parsing the elements
+    :param aset: a set
+    :param defaults: return default values
+    :return: Set
+    """
+    if not aset:
+        return aset
+
+    element_type = type_args[0]
+    if element_type == TType.STRUCT:
+        return {struct_to_dict(element, defaults=defaults) for element in aset}
+    if element_type == TType.LIST:
+        return {
+            __list_to_dict(element, type_args[1], defaults=defaults)
+            for element in aset
+        }
+    if element_type == TType.SET:
+        return {
+            __set_to_dict(element, type_args[1], defaults=defaults) for element in aset
+        }
+    else:
+        return aset
 
 
 def __map_to_dict(amap, type_args, defaults=False):
     """
     Given a python dictionary, potentially containing Thrift Structs, convert it
     into a dict
-    :param alist: a list or set
+    :param amap: a map
     :param defaults: return default values
-    :return: OrderedDict
+    :return: Dict
     """
     if not amap:
         return amap
 
-    keys, values = zip(*iteritems(amap))
+    keys, values = zip(*amap.items())
+
     keys = __list_to_dict(keys, type_args[:2], defaults=defaults)
     values = __list_to_dict(values, type_args[2:4], defaults=defaults)
 

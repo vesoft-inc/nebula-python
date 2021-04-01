@@ -1,3 +1,19 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
+
 """
 PyRemote
 
@@ -35,7 +51,6 @@ from six import string_types
 from nebula2.fbthrift import Thrift
 from nebula2.fbthrift.transport import TTransport, TSocket, TSSLSocket, THttpClient
 from nebula2.fbthrift.transport.THeaderTransport import THeaderTransport
-from nebula2.fbthrift.transport.TFuzzyHeaderTransport import TFuzzyHeaderTransport
 from nebula2.fbthrift.protocol import TBinaryProtocol, TCompactProtocol, \
     TJSONProtocol, THeaderProtocol, TSimpleJSONProtocol
 
@@ -430,6 +445,16 @@ class RemoteClient(object):
         self._exit(status=0)
 
 
+def ssl_parsed_bool(arg):
+    if isinstance(arg, bool):
+        return arg
+    if arg in ('true', '1'):
+        return True
+    elif arg in ('false', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('argument must be one of true, 1, false, or 0')
+
 class RemoteTransportClient(RemoteClient):
     """Abstract class for clients with transport manually opened and closed"""
     CMDLINE_OPTIONS = [
@@ -443,8 +468,11 @@ class RemoteTransportClient(RemoteClient):
         ), (
             ('-s', '--ssl'),
             {
-                'action': 'store_true',
-                'default': False,
+                'action': 'store',
+                'type': ssl_parsed_bool,
+                'default': True,
+                'const': True,
+                'nargs': '?',
                 'help': 'Use SSL socket'
             }
         ), (
@@ -492,26 +520,21 @@ class RemoteTransportClient(RemoteClient):
 
         elif socket is not None:
             # If json, compact, framed, and unframed are not specified,
-            # THeaderProtocol is the default. Create a protocol using either
-            # fuzzy or non-fuzzy transport depending on if options.fuzz is set.
-            if options.fuzz is not None:
-                transport = TFuzzyHeaderTransport(
-                    socket, fuzz_fields=options.fuzz, verbose=True)
-            else:
-                transport = THeaderTransport(socket)
-                if options.headers is not None:
-                    try:
-                        parsed_headers = eval(options.headers)
-                    except Exception:
-                        self._exit(
-                            error_message='Request headers (--headers) argument'
-                                          ' failed eval')
-                    if not isinstance(parsed_headers, dict):
-                        self._exit(
-                            error_message='Request headers (--headers) argument'
-                                          ' must evaluate to a dict')
-                    for header_name, header_value in parsed_headers.items():
-                        transport.set_header(header_name, header_value)
+            # THeaderProtocol is the default.
+            transport = THeaderTransport(socket)
+            if options.headers is not None:
+                try:
+                    parsed_headers = eval(options.headers)
+                except Exception:
+                    self._exit(
+                        error_message='Request headers (--headers) argument'
+                                      ' failed eval')
+                if not isinstance(parsed_headers, dict):
+                    self._exit(
+                        error_message='Request headers (--headers) argument'
+                                      ' must evaluate to a dict')
+                for header_name, header_value in parsed_headers.items():
+                    transport.set_header(header_name, header_value)
             protocol = THeaderProtocol.THeaderProtocol(transport)
         else:
             self._exit(error_message=('No valid protocol '
@@ -525,7 +548,7 @@ class RemoteTransportClient(RemoteClient):
 
         return client
 
-    def close_client(self):
+    def _close_client(self):
         self._transport.close()
 
     def _validate_options(self, options):
@@ -554,28 +577,7 @@ class RemoteHostClient(RemoteTransportClient):
             'metavar': 'HOST[:PORT]',
             'help': 'The host and port to connect to'
         }
-    ), (
-        ('-F', '--fuzz'),
-        {
-            'type': str,
-            'nargs': '*',
-            'default': None,
-            'help': ('Use TFuzzyHeaderTransport to send a fuzzed message for '
-                     'testing thrift transport. Optionally include a list of '
-                     'message field names to fuzz after this flag. Fields: ' +
-                     ', '.join(TFuzzyHeaderTransport.fuzzable_fields))
-        }
     )]
-
-    def _validate_options(self, options):
-        super(RemoteHostClient, self)._validate_options(options)
-        if (options.fuzz is not None and
-            any([options.framed, options.unframed,
-                 options.json, options.compact])):
-            self._exit(error_message=('Transport fuzzing only supported for '
-                                      'THeaderTransport (no framed, unframed, '
-                                      'json, or compact.)'),
-                       status=os.EX_USAGE)
 
     def _get_client(self, options):
         host, port = self._parse_host_port(options.host, self.default_port)
