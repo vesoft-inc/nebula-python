@@ -89,6 +89,8 @@ class ScanResult(object):
     def next(self):
         conns = self._graph_storage_client.get_conns()
         num = len(conns)
+        if num == 0:
+            raise RuntimeError('There is no storage connection')
         logging.debug('Graph storage client num: {}'.format(num))
         exceptions = []
         result = []

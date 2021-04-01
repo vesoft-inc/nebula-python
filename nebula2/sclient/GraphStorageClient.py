@@ -56,6 +56,8 @@ class GraphStorageClient(object):
 
     def _create_connection(self):
         storage_addrs = self._meta_cache.get_all_storage_addrs()
+        if len(storage_addrs) == 0:
+            raise RuntimeError('Get storage address from meta cache is empty')
         try:
             for addr in storage_addrs:
                 conn = GraphStorageConnection(addr, self._time_out, self._meta_cache)
