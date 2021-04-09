@@ -51,7 +51,7 @@ class TestGraphStorageClient(object):
     def setup_class(cls):
         try:
             conn = Connection()
-            conn.open('172.28.3.1', 9669, 3000)
+            conn.open('127.0.0.1', 9671, 3000)
             session_id = conn.authenticate('root', 'nebula')
             assert session_id != 0
             cls.execute_with_retry(conn,

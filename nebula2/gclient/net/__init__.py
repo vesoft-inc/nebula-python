@@ -66,7 +66,7 @@ class Session(object):
                         logging.warning('Retry connect failed')
                         raise IOErrorException(IOErrorException.E_ALL_BROKEN, 'All connections are broken')
                     try:
-                        self._connection.execute(self.session_id, stmt)
+                        resp = self._connection.execute(self.session_id, stmt)
                         end_time = time.time()
                         return ResultSet(resp, int((end_time - start_time) * 1000000))
                     except Exception:
