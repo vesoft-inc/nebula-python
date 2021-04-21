@@ -1,21 +1,18 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
 #
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements. See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership. The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied. See the License for the
-# specific language governing permissions and limitations
-# under the License.
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
 
 from __future__ import absolute_import
 from __future__ import division
@@ -28,6 +25,7 @@ import os
 import threading
 if sys.version_info[0] >= 3:
     import queue
+    # pyre-fixme[11]: Annotation `queue` is not defined as a type.
     Queue = queue
 else:
     import Queue
@@ -218,143 +216,3 @@ class TServer:
 
     def serve(self):
         pass
-
-
-class TSimpleServer(TServer):
-
-    """Simple single-threaded server that just pumps around one transport."""
-
-    def __init__(self, *args):
-        warnings.warn("TSimpleServer is deprecated. Please use one of "
-                      "Nonblocking, Twisted, or Gevent server instead.",
-                      DeprecationWarning)
-        TServer.__init__(self, *args)
-
-    def serve(self):
-        self.serverTransport.listen()
-        for name in self.serverTransport.getSocketNames():
-            self.serverEventHandler.preServe(name)
-        while True:
-            client = self.serverTransport.accept()
-            self.handle(client)
-
-
-class TThreadedServer(TServer):
-
-    """Threaded server that spawns a new thread per each connection."""
-
-    def __init__(self, *args, **kwargs):
-        TServer.__init__(self, *args)
-        self.daemon = kwargs.get("daemon", False)
-
-    def serve(self):
-
-        self.serverTransport.listen()
-        for name in self.serverTransport.getSocketNames():
-            self.serverEventHandler.preServe(name)
-        while True:
-            try:
-                client = self.serverTransport.accept()
-                t = threading.Thread(target=self.handle, args=(client,))
-                t.daemon = self.daemon
-                t.start()
-            except KeyboardInterrupt:
-                raise
-            except Exception as x:
-                logging.exception(x)
-
-
-class TForkingServer(TServer):
-
-    """A Thrift server that forks a new process for each request"""
-    """
-    This is more scalable than the threaded server as it does not cause
-    GIL contention.
-
-    Note that this has different semantics from the threading server.
-    Specifically, updates to shared variables will no longer be shared.
-    It will also not work on windows.
-
-    This code is heavily inspired by SocketServer.ForkingMixIn in the
-    Python stdlib.
-    """
-
-    def __init__(self, *args):
-        TServer.__init__(self, *args)
-        self.children = []
-
-    def serve(self):
-        def tryClose(file):
-            try:
-                file.close()
-            except IOError as e:
-                logging.warning(e, exc_info=True)
-
-        self.serverTransport.listen()
-        for name in self.serverTransport.getSocketNames():
-            self.serverEventHandler.preServe(name)
-        while True:
-            client = self.serverTransport.accept()
-            try:
-
-                itrans = self.inputTransportFactory.getTransport(client)
-                otrans = self.outputTransportFactory.getTransport(client)
-
-                iprot = self.inputProtocolFactory.getProtocol(itrans)
-
-                if isinstance(self.inputProtocolFactory,
-                        THeaderProtocolFactory):
-                    oprot = iprot
-                else:
-                    oprot = self.outputProtocolFactory.getProtocol(otrans)
-
-                context = TRpcConnectionContext(client, iprot, oprot)
-                self._clientBegin(context, iprot, oprot)
-
-                pid = os.fork()
-
-                if pid:  # parent
-                    # add before collect, otherwise you race w/ waitpid
-                    self.children.append(pid)
-                    self._collectChildren()
-
-                    # Parent must close socket or the connection may not get
-                    # closed promptly
-                    tryClose(itrans)
-                    tryClose(otrans)
-
-                else:
-
-                    ecode = 0
-                    try:
-                        try:
-                            while True:
-                                self.processor.process(iprot, oprot, context)
-                        except TTransport.TTransportException:
-                            pass
-                        except Exception as e:
-                            logging.exception(e)
-                            ecode = 1
-                    finally:
-                        self.serverEventHandler.connectionDestroyed(context)
-                        tryClose(itrans)
-                        tryClose(otrans)
-
-                    os._exit(ecode)
-
-            except TTransport.TTransportException:
-                pass
-            except Exception as x:
-                logging.exception(x)
-
-    def _collectChildren(self):
-        while self.children:
-            try:
-                pid, status = os.waitpid(0, os.WNOHANG)
-            except os.error:
-                pid = None
-
-            if pid:
-                self.children.remove(pid)
-            else:
-                break

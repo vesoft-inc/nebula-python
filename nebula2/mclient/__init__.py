@@ -8,7 +8,6 @@
 
 import logging
 import socket
-import threading
 
 from _thread import RLock
 from nebula2.Exception import (
@@ -25,7 +24,8 @@ from nebula2.meta.ttypes import (
     ListSpacesReq,
     GetPartsAllocReq,
     ErrorCode,
-    ListHostsReq
+    ListHostsReq,
+    HostRole
 )
 from nebula2.meta import (
     ttypes,
@@ -40,17 +40,16 @@ class MetaClient(object):
     def __init__(self, addresses, timeout):
         if len(addresses) == 0:
             raise RuntimeError('Input empty addresses')
-        self._addresses = []
         self._timeout = timeout
-
+        self._connection = None
+        self._retry_count = 3
+        self._addresses = addresses
         for address in addresses:
             try:
-                ip = socket.gethostbyname(address[0])
+                socket.gethostbyname(address[0])
             except Exception:
                 raise InValidHostname(str(address[0]))
-            self._addresses.append((ip, address[1]))
         self._leader = self._addresses[0]
-        self._connection = None
         self._lock = RLock()
 
     def open(self):
@@ -72,12 +71,19 @@ class MetaClient(object):
                 raise RuntimeError('The connection is no open')
             req = ListTagsReq()
             req.space_id = space_id
-            resp = self._connection.listTags(req)
-            if resp.code != ErrorCode.SUCCEEDED:
-                self.update_leader()
-                raise RuntimeError("List tags from space id:{} failed, error code: {}"
-                                   .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
-            return resp.tags
+            count = 0
+            while count < self._retry_count:
+                resp = self._connection.listTags(req)
+                if resp.code != ErrorCode.SUCCEEDED:
+                    if resp.code == ErrorCode.E_LEADER_CHANGED:
+                        self.update_leader(resp.leader)
+                        count = count + 1
+                        continue
+                    raise RuntimeError("List tags from space id:{} failed, error code: {}"
+                                       .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+                return resp.tags
+            raise RuntimeError("List tags from space id:{} failed, error code: {}"
+                               .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
 
     def list_edges(self, space_id):
         with self._lock:
@@ -85,37 +91,58 @@ class MetaClient(object):
                 raise RuntimeError('The connection is no open')
             req = ListEdgesReq()
             req.space_id = space_id
-            resp = self._connection.listEdges(req)
-            if resp.code != ErrorCode.SUCCEEDED:
-                self.update_leader()
-                raise RuntimeError("List edges from space id:{} failed, error code: {}"
-                                   .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
-            return resp.edges
+            count = 0
+            while count < self._retry_count:
+                resp = self._connection.listEdges(req)
+                if resp.code != ErrorCode.SUCCEEDED:
+                    if resp.code == ErrorCode.E_LEADER_CHANGED:
+                        self.update_leader(resp.leader)
+                        count = count + 1
+                        continue
+                    raise RuntimeError("List edges from space id:{} failed, error code: {}"
+                                       .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+                return resp.edges
+            raise RuntimeError("List edges from space id:{} failed, error code: {}"
+                               .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
 
     def list_spaces(self):
         with self._lock:
             if self._connection is None:
                 raise RuntimeError('The connection is no open')
             req = ListSpacesReq()
-            resp = self._connection.listSpaces(req)
-            if resp.code != ErrorCode.SUCCEEDED:
-                self.update_leader()
-                raise RuntimeError("List spaces failed, error code: {}"
-                                   .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
-            return resp.spaces
+            count = 0
+            while count < self._retry_count:
+                resp = self._connection.listSpaces(req)
+                if resp.code != ErrorCode.SUCCEEDED:
+                    if resp.code == ErrorCode.E_LEADER_CHANGED:
+                        self.update_leader(resp.leader)
+                        count = count + 1
+                        continue
+                    raise RuntimeError("List spaces failed, error code: {}"
+                                       .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
+                return resp.spaces
+            raise RuntimeError("List spaces failed, error code: {}"
+                               .format(ErrorCode._VALUES_TO_NAMES[resp.code]))
 
     def list_hosts(self):
         with self._lock:
             if self._connection is None:
                 raise RuntimeError('The connection is no open')
             req = ListHostsReq()
-            # req.role = HostRole.STORAGE
-            resp = self._connection.listHosts(req)
-            if resp.code != ErrorCode.SUCCEEDED:
-                self.update_leader()
-                raise RuntimeError("List spaces failed, error code: {}"
-                                   .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
-            return resp.hosts
+            req.role = HostRole.STORAGE
+            count = 0
+            while count < self._retry_count:
+                resp = self._connection.listHosts(req)
+                if resp.code != ErrorCode.SUCCEEDED:
+                    if resp.code == ErrorCode.E_LEADER_CHANGED:
+                        self.update_leader(resp.leader)
+                        count = count + 1
+                        continue
+                    raise RuntimeError("List spaces failed, error code: {}"
+                                       .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
+                return resp.hosts
+            raise RuntimeError("List spaces failed, error code: {}"
+                               .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
 
     def get_parts_alloc(self, space_id):
         with self._lock:
@@ -123,12 +150,19 @@ class MetaClient(object):
                 raise RuntimeError('The connection is no open')
             req = GetPartsAllocReq()
             req.space_id = space_id
-            resp = self._connection.getPartsAlloc(req)
-            if resp.code != ErrorCode.SUCCEEDED:
-                self.update_leader()
-                raise RuntimeError("List parts from space id:{} failed, error code: {}"
-                                   .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
-            return resp.parts
+            count = 0
+            while count < self._retry_count:
+                resp = self._connection.getPartsAlloc(req)
+                if resp.code != ErrorCode.SUCCEEDED:
+                    if resp.code == ErrorCode.E_LEADER_CHANGED:
+                        self.update_leader(resp.leader)
+                        count = count + 1
+                        continue
+                    raise RuntimeError("List parts from space id:{} failed, error code: {}"
+                                       .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+                return resp.parts
+            raise RuntimeError("List parts from space id:{} failed, error code: {}"
+                               .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
 
     def close(self):
         try:
@@ -137,15 +171,12 @@ class MetaClient(object):
         except Exception:
             raise
 
-    def update_leader(self, resp):
-        if resp.code == ErrorCode.E_LEADER_CHANGED:
-            try:
-                if resp.leader is not None:
-                    with self._lock:
-                        self._leader = (resp.leader.host, resp.leader.port)
-                        self.open()
-            except Exception as e:
-                logging.error(e)
+    def update_leader(self, leader):
+        try:
+            self._leader = (leader.host, leader.port)
+            self.open()
+        except Exception as e:
+            logging.error(e)
 
     def __del__(self):
         self.close()
@@ -172,18 +203,20 @@ class MetaCache(object):
         self._decode_type = decode_type
         self._load_period = load_period
         self._lock = RLock()
-        self._meta_client = MetaClient(meta_addrs, timeout)
-        self._meta_client.open()
         self._space_caches = {}
         self._space_id_names = {}
         self._storage_addrs = []
         self._storage_leader = {}
         self._close = False
+        self._meta_client = MetaClient(meta_addrs, timeout)
+        self._meta_client.open()
 
         # load meta data
         self._load_all()
 
     def close(self):
+        if self._close:
+            return
         self._close = True
         if self._meta_client is not None:
             self._meta_client.close()
@@ -239,7 +272,6 @@ class MetaCache(object):
                     self._storage_leader[space_name] = {}
                     for part_id in parts_alloc:
                         self._storage_leader[space_name][part_id] = parts_alloc[part_id][0]
-
         except Exception as x:
             logging.error('Update meta data failed: {}'.format(x))
             import traceback

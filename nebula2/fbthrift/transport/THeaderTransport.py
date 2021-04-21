@@ -1,21 +1,18 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
 #
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements. See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership. The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied. See the License for the
-# specific language governing permissions and limitations
-# under the License.
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
 
 from __future__ import absolute_import
 from __future__ import division
@@ -25,12 +22,13 @@ from __future__ import unicode_literals
 import sys
 if sys.version_info[0] >= 3:
     from http import server
+    # pyre-fixme[11]: Annotation `server` is not defined as a type.
     BaseHTTPServer = server
     xrange = range
     from io import BytesIO as StringIO
     PY3 = True
 else:
-    import BaseHTTPServer
+    import BaseHTTPServer  # @manual
     from cStringIO import StringIO
     PY3 = False
 
@@ -39,7 +37,9 @@ import zlib
 
 from nebula2.fbthrift.Thrift import TApplicationException
 from nebula2.fbthrift.protocol.TBinaryProtocol import TBinaryProtocol
-from .TTransport import TTransportException, TTransportBase, CReadableTransport
+from nebula2.fbthrift.transport.TTransport import (
+    TTransportException, TTransportBase, CReadableTransport
+)
 from nebula2.fbthrift.protocol.TCompactProtocol import (
     getVarint, readVarint, TCompactProtocol
 )
@@ -59,7 +59,24 @@ except ImportError:
         def decompress(self, buf):
             raise TTransportException(TTransportException.INVALID_TRANSFORM,
                                       'snappy module not available')
-    snappy = DummySnappy()  # type: ignore
+    snappy = DummySnappy()
+
+# Import the zstd module if it is available
+try:
+    import zstd  # @manual
+except ImportError:
+    # If zstd is not available, don't fail immediately.
+    # Only raise an error if we actually ever need to perform zstd
+    # compression.
+    class DummyZstd(object):
+        def ZstdCompressor(self, write_content_size):
+            raise TTransportException(TTransportException.INVALID_TRANSFORM,
+                                      'zstd module not available')
+
+        def ZstdDecompressor(self):
+            raise TTransportException(TTransportException.INVALID_TRANSFORM,
+                                      'zstd module not available')
+    zstd = DummyZstd()
 
 
 # Definitions from THeader.h
@@ -72,7 +89,6 @@ class CLIENT_TYPE:
     HTTP_SERVER = 3
     HTTP_CLIENT = 4
     FRAMED_COMPACT = 5
-    HEADER_SASL = 6
     HTTP_GET = 7
     UNKNOWN = 8
     UNFRAMED_COMPACT_DEPRECATED = 9
@@ -81,7 +97,6 @@ class CLIENT_TYPE:
 class HEADER_FLAG:
     SUPPORT_OUT_OF_ORDER = 0x01
     DUPLEX_REVERSE = 0x08
-    SASL = 0x10
 
 
 class TRANSFORM:
@@ -341,9 +356,7 @@ class THeaderTransport(TTransportBase, CReadableTransport):
         # Read the headers.  Data for each header varies.
         for _ in range(0, num_headers):
             trans_id = readVarint(data)
-            if trans_id == TRANSFORM.ZLIB:
-                self.__read_transforms.insert(0, trans_id)
-            elif trans_id == TRANSFORM.SNAPPY:
+            if trans_id in (TRANSFORM.ZLIB, TRANSFORM.SNAPPY, TRANSFORM.ZSTD):
                 self.__read_transforms.insert(0, trans_id)
             elif trans_id == TRANSFORM.HMAC:
                 raise TApplicationException(
@@ -390,6 +403,8 @@ class THeaderTransport(TTransportBase, CReadableTransport):
                 buf = zlib.compress(buf)
             elif trans_id == TRANSFORM.SNAPPY:
                 buf = snappy.compress(buf)
+            elif trans_id == TRANSFORM.ZSTD:
+                buf = zstd.ZstdCompressor(write_content_size=True).compress(buf)
             else:
                 raise TTransportException(TTransportException.INVALID_TRANSFORM,
                                           "Unknown transform during send")
@@ -401,6 +416,8 @@ class THeaderTransport(TTransportBase, CReadableTransport):
                 buf = zlib.decompress(buf)
             elif trans_id == TRANSFORM.SNAPPY:
                 buf = snappy.decompress(buf)
+            elif trans_id == TRANSFORM.ZSTD:
+                buf = zstd.ZstdDecompressor().decompress(buf)
             if trans_id not in self.__write_transforms:
                 self.__write_transforms.append(trans_id)
         return buf

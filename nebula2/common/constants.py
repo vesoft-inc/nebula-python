@@ -7,11 +7,12 @@
 
 from __future__ import absolute_import
 import six
+import sys
 from nebula2.fbthrift.util.Recursive import fix_spec
-from nebula2.fbthrift.Thrift import *
+from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestContext, TProcessorEventHandler, TServerInterface, TProcessor, TException, TApplicationException, UnimplementedTypedef
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
 
-from .ttypes import *
+from .ttypes import UTF8STRINGS, NullType, Date, Time, DateTime, Value, NList, NMap, NSet, Row, DataSet, Tag, Vertex, Edge, Step, Path, HostAddr, KeyValue, LogInfo, PartitionBackupInfo, GraphSpaceID, PartitionID, TagID, EdgeType, EdgeRanking, LogID, TermID, Timestamp, IndexID, Port, SessionID
 

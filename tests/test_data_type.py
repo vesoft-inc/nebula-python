@@ -190,7 +190,7 @@ class TestBaseCase(TestCase):
         resp.latency_in_us = 100
 
         resp.data = self.get_data_set()
-        return ResultSet(resp)
+        return ResultSet(resp, 100)
 
 
 class TesValueWrapper(TestBaseCase):

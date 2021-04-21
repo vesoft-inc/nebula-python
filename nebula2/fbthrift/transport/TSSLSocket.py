@@ -1,10 +1,26 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from .TSocket import *
-from .TTransport import *
+from nebula2.fbthrift.transport.TSocket import *
+from nebula2.fbthrift.transport.TTransport import *
 import socket
 import ssl
 import traceback
@@ -57,7 +73,7 @@ if _is_legacy_ssl:
     def _warn_if_legacy():
         global _has_warned
         if not _has_warned:
-            logging.warn(
+            logging.warning(
                 'You are using an old version of Python (< 2.7.9) that is '
                 'limited to an old version of TLS (1.0) with known security '
                 'vulnerabilities. '
@@ -85,13 +101,17 @@ else:
         if version is None:
             return
 
-        blacklist = [ssl.PROTOCOL_SSLv2, ssl.PROTOCOL_SSLv3, ssl.PROTOCOL_TLSv1]
+        blacklist = [ssl.PROTOCOL_TLSv1]
 
+        if hasattr(ssl, 'PROTOCOL_SSLv2'):
+            blacklist.append(ssl.PROTOCOL_SSLv2)
+        if hasattr(ssl, 'PROTOCOL_SSLv3'):
+            blacklist.append(ssl.PROTOCOL_SSLv3)
         if hasattr(ssl, 'PROTOCOL_TLSv1_1'):
             blacklist.append(ssl.PROTOCOL_TLSv1_1)
 
         if version in blacklist:
-            logging.warn(
+            logging.warning(
                 'You are constructing TSSLSocket and intentionally specifying '
                 'a weak, vulnerable ssl_version on a platform that has secure '
                 'versions available! Leave ssl_version unspecified and we will '
@@ -102,6 +122,7 @@ else:
                         ca_certs=None, keyfile=None, certfile=None,
                         disable_weaker_versions=True):
         ctx = ssl.SSLContext(ssl_version)
+        ctx.verify_mode = cert_reqs
         if certfile is not None:
             ctx.load_cert_chain(
                 certfile=certfile,
@@ -223,7 +244,7 @@ class TSSLSocket(TSocket):
                     sslh.close()
                     raise TTransportException(TTransportException.NOT_OPEN,
                             "failed to verify certificate name")
-            self.handle = sslh
+            self.setHandle(sslh)
         except ssl.SSLError as e:
             raise TTransportException(TTransportException.NOT_OPEN,
                             "SSL error during handshake: " + str(e))
@@ -273,9 +294,10 @@ class TSSLServerSocket(TServerSocket):
     This uses the ssl module's wrap_socket() method to provide SSL
     negotiated encryption.
     """
-    SSL_VERSION = ssl.PROTOCOL_TLSv1
 
-    def __init__(self, port=9090, certfile='cert.pem', unix_socket=None):
+    def __init__(self, port=9090, ssl_version=ssl.PROTOCOL_TLSv1,
+                 cert_reqs=ssl.CERT_NONE, ca_certs=None, certfile='cert.pem',
+                 unix_socket=None):
         """Initialize a TSSLServerSocket
 
         @param certfile: The filename of the server certificate file, defaults
@@ -285,7 +307,8 @@ class TSSLServerSocket(TServerSocket):
         @type port: int
         """
         self.setCertfile(certfile)
-        self.setCertReqs(ssl.CERT_NONE, None)
+        self.setCertReqs(cert_reqs, ca_certs)
+        self.ssl_version = ssl_version
         TServerSocket.__init__(self, port, unix_socket)
 
     def setCertfile(self, certfile):
@@ -317,7 +340,7 @@ class TSSLServerSocket(TServerSocket):
             client = ssl.wrap_socket(plain_client,
                                      certfile=self.certfile,
                                      server_side=True,
-                                     ssl_version=self.SSL_VERSION,
+                                     ssl_version=self.ssl_version,
                                      cert_reqs=self.cert_reqs,
                                      ca_certs=self.ca_certs)
         except ssl.SSLError:

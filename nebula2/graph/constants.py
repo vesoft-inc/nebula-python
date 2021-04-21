@@ -7,13 +7,14 @@
 
 from __future__ import absolute_import
 import six
+import sys
 from nebula2.fbthrift.util.Recursive import fix_spec
-from nebula2.fbthrift.Thrift import *
+from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestContext, TProcessorEventHandler, TServerInterface, TProcessor, TException, TApplicationException, UnimplementedTypedef
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
 import nebula2.common.ttypes
 
 
-from .ttypes import *
+from .ttypes import UTF8STRINGS, ErrorCode, ProfilingStats, PlanNodeBranchInfo, Pair, PlanNodeDescription, PlanDescription, ExecutionResponse, AuthResponse
 

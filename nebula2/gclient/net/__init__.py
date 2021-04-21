@@ -54,7 +54,10 @@ class Session(object):
         if self._connection is None:
             raise RuntimeError('The session has released')
         try:
-            return ResultSet(self._connection.execute(self.session_id, stmt))
+            start_time = time.time()
+            resp = self._connection.execute(self.session_id, stmt)
+            end_time = time.time()
+            return ResultSet(resp, int((end_time - start_time) * 1000000))
         except IOErrorException as ie:
             if ie.type == IOErrorException.E_CONNECT_BROKEN:
                 self._pool.update_servers_status()
@@ -63,7 +66,9 @@ class Session(object):
                         logging.warning('Retry connect failed')
                         raise IOErrorException(IOErrorException.E_ALL_BROKEN, 'All connections are broken')
                     try:
-                        return ResultSet(self._connection.execute(self.session_id, stmt))
+                        resp = self._connection.execute(self.session_id, stmt)
+                        end_time = time.time()
+                        return ResultSet(resp, int((end_time - start_time) * 1000000))
                     except Exception:
                         raise
             raise

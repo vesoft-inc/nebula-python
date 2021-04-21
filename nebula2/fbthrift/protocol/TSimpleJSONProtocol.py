@@ -1,21 +1,18 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
 #
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements. See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership. The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied. See the License for the
-# specific language governing permissions and limitations
-# under the License.
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
 
 from __future__ import absolute_import
 from __future__ import division
@@ -26,7 +23,7 @@ from base64 import b64encode, b64decode
 import json
 import sys
 
-from .TProtocol import TProtocolBase, TProtocolException
+from nebula2.fbthrift.protocol.TProtocol import TProtocolBase, TProtocolException
 from nebula2.fbthrift.Thrift import TType
 
 JSON_OBJECT_START = b'{'
@@ -37,6 +34,7 @@ JSON_NEW_LINE = b'\n'
 JSON_PAIR_SEPARATOR = b':'
 JSON_ELEM_SEPARATOR = b','
 JSON_BACKSLASH = b'\\'
+JSON_BACKSLASH_VALUE = ord(JSON_BACKSLASH)
 JSON_STRING_DELIMITER = b'"'
 JSON_ZERO_CHAR = b'0'
 JSON_TAB = b"  "
@@ -60,10 +58,31 @@ JSON_CHAR_TABLE = [ \
     1,  1,b'"',  1,  1,  1,  1,  1,   1,   1,   1,  1,   1,   1,  1,  1, \
 ]
 
+
+JSON_CHARS_TO_ESCAPE = set()
+for ch_value, mode in enumerate(JSON_CHAR_TABLE):
+    if mode == 1:
+        continue
+    if sys.version_info[0] == 3:
+        JSON_CHARS_TO_ESCAPE.add(chr(ch_value).encode('ascii'))
+        JSON_CHARS_TO_ESCAPE.add(chr(ch_value))
+    else:
+        JSON_CHARS_TO_ESCAPE.add(chr(ch_value))
+        JSON_CHARS_TO_ESCAPE.add(chr(ch_value).encode('utf-8'))
+JSON_CHARS_TO_ESCAPE.add(JSON_BACKSLASH)
+JSON_CHARS_TO_ESCAPE.add(JSON_BACKSLASH.decode('utf-8'))
+
 ESCAPE_CHARS = b"\"\\bfnrt"
 ESCAPE_CHAR_VALS = [b'"', b'\\', b'\b', b'\f', b'\n', b'\r', b'\t']
 
 NUMERIC_CHAR = b'+-.0123456789Ee'
+
+WHITESPACE_CHARS = {
+    JSON_NEW_LINE,
+    TAB,
+    JSON_CARRIAGE_RETURN,
+    JSON_SPACE,
+}
 
 def hexChar(x):
     x &= 0x0f
@@ -98,8 +117,7 @@ class TJSONContext:
         self.indent(trans)
 
     def indent(self, trans):
-        for _i in range(self.indentLevel):
-            trans.write(JSON_TAB)
+        trans.write(JSON_TAB * self.indentLevel)
 
 
 class TJSONPairContext(TJSONContext):
@@ -327,14 +345,45 @@ class TSimpleJSONProtocolBase(TProtocolBase, object):
         skipped = 0
         while True:
             ch = self.reader.peek()
-            if ch not in (JSON_NEW_LINE,
-                          TAB,
-                          JSON_CARRIAGE_RETURN,
-                          JSON_SPACE):
+            if ch not in WHITESPACE_CHARS:
                 break
             self.reader.read()
             skipped += 1
         return skipped
+
+    def skip(self, _type):
+        self.context.read(self.reader)
+        self.skipWhitespace()
+        type = self.guessTypeIdFromFirstByte()
+        # Since self.context.read is called at the beginning of all readJSONxxx
+        # methods and we have already called it here, push an empty context so that
+        # it becomes a no-op.
+        self.pushContext(TJSONContext(protocol=self))
+        if type == TType.STRUCT:
+            self.readJSONObjectStart()
+            while True:
+                (_, ftype, _) = self.readFieldBegin()
+                if ftype == TType.STOP:
+                    break
+                self.skip(TType.VOID)
+            self.readJSONObjectEnd()
+        elif type == TType.LIST:
+            self.readJSONArrayStart()
+            while self.peekList():
+                self.skip(TType.VOID)
+            self.readJSONArrayEnd()
+        elif type == TType.STRING:
+            self.readJSONString()
+        elif type == TType.DOUBLE:
+            self.readJSONDouble()
+        elif type == TType.BOOL:
+            self.readJSONBool()
+        else:
+            raise TProtocolException(
+                TProtocolException.INVALID_DATA,
+                "Unexpected type {} guessed when skipping".format(type)
+            )
+        self.popContext()
 
     def guessTypeIdFromFirstByte(self):
         self.skipWhitespace()
@@ -362,10 +411,10 @@ class TSimpleJSONProtocolBase(TProtocolBase, object):
         self.trans.write(hexChar(ch))
 
     def writeJSONChar(self, ch):
-        charValue = ord(ch) if not isinstance(ch, int) else ch
-        ch = chr(ch) if isinstance(ch, int) else ch
+        charValue = ord(ch)
         if charValue >= 0x30:
-            if ch == JSON_BACKSLASH:  # Only special character >= 0x30 is '\'.
+            # The only special character >= 0x30 is '\'.
+            if charValue == JSON_BACKSLASH_VALUE:
                 self.trans.write(JSON_BACKSLASH)
                 self.trans.write(JSON_BACKSLASH)
             else:
@@ -383,11 +432,24 @@ class TSimpleJSONProtocolBase(TProtocolBase, object):
     def writeJSONString(self, outStr):
         self.context.write(self.trans)
         self.trans.write(JSON_STRING_DELIMITER)
-        is_bytes_type = isinstance(outStr, bytes)
-        for i in range(len(outStr)):
-            # Slicing of bytes in Py3 produces bytes!
-            ch = outStr[i:(i + 1)] if is_bytes_type else outStr[i]
-            self.writeJSONChar(ch)
+        outStrLen = len(outStr)
+        if outStrLen > 0:
+            is_int = isinstance(outStr[0], int)
+            pos = 0
+            for idx, ch in enumerate(outStr):
+                if is_int:
+                    ch = outStr[idx:idx + 1]
+                if ch in JSON_CHARS_TO_ESCAPE:
+                    if pos < idx:
+                        # Write previous chunk not requiring escaping
+                        self.trans.write(outStr[pos:idx])
+                    # Write current char with escaping
+                    self.writeJSONChar(ch)
+                    # Advance pos
+                    pos = idx + 1
+            if pos < outStrLen:
+                # Write last chunk till outStrLen
+                self.trans.write(outStr[pos:outStrLen])
         self.trans.write(JSON_STRING_DELIMITER)
 
     def writeJSONBase64(self, outStr):

@@ -1,3 +1,19 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
+
 """
 Fuzz Testing for Thrift Services
 """
@@ -22,7 +38,8 @@ import six.moves as sm
 from six.moves.urllib.parse import urlparse
 
 try:
-    from ServiceRouter import ConnConfigs, ServiceOptions, ServiceRouter
+    # pyre-fixme[21]: Could not find module `ServiceRouter`.
+    from ServiceRouter import ConnConfigs, ServiceOptions, ServiceRouter  # @manual
     SR_AVAILABLE = True
 except ImportError:
     SR_AVAILABLE = False
@@ -30,8 +47,7 @@ except ImportError:
 from nebula2.fbthrift import Thrift
 from nebula2.fbthrift.transport import TTransport, TSocket, TSSLSocket, THttpClient
 from nebula2.fbthrift.protocol import TBinaryProtocol, TCompactProtocol, THeaderProtocol
-
-from . import randomizer
+from nebula2.fbthrift.util import randomizer
 
 if six.PY3:
     from importlib.machinery import SourceFileLoader
@@ -364,7 +380,7 @@ class FuzzerConfiguration(object):
         parent_path, service_filename = os.path.split(service_path)
         service_name = service_filename[:-3]  # Truncate extension
 
-        logging.info("Service name: %s" (service_name))
+        logging.info("Service name: %s" % (service_name))
 
         parent_path = os.path.dirname(service_path)
         ttypes_path = os.path.join(parent_path, 'ttypes.py')
@@ -439,47 +455,48 @@ class Service(object):
         """Load a service's methods.
 
         If exclude_ifaces is not None, it should be a collection and only
-        the method from thrift interfaces not included in that collection will
+        methods from nebula2.fbthrift interfaces not included in that collection will
         be considered."""
 
         exclude_ifaces = exclude_ifaces or []
 
-        # Can only have single inheritance in thrift
-        thrift_inheritance_chain = self.service.Iface.__mro__
+        pred = inspect.isfunction if six.PY3 else inspect.ismethod
 
         methods = {}
-        # We iterate inheritance from parent to base so we can override
-        # parent's methods with the base's one.
-        for klass in thrift_inheritance_chain[::-1]:
-            if klass in exclude_ifaces:
+        exclude_methods = []
+
+        for klass in exclude_ifaces:
+            exclude_methods.extend(inspect.getmembers(klass, predicate=pred))
+
+        klass_methods = inspect.getmembers(self.service.Iface, predicate=pred)
+
+        for method_name, method in klass_methods:
+            if (method_name, method) in exclude_methods:
                 continue
 
-            pred = inspect.isfunction if six.PY3 else inspect.ismethod
-            klass_methods = inspect.getmembers(klass, predicate=pred)
-            module = inspect.getmodule(klass)
+            module = inspect.getmodule(method)
 
-            for method_name, _ in klass_methods:
-                args = getattr(module, method_name + "_args", None)
-                if args is None:
-                    continue
-                result = getattr(module, method_name + "_result", None)
+            args = getattr(module, method_name + "_args", None)
+            if args is None:
+                continue
+            result = getattr(module, method_name + "_result", None)
 
-                thrift_exceptions = []
-                if result is not None:
-                    for res_spec in result.thrift_spec:
-                        if res_spec is None:
-                            continue
-                        if res_spec[2] != "success":
-                            # This is an exception return type
-                            spec_args = res_spec[3]
-                            exception_type = spec_args[0]
-                            thrift_exceptions.append(exception_type)
+            thrift_exceptions = []
+            if result is not None:
+                for res_spec in result.thrift_spec:
+                    if res_spec is None:
+                        continue
+                    if res_spec[2] != "success":
+                        # This is an exception return type
+                        spec_args = res_spec[3]
+                        exception_type = spec_args[0]
+                        thrift_exceptions.append(exception_type)
 
-                methods[method_name] = {
-                    "args_class": args,
-                    "result_spec": result,
-                    "thrift_exceptions": tuple(thrift_exceptions),
-                }
+            methods[method_name] = {
+                "args_class": args,
+                "result_spec": result,
+                "thrift_exceptions": tuple(thrift_exceptions),
+            }
 
         self.methods = methods
 

@@ -1,3 +1,19 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
+
 """
 Common base for asyncio and Trollius (the Python 2 asyncio backport).
 Ideally this would be all that's necessary but we can't use the async/await
@@ -33,9 +49,10 @@ from nebula2.fbthrift.Thrift import (
     TMessageType,
 )
 
-if six.PY3 and not nebula2.fbthrift.trollius:
+if six.PY3:
     import asyncio
 else:
+    # pyre-fixme[21]: Could not find module `trollius`.
     import trollius as asyncio
 
 # We support the deprecated FRAMED transport for old fb303
@@ -152,8 +169,7 @@ class WrappedTransport(TWriteOnlyBuffer):
         self._consumer = self._loop.create_task(self._send())
         self._producers = []
 
-    @asyncio.coroutine
-    def _send(self):
+    async def _send(self):
         raise NotImplementedError
 
     def send_message(self, msg):
@@ -207,6 +223,7 @@ class WrappedTransport(TWriteOnlyBuffer):
             )
 
 
+# pyre-fixme[11]: Annotation `Protocol` is not defined as a type.
 class FramedProtocol(asyncio.Protocol):
     """Unpacks Thrift frames and reads them asynchronously."""
 
@@ -214,8 +231,7 @@ class FramedProtocol(asyncio.Protocol):
         self.loop = loop or asyncio.get_event_loop()
         self.recvd = b""
 
-    @asyncio.coroutine
-    def message_received(self, frame):
+    async def message_received(self, frame):
         raise NotImplementedError
 
     def data_received(self, data):
@@ -281,12 +297,10 @@ class ThriftHeaderClientProtocolBase(FramedProtocol):
         self.pending_tasks = {}
         self.transport = None  # TTransport wrapping an asyncio.Transport
 
-    @asyncio.coroutine
-    def message_received(self, frame):
+    async def message_received(self, frame):
         self._handle_message(frame, clear_timeout=True)
 
-    @asyncio.coroutine
-    def timeout_task(self, fname, delay):
+    async def timeout_task(self, fname, delay):
         # timeout_task must to be implemented in a subclass
         raise NotImplementedError
 
@@ -366,8 +380,8 @@ class ThriftHeaderClientProtocolBase(FramedProtocol):
         try:
             method(iprot, mtype, seqid)
         except (
-            asyncio.futures.InvalidStateError,
             asyncio.CancelledError,
+            asyncio.InvalidStateError,
         ) as e:
             logger.warning("Method %r cancelled: %s", fname, str(e))
 

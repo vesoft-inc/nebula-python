@@ -24,7 +24,7 @@ def prepare_data():
     # init connection pool
     connection_pool = ConnectionPool()
     # the graphd server's address
-    assert connection_pool.init([('172.28.3.1', 9669)], config)
+    assert connection_pool.init([('127.0.0.1', 9671)], config)
     client = connection_pool.get_session('root', 'nebula')
     client.execute('CREATE SPACE IF NOT EXISTS ScanSpace('
                    'PARTITION_NUM=10,'

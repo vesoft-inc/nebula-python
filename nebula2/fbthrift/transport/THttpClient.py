@@ -1,28 +1,25 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
 #
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements. See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership. The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied. See the License for the
-# specific language governing permissions and limitations
-# under the License.
-#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# pyre-unsafe
 
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from .TTransport import *
+from nebula2.fbthrift.transport.TTransport import *
 
 import os
 import socket
@@ -33,20 +30,22 @@ if sys.version_info[0] >= 3:
     from io import BytesIO as StringIO
     from urllib import parse
     from http import client
+    # pyre-fixme[11]: Annotation `parse` is not defined as a type.
     urlparse = parse
     urllib = parse
+    # pyre-fixme[11]: Annotation `client` is not defined as a type.
     httplib = client
 else:
     from cStringIO import StringIO
     import urlparse
-    import httplib
+    import httplib  # @manual
     import urllib
 
 class THttpClient(TTransportBase):
 
     """Http implementation of TTransport base."""
 
-    def __init__(self, uri_or_host, port=None, path=None):
+    def __init__(self, uri_or_host, port=None, path=None, ssl_context=None):
         """THttpClient supports two different types constructor parameters.
 
         THttpClient(host, port, path) - deprecated
@@ -82,6 +81,7 @@ class THttpClient(TTransportBase):
         self.__http = None
         self.__timeout = None
         self.__custom_headers = None
+        self.ssl_context = ssl_context
 
     def open(self):
         if self.scheme == 'http':
@@ -89,6 +89,7 @@ class THttpClient(TTransportBase):
                                                  timeout=self.__timeout)
         else:
             self.__http = httplib.HTTPSConnection(self.host, self.port,
+                                                  context=self.ssl_context,
                                                   timeout=self.__timeout)
 
     def close(self):
