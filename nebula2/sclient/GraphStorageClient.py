@@ -58,14 +58,15 @@ class GraphStorageClient(object):
         storage_addrs = self._meta_cache.get_all_storage_addrs()
         if len(storage_addrs) == 0:
             raise RuntimeError('Get storage address from meta cache is empty')
-        try:
-            for addr in storage_addrs:
+        for addr in storage_addrs:
+            try:
                 conn = GraphStorageConnection(addr, self._time_out, self._meta_cache)
                 conn.open()
                 self._connections.append(conn)
-        except Exception as e:
-            logging.error('Create storage connection failed: {}'.format(e))
-            raise
+            except Exception as e:
+                logging.warning('Create storage connection to {} failed: {}'.format(addr, e))
+        if len(self._connections) == 0:
+            raise RuntimeError('No valid storage connection created successfully')
 
     def get_space_addrs(self, space_name):
         return self.meta_cache.get_space_addrs(space_name)
