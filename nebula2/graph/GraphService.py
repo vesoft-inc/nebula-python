@@ -13,7 +13,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, ErrorCode, ProfilingStats, PlanNodeBranchInfo, Pair, PlanNodeDescription, PlanDescription, ExecutionResponse, AuthResponse
+from .ttypes import UTF8STRINGS, ProfilingStats, PlanNodeBranchInfo, Pair, PlanNodeDescription, PlanDescription, ExecutionResponse, AuthResponse
 import nebula2.common.ttypes
 
 from nebula2.fbthrift.Thrift import TProcessor

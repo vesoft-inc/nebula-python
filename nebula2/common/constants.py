@@ -14,5 +14,5 @@ from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
 
-from .ttypes import UTF8STRINGS, NullType, Date, Time, DateTime, Value, NList, NMap, NSet, Row, DataSet, Tag, Vertex, Edge, Step, Path, HostAddr, KeyValue, LogInfo, PartitionBackupInfo, GraphSpaceID, PartitionID, TagID, EdgeType, EdgeRanking, LogID, TermID, Timestamp, IndexID, Port, SessionID
+from .ttypes import UTF8STRINGS, NullType, ErrorCode, Date, Time, DateTime, Value, NList, NMap, NSet, Row, DataSet, Tag, Vertex, Edge, Step, Path, HostAddr, KeyValue, LogInfo, PartitionBackupInfo, GraphSpaceID, PartitionID, TagID, EdgeType, EdgeRanking, LogID, TermID, Timestamp, IndexID, Port, SessionID
 

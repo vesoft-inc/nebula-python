@@ -17,13 +17,12 @@ from nebula2.Exception import (
     TagNotFoundException,
     EdgeNotFoundException
 )
-from nebula2.common.ttypes import HostAddr
+from nebula2.common.ttypes import HostAddr, ErrorCode
 from nebula2.meta.ttypes import (
     ListTagsReq,
     ListEdgesReq,
     ListSpacesReq,
     GetPartsAllocReq,
-    ErrorCode,
     ListHostsReq,
     HostRole
 )
