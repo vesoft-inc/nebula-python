@@ -15,7 +15,7 @@ root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
 from unittest import TestCase
-from nebula2.graph.ttypes import ErrorCode
+from nebula2.common.ttypes import ErrorCode
 from nebula2.gclient.net import ConnectionPool
 from nebula2.Config import Config
 

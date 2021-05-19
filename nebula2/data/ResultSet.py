@@ -6,7 +6,7 @@
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
-from nebula2.graph import ttypes
+from nebula2.common.ttypes import ErrorCode
 
 from nebula2.data.DataObject import DataSetWrapper
 
@@ -24,7 +24,7 @@ class ResultSet(object):
             self._data_set_wrapper = DataSetWrapper(resp.data, self._decode_type)
 
     def is_succeeded(self):
-        return self._resp.error_code == ttypes.ErrorCode.SUCCEEDED
+        return self._resp.error_code == ErrorCode.SUCCEEDED
 
     def error_code(self):
         return self._resp.error_code
