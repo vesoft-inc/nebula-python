@@ -60,6 +60,15 @@ When your environment cannot access `pypi`, you need to install the following pa
 - httplib2
 - futures   # python2.x is needed
 
+or
+```
+pip install -r requirements.txt
+```
+dev version
+```
+pip install -r requirements-dev.txt
+```
+
 ### Option two: using pip
 
 ```python
@@ -143,4 +152,3 @@ while resp.has_next():
 | 2.0.0.post1  | 2.0.0beta |
 | 2.0.0rc1  | 2.0.0-rc1 |
 | 2.0.0  | >= 2.0.0 |
-
