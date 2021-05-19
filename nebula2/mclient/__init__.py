@@ -80,10 +80,10 @@ class MetaClient(object):
                         count = count + 1
                         continue
                     raise RuntimeError("List tags from space id:{} failed, error code: {}"
-                                       .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+                                       .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
                 return resp.tags
             raise RuntimeError("List tags from space id:{} failed, error code: {}"
-                               .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+                               .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
 
     def list_edges(self, space_id):
         with self._lock:
@@ -100,10 +100,10 @@ class MetaClient(object):
                         count = count + 1
                         continue
                     raise RuntimeError("List edges from space id:{} failed, error code: {}"
-                                       .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+                                       .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
                 return resp.edges
             raise RuntimeError("List edges from space id:{} failed, error code: {}"
-                               .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+                               .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
 
     def list_spaces(self):
         with self._lock:
@@ -119,10 +119,10 @@ class MetaClient(object):
                         count = count + 1
                         continue
                     raise RuntimeError("List spaces failed, error code: {}"
-                                       .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
+                                       .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
                 return resp.spaces
             raise RuntimeError("List spaces failed, error code: {}"
-                               .format(ErrorCode._VALUES_TO_NAMES[resp.code]))
+                               .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
 
     def list_hosts(self):
         with self._lock:
@@ -139,10 +139,10 @@ class MetaClient(object):
                         count = count + 1
                         continue
                     raise RuntimeError("List spaces failed, error code: {}"
-                                       .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
+                                       .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
                 return resp.hosts
             raise RuntimeError("List spaces failed, error code: {}"
-                               .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
+                               .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
 
     def get_parts_alloc(self, space_id):
         with self._lock:
@@ -159,10 +159,10 @@ class MetaClient(object):
                         count = count + 1
                         continue
                     raise RuntimeError("List parts from space id:{} failed, error code: {}"
-                                       .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+                                       .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
                 return resp.parts
             raise RuntimeError("List parts from space id:{} failed, error code: {}"
-                               .format(space_id, ErrorCode._VALUES_TO_NAMES(resp.code)))
+                               .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
 
     def close(self):
         try:
