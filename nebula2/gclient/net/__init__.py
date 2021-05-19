@@ -20,10 +20,9 @@ from nebula2.fbthrift.transport import TSocket, TTransport
 from nebula2.fbthrift.transport.TTransport import TTransportException
 from nebula2.fbthrift.protocol import TBinaryProtocol
 
-from nebula2.graph import (
-    ttypes,
-    GraphService
-)
+from nebula2.common.ttypes import ErrorCode
+
+from nebula2.graph import GraphService
 
 from nebula2.Exception import (
     AuthFailedException,
@@ -389,7 +388,7 @@ class Connection(object):
     def authenticate(self, user_name, password):
         try:
             resp = self._connection.authenticate(user_name, password)
-            if resp.error_code != ttypes.ErrorCode.SUCCEEDED:
+            if resp.error_code != ErrorCode.SUCCEEDED:
                 raise AuthFailedException(resp.error_msg)
             return resp.session_id
         except TTransportException as te:
