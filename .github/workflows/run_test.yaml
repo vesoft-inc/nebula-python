@@ -28,7 +28,7 @@ jobs:
       run: |
         mkdir tmp
         pushd tmp
-        git clone -b v2-preview https://github.com/vesoft-inc/nebula-docker-compose.git
+        git clone https://github.com/vesoft-inc/nebula-docker-compose.git
         pushd nebula-docker-compose/
         cp ../../tests/docker-compose.yaml ./
         docker-compose up -d
