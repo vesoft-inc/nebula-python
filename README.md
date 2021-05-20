@@ -54,11 +54,13 @@ sudo python3 setup.py install
 
 When your environment cannot access `pypi`, you need to install the following packages manually.
 
-- django-import-export
-- future
-- six
-- httplib2
-- futures   # python2.x is needed
+```
+pip install -r requirements.txt
+```
+dev version
+```
+pip install -r requirements.txt
+```
 
 ### Option two: using pip
 
@@ -143,4 +145,3 @@ while resp.has_next():
 | 2.0.0.post1  | 2.0.0beta |
 | 2.0.0rc1  | 2.0.0-rc1 |
 | 2.0.0  | >= 2.0.0 |
-

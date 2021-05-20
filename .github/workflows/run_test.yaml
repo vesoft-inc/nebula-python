@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install django-import-export future futures six gevent prettytable pytest
+        pip install -r requirements-dev.txt
     - name: Test with pytest
       run: |
         mkdir tmp
@@ -32,9 +32,8 @@ jobs:
         pushd nebula-docker-compose/
         cp ../../tests/docker-compose.yaml ./
         docker-compose up -d
-        sleep 10
+        sleep 60
         popd
         popd
         cd tests
         pytest -s -v
-
