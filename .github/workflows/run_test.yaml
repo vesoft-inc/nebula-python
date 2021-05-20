@@ -23,18 +23,17 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install django-import-export future futures six gevent prettytable pytest
+        pip install -r requirements-dev.txt
     - name: Test with pytest
       run: |
         mkdir tmp
         pushd tmp
-        git clone -b v2-preview https://github.com/vesoft-inc/nebula-docker-compose.git
+        git clone https://github.com/vesoft-inc/nebula-docker-compose.git
         pushd nebula-docker-compose/
         cp ../../tests/docker-compose.yaml ./
         docker-compose up -d
-        sleep 10
+        sleep 60
         popd
         popd
         cd tests
         pytest -s -v
-

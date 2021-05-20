@@ -31,153 +31,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'ErrorCode', 'AlterSchemaOp', 'RoleType', 'PropertyType', 'IsolationLevel', 'HostStatus', 'SnapshotStatus', 'AdminJobOp', 'AdminCmd', 'JobStatus', 'ListHostType', 'HostRole', 'TaskResult', 'ConfigModule', 'ConfigMode', 'ListenerType', 'FTServiceType', 'ID', 'ColumnTypeDef', 'ColumnDef', 'SchemaProp', 'Schema', 'IdName', 'SpaceDesc', 'SpaceItem', 'TagItem', 'AlterSchemaItem', 'EdgeItem', 'SchemaID', 'IndexItem', 'HostItem', 'UserItem', 'RoleItem', 'ExecResp', 'AdminJobReq', 'JobDesc', 'TaskDesc', 'AdminJobResult', 'AdminJobResp', 'Correlativity', 'StatisItem', 'CreateSpaceReq', 'DropSpaceReq', 'ListSpacesReq', 'ListSpacesResp', 'GetSpaceReq', 'GetSpaceResp', 'CreateTagReq', 'AlterTagReq', 'DropTagReq', 'ListTagsReq', 'ListTagsResp', 'GetTagReq', 'GetTagResp', 'CreateEdgeReq', 'AlterEdgeReq', 'GetEdgeReq', 'GetEdgeResp', 'DropEdgeReq', 'ListEdgesReq', 'ListEdgesResp', 'ListHostsReq', 'ListHostsResp', 'PartItem', 'ListPartsReq', 'ListPartsResp', 'GetPartsAllocReq', 'GetPartsAllocResp', 'MultiPutReq', 'GetReq', 'GetResp', 'MultiGetReq', 'MultiGetResp', 'RemoveReq', 'RemoveRangeReq', 'ScanReq', 'ScanResp', 'HBResp', 'HBReq', 'IndexFieldDef', 'CreateTagIndexReq', 'DropTagIndexReq', 'GetTagIndexReq', 'GetTagIndexResp', 'ListTagIndexesReq', 'ListTagIndexesResp', 'CreateEdgeIndexReq', 'DropEdgeIndexReq', 'GetEdgeIndexReq', 'GetEdgeIndexResp', 'ListEdgeIndexesReq', 'ListEdgeIndexesResp', 'RebuildIndexReq', 'CreateUserReq', 'DropUserReq', 'AlterUserReq', 'GrantRoleReq', 'RevokeRoleReq', 'ListUsersReq', 'ListUsersResp', 'ListRolesReq', 'ListRolesResp', 'GetUserRolesReq', 'ChangePasswordReq', 'BalanceReq', 'BalanceTask', 'BalanceResp', 'LeaderBalanceReq', 'ConfigItem', 'RegConfigReq', 'GetConfigReq', 'GetConfigResp', 'SetConfigReq', 'ListConfigsReq', 'ListConfigsResp', 'CreateSnapshotReq', 'DropSnapshotReq', 'ListSnapshotsReq', 'Snapshot', 'ListSnapshotsResp', 'ListIndexStatusReq', 'IndexStatus', 'ListIndexStatusResp', 'AddZoneReq', 'DropZoneReq', 'AddHostIntoZoneReq', 'DropHostFromZoneReq', 'GetZoneReq', 'GetZoneResp', 'ListZonesReq', 'Zone', 'ListZonesResp', 'AddGroupReq', 'DropGroupReq', 'AddZoneIntoGroupReq', 'DropZoneFromGroupReq', 'GetGroupReq', 'GetGroupResp', 'ListGroupsReq', 'Group', 'ListGroupsResp', 'AddListenerReq', 'RemoveListenerReq', 'ListListenerReq', 'ListenerInfo', 'ListListenerResp', 'GetStatisReq', 'GetStatisResp', 'CheckpointInfo', 'SpaceBackupInfo', 'BackupMeta', 'CreateBackupReq', 'CreateBackupResp', 'HostPair', 'RestoreMetaReq', 'FTClient', 'SignInFTServiceReq', 'SignOutFTServiceReq', 'ListFTClientsReq', 'ListFTClientsResp', 'Session', 'CreateSessionReq', 'CreateSessionResp', 'UpdateSessionsReq', 'ListSessionsReq', 'ListSessionsResp', 'GetSessionReq', 'GetSessionResp', 'RemoveSessionReq', 'ReportTaskReq', 'SchemaVer', 'ClusterID']
-
-class ErrorCode:
-  SUCCEEDED = 0
-  E_DISCONNECTED = -1
-  E_FAIL_TO_CONNECT = -2
-  E_RPC_FAILURE = -3
-  E_LEADER_CHANGED = -11
-  E_NO_HOSTS = -21
-  E_EXISTED = -22
-  E_NOT_FOUND = -23
-  E_INVALID_HOST = -24
-  E_UNSUPPORTED = -25
-  E_NOT_DROP = -26
-  E_BALANCER_RUNNING = -27
-  E_CONFIG_IMMUTABLE = -28
-  E_CONFLICT = -29
-  E_INVALID_PARM = -30
-  E_WRONGCLUSTER = -31
-  E_STORE_FAILURE = -32
-  E_STORE_SEGMENT_ILLEGAL = -33
-  E_BAD_BALANCE_PLAN = -34
-  E_BALANCED = -35
-  E_NO_RUNNING_BALANCE_PLAN = -36
-  E_NO_VALID_HOST = -37
-  E_CORRUPTTED_BALANCE_PLAN = -38
-  E_NO_INVALID_BALANCE_PLAN = -39
-  E_INVALID_PASSWORD = -41
-  E_IMPROPER_ROLE = -42
-  E_INVALID_PARTITION_NUM = -43
-  E_INVALID_REPLICA_FACTOR = -44
-  E_INVALID_CHARSET = -45
-  E_INVALID_COLLATE = -46
-  E_CHARSET_COLLATE_NOT_MATCH = -47
-  E_SNAPSHOT_FAILURE = -51
-  E_BLOCK_WRITE_FAILURE = -52
-  E_REBUILD_INDEX_FAILURE = -53
-  E_INDEX_WITH_TTL = -54
-  E_ADD_JOB_FAILURE = -55
-  E_STOP_JOB_FAILURE = -56
-  E_SAVE_JOB_FAILURE = -57
-  E_BALANCER_FAILURE = -58
-  E_JOB_NOT_FINISHED = -59
-  E_TASK_REPORT_OUT_DATE = -60
-  E_BACKUP_FAILURE = -70
-  E_BACKUP_BUILDING_INDEX = -71
-  E_BACKUP_SPACE_NOT_FOUND = -72
-  E_RESTORE_FAILURE = -80
-  E_UNKNOWN = -99
-
-  _VALUES_TO_NAMES = {
-    0: "SUCCEEDED",
-    -1: "E_DISCONNECTED",
-    -2: "E_FAIL_TO_CONNECT",
-    -3: "E_RPC_FAILURE",
-    -11: "E_LEADER_CHANGED",
-    -21: "E_NO_HOSTS",
-    -22: "E_EXISTED",
-    -23: "E_NOT_FOUND",
-    -24: "E_INVALID_HOST",
-    -25: "E_UNSUPPORTED",
-    -26: "E_NOT_DROP",
-    -27: "E_BALANCER_RUNNING",
-    -28: "E_CONFIG_IMMUTABLE",
-    -29: "E_CONFLICT",
-    -30: "E_INVALID_PARM",
-    -31: "E_WRONGCLUSTER",
-    -32: "E_STORE_FAILURE",
-    -33: "E_STORE_SEGMENT_ILLEGAL",
-    -34: "E_BAD_BALANCE_PLAN",
-    -35: "E_BALANCED",
-    -36: "E_NO_RUNNING_BALANCE_PLAN",
-    -37: "E_NO_VALID_HOST",
-    -38: "E_CORRUPTTED_BALANCE_PLAN",
-    -39: "E_NO_INVALID_BALANCE_PLAN",
-    -41: "E_INVALID_PASSWORD",
-    -42: "E_IMPROPER_ROLE",
-    -43: "E_INVALID_PARTITION_NUM",
-    -44: "E_INVALID_REPLICA_FACTOR",
-    -45: "E_INVALID_CHARSET",
-    -46: "E_INVALID_COLLATE",
-    -47: "E_CHARSET_COLLATE_NOT_MATCH",
-    -51: "E_SNAPSHOT_FAILURE",
-    -52: "E_BLOCK_WRITE_FAILURE",
-    -53: "E_REBUILD_INDEX_FAILURE",
-    -54: "E_INDEX_WITH_TTL",
-    -55: "E_ADD_JOB_FAILURE",
-    -56: "E_STOP_JOB_FAILURE",
-    -57: "E_SAVE_JOB_FAILURE",
-    -58: "E_BALANCER_FAILURE",
-    -59: "E_JOB_NOT_FINISHED",
-    -60: "E_TASK_REPORT_OUT_DATE",
-    -70: "E_BACKUP_FAILURE",
-    -71: "E_BACKUP_BUILDING_INDEX",
-    -72: "E_BACKUP_SPACE_NOT_FOUND",
-    -80: "E_RESTORE_FAILURE",
-    -99: "E_UNKNOWN",
-  }
-
-  _NAMES_TO_VALUES = {
-    "SUCCEEDED": 0,
-    "E_DISCONNECTED": -1,
-    "E_FAIL_TO_CONNECT": -2,
-    "E_RPC_FAILURE": -3,
-    "E_LEADER_CHANGED": -11,
-    "E_NO_HOSTS": -21,
-    "E_EXISTED": -22,
-    "E_NOT_FOUND": -23,
-    "E_INVALID_HOST": -24,
-    "E_UNSUPPORTED": -25,
-    "E_NOT_DROP": -26,
-    "E_BALANCER_RUNNING": -27,
-    "E_CONFIG_IMMUTABLE": -28,
-    "E_CONFLICT": -29,
-    "E_INVALID_PARM": -30,
-    "E_WRONGCLUSTER": -31,
-    "E_STORE_FAILURE": -32,
-    "E_STORE_SEGMENT_ILLEGAL": -33,
-    "E_BAD_BALANCE_PLAN": -34,
-    "E_BALANCED": -35,
-    "E_NO_RUNNING_BALANCE_PLAN": -36,
-    "E_NO_VALID_HOST": -37,
-    "E_CORRUPTTED_BALANCE_PLAN": -38,
-    "E_NO_INVALID_BALANCE_PLAN": -39,
-    "E_INVALID_PASSWORD": -41,
-    "E_IMPROPER_ROLE": -42,
-    "E_INVALID_PARTITION_NUM": -43,
-    "E_INVALID_REPLICA_FACTOR": -44,
-    "E_INVALID_CHARSET": -45,
-    "E_INVALID_COLLATE": -46,
-    "E_CHARSET_COLLATE_NOT_MATCH": -47,
-    "E_SNAPSHOT_FAILURE": -51,
-    "E_BLOCK_WRITE_FAILURE": -52,
-    "E_REBUILD_INDEX_FAILURE": -53,
-    "E_INDEX_WITH_TTL": -54,
-    "E_ADD_JOB_FAILURE": -55,
-    "E_STOP_JOB_FAILURE": -56,
-    "E_SAVE_JOB_FAILURE": -57,
-    "E_BALANCER_FAILURE": -58,
-    "E_JOB_NOT_FINISHED": -59,
-    "E_TASK_REPORT_OUT_DATE": -60,
-    "E_BACKUP_FAILURE": -70,
-    "E_BACKUP_BUILDING_INDEX": -71,
-    "E_BACKUP_SPACE_NOT_FOUND": -72,
-    "E_RESTORE_FAILURE": -80,
-    "E_UNKNOWN": -99,
-  }
+__all__ = ['UTF8STRINGS', 'AlterSchemaOp', 'RoleType', 'PropertyType', 'IsolationLevel', 'HostStatus', 'SnapshotStatus', 'AdminJobOp', 'AdminCmd', 'JobStatus', 'ListHostType', 'HostRole', 'TaskResult', 'ConfigModule', 'ConfigMode', 'ListenerType', 'FTServiceType', 'ID', 'ColumnTypeDef', 'ColumnDef', 'SchemaProp', 'Schema', 'IdName', 'SpaceDesc', 'SpaceItem', 'TagItem', 'AlterSchemaItem', 'EdgeItem', 'SchemaID', 'IndexItem', 'HostItem', 'UserItem', 'RoleItem', 'ExecResp', 'AdminJobReq', 'JobDesc', 'TaskDesc', 'AdminJobResult', 'AdminJobResp', 'Correlativity', 'StatisItem', 'CreateSpaceReq', 'DropSpaceReq', 'ListSpacesReq', 'ListSpacesResp', 'GetSpaceReq', 'GetSpaceResp', 'CreateTagReq', 'AlterTagReq', 'DropTagReq', 'ListTagsReq', 'ListTagsResp', 'GetTagReq', 'GetTagResp', 'CreateEdgeReq', 'AlterEdgeReq', 'GetEdgeReq', 'GetEdgeResp', 'DropEdgeReq', 'ListEdgesReq', 'ListEdgesResp', 'ListHostsReq', 'ListHostsResp', 'PartItem', 'ListPartsReq', 'ListPartsResp', 'GetPartsAllocReq', 'GetPartsAllocResp', 'MultiPutReq', 'GetReq', 'GetResp', 'MultiGetReq', 'MultiGetResp', 'RemoveReq', 'RemoveRangeReq', 'ScanReq', 'ScanResp', 'HBResp', 'LeaderInfo', 'HBReq', 'IndexFieldDef', 'CreateTagIndexReq', 'DropTagIndexReq', 'GetTagIndexReq', 'GetTagIndexResp', 'ListTagIndexesReq', 'ListTagIndexesResp', 'CreateEdgeIndexReq', 'DropEdgeIndexReq', 'GetEdgeIndexReq', 'GetEdgeIndexResp', 'ListEdgeIndexesReq', 'ListEdgeIndexesResp', 'RebuildIndexReq', 'CreateUserReq', 'DropUserReq', 'AlterUserReq', 'GrantRoleReq', 'RevokeRoleReq', 'ListUsersReq', 'ListUsersResp', 'ListRolesReq', 'ListRolesResp', 'GetUserRolesReq', 'ChangePasswordReq', 'BalanceReq', 'BalanceTask', 'BalanceResp', 'LeaderBalanceReq', 'ConfigItem', 'RegConfigReq', 'GetConfigReq', 'GetConfigResp', 'SetConfigReq', 'ListConfigsReq', 'ListConfigsResp', 'CreateSnapshotReq', 'DropSnapshotReq', 'ListSnapshotsReq', 'Snapshot', 'ListSnapshotsResp', 'ListIndexStatusReq', 'IndexStatus', 'ListIndexStatusResp', 'AddZoneReq', 'DropZoneReq', 'AddHostIntoZoneReq', 'DropHostFromZoneReq', 'GetZoneReq', 'GetZoneResp', 'ListZonesReq', 'Zone', 'ListZonesResp', 'AddGroupReq', 'DropGroupReq', 'AddZoneIntoGroupReq', 'DropZoneFromGroupReq', 'GetGroupReq', 'GetGroupResp', 'ListGroupsReq', 'Group', 'ListGroupsResp', 'AddListenerReq', 'RemoveListenerReq', 'ListListenerReq', 'ListenerInfo', 'ListListenerResp', 'GetStatisReq', 'GetStatisResp', 'CheckpointInfo', 'SpaceBackupInfo', 'BackupMeta', 'CreateBackupReq', 'CreateBackupResp', 'HostPair', 'RestoreMetaReq', 'FTClient', 'SignInFTServiceReq', 'SignOutFTServiceReq', 'ListFTClientsReq', 'ListFTClientsResp', 'Session', 'CreateSessionReq', 'CreateSessionResp', 'UpdateSessionsReq', 'ListSessionsReq', 'ListSessionsResp', 'GetSessionReq', 'GetSessionResp', 'RemoveSessionReq', 'ReportTaskReq', 'SchemaVer', 'ClusterID']
 
 class AlterSchemaOp:
   ADD = 1
@@ -350,7 +204,7 @@ class AdminCmd:
   REBUILD_EDGE_INDEX = 3
   STATS = 4
   DATA_BALANCE = 5
-  DOWELOAD = 6
+  DOWNLOAD = 6
   INGEST = 7
   UNKNOWN = 99
 
@@ -361,7 +215,7 @@ class AdminCmd:
     3: "REBUILD_EDGE_INDEX",
     4: "STATS",
     5: "DATA_BALANCE",
-    6: "DOWELOAD",
+    6: "DOWNLOAD",
     7: "INGEST",
     99: "UNKNOWN",
   }
@@ -373,7 +227,7 @@ class AdminCmd:
     "REBUILD_EDGE_INDEX": 3,
     "STATS": 4,
     "DATA_BALANCE": 5,
-    "DOWELOAD": 6,
+    "DOWNLOAD": 6,
     "INGEST": 7,
     "UNKNOWN": 99,
   }
@@ -821,6 +675,7 @@ class ColumnDef:
    - type
    - default_value
    - nullable
+   - comment
   """
 
   thrift_spec = None
@@ -864,6 +719,11 @@ class ColumnDef:
           self.nullable = iprot.readBool()
         else:
           iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.STRING:
+          self.comment = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -893,6 +753,10 @@ class ColumnDef:
       oprot.writeFieldBegin('nullable', TType.BOOL, 4)
       oprot.writeBool(self.nullable)
       oprot.writeFieldEnd()
+    if self.comment != None:
+      oprot.writeFieldBegin('comment', TType.STRING, 5)
+      oprot.writeString(self.comment)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -915,6 +779,10 @@ class ColumnDef:
       value = pprint.pformat(self.nullable, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    nullable=%s' % (value))
+    if self.comment is not None:
+      value = pprint.pformat(self.comment, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    comment=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -935,6 +803,7 @@ class SchemaProp:
   Attributes:
    - ttl_duration
    - ttl_col
+   - comment
   """
 
   thrift_spec = None
@@ -967,6 +836,11 @@ class SchemaProp:
           self.ttl_col = iprot.readString()
         else:
           iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.comment = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -988,6 +862,10 @@ class SchemaProp:
       oprot.writeFieldBegin('ttl_col', TType.STRING, 2)
       oprot.writeString(self.ttl_col)
       oprot.writeFieldEnd()
+    if self.comment != None:
+      oprot.writeFieldBegin('comment', TType.STRING, 3)
+      oprot.writeString(self.comment)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -1002,6 +880,10 @@ class SchemaProp:
       value = pprint.pformat(self.ttl_col, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    ttl_col=%s' % (value))
+    if self.comment is not None:
+      value = pprint.pformat(self.comment, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    comment=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -1219,6 +1101,7 @@ class SpaceDesc:
    - vid_type
    - group_name
    - isolation_level
+   - comment
   """
 
   thrift_spec = None
@@ -1282,6 +1165,11 @@ class SpaceDesc:
           self.isolation_level = iprot.readI32()
         else:
           iprot.skip(ftype)
+      elif fid == 9:
+        if ftype == TType.STRING:
+          self.comment = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -1327,6 +1215,10 @@ class SpaceDesc:
       oprot.writeFieldBegin('isolation_level', TType.I32, 8)
       oprot.writeI32(self.isolation_level)
       oprot.writeFieldEnd()
+    if self.comment != None:
+      oprot.writeFieldBegin('comment', TType.STRING, 9)
+      oprot.writeString(self.comment)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -1365,6 +1257,10 @@ class SpaceDesc:
       value = pprint.pformat(self.isolation_level, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    isolation_level=%s' % (value))
+    if self.comment is not None:
+      value = pprint.pformat(self.comment, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    comment=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -1910,6 +1806,7 @@ class IndexItem:
    - schema_id
    - schema_name
    - fields
+   - comment
   """
 
   thrift_spec = None
@@ -1970,6 +1867,11 @@ class IndexItem:
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.STRING:
+          self.comment = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -2006,6 +1908,10 @@ class IndexItem:
         iter15.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
+    if self.comment != None:
+      oprot.writeFieldBegin('comment', TType.STRING, 6)
+      oprot.writeString(self.comment)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -2032,6 +1938,10 @@ class IndexItem:
       value = pprint.pformat(self.fields, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    fields=%s' % (value))
+    if self.comment is not None:
+      value = pprint.pformat(self.comment, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    comment=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -7458,6 +7368,93 @@ class HBResp:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class LeaderInfo:
+  """
+  Attributes:
+   - part_id
+   - term
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I32:
+          self.part_id = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I64:
+          self.term = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('LeaderInfo')
+    if self.part_id != None:
+      oprot.writeFieldBegin('part_id', TType.I32, 1)
+      oprot.writeI32(self.part_id)
+      oprot.writeFieldEnd()
+    if self.term != None:
+      oprot.writeFieldBegin('term', TType.I64, 2)
+      oprot.writeI64(self.term)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.part_id is not None:
+      value = pprint.pformat(self.part_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    part_id=%s' % (value))
+    if self.term is not None:
+      value = pprint.pformat(self.term, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    term=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
 class HBReq:
   """
   Attributes:
@@ -7515,11 +7512,13 @@ class HBReq:
               (_etype322, _size319) = iprot.readListBegin()
               if _size319 >= 0:
                 for _i323 in six.moves.range(_size319):
-                  _elem324 = iprot.readI32()
+                  _elem324 = LeaderInfo()
+                  _elem324.read(iprot)
                   _val318.append(_elem324)
               else: 
                 while iprot.peekList():
-                  _elem325 = iprot.readI32()
+                  _elem325 = LeaderInfo()
+                  _elem325.read(iprot)
                   _val318.append(_elem325)
               iprot.readListEnd()
               self.leader_partIds[_key317] = _val318
@@ -7530,11 +7529,13 @@ class HBReq:
               (_etype331, _size328) = iprot.readListBegin()
               if _size328 >= 0:
                 for _i332 in six.moves.range(_size328):
-                  _elem333 = iprot.readI32()
+                  _elem333 = LeaderInfo()
+                  _elem333.read(iprot)
                   _val327.append(_elem333)
               else: 
                 while iprot.peekList():
-                  _elem334 = iprot.readI32()
+                  _elem334 = LeaderInfo()
+                  _elem334.read(iprot)
                   _val327.append(_elem334)
               iprot.readListEnd()
               self.leader_partIds[_key326] = _val327
@@ -7576,9 +7577,9 @@ class HBReq:
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.leader_partIds))
       for kiter335,viter336 in self.leader_partIds.items():
         oprot.writeI32(kiter335)
-        oprot.writeListBegin(TType.I32, len(viter336))
+        oprot.writeListBegin(TType.STRUCT, len(viter336))
         for iter337 in viter336:
-          oprot.writeI32(iter337)
+          iter337.write(oprot)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -7722,6 +7723,7 @@ class CreateTagIndexReq:
    - tag_name
    - fields
    - if_not_exists
+   - comment
   """
 
   thrift_spec = None
@@ -7781,6 +7783,11 @@ class CreateTagIndexReq:
           self.if_not_exists = iprot.readBool()
         else:
           iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.STRING:
+          self.comment = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -7817,6 +7824,10 @@ class CreateTagIndexReq:
       oprot.writeFieldBegin('if_not_exists', TType.BOOL, 5)
       oprot.writeBool(self.if_not_exists)
       oprot.writeFieldEnd()
+    if self.comment != None:
+      oprot.writeFieldBegin('comment', TType.STRING, 6)
+      oprot.writeString(self.comment)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -7843,6 +7854,10 @@ class CreateTagIndexReq:
       value = pprint.pformat(self.if_not_exists, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    if_not_exists=%s' % (value))
+    if self.comment is not None:
+      value = pprint.pformat(self.comment, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    comment=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -8347,6 +8362,7 @@ class CreateEdgeIndexReq:
    - edge_name
    - fields
    - if_not_exists
+   - comment
   """
 
   thrift_spec = None
@@ -8406,6 +8422,11 @@ class CreateEdgeIndexReq:
           self.if_not_exists = iprot.readBool()
         else:
           iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.STRING:
+          self.comment = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -8442,6 +8463,10 @@ class CreateEdgeIndexReq:
       oprot.writeFieldBegin('if_not_exists', TType.BOOL, 5)
       oprot.writeBool(self.if_not_exists)
       oprot.writeFieldEnd()
+    if self.comment != None:
+      oprot.writeFieldBegin('comment', TType.STRING, 6)
+      oprot.writeString(self.comment)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -8468,6 +8493,10 @@ class CreateEdgeIndexReq:
       value = pprint.pformat(self.if_not_exists, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    if_not_exists=%s' % (value))
+    if self.comment is not None:
+      value = pprint.pformat(self.comment, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    comment=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -16358,6 +16387,7 @@ ColumnDef.thrift_spec = (
   (2, TType.STRUCT, 'type', [ColumnTypeDef, ColumnTypeDef.thrift_spec, False], None, 0, ), # 2
   (3, TType.STRING, 'default_value', False, None, 1, ), # 3
   (4, TType.BOOL, 'nullable', None, False, 1, ), # 4
+  (5, TType.STRING, 'comment', False, None, 1, ), # 5
 )
 
 ColumnDef.thrift_struct_annotations = {
@@ -16365,11 +16395,12 @@ ColumnDef.thrift_struct_annotations = {
 ColumnDef.thrift_field_annotations = {
 }
 
-def ColumnDef__init__(self, name=None, type=None, default_value=None, nullable=ColumnDef.thrift_spec[4][4],):
+def ColumnDef__init__(self, name=None, type=None, default_value=None, nullable=ColumnDef.thrift_spec[4][4], comment=None,):
   self.name = name
   self.type = type
   self.default_value = default_value
   self.nullable = nullable
+  self.comment = comment
 
 ColumnDef.__init__ = ColumnDef__init__
 
@@ -16378,6 +16409,7 @@ def ColumnDef__setstate__(self, state):
   state.setdefault('type', None)
   state.setdefault('default_value', None)
   state.setdefault('nullable', False)
+  state.setdefault('comment', None)
   self.__dict__ = state
 
 ColumnDef.__getstate__ = lambda self: self.__dict__.copy()
@@ -16388,6 +16420,7 @@ SchemaProp.thrift_spec = (
   None, # 0
   (1, TType.I64, 'ttl_duration', None, None, 1, ), # 1
   (2, TType.STRING, 'ttl_col', False, None, 1, ), # 2
+  (3, TType.STRING, 'comment', False, None, 1, ), # 3
 )
 
 SchemaProp.thrift_struct_annotations = {
@@ -16395,15 +16428,17 @@ SchemaProp.thrift_struct_annotations = {
 SchemaProp.thrift_field_annotations = {
 }
 
-def SchemaProp__init__(self, ttl_duration=None, ttl_col=None,):
+def SchemaProp__init__(self, ttl_duration=None, ttl_col=None, comment=None,):
   self.ttl_duration = ttl_duration
   self.ttl_col = ttl_col
+  self.comment = comment
 
 SchemaProp.__init__ = SchemaProp__init__
 
 def SchemaProp__setstate__(self, state):
   state.setdefault('ttl_duration', None)
   state.setdefault('ttl_col', None)
+  state.setdefault('comment', None)
   self.__dict__ = state
 
 SchemaProp.__getstate__ = lambda self: self.__dict__.copy()
@@ -16475,6 +16510,7 @@ SpaceDesc.thrift_spec = (
   }), 2, ), # 6
   (7, TType.STRING, 'group_name', False, None, 1, ), # 7
   (8, TType.I32, 'isolation_level', IsolationLevel, None, 1, ), # 8
+  (9, TType.STRING, 'comment', False, None, 1, ), # 9
 )
 
 SpaceDesc.thrift_struct_annotations = {
@@ -16482,7 +16518,7 @@ SpaceDesc.thrift_struct_annotations = {
 SpaceDesc.thrift_field_annotations = {
 }
 
-def SpaceDesc__init__(self, space_name=None, partition_num=SpaceDesc.thrift_spec[2][4], replica_factor=SpaceDesc.thrift_spec[3][4], charset_name=None, collate_name=None, vid_type=SpaceDesc.thrift_spec[6][4], group_name=None, isolation_level=None,):
+def SpaceDesc__init__(self, space_name=None, partition_num=SpaceDesc.thrift_spec[2][4], replica_factor=SpaceDesc.thrift_spec[3][4], charset_name=None, collate_name=None, vid_type=SpaceDesc.thrift_spec[6][4], group_name=None, isolation_level=None, comment=None,):
   self.space_name = space_name
   self.partition_num = partition_num
   self.replica_factor = replica_factor
@@ -16496,6 +16532,7 @@ def SpaceDesc__init__(self, space_name=None, partition_num=SpaceDesc.thrift_spec
   self.vid_type = vid_type
   self.group_name = group_name
   self.isolation_level = isolation_level
+  self.comment = comment
 
 SpaceDesc.__init__ = SpaceDesc__init__
 
@@ -16511,6 +16548,7 @@ def SpaceDesc__setstate__(self, state):
   }))
   state.setdefault('group_name', None)
   state.setdefault('isolation_level', None)
+  state.setdefault('comment', None)
   self.__dict__ = state
 
 SpaceDesc.__getstate__ = lambda self: self.__dict__.copy()
@@ -16666,6 +16704,7 @@ IndexItem.thrift_spec = (
   (3, TType.STRUCT, 'schema_id', [SchemaID, SchemaID.thrift_spec, True], None, 2, ), # 3
   (4, TType.STRING, 'schema_name', False, None, 2, ), # 4
   (5, TType.LIST, 'fields', (TType.STRUCT,[ColumnDef, ColumnDef.thrift_spec, False]), None, 2, ), # 5
+  (6, TType.STRING, 'comment', False, None, 1, ), # 6
 )
 
 IndexItem.thrift_struct_annotations = {
@@ -16673,12 +16712,13 @@ IndexItem.thrift_struct_annotations = {
 IndexItem.thrift_field_annotations = {
 }
 
-def IndexItem__init__(self, index_id=None, index_name=None, schema_id=None, schema_name=None, fields=None,):
+def IndexItem__init__(self, index_id=None, index_name=None, schema_id=None, schema_name=None, fields=None, comment=None,):
   self.index_id = index_id
   self.index_name = index_name
   self.schema_id = schema_id
   self.schema_name = schema_name
   self.fields = fields
+  self.comment = comment
 
 IndexItem.__init__ = IndexItem__init__
 
@@ -16688,6 +16728,7 @@ def IndexItem__setstate__(self, state):
   state.setdefault('schema_id', None)
   state.setdefault('schema_name', None)
   state.setdefault('fields', None)
+  state.setdefault('comment', None)
   self.__dict__ = state
 
 IndexItem.__getstate__ = lambda self: self.__dict__.copy()
@@ -16804,7 +16845,7 @@ RoleItem.__setstate__ = RoleItem__setstate__
 all_structs.append(ExecResp)
 ExecResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'id', [ID, ID.thrift_spec, True], None, 2, ), # 2
   (3, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 3
 )
@@ -16970,7 +17011,7 @@ AdminJobResult.__setstate__ = AdminJobResult__setstate__
 all_structs.append(AdminJobResp)
 AdminJobResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'result', [AdminJobResult, AdminJobResult.thrift_spec, False], None, 2, ), # 3
 )
@@ -17127,7 +17168,7 @@ ListSpacesReq.thrift_field_annotations = {
 all_structs.append(ListSpacesResp)
 ListSpacesResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'spaces', (TType.STRUCT,[IdName, IdName.thrift_spec, False]), None, 2, ), # 3
 )
@@ -17179,7 +17220,7 @@ GetSpaceReq.__setstate__ = GetSpaceReq__setstate__
 all_structs.append(GetSpaceResp)
 GetSpaceResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'item', [SpaceItem, SpaceItem.thrift_spec, False], None, 2, ), # 3
 )
@@ -17324,7 +17365,7 @@ ListTagsReq.__setstate__ = ListTagsReq__setstate__
 all_structs.append(ListTagsResp)
 ListTagsResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'tags', (TType.STRUCT,[TagItem, TagItem.thrift_spec, False]), None, 2, ), # 3
 )
@@ -17382,7 +17423,7 @@ GetTagReq.__setstate__ = GetTagReq__setstate__
 all_structs.append(GetTagResp)
 GetTagResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'schema', [Schema, Schema.thrift_spec, False], None, 2, ), # 3
 )
@@ -17504,7 +17545,7 @@ GetEdgeReq.__setstate__ = GetEdgeReq__setstate__
 all_structs.append(GetEdgeResp)
 GetEdgeResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'schema', [Schema, Schema.thrift_spec, False], None, 2, ), # 3
 )
@@ -17585,7 +17626,7 @@ ListEdgesReq.__setstate__ = ListEdgesReq__setstate__
 all_structs.append(ListEdgesResp)
 ListEdgesResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'edges', (TType.STRUCT,[EdgeItem, EdgeItem.thrift_spec, False]), None, 2, ), # 3
 )
@@ -17637,7 +17678,7 @@ ListHostsReq.__setstate__ = ListHostsReq__setstate__
 all_structs.append(ListHostsResp)
 ListHostsResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'hosts', (TType.STRUCT,[HostItem, HostItem.thrift_spec, False]), None, 2, ), # 3
 )
@@ -17724,7 +17765,7 @@ ListPartsReq.__setstate__ = ListPartsReq__setstate__
 all_structs.append(ListPartsResp)
 ListPartsResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'parts', (TType.STRUCT,[PartItem, PartItem.thrift_spec, False]), None, 2, ), # 3
 )
@@ -17776,7 +17817,7 @@ GetPartsAllocReq.__setstate__ = GetPartsAllocReq__setstate__
 all_structs.append(GetPartsAllocResp)
 GetPartsAllocResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRUCT,[nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False])), None, 2, ), # 3
 )
@@ -17857,7 +17898,7 @@ GetReq.__setstate__ = GetReq__setstate__
 all_structs.append(GetResp)
 GetResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRING, 'value', False, None, 2, ), # 3
 )
@@ -17912,7 +17953,7 @@ MultiGetReq.__setstate__ = MultiGetReq__setstate__
 all_structs.append(MultiGetResp)
 MultiGetResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'values', (TType.STRING,False), None, 2, ), # 3
 )
@@ -18025,7 +18066,7 @@ ScanReq.__setstate__ = ScanReq__setstate__
 all_structs.append(ScanResp)
 ScanResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'values', (TType.STRING,False), None, 2, ), # 3
 )
@@ -18054,7 +18095,7 @@ ScanResp.__setstate__ = ScanResp__setstate__
 all_structs.append(HBResp)
 HBResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.I64, 'cluster_id', None, None, 2, ), # 3
   (4, TType.I64, 'last_update_time_in_ms', None, None, 2, ), # 4
@@ -18083,13 +18124,39 @@ def HBResp__setstate__(self, state):
 HBResp.__getstate__ = lambda self: self.__dict__.copy()
 HBResp.__setstate__ = HBResp__setstate__
 
+all_structs.append(LeaderInfo)
+LeaderInfo.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'part_id', None, None, 2, ), # 1
+  (2, TType.I64, 'term', None, None, 2, ), # 2
+)
+
+LeaderInfo.thrift_struct_annotations = {
+}
+LeaderInfo.thrift_field_annotations = {
+}
+
+def LeaderInfo__init__(self, part_id=None, term=None,):
+  self.part_id = part_id
+  self.term = term
+
+LeaderInfo.__init__ = LeaderInfo__init__
+
+def LeaderInfo__setstate__(self, state):
+  state.setdefault('part_id', None)
+  state.setdefault('term', None)
+  self.__dict__ = state
+
+LeaderInfo.__getstate__ = lambda self: self.__dict__.copy()
+LeaderInfo.__setstate__ = LeaderInfo__setstate__
+
 all_structs.append(HBReq)
 HBReq.thrift_spec = (
   None, # 0
   (1, TType.I32, 'role', HostRole, None, 2, ), # 1
   (2, TType.STRUCT, 'host', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.I64, 'cluster_id', None, None, 2, ), # 3
-  (4, TType.MAP, 'leader_partIds', (TType.I32,None,TType.LIST,(TType.I32,None)), None, 1, ), # 4
+  (4, TType.MAP, 'leader_partIds', (TType.I32,None,TType.LIST,(TType.STRUCT,[LeaderInfo, LeaderInfo.thrift_spec, False])), None, 1, ), # 4
   (5, TType.STRING, 'git_info_sha', False, None, 2, ), # 5
 )
 
@@ -18152,6 +18219,7 @@ CreateTagIndexReq.thrift_spec = (
   (3, TType.STRING, 'tag_name', False, None, 2, ), # 3
   (4, TType.LIST, 'fields', (TType.STRUCT,[IndexFieldDef, IndexFieldDef.thrift_spec, False]), None, 2, ), # 4
   (5, TType.BOOL, 'if_not_exists', None, None, 2, ), # 5
+  (6, TType.STRING, 'comment', False, None, 1, ), # 6
 )
 
 CreateTagIndexReq.thrift_struct_annotations = {
@@ -18159,12 +18227,13 @@ CreateTagIndexReq.thrift_struct_annotations = {
 CreateTagIndexReq.thrift_field_annotations = {
 }
 
-def CreateTagIndexReq__init__(self, space_id=None, index_name=None, tag_name=None, fields=None, if_not_exists=None,):
+def CreateTagIndexReq__init__(self, space_id=None, index_name=None, tag_name=None, fields=None, if_not_exists=None, comment=None,):
   self.space_id = space_id
   self.index_name = index_name
   self.tag_name = tag_name
   self.fields = fields
   self.if_not_exists = if_not_exists
+  self.comment = comment
 
 CreateTagIndexReq.__init__ = CreateTagIndexReq__init__
 
@@ -18174,6 +18243,7 @@ def CreateTagIndexReq__setstate__(self, state):
   state.setdefault('tag_name', None)
   state.setdefault('fields', None)
   state.setdefault('if_not_exists', None)
+  state.setdefault('comment', None)
   self.__dict__ = state
 
 CreateTagIndexReq.__getstate__ = lambda self: self.__dict__.copy()
@@ -18237,7 +18307,7 @@ GetTagIndexReq.__setstate__ = GetTagIndexReq__setstate__
 all_structs.append(GetTagIndexResp)
 GetTagIndexResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'item', [IndexItem, IndexItem.thrift_spec, False], None, 2, ), # 3
 )
@@ -18289,7 +18359,7 @@ ListTagIndexesReq.__setstate__ = ListTagIndexesReq__setstate__
 all_structs.append(ListTagIndexesResp)
 ListTagIndexesResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'items', (TType.STRUCT,[IndexItem, IndexItem.thrift_spec, False]), None, 2, ), # 3
 )
@@ -18323,6 +18393,7 @@ CreateEdgeIndexReq.thrift_spec = (
   (3, TType.STRING, 'edge_name', False, None, 2, ), # 3
   (4, TType.LIST, 'fields', (TType.STRUCT,[IndexFieldDef, IndexFieldDef.thrift_spec, False]), None, 2, ), # 4
   (5, TType.BOOL, 'if_not_exists', None, None, 2, ), # 5
+  (6, TType.STRING, 'comment', False, None, 1, ), # 6
 )
 
 CreateEdgeIndexReq.thrift_struct_annotations = {
@@ -18330,12 +18401,13 @@ CreateEdgeIndexReq.thrift_struct_annotations = {
 CreateEdgeIndexReq.thrift_field_annotations = {
 }
 
-def CreateEdgeIndexReq__init__(self, space_id=None, index_name=None, edge_name=None, fields=None, if_not_exists=None,):
+def CreateEdgeIndexReq__init__(self, space_id=None, index_name=None, edge_name=None, fields=None, if_not_exists=None, comment=None,):
   self.space_id = space_id
   self.index_name = index_name
   self.edge_name = edge_name
   self.fields = fields
   self.if_not_exists = if_not_exists
+  self.comment = comment
 
 CreateEdgeIndexReq.__init__ = CreateEdgeIndexReq__init__
 
@@ -18345,6 +18417,7 @@ def CreateEdgeIndexReq__setstate__(self, state):
   state.setdefault('edge_name', None)
   state.setdefault('fields', None)
   state.setdefault('if_not_exists', None)
+  state.setdefault('comment', None)
   self.__dict__ = state
 
 CreateEdgeIndexReq.__getstate__ = lambda self: self.__dict__.copy()
@@ -18408,7 +18481,7 @@ GetEdgeIndexReq.__setstate__ = GetEdgeIndexReq__setstate__
 all_structs.append(GetEdgeIndexResp)
 GetEdgeIndexResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'item', [IndexItem, IndexItem.thrift_spec, False], None, 2, ), # 3
 )
@@ -18460,7 +18533,7 @@ ListEdgeIndexesReq.__setstate__ = ListEdgeIndexesReq__setstate__
 all_structs.append(ListEdgeIndexesResp)
 ListEdgeIndexesResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'items', (TType.STRUCT,[IndexItem, IndexItem.thrift_spec, False]), None, 2, ), # 3
 )
@@ -18651,7 +18724,7 @@ ListUsersReq.thrift_field_annotations = {
 all_structs.append(ListUsersResp)
 ListUsersResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.MAP, 'users', (TType.STRING,False,TType.STRING,False), None, 2, ), # 3
 )
@@ -18703,7 +18776,7 @@ ListRolesReq.__setstate__ = ListRolesReq__setstate__
 all_structs.append(ListRolesResp)
 ListRolesResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'roles', (TType.STRUCT,[RoleItem, RoleItem.thrift_spec, False]), None, 2, ), # 3
 )
@@ -18845,7 +18918,7 @@ BalanceTask.__setstate__ = BalanceTask__setstate__
 all_structs.append(BalanceResp)
 BalanceResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.I64, 'id', None, None, 2, ), # 2
   (3, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 3
   (4, TType.LIST, 'tasks', (TType.STRUCT,[BalanceTask, BalanceTask.thrift_spec, False]), None, 2, ), # 4
@@ -18964,7 +19037,7 @@ GetConfigReq.__setstate__ = GetConfigReq__setstate__
 all_structs.append(GetConfigResp)
 GetConfigResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'items', (TType.STRUCT,[ConfigItem, ConfigItem.thrift_spec, False]), None, 2, ), # 3
 )
@@ -19042,7 +19115,7 @@ ListConfigsReq.__setstate__ = ListConfigsReq__setstate__
 all_structs.append(ListConfigsResp)
 ListConfigsResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'items', (TType.STRUCT,[ConfigItem, ConfigItem.thrift_spec, False]), None, 2, ), # 3
 )
@@ -19141,7 +19214,7 @@ Snapshot.__setstate__ = Snapshot__setstate__
 all_structs.append(ListSnapshotsResp)
 ListSnapshotsResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'snapshots', (TType.STRUCT,[Snapshot, Snapshot.thrift_spec, False]), None, 2, ), # 3
 )
@@ -19219,7 +19292,7 @@ IndexStatus.__setstate__ = IndexStatus__setstate__
 all_structs.append(ListIndexStatusResp)
 ListIndexStatusResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'statuses', (TType.STRUCT,[IndexStatus, IndexStatus.thrift_spec, False]), None, 2, ), # 3
 )
@@ -19372,7 +19445,7 @@ GetZoneReq.__setstate__ = GetZoneReq__setstate__
 all_structs.append(GetZoneResp)
 GetZoneResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'hosts', (TType.STRUCT,[nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False]), None, 2, ), # 3
 )
@@ -19436,7 +19509,7 @@ Zone.__setstate__ = Zone__setstate__
 all_structs.append(ListZonesResp)
 ListZonesResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'zones', (TType.STRUCT,[Zone, Zone.thrift_spec, False]), None, 2, ), # 3
 )
@@ -19589,7 +19662,7 @@ GetGroupReq.__setstate__ = GetGroupReq__setstate__
 all_structs.append(GetGroupResp)
 GetGroupResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'zone_names', (TType.STRING,False), None, 2, ), # 3
 )
@@ -19653,7 +19726,7 @@ Group.__setstate__ = Group__setstate__
 all_structs.append(ListGroupsResp)
 ListGroupsResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'groups', (TType.STRUCT,[Group, Group.thrift_spec, False]), None, 2, ), # 3
 )
@@ -19792,7 +19865,7 @@ ListenerInfo.__setstate__ = ListenerInfo__setstate__
 all_structs.append(ListListenerResp)
 ListListenerResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'listeners', (TType.STRUCT,[ListenerInfo, ListenerInfo.thrift_spec, False]), None, 2, ), # 3
 )
@@ -19844,7 +19917,7 @@ GetStatisReq.__setstate__ = GetStatisReq__setstate__
 all_structs.append(GetStatisResp)
 GetStatisResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'statis', [StatisItem, StatisItem.thrift_spec, False], None, 2, ), # 3
 )
@@ -19980,7 +20053,7 @@ CreateBackupReq.__setstate__ = CreateBackupReq__setstate__
 all_structs.append(CreateBackupResp)
 CreateBackupResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'meta', [BackupMeta, BackupMeta.thrift_spec, False], None, 2, ), # 3
 )
@@ -20134,7 +20207,7 @@ ListFTClientsReq.thrift_field_annotations = {
 all_structs.append(ListFTClientsResp)
 ListFTClientsResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'clients', (TType.STRUCT,[FTClient, FTClient.thrift_spec, False]), None, 2, ), # 3
 )
@@ -20239,7 +20312,7 @@ CreateSessionReq.__setstate__ = CreateSessionReq__setstate__
 all_structs.append(CreateSessionResp)
 CreateSessionResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'session', [Session, Session.thrift_spec, False], None, 2, ), # 3
 )
@@ -20300,7 +20373,7 @@ ListSessionsReq.thrift_field_annotations = {
 all_structs.append(ListSessionsResp)
 ListSessionsResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.LIST, 'sessions', (TType.STRUCT,[Session, Session.thrift_spec, False]), None, 2, ), # 3
 )
@@ -20352,7 +20425,7 @@ GetSessionReq.__setstate__ = GetSessionReq__setstate__
 all_structs.append(GetSessionResp)
 GetSessionResp.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.STRUCT, 'session', [Session, Session.thrift_spec, False], None, 2, ), # 3
 )
@@ -20404,7 +20477,7 @@ RemoveSessionReq.__setstate__ = RemoveSessionReq__setstate__
 all_structs.append(ReportTaskReq)
 ReportTaskReq.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 2, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.I32, 'job_id', None, None, 2, ), # 2
   (3, TType.I32, 'task_id', None, None, 2, ), # 3
   (4, TType.STRUCT, 'statis', [StatisItem, StatisItem.thrift_spec, False], None, 1, ), # 4

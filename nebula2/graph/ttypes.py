@@ -31,60 +31,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'ErrorCode', 'ProfilingStats', 'PlanNodeBranchInfo', 'Pair', 'PlanNodeDescription', 'PlanDescription', 'ExecutionResponse', 'AuthResponse']
-
-class ErrorCode:
-  SUCCEEDED = 0
-  E_DISCONNECTED = -1
-  E_FAIL_TO_CONNECT = -2
-  E_RPC_FAILURE = -3
-  E_BAD_USERNAME_PASSWORD = -4
-  E_SESSION_INVALID = -5
-  E_SESSION_TIMEOUT = -6
-  E_SYNTAX_ERROR = -7
-  E_EXECUTION_ERROR = -8
-  E_STATEMENT_EMPTY = -9
-  E_USER_NOT_FOUND = -10
-  E_BAD_PERMISSION = -11
-  E_SEMANTIC_ERROR = -12
-  E_TOO_MANY_CONNECTIONS = -13
-  E_PARTIAL_SUCCEEDED = -14
-
-  _VALUES_TO_NAMES = {
-    0: "SUCCEEDED",
-    -1: "E_DISCONNECTED",
-    -2: "E_FAIL_TO_CONNECT",
-    -3: "E_RPC_FAILURE",
-    -4: "E_BAD_USERNAME_PASSWORD",
-    -5: "E_SESSION_INVALID",
-    -6: "E_SESSION_TIMEOUT",
-    -7: "E_SYNTAX_ERROR",
-    -8: "E_EXECUTION_ERROR",
-    -9: "E_STATEMENT_EMPTY",
-    -10: "E_USER_NOT_FOUND",
-    -11: "E_BAD_PERMISSION",
-    -12: "E_SEMANTIC_ERROR",
-    -13: "E_TOO_MANY_CONNECTIONS",
-    -14: "E_PARTIAL_SUCCEEDED",
-  }
-
-  _NAMES_TO_VALUES = {
-    "SUCCEEDED": 0,
-    "E_DISCONNECTED": -1,
-    "E_FAIL_TO_CONNECT": -2,
-    "E_RPC_FAILURE": -3,
-    "E_BAD_USERNAME_PASSWORD": -4,
-    "E_SESSION_INVALID": -5,
-    "E_SESSION_TIMEOUT": -6,
-    "E_SYNTAX_ERROR": -7,
-    "E_EXECUTION_ERROR": -8,
-    "E_STATEMENT_EMPTY": -9,
-    "E_USER_NOT_FOUND": -10,
-    "E_BAD_PERMISSION": -11,
-    "E_SEMANTIC_ERROR": -12,
-    "E_TOO_MANY_CONNECTIONS": -13,
-    "E_PARTIAL_SUCCEEDED": -14,
-  }
+__all__ = ['UTF8STRINGS', 'ProfilingStats', 'PlanNodeBranchInfo', 'Pair', 'PlanNodeDescription', 'PlanDescription', 'ExecutionResponse', 'AuthResponse']
 
 class ProfilingStats:
   """
@@ -1163,7 +1110,7 @@ PlanDescription.__setstate__ = PlanDescription__setstate__
 all_structs.append(ExecutionResponse)
 ExecutionResponse.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'error_code', ErrorCode, None, 0, ), # 1
+  (1, TType.I32, 'error_code', nebula2.common.ttypes.ErrorCode, None, 0, ), # 1
   (2, TType.I32, 'latency_in_us', None, None, 0, ), # 2
   (3, TType.STRUCT, 'data', [nebula2.common.ttypes.DataSet, nebula2.common.ttypes.DataSet.thrift_spec, False], None, 1, ), # 3
   (4, TType.STRING, 'space_name', False, None, 1, ), # 4
@@ -1205,7 +1152,7 @@ ExecutionResponse.__setstate__ = ExecutionResponse__setstate__
 all_structs.append(AuthResponse)
 AuthResponse.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'error_code', ErrorCode, None, 0, ), # 1
+  (1, TType.I32, 'error_code', nebula2.common.ttypes.ErrorCode, None, 0, ), # 1
   (2, TType.STRING, 'error_msg', False, None, 1, ), # 2
   (3, TType.I64, 'session_id', None, None, 1, ), # 3
 )

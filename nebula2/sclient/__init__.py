@@ -10,8 +10,7 @@ import copy
 import logging
 from threading import RLock, Condition
 
-from nebula2.common.ttypes import HostAddr
-from nebula2.storage.ttypes import ErrorCode
+from nebula2.common.ttypes import HostAddr, ErrorCode
 
 
 class PartInfo(object):
