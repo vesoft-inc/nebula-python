@@ -140,7 +140,11 @@ class MetaClient(object):
                         continue
                     raise RuntimeError("List spaces failed, error code: {}"
                                        .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
-                return resp.hosts
+                valid_hosts = []
+                for host in resp.hosts:
+                    if host.status == 0:
+                        valid_hosts.append(host)
+                return valid_hosts
             raise RuntimeError("List spaces failed, error code: {}"
                                .format(ErrorCode._VALUES_TO_NAMES(resp.code)))
 
