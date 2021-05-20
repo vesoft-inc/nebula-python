@@ -32,156 +32,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'ErrorCode', 'StatType', 'OrderDirection', 'EdgeDirection', 'ScanType', 'EngineSignType', 'PartitionResult', 'ResponseCommon', 'StatProp', 'Expr', 'EdgeProp', 'VertexProp', 'OrderBy', 'TraverseSpec', 'GetNeighborsRequest', 'GetNeighborsResponse', 'ExecResponse', 'GetPropRequest', 'GetPropResponse', 'NewTag', 'NewVertex', 'EdgeKey', 'NewEdge', 'AddVerticesRequest', 'AddEdgesRequest', 'DeleteVerticesRequest', 'DeleteEdgesRequest', 'UpdateResponse', 'UpdatedProp', 'UpdateVertexRequest', 'UpdateEdgeRequest', 'GetUUIDReq', 'GetUUIDResp', 'LookupIndexResp', 'IndexColumnHint', 'IndexQueryContext', 'IndexSpec', 'LookupIndexRequest', 'LookupAndTraverseRequest', 'ScanVertexRequest', 'ScanVertexResponse', 'ScanEdgeRequest', 'ScanEdgeResponse', 'TaskPara', 'AddAdminTaskRequest', 'StopAdminTaskRequest', 'AdminExecResp', 'TransLeaderReq', 'AddPartReq', 'AddLearnerReq', 'RemovePartReq', 'MemberChangeReq', 'CatchUpDataReq', 'GetLeaderReq', 'CreateCPRequest', 'DropCPRequest', 'BlockingSignRequest', 'GetLeaderPartsResp', 'CheckPeersReq', 'RebuildIndexRequest', 'CreateCPResp', 'PartitionInfoResp', 'PartitionInfoRequest', 'KVGetRequest', 'KVGetResponse', 'KVPutRequest', 'KVRemoveRequest', 'InternalTxnRequest', 'GetValueRequest', 'GetValueResponse']
-
-class ErrorCode:
-  SUCCEEDED = 0
-  E_DISCONNECTED = -1
-  E_FAILED_TO_CONNECT = -2
-  E_RPC_FAILURE = -3
-  E_LEADER_CHANGED = -11
-  E_KEY_HAS_EXISTS = -12
-  E_SPACE_NOT_FOUND = -13
-  E_PART_NOT_FOUND = -14
-  E_KEY_NOT_FOUND = -15
-  E_CONSENSUS_ERROR = -16
-  E_DATA_TYPE_MISMATCH = -17
-  E_INVALID_FIELD_VALUE = -18
-  E_REBUILD_INDEX_FAILED = -19
-  E_INVALID_OPERATION = -20
-  E_NOT_NULLABLE = -21
-  E_FIELD_UNSET = -22
-  E_OUT_OF_RANGE = -23
-  E_ATOMIC_OP_FAILED = -24
-  E_DATA_CONFLICT_ERROR = -25
-  E_EDGE_PROP_NOT_FOUND = -31
-  E_TAG_PROP_NOT_FOUND = -32
-  E_IMPROPER_DATA_TYPE = -33
-  E_EDGE_NOT_FOUND = -34
-  E_TAG_NOT_FOUND = -35
-  E_INVALID_SPACEVIDLEN = -36
-  E_INDEX_NOT_FOUND = -37
-  E_INVALID_FILTER = -41
-  E_INVALID_UPDATER = -42
-  E_INVALID_STORE = -43
-  E_INVALID_PEER = -44
-  E_RETRY_EXHAUSTED = -45
-  E_TRANSFER_LEADER_FAILED = -46
-  E_INVALID_STAT_TYPE = -47
-  E_INVALID_VID = -48
-  E_NO_TRANSFORMED = -49
-  E_LOAD_META_FAILED = -51
-  E_FAILED_TO_CHECKPOINT = -60
-  E_CHECKPOINT_BLOCKED = -61
-  E_BACKUP_FAILED = -65
-  E_PARTIAL_RESULT = -71
-  E_FILTER_OUT = -81
-  E_INVALID_DATA = -82
-  E_MUTATE_EDGE_CONFLICT = -85
-  E_OUTDATED_LOCK = -86
-  E_INVALID_TASK_PARA = -90
-  E_USER_CANCEL = -99
-  E_UNKNOWN = -100
-
-  _VALUES_TO_NAMES = {
-    0: "SUCCEEDED",
-    -1: "E_DISCONNECTED",
-    -2: "E_FAILED_TO_CONNECT",
-    -3: "E_RPC_FAILURE",
-    -11: "E_LEADER_CHANGED",
-    -12: "E_KEY_HAS_EXISTS",
-    -13: "E_SPACE_NOT_FOUND",
-    -14: "E_PART_NOT_FOUND",
-    -15: "E_KEY_NOT_FOUND",
-    -16: "E_CONSENSUS_ERROR",
-    -17: "E_DATA_TYPE_MISMATCH",
-    -18: "E_INVALID_FIELD_VALUE",
-    -19: "E_REBUILD_INDEX_FAILED",
-    -20: "E_INVALID_OPERATION",
-    -21: "E_NOT_NULLABLE",
-    -22: "E_FIELD_UNSET",
-    -23: "E_OUT_OF_RANGE",
-    -24: "E_ATOMIC_OP_FAILED",
-    -25: "E_DATA_CONFLICT_ERROR",
-    -31: "E_EDGE_PROP_NOT_FOUND",
-    -32: "E_TAG_PROP_NOT_FOUND",
-    -33: "E_IMPROPER_DATA_TYPE",
-    -34: "E_EDGE_NOT_FOUND",
-    -35: "E_TAG_NOT_FOUND",
-    -36: "E_INVALID_SPACEVIDLEN",
-    -37: "E_INDEX_NOT_FOUND",
-    -41: "E_INVALID_FILTER",
-    -42: "E_INVALID_UPDATER",
-    -43: "E_INVALID_STORE",
-    -44: "E_INVALID_PEER",
-    -45: "E_RETRY_EXHAUSTED",
-    -46: "E_TRANSFER_LEADER_FAILED",
-    -47: "E_INVALID_STAT_TYPE",
-    -48: "E_INVALID_VID",
-    -49: "E_NO_TRANSFORMED",
-    -51: "E_LOAD_META_FAILED",
-    -60: "E_FAILED_TO_CHECKPOINT",
-    -61: "E_CHECKPOINT_BLOCKED",
-    -65: "E_BACKUP_FAILED",
-    -71: "E_PARTIAL_RESULT",
-    -81: "E_FILTER_OUT",
-    -82: "E_INVALID_DATA",
-    -85: "E_MUTATE_EDGE_CONFLICT",
-    -86: "E_OUTDATED_LOCK",
-    -90: "E_INVALID_TASK_PARA",
-    -99: "E_USER_CANCEL",
-    -100: "E_UNKNOWN",
-  }
-
-  _NAMES_TO_VALUES = {
-    "SUCCEEDED": 0,
-    "E_DISCONNECTED": -1,
-    "E_FAILED_TO_CONNECT": -2,
-    "E_RPC_FAILURE": -3,
-    "E_LEADER_CHANGED": -11,
-    "E_KEY_HAS_EXISTS": -12,
-    "E_SPACE_NOT_FOUND": -13,
-    "E_PART_NOT_FOUND": -14,
-    "E_KEY_NOT_FOUND": -15,
-    "E_CONSENSUS_ERROR": -16,
-    "E_DATA_TYPE_MISMATCH": -17,
-    "E_INVALID_FIELD_VALUE": -18,
-    "E_REBUILD_INDEX_FAILED": -19,
-    "E_INVALID_OPERATION": -20,
-    "E_NOT_NULLABLE": -21,
-    "E_FIELD_UNSET": -22,
-    "E_OUT_OF_RANGE": -23,
-    "E_ATOMIC_OP_FAILED": -24,
-    "E_DATA_CONFLICT_ERROR": -25,
-    "E_EDGE_PROP_NOT_FOUND": -31,
-    "E_TAG_PROP_NOT_FOUND": -32,
-    "E_IMPROPER_DATA_TYPE": -33,
-    "E_EDGE_NOT_FOUND": -34,
-    "E_TAG_NOT_FOUND": -35,
-    "E_INVALID_SPACEVIDLEN": -36,
-    "E_INDEX_NOT_FOUND": -37,
-    "E_INVALID_FILTER": -41,
-    "E_INVALID_UPDATER": -42,
-    "E_INVALID_STORE": -43,
-    "E_INVALID_PEER": -44,
-    "E_RETRY_EXHAUSTED": -45,
-    "E_TRANSFER_LEADER_FAILED": -46,
-    "E_INVALID_STAT_TYPE": -47,
-    "E_INVALID_VID": -48,
-    "E_NO_TRANSFORMED": -49,
-    "E_LOAD_META_FAILED": -51,
-    "E_FAILED_TO_CHECKPOINT": -60,
-    "E_CHECKPOINT_BLOCKED": -61,
-    "E_BACKUP_FAILED": -65,
-    "E_PARTIAL_RESULT": -71,
-    "E_FILTER_OUT": -81,
-    "E_INVALID_DATA": -82,
-    "E_MUTATE_EDGE_CONFLICT": -85,
-    "E_OUTDATED_LOCK": -86,
-    "E_INVALID_TASK_PARA": -90,
-    "E_USER_CANCEL": -99,
-    "E_UNKNOWN": -100,
-  }
+__all__ = ['UTF8STRINGS', 'StatType', 'OrderDirection', 'EdgeDirection', 'ScanType', 'EngineSignType', 'PartitionResult', 'ResponseCommon', 'StatProp', 'Expr', 'EdgeProp', 'VertexProp', 'OrderBy', 'TraverseSpec', 'GetNeighborsRequest', 'GetNeighborsResponse', 'ExecResponse', 'GetPropRequest', 'GetPropResponse', 'NewTag', 'NewVertex', 'EdgeKey', 'NewEdge', 'AddVerticesRequest', 'AddEdgesRequest', 'DeleteVerticesRequest', 'DeleteEdgesRequest', 'UpdateResponse', 'UpdatedProp', 'UpdateVertexRequest', 'UpdateEdgeRequest', 'GetUUIDReq', 'GetUUIDResp', 'LookupIndexResp', 'IndexColumnHint', 'IndexQueryContext', 'IndexSpec', 'LookupIndexRequest', 'LookupAndTraverseRequest', 'ScanVertexRequest', 'ScanVertexResponse', 'ScanEdgeRequest', 'ScanEdgeResponse', 'TaskPara', 'AddAdminTaskRequest', 'StopAdminTaskRequest', 'AdminExecResp', 'TransLeaderReq', 'AddPartReq', 'AddLearnerReq', 'RemovePartReq', 'MemberChangeReq', 'CatchUpDataReq', 'GetLeaderReq', 'CreateCPRequest', 'DropCPRequest', 'BlockingSignRequest', 'GetLeaderPartsResp', 'CheckPeersReq', 'RebuildIndexRequest', 'CreateCPResp', 'KVGetRequest', 'KVGetResponse', 'KVPutRequest', 'KVRemoveRequest', 'InternalTxnRequest', 'GetValueRequest', 'GetValueResponse']
 
 class StatType:
   SUM = 1
@@ -2388,7 +2239,7 @@ class AddVerticesRequest:
    - space_id
    - parts
    - prop_names
-   - overwritable
+   - if_not_exists
   """
 
   thrift_spec = None
@@ -2496,7 +2347,7 @@ class AddVerticesRequest:
           iprot.skip(ftype)
       elif fid == 4:
         if ftype == TType.BOOL:
-          self.overwritable = iprot.readBool()
+          self.if_not_exists = iprot.readBool()
         else:
           iprot.skip(ftype)
       else:
@@ -2538,9 +2389,9 @@ class AddVerticesRequest:
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
-    if self.overwritable != None:
-      oprot.writeFieldBegin('overwritable', TType.BOOL, 4)
-      oprot.writeBool(self.overwritable)
+    if self.if_not_exists != None:
+      oprot.writeFieldBegin('if_not_exists', TType.BOOL, 4)
+      oprot.writeBool(self.if_not_exists)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -2560,10 +2411,10 @@ class AddVerticesRequest:
       value = pprint.pformat(self.prop_names, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    prop_names=%s' % (value))
-    if self.overwritable is not None:
-      value = pprint.pformat(self.overwritable, indent=0)
+    if self.if_not_exists is not None:
+      value = pprint.pformat(self.if_not_exists, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    overwritable=%s' % (value))
+      L.append('    if_not_exists=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -2585,7 +2436,7 @@ class AddEdgesRequest:
    - space_id
    - parts
    - prop_names
-   - overwritable
+   - if_not_exists
   """
 
   thrift_spec = None
@@ -2671,7 +2522,7 @@ class AddEdgesRequest:
           iprot.skip(ftype)
       elif fid == 4:
         if ftype == TType.BOOL:
-          self.overwritable = iprot.readBool()
+          self.if_not_exists = iprot.readBool()
         else:
           iprot.skip(ftype)
       else:
@@ -2709,9 +2560,9 @@ class AddEdgesRequest:
         oprot.writeString(iter273)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
-    if self.overwritable != None:
-      oprot.writeFieldBegin('overwritable', TType.BOOL, 4)
-      oprot.writeBool(self.overwritable)
+    if self.if_not_exists != None:
+      oprot.writeFieldBegin('if_not_exists', TType.BOOL, 4)
+      oprot.writeBool(self.if_not_exists)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -2731,10 +2582,10 @@ class AddEdgesRequest:
       value = pprint.pformat(self.prop_names, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    prop_names=%s' % (value))
-    if self.overwritable is not None:
-      value = pprint.pformat(self.overwritable, indent=0)
+    if self.if_not_exists is not None:
+      value = pprint.pformat(self.if_not_exists, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    overwritable=%s' % (value))
+      L.append('    if_not_exists=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -6856,6 +6707,7 @@ class CreateCPResp:
   Attributes:
    - result
    - path
+   - partition_info
   """
 
   thrift_spec = None
@@ -6889,6 +6741,12 @@ class CreateCPResp:
           self.path = iprot.readString()
         else:
           iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRUCT:
+          self.partition_info = nebula2.common.ttypes.PartitionBackupInfo()
+          self.partition_info.read(iprot)
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -6910,101 +6768,6 @@ class CreateCPResp:
       oprot.writeFieldBegin('path', TType.STRING, 2)
       oprot.writeString(self.path)
       oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.result is not None:
-      value = pprint.pformat(self.result, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    result=%s' % (value))
-    if self.path is not None:
-      value = pprint.pformat(self.path, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    path=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-class PartitionInfoResp:
-  """
-  Attributes:
-   - result
-   - backup_name
-   - partition_info
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.result = ResponseCommon()
-          self.result.read(iprot)
-        else:
-          iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.STRING:
-          self.backup_name = iprot.readString()
-        else:
-          iprot.skip(ftype)
-      elif fid == 3:
-        if ftype == TType.STRUCT:
-          self.partition_info = nebula2.common.ttypes.PartitionBackupInfo()
-          self.partition_info.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('PartitionInfoResp')
-    if self.result != None:
-      oprot.writeFieldBegin('result', TType.STRUCT, 1)
-      self.result.write(oprot)
-      oprot.writeFieldEnd()
-    if self.backup_name != None:
-      oprot.writeFieldBegin('backup_name', TType.STRING, 2)
-      oprot.writeString(self.backup_name)
-      oprot.writeFieldEnd()
     if self.partition_info != None:
       oprot.writeFieldBegin('partition_info', TType.STRUCT, 3)
       self.partition_info.write(oprot)
@@ -7019,101 +6782,14 @@ class PartitionInfoResp:
       value = pprint.pformat(self.result, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    result=%s' % (value))
-    if self.backup_name is not None:
-      value = pprint.pformat(self.backup_name, indent=0)
+    if self.path is not None:
+      value = pprint.pformat(self.path, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    backup_name=%s' % (value))
+      L.append('    path=%s' % (value))
     if self.partition_info is not None:
       value = pprint.pformat(self.partition_info, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    partition_info=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-class PartitionInfoRequest:
-  """
-  Attributes:
-   - space_id
-   - backup_name
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.I32:
-          self.space_id = iprot.readI32()
-        else:
-          iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.STRING:
-          self.backup_name = iprot.readString()
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('PartitionInfoRequest')
-    if self.space_id != None:
-      oprot.writeFieldBegin('space_id', TType.I32, 1)
-      oprot.writeI32(self.space_id)
-      oprot.writeFieldEnd()
-    if self.backup_name != None:
-      oprot.writeFieldBegin('backup_name', TType.STRING, 2)
-      oprot.writeString(self.backup_name)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.space_id is not None:
-      value = pprint.pformat(self.space_id, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    space_id=%s' % (value))
-    if self.backup_name is not None:
-      value = pprint.pformat(self.backup_name, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    backup_name=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -7986,7 +7662,7 @@ class GetValueResponse:
 all_structs.append(PartitionResult)
 PartitionResult.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'code', ErrorCode, None, 0, ), # 1
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 0, ), # 1
   (2, TType.I32, 'part_id', None, None, 0, ), # 2
   (3, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 1, ), # 3
 )
@@ -8494,7 +8170,7 @@ AddVerticesRequest.thrift_spec = (
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
   (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRUCT,[NewVertex, NewVertex.thrift_spec, False])), None, 2, ), # 2
   (3, TType.MAP, 'prop_names', (TType.I32,None,TType.LIST,(TType.STRING,False)), None, 2, ), # 3
-  (4, TType.BOOL, 'overwritable', None, True, 2, ), # 4
+  (4, TType.BOOL, 'if_not_exists', None, None, 2, ), # 4
 )
 
 AddVerticesRequest.thrift_struct_annotations = {
@@ -8502,11 +8178,11 @@ AddVerticesRequest.thrift_struct_annotations = {
 AddVerticesRequest.thrift_field_annotations = {
 }
 
-def AddVerticesRequest__init__(self, space_id=None, parts=None, prop_names=None, overwritable=AddVerticesRequest.thrift_spec[4][4],):
+def AddVerticesRequest__init__(self, space_id=None, parts=None, prop_names=None, if_not_exists=None,):
   self.space_id = space_id
   self.parts = parts
   self.prop_names = prop_names
-  self.overwritable = overwritable
+  self.if_not_exists = if_not_exists
 
 AddVerticesRequest.__init__ = AddVerticesRequest__init__
 
@@ -8514,7 +8190,7 @@ def AddVerticesRequest__setstate__(self, state):
   state.setdefault('space_id', None)
   state.setdefault('parts', None)
   state.setdefault('prop_names', None)
-  state.setdefault('overwritable', True)
+  state.setdefault('if_not_exists', None)
   self.__dict__ = state
 
 AddVerticesRequest.__getstate__ = lambda self: self.__dict__.copy()
@@ -8526,7 +8202,7 @@ AddEdgesRequest.thrift_spec = (
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
   (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRUCT,[NewEdge, NewEdge.thrift_spec, False])), None, 2, ), # 2
   (3, TType.LIST, 'prop_names', (TType.STRING,False), None, 2, ), # 3
-  (4, TType.BOOL, 'overwritable', None, True, 2, ), # 4
+  (4, TType.BOOL, 'if_not_exists', None, None, 2, ), # 4
 )
 
 AddEdgesRequest.thrift_struct_annotations = {
@@ -8534,11 +8210,11 @@ AddEdgesRequest.thrift_struct_annotations = {
 AddEdgesRequest.thrift_field_annotations = {
 }
 
-def AddEdgesRequest__init__(self, space_id=None, parts=None, prop_names=None, overwritable=AddEdgesRequest.thrift_spec[4][4],):
+def AddEdgesRequest__init__(self, space_id=None, parts=None, prop_names=None, if_not_exists=None,):
   self.space_id = space_id
   self.parts = parts
   self.prop_names = prop_names
-  self.overwritable = overwritable
+  self.if_not_exists = if_not_exists
 
 AddEdgesRequest.__init__ = AddEdgesRequest__init__
 
@@ -8546,7 +8222,7 @@ def AddEdgesRequest__setstate__(self, state):
   state.setdefault('space_id', None)
   state.setdefault('parts', None)
   state.setdefault('prop_names', None)
-  state.setdefault('overwritable', True)
+  state.setdefault('if_not_exists', None)
   self.__dict__ = state
 
 AddEdgesRequest.__getstate__ = lambda self: self.__dict__.copy()
@@ -9609,6 +9285,7 @@ CreateCPResp.thrift_spec = (
   None, # 0
   (1, TType.STRUCT, 'result', [ResponseCommon, ResponseCommon.thrift_spec, False], None, 0, ), # 1
   (2, TType.STRING, 'path', False, None, 2, ), # 2
+  (3, TType.STRUCT, 'partition_info', [nebula2.common.ttypes.PartitionBackupInfo, nebula2.common.ttypes.PartitionBackupInfo.thrift_spec, False], None, 2, ), # 3
 )
 
 CreateCPResp.thrift_struct_annotations = {
@@ -9616,74 +9293,21 @@ CreateCPResp.thrift_struct_annotations = {
 CreateCPResp.thrift_field_annotations = {
 }
 
-def CreateCPResp__init__(self, result=None, path=None,):
+def CreateCPResp__init__(self, result=None, path=None, partition_info=None,):
   self.result = result
   self.path = path
+  self.partition_info = partition_info
 
 CreateCPResp.__init__ = CreateCPResp__init__
 
 def CreateCPResp__setstate__(self, state):
   state.setdefault('result', None)
   state.setdefault('path', None)
+  state.setdefault('partition_info', None)
   self.__dict__ = state
 
 CreateCPResp.__getstate__ = lambda self: self.__dict__.copy()
 CreateCPResp.__setstate__ = CreateCPResp__setstate__
-
-all_structs.append(PartitionInfoResp)
-PartitionInfoResp.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'result', [ResponseCommon, ResponseCommon.thrift_spec, False], None, 0, ), # 1
-  (2, TType.STRING, 'backup_name', False, None, 2, ), # 2
-  (3, TType.STRUCT, 'partition_info', [nebula2.common.ttypes.PartitionBackupInfo, nebula2.common.ttypes.PartitionBackupInfo.thrift_spec, False], None, 2, ), # 3
-)
-
-PartitionInfoResp.thrift_struct_annotations = {
-}
-PartitionInfoResp.thrift_field_annotations = {
-}
-
-def PartitionInfoResp__init__(self, result=None, backup_name=None, partition_info=None,):
-  self.result = result
-  self.backup_name = backup_name
-  self.partition_info = partition_info
-
-PartitionInfoResp.__init__ = PartitionInfoResp__init__
-
-def PartitionInfoResp__setstate__(self, state):
-  state.setdefault('result', None)
-  state.setdefault('backup_name', None)
-  state.setdefault('partition_info', None)
-  self.__dict__ = state
-
-PartitionInfoResp.__getstate__ = lambda self: self.__dict__.copy()
-PartitionInfoResp.__setstate__ = PartitionInfoResp__setstate__
-
-all_structs.append(PartitionInfoRequest)
-PartitionInfoRequest.thrift_spec = (
-  None, # 0
-  (1, TType.I32, 'space_id', None, None, 2, ), # 1
-  (2, TType.STRING, 'backup_name', False, None, 2, ), # 2
-)
-
-PartitionInfoRequest.thrift_struct_annotations = {
-}
-PartitionInfoRequest.thrift_field_annotations = {
-}
-
-def PartitionInfoRequest__init__(self, space_id=None, backup_name=None,):
-  self.space_id = space_id
-  self.backup_name = backup_name
-
-PartitionInfoRequest.__init__ = PartitionInfoRequest__init__
-
-def PartitionInfoRequest__setstate__(self, state):
-  state.setdefault('space_id', None)
-  state.setdefault('backup_name', None)
-  self.__dict__ = state
-
-PartitionInfoRequest.__getstate__ = lambda self: self.__dict__.copy()
-PartitionInfoRequest.__setstate__ = PartitionInfoRequest__setstate__
 
 all_structs.append(KVGetRequest)
 KVGetRequest.thrift_spec = (

@@ -24,7 +24,8 @@ from nebula2.common.ttypes import (
     NSet,
     Date,
     NList,
-    NMap
+    NMap,
+    ErrorCode
 )
 from nebula2.common import ttypes
 from nebula2.graph import ttypes as graphTtype
@@ -183,7 +184,7 @@ class TestBaseCase(TestCase):
     @classmethod
     def get_result_set(self):
         resp = graphTtype.ExecutionResponse()
-        resp.error_code = graphTtype.ErrorCode.E_BAD_PERMISSION
+        resp.error_code = ErrorCode.E_BAD_PERMISSION
         resp.error_msg = b"Permission"
         resp.comment = b"Permission"
         resp.space_name = b"test"
@@ -503,7 +504,7 @@ class TestResultset(TestBaseCase):
         assert result.space_name() == "test"
         assert result.comment() == "Permission"
         assert result.error_msg() == "Permission"
-        assert result.error_code() == graphTtype.ErrorCode.E_BAD_PERMISSION
+        assert result.error_code() == ErrorCode.E_BAD_PERMISSION
         assert result.plan_desc() is None
         assert result.latency() == 100
         assert not result.is_empty()

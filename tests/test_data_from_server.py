@@ -19,10 +19,10 @@ from nebula2.Config import Config
 from nebula2.common.ttypes import (
     DateTime,
     Date,
-    Time
+    Time,
+    ErrorCode
 )
 
-from nebula2.graph import ttypes
 from nebula2.data.DataObject import (
     DateTimeWrapper,
     DateWrapper,
@@ -123,7 +123,7 @@ class TestBaseCase(TestCase):
         assert '' == resp.error_msg()
         assert resp.latency() > 0
         assert '' == resp.comment()
-        assert ttypes.ErrorCode.SUCCEEDED == resp.error_code()
+        assert ErrorCode.SUCCEEDED == resp.error_code()
         assert 'test_data' == resp.space_name()
         assert not resp.is_empty()
         assert 1 == resp.row_size()
