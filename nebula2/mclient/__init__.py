@@ -19,6 +19,7 @@ from nebula2.Exception import (
 )
 from nebula2.common.ttypes import HostAddr, ErrorCode
 from nebula2.meta.ttypes import (
+    HostStatus,
     ListTagsReq,
     ListEdgesReq,
     ListSpacesReq,
@@ -141,7 +142,7 @@ class MetaClient(object):
                                        .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
                 valid_hosts = []
                 for host in resp.hosts:
-                    if host.status == 0:
+                    if host.status == HostStatus.ONLINE:
                         valid_hosts.append(host)
                 return valid_hosts
             raise RuntimeError("List spaces failed, error code: {}"
