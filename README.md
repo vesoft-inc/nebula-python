@@ -59,7 +59,7 @@ pip install -r requirements.txt
 ```
 dev version
 ```
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 ### Option two: using pip
