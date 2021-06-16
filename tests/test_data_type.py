@@ -47,23 +47,24 @@ from nebula2.data.DataObject import (
 
 class TestBaseCase(TestCase):
     @classmethod
-    def get_vertex_value(self, vid):
+    def get_vertex_value(cls, vid, empty_props=False):
         vertex = ttypes.Vertex()
         vertex.vid = ttypes.Value(sVal=vid)
         vertex.tags = list()
         for i in range(0, 3):
             tag = ttypes.Tag()
             tag.name = ('tag{}'.format(i)).encode('utf-8')
-            tag.props = dict()
-            for j in range(0, 5):
-                value = ttypes.Value()
-                value.set_iVal(j)
-                tag.props[('prop{}'.format(j)).encode('utf-8')] = value
+            if not empty_props:
+                tag.props = dict()
+                for j in range(0, 5):
+                    value = ttypes.Value()
+                    value.set_iVal(j)
+                    tag.props[('prop{}'.format(j)).encode('utf-8')] = value
             vertex.tags.append(tag)
         return vertex
 
     @classmethod
-    def get_edge_value(self, src_id, dst_id, is_reverse=False):
+    def get_edge_value(cls, src_id, dst_id, is_reverse=False, empty_props=False):
         edge = ttypes.Edge()
         if not is_reverse:
             edge.src = ttypes.Value(sVal=src_id)
@@ -74,21 +75,22 @@ class TestBaseCase(TestCase):
         edge.type = 1
         edge.name = b'classmate'
         edge.ranking = 100
-        edge.props = dict()
-        for i in range(0, 5):
-            value = ttypes.Value()
-            value.set_iVal(i)
-            edge.props[('prop{}'.format(i)).encode('utf-8')] = value
+        if not empty_props:
+            edge.props = dict()
+            for i in range(0, 5):
+                value = ttypes.Value()
+                value.set_iVal(i)
+                edge.props[('prop{}'.format(i)).encode('utf-8')] = value
         return edge
 
     @classmethod
-    def get_path_value(self, start_id, steps=5):
+    def get_path_value(cls, start_id, steps=5):
         path = ttypes.Path()
-        path.src = self.get_vertex_value(start_id)
+        path.src = cls.get_vertex_value(start_id)
         path.steps = list()
         for i in range(0, steps):
             step = ttypes.Step()
-            step.dst = self.get_vertex_value(('vertex{}'.format(i)).encode('utf-8'))
+            step.dst = cls.get_vertex_value(('vertex{}'.format(i)).encode('utf-8'))
             step.type = 1 if i % 2 == 0 else -1
             step.name = b'classmate'
             step.ranking = 100
@@ -101,7 +103,7 @@ class TestBaseCase(TestCase):
         return path
 
     @classmethod
-    def get_data_set(self):
+    def get_data_set(cls):
         data_set = ttypes.DataSet()
         data_set.column_names = [b"col1_empty",
                                  b"col2_null",
@@ -168,13 +170,13 @@ class TestBaseCase(TestCase):
         value12.set_dtVal(DateTime(2020, 10, 1, 10, 10, 10, 10000))
         row.values.append(value12)
         value13 = ttypes.Value()
-        value13.set_vVal(self.get_vertex_value(b"Tom"))
+        value13.set_vVal(cls.get_vertex_value(b"Tom"))
         row.values.append(value13)
         value14 = ttypes.Value()
-        value14.set_eVal(self.get_edge_value(b"Tom", b"Lily"))
+        value14.set_eVal(cls.get_edge_value(b"Tom", b"Lily"))
         row.values.append(value14)
         value15 = ttypes.Value()
-        value15.set_pVal(self.get_path_value(b"Tom", 3))
+        value15.set_pVal(cls.get_path_value(b"Tom", 3))
         row.values.append(value15)
         data_set.rows = []
         data_set.rows.append(row)
@@ -182,7 +184,7 @@ class TestBaseCase(TestCase):
         return data_set
 
     @classmethod
-    def get_result_set(self):
+    def get_result_set(cls):
         resp = graphTtype.ExecutionResponse()
         resp.error_code = ErrorCode.E_BAD_PERMISSION
         resp.error_msg = b"Permission"
@@ -190,7 +192,7 @@ class TestBaseCase(TestCase):
         resp.space_name = b"test"
         resp.latency_in_us = 100
 
-        resp.data = self.get_data_set()
+        resp.data = cls.get_data_set()
         return ResultSet(resp, 100)
 
 
@@ -352,6 +354,15 @@ class TesValueWrapper(TestBaseCase):
 
         node = value_wrapper.as_node()
         assert isinstance(node, Node)
+        assert node.get_id().as_string() == 'Tom'
+        assert node.has_tag('tag1')
+        assert node.prop_names('tag1').sort() == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+        expect_values = [(v.as_int()) for v in node.prop_values('tag1')]
+        assert expect_values == [0, 1, 2, 3, 4]
+        assert node.tags() == ['tag0', 'tag1', 'tag2']
+        assert list(node.properties('tag1').keys()).sort() == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+        expect_values = [(v.as_int()) for v in node.properties('tag1').values()]
+        assert expect_values == [0, 1, 2, 3, 4]
 
     def test_as_relationship(self):
         value = ttypes.Value(eVal=self.get_edge_value(b'Tom', b'Lily'))
@@ -374,6 +385,24 @@ class TesValueWrapper(TestBaseCase):
         reversely_relationship = reversely_value_wrapper.as_relationship()
         assert isinstance(reversely_relationship, Relationship)
         assert reversely_relationship != relationship
+
+        relationship.ranking() == 100
+        relationship.edge_name() == 'classmate'
+        relationship.start_vertex_id().as_string() == 'Lily'
+        relationship.start_vertex_id().as_string() == 'Tom'
+        assert relationship.keys() == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4']
+        expect_values = [(v.as_int()) for v in relationship.values()]
+        assert expect_values == [0, 1, 2, 3, 4]
+        assert list(relationship.properties().keys()).sort() == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+        expect_values = [(v.as_int()) for v in relationship.properties().values()]
+        assert expect_values == [0, 1, 2, 3, 4]
+
+        # test empty props
+        value = ttypes.Value(eVal=self.get_edge_value(b'Tom', b'Lily', empty_props=True))
+        relationship = ValueWrapper(value).as_relationship()
+        assert relationship.keys() == []
+        assert relationship.values() == []
+        assert len(relationship.properties()) == 0
 
     def test_as_path(self):
         value = ttypes.Value()
@@ -401,8 +430,8 @@ class TestNode(TestBaseCase):
         assert ['tag0', 'tag1', 'tag2'] == node.tags()
 
         expect_propertys = {}
-        for key in node.propertys('tag2').keys():
-            expect_propertys[key] = node.propertys('tag2')[key].as_int()
+        for key in node.properties('tag2').keys():
+            expect_propertys[key] = node.properties('tag2')[key].as_int()
         assert {'prop0': 0, 'prop1': 1, 'prop2': 2, 'prop3': 3, 'prop4': 4} == expect_propertys
 
 
@@ -423,8 +452,8 @@ class TestRelationship(TestBaseCase):
         assert ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'] == relationship.keys()
 
         expect_propertys = {}
-        for key in relationship.propertys().keys():
-            expect_propertys[key] = relationship.propertys()[key].as_int()
+        for key in relationship.properties().keys():
+            expect_propertys[key] = relationship.properties()[key].as_int()
         assert {'prop0': 0, 'prop1': 1, 'prop2': 2, 'prop3': 3, 'prop4': 4} == expect_propertys
 
 

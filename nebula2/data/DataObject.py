@@ -13,7 +13,7 @@ from nebula2.Exception import (
     InvalidKeyException,
     OutOfRangeException
 )
-from nebula2.common.ttypes import NullType
+from nebula2.common.ttypes import NullType, Edge, Vertex
 
 
 class Record(object):
@@ -613,7 +613,7 @@ class GenValue(object):
 
 
 class Node(object):
-    def __init__(self, vertex, decode_type='utf-8'):
+    def __init__(self, vertex: Vertex, decode_type='utf-8'):
         self._value = vertex
         self._tag_indexes = dict()
         self._decode_type = decode_type
@@ -633,12 +633,14 @@ class Node(object):
     def has_tag(self, tag):
         return True if tag in self._tag_indexes.keys() else False
 
-    def propertys(self, tag):
+    def properties(self, tag):
         if tag not in self._tag_indexes.keys():
             raise InvalidKeyException(tag)
 
         props = self._value.tags[self._tag_indexes[tag]].props
         result_props = {}
+        if props is None:
+            return result_props
         for key in props.keys():
             result_props[key.decode(self._decode_type)] = ValueWrapper(props[key])
         return result_props
@@ -647,18 +649,24 @@ class Node(object):
         if tag not in self._tag_indexes.keys():
             raise InvalidKeyException(tag)
         index = self._tag_indexes[tag]
-        return [(key.decode(self._decode_type)) for key in self._value.tags[index].props.keys()]
+        props = self._value.tags[index].props
+        if props is None:
+            return []
+        return [(key.decode(self._decode_type)) for key in props.keys()]
 
     def prop_values(self, tag):
         if tag not in self._tag_indexes.keys():
             raise InvalidKeyException(tag)
         index = self._tag_indexes[tag]
-        return [(ValueWrapper(value)) for value in self._value.tags[index].props.values()]
+        props = self._value.tags[index].props
+        if props is None:
+            return []
+        return [(ValueWrapper(value)) for value in props.values()]
 
     def __repr__(self):
         tag_str_list = list()
         for tag in self._tag_indexes.keys():
-            prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.propertys(tag).items()]
+            prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.properties(tag).items()]
             tag_str_list.append(':%s{%s}' % (tag, ', '.join(prop_strs)))
         return '({} {})'.format(str(self.get_id()), ' '.join(tag_str_list))
 
@@ -673,7 +681,7 @@ class Node(object):
 
 
 class Relationship(object):
-    def __init__(self, edge, decode_type='utf-8'):
+    def __init__(self, edge: Edge, decode_type='utf-8'):
         self._decode_type = decode_type
         self._value = edge
 
@@ -703,20 +711,26 @@ class Relationship(object):
     def ranking(self):
         return self._value.ranking
 
-    def propertys(self):
+    def properties(self):
         props = {}
+        if self._value.props is None:
+            return props
         for key in self._value.props.keys():
             props[key.decode(self._decode_type)] = ValueWrapper(self._value.props[key])
         return props
 
     def keys(self):
+        if self._value.props is None:
+            return []
         return [(key.decode(self._decode_type)) for key in self._value.props.keys()]
 
     def values(self):
-        return [(ValueWrapper(value)) for value in self._value.props.values]
+        if self._value.props is None:
+            return []
+        return [(ValueWrapper(value)) for value in self._value.props.values()]
 
     def __repr__(self):
-        prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.propertys().items()]
+        prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.properties().items()]
         return "(%s)-[:%s@%d{%s}]->(%s)" % (str(self.start_vertex_id()),
                                             self.edge_name(),
                                             self.ranking(),
@@ -744,7 +758,7 @@ class Segment:
         return "{}-[:{}@{}{}]->{}".format(self.start_node,
                                           self.relationship.edge_name(),
                                           self.relationship.ranking(),
-                                          self.relationship.propertys(),
+                                          self.relationship.properties(),
                                           self.end_node)
 
     def __eq__(self, other):
@@ -836,7 +850,7 @@ class PathWrapper(object):
                                                           step.ranking,
                                                           step.props))
             edge_str = ''
-            prop_strs = ['%s: %s' % (key, str(val)) for key, val in relationship.propertys().items()]
+            prop_strs = ['%s: %s' % (key, str(val)) for key, val in relationship.properties().items()]
             if step.type > 0:
                 edge_str = '-[:%s@%d{%s}]->%s' % (relationship.edge_name(),
                                                   relationship.ranking(),
