@@ -46,16 +46,15 @@ class TestSession(TestCase):
     def test_2_reconnect(self):
         try:
             session = self.pool.get_session('root', 'nebula')
+            session.execute('CREATE SPACE IF NOT EXISTS test_session; USE test_session;')
             for i in range(0, 5):
                 if i == 3:
                     os.system('docker stop nebula-docker-compose_graphd0_1')
                     os.system('docker stop nebula-docker-compose_graphd1_1')
                     time.sleep(3)
-                resp = session.execute('SHOW SPACES')
-                if i >= 3:
-                    assert resp.error_code() == ErrorCode.E_SESSION_INVALID
-                else:
-                    assert resp.is_succeeded()
+                resp = session.execute('SHOW TAGS')
+                assert resp.is_succeeded()
+                assert resp.space_name() == 'test_session'
                 time.sleep(2)
             session.release()
             new_session = self.pool.get_session('root', 'nebula')
