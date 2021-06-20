@@ -57,6 +57,7 @@ FUNCTIONS = {
     'checkPeers': Function('checkPeers', 'StorageAdminService', 'AdminExecResp', [('CheckPeersReq', 'req', 'CheckPeersReq')]),
     'addAdminTask': Function('addAdminTask', 'StorageAdminService', 'AdminExecResp', [('AddAdminTaskRequest', 'req', 'AddAdminTaskRequest')]),
     'stopAdminTask': Function('stopAdminTask', 'StorageAdminService', 'AdminExecResp', [('StopAdminTaskRequest', 'req', 'StopAdminTaskRequest')]),
+    'listClusterInfo': Function('listClusterInfo', 'StorageAdminService', 'ListClusterInfoResp', [('ListClusterInfoReq', 'req', 'ListClusterInfoReq')]),
 }
 
 SERVICE_NAMES = ['StorageAdminService', ]

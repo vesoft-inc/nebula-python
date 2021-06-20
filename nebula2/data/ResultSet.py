@@ -12,14 +12,15 @@ from nebula2.data.DataObject import DataSetWrapper
 
 
 class ResultSet(object):
-    def __init__(self, resp, _all_latency, decode_type='utf-8'):
+    def __init__(self, resp, all_latency, decode_type='utf-8', timezone_offset: int = 0):
         """
         get data from ResultSet
         """
         self._decode_type = decode_type
         self._resp = resp
         self._data_set_wrapper = None
-        self._all_latency = _all_latency;
+        self._all_latency = all_latency
+        self._timezone_offset = timezone_offset
         if self._resp.data is not None:
             self._data_set_wrapper = DataSetWrapper(resp.data, self._decode_type)
 

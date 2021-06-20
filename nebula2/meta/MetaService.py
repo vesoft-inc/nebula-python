@@ -13,7 +13,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, PropertyType, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, SchemaID, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatisItem, CreateSpaceReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceReq, BalanceTask, BalanceResp, LeaderBalanceReq, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddGroupReq, DropGroupReq, AddZoneIntoGroupReq, DropZoneFromGroupReq, GetGroupReq, GetGroupResp, ListGroupsReq, Group, ListGroupsResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatisReq, GetStatisResp, CheckpointInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, ReportTaskReq, SchemaVer, ClusterID
+from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, PropertyType, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, SchemaID, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatisItem, CreateSpaceReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceReq, BalanceTask, BalanceResp, LeaderBalanceReq, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddGroupReq, DropGroupReq, AddZoneIntoGroupReq, DropZoneFromGroupReq, GetGroupReq, GetGroupResp, ListGroupsReq, Group, ListGroupsResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatisReq, GetStatisResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, SchemaVer, ClusterID
 import nebula2.common.ttypes
 
 from nebula2.fbthrift.Thrift import TProcessor
@@ -575,6 +575,27 @@ class Iface:
     """
     pass
 
+  def createFTIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def dropFTIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def listFTIndexes(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def createSession(self, req=None):
     """
     Parameters:
@@ -611,6 +632,20 @@ class Iface:
     pass
 
   def reportTaskFinish(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def listCluster(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def getMetaDirInfo(self, req=None):
     """
     Parameters:
      - req
@@ -1151,6 +1186,27 @@ class ContextIface:
     """
     pass
 
+  def createFTIndex(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def dropFTIndex(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def listFTIndexes(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def createSession(self, handler_ctx, req=None):
     """
     Parameters:
@@ -1187,6 +1243,20 @@ class ContextIface:
     pass
 
   def reportTaskFinish(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def listCluster(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def getMetaDirInfo(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -15864,6 +15934,585 @@ def listFTClients_result__setstate__(self, state):
 listFTClients_result.__getstate__ = lambda self: self.__dict__.copy()
 listFTClients_result.__setstate__ = listFTClients_result__setstate__
 
+class createFTIndex_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = CreateFTIndexReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('createFTIndex_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(createFTIndex_args)
+createFTIndex_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [CreateFTIndexReq, CreateFTIndexReq.thrift_spec, False], None, 2, ), # 1
+)
+
+createFTIndex_args.thrift_struct_annotations = {
+}
+createFTIndex_args.thrift_field_annotations = {
+}
+
+def createFTIndex_args__init__(self, req=None,):
+  self.req = req
+
+createFTIndex_args.__init__ = createFTIndex_args__init__
+
+def createFTIndex_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+createFTIndex_args.__getstate__ = lambda self: self.__dict__.copy()
+createFTIndex_args.__setstate__ = createFTIndex_args__setstate__
+
+class createFTIndex_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('createFTIndex_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(createFTIndex_result)
+createFTIndex_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+createFTIndex_result.thrift_struct_annotations = {
+}
+createFTIndex_result.thrift_field_annotations = {
+}
+
+def createFTIndex_result__init__(self, success=None,):
+  self.success = success
+
+createFTIndex_result.__init__ = createFTIndex_result__init__
+
+def createFTIndex_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+createFTIndex_result.__getstate__ = lambda self: self.__dict__.copy()
+createFTIndex_result.__setstate__ = createFTIndex_result__setstate__
+
+class dropFTIndex_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = DropFTIndexReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('dropFTIndex_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(dropFTIndex_args)
+dropFTIndex_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [DropFTIndexReq, DropFTIndexReq.thrift_spec, False], None, 2, ), # 1
+)
+
+dropFTIndex_args.thrift_struct_annotations = {
+}
+dropFTIndex_args.thrift_field_annotations = {
+}
+
+def dropFTIndex_args__init__(self, req=None,):
+  self.req = req
+
+dropFTIndex_args.__init__ = dropFTIndex_args__init__
+
+def dropFTIndex_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+dropFTIndex_args.__getstate__ = lambda self: self.__dict__.copy()
+dropFTIndex_args.__setstate__ = dropFTIndex_args__setstate__
+
+class dropFTIndex_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('dropFTIndex_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(dropFTIndex_result)
+dropFTIndex_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+dropFTIndex_result.thrift_struct_annotations = {
+}
+dropFTIndex_result.thrift_field_annotations = {
+}
+
+def dropFTIndex_result__init__(self, success=None,):
+  self.success = success
+
+dropFTIndex_result.__init__ = dropFTIndex_result__init__
+
+def dropFTIndex_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+dropFTIndex_result.__getstate__ = lambda self: self.__dict__.copy()
+dropFTIndex_result.__setstate__ = dropFTIndex_result__setstate__
+
+class listFTIndexes_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = ListFTIndexesReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('listFTIndexes_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(listFTIndexes_args)
+listFTIndexes_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [ListFTIndexesReq, ListFTIndexesReq.thrift_spec, False], None, 2, ), # 1
+)
+
+listFTIndexes_args.thrift_struct_annotations = {
+}
+listFTIndexes_args.thrift_field_annotations = {
+}
+
+def listFTIndexes_args__init__(self, req=None,):
+  self.req = req
+
+listFTIndexes_args.__init__ = listFTIndexes_args__init__
+
+def listFTIndexes_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+listFTIndexes_args.__getstate__ = lambda self: self.__dict__.copy()
+listFTIndexes_args.__setstate__ = listFTIndexes_args__setstate__
+
+class listFTIndexes_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ListFTIndexesResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('listFTIndexes_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(listFTIndexes_result)
+listFTIndexes_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ListFTIndexesResp, ListFTIndexesResp.thrift_spec, False], None, 2, ), # 0
+)
+
+listFTIndexes_result.thrift_struct_annotations = {
+}
+listFTIndexes_result.thrift_field_annotations = {
+}
+
+def listFTIndexes_result__init__(self, success=None,):
+  self.success = success
+
+listFTIndexes_result.__init__ = listFTIndexes_result__init__
+
+def listFTIndexes_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+listFTIndexes_result.__getstate__ = lambda self: self.__dict__.copy()
+listFTIndexes_result.__setstate__ = listFTIndexes_result__setstate__
+
 class createSession_args:
   """
   Attributes:
@@ -17021,6 +17670,392 @@ def reportTaskFinish_result__setstate__(self, state):
 
 reportTaskFinish_result.__getstate__ = lambda self: self.__dict__.copy()
 reportTaskFinish_result.__setstate__ = reportTaskFinish_result__setstate__
+
+class listCluster_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = ListClusterInfoReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('listCluster_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(listCluster_args)
+listCluster_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [ListClusterInfoReq, ListClusterInfoReq.thrift_spec, False], None, 2, ), # 1
+)
+
+listCluster_args.thrift_struct_annotations = {
+}
+listCluster_args.thrift_field_annotations = {
+}
+
+def listCluster_args__init__(self, req=None,):
+  self.req = req
+
+listCluster_args.__init__ = listCluster_args__init__
+
+def listCluster_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+listCluster_args.__getstate__ = lambda self: self.__dict__.copy()
+listCluster_args.__setstate__ = listCluster_args__setstate__
+
+class listCluster_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ListClusterInfoResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('listCluster_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(listCluster_result)
+listCluster_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ListClusterInfoResp, ListClusterInfoResp.thrift_spec, False], None, 2, ), # 0
+)
+
+listCluster_result.thrift_struct_annotations = {
+}
+listCluster_result.thrift_field_annotations = {
+}
+
+def listCluster_result__init__(self, success=None,):
+  self.success = success
+
+listCluster_result.__init__ = listCluster_result__init__
+
+def listCluster_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+listCluster_result.__getstate__ = lambda self: self.__dict__.copy()
+listCluster_result.__setstate__ = listCluster_result__setstate__
+
+class getMetaDirInfo_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = GetMetaDirInfoReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('getMetaDirInfo_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(getMetaDirInfo_args)
+getMetaDirInfo_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [GetMetaDirInfoReq, GetMetaDirInfoReq.thrift_spec, False], None, 2, ), # 1
+)
+
+getMetaDirInfo_args.thrift_struct_annotations = {
+}
+getMetaDirInfo_args.thrift_field_annotations = {
+}
+
+def getMetaDirInfo_args__init__(self, req=None,):
+  self.req = req
+
+getMetaDirInfo_args.__init__ = getMetaDirInfo_args__init__
+
+def getMetaDirInfo_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+getMetaDirInfo_args.__getstate__ = lambda self: self.__dict__.copy()
+getMetaDirInfo_args.__setstate__ = getMetaDirInfo_args__setstate__
+
+class getMetaDirInfo_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = GetMetaDirInfoResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('getMetaDirInfo_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(getMetaDirInfo_result)
+getMetaDirInfo_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [GetMetaDirInfoResp, GetMetaDirInfoResp.thrift_spec, False], None, 2, ), # 0
+)
+
+getMetaDirInfo_result.thrift_struct_annotations = {
+}
+getMetaDirInfo_result.thrift_field_annotations = {
+}
+
+def getMetaDirInfo_result__init__(self, success=None,):
+  self.success = success
+
+getMetaDirInfo_result.__init__ = getMetaDirInfo_result__init__
+
+def getMetaDirInfo_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+getMetaDirInfo_result.__getstate__ = lambda self: self.__dict__.copy()
+getMetaDirInfo_result.__setstate__ = getMetaDirInfo_result__setstate__
 
 class Client(Iface):
   def __enter__(self):
@@ -19317,6 +20352,96 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "listFTClients failed: unknown result");
 
+  def createFTIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_createFTIndex(req)
+    return self.recv_createFTIndex()
+
+  def send_createFTIndex(self, req=None):
+    self._oprot.writeMessageBegin('createFTIndex', TMessageType.CALL, self._seqid)
+    args = createFTIndex_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_createFTIndex(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = createFTIndex_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "createFTIndex failed: unknown result");
+
+  def dropFTIndex(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_dropFTIndex(req)
+    return self.recv_dropFTIndex()
+
+  def send_dropFTIndex(self, req=None):
+    self._oprot.writeMessageBegin('dropFTIndex', TMessageType.CALL, self._seqid)
+    args = dropFTIndex_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_dropFTIndex(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = dropFTIndex_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "dropFTIndex failed: unknown result");
+
+  def listFTIndexes(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_listFTIndexes(req)
+    return self.recv_listFTIndexes()
+
+  def send_listFTIndexes(self, req=None):
+    self._oprot.writeMessageBegin('listFTIndexes', TMessageType.CALL, self._seqid)
+    args = listFTIndexes_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_listFTIndexes(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = listFTIndexes_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "listFTIndexes failed: unknown result");
+
   def createSession(self, req=None):
     """
     Parameters:
@@ -19497,6 +20622,66 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "reportTaskFinish failed: unknown result");
 
+  def listCluster(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_listCluster(req)
+    return self.recv_listCluster()
+
+  def send_listCluster(self, req=None):
+    self._oprot.writeMessageBegin('listCluster', TMessageType.CALL, self._seqid)
+    args = listCluster_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_listCluster(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = listCluster_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "listCluster failed: unknown result");
+
+  def getMetaDirInfo(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_getMetaDirInfo(req)
+    return self.recv_getMetaDirInfo()
+
+  def send_getMetaDirInfo(self, req=None):
+    self._oprot.writeMessageBegin('getMetaDirInfo', TMessageType.CALL, self._seqid)
+    args = getMetaDirInfo_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_getMetaDirInfo(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = getMetaDirInfo_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "getMetaDirInfo failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   _onewayMethods = ()
@@ -19658,6 +20843,12 @@ class Processor(Iface, TProcessor):
     self._priorityMap["signOutFTService"] = TPriority.NORMAL
     self._processMap["listFTClients"] = Processor.process_listFTClients
     self._priorityMap["listFTClients"] = TPriority.NORMAL
+    self._processMap["createFTIndex"] = Processor.process_createFTIndex
+    self._priorityMap["createFTIndex"] = TPriority.NORMAL
+    self._processMap["dropFTIndex"] = Processor.process_dropFTIndex
+    self._priorityMap["dropFTIndex"] = TPriority.NORMAL
+    self._processMap["listFTIndexes"] = Processor.process_listFTIndexes
+    self._priorityMap["listFTIndexes"] = TPriority.NORMAL
     self._processMap["createSession"] = Processor.process_createSession
     self._priorityMap["createSession"] = TPriority.NORMAL
     self._processMap["updateSessions"] = Processor.process_updateSessions
@@ -19670,6 +20861,10 @@ class Processor(Iface, TProcessor):
     self._priorityMap["removeSession"] = TPriority.NORMAL
     self._processMap["reportTaskFinish"] = Processor.process_reportTaskFinish
     self._priorityMap["reportTaskFinish"] = TPriority.NORMAL
+    self._processMap["listCluster"] = Processor.process_listCluster
+    self._priorityMap["listCluster"] = TPriority.NORMAL
+    self._processMap["getMetaDirInfo"] = Processor.process_getMetaDirInfo
+    self._priorityMap["getMetaDirInfo"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -20515,6 +21710,39 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(createFTIndex_args, oneway=False)
+  def process_createFTIndex(self, args, handler_ctx):
+    result = createFTIndex_result()
+    try:
+      result.success = self._handler.createFTIndex(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'createFTIndex', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(dropFTIndex_args, oneway=False)
+  def process_dropFTIndex(self, args, handler_ctx):
+    result = dropFTIndex_result()
+    try:
+      result.success = self._handler.dropFTIndex(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'dropFTIndex', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(listFTIndexes_args, oneway=False)
+  def process_listFTIndexes(self, args, handler_ctx):
+    result = listFTIndexes_result()
+    try:
+      result.success = self._handler.listFTIndexes(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'listFTIndexes', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
   @thrift_process_method(createSession_args, oneway=False)
   def process_createSession(self, args, handler_ctx):
     result = createSession_result()
@@ -20578,6 +21806,28 @@ class Processor(Iface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'reportTaskFinish', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(listCluster_args, oneway=False)
+  def process_listCluster(self, args, handler_ctx):
+    result = listCluster_result()
+    try:
+      result.success = self._handler.listCluster(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'listCluster', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(getMetaDirInfo_args, oneway=False)
+  def process_getMetaDirInfo(self, args, handler_ctx):
+    result = getMetaDirInfo_result()
+    try:
+      result.success = self._handler.getMetaDirInfo(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'getMetaDirInfo', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -20743,6 +21993,12 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["signOutFTService"] = TPriority.NORMAL
     self._processMap["listFTClients"] = ContextProcessor.process_listFTClients
     self._priorityMap["listFTClients"] = TPriority.NORMAL
+    self._processMap["createFTIndex"] = ContextProcessor.process_createFTIndex
+    self._priorityMap["createFTIndex"] = TPriority.NORMAL
+    self._processMap["dropFTIndex"] = ContextProcessor.process_dropFTIndex
+    self._priorityMap["dropFTIndex"] = TPriority.NORMAL
+    self._processMap["listFTIndexes"] = ContextProcessor.process_listFTIndexes
+    self._priorityMap["listFTIndexes"] = TPriority.NORMAL
     self._processMap["createSession"] = ContextProcessor.process_createSession
     self._priorityMap["createSession"] = TPriority.NORMAL
     self._processMap["updateSessions"] = ContextProcessor.process_updateSessions
@@ -20755,6 +22011,10 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["removeSession"] = TPriority.NORMAL
     self._processMap["reportTaskFinish"] = ContextProcessor.process_reportTaskFinish
     self._priorityMap["reportTaskFinish"] = TPriority.NORMAL
+    self._processMap["listCluster"] = ContextProcessor.process_listCluster
+    self._priorityMap["listCluster"] = TPriority.NORMAL
+    self._processMap["getMetaDirInfo"] = ContextProcessor.process_getMetaDirInfo
+    self._priorityMap["getMetaDirInfo"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -21600,6 +22860,39 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(createFTIndex_args, oneway=False)
+  def process_createFTIndex(self, args, handler_ctx):
+    result = createFTIndex_result()
+    try:
+      result.success = self._handler.createFTIndex(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'createFTIndex', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(dropFTIndex_args, oneway=False)
+  def process_dropFTIndex(self, args, handler_ctx):
+    result = dropFTIndex_result()
+    try:
+      result.success = self._handler.dropFTIndex(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'dropFTIndex', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(listFTIndexes_args, oneway=False)
+  def process_listFTIndexes(self, args, handler_ctx):
+    result = listFTIndexes_result()
+    try:
+      result.success = self._handler.listFTIndexes(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'listFTIndexes', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
   @thrift_process_method(createSession_args, oneway=False)
   def process_createSession(self, args, handler_ctx):
     result = createSession_result()
@@ -21663,6 +22956,28 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'reportTaskFinish', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(listCluster_args, oneway=False)
+  def process_listCluster(self, args, handler_ctx):
+    result = listCluster_result()
+    try:
+      result.success = self._handler.listCluster(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'listCluster', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(getMetaDirInfo_args, oneway=False)
+  def process_getMetaDirInfo(self, args, handler_ctx):
+    result = getMetaDirInfo_result()
+    try:
+      result.success = self._handler.getMetaDirInfo(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'getMetaDirInfo', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 

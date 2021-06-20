@@ -5,7 +5,7 @@
 #
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
-
+import copy
 import sys
 import os
 from datetime import date
@@ -297,17 +297,22 @@ class TesValueWrapper(TestBaseCase):
         time.minute = 20
         time.sec = 10
         time.microsec = 100
-        value = ttypes.Value(tVal = time)
+        value = ttypes.Value(tVal=time)
         value_wrapper = ValueWrapper(value)
         assert value_wrapper.is_time()
 
         time_val = value_wrapper.as_time()
+        time_val.set_timezone_offset(28800)
         assert isinstance(time_val, TimeWrapper)
         assert time_val.get_hour() == 10
         assert time_val.get_minute() == 20
         assert time_val.get_sec() == 10
         assert time_val.get_microsec() == 100
-        assert '10:20:10.000100' == str(time_val)
+        assert 'utc time: 10:20:10.000100, timezone_offset: 28800' == str(time_val)
+        assert '18:20:10.000100' == time_val.get_local_time_str()
+        new_time = copy.deepcopy(time)
+        new_time.hour = 18
+        assert new_time == time_val.get_local_time()
 
     def test_as_date(self):
         date = Date()
@@ -339,12 +344,17 @@ class TesValueWrapper(TestBaseCase):
         assert value_wrapper.is_datetime()
 
         datetime_val = value_wrapper.as_datetime()
+        datetime_val.set_timezone_offset(28800)
         assert isinstance(datetime_val, DateTimeWrapper)
         assert datetime_val.get_hour() == 10
         assert datetime_val.get_minute() == 20
         assert datetime_val.get_sec() == 10
         assert datetime_val.get_microsec() == 100
-        assert '123-02-01T10:20:10.000100' == str(datetime_val)
+        assert 'utc datetime: 123-02-01T10:20:10.000100, timezone_offset: 28800' == str(datetime_val)
+        assert '123-02-01T18:20:10.000100' == datetime_val.get_local_datetime_str()
+        new_datetime = copy.deepcopy(datetime)
+        new_datetime.hour = 18
+        assert new_datetime == datetime_val.get_local_datetime()
 
     def test_as_node(self):
         value = ttypes.Value()

@@ -6,18 +6,79 @@
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
-
-from nebula2.common import ttypes
+import pytz
+from datetime import datetime, timezone, timedelta
 from nebula2.Exception import (
     InvalidValueTypeException,
     InvalidKeyException,
     OutOfRangeException
 )
-from nebula2.common.ttypes import NullType, Edge, Vertex
+
+from nebula2.common.ttypes import Value, Vertex, Edge, NullType, DateTime, Time
+
+
+def date_time_convert_with_timezone(date_time: DateTime, timezone_offset: int):
+    native_date_time = datetime(date_time.year,
+                                date_time.month,
+                                date_time.day,
+                                date_time.hour,
+                                date_time.minute,
+                                date_time.sec,
+                                date_time.microsec,
+                                pytz.timezone("utc"))
+    local_date_time = native_date_time.astimezone(timezone(timedelta(seconds=timezone_offset)))
+    new_date_time = DateTime()
+    new_date_time.year = local_date_time.year
+    new_date_time.month = local_date_time.month
+    new_date_time.day = local_date_time.day
+    new_date_time.hour = local_date_time.hour
+    new_date_time.minute = local_date_time.minute
+    new_date_time.sec = local_date_time.second
+    new_date_time.microsec = local_date_time.microsecond
+    return new_date_time
+
+
+def time_convert_with_timezone(n_time: Time, timezone_offset: int):
+    native_date_time = datetime(1,
+                                1,
+                                1,
+                                n_time.hour,
+                                n_time.minute,
+                                n_time.sec,
+                                n_time.microsec,
+                                pytz.timezone("utc"))
+    local_date_time = native_date_time.astimezone(timezone(timedelta(seconds=timezone_offset)))
+    local_time = Time()
+    local_time.hour = local_date_time.hour
+    local_time.minute = local_date_time.minute
+    local_time.sec = local_date_time.second
+    local_time.microsec = local_date_time.microsecond
+    return local_time
+
+
+class BaseObject(object):
+    def __init__(self):
+        self._decode_type = 'utf-8'
+        self._timezone_offset = 0
+
+    def set_decode_type(self, decode_type):
+        self._decode_type = decode_type
+        return self
+
+    def set_timezone_offset(self, timezone_offset):
+        self._timezone_offset = timezone_offset
+        return self
+
+    def get_decode_type(self):
+        return self._decode_type
+
+    def get_timezone_offset(self):
+        return self._timezone_offset
+>>>>>>> add timezone
 
 
 class Record(object):
-    def __init__(self, values, names):
+    def __init__(self, values, names, decode_type='utf-8', timezone_offset: int = 0):
         assert len(names) == len(values),\
             'len(names): {} != len(values): {}, names: {}, values: {}'.format(
                 len(names), len(values), str(names), str(values))
@@ -25,7 +86,9 @@ class Record(object):
         self._names = names
 
         for val in values:
-            self._record.append(ValueWrapper(val))
+            self._record.append(ValueWrapper(val,
+                                             decode_type=decode_type,
+                                             timezone_offset=timezone_offset))
 
     def __iter__(self):
         return iter(self._record)
@@ -76,9 +139,10 @@ class Record(object):
 
 
 class DataSetWrapper(object):
-    def __init__(self, data_set, decode_type='utf-8'):
+    def __init__(self, data_set, decode_type='utf-8', timezone_offset: int = 0):
         assert data_set is not None
         self._decode_type = decode_type
+        self._timezone_offset = timezone_offset
         self._data_set = data_set
         self._column_names = []
         self._key_indexes = {}
@@ -131,7 +195,7 @@ class DataSetWrapper(object):
         """
         if row_index >= len(self._data_set.rows):
             raise OutOfRangeException()
-        return [(ValueWrapper(value)) for value in self._data_set.rows[row_index].values]
+        return [(ValueWrapper(value, timezone_offset=self._timezone_offset)) for value in self._data_set.rows[row_index].values]
 
     def column_values(self, key):
         """
@@ -142,7 +206,7 @@ class DataSetWrapper(object):
         if key not in self._column_names:
             raise InvalidKeyException(key)
 
-        return [(ValueWrapper(row.values[self._key_indexes[key]])) for row in self._data_set.rows]
+        return [(ValueWrapper(row.values[self._key_indexes[key]], timezone_offset=self._timezone_offset)) for row in self._data_set.rows]
 
     def __iter__(self):
         self._pos = -1
@@ -187,63 +251,64 @@ class Null(object):
 
 
 class ValueWrapper(object):
-    def __init__(self, value, decode_type='utf-8'):
+    def __init__(self, value, decode_type='utf-8', timezone_offset: int = 0):
         self._value = value
         self._decode_type = decode_type
+        self._timezone_offset = timezone_offset
 
     def get_value(self):
         return self._value
 
     def is_null(self):
-        return self._value.getType() == ttypes.Value.NVAL
+        return self._value.getType() == Value.NVAL
 
     def is_empty(self):
-        return self._value.getType() == ttypes.Value.__EMPTY__
+        return self._value.getType() == Value.__EMPTY__
 
     def is_bool(self):
-        return self._value.getType() == ttypes.Value.BVAL
+        return self._value.getType() == Value.BVAL
 
     def is_int(self):
-        return self._value.getType() == ttypes.Value.IVAL
+        return self._value.getType() == Value.IVAL
 
     def is_double(self):
-        return self._value.getType() == ttypes.Value.FVAL
+        return self._value.getType() == Value.FVAL
 
     def is_string(self):
-        return self._value.getType() == ttypes.Value.SVAL
+        return self._value.getType() == Value.SVAL
 
     def is_list(self):
-        return self._value.getType() == ttypes.Value.LVAL
+        return self._value.getType() == Value.LVAL
 
     def is_set(self):
-        return self._value.getType() == ttypes.Value.UVAL
+        return self._value.getType() == Value.UVAL
 
     def is_map(self):
-        return self._value.getType() == ttypes.Value.MVAL
+        return self._value.getType() == Value.MVAL
 
     def is_time(self):
-        return self._value.getType() == ttypes.Value.TVAL
+        return self._value.getType() == Value.TVAL
 
     def is_date(self):
-        return self._value.getType() == ttypes.Value.DVAL
+        return self._value.getType() == Value.DVAL
 
     def is_datetime(self):
-        return self._value.getType() == ttypes.Value.DTVAL
+        return self._value.getType() == Value.DTVAL
 
     def is_vertex(self):
-        return self._value.getType() == ttypes.Value.VVAL
+        return self._value.getType() == Value.VVAL
 
     def is_edge(self):
-        return self._value.getType() == ttypes.Value.EVAL
+        return self._value.getType() == Value.EVAL
 
     def is_path(self):
-        return self._value.getType() == ttypes.Value.PVAL
+        return self._value.getType() == Value.PVAL
 
     def as_null(self):
         """
         :return: Null
         """
-        if self._value.getType() == ttypes.Value.NVAL:
+        if self._value.getType() == Value.NVAL:
             return Null(self._value.get_nVal())
         raise InvalidValueTypeException("expect NULL type, but is " + self._get_type_name())
 
@@ -251,7 +316,7 @@ class ValueWrapper(object):
         """
         :return Boolean:
         """
-        if self._value.getType() == ttypes.Value.BVAL:
+        if self._value.getType() == Value.BVAL:
             return self._value.get_bVal()
         raise InvalidValueTypeException("expect bool type, but is " + self._get_type_name())
 
@@ -259,7 +324,7 @@ class ValueWrapper(object):
         """
         :return int:
         """
-        if self._value.getType() == ttypes.Value.IVAL:
+        if self._value.getType() == Value.IVAL:
             return self._value.get_iVal()
         raise InvalidValueTypeException("expect bool type, but is " + self._get_type_name())
 
@@ -267,7 +332,7 @@ class ValueWrapper(object):
         """
         :return double:
         """
-        if self._value.getType() == ttypes.Value.FVAL:
+        if self._value.getType() == Value.FVAL:
             return self._value.get_fVal()
         raise InvalidValueTypeException("expect int type, but is " + self._get_type_name())
 
@@ -275,7 +340,7 @@ class ValueWrapper(object):
         """
         :return string:
         """
-        if self._value.getType() == ttypes.Value.SVAL:
+        if self._value.getType() == Value.SVAL:
             return self._value.get_sVal().decode(self._decode_type)
         raise InvalidValueTypeException("expect string type, but is " + self._get_type_name())
 
@@ -283,15 +348,15 @@ class ValueWrapper(object):
         """
         :return: TimeWrapper
         """
-        if self._value.getType() == ttypes.Value.TVAL:
-            return TimeWrapper(self._value.get_tVal())
+        if self._value.getType() == Value.TVAL:
+            return TimeWrapper(self._value.get_tVal()).set_timezone_offset(self._timezone_offset)
         raise InvalidValueTypeException("expect time type, but is " + self._get_type_name())
 
     def as_date(self):
         """
         :return: DateWrapper
         """
-        if self._value.getType() == ttypes.Value.DVAL:
+        if self._value.getType() == Value.DVAL:
             return DateWrapper(self._value.get_dVal())
         raise InvalidValueTypeException("expect date type, but is " + self._get_type_name())
 
@@ -299,7 +364,7 @@ class ValueWrapper(object):
         """
         :return: DateTimeWrapper
         """
-        if self._value.getType() == ttypes.Value.DTVAL:
+        if self._value.getType() == Value.DTVAL:
             return DateTimeWrapper(self._value.get_dtVal())
         raise InvalidValueTypeException("expect datetime type, but is " + self._get_type_name())
 
@@ -307,10 +372,10 @@ class ValueWrapper(object):
         """
         :return: list<ValueWrapper>
         """
-        if self._value.getType() == ttypes.Value.LVAL:
+        if self._value.getType() == Value.LVAL:
             result = []
             for val in self._value.get_lVal().values:
-                result.append(ValueWrapper(val))
+                result.append(ValueWrapper(val, timezone_offset=self._timezone_offset))
             return result
         raise InvalidValueTypeException("expect list type, but is " + self._get_type_name())
 
@@ -318,10 +383,10 @@ class ValueWrapper(object):
         """
         :return: set<ValueWrapper>
         """
-        if self._value.getType() == ttypes.Value.UVAL:
+        if self._value.getType() == Value.UVAL:
             result = set()
             for val in self._value.get_uVal().values:
-                result.add(ValueWrapper(val))
+                result.add(ValueWrapper(val, timezone_offset=self._timezone_offset))
             return result
         raise InvalidValueTypeException("expect set type, but is " + self._get_type_name())
 
@@ -329,11 +394,11 @@ class ValueWrapper(object):
         """
         :return: map<string, ValueWrapper>
         """
-        if self._value.getType() == ttypes.Value.MVAL:
+        if self._value.getType() == Value.MVAL:
             result = {}
             kvs = self._value.get_mVal().kvs
             for key in kvs.keys():
-                result[key.decode(self._decode_type)] = ValueWrapper(kvs[key])
+                result[key.decode(self._decode_type)] = ValueWrapper(kvs[key], timezone_offset=self._timezone_offset)
             return result
         raise InvalidValueTypeException("expect map type, but is " + self._get_type_name())
 
@@ -341,7 +406,7 @@ class ValueWrapper(object):
         """
         :return: Node
         """
-        if self._value.getType() == ttypes.Value.VVAL:
+        if self._value.getType() == Value.VVAL:
             return Node(self._value.get_vVal())
         raise InvalidValueTypeException("expect vertex type, but is " + self._get_type_name())
 
@@ -349,7 +414,7 @@ class ValueWrapper(object):
         """
         :return: Relationship
         """
-        if self._value.getType() == ttypes.Value.EVAL:
+        if self._value.getType() == Value.EVAL:
             return Relationship(self._value.get_eVal())
         raise InvalidValueTypeException("expect edge type, but is " + self._get_type_name())
 
@@ -357,7 +422,7 @@ class ValueWrapper(object):
         """
         :return: PathWrapper
         """
-        if self._value.getType() == ttypes.Value.PVAL:
+        if self._value.getType() == Value.PVAL:
             return PathWrapper(self._value.get_pVal())
         raise InvalidValueTypeException("expect path type, but is " + self._get_type_name())
 
@@ -472,10 +537,10 @@ class ValueWrapper(object):
         return self._value.__hash__()
 
 
-class TimeWrapper(object):
-    def __init__(self, time, time_zone='+08:00'):
+class TimeWrapper(BaseObject):
+    def __init__(self, time):
+        super(TimeWrapper, self).__init__()
         self._time = time
-        self._time_zone = time_zone
 
     def get_hour(self):
         return self._time.hour
@@ -490,7 +555,26 @@ class TimeWrapper(object):
         return self._time.microsec
 
     def get_time(self):
+        """
+        get utc time
+        """
         return self._time
+
+    def get_local_time(self):
+        """
+        get time with the timezone from graph service
+        """
+        return time_convert_with_timezone(self._time, self.get_timezone_offset())
+
+    def get_local_time_str(self):
+        """
+        get local time str
+        """
+        local_time = time_convert_with_timezone(self._time, self.get_timezone_offset())
+        return "%02d:%02d:%02d.%06d" % (local_time.hour,
+                                        local_time.minute,
+                                        local_time.sec,
+                                        local_time.microsec)
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -501,10 +585,12 @@ class TimeWrapper(object):
                self._time.microsec == self.get_microsec()
 
     def __repr__(self):
-        return "%02d:%02d:%02d.%06d" % (self._time.hour,
-                                        self._time.minute,
-                                        self._time.sec,
-                                        self._time.microsec)
+        return "utc time: %02d:%02d:%02d.%06d, timezone_offset: %d" % (
+            self._time.hour,
+            self._time.minute,
+            self._time.sec,
+            self._time.microsec,
+            self.get_timezone_offset())
 
 
 class DateWrapper(object):
@@ -534,10 +620,10 @@ class DateWrapper(object):
         return "%d-%02d-%02d" % (self._date.year, self._date.month, self._date.day)
 
 
-class DateTimeWrapper(object):
-    def __init__(self, date_time, time_zone='+08:00'):
+class DateTimeWrapper(BaseObject):
+    def __init__(self, date_time):
+        super(DateTimeWrapper, self).__init__()
         self._date_time = date_time
-        self._time_zone = time_zone
 
     def get_year(self):
         return self._date_time.year
@@ -561,7 +647,29 @@ class DateTimeWrapper(object):
         return self._date_time.microsec
 
     def get_datetime(self):
+        """
+        get utc datetime
+        """
         return self._date_time
+
+    def get_local_datetime(self):
+        """
+        get datetime with the timezone from the graph service
+        """
+        return date_time_convert_with_timezone(self._date_time, self.get_timezone_offset())
+
+    def get_local_datetime_str(self):
+        """
+        get date time str with the timezone from the graph service
+        """
+        local_date_time = date_time_convert_with_timezone(self._date_time, self.get_timezone_offset())
+        return "%d-%02d-%02dT%02d:%02d:%02d.%06d" % (local_date_time.year,
+                                                     local_date_time.month,
+                                                     local_date_time.day,
+                                                     local_date_time.hour,
+                                                     local_date_time.minute,
+                                                     local_date_time.sec,
+                                                     local_date_time.microsec)
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -575,26 +683,28 @@ class DateTimeWrapper(object):
                self._date_time.microsec == other.get_microsec()
 
     def __repr__(self):
-        return "%d-%02d-%02dT%02d:%02d:%02d.%06d" % (self._date_time.year,
-                                                     self._date_time.month,
-                                                     self._date_time.day,
-                                                     self._date_time.hour,
-                                                     self._date_time.minute,
-                                                     self._date_time.sec,
-                                                     self._date_time.microsec)
+        return "utc datetime: %d-%02d-%02dT%02d:%02d:%02d.%06d, timezone_offset: %d" % (
+            self._date_time.year,
+            self._date_time.month,
+            self._date_time.day,
+            self._date_time.hour,
+            self._date_time.minute,
+            self._date_time.sec,
+            self._date_time.microsec,
+            self.get_timezone_offset())
 
 
 class GenValue(object):
     @classmethod
     def gen_vertex(cls, vid, tags):
-        vertex = ttypes.Vertex()
+        vertex = Vertex()
         vertex.vid = vid
         vertex.tags = tags
         return vertex
 
     @classmethod
     def gen_edge(cls, src_id, dst_id, type, edge_name, ranking, props):
-        edge = ttypes.Edge()
+        edge = Edge()
         edge.src = src_id
         edge.dst = dst_id
         edge.type = type
@@ -612,20 +722,20 @@ class GenValue(object):
         return segment
 
 
-class Node(object):
-    def __init__(self, vertex: Vertex, decode_type='utf-8'):
+class Node(BaseObject):
+    def __init__(self, vertex):
+        super(Node, self).__init__()
         self._value = vertex
         self._tag_indexes = dict()
-        self._decode_type = decode_type
         for index, tag in enumerate(self._value.tags, start=0):
-            self._tag_indexes[tag.name.decode(self._decode_type)] = index
+            self._tag_indexes[tag.name.decode(self.get_decode_type())] = index
 
     def get_id(self):
         """
         get vertex id
         :return: ValueWrapper
         """
-        return ValueWrapper(self._value.vid, self._decode_type)
+        return ValueWrapper(self._value.vid, self.get_decode_type())
 
     def tags(self):
         return list(self._tag_indexes.keys())
@@ -642,7 +752,9 @@ class Node(object):
         if props is None:
             return result_props
         for key in props.keys():
-            result_props[key.decode(self._decode_type)] = ValueWrapper(props[key])
+            result_props[key.decode(self.get_decode_type())] = ValueWrapper(props[key],
+                                                                            decode_type=self.get_decode_type(),
+                                                                            timezone_offset=self._timezone_offset)
         return result_props
 
     def prop_names(self, tag):
@@ -652,7 +764,7 @@ class Node(object):
         props = self._value.tags[index].props
         if props is None:
             return []
-        return [(key.decode(self._decode_type)) for key in props.keys()]
+        return [(key.decode(self.get_decode_type())) for key in self._value.tags[index].props.keys()]
 
     def prop_values(self, tag):
         if tag not in self._tag_indexes.keys():
@@ -661,7 +773,10 @@ class Node(object):
         props = self._value.tags[index].props
         if props is None:
             return []
-        return [(ValueWrapper(value)) for value in props.values()]
+        return [(ValueWrapper(value,
+                              decode_type=self.get_decode_type(),
+                              timezone_offset=self._timezone_offset))
+                for value in self._value.tags[index].props.values()]
 
     def __repr__(self):
         tag_str_list = list()
@@ -680,9 +795,10 @@ class Node(object):
         return not (self == other)
 
 
-class Relationship(object):
-    def __init__(self, edge: Edge, decode_type='utf-8'):
-        self._decode_type = decode_type
+
+class Relationship(BaseObject):
+    def __init__(self, edge: Edge):
+        super(Relationship, self).__init__()
         self._value = edge
 
     def start_vertex_id(self):
@@ -691,9 +807,9 @@ class Relationship(object):
         :return: ValueWrapper
         """
         if self._value.type > 0:
-            return ValueWrapper(self._value.src, self._decode_type)
+            return ValueWrapper(self._value.src, self.get_decode_type())
         else:
-            return ValueWrapper(self._value.dst, self._decode_type)
+            return ValueWrapper(self._value.dst, self.get_decode_type())
 
     def end_vertex_id(self):
         """
@@ -701,12 +817,12 @@ class Relationship(object):
         :return: ValueWrapper
         """
         if self._value.type > 0:
-            return ValueWrapper(self._value.dst, self._decode_type)
+            return ValueWrapper(self._value.dst, self.get_decode_type())
         else:
-            return ValueWrapper(self._value.src, self._decode_type)
+            return ValueWrapper(self._value.src, self.get_decode_type())
 
     def edge_name(self):
-        return self._value.name.decode(self._decode_type)
+        return self._value.name.decode(self.get_decode_type())
 
     def ranking(self):
         return self._value.ranking
@@ -716,7 +832,9 @@ class Relationship(object):
         if self._value.props is None:
             return props
         for key in self._value.props.keys():
-            props[key.decode(self._decode_type)] = ValueWrapper(self._value.props[key])
+            props[key.decode(self.get_decode_type())] = ValueWrapper(self._value.props[key],
+                                                                     decode_type=self.get_decode_type(),
+                                                                      timezone_offset=self._timezone_offset)
         return props
 
     def keys(self):
@@ -727,7 +845,7 @@ class Relationship(object):
     def values(self):
         if self._value.props is None:
             return []
-        return [(ValueWrapper(value)) for value in self._value.props.values()]
+        return [(ValueWrapper(value, timezone_offset=self._timezone_offset)) for value in self._value.props.values]
 
     def __repr__(self):
         prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.properties().items()]
@@ -769,9 +887,9 @@ class Segment:
                and self.relationship == other.relationship
 
 
-class PathWrapper(object):
-    def __init__(self, path, decode_type='utf-8'):
-        self._decode_type = decode_type
+class PathWrapper(BaseObject):
+    def __init__(self, path):
+        super(PathWrapper, self).__init__()
         self._nodes = list()
         self._segments = list()
         self._relationships = list()

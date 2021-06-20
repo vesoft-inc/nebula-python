@@ -44,7 +44,7 @@ class TestBaseCase(TestCase):
         configs = Config()
         configs.max_connection_pool_size = 1
         cls.pool = ConnectionPool()
-        cls.pool.init([('127.0.0.1', 9671)], configs)
+        cls.pool.init([('127.0.0.1', 3777)], configs)
         cls.session = cls.pool.get_session('root', 'nebula')
         resp = cls.session.execute(
             '''
@@ -117,8 +117,10 @@ class TestBaseCase(TestCase):
 
     def test_base_type(self):
         resp = self.session.execute('FETCH PROP ON person "Bob" YIELD person.name, person.age, person.grade,'
-                                    'person.friends, person.book_num, person.birthday, person.start_school, person.morning, '
-                                    'person.property, person.is_girl, person.child_name, person.expend, person.first_out_city, person.hobby')
+                                    'person.friends, person.book_num, person.birthday, '
+                                    'person.start_school, person.morning, '
+                                    'person.property, person.is_girl, person.child_name, '
+                                    'person.expend, person.first_out_city, person.hobby')
         assert resp.is_succeeded(), resp.error_msg()
         assert '' == resp.error_msg()
         assert resp.latency() > 0
@@ -150,12 +152,18 @@ class TestBaseCase(TestCase):
         assert 3 == resp.row_values(0)[3].as_int()
         assert 10 == resp.row_values(0)[4].as_int()
         assert 100 == resp.row_values(0)[5].as_int()
-        assert resp.row_values(0)[6].as_datetime() == \
+        return_data_time_val = resp.row_values(0)[6].as_datetime()
+        assert return_data_time_val == \
                DateTimeWrapper(DateTime(2010, 9, 10, 10, 8, 2, 0))
+        assert '2010-09-10T10:08:02.000000' == return_data_time_val.get_local_datetime_str()
+        assert 'utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800' == str(return_data_time_val)
 
         assert DateWrapper(Date(2017, 9, 10)) == resp.row_values(0)[7].as_date()
 
-        assert TimeWrapper(Time(7, 10, 0, 0)) == resp.row_values(0)[8].as_time()
+        return_time_val = TimeWrapper(Time(7, 10, 0, 0))
+        assert return_time_val == resp.row_values(0)[8].as_time()
+        assert '07:10:00.000000' == return_time_val.get_local_time_str()
+        assert 'utc time: 23:10:00.000000, timezone_offset: 28800' == str(return_time_val)
 
         assert 1000.0 == resp.row_values(0)[9].as_double()
         assert False == resp.row_values(0)[10].as_bool()
