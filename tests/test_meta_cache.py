@@ -26,7 +26,8 @@ class TestMetaCache(object):
         try:
             conn = Connection()
             conn.open('127.0.0.1', 9669, 1000)
-            session_id = conn.authenticate('root', 'nebula')
+            auth_result = conn.authenticate('root', 'nebula')
+            session_id = auth_result.get_session_id()
             assert session_id != 0
             resp = conn.execute(session_id,
                                 'CREATE SPACE IF NOT EXISTS test_meta_cache1(REPLICA_FACTOR=3);'

@@ -382,6 +382,7 @@ class ConnectionPool(object):
         timer.setDaemon(True)
         timer.start()
 
+
 class Connection(object):
     is_used = False
 

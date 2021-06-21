@@ -314,6 +314,10 @@ class TesValueWrapper(TestBaseCase):
         new_time.hour = 18
         assert new_time == time_val.get_local_time()
 
+        new_time_2 = copy.deepcopy(time)
+        new_time_2.hour = 12
+        assert new_time_2 == time_val.get_local_time_by_timezone_offset(7200)
+
     def test_as_date(self):
         date = Date()
         date.year = 220
@@ -355,6 +359,10 @@ class TesValueWrapper(TestBaseCase):
         new_datetime = copy.deepcopy(datetime)
         new_datetime.hour = 18
         assert new_datetime == datetime_val.get_local_datetime()
+
+        new_datetime_2 = copy.deepcopy(datetime)
+        new_datetime_2.hour = 12
+        assert new_datetime_2 == datetime_val.get_local_datetime_by_timezone_offset(7200)
 
     def test_as_node(self):
         value = ttypes.Value()

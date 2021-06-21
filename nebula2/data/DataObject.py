@@ -194,7 +194,7 @@ class DataSetWrapper(object):
         """
         if row_index >= len(self._data_set.rows):
             raise OutOfRangeException()
-        return [(ValueWrapper(value,
+        return [(ValueWrapper(value=value,
                               decode_type=self._decode_type,
                               timezone_offset=self._timezone_offset))
                 for value in self._data_set.rows[row_index].values]
@@ -208,7 +208,7 @@ class DataSetWrapper(object):
         if key not in self._column_names:
             raise InvalidKeyException(key)
 
-        return [(ValueWrapper(row.values[self._key_indexes[key]],
+        return [(ValueWrapper(value=row.values[self._key_indexes[key]],
                               decode_type=self._decode_type,
                               timezone_offset=self._timezone_offset))
                 for row in self._data_set.rows]
@@ -225,7 +225,10 @@ class DataSetWrapper(object):
         if len(self._data_set.rows) == 0 or self._pos >= len(self._data_set.rows) - 1:
             raise StopIteration
         self._pos = self._pos + 1
-        return Record(self._data_set.rows[self._pos].values, self._column_names)
+        return Record(values=self._data_set.rows[self._pos].values,
+                      names=self._column_names,
+                      decode_type=self._decode_type,
+                      timezone_offset=self._timezone_offset)
 
     def __repr__(self):
         data_str = []
@@ -370,7 +373,7 @@ class ValueWrapper(object):
         :return: DateTimeWrapper
         """
         if self._value.getType() == Value.DTVAL:
-            return DateTimeWrapper(self._value.get_dtVal())
+            return DateTimeWrapper(self._value.get_dtVal()).set_timezone_offset(self._timezone_offset)
         raise InvalidValueTypeException("expect datetime type, but is " + self._get_type_name())
 
     def as_list(self):
@@ -418,7 +421,9 @@ class ValueWrapper(object):
         :return: Node
         """
         if self._value.getType() == Value.VVAL:
-            return Node(self._value.get_vVal())
+            return Node(self._value.get_vVal())\
+                .set_decode_type(self._decode_type)\
+                .set_timezone_offset(self._timezone_offset)
         raise InvalidValueTypeException("expect vertex type, but is " + self._get_type_name())
 
     def as_relationship(self):
@@ -426,7 +431,9 @@ class ValueWrapper(object):
         :return: Relationship
         """
         if self._value.getType() == Value.EVAL:
-            return Relationship(self._value.get_eVal())
+            return Relationship(self._value.get_eVal())\
+                .set_decode_type(self._decode_type)\
+                .set_timezone_offset(self._timezone_offset)
         raise InvalidValueTypeException("expect edge type, but is " + self._get_type_name())
 
     def as_path(self):
@@ -434,7 +441,9 @@ class ValueWrapper(object):
         :return: PathWrapper
         """
         if self._value.getType() == Value.PVAL:
-            return PathWrapper(self._value.get_pVal())
+            return PathWrapper(self._value.get_pVal())\
+                .set_decode_type(self._decode_type)\
+                .set_timezone_offset(self._timezone_offset)
         raise InvalidValueTypeException("expect path type, but is " + self._get_type_name())
 
     def _get_type_name(self):
@@ -577,6 +586,12 @@ class TimeWrapper(BaseObject):
         """
         return time_convert_with_timezone(self._time, self.get_timezone_offset())
 
+    def get_local_time_by_timezone_offset(self, timezone_offset):
+        """
+        get local time with the specified timezone by user
+        """
+        return time_convert_with_timezone(self._time, timezone_offset)
+
     def get_local_time_str(self):
         """
         get local time str
@@ -669,6 +684,12 @@ class DateTimeWrapper(BaseObject):
         """
         return date_time_convert_with_timezone(self._date_time, self.get_timezone_offset())
 
+    def get_local_datetime_by_timezone_offset(self, timezone_offset):
+        """
+        get local datetime with the specified timezone by user
+        """
+        return date_time_convert_with_timezone(self._date_time, timezone_offset)
+
     def get_local_datetime_str(self):
         """
         get date time str with the timezone from the graph service
@@ -746,7 +767,9 @@ class Node(BaseObject):
         get vertex id
         :return: ValueWrapper
         """
-        return ValueWrapper(self._value.vid, self.get_decode_type())
+        return ValueWrapper(value=self._value.vid,
+                            decode_type=self.get_decode_type(),
+                            timezone_offset=self.get_timezone_offset())
 
     def tags(self):
         return list(self._tag_indexes.keys())
@@ -908,7 +931,9 @@ class PathWrapper(BaseObject):
         self._relationships = list()
 
         self._path = path
-        self._nodes.append(Node(path.src))
+        self._nodes.append(Node(path.src)
+                           .set_decode_type(self.get_decode_type())
+                           .set_timezone_offset(self.get_timezone_offset()))
 
         vids = []
         vids.append(path.src.vid)
@@ -916,13 +941,17 @@ class PathWrapper(BaseObject):
             type = step.type
             if step.type > 0:
                 start_node = self._nodes[-1]
-                end_node = Node(step.dst)
+                end_node = Node(step.dst)\
+                    .set_decode_type(self.get_decode_type())\
+                    .set_timezone_offset(self.get_timezone_offset())
                 src_id = vids[-1]
                 dst_id = step.dst.vid
             else:
                 type = -type
                 end_node = self._nodes[-1]
-                start_node = Node(step.dst)
+                start_node = Node(step.dst)\
+                    .set_decode_type(self.get_decode_type())\
+                    .set_timezone_offset(self.get_timezone_offset())
                 dst_id = vids[-1]
                 src_id = step.dst.vid
             vids.append(step.dst.vid)
@@ -931,7 +960,9 @@ class PathWrapper(BaseObject):
                                                           type,
                                                           step.name,
                                                           step.ranking,
-                                                          step.props))
+                                                          step.props))\
+                .set_decode_type(self.get_decode_type())\
+                .set_timezone_offset(self.get_timezone_offset())
 
             self._relationships.append(relationship)
             segment = GenValue.gen_segment(start_node, end_node, relationship)
@@ -979,22 +1010,31 @@ class PathWrapper(BaseObject):
                                                           type,
                                                           step.name,
                                                           step.ranking,
-                                                          step.props))
+                                                          step.props))\
+                .set_decode_type(self.get_decode_type())\
+                .set_timezone_offset(self.get_timezone_offset())
             edge_str = ''
             prop_strs = ['%s: %s' % (key, str(val)) for key, val in relationship.properties().items()]
             if step.type > 0:
                 edge_str = '-[:%s@%d{%s}]->%s' % (relationship.edge_name(),
                                                   relationship.ranking(),
                                                   ', '.join(prop_strs),
-                                                  Node(step.dst))
+                                                  Node(step.dst)
+                                                  .set_decode_type(self.get_decode_type())
+                                                  .set_timezone_offset(self.get_timezone_offset()))
             else:
                 edge_str = "<-[:%s@%d{%s}]-%s" % (relationship.edge_name(),
                                                   relationship.ranking(),
                                                   ', '.join(prop_strs),
-                                                  Node(step.dst))
+                                                  Node(step.dst)
+                                                  .set_decode_type(self.get_decode_type())
+                                                  .set_timezone_offset(self.get_timezone_offset())
+                                                  )
 
             edge_strs.append(edge_str)
-        return '{}{}'.format(Node(self._path.src), ''.join(edge_strs))
+        return '{}{}'.format(Node(self._path.src)
+                             .set_decode_type(self.get_decode_type())
+                             .set_timezone_offset(self.get_timezone_offset()), ''.join(edge_strs))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
