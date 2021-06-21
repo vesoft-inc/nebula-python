@@ -74,7 +74,6 @@ class BaseObject(object):
 
     def get_timezone_offset(self):
         return self._timezone_offset
->>>>>>> add timezone
 
 
 class Record(object):
@@ -195,7 +194,10 @@ class DataSetWrapper(object):
         """
         if row_index >= len(self._data_set.rows):
             raise OutOfRangeException()
-        return [(ValueWrapper(value, timezone_offset=self._timezone_offset)) for value in self._data_set.rows[row_index].values]
+        return [(ValueWrapper(value,
+                              decode_type=self._decode_type,
+                              timezone_offset=self._timezone_offset))
+                for value in self._data_set.rows[row_index].values]
 
     def column_values(self, key):
         """
@@ -206,7 +208,10 @@ class DataSetWrapper(object):
         if key not in self._column_names:
             raise InvalidKeyException(key)
 
-        return [(ValueWrapper(row.values[self._key_indexes[key]], timezone_offset=self._timezone_offset)) for row in self._data_set.rows]
+        return [(ValueWrapper(row.values[self._key_indexes[key]],
+                              decode_type=self._decode_type,
+                              timezone_offset=self._timezone_offset))
+                for row in self._data_set.rows]
 
     def __iter__(self):
         self._pos = -1
@@ -375,7 +380,9 @@ class ValueWrapper(object):
         if self._value.getType() == Value.LVAL:
             result = []
             for val in self._value.get_lVal().values:
-                result.append(ValueWrapper(val, timezone_offset=self._timezone_offset))
+                result.append(ValueWrapper(val,
+                                           decode_type=self._decode_type,
+                                           timezone_offset=self._timezone_offset))
             return result
         raise InvalidValueTypeException("expect list type, but is " + self._get_type_name())
 
@@ -386,7 +393,9 @@ class ValueWrapper(object):
         if self._value.getType() == Value.UVAL:
             result = set()
             for val in self._value.get_uVal().values:
-                result.add(ValueWrapper(val, timezone_offset=self._timezone_offset))
+                result.add(ValueWrapper(val,
+                                        decode_type=self._decode_type,
+                                        timezone_offset=self._timezone_offset))
             return result
         raise InvalidValueTypeException("expect set type, but is " + self._get_type_name())
 
@@ -398,7 +407,9 @@ class ValueWrapper(object):
             result = {}
             kvs = self._value.get_mVal().kvs
             for key in kvs.keys():
-                result[key.decode(self._decode_type)] = ValueWrapper(kvs[key], timezone_offset=self._timezone_offset)
+                result[key.decode(self._decode_type)] = ValueWrapper(kvs[key],
+                                                                     decode_type=self._decode_type,
+                                                                     timezone_offset=self._timezone_offset)
             return result
         raise InvalidValueTypeException("expect map type, but is " + self._get_type_name())
 
@@ -795,7 +806,6 @@ class Node(BaseObject):
         return not (self == other)
 
 
-
 class Relationship(BaseObject):
     def __init__(self, edge: Edge):
         super(Relationship, self).__init__()
@@ -834,7 +844,7 @@ class Relationship(BaseObject):
         for key in self._value.props.keys():
             props[key.decode(self.get_decode_type())] = ValueWrapper(self._value.props[key],
                                                                      decode_type=self.get_decode_type(),
-                                                                      timezone_offset=self._timezone_offset)
+                                                                     timezone_offset=self.get_timezone_offset())
         return props
 
     def keys(self):
@@ -845,7 +855,10 @@ class Relationship(BaseObject):
     def values(self):
         if self._value.props is None:
             return []
-        return [(ValueWrapper(value, timezone_offset=self._timezone_offset)) for value in self._value.props.values]
+        return [(ValueWrapper(value,
+                              decode_type=self.get_decode_type(),
+                              timezone_offset=self.get_timezone_offset()))
+                for value in self._value.props.values()]
 
     def __repr__(self):
         prop_strs = ['%s: %s' % (key, str(val)) for key, val in self.properties().items()]
