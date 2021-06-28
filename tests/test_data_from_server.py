@@ -48,7 +48,7 @@ class TestBaseCase(TestCase):
         cls.session = cls.pool.get_session('root', 'nebula')
         resp = cls.session.execute(
             '''
-            CREATE SPACE IF NOT EXISTS test_data; 
+            CREATE SPACE IF NOT EXISTS test_data(vid_type=FIXED_STRING(8));
             USE test_data;
             CREATE TAG IF NOT EXISTS person(name string, age int8, grade int16, 
             friends int32, book_num int64, birthday datetime, 

@@ -30,11 +30,11 @@ class TestMetaCache(object):
             session_id = auth_result.get_session_id()
             assert session_id != 0
             resp = conn.execute(session_id,
-                                'CREATE SPACE IF NOT EXISTS test_meta_cache1(REPLICA_FACTOR=3);'
+                                'CREATE SPACE IF NOT EXISTS test_meta_cache1(REPLICA_FACTOR=3, vid_type=FIXED_STRING(8));'
                                 'USE test_meta_cache1;'
                                 'CREATE TAG IF NOT EXISTS tag11(name string);'
                                 'CREATE EDGE IF NOT EXISTS edge11(name string);'
-                                'CREATE SPACE IF NOT EXISTS test_meta_cache2;'
+                                'CREATE SPACE IF NOT EXISTS test_meta_cache2(vid_type=FIXED_STRING(8));'
                                 'USE test_meta_cache2;'
                                 'CREATE TAG IF NOT EXISTS tag22(name string);'
                                 'CREATE EDGE IF NOT EXISTS edge22(name string);')
