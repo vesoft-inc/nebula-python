@@ -36,9 +36,26 @@ from nebula2.data.ResultSet import ResultSet
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s]:%(message)s')
 
 
+class AuthResult(object):
+    def __init__(self, session_id, timezone_offset, timezone_name):
+        self._session_id = session_id
+        self._timezone_offset = timezone_offset
+        self._timezone_name = timezone_name
+
+    def get_session_id(self):
+        return self._session_id
+
+    def get_timezone_offset(self):
+        return self._timezone_offset
+
+    def get_timezone_name(self):
+        return self._timezone_name
+
+
 class Session(object):
-    def __init__(self, connection, session_id, pool, retry_connect=True):
-        self.session_id = session_id
+    def __init__(self, connection, auth_result: AuthResult, pool, retry_connect=True):
+        self._session_id = auth_result.get_session_id()
+        self._timezone_offset = auth_result.get_timezone_offset()
         self._connection = connection
         self._timezone = 0
         self._pool = pool
@@ -54,9 +71,11 @@ class Session(object):
             raise RuntimeError('The session has released')
         try:
             start_time = time.time()
-            resp = self._connection.execute(self.session_id, stmt)
+            resp = self._connection.execute(self._session_id, stmt)
             end_time = time.time()
-            return ResultSet(resp, int((end_time - start_time) * 1000000))
+            return ResultSet(resp,
+                             all_latency=int((end_time - start_time) * 1000000),
+                             timezone_offset=self._timezone_offset)
         except IOErrorException as ie:
             if ie.type == IOErrorException.E_CONNECT_BROKEN:
                 self._pool.update_servers_status()
@@ -65,9 +84,11 @@ class Session(object):
                         logging.warning('Retry connect failed')
                         raise IOErrorException(IOErrorException.E_ALL_BROKEN, 'All connections are broken')
                     try:
-                        resp = self._connection.execute(self.session_id, stmt)
+                        resp = self._connection.execute(self._session_id, stmt)
                         end_time = time.time()
-                        return ResultSet(resp, int((end_time - start_time) * 1000000))
+                        return ResultSet(resp,
+                                         all_latency=int((end_time - start_time) * 1000000),
+                                         timezone_offset=self._timezone_offset)
                     except Exception:
                         raise
             raise
@@ -80,7 +101,7 @@ class Session(object):
         """
         if self._connection is None:
             return
-        self._connection.signout(self.session_id)
+        self._connection.signout(self._session_id)
         self._connection.is_used = False
         self._connection = None
 
@@ -179,8 +200,8 @@ class ConnectionPool(object):
         if connection is None:
             raise NotValidConnectionException()
         try:
-            session_id = connection.authenticate(user_name, password)
-            return Session(connection, session_id, self, retry_connect)
+            auth_result = connection.authenticate(user_name, password)
+            return Session(connection, auth_result, self, retry_connect)
         except Exception:
             raise
 
@@ -390,7 +411,7 @@ class Connection(object):
             resp = self._connection.authenticate(user_name, password)
             if resp.error_code != ErrorCode.SUCCEEDED:
                 raise AuthFailedException(resp.error_msg)
-            return resp.session_id
+            return AuthResult(resp.session_id, resp.time_zone_offset_seconds, resp.time_zone_name)
         except TTransportException as te:
             if te.type == TTransportException.END_OF_FILE:
                 self.close()

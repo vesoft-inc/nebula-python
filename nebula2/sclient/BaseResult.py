@@ -73,7 +73,7 @@ class VertexData(object):
             index = index + 1
         vertex.tags.append(tag)
 
-        return Node(vertex, self._decode_type)
+        return Node(vertex).set_decode_type(self._decode_type)
 
     def get_prop_values(self):
         """
@@ -84,7 +84,7 @@ class VertexData(object):
         prop_values = []
         while index < len(self._row.values):
             prop_values.append(ValueWrapper(self._row.values[index],
-                                            self._decode_type))
+                                            decode_type=self._decode_type))
             index = index + 1
         return prop_values
 
@@ -167,7 +167,7 @@ class EdgeData(object):
             edge.props[self._col_names[index]] = self._row.values[index]
             index = index + 1
 
-        return Relationship(edge, self._decode_type)
+        return Relationship(edge).set_decode_type(self._decode_type)
 
     def get_prop_values(self):
         """
@@ -177,7 +177,7 @@ class EdgeData(object):
         index = self.PROP_START_INDEX
         prop_values = []
         while index < len(self._row.values):
-            prop_values.append(ValueWrapper(self._row.values[index]))
+            prop_values.append(ValueWrapper(self._row.values[index], decode_type=self._decode_type))
             index = index + 1
         return prop_values
 

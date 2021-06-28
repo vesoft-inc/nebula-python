@@ -120,6 +120,7 @@ services:
       - --v=0
       - --minloglevel=0
       - --heartbeat_interval_secs=2
+      - --timezone_name=+08:00
     depends_on:
       - metad0
       - metad1
@@ -159,6 +160,7 @@ services:
       - --v=0
       - --minloglevel=0
       - --heartbeat_interval_secs=2
+      - --timezone_name=+08:00
     depends_on:
       - metad0
       - metad1
@@ -198,6 +200,7 @@ services:
       - --v=0
       - --minloglevel=0
       - --heartbeat_interval_secs=2
+      - --timezone_name=+08:00
     depends_on:
       - metad0
       - metad1
@@ -235,6 +238,7 @@ services:
       - --v=0
       - --minloglevel=0
       - --heartbeat_interval_secs=2
+      - --timezone_name=+08:00
     depends_on:
       - metad0
       - metad1
@@ -271,6 +275,7 @@ services:
       - --v=0
       - --minloglevel=0
       - --heartbeat_interval_secs=2
+      - --timezone_name=+08:00
     depends_on:
       - metad0
       - metad1
@@ -307,6 +312,7 @@ services:
       - --v=0
       - --minloglevel=0
       - --heartbeat_interval_secs=2
+      - --timezone_name=+08:00
     depends_on:
       - metad0
       - metad1

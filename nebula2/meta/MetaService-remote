@@ -118,12 +118,17 @@ FUNCTIONS = {
     'signInFTService': Function('signInFTService', 'MetaService', 'ExecResp', [('SignInFTServiceReq', 'req', 'SignInFTServiceReq')]),
     'signOutFTService': Function('signOutFTService', 'MetaService', 'ExecResp', [('SignOutFTServiceReq', 'req', 'SignOutFTServiceReq')]),
     'listFTClients': Function('listFTClients', 'MetaService', 'ListFTClientsResp', [('ListFTClientsReq', 'req', 'ListFTClientsReq')]),
+    'createFTIndex': Function('createFTIndex', 'MetaService', 'ExecResp', [('CreateFTIndexReq', 'req', 'CreateFTIndexReq')]),
+    'dropFTIndex': Function('dropFTIndex', 'MetaService', 'ExecResp', [('DropFTIndexReq', 'req', 'DropFTIndexReq')]),
+    'listFTIndexes': Function('listFTIndexes', 'MetaService', 'ListFTIndexesResp', [('ListFTIndexesReq', 'req', 'ListFTIndexesReq')]),
     'createSession': Function('createSession', 'MetaService', 'CreateSessionResp', [('CreateSessionReq', 'req', 'CreateSessionReq')]),
     'updateSessions': Function('updateSessions', 'MetaService', 'ExecResp', [('UpdateSessionsReq', 'req', 'UpdateSessionsReq')]),
     'listSessions': Function('listSessions', 'MetaService', 'ListSessionsResp', [('ListSessionsReq', 'req', 'ListSessionsReq')]),
     'getSession': Function('getSession', 'MetaService', 'GetSessionResp', [('GetSessionReq', 'req', 'GetSessionReq')]),
     'removeSession': Function('removeSession', 'MetaService', 'ExecResp', [('RemoveSessionReq', 'req', 'RemoveSessionReq')]),
     'reportTaskFinish': Function('reportTaskFinish', 'MetaService', 'ExecResp', [('ReportTaskReq', 'req', 'ReportTaskReq')]),
+    'listCluster': Function('listCluster', 'MetaService', 'ListClusterInfoResp', [('ListClusterInfoReq', 'req', 'ListClusterInfoReq')]),
+    'getMetaDirInfo': Function('getMetaDirInfo', 'MetaService', 'GetMetaDirInfoResp', [('GetMetaDirInfoReq', 'req', 'GetMetaDirInfoReq')]),
 }
 
 SERVICE_NAMES = ['MetaService', ]

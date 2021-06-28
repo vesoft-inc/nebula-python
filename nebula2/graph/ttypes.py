@@ -850,6 +850,8 @@ class AuthResponse:
    - error_code
    - error_msg
    - session_id
+   - time_zone_offset_seconds
+   - time_zone_name
   """
 
   thrift_spec = None
@@ -887,6 +889,16 @@ class AuthResponse:
           self.session_id = iprot.readI64()
         else:
           iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.I32:
+          self.time_zone_offset_seconds = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.STRING:
+          self.time_zone_name = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -912,6 +924,14 @@ class AuthResponse:
       oprot.writeFieldBegin('session_id', TType.I64, 3)
       oprot.writeI64(self.session_id)
       oprot.writeFieldEnd()
+    if self.time_zone_offset_seconds != None:
+      oprot.writeFieldBegin('time_zone_offset_seconds', TType.I32, 4)
+      oprot.writeI32(self.time_zone_offset_seconds)
+      oprot.writeFieldEnd()
+    if self.time_zone_name != None:
+      oprot.writeFieldBegin('time_zone_name', TType.STRING, 5)
+      oprot.writeString(self.time_zone_name)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -930,6 +950,14 @@ class AuthResponse:
       value = pprint.pformat(self.session_id, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    session_id=%s' % (value))
+    if self.time_zone_offset_seconds is not None:
+      value = pprint.pformat(self.time_zone_offset_seconds, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    time_zone_offset_seconds=%s' % (value))
+    if self.time_zone_name is not None:
+      value = pprint.pformat(self.time_zone_name, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    time_zone_name=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -1155,6 +1183,8 @@ AuthResponse.thrift_spec = (
   (1, TType.I32, 'error_code', nebula2.common.ttypes.ErrorCode, None, 0, ), # 1
   (2, TType.STRING, 'error_msg', False, None, 1, ), # 2
   (3, TType.I64, 'session_id', None, None, 1, ), # 3
+  (4, TType.I32, 'time_zone_offset_seconds', None, None, 1, ), # 4
+  (5, TType.STRING, 'time_zone_name', False, None, 1, ), # 5
 )
 
 AuthResponse.thrift_struct_annotations = {
@@ -1163,10 +1193,12 @@ AuthResponse.thrift_struct_annotations = {
 AuthResponse.thrift_field_annotations = {
 }
 
-def AuthResponse__init__(self, error_code=None, error_msg=None, session_id=None,):
+def AuthResponse__init__(self, error_code=None, error_msg=None, session_id=None, time_zone_offset_seconds=None, time_zone_name=None,):
   self.error_code = error_code
   self.error_msg = error_msg
   self.session_id = session_id
+  self.time_zone_offset_seconds = time_zone_offset_seconds
+  self.time_zone_name = time_zone_name
 
 AuthResponse.__init__ = AuthResponse__init__
 
@@ -1174,6 +1206,8 @@ def AuthResponse__setstate__(self, state):
   state.setdefault('error_code', None)
   state.setdefault('error_msg', None)
   state.setdefault('session_id', None)
+  state.setdefault('time_zone_offset_seconds', None)
+  state.setdefault('time_zone_name', None)
   self.__dict__ = state
 
 AuthResponse.__getstate__ = lambda self: self.__dict__.copy()

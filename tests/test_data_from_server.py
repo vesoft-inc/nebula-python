@@ -117,8 +117,10 @@ class TestBaseCase(TestCase):
 
     def test_base_type(self):
         resp = self.session.execute('FETCH PROP ON person "Bob" YIELD person.name, person.age, person.grade,'
-                                    'person.friends, person.book_num, person.birthday, person.start_school, person.morning, '
-                                    'person.property, person.is_girl, person.child_name, person.expend, person.first_out_city, person.hobby')
+                                    'person.friends, person.book_num, person.birthday, '
+                                    'person.start_school, person.morning, '
+                                    'person.property, person.is_girl, person.child_name, '
+                                    'person.expend, person.first_out_city, person.hobby')
         assert resp.is_succeeded(), resp.error_msg()
         assert '' == resp.error_msg()
         assert resp.latency() > 0
@@ -150,12 +152,19 @@ class TestBaseCase(TestCase):
         assert 3 == resp.row_values(0)[3].as_int()
         assert 10 == resp.row_values(0)[4].as_int()
         assert 100 == resp.row_values(0)[5].as_int()
-        assert resp.row_values(0)[6].as_datetime() == \
-               DateTimeWrapper(DateTime(2010, 9, 10, 10, 8, 2, 0))
+        return_data_time_val = resp.row_values(0)[6].as_datetime()
+        assert return_data_time_val == \
+               DateTimeWrapper(DateTime(2010, 9, 10, 2, 8, 2, 0))
+        assert '2010-09-10T10:08:02.000000' == return_data_time_val.get_local_datetime_str()
+        assert 'utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800' == str(return_data_time_val)
 
         assert DateWrapper(Date(2017, 9, 10)) == resp.row_values(0)[7].as_date()
 
-        assert TimeWrapper(Time(7, 10, 0, 0)) == resp.row_values(0)[8].as_time()
+        expected_time_val = TimeWrapper(Time(23, 10, 0, 0))
+        return_time_val = resp.row_values(0)[8].as_time()
+        assert expected_time_val == return_time_val
+        assert '07:10:00.000000' == return_time_val.get_local_time_str()
+        assert 'utc time: 23:10:00.000000, timezone_offset: 28800' == str(return_time_val)
 
         assert 1000.0 == resp.row_values(0)[9].as_double()
         assert False == resp.row_values(0)[10].as_bool()
@@ -220,13 +229,16 @@ class TestBaseCase(TestCase):
                        ':person{hobby: __NULL__, expend: 100.0, book_num: 100, ' \
                        'property: 1000.0, grade: 3, child_name: "Hello Worl", ' \
                        'start_school: 2017-09-10, friends: 10, ' \
-                       'morning: 07:10:00.000000, first_out_city: 1111, ' \
-                       'name: "Bob", age: 10, birthday: 2010-09-10T10:08:02.000000, is_girl: False})' \
+                       'morning: utc time: 23:10:00.000000, timezone_offset: 28800, first_out_city: 1111, ' \
+                       'name: "Bob", age: 10, ' \
+                       'birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800, is_girl: False})' \
                        '-[:friend@0{end_year: 2020, start_year: 2018}]->' \
                        '("Lily" :student{name: "Lily"} ' \
-                       ':person{is_girl: False, birthday: 2010-09-10T10:08:02.000000, age: 9, ' \
+                       ':person{is_girl: False, ' \
+                       'birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800, age: 9, ' \
                        'book_num: 100, grade: 3, property: 1000.0, hobby: __NULL__, expend: 100.0, ' \
-                       'start_school: 2017-09-10, child_name: "Hello Worl", morning: 07:10:00.000000, ' \
+                       'start_school: 2017-09-10, child_name: "Hello Worl", ' \
+                       'morning: utc time: 23:10:00.000000, timezone_offset: 28800, ' \
                        'friends: 10, first_out_city: 1111, name: "Lily"})'
         assert expected_str == str(path)
 
