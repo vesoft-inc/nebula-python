@@ -158,7 +158,7 @@ def test_multi_thread():
             space_name = 'space_' + threading.current_thread().getName()
 
             session.execute('DROP SPACE %s' % space_name)
-            resp = session.execute('CREATE SPACE IF NOT EXISTS %s' % space_name)
+            resp = session.execute('CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))' % space_name)
             if not resp.is_succeeded():
                 raise RuntimeError('CREATE SPACE failed: {}'.format(resp.error_msg()))
 

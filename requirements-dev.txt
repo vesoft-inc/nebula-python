@@ -6,3 +6,4 @@ futures; python_version < '3.0'
 gevent
 prettytable
 pytest
+pytz
