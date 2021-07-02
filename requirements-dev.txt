@@ -1,7 +1,6 @@
 future
 six
 httplib2  
-gevent
 prettytable
 pytest
 pytz
