@@ -15,7 +15,6 @@ root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
 from unittest import TestCase
-from nebula2.common.ttypes import ErrorCode
 from nebula2.gclient.net import ConnectionPool
 from nebula2.Config import Config
 
@@ -71,3 +70,20 @@ class TestSession(TestCase):
         with self.pool.session_context('root', 'nebula') as session:
             assert self.pool.in_used_connects() == in_used_connects + 1
         assert self.pool.in_used_connects() == in_used_connects
+
+    def test_4_timeout(self):
+        try:
+            configs = Config()
+            configs.timeout = 100
+            configs.max_connection_pool_size = 1
+            pool = ConnectionPool()
+            assert pool.init([('127.0.0.1', 9669)], configs)
+            session = pool.get_session(self.user_name, self.password)
+            ngql = ''
+            for n in range(0, 500):
+                ngql = ngql + 'show hosts;'
+            session.execute(ngql)
+            assert False, 'expect to get exception'
+        except Exception as ex:
+            assert str(ex).find('timed out') > 0
+            assert True, ex

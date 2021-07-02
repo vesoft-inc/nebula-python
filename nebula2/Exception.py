@@ -75,4 +75,5 @@ class IOErrorException(Exception):
     def __init__(self, code=E_UNKNOWN, message=None):
         Exception.__init__(self, message)
         self.type = code
+        self.message = message
 
