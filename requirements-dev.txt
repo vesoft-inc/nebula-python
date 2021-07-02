@@ -1,8 +1,6 @@
-django-import-export
 future
 six
 httplib2  
-futures; python_version < '3.0'
 gevent
 prettytable
 pytest
