@@ -8,6 +8,7 @@
 
 import sys
 import os
+import time
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
@@ -40,6 +41,8 @@ class TestConnection(TestCase):
             resp = conn.execute(session_id, 'SHOW SPACES')
             assert resp.error_code == ttypes.ErrorCode.SUCCEEDED, resp.error_msg
             conn.signout(session_id)
+            # the session delete later
+            time.sleep(12)
             resp = conn.execute(session_id, 'SHOW SPACES')
             assert resp.error_code != ttypes.ErrorCode.SUCCEEDED
             conn.close()

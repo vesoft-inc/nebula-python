@@ -46,17 +46,14 @@ class TestSession(TestCase):
         try:
             session = self.pool.get_session('root', 'nebula')
             session.execute('CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;')
-            # the service update session with bug
-            time.sleep(3)
-            session.execute('USE test_session;')
-            time.sleep(3)
-            session.execute('USE test_session;')
             for i in range(0, 5):
                 if i == 3:
                     os.system('docker stop nebula-docker-compose_graphd0_1')
                     os.system('docker stop nebula-docker-compose_graphd1_1')
                     time.sleep(3)
-                resp = session.execute('SHOW TAGS')
+                # the session update later, the expect test
+                # resp = session.execute('SHOW TAGS')
+                resp = session.execute('SHOW HOSTS')
                 assert resp.is_succeeded(), resp.error_msg()
                 assert resp.space_name() == 'test_session'
                 time.sleep(2)
