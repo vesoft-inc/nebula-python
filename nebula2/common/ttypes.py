@@ -29,7 +29,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'NullType', 'ErrorCode', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID']
+__all__ = ['UTF8STRINGS', 'NullType', 'ErrorCode', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
 
 class NullType:
   __NULL__ = 0
@@ -142,6 +142,7 @@ class ErrorCode:
   E_LIST_CLUSTER_FAILURE = -2070
   E_LIST_CLUSTER_GET_ABS_PATH_FAILURE = -2071
   E_GET_META_DIR_FAILURE = -2072
+  E_QUERY_NOT_FOUND = -2073
   E_CONSENSUS_ERROR = -3001
   E_KEY_HAS_EXISTS = -3002
   E_DATA_TYPE_MISMATCH = -3003
@@ -152,6 +153,7 @@ class ErrorCode:
   E_OUT_OF_RANGE = -3008
   E_ATOMIC_OP_FAILED = -3009
   E_DATA_CONFLICT_ERROR = -3010
+  E_WRITE_STALLED = -3011
   E_IMPROPER_DATA_TYPE = -3021
   E_INVALID_SPACEVIDLEN = -3022
   E_INVALID_FILTER = -3031
@@ -255,6 +257,7 @@ class ErrorCode:
     -2070: "E_LIST_CLUSTER_FAILURE",
     -2071: "E_LIST_CLUSTER_GET_ABS_PATH_FAILURE",
     -2072: "E_GET_META_DIR_FAILURE",
+    -2073: "E_QUERY_NOT_FOUND",
     -3001: "E_CONSENSUS_ERROR",
     -3002: "E_KEY_HAS_EXISTS",
     -3003: "E_DATA_TYPE_MISMATCH",
@@ -265,6 +268,7 @@ class ErrorCode:
     -3008: "E_OUT_OF_RANGE",
     -3009: "E_ATOMIC_OP_FAILED",
     -3010: "E_DATA_CONFLICT_ERROR",
+    -3011: "E_WRITE_STALLED",
     -3021: "E_IMPROPER_DATA_TYPE",
     -3022: "E_INVALID_SPACEVIDLEN",
     -3031: "E_INVALID_FILTER",
@@ -369,6 +373,7 @@ class ErrorCode:
     "E_LIST_CLUSTER_FAILURE": -2070,
     "E_LIST_CLUSTER_GET_ABS_PATH_FAILURE": -2071,
     "E_GET_META_DIR_FAILURE": -2072,
+    "E_QUERY_NOT_FOUND": -2073,
     "E_CONSENSUS_ERROR": -3001,
     "E_KEY_HAS_EXISTS": -3002,
     "E_DATA_TYPE_MISMATCH": -3003,
@@ -379,6 +384,7 @@ class ErrorCode:
     "E_OUT_OF_RANGE": -3008,
     "E_ATOMIC_OP_FAILED": -3009,
     "E_DATA_CONFLICT_ERROR": -3010,
+    "E_WRITE_STALLED": -3011,
     "E_IMPROPER_DATA_TYPE": -3021,
     "E_INVALID_SPACEVIDLEN": -3022,
     "E_INVALID_FILTER": -3031,
@@ -2971,6 +2977,7 @@ Timestamp = UnimplementedTypedef()
 IndexID = UnimplementedTypedef()
 Port = UnimplementedTypedef()
 SessionID = UnimplementedTypedef()
+ExecutionPlanID = UnimplementedTypedef()
 all_structs.append(Date)
 Date.thrift_spec = (
   None, # 0
