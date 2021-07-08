@@ -37,6 +37,8 @@ class TestConnectionPool(TestCase):
         self.configs = Config()
         self.configs.min_connection_pool_size = 2
         self.configs.max_connection_pool_size = 4
+        self.configs.idle_time = 2000
+        self.configs.interval_check = 2
         self.pool = ConnectionPool()
         assert self.pool.init(self.addresses, self.configs)
         assert self.pool.connnects() == 2
@@ -105,6 +107,7 @@ class TestConnectionPool(TestCase):
             session.release()
 
         assert self.pool.in_used_connects() == 0
+        assert self.pool.connnects() == 4
 
         # test get session after release
         for num in range(0, self.configs.max_connection_pool_size - 1):
@@ -114,6 +117,10 @@ class TestConnectionPool(TestCase):
             sessions.append(session)
 
         assert self.pool.in_used_connects() == 3
+        assert self.pool.connnects() == 4
+        # test the idle connection delete
+        time.sleep(5)
+        assert self.pool.connnects() == 3
 
     def test_stop_close(self):
         session = self.pool.get_session('root', 'nebula')

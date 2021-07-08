@@ -17,5 +17,8 @@ class Config(object):
     # connection or execute timeout, unit ms, 0 means no timeout
     timeout = 0
 
-    # unit s, 0 means will never close the idle connection
+    # 0 means will never close the idle connection, unit ms,
     idle_time = 0
+
+    # the interval to check idle time connection, unit second, -1 means no check
+    interval_check = -1

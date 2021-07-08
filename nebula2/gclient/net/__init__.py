@@ -82,7 +82,7 @@ class Session(object):
                 if self._retry_connect:
                     if not self._reconnect():
                         logging.warning('Retry connect failed')
-                        raise IOErrorException(IOErrorException.E_ALL_BROKEN, 'All connections are broken')
+                        raise IOErrorException(IOErrorException.E_ALL_BROKEN, ie.message)
                     try:
                         resp = self._connection.execute(self._session_id, stmt)
                         end_time = time.time()
@@ -144,7 +144,6 @@ class ConnectionPool(object):
         self._configs = None
         self._lock = RLock()
         self._pos = -1
-        self._check_delay = 5 * 60  # unit seconds
         self._close = False
 
     def __del__(self):
@@ -171,6 +170,8 @@ class ConnectionPool(object):
                 self._addresses.append(ip_port)
                 self._addresses_status[ip_port] = self.S_BAD
                 self._connections[ip_port] = deque()
+
+        self.update_servers_status()
 
         # detect the services
         self._period_detect()
@@ -363,7 +364,7 @@ class ConnectionPool(object):
         with self._lock:
             for addr in self._connections.keys():
                 conns = self._connections[addr]
-                for connection in conns:
+                for connection in list(conns):
                     if not connection.is_used:
                         if not connection.ping():
                             logging.debug('Remove the not unusable connection to {}'.format(connection.get_address()))
@@ -374,11 +375,11 @@ class ConnectionPool(object):
                             conns.remove(connection)
 
     def _period_detect(self):
-        if self._close:
+        if self._close or self._configs.interval_check < 0:
             return
         self.update_servers_status()
         self._remove_idle_unusable_connection()
-        timer = threading.Timer(self._check_delay, self._period_detect)
+        timer = threading.Timer(self._configs.interval_check, self._period_detect)
         timer.setDaemon(True)
         timer.start()
 
@@ -388,7 +389,7 @@ class Connection(object):
 
     def __init__(self):
         self._connection = None
-        self.start_use_time = 0
+        self.start_use_time = time.time()
         self._ip = None
         self._port = None
 
@@ -460,9 +461,9 @@ class Connection(object):
         self.start_use_time = time.time()
 
     def idle_time(self):
-        if not self.is_used:
+        if self.is_used:
             return 0
-        return time.time() - self.start_use_time
+        return (time.time() - self.start_use_time) * 1000
 
     def get_address(self):
         return (self._ip, self._port)
