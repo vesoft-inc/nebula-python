@@ -29,8 +29,8 @@ class VertexResult(BaseResult):
                          is_vertex=True)
 
     def as_nodes(self):
-        """
-        as_nodes
+        """convert the vertexes to relationships
+
         :return: list<Node>
         """
         nodes = []
@@ -50,8 +50,8 @@ class EdgeResult(BaseResult):
                          is_vertex=False)
 
     def as_relationships(self):
-        """
-        as_relationships
+        """convert the edges to relationships
+
         :return: list<Relationship>
         """
         relationships = []
@@ -65,6 +65,8 @@ class EdgeResult(BaseResult):
 
 
 class ScanResult(object):
+    """the scan result
+    """
     def __init__(self,
                  graph_storage_client,
                  req,
@@ -84,9 +86,17 @@ class ScanResult(object):
         self._parts_manager = PartManager(part_infos)
 
     def has_next(self):
+        """whether if has data, the first call is always return True
+
+        :return: True of False
+        """
         return self._parts_manager.has_next()
 
     def next(self):
+        """get scan data result
+
+        :return: VertexResult or EdgeResult
+        """
         conns = self._graph_storage_client.get_conns()
         num = len(conns)
         if num == 0:
