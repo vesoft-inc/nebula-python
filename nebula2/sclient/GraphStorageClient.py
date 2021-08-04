@@ -41,12 +41,20 @@ class GraphStorageClient(object):
         self._create_connection()
 
     def get_conns(self):
+        """get all connections which connect to storaged, the ScanResult use it
+
+        :return: list<GraphStorageConnection>
+        """
         return self._connections
 
     def __del__(self):
         self.close()
 
     def close(self):
+        """close the GraphStorageClient
+
+        :return:
+        """
         try:
             for conn in self._connections:
                 conn.close()
@@ -55,6 +63,10 @@ class GraphStorageClient(object):
             raise
 
     def _create_connection(self):
+        """create GraphStorageConnection
+
+        :return: GraphStorageConnection
+        """
         storage_addrs = self._meta_cache.get_all_storage_addrs()
         if len(storage_addrs) == 0:
             raise RuntimeError('Get storage address from meta cache is empty')
@@ -68,6 +80,11 @@ class GraphStorageClient(object):
             raise
 
     def get_space_addrs(self, space_name):
+        """get all storage addresses that manage space
+
+        :param space_name: the specified space name
+        :return: list<(ip, port)>
+        """
         return self.meta_cache.get_space_addrs(space_name)
 
     def scan_vertex(self,
@@ -81,8 +98,9 @@ class GraphStorageClient(object):
                     only_latest_version=False,
                     enable_read_from_follower=True,
                     partial_success=False):
-        """
-        scan_vertex
+        """scan vertex with the specified space_name, tag_name,
+        if the prop_names is empty, will return all properties of the tag
+
         :param prop_names: if given empty, return all property
         :param tag_name: the tag name
         :param space_name: the space name
@@ -122,8 +140,9 @@ class GraphStorageClient(object):
                               only_latest_version=False,
                               enable_read_from_follower=True,
                               partial_success=False):
-        """
-        scan_vertex_with_part
+        """scan vertex with the specified space_name, partId, tag_name,
+        if the prop_names is empty, will return all properties of the tag
+
         :param prop_names: if given empty, return all property
         :param tag_name: the tag name
         :type part: part id
@@ -205,9 +224,9 @@ class GraphStorageClient(object):
                   only_latest_version=False,
                   enable_read_from_follower=True,
                   partial_success=False):
-        """
+        """scan edge with the specified space_name, edge_name,
+        if the prop_names is empty, will return all properties of the edge
 
-        scan_edge
         :param prop_names: if given empty, return all property
         :param edge_name: the edge name
         :param space_name: the space name
@@ -247,7 +266,9 @@ class GraphStorageClient(object):
                             only_latest_version=False,
                             enable_read_from_follower=True,
                             partial_success=False):
-        """
+        """scan edge with the specified space_name, partId, edge_name,
+        if the prop_names is empty, will return all properties of the edge
+
         :param space_name: the space name
         :param part: the partition num of the given space
         :type prop_names: if given empty, return all property

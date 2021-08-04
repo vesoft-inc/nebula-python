@@ -62,8 +62,8 @@ class Session(object):
         self._retry_connect = retry_connect
 
     def execute(self, stmt):
-        """
-        execute statement
+        """execute statement
+
         :param stmt: the ngql
         :return: ResultSet
         """
@@ -96,8 +96,9 @@ class Session(object):
             raise
 
     def release(self):
-        """
-        release the connection to pool
+        """release the connection to pool, and the session couldn't been use again
+
+        :return:
         """
         if self._connection is None:
             return
@@ -106,9 +107,9 @@ class Session(object):
         self._connection = None
 
     def ping(self):
-        """
-        check the connection is ok
-        :return Boolean
+        """check the connection is ok
+
+        :return: True or False
         """
         if self._connection is None:
             return False
@@ -150,10 +151,10 @@ class ConnectionPool(object):
         self.close()
 
     def init(self, addresses, configs):
-        """
-        init the connection pool
+        """init the connection pool
+
         :param addresses: the graphd servers' addresses
-        :param configs: the config
+        :param configs: the config of the pool
         :return: if all addresses are ok, return True else return False.
         """
         if self._close:
@@ -190,12 +191,12 @@ class ConnectionPool(object):
         return True
 
     def get_session(self, user_name, password, retry_connect=True):
-        """
-        get session
-        :param user_name:
-        :param password:
-        :param retry_connect: if auto retry connect
-        :return: void
+        """get session
+
+        :param user_name: the user name to authenticate graphd
+        :param password: the password to authenticate graphd
+        :param retry_connect:
+        :return: Session
         """
         connection = self.get_connection()
         if connection is None:
@@ -215,8 +216,8 @@ class ConnectionPool(object):
 
         When session_context is exited, the connection will be released.
 
-        :param user_name:
-        :param password:
+        :param user_name: the user name to authenticate graphd
+        :param password: the password to authenticate graphd
         :param retry_connect: if auto retry connect
         :return: contextlib._GeneratorContextManager
         """
@@ -231,9 +232,9 @@ class ConnectionPool(object):
                 session.release()
 
     def get_connection(self):
-        """
-        get available connection
-        :return: Connection Object
+        """get available connection
+
+        :return: Connection
         """
         with self._lock:
             if self._close:
@@ -277,8 +278,8 @@ class ConnectionPool(object):
                 return None
 
     def ping(self, address):
-        """
-        check the server is ok
+        """check the server is ok
+
         :param address: the server address want to connect
         :return: True or False
         """
@@ -292,8 +293,8 @@ class ConnectionPool(object):
             return False
 
     def close(self):
-        """
-        close all connections in pool
+        """close all connections in pool
+
         :return: void
         """
         with self._lock:
@@ -305,9 +306,9 @@ class ConnectionPool(object):
             self._close = True
 
     def connnects(self):
-        """
-        get the number of existing connections
-        :return: int
+        """get the number of existing connections
+
+        :return: the number of connections
         """
         with self._lock:
             count = 0
@@ -316,8 +317,8 @@ class ConnectionPool(object):
             return count
 
     def in_used_connects(self):
-        """
-        get the number of the used connections
+        """get the number of the used connections
+
         :return: int
         """
         with self._lock:
@@ -329,8 +330,8 @@ class ConnectionPool(object):
             return count
 
     def get_ok_servers_num(self):
-        """
-        get the number of the ok servers
+        """get the number of the ok servers
+
         :return: int
         """
         count = 0
@@ -349,8 +350,7 @@ class ConnectionPool(object):
         return ', '.join(msg_list)
 
     def update_servers_status(self):
-        """
-        update the servers' status
+        """update the servers' status
         """
         for address in self._addresses:
             if self.ping(address):
@@ -394,6 +394,13 @@ class Connection(object):
         self._port = None
 
     def open(self, ip, port, timeout):
+        """open the connection
+
+        :param ip: the server ip
+        :param port: the server port
+        :param timeout: the timeout for connect and execute
+        :return: void
+        """
         self._ip = ip
         self._port = port
         try:
@@ -408,6 +415,12 @@ class Connection(object):
             raise
 
     def authenticate(self, user_name, password):
+        """authenticate to graphd
+
+        :param user_name: the user name
+        :param password: the password
+        :return:
+        """
         try:
             resp = self._connection.authenticate(user_name, password)
             if resp.error_code != ErrorCode.SUCCEEDED:
@@ -419,6 +432,12 @@ class Connection(object):
             raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
 
     def execute(self, session_id, stmt):
+        """execute interface with session_id and ngql
+
+        :param session_id: the session id get from result of authenticate interface
+        :param stmt: the ngql
+        :return: ExecutionResponse
+        """
         try:
             resp = self._connection.execute(session_id, stmt)
             return resp
@@ -428,6 +447,11 @@ class Connection(object):
             raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
 
     def signout(self, session_id):
+        """tells the graphd can release the session info
+
+        :param session_id:the session id
+        :return: void
+        """
         try:
             self._connection.signout(session_id)
         except TTransportException as te:
@@ -435,7 +459,7 @@ class Connection(object):
                 self.close()
 
     def close(self):
-        """
+        """close the connection
 
         :return: void
         """
@@ -445,9 +469,8 @@ class Connection(object):
             logging.error('Close connection to {}:{} failed:{}'.format(self._ip, self._port, e))
 
     def ping(self):
-        """
-        check the connection if ok
-        :return: Boolean
+        """check the connection if ok
+        :return: True or False
         """
         try:
             self._connection.execute(0, 'YIELD 1;')
@@ -458,12 +481,24 @@ class Connection(object):
         return True
 
     def reset(self):
+        """reset the idletime
+
+        :return: void
+        """
         self.start_use_time = time.time()
 
     def idle_time(self):
+        """get idletime of connection
+
+        :return: idletime
+        """
         if self.is_used:
             return 0
         return (time.time() - self.start_use_time) * 1000
 
     def get_address(self):
+        """get the address of the connected service
+
+        :return: (ip, port)
+        """
         return (self._ip, self._port)
