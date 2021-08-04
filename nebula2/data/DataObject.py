@@ -18,6 +18,12 @@ from nebula2.common.ttypes import Value, Vertex, Edge, NullType, DateTime, Time
 
 
 def date_time_convert_with_timezone(date_time: DateTime, timezone_offset: int):
+    """the function to convert utc date_time to local date_time
+
+    :param date_time: the utc date_time
+    :param timezone_offset: the timezone offset
+    :return: the date_time with timezone
+    """
     native_date_time = datetime(date_time.year,
                                 date_time.month,
                                 date_time.day,
@@ -39,6 +45,12 @@ def date_time_convert_with_timezone(date_time: DateTime, timezone_offset: int):
 
 
 def time_convert_with_timezone(n_time: Time, timezone_offset: int):
+    """the function to convert utc date_time to local date_time
+
+    :param n_time: the utc time
+    :param timezone_offset: the timezone offset
+    :return: the time with the timezone
+    """
     native_date_time = datetime(1,
                                 1,
                                 1,
@@ -93,20 +105,25 @@ class Record(object):
         return iter(self._record)
 
     def size(self):
+        """the size of record
+
+        :return: record size
+        """
         return len(self._names)
 
     def get_value(self, index):
-        """
-        get value by index
-        :return: Value
+        """get value by specified index
+
+        :param index: the index of column
+        :return: ValueWrapper
         """
         if index >= len(self._names):
             raise OutOfRangeException()
         return self._record[index]
 
     def get_value_by_key(self, key):
-        """
-        get value by key
+        """get value by key
+
         :return: Value
         """
         try:
@@ -115,13 +132,17 @@ class Record(object):
             raise InvalidKeyException(key)
 
     def keys(self):
-        """
-        keys()
-        :return: the col name of the recod
+        """get column names of record
+
+        :return: the column names
         """
         return self._names
 
     def values(self):
+        """get all values
+
+        :return: values
+        """
         return self._record
 
     def __repr__(self):
@@ -161,8 +182,8 @@ class DataSetWrapper(object):
         return self._data_set.rows
 
     def get_row_types(self):
-        """
-        Get row types
+        """Get row types
+
         :param empty
         :return: list<int>
           ttypes.Value.__EMPTY__ = 0
@@ -187,9 +208,9 @@ class DataSetWrapper(object):
         return [(value.getType()) for value in self._data_set.rows[0].values]
 
     def row_values(self, row_index):
-        """
-        Get row values
-        :param index: the Record index
+        """get row values
+
+        :param row_index: the Record index
         :return: list<ValueWrapper>
         """
         if row_index >= len(self._data_set.rows):
@@ -200,8 +221,8 @@ class DataSetWrapper(object):
                 for value in self._data_set.rows[row_index].values]
 
     def column_values(self, key):
-        """
-        get column values
+        """get column values
+
         :param key: the col name
         :return: list<ValueWrapper>
         """
@@ -218,8 +239,8 @@ class DataSetWrapper(object):
         return self
 
     def __next__(self):
-        """
-        The record iterator
+        """The record iterator
+
         :return: record
         """
         if len(self._data_set.rows) == 0 or self._pos >= len(self._data_set.rows) - 1:
@@ -265,119 +286,192 @@ class ValueWrapper(object):
         self._timezone_offset = timezone_offset
 
     def get_value(self):
+        """get raw data
+
+        :return: Value
+        """
         return self._value
 
     def is_null(self):
+        """judge the value if is Null type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.NVAL
 
     def is_empty(self):
+        """judge the value if is Empty type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.__EMPTY__
 
     def is_bool(self):
+        """judge the value if is Bool type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.BVAL
 
     def is_int(self):
+        """judge the value if is Int type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.IVAL
 
     def is_double(self):
+        """judge the value if is Double type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.FVAL
 
     def is_string(self):
+        """judge the value if is String type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.SVAL
 
     def is_list(self):
+        """judge the value if is List type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.LVAL
 
     def is_set(self):
+        """judge the value if is Set type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.UVAL
 
     def is_map(self):
+        """judge the value if is Map type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.MVAL
 
     def is_time(self):
+        """judge the value if is Time type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.TVAL
 
     def is_date(self):
+        """judge the value if is Date type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.DVAL
 
     def is_datetime(self):
+        """judge the value if is Datetime type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.DTVAL
 
     def is_vertex(self):
+        """judge the value if is Vertex type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.VVAL
 
     def is_edge(self):
+        """judge the value if is Edge type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.EVAL
 
     def is_path(self):
+        """judge the value if is Path type
+
+        :return: true or false
+        """
         return self._value.getType() == Value.PVAL
 
     def as_null(self):
-        """
-        :return: Null
+        """converts the original data type to Null type
+
+        :return: Null value
         """
         if self._value.getType() == Value.NVAL:
             return Null(self._value.get_nVal())
         raise InvalidValueTypeException("expect NULL type, but is " + self._get_type_name())
 
     def as_bool(self):
-        """
-        :return Boolean:
+        """converts the original data type to Bool type
+
+        :return: Bool value
         """
         if self._value.getType() == Value.BVAL:
             return self._value.get_bVal()
         raise InvalidValueTypeException("expect bool type, but is " + self._get_type_name())
 
     def as_int(self):
-        """
-        :return int:
+        """converts the original data type to Int type
+
+        :return: Int value
         """
         if self._value.getType() == Value.IVAL:
             return self._value.get_iVal()
         raise InvalidValueTypeException("expect bool type, but is " + self._get_type_name())
 
     def as_double(self):
-        """
-        :return double:
+        """converts the original data type to Double type
+
+        :return: Double value
         """
         if self._value.getType() == Value.FVAL:
             return self._value.get_fVal()
         raise InvalidValueTypeException("expect int type, but is " + self._get_type_name())
 
     def as_string(self):
-        """
-        :return string:
+        """converts the original data type to String type
+
+        :return: String value
         """
         if self._value.getType() == Value.SVAL:
             return self._value.get_sVal().decode(self._decode_type)
         raise InvalidValueTypeException("expect string type, but is " + self._get_type_name())
 
     def as_time(self):
-        """
-        :return: TimeWrapper
+        """converts the original data type to Time type
+
+        :return: Time value
         """
         if self._value.getType() == Value.TVAL:
             return TimeWrapper(self._value.get_tVal()).set_timezone_offset(self._timezone_offset)
         raise InvalidValueTypeException("expect time type, but is " + self._get_type_name())
 
     def as_date(self):
-        """
-        :return: DateWrapper
+        """converts the original data type to Date type
+
+        :return: Date value
         """
         if self._value.getType() == Value.DVAL:
             return DateWrapper(self._value.get_dVal())
         raise InvalidValueTypeException("expect date type, but is " + self._get_type_name())
 
     def as_datetime(self):
-        """
-        :return: DateTimeWrapper
+        """converts the original data type to Datetime type
+
+        :return: Datetime value
         """
         if self._value.getType() == Value.DTVAL:
             return DateTimeWrapper(self._value.get_dtVal()).set_timezone_offset(self._timezone_offset)
         raise InvalidValueTypeException("expect datetime type, but is " + self._get_type_name())
 
     def as_list(self):
-        """
+        """converts the original data type to list of ValueWrapper
+
         :return: list<ValueWrapper>
         """
         if self._value.getType() == Value.LVAL:
@@ -390,7 +484,8 @@ class ValueWrapper(object):
         raise InvalidValueTypeException("expect list type, but is " + self._get_type_name())
 
     def as_set(self):
-        """
+        """converts the original data type to set of ValueWrapper
+
         :return: set<ValueWrapper>
         """
         if self._value.getType() == Value.UVAL:
@@ -403,8 +498,9 @@ class ValueWrapper(object):
         raise InvalidValueTypeException("expect set type, but is " + self._get_type_name())
 
     def as_map(self):
-        """
-        :return: map<string, ValueWrapper>
+        """converts the original data type to map type
+
+        :return: map<String, ValueWrapper>
         """
         if self._value.getType() == Value.MVAL:
             result = {}
@@ -417,8 +513,9 @@ class ValueWrapper(object):
         raise InvalidValueTypeException("expect map type, but is " + self._get_type_name())
 
     def as_node(self):
-        """
-        :return: Node
+        """converts the original data type to Node type
+
+        :return: Node type
         """
         if self._value.getType() == Value.VVAL:
             return Node(self._value.get_vVal())\
@@ -427,8 +524,9 @@ class ValueWrapper(object):
         raise InvalidValueTypeException("expect vertex type, but is " + self._get_type_name())
 
     def as_relationship(self):
-        """
-        :return: Relationship
+        """converts the original data type to Relationship type
+
+        :return: Relationship type
         """
         if self._value.getType() == Value.EVAL:
             return Relationship(self._value.get_eVal())\
@@ -437,8 +535,9 @@ class ValueWrapper(object):
         raise InvalidValueTypeException("expect edge type, but is " + self._get_type_name())
 
     def as_path(self):
-        """
-        :return: PathWrapper
+        """converts the original data type to PathWrapper type
+
+        :return: PathWrapper type
         """
         if self._value.getType() == Value.PVAL:
             return PathWrapper(self._value.get_pVal())\
@@ -563,38 +662,58 @@ class TimeWrapper(BaseObject):
         self._time = time
 
     def get_hour(self):
+        """get utc hour
+
+        :return: hour
+        """
         return self._time.hour
 
     def get_minute(self):
+        """get utc minute
+
+        :return: minute
+        """
         return self._time.minute
 
     def get_sec(self):
+        """get utc second
+
+        :return: second
+        """
         return self._time.sec
 
     def get_microsec(self):
+        """get utc microseconds
+
+        :return: microseconds
+        """
         return self._time.microsec
 
     def get_time(self):
-        """
-        get utc time
+        """get utc time
+
+        :return: Time value
         """
         return self._time
 
     def get_local_time(self):
-        """
-        get time with the timezone from graph service
+        """get time with the timezone from graph service
+
+        :return: Time value with timezone offset
         """
         return time_convert_with_timezone(self._time, self.get_timezone_offset())
 
     def get_local_time_by_timezone_offset(self, timezone_offset):
-        """
-        get local time with the specified timezone by user
+        """get local time with the specified timezone by user
+
+        :return: Time value with timezone offset
         """
         return time_convert_with_timezone(self._time, timezone_offset)
 
     def get_local_time_str(self):
-        """
-        get local time str
+        """convert local time string format
+
+        :return: return local time string format
         """
         local_time = time_convert_with_timezone(self._time, self.get_timezone_offset())
         return "%02d:%02d:%02d.%06d" % (local_time.hour,
@@ -624,15 +743,31 @@ class DateWrapper(object):
         self._date = date
 
     def get_year(self):
+        """get year
+
+        :return: year
+        """
         return self._date.year
 
     def get_month(self):
+        """get month
+
+        :return: month
+        """
         return self._date.month
 
     def get_day(self):
+        """get day
+
+        :return: day
+        """
         return self._date.day
 
     def get_date(self):
+        """get original date
+
+        :return: Date
+        """
         return self._date
 
     def __eq__(self, other):
@@ -652,47 +787,79 @@ class DateTimeWrapper(BaseObject):
         self._date_time = date_time
 
     def get_year(self):
+        """get utc year
+
+        :return: year
+        """
         return self._date_time.year
 
     def get_month(self):
+        """get utc month
+
+        :return: month
+        """
         return self._date_time.month
 
     def get_day(self):
+        """get utc day
+
+        :return: day
+        """
         return self._date_time.day
 
     def get_hour(self):
+        """get utc hour
+
+        :return: hour
+        """
         return self._date_time.hour
 
     def get_minute(self):
+        """get utc minute
+
+        :return: minute
+        """
         return self._date_time.minute
 
     def get_sec(self):
+        """get utc seconds
+
+        :return: seconds
+        """
         return self._date_time.sec
 
     def get_microsec(self):
+        """get utc microseconds
+
+        :return: microseconds
+        """
         return self._date_time.microsec
 
     def get_datetime(self):
-        """
-        get utc datetime
+        """get utc datetime
+
+        :return: datetime
         """
         return self._date_time
 
     def get_local_datetime(self):
-        """
-        get datetime with the timezone from the graph service
+        """get datetime with the timezone from graph service
+
+        :return: Datetime value with timezone offset
         """
         return date_time_convert_with_timezone(self._date_time, self.get_timezone_offset())
 
     def get_local_datetime_by_timezone_offset(self, timezone_offset):
-        """
-        get local datetime with the specified timezone by user
+        """get local datetime with the specified timezone by user
+
+        :return: Time value with timezone offset
         """
         return date_time_convert_with_timezone(self._date_time, timezone_offset)
 
     def get_local_datetime_str(self):
-        """
-        get date time str with the timezone from the graph service
+        """convert local datetime string format
+
+        :return: return local datetime string format
         """
         local_date_time = date_time_convert_with_timezone(self._date_time, self.get_timezone_offset())
         return "%d-%02d-%02dT%02d:%02d:%02d.%06d" % (local_date_time.year,
@@ -763,21 +930,35 @@ class Node(BaseObject):
             self._tag_indexes[tag.name.decode(self.get_decode_type())] = index
 
     def get_id(self):
-        """
-        get vertex id
-        :return: ValueWrapper
+        """get the vid of Node
+
+        :return: ValueWrapper type vid
         """
         return ValueWrapper(value=self._value.vid,
                             decode_type=self.get_decode_type(),
                             timezone_offset=self.get_timezone_offset())
 
     def tags(self):
+        """get tag names
+
+        :return: the list of tag name
+        """
         return list(self._tag_indexes.keys())
 
     def has_tag(self, tag):
+        """whether the specified tag is included
+
+        :param tag: the tag name
+        :return: true or false
+        """
         return True if tag in self._tag_indexes.keys() else False
 
     def properties(self, tag):
+        """get all properties of the specified tag
+
+        :param tag: the tag name
+        :return: the properties
+        """
         if tag not in self._tag_indexes.keys():
             raise InvalidKeyException(tag)
 
@@ -792,6 +973,11 @@ class Node(BaseObject):
         return result_props
 
     def prop_names(self, tag):
+        """get the property names of the specified tag
+
+        :param tag: the tag name
+        :return: property name list
+        """
         if tag not in self._tag_indexes.keys():
             raise InvalidKeyException(tag)
         index = self._tag_indexes[tag]
@@ -801,6 +987,11 @@ class Node(BaseObject):
         return [(key.decode(self.get_decode_type())) for key in self._value.tags[index].props.keys()]
 
     def prop_values(self, tag):
+        """get all property values of the specified tag
+
+        :param tag: the tag name
+        :return: property name list
+        """
         if tag not in self._tag_indexes.keys():
             raise InvalidKeyException(tag)
         index = self._tag_indexes[tag]
@@ -835,9 +1026,10 @@ class Relationship(BaseObject):
         self._value = edge
 
     def start_vertex_id(self):
-        """
-        get start vid
-        :return: ValueWrapper
+        """get start vertex vid, if your space vid_type is int, you can use start_vertex_id().as_int(),
+        if your space vid_type is fixed_string, you can use start_vertex_id().as_string()
+
+        :return: ValueWrapper type vid
         """
         if self._value.type > 0:
             return ValueWrapper(self._value.src, self.get_decode_type())
@@ -845,9 +1037,10 @@ class Relationship(BaseObject):
             return ValueWrapper(self._value.dst, self.get_decode_type())
 
     def end_vertex_id(self):
-        """
-        get end vid
-        :return: ValueWrapper
+        """get end vertex vid, if your space vid_type is int, you can use end_vertex_id().as_int(),
+        if your space vid_type is fixed_string, you can use end_vertex_id().as_string()
+
+        :return: ValueWrapper type vid
         """
         if self._value.type > 0:
             return ValueWrapper(self._value.dst, self.get_decode_type())
@@ -855,12 +1048,24 @@ class Relationship(BaseObject):
             return ValueWrapper(self._value.src, self.get_decode_type())
 
     def edge_name(self):
+        """get the edge name
+
+        :return: edge name
+        """
         return self._value.name.decode(self.get_decode_type())
 
     def ranking(self):
+        """get the edge ranking
+
+        :return: ranking
+        """
         return self._value.ranking
 
     def properties(self):
+        """get all properties
+
+        :return: the properties
+        """
         props = {}
         if self._value.props is None:
             return props
@@ -871,11 +1076,19 @@ class Relationship(BaseObject):
         return props
 
     def keys(self):
+        """get all property names
+
+        :return: the property names
+        """
         if self._value.props is None:
             return []
         return [(key.decode(self._decode_type)) for key in self._value.props.keys()]
 
     def values(self):
+        """get all property values
+
+        :return: the property values
+        """
         if self._value.props is None:
             return []
         return [(ValueWrapper(value,
@@ -924,6 +1137,9 @@ class Segment:
 
 
 class PathWrapper(BaseObject):
+    """
+    PathWrapper is wrapper handling for the Path from the service
+    """
     def __init__(self, path):
         super(PathWrapper, self).__init__()
         self._nodes = list()
@@ -980,26 +1196,56 @@ class PathWrapper(BaseObject):
         return iter(self._segments)
 
     def start_node(self):
+        """get start node of the Path
+
+        :return: start node
+        """
         if len(self._nodes) == 0:
             return None
         return self._nodes[0]
 
     def length(self):
+        """get the length of the path
+
+        :return: path length
+        """
         return len(self._segments)
 
     def contain_node(self, node):
+        """whether the node is in the path
+
+        :param node: the specified node
+        :return: true or false
+        """
         return True if node in self._nodes else False
 
     def contain_relationship(self, relationship):
+        """whether the relationship is in the path
+
+        :param relationship: the specified relationship
+        :return: true or false
+        """
         return True if relationship in self._relationships else False
 
     def nodes(self):
+        """get all nodes of the path
+
+        :return: nodes
+        """
         return self._nodes
 
     def relationships(self):
+        """get all relationships of the path
+
+        :return: relationships
+        """
         return self._relationships
 
     def segments(self):
+        """get all segments of the path
+
+        :return: segments
+        """
         return self._segments
 
     def __repr__(self):

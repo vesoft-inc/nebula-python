@@ -53,6 +53,10 @@ class MetaClient(object):
         self._lock = RLock()
 
     def open(self):
+        """open the connection to connect meta service
+
+        :eturn: void
+        """
         try:
             self.close()
             s = TSocket.TSocket(self._leader[0], self._leader[1])
@@ -66,6 +70,11 @@ class MetaClient(object):
             raise
 
     def list_tags(self, space_id):
+        """get all version tags
+
+        :param space_id: the specified space id
+        :eturn: list<TagItem>
+        """
         with self._lock:
             if self._connection is None:
                 raise RuntimeError('The connection is no open')
@@ -86,6 +95,11 @@ class MetaClient(object):
                                .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
 
     def list_edges(self, space_id):
+        """get all version edge
+
+       :param space_id: the specified space id
+       :eturn: list<EdgeItem>
+       """
         with self._lock:
             if self._connection is None:
                 raise RuntimeError('The connection is no open')
@@ -106,6 +120,10 @@ class MetaClient(object):
                                .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
 
     def list_spaces(self):
+        """get all spaces info
+
+        :eturn: list<IdName>
+        """
         with self._lock:
             if self._connection is None:
                 raise RuntimeError('The connection is no open')
@@ -125,6 +143,10 @@ class MetaClient(object):
                                .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
 
     def list_hosts(self):
+        """get all online hosts info
+
+        :eturn: list<HostItem>
+        """
         with self._lock:
             if self._connection is None:
                 raise RuntimeError('The connection is no open')
@@ -149,6 +171,11 @@ class MetaClient(object):
                                .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
 
     def get_parts_alloc(self, space_id):
+        """get all parts info of the specified space id
+
+        :param space_id:
+        :eturn: map<PartitionID, list<HostAddr>>
+        """
         with self._lock:
             if self._connection is None:
                 raise RuntimeError('The connection is no open')
@@ -169,6 +196,10 @@ class MetaClient(object):
                                .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
 
     def close(self):
+        """close the connection
+
+        :eturn: void
+        """
         try:
             if self._connection is not None:
                 self._connection._iprot.trans.close()
@@ -176,6 +207,11 @@ class MetaClient(object):
             raise
 
     def update_leader(self, leader):
+        """update the leader meta info when hanppen leader change
+
+        :param leader: the address of meta leader
+        :eturn:
+        """
         try:
             self._leader = (leader.host, leader.port)
             self.open()
@@ -219,6 +255,10 @@ class MetaCache(object):
         self._load_all()
 
     def close(self):
+        """close the metaClient
+
+        :eturn: void
+        """
         if self._close:
             return
         self._close = True
@@ -229,6 +269,10 @@ class MetaCache(object):
         self.close()
 
     def _load_all(self):
+        """load all space info and schema info from meta services
+
+        :eturn: void
+        """
         try:
             spaces = self._meta_client.list_spaces()
             space_caches = {}
@@ -282,14 +326,15 @@ class MetaCache(object):
             logging.error(traceback.format_exc())
 
     def get_all_storage_addrs(self):
-        """
+        """get all storage address
+
         :return: list[HostAddr]
         """
         return self._storage_addrs
 
     def get_tag_id(self, space_name, tag_name):
-        """
-        get_tag_id
+        """get tag id
+
         :param space_name:
         :param tag_name:
         :return: tag_id
@@ -299,8 +344,8 @@ class MetaCache(object):
             return tag_item.tag_id
 
     def get_edge_type(self, space_name, edge_name):
-        """
-        get_edge_type
+        """get edge type
+
         :param space_name:
         :param edge_name:
         :return: edge_type
@@ -310,8 +355,8 @@ class MetaCache(object):
             return edge_item.edge_type
 
     def get_space_id(self, space_name):
-        """
-        get_space_id
+        """get space id
+
         :param space_name:
         :return: space_id
         """
@@ -323,8 +368,8 @@ class MetaCache(object):
             return self._space_caches[space_name].space_id
 
     def get_tag_schema(self, space_name, tag_name):
-        """
-        get_tag_schema
+        """get tag schema
+
         :param space_name:
         :param tag_name:
         :return: schema
@@ -333,8 +378,8 @@ class MetaCache(object):
         return tag_item.schema
 
     def get_edge_schema(self, space_name, edge_name):
-        """
-        get_edge_schema
+        """get edge schema
+
         :param space_name:
         :param edge_name:
         :return: schema
@@ -355,6 +400,11 @@ class MetaCache(object):
         return part_leaders[part_id]
 
     def get_part_leaders(self, space_name):
+        """get all part leader info of the space
+
+        :param space_name: space name
+        :eturn: map<PartitionID, HostAddr>
+        """
         with self._lock:
             if space_name not in self._storage_leader.keys():
                 self._load_all()
@@ -363,6 +413,11 @@ class MetaCache(object):
             return self._storage_leader[space_name]
 
     def get_part_alloc(self, space_name):
+        """get all part info of the space
+
+        :param space_name: space name
+        :eturn: map<PartitionID, list<HostAddr>>
+        """
         with self._lock:
             if space_name not in self._space_caches.keys():
                 self._load_all()
@@ -397,8 +452,8 @@ class MetaCache(object):
             return space_info.edge_items[edge_name]
 
     def update_storage_leader(self, space_id, part_id, address: HostAddr):
-        """
-        if the storage leader change, storage client need to call this function
+        """if the storage leader change, storage client need to call this function
+
         :param space_id:
         :param part_id:
         :param address: HostAddr, if the address is None, it means the leader can't connect,
