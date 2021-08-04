@@ -13,7 +13,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, PropertyType, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, SchemaID, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatisItem, CreateSpaceReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceReq, BalanceTask, BalanceResp, LeaderBalanceReq, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddGroupReq, DropGroupReq, AddZoneIntoGroupReq, DropZoneFromGroupReq, GetGroupReq, GetGroupResp, ListGroupsReq, Group, ListGroupsResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatisReq, GetStatisResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, SchemaVer, ClusterID
+from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, PropertyType, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, SchemaID, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatisItem, CreateSpaceReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceReq, BalanceTask, BalanceResp, LeaderBalanceReq, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddGroupReq, DropGroupReq, AddZoneIntoGroupReq, DropZoneFromGroupReq, GetGroupReq, GetGroupResp, ListGroupsReq, Group, ListGroupsResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatisReq, GetStatisResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, SchemaVer, ClusterID
 import nebula2.common.ttypes
 
 from nebula2.fbthrift.Thrift import TProcessor
@@ -631,6 +631,13 @@ class Iface:
     """
     pass
 
+  def killQuery(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def reportTaskFinish(self, req=None):
     """
     Parameters:
@@ -1236,6 +1243,13 @@ class ContextIface:
     pass
 
   def removeSession(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def killQuery(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -16831,7 +16845,7 @@ class updateSessions_result:
         break
       if fid == 0:
         if ftype == TType.STRUCT:
-          self.success = ExecResp()
+          self.success = UpdateSessionsResp()
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
@@ -16879,7 +16893,7 @@ class updateSessions_result:
 
 all_structs.append(updateSessions_result)
 updateSessions_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+  (0, TType.STRUCT, 'success', [UpdateSessionsResp, UpdateSessionsResp.thrift_spec, False], None, 2, ), # 0
 )
 
 updateSessions_result.thrift_struct_annotations = {
@@ -17477,6 +17491,199 @@ def removeSession_result__setstate__(self, state):
 
 removeSession_result.__getstate__ = lambda self: self.__dict__.copy()
 removeSession_result.__setstate__ = removeSession_result__setstate__
+
+class killQuery_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = KillQueryReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('killQuery_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(killQuery_args)
+killQuery_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [KillQueryReq, KillQueryReq.thrift_spec, False], None, 2, ), # 1
+)
+
+killQuery_args.thrift_struct_annotations = {
+}
+killQuery_args.thrift_field_annotations = {
+}
+
+def killQuery_args__init__(self, req=None,):
+  self.req = req
+
+killQuery_args.__init__ = killQuery_args__init__
+
+def killQuery_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+killQuery_args.__getstate__ = lambda self: self.__dict__.copy()
+killQuery_args.__setstate__ = killQuery_args__setstate__
+
+class killQuery_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('killQuery_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(killQuery_result)
+killQuery_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+killQuery_result.thrift_struct_annotations = {
+}
+killQuery_result.thrift_field_annotations = {
+}
+
+def killQuery_result__init__(self, success=None,):
+  self.success = success
+
+killQuery_result.__init__ = killQuery_result__init__
+
+def killQuery_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+killQuery_result.__getstate__ = lambda self: self.__dict__.copy()
+killQuery_result.__setstate__ = killQuery_result__setstate__
 
 class reportTaskFinish_args:
   """
@@ -20592,6 +20799,36 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "removeSession failed: unknown result");
 
+  def killQuery(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_killQuery(req)
+    return self.recv_killQuery()
+
+  def send_killQuery(self, req=None):
+    self._oprot.writeMessageBegin('killQuery', TMessageType.CALL, self._seqid)
+    args = killQuery_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_killQuery(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = killQuery_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "killQuery failed: unknown result");
+
   def reportTaskFinish(self, req=None):
     """
     Parameters:
@@ -20859,6 +21096,8 @@ class Processor(Iface, TProcessor):
     self._priorityMap["getSession"] = TPriority.NORMAL
     self._processMap["removeSession"] = Processor.process_removeSession
     self._priorityMap["removeSession"] = TPriority.NORMAL
+    self._processMap["killQuery"] = Processor.process_killQuery
+    self._priorityMap["killQuery"] = TPriority.NORMAL
     self._processMap["reportTaskFinish"] = Processor.process_reportTaskFinish
     self._priorityMap["reportTaskFinish"] = TPriority.NORMAL
     self._processMap["listCluster"] = Processor.process_listCluster
@@ -21798,6 +22037,17 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(killQuery_args, oneway=False)
+  def process_killQuery(self, args, handler_ctx):
+    result = killQuery_result()
+    try:
+      result.success = self._handler.killQuery(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'killQuery', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
   @thrift_process_method(reportTaskFinish_args, oneway=False)
   def process_reportTaskFinish(self, args, handler_ctx):
     result = reportTaskFinish_result()
@@ -22009,6 +22259,8 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["getSession"] = TPriority.NORMAL
     self._processMap["removeSession"] = ContextProcessor.process_removeSession
     self._priorityMap["removeSession"] = TPriority.NORMAL
+    self._processMap["killQuery"] = ContextProcessor.process_killQuery
+    self._priorityMap["killQuery"] = TPriority.NORMAL
     self._processMap["reportTaskFinish"] = ContextProcessor.process_reportTaskFinish
     self._priorityMap["reportTaskFinish"] = TPriority.NORMAL
     self._processMap["listCluster"] = ContextProcessor.process_listCluster
@@ -22945,6 +23197,17 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'removeSession', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(killQuery_args, oneway=False)
+  def process_killQuery(self, args, handler_ctx):
+    result = killQuery_result()
+    try:
+      result.success = self._handler.killQuery(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'killQuery', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
