@@ -71,6 +71,8 @@ class IOErrorException(Exception):
     E_UNKNOWN = 0
     E_ALL_BROKEN = 1
     E_CONNECT_BROKEN = 2
+    E_TIMEOUT = 3
+    E_NOT_OPEN = 4
 
     def __init__(self, code=E_UNKNOWN, message=None):
         Exception.__init__(self, message)
