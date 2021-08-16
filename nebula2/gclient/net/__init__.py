@@ -83,14 +83,11 @@ class Session(object):
                     if not self._reconnect():
                         logging.warning('Retry connect failed')
                         raise IOErrorException(IOErrorException.E_ALL_BROKEN, ie.message)
-                    try:
-                        resp = self._connection.execute(self._session_id, stmt)
-                        end_time = time.time()
-                        return ResultSet(resp,
-                                         all_latency=int((end_time - start_time) * 1000000),
-                                         timezone_offset=self._timezone_offset)
-                    except Exception:
-                        raise
+                    resp = self._connection.execute(self._session_id, stmt)
+                    end_time = time.time()
+                    return ResultSet(resp,
+                                     all_latency=int((end_time - start_time) * 1000000),
+                                     timezone_offset=self._timezone_offset)
             raise
         except Exception:
             raise
@@ -117,6 +114,7 @@ class Session(object):
 
     def _reconnect(self):
         try:
+            self._connection.is_used = False
             conn = self._pool.get_connection()
             if conn is None:
                 return False
@@ -273,8 +271,6 @@ class ConnectionPool(object):
                 return None
             except Exception as ex:
                 logging.error('Get connection failed: {}'.format(ex))
-                import traceback
-                print(traceback.format_exc())
                 return None
 
     def ping(self, address):
@@ -392,6 +388,7 @@ class Connection(object):
         self.start_use_time = time.time()
         self._ip = None
         self._port = None
+        self._timeout = 0
 
     def open(self, ip, port, timeout):
         """open the connection
@@ -403,6 +400,7 @@ class Connection(object):
         """
         self._ip = ip
         self._port = port
+        self._timeout = timeout
         try:
             s = TSocket.TSocket(self._ip, self._port)
             if timeout > 0:
@@ -413,6 +411,14 @@ class Connection(object):
             self._connection = GraphService.Client(protocol)
         except Exception:
             raise
+
+    def _reopen(self):
+        """reopen the connection
+
+        :return:
+        """
+        self.close()
+        self.open(self._ip, self._port, self._timeout)
 
     def authenticate(self, user_name, password):
         """authenticate to graphd
@@ -427,6 +433,8 @@ class Connection(object):
                 raise AuthFailedException(resp.error_msg)
             return AuthResult(resp.session_id, resp.time_zone_offset_seconds, resp.time_zone_name)
         except TTransportException as te:
+            if te.message.find("timed out"):
+                self._reopen()
             if te.type == TTransportException.END_OF_FILE:
                 self.close()
             raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
@@ -441,10 +449,18 @@ class Connection(object):
         try:
             resp = self._connection.execute(session_id, stmt)
             return resp
-        except TTransportException as te:
-            if te.type == TTransportException.END_OF_FILE:
-                self.close()
-            raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
+        except Exception as te:
+            if isinstance(te, TTransportException):
+                if te.message.find("timed out") > 0:
+                    self._reopen()
+                    raise IOErrorException(IOErrorException.E_TIMEOUT, te.message)
+                elif te.type == TTransportException.END_OF_FILE:
+                    raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
+                elif te.type == TTransportException.NOT_OPEN:
+                    raise IOErrorException(IOErrorException.E_NOT_OPEN, te.message)
+                else:
+                    raise IOErrorException(IOErrorException.E_UNKNOWN, te.message);
+            raise
 
     def signout(self, session_id):
         """tells the graphd can release the session info
@@ -473,12 +489,10 @@ class Connection(object):
         :return: True or False
         """
         try:
-            self._connection.execute(0, 'YIELD 1;')
+            resp = self._connection.execute(0, 'YIELD 1;')
             return True
-        except TTransportException as te:
-            if te.type == TTransportException.END_OF_FILE:
-                return False
-        return True
+        except Exception:
+            return False
 
     def reset(self):
         """reset the idletime
