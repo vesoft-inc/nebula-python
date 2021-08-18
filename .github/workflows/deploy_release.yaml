@@ -1,0 +1,41 @@
+name: Upload package to pypi
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  ci:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip3 install setuptools wheel twine
+        pip install -r requirements-dev.txt
+
+    - name: Test with pytest
+      run: |
+        mkdir tmp
+        pushd tmp
+        git clone https://github.com/vesoft-inc/nebula-docker-compose.git
+        pushd nebula-docker-compose/
+        cp ../../tests/docker-compose.yaml ./
+        docker-compose up -d
+        sleep 60
+        popd
+        popd
+        cd tests
+        pytest -s -v
+
+    - name: Build and publish
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_NAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        python3 setup.py sdist bdist_wheel
+        twine upload dist/*
