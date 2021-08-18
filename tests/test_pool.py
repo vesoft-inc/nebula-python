@@ -10,6 +10,7 @@ import sys
 import os
 import threading
 import time
+import pytest
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
@@ -141,6 +142,26 @@ class TestConnectionPool(TestCase):
             assert True
         except Exception as e:
             assert False, "We don't expect reach here:".format(e)
+
+    @pytest.mark.skip(reason="the test data without nba")
+    def test_timeout(self):
+        config = Config()
+        config.timeout = 1000
+        config.max_connection_pool_size = 1
+        pool = ConnectionPool()
+        assert pool.init([('127.0.0.1', 9669)], config)
+        session = pool.get_session('root', 'nebula')
+        try:
+            resp = session.execute('USE nba;GO 1000 STEPS FROM \"Tim Duncan\" OVER like')
+            assert False
+        except IOErrorException as e:
+            assert True
+            assert str(e).find("Read timed out")
+        session.release()
+        try:
+            session = pool.get_session('root', 'nebula')
+        except IOErrorException as e:
+            assert False
 
 
 def test_multi_thread():
