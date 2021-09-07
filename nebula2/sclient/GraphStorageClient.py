@@ -223,7 +223,8 @@ class GraphStorageClient(object):
                   where=None,
                   only_latest_version=False,
                   enable_read_from_follower=True,
-                  partial_success=False):
+                  partial_success=False,
+                  reverse_edge=False):
         """scan edge with the specified space_name, edge_name,
         if the prop_names is empty, will return all properties of the edge
 
@@ -252,7 +253,8 @@ class GraphStorageClient(object):
                                where,
                                only_latest_version,
                                enable_read_from_follower,
-                               partial_success)
+                               partial_success,
+                               reverse_edge=reverse_edge)
 
     def scan_edge_with_part(self,
                             space_name,
@@ -265,7 +267,8 @@ class GraphStorageClient(object):
                             where=None,
                             only_latest_version=False,
                             enable_read_from_follower=True,
-                            partial_success=False):
+                            partial_success=False,
+                            reverse_edge=False):
         """scan edge with the specified space_name, partId, edge_name,
         if the prop_names is empty, will return all properties of the edge
 
@@ -295,7 +298,8 @@ class GraphStorageClient(object):
                                where,
                                only_latest_version,
                                enable_read_from_follower,
-                               partial_success)
+                               partial_success,
+                               reverse_edge=reverse_edge)
 
     def _scan_edge(self,
                    space_name,
@@ -308,10 +312,13 @@ class GraphStorageClient(object):
                    where,
                    only_latest_version,
                    enable_read_from_follower,
-                   partial_success):
+                   partial_success,
+                   reverse_edge=False):
         space_id = self._meta_cache.get_space_id(space_name)
         edge_type = self._meta_cache.get_edge_type(space_name, edge_name)
         edge_prop = EdgeProp()
+        if reverse_edge:
+            edge_type = -edge_type
         edge_prop.type = edge_type
         edge_prop.props = [kSrc, kType, kRank, kDst]
 
