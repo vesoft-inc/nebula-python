@@ -166,7 +166,6 @@ class EdgeData(object):
             raise RuntimeError('The row value is bad format, '
                                'get edge dst id failed: len is {}'
                                .format(len(self._row.values)))
-        assert self._row.values[3].getType() == ttypes.Value.SVAL
         return ValueWrapper(self._row.values[3], self._decode_type)
 
     def as_relationship(self):
