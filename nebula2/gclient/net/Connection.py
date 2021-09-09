@@ -24,7 +24,6 @@ from nebula2.gclient.net.AuthResult import AuthResult
 
 
 class Connection(object):
-    is_used = False
 
     def __init__(self):
         self._connection = None
@@ -32,6 +31,16 @@ class Connection(object):
         self._ip = None
         self._port = None
         self._timeout = 0
+        self._is_used = False
+
+    def __str__(self):
+        return "{}:{} used: {}".format(self._ip, self._port, self._is_used)
+
+    def is_used(self):
+        return self._is_used
+
+    def set_used(self, used=True):
+        self._is_used = used
 
     def open(self, ip, port, timeout):
         """open the connection
@@ -149,7 +158,7 @@ class Connection(object):
 
         :return: idletime
         """
-        if self.is_used:
+        if self._is_used:
             return 0
         return (time.time() - self.start_use_time) * 1000
 

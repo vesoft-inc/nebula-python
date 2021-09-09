@@ -95,7 +95,9 @@ class ConnectionPool(object):
             raise NotValidConnectionException()
         try:
             auth_result = connection.authenticate(user_name, password)
-            return Session(connection, auth_result, self, retry_connect)
+            sess = Session(connection, auth_result, self, retry_connect)
+            logging.info("session: {}".format(sess))
+            return sess
         except Exception:
             raise
 
@@ -144,22 +146,19 @@ class ConnectionPool(object):
                     addr = self._addresses[self._pos]
                     if self._addresses_status[addr] == self.S_OK:
                         for connection in self._connections[addr]:
-                            if not connection.is_used:
-                                if connection.ping():
-                                    connection.is_used = True
-                                    logging.info('Get connection to {}'.format(addr))
-                                    return connection
+                            if not connection.is_used() and connection.ping():
+                                logging.info('Get connection to {}'.format(addr))
+                                return connection
 
                         if len(self._connections[addr]) < max_con_per_address:
                             connection = Connection()
                             connection.open(addr[0], addr[1], self._configs.timeout)
-                            connection.is_used = True
                             self._connections[addr].append(connection)
                             logging.info('Get connection to {}'.format(addr))
                             return connection
                     else:
                         for connection in list(self._connections[addr]):
-                            if not connection.is_used:
+                            if not connection.is_used():
                                 self._connections[addr].remove(connection)
                     try_count = try_count + 1
                 return None
@@ -190,7 +189,7 @@ class ConnectionPool(object):
         with self._lock:
             for addr in self._connections.keys():
                 for connection in self._connections[addr]:
-                    if connection.is_used:
+                    if connection.is_used():
                         logging.error('The connection using by someone, but now want to close it')
                     connection.close()
             self._close = True
@@ -215,7 +214,7 @@ class ConnectionPool(object):
             count = 0
             for addr in self._connections.keys():
                 for connection in self._connections[addr]:
-                    if connection.is_used:
+                    if connection.is_used():
                         count = count + 1
             return count
 
@@ -255,7 +254,7 @@ class ConnectionPool(object):
             for addr in self._connections.keys():
                 conns = self._connections[addr]
                 for connection in list(conns):
-                    if not connection.is_used:
+                    if not connection.is_used():
                         if not connection.ping():
                             logging.debug('Remove the not unusable connection to {}'.format(connection.get_address()))
                             conns.remove(connection)

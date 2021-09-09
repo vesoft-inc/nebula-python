@@ -25,6 +25,11 @@ class Session(object):
         self._timezone = 0
         self._pool = pool
         self._retry_connect = retry_connect
+        if self._connection is not None:
+            self._connection.set_used(True)
+
+    def __str__(self):
+        return "id: {}, conn: ({})".format(self._session_id, self._connection)
 
     def execute(self, stmt):
         """execute statement
@@ -63,9 +68,11 @@ class Session(object):
         :return:
         """
         if self._connection is None:
+            logging.info("Connection of session {} is None when releasing".format(self._session_id))
             return
+        logging.info("Connection ({}) of session {} will be released".format(self._connection, self._session_id))
         self._connection.signout(self._session_id)
-        self._connection.is_used = False
+        self._connection.set_used(False)
         self._connection = None
 
     def ping(self):
@@ -79,7 +86,6 @@ class Session(object):
 
     def _reconnect(self):
         try:
-            self._connection.is_used = False
             conn = self._pool.get_connection()
             if conn is None:
                 return False
