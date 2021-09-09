@@ -34,7 +34,7 @@ class Connection(object):
         self._is_used = False
 
     def __str__(self):
-        return "{}:{} used: {}".format(self._ip, self._port, self._is_used)
+        return "({}:{} used: {})".format(self._ip, self._port, self._is_used)
 
     def is_used(self):
         return self._is_used
@@ -133,7 +133,7 @@ class Connection(object):
         """
         try:
             self._connection._iprot.trans.close()
-            logging.info("Connection ({}) has been closed.".format(self))
+            logging.info("Connection {} has been closed.".format(self))
         except Exception as e:
             logging.error('Close connection to {}:{} failed:{}'.format(self._ip, self._port, e))
 

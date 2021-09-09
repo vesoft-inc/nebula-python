@@ -27,7 +27,7 @@ class Session(object):
         self._retry_connect = retry_connect
 
     def __str__(self):
-        return "id: {}, conn: ({})".format(self._session_id, self._connection)
+        return "id: {}, conn: {}".format(self._session_id, self._connection)
 
     def execute(self, stmt):
         """execute statement
@@ -68,7 +68,7 @@ class Session(object):
         if self._connection is None:
             logging.info("Connection of session {} is None when releasing".format(self._session_id))
             return
-        logging.info("Connection ({}) of session {} will be released".format(self._connection, self._session_id))
+        logging.info("Connection {} of session {} will be released".format(self._connection, self._session_id))
         self._connection.signout(self._session_id)
         self._release_conn()
 
