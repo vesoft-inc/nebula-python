@@ -133,6 +133,7 @@ class Connection(object):
         """
         try:
             self._connection._iprot.trans.close()
+            logging.info("Connection ({}) has been closed.".format(self))
         except Exception as e:
             logging.error('Close connection to {}:{} failed:{}'.format(self._ip, self._port, e))
 

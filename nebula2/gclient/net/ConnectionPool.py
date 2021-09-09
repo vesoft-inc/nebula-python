@@ -96,7 +96,7 @@ class ConnectionPool(object):
         try:
             auth_result = connection.authenticate(user_name, password)
             sess = Session(connection, auth_result, self, retry_connect)
-            logging.info("session: {}".format(sess))
+            logging.info("Get session: {}".format(sess))
             return sess
         except Exception:
             raise

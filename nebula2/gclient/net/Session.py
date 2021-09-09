@@ -86,10 +86,12 @@ class Session(object):
 
     def _reconnect(self):
         try:
+            self._connection.set_used(False)
             conn = self._pool.get_connection()
             if conn is None:
                 return False
             self._connection = conn
+            self._connection.set_used(True)
         except NotValidConnectionException:
             return False
         return True
