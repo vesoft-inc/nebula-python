@@ -11,6 +11,7 @@ import os
 import threading
 import time
 import pytest
+import logging
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
@@ -181,12 +182,13 @@ def test_multi_thread():
         try:
             session = pool.get_session('root', 'nebula')
             if session is None:
+                logging.error("Could not get session.")
                 success_flag = False
                 return
             space_name = 'space_' + threading.current_thread().getName()
 
-            resp = session.execute('DROP SPACE %s' % space_name)
-            assert resp.is_succeeded()
+            resp = session.execute('DROP SPACE IF EXISTS %s' % space_name)
+            assert resp.is_succeeded(), "Fail to drop space {}, error: {}".format(space_name, resp.error_msg())
             resp = session.execute('CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))' % space_name)
             if not resp.is_succeeded():
                 raise RuntimeError('CREATE SPACE failed: {}'.format(resp.error_msg()))
@@ -197,7 +199,7 @@ def test_multi_thread():
                 raise RuntimeError('USE SPACE failed:{}'.format(resp.error_msg()))
 
         except Exception as x:
-            print(x)
+            logging.error("Catched a exception {} in thread {}".format(x, threading.current_thread().getName()))
             success_flag = False
             return
         finally:
