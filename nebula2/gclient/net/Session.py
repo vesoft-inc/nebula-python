@@ -21,12 +21,10 @@ class Session(object):
     def __init__(self, connection, auth_result: AuthResult, pool, retry_connect=True):
         self._session_id = auth_result.get_session_id()
         self._timezone_offset = auth_result.get_timezone_offset()
-        self._connection = connection
+        self._bind_conn(connection)
         self._timezone = 0
         self._pool = pool
         self._retry_connect = retry_connect
-        if self._connection is not None:
-            self._connection.set_used(True)
 
     def __str__(self):
         return "id: {}, conn: ({})".format(self._session_id, self._connection)
@@ -72,8 +70,7 @@ class Session(object):
             return
         logging.info("Connection ({}) of session {} will be released".format(self._connection, self._session_id))
         self._connection.signout(self._session_id)
-        self._connection.set_used(False)
-        self._connection = None
+        self._release_conn()
 
     def ping(self):
         """check the connection is ok
@@ -86,15 +83,24 @@ class Session(object):
 
     def _reconnect(self):
         try:
-            self._connection.set_used(False)
+            self._release_conn()
             conn = self._pool.get_connection()
-            if conn is None:
-                return False
-            self._connection = conn
-            self._connection.set_used(True)
+            return self._bind_conn(conn)
         except NotValidConnectionException:
             return False
         return True
 
     def __del__(self):
         self.release()
+
+    def _release_conn(self):
+        self._connection.set_used(False)
+        self._connection = None
+
+    def _bind_conn(self, conn):
+        if conn is None:
+            logging.info("Could not bind the None connection.")
+            return False
+        self._connection = conn
+        self._connection.set_used(True)
+        return True
