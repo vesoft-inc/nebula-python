@@ -42,6 +42,9 @@ class ConnectionPool(object):
     def __del__(self):
         self.close()
 
+    def _accessible(self, addr):
+        return self._addresses_status[addr] == self.S_OK
+
     def init(self, addresses, configs):
         """init the connection pool
 
@@ -145,7 +148,7 @@ class ConnectionPool(object):
                 while try_count <= len(self._addresses):
                     self._pos = (self._pos + 1) % len(self._addresses)
                     addr = self._addresses[self._pos]
-                    if self._addresses_status[addr] == self.S_OK:
+                    if self._accessible(addr):
                         for connection in self._connections[addr]:
                             if not connection.is_used() and connection.ping():
                                 logging.info('Get connection to {}'.format(addr))
@@ -227,16 +230,14 @@ class ConnectionPool(object):
         """
         count = 0
         for addr in self._addresses_status.keys():
-            if self._addresses_status[addr] == self.S_OK:
+            if self._accessible(addr):
                 count = count + 1
         return count
 
     def _get_services_status(self):
         msg_list = []
         for addr in self._addresses_status.keys():
-            status = 'OK'
-            if self._addresses_status[addr] != self.S_OK:
-                status = 'BAD'
+            status = 'OK' if self._accessible(addr) else 'BAD'
             msg_list.append('[services: {}, status: {}]'.format(addr, status))
         return ', '.join(msg_list)
 
@@ -244,10 +245,7 @@ class ConnectionPool(object):
         """update the servers' status
         """
         for address in self._addresses:
-            if self.ping(address):
-                self._addresses_status[address] = self.S_OK
-            else:
-                self._addresses_status[address] = self.S_BAD
+            self._addresses_status[address] = self.S_OK if self.ping(address) else self.S_BAD
 
     def _remove_idle_unusable_connection(self):
         if self._configs.idle_time == 0:
