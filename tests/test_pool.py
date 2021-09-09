@@ -199,7 +199,7 @@ def test_multi_thread():
                 raise RuntimeError('USE SPACE failed:{}'.format(resp.error_msg()))
 
         except Exception as x:
-            logging.error("Catched a exception {} in thread {}".format(x, threading.current_thread().getName()))
+            logging.error("Catched a exception {} in thread {}".format(x.message, threading.current_thread().getName()))
             success_flag = False
             return
         finally:

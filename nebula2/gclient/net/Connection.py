@@ -72,7 +72,7 @@ class Connection(object):
         self.close()
         self.open(self._ip, self._port, self._timeout)
 
-    def authenticate(self, user_name, password):
+    def authenticate(self, username, password):
         """authenticate to graphd
 
         :param user_name: the user name
@@ -80,9 +80,9 @@ class Connection(object):
         :return:
         """
         try:
-            resp = self._connection.authenticate(user_name, password)
+            resp = self._connection.authenticate(username, password)
             if resp.error_code != ErrorCode.SUCCEEDED:
-                raise AuthFailedException(resp.error_msg)
+                raise AuthFailedException("Fail to authenticate for {}, error: {}, code: {}".format(username, resp.error_msg, resp.error_code))
             return AuthResult(resp.session_id, resp.time_zone_offset_seconds, resp.time_zone_name)
         except TTransportException as te:
             if te.message.find("timed out"):

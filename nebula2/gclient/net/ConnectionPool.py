@@ -138,6 +138,7 @@ class ConnectionPool(object):
             try:
                 ok_num = self.get_ok_servers_num()
                 if ok_num == 0:
+                    logging.warn("There is no any valid connection to use.")
                     return None
                 max_con_per_address = int(self._configs.max_connection_pool_size / ok_num)
                 try_count = 0
@@ -161,6 +162,7 @@ class ConnectionPool(object):
                             if not connection.is_used():
                                 self._connections[addr].remove(connection)
                     try_count = try_count + 1
+                logging.warn("After trying {} times, a valid connection still could not be obtained.".format(try_count))
                 return None
             except Exception as ex:
                 logging.error('Get connection failed: {}'.format(ex))
