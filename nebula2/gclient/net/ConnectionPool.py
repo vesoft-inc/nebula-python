@@ -37,6 +37,7 @@ class ConnectionPool(object):
         self._connections = dict()
         self._configs = None
         self._lock = RLock()
+        self._pos = -1
         self._close = False
 
     def __del__(self):
@@ -177,9 +178,10 @@ class ConnectionPool(object):
                     return None
                 max_con_per_address = int(self._configs.max_connection_pool_size / ok_num)
 
-                try_count = len(self._addresses)
-                for i in range(try_count):
-                    addr = self._addresses[i % len(self._addresses)]
+                num_addrs = len(self._addresses)
+                for i in range(num_addrs):
+                    self._pos = (self._pos + 1) % num_addrs
+                    addr = self._addresses[self._pos]
                     if self._accessible(addr):
                         conn = self._get_idle_connection(addr, max_con_per_address)
                         if conn is not None:
@@ -187,7 +189,7 @@ class ConnectionPool(object):
                     else:
                         self._cleanup_unused_connections(addr)
 
-                logging.warn("After trying {} times, a valid connection still could not be obtained.".format(try_count))
+                logging.warn("After trying {} times, a valid connection still could not be obtained.".format(num_addrs))
                 return None
             except Exception as ex:
                 logging.error('Get connection failed: {}'.format(ex))
