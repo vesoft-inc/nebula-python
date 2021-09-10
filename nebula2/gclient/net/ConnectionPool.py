@@ -132,34 +132,30 @@ class ConnectionPool(object):
     def _get_active_idle_connection(self, addr):
         for connection in self._connections[addr]:
             if not connection.is_used() and connection.ping():
-                connection.set_used(True)
                 return connection
         return None
 
     def _create_connection(self, addr):
         connection = Connection()
         connection.open(addr[0], addr[1], self._configs.timeout)
-        connection.set_used(True)
         self._connections[addr].append(connection)
         return connection
 
     def _get_idle_connection(self, addr, max_con_per_address):
         connection = self._get_active_idle_connection(addr)
         if connection is not None:
-            logging.info('Get connection to {}'.format(addr))
             return connection
 
         if len(self._connections[addr]) < max_con_per_address:
-            logging.info('Get connection to {}'.format(addr))
             return self._create_connection(addr)
 
-        logging.warning('There is no any valid connection for {}'.format(addr))
         return None
 
     def _cleanup_unused_connections(self, addr):
-        for connection in list(self._connections[addr]):
+        conns = self._connections[addr]
+        for connection in list(conns):
             if not connection.is_used():
-                self._connections[addr].remove(connection)
+                conns.remove(connection)
 
     def get_connection(self):
         """get available connection
@@ -185,6 +181,8 @@ class ConnectionPool(object):
                     if self._accessible(addr):
                         conn = self._get_idle_connection(addr, max_con_per_address)
                         if conn is not None:
+                            logging.info('Get connection to {}'.format(addr))
+                            conn.set_used(True)
                             return conn
                     else:
                         self._cleanup_unused_connections(addr)
@@ -252,7 +250,7 @@ class ConnectionPool(object):
 
         :return: int
         """
-        return reduce(lambda x,y: x+1, self._addresses_status.keys(), 0)
+        return reduce(lambda x,y: x+1, filter(self._accessible, self._addresses_status.keys()), 0)
 
     def _get_services_status(self):
         msg_list = []
