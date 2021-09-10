@@ -153,7 +153,7 @@ class ConnectionPool(object):
             logging.info('Get connection to {}'.format(addr))
             return self._create_connection(addr)
 
-        logging.warn('There is no any valid connection for {}'.format(addr))
+        logging.warning('There is no any valid connection for {}'.format(addr))
         return None
 
     def _cleanup_unused_connections(self, addr):
@@ -174,7 +174,7 @@ class ConnectionPool(object):
             try:
                 ok_num = self.num_ok_servers()
                 if ok_num == 0:
-                    logging.warn("There is no any valid connection to use.")
+                    logging.warning("There is no any valid connection to use.")
                     return None
                 max_con_per_address = int(self._configs.max_connection_pool_size / ok_num)
 
@@ -189,7 +189,7 @@ class ConnectionPool(object):
                     else:
                         self._cleanup_unused_connections(addr)
 
-                logging.warn("After trying {} times, a valid connection still could not be obtained.".format(num_addrs))
+                logging.warning("After trying {} times, a valid connection still could not be obtained.".format(num_addrs))
                 return None
             except Exception as ex:
                 logging.error('Get connection failed: {}'.format(ex))
