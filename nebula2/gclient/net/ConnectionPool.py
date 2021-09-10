@@ -11,6 +11,7 @@ import socket
 
 from collections import deque
 from threading import RLock, Timer
+from functools import reduce
 
 from nebula2.Exception import (
     NotValidConnectionException,
@@ -36,7 +37,6 @@ class ConnectionPool(object):
         self._connections = dict()
         self._configs = None
         self._lock = RLock()
-        self._pos = -1
         self._close = False
 
     def __del__(self):
@@ -73,7 +73,7 @@ class ConnectionPool(object):
         self._period_detect()
 
         # init min connections
-        ok_num = self.get_ok_servers_num()
+        ok_num = self.num_ok_servers()
         if ok_num < len(self._addresses):
             raise RuntimeError('The services status exception: {}'.format(self._get_services_status()))
 
@@ -128,6 +128,38 @@ class ConnectionPool(object):
             if session:
                 session.release()
 
+    def _get_active_idle_connection(self, addr):
+        for connection in self._connections[addr]:
+            if not connection.is_used() and connection.ping():
+                connection.set_used(True)
+                return connection
+        return None
+
+    def _create_connection(self, addr):
+        connection = Connection()
+        connection.open(addr[0], addr[1], self._configs.timeout)
+        connection.set_used(True)
+        self._connections[addr].append(connection)
+        return connection
+
+    def _get_idle_connection(self, addr, max_con_per_address):
+        connection = self._get_active_idle_connection(addr)
+        if connection is not None:
+            logging.info('Get connection to {}'.format(addr))
+            return connection
+
+        if len(self._connections[addr]) < max_con_per_address:
+            logging.info('Get connection to {}'.format(addr))
+            return self._create_connection(addr)
+
+        logging.warn('There is no any valid connection for {}'.format(addr))
+        return None
+
+    def _cleanup_unused_connections(self, addr):
+        for connection in list(self._connections[addr]):
+            if not connection.is_used():
+                self._connections[addr].remove(connection)
+
     def get_connection(self):
         """get available connection
 
@@ -139,32 +171,22 @@ class ConnectionPool(object):
                 raise NotValidConnectionException()
 
             try:
-                ok_num = self.get_ok_servers_num()
+                ok_num = self.num_ok_servers()
                 if ok_num == 0:
                     logging.warn("There is no any valid connection to use.")
                     return None
                 max_con_per_address = int(self._configs.max_connection_pool_size / ok_num)
-                try_count = 0
-                while try_count <= len(self._addresses):
-                    self._pos = (self._pos + 1) % len(self._addresses)
-                    addr = self._addresses[self._pos]
-                    if self._accessible(addr):
-                        for connection in self._connections[addr]:
-                            if not connection.is_used() and connection.ping():
-                                logging.info('Get connection to {}'.format(addr))
-                                return connection
 
-                        if len(self._connections[addr]) < max_con_per_address:
-                            connection = Connection()
-                            connection.open(addr[0], addr[1], self._configs.timeout)
-                            self._connections[addr].append(connection)
-                            logging.info('Get connection to {}'.format(addr))
-                            return connection
+                try_count = len(self._addresses)
+                for i in range(try_count):
+                    addr = self._addresses[i % len(self._addresses)]
+                    if self._accessible(addr):
+                        conn = self._get_idle_connection(addr, max_con_per_address)
+                        if conn is not None:
+                            return conn
                     else:
-                        for connection in list(self._connections[addr]):
-                            if not connection.is_used():
-                                self._connections[addr].remove(connection)
-                    try_count = try_count + 1
+                        self._cleanup_unused_connections(addr)
+
                 logging.warn("After trying {} times, a valid connection still could not be obtained.".format(try_count))
                 return None
             except Exception as ex:
@@ -223,16 +245,12 @@ class ConnectionPool(object):
                         count = count + 1
             return count
 
-    def get_ok_servers_num(self):
+    def num_ok_servers(self):
         """get the number of the ok servers
 
         :return: int
         """
-        count = 0
-        for addr in self._addresses_status.keys():
-            if self._accessible(addr):
-                count = count + 1
-        return count
+        return reduce(lambda x,y: x+1, self._addresses_status.keys(), 0)
 
     def _get_services_status(self):
         msg_list = []
