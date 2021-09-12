@@ -106,7 +106,7 @@ with connection_pool.session_context('root', 'nebula') as session:
 connection_pool.close()
 ```
 
-## Quick example to use storage-cleint to scan vertex and edge
+## Quick example to use storage-client to scan vertex and edge
 
 You should make sure the scan client can connect to the address of storage which see from `SHOW HOSTS` 
 
