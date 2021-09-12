@@ -109,3 +109,6 @@ nebula/graph.thrift
 
 # ide
 .idea/
+
+tests/data
+tests/logs
