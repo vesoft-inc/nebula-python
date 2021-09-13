@@ -34,11 +34,13 @@ class GraphStorageClient(object):
     DEFAULT_END_TIME = sys.maxsize
     DEFAULT_LIMIT = 1000
 
-    def __init__(self, meta_cache, time_out=60000):
+    def __init__(self, meta_cache,storage_addrs =None, time_out=60000):
         self._meta_cache = meta_cache
+        self.storage_addrs = storage_addrs
         self._time_out = time_out
         self._connections = []
         self._create_connection()
+        
 
     def get_conns(self):
         """get all connections which connect to storaged, the ScanResult use it
@@ -67,11 +69,12 @@ class GraphStorageClient(object):
 
         :return: GraphStorageConnection
         """
-        storage_addrs = self._meta_cache.get_all_storage_addrs()
-        if len(storage_addrs) == 0:
+        if self.storage_addrs is None:
+            self.storage_addrs = self._meta_cache.get_all_storage_addrs()
+        if len(self.storage_addrs) == 0:
             raise RuntimeError('Get storage address from meta cache is empty')
         try:
-            for addr in storage_addrs:
+            for addr in self.storage_addrs:
                 conn = GraphStorageConnection(addr, self._time_out, self._meta_cache)
                 conn.open()
                 self._connections.append(conn)
