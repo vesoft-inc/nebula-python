@@ -42,4 +42,4 @@ from . import ttypes
 from . import constants
 
 import nebula2.fbthrift.util.fuzzer
-thrift.util.fuzzer.fuzz_service(StorageAdminService, ttypes, constants)
+nebula2.fbthrift.util.fuzzer.fuzz_service(StorageAdminService, ttypes, constants)

@@ -66,11 +66,29 @@ class Iface:
     """
     pass
 
+  def executeWithParameter(self, sessionId=None, stmt=None, parameterMap=None):
+    """
+    Parameters:
+     - sessionId
+     - stmt
+     - parameterMap
+    """
+    pass
+
   def executeJson(self, sessionId=None, stmt=None):
     """
     Parameters:
      - sessionId
      - stmt
+    """
+    pass
+
+  def executeJsonWithParameter(self, sessionId=None, stmt=None, parameterMap=None):
+    """
+    Parameters:
+     - sessionId
+     - stmt
+     - parameterMap
     """
     pass
 
@@ -99,11 +117,29 @@ class ContextIface:
     """
     pass
 
+  def executeWithParameter(self, handler_ctx, sessionId=None, stmt=None, parameterMap=None):
+    """
+    Parameters:
+     - sessionId
+     - stmt
+     - parameterMap
+    """
+    pass
+
   def executeJson(self, handler_ctx, sessionId=None, stmt=None):
     """
     Parameters:
      - sessionId
      - stmt
+    """
+    pass
+
+  def executeJsonWithParameter(self, handler_ctx, sessionId=None, stmt=None, parameterMap=None):
+    """
+    Parameters:
+     - sessionId
+     - stmt
+     - parameterMap
     """
     pass
 
@@ -624,6 +660,250 @@ def execute_result__setstate__(self, state):
 execute_result.__getstate__ = lambda self: self.__dict__.copy()
 execute_result.__setstate__ = execute_result__setstate__
 
+class executeWithParameter_args:
+  """
+  Attributes:
+   - sessionId
+   - stmt
+   - parameterMap
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.sessionId = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.stmt = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.MAP:
+          self.parameterMap = {}
+          (_ktype55, _vtype56, _size54 ) = iprot.readMapBegin() 
+          if _size54 >= 0:
+            for _i58 in six.moves.range(_size54):
+              _key59 = iprot.readString()
+              _val60 = nebula2.common.ttypes.Value()
+              _val60.read(iprot)
+              self.parameterMap[_key59] = _val60
+          else: 
+            while iprot.peekMap():
+              _key61 = iprot.readString()
+              _val62 = nebula2.common.ttypes.Value()
+              _val62.read(iprot)
+              self.parameterMap[_key61] = _val62
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('executeWithParameter_args')
+    if self.sessionId != None:
+      oprot.writeFieldBegin('sessionId', TType.I64, 1)
+      oprot.writeI64(self.sessionId)
+      oprot.writeFieldEnd()
+    if self.stmt != None:
+      oprot.writeFieldBegin('stmt', TType.STRING, 2)
+      oprot.writeString(self.stmt)
+      oprot.writeFieldEnd()
+    if self.parameterMap != None:
+      oprot.writeFieldBegin('parameterMap', TType.MAP, 3)
+      oprot.writeMapBegin(TType.STRING, TType.STRUCT, len(self.parameterMap))
+      for kiter63,viter64 in self.parameterMap.items():
+        oprot.writeString(kiter63)
+        viter64.write(oprot)
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.sessionId is not None:
+      value = pprint.pformat(self.sessionId, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    sessionId=%s' % (value))
+    if self.stmt is not None:
+      value = pprint.pformat(self.stmt, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    stmt=%s' % (value))
+    if self.parameterMap is not None:
+      value = pprint.pformat(self.parameterMap, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    parameterMap=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(executeWithParameter_args)
+executeWithParameter_args.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'sessionId', None, None, 2, ), # 1
+  (2, TType.STRING, 'stmt', False, None, 2, ), # 2
+  (3, TType.MAP, 'parameterMap', (TType.STRING,False,TType.STRUCT,[nebula2.common.ttypes.Value, nebula2.common.ttypes.Value.thrift_spec, True]), None, 2, ), # 3
+)
+
+executeWithParameter_args.thrift_struct_annotations = {
+}
+executeWithParameter_args.thrift_field_annotations = {
+}
+
+def executeWithParameter_args__init__(self, sessionId=None, stmt=None, parameterMap=None,):
+  self.sessionId = sessionId
+  self.stmt = stmt
+  self.parameterMap = parameterMap
+
+executeWithParameter_args.__init__ = executeWithParameter_args__init__
+
+def executeWithParameter_args__setstate__(self, state):
+  state.setdefault('sessionId', None)
+  state.setdefault('stmt', None)
+  state.setdefault('parameterMap', None)
+  self.__dict__ = state
+
+executeWithParameter_args.__getstate__ = lambda self: self.__dict__.copy()
+executeWithParameter_args.__setstate__ = executeWithParameter_args__setstate__
+
+class executeWithParameter_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecutionResponse()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('executeWithParameter_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(executeWithParameter_result)
+executeWithParameter_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecutionResponse, ExecutionResponse.thrift_spec, False], None, 2, ), # 0
+)
+
+executeWithParameter_result.thrift_struct_annotations = {
+}
+executeWithParameter_result.thrift_field_annotations = {
+}
+
+def executeWithParameter_result__init__(self, success=None,):
+  self.success = success
+
+executeWithParameter_result.__init__ = executeWithParameter_result__init__
+
+def executeWithParameter_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+executeWithParameter_result.__getstate__ = lambda self: self.__dict__.copy()
+executeWithParameter_result.__setstate__ = executeWithParameter_result__setstate__
+
 class executeJson_args:
   """
   Attributes:
@@ -832,6 +1112,249 @@ def executeJson_result__setstate__(self, state):
 executeJson_result.__getstate__ = lambda self: self.__dict__.copy()
 executeJson_result.__setstate__ = executeJson_result__setstate__
 
+class executeJsonWithParameter_args:
+  """
+  Attributes:
+   - sessionId
+   - stmt
+   - parameterMap
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.sessionId = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.stmt = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.MAP:
+          self.parameterMap = {}
+          (_ktype66, _vtype67, _size65 ) = iprot.readMapBegin() 
+          if _size65 >= 0:
+            for _i69 in six.moves.range(_size65):
+              _key70 = iprot.readString()
+              _val71 = nebula2.common.ttypes.Value()
+              _val71.read(iprot)
+              self.parameterMap[_key70] = _val71
+          else: 
+            while iprot.peekMap():
+              _key72 = iprot.readString()
+              _val73 = nebula2.common.ttypes.Value()
+              _val73.read(iprot)
+              self.parameterMap[_key72] = _val73
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('executeJsonWithParameter_args')
+    if self.sessionId != None:
+      oprot.writeFieldBegin('sessionId', TType.I64, 1)
+      oprot.writeI64(self.sessionId)
+      oprot.writeFieldEnd()
+    if self.stmt != None:
+      oprot.writeFieldBegin('stmt', TType.STRING, 2)
+      oprot.writeString(self.stmt)
+      oprot.writeFieldEnd()
+    if self.parameterMap != None:
+      oprot.writeFieldBegin('parameterMap', TType.MAP, 3)
+      oprot.writeMapBegin(TType.STRING, TType.STRUCT, len(self.parameterMap))
+      for kiter74,viter75 in self.parameterMap.items():
+        oprot.writeString(kiter74)
+        viter75.write(oprot)
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.sessionId is not None:
+      value = pprint.pformat(self.sessionId, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    sessionId=%s' % (value))
+    if self.stmt is not None:
+      value = pprint.pformat(self.stmt, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    stmt=%s' % (value))
+    if self.parameterMap is not None:
+      value = pprint.pformat(self.parameterMap, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    parameterMap=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(executeJsonWithParameter_args)
+executeJsonWithParameter_args.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'sessionId', None, None, 2, ), # 1
+  (2, TType.STRING, 'stmt', False, None, 2, ), # 2
+  (3, TType.MAP, 'parameterMap', (TType.STRING,False,TType.STRUCT,[nebula2.common.ttypes.Value, nebula2.common.ttypes.Value.thrift_spec, True]), None, 2, ), # 3
+)
+
+executeJsonWithParameter_args.thrift_struct_annotations = {
+}
+executeJsonWithParameter_args.thrift_field_annotations = {
+}
+
+def executeJsonWithParameter_args__init__(self, sessionId=None, stmt=None, parameterMap=None,):
+  self.sessionId = sessionId
+  self.stmt = stmt
+  self.parameterMap = parameterMap
+
+executeJsonWithParameter_args.__init__ = executeJsonWithParameter_args__init__
+
+def executeJsonWithParameter_args__setstate__(self, state):
+  state.setdefault('sessionId', None)
+  state.setdefault('stmt', None)
+  state.setdefault('parameterMap', None)
+  self.__dict__ = state
+
+executeJsonWithParameter_args.__getstate__ = lambda self: self.__dict__.copy()
+executeJsonWithParameter_args.__setstate__ = executeJsonWithParameter_args__setstate__
+
+class executeJsonWithParameter_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRING:
+          self.success = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('executeJsonWithParameter_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRING, 0)
+      oprot.writeString(self.success)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(executeJsonWithParameter_result)
+executeJsonWithParameter_result.thrift_spec = (
+  (0, TType.STRING, 'success', False, None, 2, ), # 0
+)
+
+executeJsonWithParameter_result.thrift_struct_annotations = {
+}
+executeJsonWithParameter_result.thrift_field_annotations = {
+}
+
+def executeJsonWithParameter_result__init__(self, success=None,):
+  self.success = success
+
+executeJsonWithParameter_result.__init__ = executeJsonWithParameter_result__init__
+
+def executeJsonWithParameter_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+executeJsonWithParameter_result.__getstate__ = lambda self: self.__dict__.copy()
+executeJsonWithParameter_result.__setstate__ = executeJsonWithParameter_result__setstate__
+
 class Client(Iface):
   def __enter__(self):
     return self
@@ -925,6 +1448,40 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "execute failed: unknown result");
 
+  def executeWithParameter(self, sessionId=None, stmt=None, parameterMap=None):
+    """
+    Parameters:
+     - sessionId
+     - stmt
+     - parameterMap
+    """
+    self.send_executeWithParameter(sessionId, stmt, parameterMap)
+    return self.recv_executeWithParameter()
+
+  def send_executeWithParameter(self, sessionId=None, stmt=None, parameterMap=None):
+    self._oprot.writeMessageBegin('executeWithParameter', TMessageType.CALL, self._seqid)
+    args = executeWithParameter_args()
+    args.sessionId = sessionId
+    args.stmt = stmt
+    args.parameterMap = parameterMap
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_executeWithParameter(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = executeWithParameter_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "executeWithParameter failed: unknown result");
+
   def executeJson(self, sessionId=None, stmt=None):
     """
     Parameters:
@@ -957,6 +1514,40 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "executeJson failed: unknown result");
 
+  def executeJsonWithParameter(self, sessionId=None, stmt=None, parameterMap=None):
+    """
+    Parameters:
+     - sessionId
+     - stmt
+     - parameterMap
+    """
+    self.send_executeJsonWithParameter(sessionId, stmt, parameterMap)
+    return self.recv_executeJsonWithParameter()
+
+  def send_executeJsonWithParameter(self, sessionId=None, stmt=None, parameterMap=None):
+    self._oprot.writeMessageBegin('executeJsonWithParameter', TMessageType.CALL, self._seqid)
+    args = executeJsonWithParameter_args()
+    args.sessionId = sessionId
+    args.stmt = stmt
+    args.parameterMap = parameterMap
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_executeJsonWithParameter(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = executeJsonWithParameter_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "executeJsonWithParameter failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   _onewayMethods = ("signout",)
@@ -972,8 +1563,12 @@ class Processor(Iface, TProcessor):
     self._priorityMap["signout"] = TPriority.NORMAL
     self._processMap["execute"] = Processor.process_execute
     self._priorityMap["execute"] = TPriority.NORMAL
+    self._processMap["executeWithParameter"] = Processor.process_executeWithParameter
+    self._priorityMap["executeWithParameter"] = TPriority.NORMAL
     self._processMap["executeJson"] = Processor.process_executeJson
     self._priorityMap["executeJson"] = TPriority.NORMAL
+    self._processMap["executeJsonWithParameter"] = Processor.process_executeJsonWithParameter
+    self._priorityMap["executeJsonWithParameter"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -1014,6 +1609,17 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(executeWithParameter_args, oneway=False)
+  def process_executeWithParameter(self, args, handler_ctx):
+    result = executeWithParameter_result()
+    try:
+      result.success = self._handler.executeWithParameter(args.sessionId, args.stmt, args.parameterMap)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'executeWithParameter', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
   @thrift_process_method(executeJson_args, oneway=False)
   def process_executeJson(self, args, handler_ctx):
     result = executeJson_result()
@@ -1022,6 +1628,17 @@ class Processor(Iface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'executeJson', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(executeJsonWithParameter_args, oneway=False)
+  def process_executeJsonWithParameter(self, args, handler_ctx):
+    result = executeJsonWithParameter_result()
+    try:
+      result.success = self._handler.executeJsonWithParameter(args.sessionId, args.stmt, args.parameterMap)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'executeJsonWithParameter', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -1041,8 +1658,12 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["signout"] = TPriority.NORMAL
     self._processMap["execute"] = ContextProcessor.process_execute
     self._priorityMap["execute"] = TPriority.NORMAL
+    self._processMap["executeWithParameter"] = ContextProcessor.process_executeWithParameter
+    self._priorityMap["executeWithParameter"] = TPriority.NORMAL
     self._processMap["executeJson"] = ContextProcessor.process_executeJson
     self._priorityMap["executeJson"] = TPriority.NORMAL
+    self._processMap["executeJsonWithParameter"] = ContextProcessor.process_executeJsonWithParameter
+    self._priorityMap["executeJsonWithParameter"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -1083,6 +1704,17 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(executeWithParameter_args, oneway=False)
+  def process_executeWithParameter(self, args, handler_ctx):
+    result = executeWithParameter_result()
+    try:
+      result.success = self._handler.executeWithParameter(handler_ctx, args.sessionId, args.stmt, args.parameterMap)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'executeWithParameter', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
   @thrift_process_method(executeJson_args, oneway=False)
   def process_executeJson(self, args, handler_ctx):
     result = executeJson_result()
@@ -1091,6 +1723,17 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'executeJson', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(executeJsonWithParameter_args, oneway=False)
+  def process_executeJsonWithParameter(self, args, handler_ctx):
+    result = executeJsonWithParameter_result()
+    try:
+      result.success = self._handler.executeJsonWithParameter(handler_ctx, args.sessionId, args.stmt, args.parameterMap)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'executeJsonWithParameter', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 

@@ -46,6 +46,7 @@ FUNCTIONS = {
     'dropSpace': Function('dropSpace', 'MetaService', 'ExecResp', [('DropSpaceReq', 'req', 'DropSpaceReq')]),
     'getSpace': Function('getSpace', 'MetaService', 'GetSpaceResp', [('GetSpaceReq', 'req', 'GetSpaceReq')]),
     'listSpaces': Function('listSpaces', 'MetaService', 'ListSpacesResp', [('ListSpacesReq', 'req', 'ListSpacesReq')]),
+    'createSpaceAs': Function('createSpaceAs', 'MetaService', 'ExecResp', [('CreateSpaceAsReq', 'req', 'CreateSpaceAsReq')]),
     'createTag': Function('createTag', 'MetaService', 'ExecResp', [('CreateTagReq', 'req', 'CreateTagReq')]),
     'alterTag': Function('alterTag', 'MetaService', 'ExecResp', [('AlterTagReq', 'req', 'AlterTagReq')]),
     'dropTag': Function('dropTag', 'MetaService', 'ExecResp', [('DropTagReq', 'req', 'DropTagReq')]),

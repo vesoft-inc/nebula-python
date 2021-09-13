@@ -56,7 +56,8 @@ FUNCTIONS = {
     'getUUID': Function('getUUID', 'GraphStorageService', 'GetUUIDResp', [('GetUUIDReq', 'req', 'GetUUIDReq')]),
     'lookupIndex': Function('lookupIndex', 'GraphStorageService', 'LookupIndexResp', [('LookupIndexRequest', 'req', 'LookupIndexRequest')]),
     'lookupAndTraverse': Function('lookupAndTraverse', 'GraphStorageService', 'GetNeighborsResponse', [('LookupAndTraverseRequest', 'req', 'LookupAndTraverseRequest')]),
-    'addEdgesAtomic': Function('addEdgesAtomic', 'GraphStorageService', 'ExecResponse', [('AddEdgesRequest', 'req', 'AddEdgesRequest')]),
+    'chainUpdateEdge': Function('chainUpdateEdge', 'GraphStorageService', 'UpdateResponse', [('UpdateEdgeRequest', 'req', 'UpdateEdgeRequest')]),
+    'chainAddEdges': Function('chainAddEdges', 'GraphStorageService', 'ExecResponse', [('AddEdgesRequest', 'req', 'AddEdgesRequest')]),
 }
 
 SERVICE_NAMES = ['GraphStorageService', ]

@@ -32,7 +32,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'StatType', 'OrderDirection', 'EdgeDirection', 'ScanType', 'EngineSignType', 'RequestCommon', 'PartitionResult', 'ResponseCommon', 'StatProp', 'Expr', 'EdgeProp', 'VertexProp', 'OrderBy', 'TraverseSpec', 'GetNeighborsRequest', 'GetNeighborsResponse', 'ExecResponse', 'GetPropRequest', 'GetPropResponse', 'NewTag', 'NewVertex', 'EdgeKey', 'NewEdge', 'AddVerticesRequest', 'AddEdgesRequest', 'DeleteVerticesRequest', 'DeleteEdgesRequest', 'DelTags', 'DeleteTagsRequest', 'UpdateResponse', 'UpdatedProp', 'UpdateVertexRequest', 'UpdateEdgeRequest', 'GetUUIDReq', 'GetUUIDResp', 'LookupIndexResp', 'IndexColumnHint', 'IndexQueryContext', 'IndexSpec', 'LookupIndexRequest', 'LookupAndTraverseRequest', 'ScanVertexRequest', 'ScanVertexResponse', 'ScanEdgeRequest', 'ScanEdgeResponse', 'TaskPara', 'AddAdminTaskRequest', 'StopAdminTaskRequest', 'AdminExecResp', 'TransLeaderReq', 'AddPartReq', 'AddLearnerReq', 'RemovePartReq', 'MemberChangeReq', 'CatchUpDataReq', 'GetLeaderReq', 'CreateCPRequest', 'DropCPRequest', 'BlockingSignRequest', 'GetLeaderPartsResp', 'CheckPeersReq', 'RebuildIndexRequest', 'CreateCPResp', 'ListClusterInfoResp', 'ListClusterInfoReq', 'KVGetRequest', 'KVGetResponse', 'KVPutRequest', 'KVRemoveRequest', 'InternalTxnRequest', 'GetValueRequest', 'GetValueResponse']
+__all__ = ['UTF8STRINGS', 'StatType', 'OrderDirection', 'EdgeDirection', 'ScanType', 'EngineSignType', 'RequestCommon', 'PartitionResult', 'ResponseCommon', 'StatProp', 'Expr', 'EdgeProp', 'VertexProp', 'OrderBy', 'TraverseSpec', 'GetNeighborsRequest', 'GetNeighborsResponse', 'ExecResponse', 'GetPropRequest', 'GetPropResponse', 'NewTag', 'NewVertex', 'EdgeKey', 'NewEdge', 'AddVerticesRequest', 'AddEdgesRequest', 'DeleteVerticesRequest', 'DeleteEdgesRequest', 'DelTags', 'DeleteTagsRequest', 'UpdateResponse', 'UpdatedProp', 'UpdateVertexRequest', 'UpdateEdgeRequest', 'GetUUIDReq', 'GetUUIDResp', 'LookupIndexResp', 'IndexColumnHint', 'IndexQueryContext', 'IndexSpec', 'LookupIndexRequest', 'LookupAndTraverseRequest', 'ScanVertexRequest', 'ScanVertexResponse', 'ScanEdgeRequest', 'ScanEdgeResponse', 'TaskPara', 'AddAdminTaskRequest', 'StopAdminTaskRequest', 'AdminExecResp', 'TransLeaderReq', 'AddPartReq', 'AddLearnerReq', 'RemovePartReq', 'MemberChangeReq', 'CatchUpDataReq', 'GetLeaderReq', 'CreateCPRequest', 'DropCPRequest', 'BlockingSignRequest', 'GetLeaderPartsResp', 'CheckPeersReq', 'RebuildIndexRequest', 'CreateCPResp', 'ListClusterInfoResp', 'ListClusterInfoReq', 'KVGetRequest', 'KVGetResponse', 'KVPutRequest', 'KVRemoveRequest', 'InternalTxnRequest', 'ChainAddEdgesRequest', 'ChainUpdateEdgeRequest']
 
 class StatType:
   SUM = 1
@@ -4437,8 +4437,7 @@ class IndexSpec:
   """
   Attributes:
    - contexts
-   - is_edge
-   - tag_or_edge_id
+   - schema_id
   """
 
   thrift_spec = None
@@ -4479,13 +4478,9 @@ class IndexSpec:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.BOOL:
-          self.is_edge = iprot.readBool()
-        else:
-          iprot.skip(ftype)
-      elif fid == 3:
-        if ftype == TType.I32:
-          self.tag_or_edge_id = iprot.readI32()
+        if ftype == TType.STRUCT:
+          self.schema_id = nebula2.common.ttypes.SchemaID()
+          self.schema_id.read(iprot)
         else:
           iprot.skip(ftype)
       else:
@@ -4508,13 +4503,9 @@ class IndexSpec:
         iter418.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
-    if self.is_edge != None:
-      oprot.writeFieldBegin('is_edge', TType.BOOL, 2)
-      oprot.writeBool(self.is_edge)
-      oprot.writeFieldEnd()
-    if self.tag_or_edge_id != None:
-      oprot.writeFieldBegin('tag_or_edge_id', TType.I32, 3)
-      oprot.writeI32(self.tag_or_edge_id)
+    if self.schema_id != None:
+      oprot.writeFieldBegin('schema_id', TType.STRUCT, 2)
+      self.schema_id.write(oprot)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -4526,14 +4517,10 @@ class IndexSpec:
       value = pprint.pformat(self.contexts, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    contexts=%s' % (value))
-    if self.is_edge is not None:
-      value = pprint.pformat(self.is_edge, indent=0)
+    if self.schema_id is not None:
+      value = pprint.pformat(self.schema_id, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    is_edge=%s' % (value))
-    if self.tag_or_edge_id is not None:
-      value = pprint.pformat(self.tag_or_edge_id, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    tag_or_edge_id=%s' % (value))
+      L.append('    schema_id=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -4557,6 +4544,7 @@ class LookupIndexRequest:
    - indices
    - return_columns
    - common
+   - limit
   """
 
   thrift_spec = None
@@ -4626,6 +4614,11 @@ class LookupIndexRequest:
           self.common.read(iprot)
         else:
           iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.I64:
+          self.limit = iprot.readI64()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -4665,6 +4658,10 @@ class LookupIndexRequest:
       oprot.writeFieldBegin('common', TType.STRUCT, 5)
       self.common.write(oprot)
       oprot.writeFieldEnd()
+    if self.limit != None:
+      oprot.writeFieldBegin('limit', TType.I64, 6)
+      oprot.writeI64(self.limit)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -4691,6 +4688,10 @@ class LookupIndexRequest:
       value = pprint.pformat(self.common, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    common=%s' % (value))
+    if self.limit is not None:
+      value = pprint.pformat(self.limit, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    limit=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -8011,10 +8012,10 @@ class InternalTxnRequest:
   """
   Attributes:
    - txn_id
-   - space_id
-   - part_id
-   - position
-   - data
+   - term_of_parts
+   - add_edge_req
+   - upd_edge_req
+   - edge_ver
   """
 
   thrift_spec = None
@@ -8043,53 +8044,69 @@ class InternalTxnRequest:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.space_id = iprot.readI32()
+        if ftype == TType.MAP:
+          self.term_of_parts = {}
+          (_ktype607, _vtype608, _size606 ) = iprot.readMapBegin() 
+          if _size606 >= 0:
+            for _i610 in six.moves.range(_size606):
+              _key611 = iprot.readI32()
+              _val612 = iprot.readI64()
+              self.term_of_parts[_key611] = _val612
+          else: 
+            while iprot.peekMap():
+              _key613 = iprot.readI32()
+              _val614 = iprot.readI64()
+              self.term_of_parts[_key613] = _val614
+          iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.I32:
-          self.part_id = iprot.readI32()
+        if ftype == TType.STRUCT:
+          self.add_edge_req = AddEdgesRequest()
+          self.add_edge_req.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 4:
-        if ftype == TType.I32:
-          self.position = iprot.readI32()
+        if ftype == TType.STRUCT:
+          self.upd_edge_req = UpdateEdgeRequest()
+          self.upd_edge_req.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 5:
-        if ftype == TType.LIST:
-          self.data = []
-          (_etype609, _size606) = iprot.readListBegin()
-          if _size606 >= 0:
-            for _i610 in six.moves.range(_size606):
-              _elem611 = []
-              (_etype615, _size612) = iprot.readListBegin()
-              if _size612 >= 0:
-                for _i616 in six.moves.range(_size612):
-                  _elem617 = iprot.readString()
-                  _elem611.append(_elem617)
+        if ftype == TType.MAP:
+          self.edge_ver = {}
+          (_ktype616, _vtype617, _size615 ) = iprot.readMapBegin() 
+          if _size615 >= 0:
+            for _i619 in six.moves.range(_size615):
+              _key620 = iprot.readI32()
+              _val621 = []
+              (_etype625, _size622) = iprot.readListBegin()
+              if _size622 >= 0:
+                for _i626 in six.moves.range(_size622):
+                  _elem627 = iprot.readI64()
+                  _val621.append(_elem627)
               else: 
                 while iprot.peekList():
-                  _elem618 = iprot.readString()
-                  _elem611.append(_elem618)
+                  _elem628 = iprot.readI64()
+                  _val621.append(_elem628)
               iprot.readListEnd()
-              self.data.append(_elem611)
+              self.edge_ver[_key620] = _val621
           else: 
-            while iprot.peekList():
-              _elem619 = []
-              (_etype623, _size620) = iprot.readListBegin()
-              if _size620 >= 0:
-                for _i624 in six.moves.range(_size620):
-                  _elem625 = iprot.readString()
-                  _elem619.append(_elem625)
+            while iprot.peekMap():
+              _key629 = iprot.readI32()
+              _val630 = []
+              (_etype634, _size631) = iprot.readListBegin()
+              if _size631 >= 0:
+                for _i635 in six.moves.range(_size631):
+                  _elem636 = iprot.readI64()
+                  _val630.append(_elem636)
               else: 
                 while iprot.peekList():
-                  _elem626 = iprot.readString()
-                  _elem619.append(_elem626)
+                  _elem637 = iprot.readI64()
+                  _val630.append(_elem637)
               iprot.readListEnd()
-              self.data.append(_elem619)
-          iprot.readListEnd()
+              self.edge_ver[_key629] = _val630
+          iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -8109,27 +8126,32 @@ class InternalTxnRequest:
       oprot.writeFieldBegin('txn_id', TType.I64, 1)
       oprot.writeI64(self.txn_id)
       oprot.writeFieldEnd()
-    if self.space_id != None:
-      oprot.writeFieldBegin('space_id', TType.I32, 2)
-      oprot.writeI32(self.space_id)
+    if self.term_of_parts != None:
+      oprot.writeFieldBegin('term_of_parts', TType.MAP, 2)
+      oprot.writeMapBegin(TType.I32, TType.I64, len(self.term_of_parts))
+      for kiter638,viter639 in self.term_of_parts.items():
+        oprot.writeI32(kiter638)
+        oprot.writeI64(viter639)
+      oprot.writeMapEnd()
       oprot.writeFieldEnd()
-    if self.part_id != None:
-      oprot.writeFieldBegin('part_id', TType.I32, 3)
-      oprot.writeI32(self.part_id)
+    if self.add_edge_req != None:
+      oprot.writeFieldBegin('add_edge_req', TType.STRUCT, 3)
+      self.add_edge_req.write(oprot)
       oprot.writeFieldEnd()
-    if self.position != None:
-      oprot.writeFieldBegin('position', TType.I32, 4)
-      oprot.writeI32(self.position)
+    if self.upd_edge_req != None:
+      oprot.writeFieldBegin('upd_edge_req', TType.STRUCT, 4)
+      self.upd_edge_req.write(oprot)
       oprot.writeFieldEnd()
-    if self.data != None:
-      oprot.writeFieldBegin('data', TType.LIST, 5)
-      oprot.writeListBegin(TType.LIST, len(self.data))
-      for iter627 in self.data:
-        oprot.writeListBegin(TType.STRING, len(iter627))
-        for iter628 in iter627:
-          oprot.writeString(iter628)
+    if self.edge_ver != None:
+      oprot.writeFieldBegin('edge_ver', TType.MAP, 5)
+      oprot.writeMapBegin(TType.I32, TType.LIST, len(self.edge_ver))
+      for kiter640,viter641 in self.edge_ver.items():
+        oprot.writeI32(kiter640)
+        oprot.writeListBegin(TType.I64, len(viter641))
+        for iter642 in viter641:
+          oprot.writeI64(iter642)
         oprot.writeListEnd()
-      oprot.writeListEnd()
+      oprot.writeMapEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -8141,22 +8163,22 @@ class InternalTxnRequest:
       value = pprint.pformat(self.txn_id, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    txn_id=%s' % (value))
-    if self.space_id is not None:
-      value = pprint.pformat(self.space_id, indent=0)
+    if self.term_of_parts is not None:
+      value = pprint.pformat(self.term_of_parts, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    space_id=%s' % (value))
-    if self.part_id is not None:
-      value = pprint.pformat(self.part_id, indent=0)
+      L.append('    term_of_parts=%s' % (value))
+    if self.add_edge_req is not None:
+      value = pprint.pformat(self.add_edge_req, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    part_id=%s' % (value))
-    if self.position is not None:
-      value = pprint.pformat(self.position, indent=0)
+      L.append('    add_edge_req=%s' % (value))
+    if self.upd_edge_req is not None:
+      value = pprint.pformat(self.upd_edge_req, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    position=%s' % (value))
-    if self.data is not None:
-      value = pprint.pformat(self.data, indent=0)
+      L.append('    upd_edge_req=%s' % (value))
+    if self.edge_ver is not None:
+      value = pprint.pformat(self.edge_ver, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    data=%s' % (value))
+      L.append('    edge_ver=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -8172,12 +8194,15 @@ class InternalTxnRequest:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class GetValueRequest:
+class ChainAddEdgesRequest:
   """
   Attributes:
    - space_id
-   - part_id
-   - key
+   - parts
+   - prop_names
+   - if_not_exists
+   - term
+   - edge_version
   """
 
   thrift_spec = None
@@ -8206,13 +8231,74 @@ class GetValueRequest:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.part_id = iprot.readI32()
+        if ftype == TType.MAP:
+          self.parts = {}
+          (_ktype644, _vtype645, _size643 ) = iprot.readMapBegin() 
+          if _size643 >= 0:
+            for _i647 in six.moves.range(_size643):
+              _key648 = iprot.readI32()
+              _val649 = []
+              (_etype653, _size650) = iprot.readListBegin()
+              if _size650 >= 0:
+                for _i654 in six.moves.range(_size650):
+                  _elem655 = NewEdge()
+                  _elem655.read(iprot)
+                  _val649.append(_elem655)
+              else: 
+                while iprot.peekList():
+                  _elem656 = NewEdge()
+                  _elem656.read(iprot)
+                  _val649.append(_elem656)
+              iprot.readListEnd()
+              self.parts[_key648] = _val649
+          else: 
+            while iprot.peekMap():
+              _key657 = iprot.readI32()
+              _val658 = []
+              (_etype662, _size659) = iprot.readListBegin()
+              if _size659 >= 0:
+                for _i663 in six.moves.range(_size659):
+                  _elem664 = NewEdge()
+                  _elem664.read(iprot)
+                  _val658.append(_elem664)
+              else: 
+                while iprot.peekList():
+                  _elem665 = NewEdge()
+                  _elem665.read(iprot)
+                  _val658.append(_elem665)
+              iprot.readListEnd()
+              self.parts[_key657] = _val658
+          iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.STRING:
-          self.key = iprot.readString()
+        if ftype == TType.LIST:
+          self.prop_names = []
+          (_etype669, _size666) = iprot.readListBegin()
+          if _size666 >= 0:
+            for _i670 in six.moves.range(_size666):
+              _elem671 = iprot.readString()
+              self.prop_names.append(_elem671)
+          else: 
+            while iprot.peekList():
+              _elem672 = iprot.readString()
+              self.prop_names.append(_elem672)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.BOOL:
+          self.if_not_exists = iprot.readBool()
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.I64:
+          self.term = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 6:
+        if ftype == TType.I64:
+          self.edge_version = iprot.readI64()
         else:
           iprot.skip(ftype)
       else:
@@ -8227,18 +8313,40 @@ class GetValueRequest:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('GetValueRequest')
+    oprot.writeStructBegin('ChainAddEdgesRequest')
     if self.space_id != None:
       oprot.writeFieldBegin('space_id', TType.I32, 1)
       oprot.writeI32(self.space_id)
       oprot.writeFieldEnd()
-    if self.part_id != None:
-      oprot.writeFieldBegin('part_id', TType.I32, 2)
-      oprot.writeI32(self.part_id)
+    if self.parts != None:
+      oprot.writeFieldBegin('parts', TType.MAP, 2)
+      oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
+      for kiter673,viter674 in self.parts.items():
+        oprot.writeI32(kiter673)
+        oprot.writeListBegin(TType.STRUCT, len(viter674))
+        for iter675 in viter674:
+          iter675.write(oprot)
+        oprot.writeListEnd()
+      oprot.writeMapEnd()
       oprot.writeFieldEnd()
-    if self.key != None:
-      oprot.writeFieldBegin('key', TType.STRING, 3)
-      oprot.writeString(self.key)
+    if self.prop_names != None:
+      oprot.writeFieldBegin('prop_names', TType.LIST, 3)
+      oprot.writeListBegin(TType.STRING, len(self.prop_names))
+      for iter676 in self.prop_names:
+        oprot.writeString(iter676)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.if_not_exists != None:
+      oprot.writeFieldBegin('if_not_exists', TType.BOOL, 4)
+      oprot.writeBool(self.if_not_exists)
+      oprot.writeFieldEnd()
+    if self.term != None:
+      oprot.writeFieldBegin('term', TType.I64, 5)
+      oprot.writeI64(self.term)
+      oprot.writeFieldEnd()
+    if self.edge_version != None:
+      oprot.writeFieldBegin('edge_version', TType.I64, 6)
+      oprot.writeI64(self.edge_version)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -8250,14 +8358,26 @@ class GetValueRequest:
       value = pprint.pformat(self.space_id, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    space_id=%s' % (value))
-    if self.part_id is not None:
-      value = pprint.pformat(self.part_id, indent=0)
+    if self.parts is not None:
+      value = pprint.pformat(self.parts, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    part_id=%s' % (value))
-    if self.key is not None:
-      value = pprint.pformat(self.key, indent=0)
+      L.append('    parts=%s' % (value))
+    if self.prop_names is not None:
+      value = pprint.pformat(self.prop_names, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    key=%s' % (value))
+      L.append('    prop_names=%s' % (value))
+    if self.if_not_exists is not None:
+      value = pprint.pformat(self.if_not_exists, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    if_not_exists=%s' % (value))
+    if self.term is not None:
+      value = pprint.pformat(self.term, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    term=%s' % (value))
+    if self.edge_version is not None:
+      value = pprint.pformat(self.edge_version, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    edge_version=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -8273,11 +8393,14 @@ class GetValueRequest:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class GetValueResponse:
+class ChainUpdateEdgeRequest:
   """
   Attributes:
-   - result
-   - value
+   - update_edge_request
+   - term
+   - edge_version
+   - space_id
+   - parts
   """
 
   thrift_spec = None
@@ -8302,13 +8425,38 @@ class GetValueResponse:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.result = ResponseCommon()
-          self.result.read(iprot)
+          self.update_edge_request = UpdateEdgeRequest()
+          self.update_edge_request.read(iprot)
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.STRING:
-          self.value = iprot.readString()
+        if ftype == TType.I64:
+          self.term = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I64:
+          self.edge_version = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.I32:
+          self.space_id = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.LIST:
+          self.parts = []
+          (_etype680, _size677) = iprot.readListBegin()
+          if _size677 >= 0:
+            for _i681 in six.moves.range(_size677):
+              _elem682 = iprot.readI32()
+              self.parts.append(_elem682)
+          else: 
+            while iprot.peekList():
+              _elem683 = iprot.readI32()
+              self.parts.append(_elem683)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -8323,14 +8471,29 @@ class GetValueResponse:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('GetValueResponse')
-    if self.result != None:
-      oprot.writeFieldBegin('result', TType.STRUCT, 1)
-      self.result.write(oprot)
+    oprot.writeStructBegin('ChainUpdateEdgeRequest')
+    if self.update_edge_request != None:
+      oprot.writeFieldBegin('update_edge_request', TType.STRUCT, 1)
+      self.update_edge_request.write(oprot)
       oprot.writeFieldEnd()
-    if self.value != None:
-      oprot.writeFieldBegin('value', TType.STRING, 2)
-      oprot.writeString(self.value)
+    if self.term != None:
+      oprot.writeFieldBegin('term', TType.I64, 2)
+      oprot.writeI64(self.term)
+      oprot.writeFieldEnd()
+    if self.edge_version != None:
+      oprot.writeFieldBegin('edge_version', TType.I64, 3)
+      oprot.writeI64(self.edge_version)
+      oprot.writeFieldEnd()
+    if self.space_id != None:
+      oprot.writeFieldBegin('space_id', TType.I32, 4)
+      oprot.writeI32(self.space_id)
+      oprot.writeFieldEnd()
+    if self.parts != None:
+      oprot.writeFieldBegin('parts', TType.LIST, 5)
+      oprot.writeListBegin(TType.I32, len(self.parts))
+      for iter684 in self.parts:
+        oprot.writeI32(iter684)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -8338,14 +8501,26 @@ class GetValueResponse:
   def __repr__(self):
     L = []
     padding = ' ' * 4
-    if self.result is not None:
-      value = pprint.pformat(self.result, indent=0)
+    if self.update_edge_request is not None:
+      value = pprint.pformat(self.update_edge_request, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    result=%s' % (value))
-    if self.value is not None:
-      value = pprint.pformat(self.value, indent=0)
+      L.append('    update_edge_request=%s' % (value))
+    if self.term is not None:
+      value = pprint.pformat(self.term, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    value=%s' % (value))
+      L.append('    term=%s' % (value))
+    if self.edge_version is not None:
+      value = pprint.pformat(self.edge_version, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    edge_version=%s' % (value))
+    if self.space_id is not None:
+      value = pprint.pformat(self.space_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    space_id=%s' % (value))
+    if self.parts is not None:
+      value = pprint.pformat(self.parts, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    parts=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -9376,8 +9551,7 @@ all_structs.append(IndexSpec)
 IndexSpec.thrift_spec = (
   None, # 0
   (1, TType.LIST, 'contexts', (TType.STRUCT,[IndexQueryContext, IndexQueryContext.thrift_spec, False]), None, 0, ), # 1
-  (2, TType.BOOL, 'is_edge', None, None, 0, ), # 2
-  (3, TType.I32, 'tag_or_edge_id', None, None, 0, ), # 3
+  (2, TType.STRUCT, 'schema_id', [nebula2.common.ttypes.SchemaID, nebula2.common.ttypes.SchemaID.thrift_spec, True], None, 2, ), # 2
 )
 
 IndexSpec.thrift_struct_annotations = {
@@ -9385,17 +9559,15 @@ IndexSpec.thrift_struct_annotations = {
 IndexSpec.thrift_field_annotations = {
 }
 
-def IndexSpec__init__(self, contexts=None, is_edge=None, tag_or_edge_id=None,):
+def IndexSpec__init__(self, contexts=None, schema_id=None,):
   self.contexts = contexts
-  self.is_edge = is_edge
-  self.tag_or_edge_id = tag_or_edge_id
+  self.schema_id = schema_id
 
 IndexSpec.__init__ = IndexSpec__init__
 
 def IndexSpec__setstate__(self, state):
   state.setdefault('contexts', None)
-  state.setdefault('is_edge', None)
-  state.setdefault('tag_or_edge_id', None)
+  state.setdefault('schema_id', None)
   self.__dict__ = state
 
 IndexSpec.__getstate__ = lambda self: self.__dict__.copy()
@@ -9409,6 +9581,7 @@ LookupIndexRequest.thrift_spec = (
   (3, TType.STRUCT, 'indices', [IndexSpec, IndexSpec.thrift_spec, False], None, 2, ), # 3
   (4, TType.LIST, 'return_columns', (TType.STRING,False), None, 1, ), # 4
   (5, TType.STRUCT, 'common', [RequestCommon, RequestCommon.thrift_spec, False], None, 1, ), # 5
+  (6, TType.I64, 'limit', None, None, 1, ), # 6
 )
 
 LookupIndexRequest.thrift_struct_annotations = {
@@ -9416,12 +9589,13 @@ LookupIndexRequest.thrift_struct_annotations = {
 LookupIndexRequest.thrift_field_annotations = {
 }
 
-def LookupIndexRequest__init__(self, space_id=None, parts=None, indices=None, return_columns=None, common=None,):
+def LookupIndexRequest__init__(self, space_id=None, parts=None, indices=None, return_columns=None, common=None, limit=None,):
   self.space_id = space_id
   self.parts = parts
   self.indices = indices
   self.return_columns = return_columns
   self.common = common
+  self.limit = limit
 
 LookupIndexRequest.__init__ = LookupIndexRequest__init__
 
@@ -9431,6 +9605,7 @@ def LookupIndexRequest__setstate__(self, state):
   state.setdefault('indices', None)
   state.setdefault('return_columns', None)
   state.setdefault('common', None)
+  state.setdefault('limit', None)
   self.__dict__ = state
 
 LookupIndexRequest.__getstate__ = lambda self: self.__dict__.copy()
@@ -10277,10 +10452,10 @@ all_structs.append(InternalTxnRequest)
 InternalTxnRequest.thrift_spec = (
   None, # 0
   (1, TType.I64, 'txn_id', None, None, 2, ), # 1
-  (2, TType.I32, 'space_id', None, None, 2, ), # 2
-  (3, TType.I32, 'part_id', None, None, 2, ), # 3
-  (4, TType.I32, 'position', None, None, 2, ), # 4
-  (5, TType.LIST, 'data', (TType.LIST,(TType.STRING,False)), None, 2, ), # 5
+  (2, TType.MAP, 'term_of_parts', (TType.I32,None,TType.I64,None), None, 2, ), # 2
+  (3, TType.STRUCT, 'add_edge_req', [AddEdgesRequest, AddEdgesRequest.thrift_spec, False], None, 1, ), # 3
+  (4, TType.STRUCT, 'upd_edge_req', [UpdateEdgeRequest, UpdateEdgeRequest.thrift_spec, False], None, 1, ), # 4
+  (5, TType.MAP, 'edge_ver', (TType.I32,None,TType.LIST,(TType.I64,None)), None, 1, ), # 5
 )
 
 InternalTxnRequest.thrift_struct_annotations = {
@@ -10288,80 +10463,98 @@ InternalTxnRequest.thrift_struct_annotations = {
 InternalTxnRequest.thrift_field_annotations = {
 }
 
-def InternalTxnRequest__init__(self, txn_id=None, space_id=None, part_id=None, position=None, data=None,):
+def InternalTxnRequest__init__(self, txn_id=None, term_of_parts=None, add_edge_req=None, upd_edge_req=None, edge_ver=None,):
   self.txn_id = txn_id
-  self.space_id = space_id
-  self.part_id = part_id
-  self.position = position
-  self.data = data
+  self.term_of_parts = term_of_parts
+  self.add_edge_req = add_edge_req
+  self.upd_edge_req = upd_edge_req
+  self.edge_ver = edge_ver
 
 InternalTxnRequest.__init__ = InternalTxnRequest__init__
 
 def InternalTxnRequest__setstate__(self, state):
   state.setdefault('txn_id', None)
-  state.setdefault('space_id', None)
-  state.setdefault('part_id', None)
-  state.setdefault('position', None)
-  state.setdefault('data', None)
+  state.setdefault('term_of_parts', None)
+  state.setdefault('add_edge_req', None)
+  state.setdefault('upd_edge_req', None)
+  state.setdefault('edge_ver', None)
   self.__dict__ = state
 
 InternalTxnRequest.__getstate__ = lambda self: self.__dict__.copy()
 InternalTxnRequest.__setstate__ = InternalTxnRequest__setstate__
 
-all_structs.append(GetValueRequest)
-GetValueRequest.thrift_spec = (
+all_structs.append(ChainAddEdgesRequest)
+ChainAddEdgesRequest.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
-  (2, TType.I32, 'part_id', None, None, 2, ), # 2
-  (3, TType.STRING, 'key', False, None, 2, ), # 3
+  (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRUCT,[NewEdge, NewEdge.thrift_spec, False])), None, 2, ), # 2
+  (3, TType.LIST, 'prop_names', (TType.STRING,False), None, 2, ), # 3
+  (4, TType.BOOL, 'if_not_exists', None, None, 2, ), # 4
+  (5, TType.I64, 'term', None, None, 2, ), # 5
+  (6, TType.I64, 'edge_version', None, None, 1, ), # 6
 )
 
-GetValueRequest.thrift_struct_annotations = {
+ChainAddEdgesRequest.thrift_struct_annotations = {
 }
-GetValueRequest.thrift_field_annotations = {
+ChainAddEdgesRequest.thrift_field_annotations = {
 }
 
-def GetValueRequest__init__(self, space_id=None, part_id=None, key=None,):
+def ChainAddEdgesRequest__init__(self, space_id=None, parts=None, prop_names=None, if_not_exists=None, term=None, edge_version=None,):
   self.space_id = space_id
-  self.part_id = part_id
-  self.key = key
+  self.parts = parts
+  self.prop_names = prop_names
+  self.if_not_exists = if_not_exists
+  self.term = term
+  self.edge_version = edge_version
 
-GetValueRequest.__init__ = GetValueRequest__init__
+ChainAddEdgesRequest.__init__ = ChainAddEdgesRequest__init__
 
-def GetValueRequest__setstate__(self, state):
+def ChainAddEdgesRequest__setstate__(self, state):
   state.setdefault('space_id', None)
-  state.setdefault('part_id', None)
-  state.setdefault('key', None)
+  state.setdefault('parts', None)
+  state.setdefault('prop_names', None)
+  state.setdefault('if_not_exists', None)
+  state.setdefault('term', None)
+  state.setdefault('edge_version', None)
   self.__dict__ = state
 
-GetValueRequest.__getstate__ = lambda self: self.__dict__.copy()
-GetValueRequest.__setstate__ = GetValueRequest__setstate__
+ChainAddEdgesRequest.__getstate__ = lambda self: self.__dict__.copy()
+ChainAddEdgesRequest.__setstate__ = ChainAddEdgesRequest__setstate__
 
-all_structs.append(GetValueResponse)
-GetValueResponse.thrift_spec = (
+all_structs.append(ChainUpdateEdgeRequest)
+ChainUpdateEdgeRequest.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'result', [ResponseCommon, ResponseCommon.thrift_spec, False], None, 0, ), # 1
-  (2, TType.STRING, 'value', False, None, 2, ), # 2
+  (1, TType.STRUCT, 'update_edge_request', [UpdateEdgeRequest, UpdateEdgeRequest.thrift_spec, False], None, 2, ), # 1
+  (2, TType.I64, 'term', None, None, 2, ), # 2
+  (3, TType.I64, 'edge_version', None, None, 1, ), # 3
+  (4, TType.I32, 'space_id', None, None, 2, ), # 4
+  (5, TType.LIST, 'parts', (TType.I32,None), None, 0, ), # 5
 )
 
-GetValueResponse.thrift_struct_annotations = {
+ChainUpdateEdgeRequest.thrift_struct_annotations = {
 }
-GetValueResponse.thrift_field_annotations = {
+ChainUpdateEdgeRequest.thrift_field_annotations = {
 }
 
-def GetValueResponse__init__(self, result=None, value=None,):
-  self.result = result
-  self.value = value
+def ChainUpdateEdgeRequest__init__(self, update_edge_request=None, term=None, edge_version=None, space_id=None, parts=None,):
+  self.update_edge_request = update_edge_request
+  self.term = term
+  self.edge_version = edge_version
+  self.space_id = space_id
+  self.parts = parts
 
-GetValueResponse.__init__ = GetValueResponse__init__
+ChainUpdateEdgeRequest.__init__ = ChainUpdateEdgeRequest__init__
 
-def GetValueResponse__setstate__(self, state):
-  state.setdefault('result', None)
-  state.setdefault('value', None)
+def ChainUpdateEdgeRequest__setstate__(self, state):
+  state.setdefault('update_edge_request', None)
+  state.setdefault('term', None)
+  state.setdefault('edge_version', None)
+  state.setdefault('space_id', None)
+  state.setdefault('parts', None)
   self.__dict__ = state
 
-GetValueResponse.__getstate__ = lambda self: self.__dict__.copy()
-GetValueResponse.__setstate__ = GetValueResponse__setstate__
+ChainUpdateEdgeRequest.__getstate__ = lambda self: self.__dict__.copy()
+ChainUpdateEdgeRequest.__setstate__ = ChainUpdateEdgeRequest__setstate__
 
 fix_spec(all_structs)
 del all_structs
