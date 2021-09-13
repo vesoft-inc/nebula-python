@@ -44,21 +44,14 @@ from nebula2.fbthrift.util.Decorators import (
 )
 
 class Iface:
-  def get(self, req=None):
+  def getValue(self, req=None):
     """
     Parameters:
      - req
     """
     pass
 
-  def put(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def remove(self, req=None):
+  def forwardTransaction(self, req=None):
     """
     Parameters:
      - req
@@ -67,21 +60,14 @@ class Iface:
 
 
 class ContextIface:
-  def get(self, handler_ctx, req=None):
+  def getValue(self, handler_ctx, req=None):
     """
     Parameters:
      - req
     """
     pass
 
-  def put(self, handler_ctx, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def remove(self, handler_ctx, req=None):
+  def forwardTransaction(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -91,7 +77,7 @@ class ContextIface:
 
 # HELPER FUNCTIONS AND STRUCTURES
 
-class get_args:
+class getValue_args:
   """
   Attributes:
    - req
@@ -119,7 +105,7 @@ class get_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = KVGetRequest()
+          self.req = GetValueRequest()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -135,7 +121,7 @@ class get_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('get_args')
+    oprot.writeStructBegin('getValue_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -165,30 +151,30 @@ class get_args:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(get_args)
-get_args.thrift_spec = (
+all_structs.append(getValue_args)
+getValue_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [KVGetRequest, KVGetRequest.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [GetValueRequest, GetValueRequest.thrift_spec, False], None, 2, ), # 1
 )
 
-get_args.thrift_struct_annotations = {
+getValue_args.thrift_struct_annotations = {
 }
-get_args.thrift_field_annotations = {
+getValue_args.thrift_field_annotations = {
 }
 
-def get_args__init__(self, req=None,):
+def getValue_args__init__(self, req=None,):
   self.req = req
 
-get_args.__init__ = get_args__init__
+getValue_args.__init__ = getValue_args__init__
 
-def get_args__setstate__(self, state):
+def getValue_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-get_args.__getstate__ = lambda self: self.__dict__.copy()
-get_args.__setstate__ = get_args__setstate__
+getValue_args.__getstate__ = lambda self: self.__dict__.copy()
+getValue_args.__setstate__ = getValue_args__setstate__
 
-class get_result:
+class getValue_result:
   """
   Attributes:
    - success
@@ -216,7 +202,7 @@ class get_result:
         break
       if fid == 0:
         if ftype == TType.STRUCT:
-          self.success = KVGetResponse()
+          self.success = GetValueResponse()
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
@@ -232,7 +218,7 @@ class get_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('get_result')
+    oprot.writeStructBegin('getValue_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -262,29 +248,29 @@ class get_result:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(get_result)
-get_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [KVGetResponse, KVGetResponse.thrift_spec, False], None, 2, ), # 0
+all_structs.append(getValue_result)
+getValue_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [GetValueResponse, GetValueResponse.thrift_spec, False], None, 2, ), # 0
 )
 
-get_result.thrift_struct_annotations = {
+getValue_result.thrift_struct_annotations = {
 }
-get_result.thrift_field_annotations = {
+getValue_result.thrift_field_annotations = {
 }
 
-def get_result__init__(self, success=None,):
+def getValue_result__init__(self, success=None,):
   self.success = success
 
-get_result.__init__ = get_result__init__
+getValue_result.__init__ = getValue_result__init__
 
-def get_result__setstate__(self, state):
+def getValue_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-get_result.__getstate__ = lambda self: self.__dict__.copy()
-get_result.__setstate__ = get_result__setstate__
+getValue_result.__getstate__ = lambda self: self.__dict__.copy()
+getValue_result.__setstate__ = getValue_result__setstate__
 
-class put_args:
+class forwardTransaction_args:
   """
   Attributes:
    - req
@@ -312,7 +298,7 @@ class put_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = KVPutRequest()
+          self.req = InternalTxnRequest()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -328,7 +314,7 @@ class put_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('put_args')
+    oprot.writeStructBegin('forwardTransaction_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -358,223 +344,30 @@ class put_args:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(put_args)
-put_args.thrift_spec = (
+all_structs.append(forwardTransaction_args)
+forwardTransaction_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [KVPutRequest, KVPutRequest.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [InternalTxnRequest, InternalTxnRequest.thrift_spec, False], None, 2, ), # 1
 )
 
-put_args.thrift_struct_annotations = {
+forwardTransaction_args.thrift_struct_annotations = {
 }
-put_args.thrift_field_annotations = {
+forwardTransaction_args.thrift_field_annotations = {
 }
 
-def put_args__init__(self, req=None,):
+def forwardTransaction_args__init__(self, req=None,):
   self.req = req
 
-put_args.__init__ = put_args__init__
+forwardTransaction_args.__init__ = forwardTransaction_args__init__
 
-def put_args__setstate__(self, state):
+def forwardTransaction_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-put_args.__getstate__ = lambda self: self.__dict__.copy()
-put_args.__setstate__ = put_args__setstate__
+forwardTransaction_args.__getstate__ = lambda self: self.__dict__.copy()
+forwardTransaction_args.__setstate__ = forwardTransaction_args__setstate__
 
-class put_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.STRUCT:
-          self.success = ExecResponse()
-          self.success.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('put_result')
-    if self.success != None:
-      oprot.writeFieldBegin('success', TType.STRUCT, 0)
-      self.success.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.success is not None:
-      value = pprint.pformat(self.success, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    success=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(put_result)
-put_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ExecResponse, ExecResponse.thrift_spec, False], None, 2, ), # 0
-)
-
-put_result.thrift_struct_annotations = {
-}
-put_result.thrift_field_annotations = {
-}
-
-def put_result__init__(self, success=None,):
-  self.success = success
-
-put_result.__init__ = put_result__init__
-
-def put_result__setstate__(self, state):
-  state.setdefault('success', None)
-  self.__dict__ = state
-
-put_result.__getstate__ = lambda self: self.__dict__.copy()
-put_result.__setstate__ = put_result__setstate__
-
-class remove_args:
-  """
-  Attributes:
-   - req
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.req = KVRemoveRequest()
-          self.req.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('remove_args')
-    if self.req != None:
-      oprot.writeFieldBegin('req', TType.STRUCT, 1)
-      self.req.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.req is not None:
-      value = pprint.pformat(self.req, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    req=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(remove_args)
-remove_args.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'req', [KVRemoveRequest, KVRemoveRequest.thrift_spec, False], None, 2, ), # 1
-)
-
-remove_args.thrift_struct_annotations = {
-}
-remove_args.thrift_field_annotations = {
-}
-
-def remove_args__init__(self, req=None,):
-  self.req = req
-
-remove_args.__init__ = remove_args__init__
-
-def remove_args__setstate__(self, state):
-  state.setdefault('req', None)
-  self.__dict__ = state
-
-remove_args.__getstate__ = lambda self: self.__dict__.copy()
-remove_args.__setstate__ = remove_args__setstate__
-
-class remove_result:
+class forwardTransaction_result:
   """
   Attributes:
    - success
@@ -618,7 +411,7 @@ class remove_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('remove_result')
+    oprot.writeStructBegin('forwardTransaction_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -648,27 +441,27 @@ class remove_result:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(remove_result)
-remove_result.thrift_spec = (
+all_structs.append(forwardTransaction_result)
+forwardTransaction_result.thrift_spec = (
   (0, TType.STRUCT, 'success', [ExecResponse, ExecResponse.thrift_spec, False], None, 2, ), # 0
 )
 
-remove_result.thrift_struct_annotations = {
+forwardTransaction_result.thrift_struct_annotations = {
 }
-remove_result.thrift_field_annotations = {
+forwardTransaction_result.thrift_field_annotations = {
 }
 
-def remove_result__init__(self, success=None,):
+def forwardTransaction_result__init__(self, success=None,):
   self.success = success
 
-remove_result.__init__ = remove_result__init__
+forwardTransaction_result.__init__ = forwardTransaction_result__init__
 
-def remove_result__setstate__(self, state):
+def forwardTransaction_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-remove_result.__getstate__ = lambda self: self.__dict__.copy()
-remove_result.__setstate__ = remove_result__setstate__
+forwardTransaction_result.__getstate__ = lambda self: self.__dict__.copy()
+forwardTransaction_result.__setstate__ = forwardTransaction_result__setstate__
 
 class Client(Iface):
   def __enter__(self):
@@ -685,95 +478,65 @@ class Client(Iface):
       self._oprot = oprot
     self._seqid = 0
 
-  def get(self, req=None):
+  def getValue(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_get(req)
-    return self.recv_get()
+    self.send_getValue(req)
+    return self.recv_getValue()
 
-  def send_get(self, req=None):
-    self._oprot.writeMessageBegin('get', TMessageType.CALL, self._seqid)
-    args = get_args()
+  def send_getValue(self, req=None):
+    self._oprot.writeMessageBegin('getValue', TMessageType.CALL, self._seqid)
+    args = getValue_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_get(self, ):
+  def recv_getValue(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = get_result()
+    result = getValue_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "get failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "getValue failed: unknown result");
 
-  def put(self, req=None):
+  def forwardTransaction(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_put(req)
-    return self.recv_put()
+    self.send_forwardTransaction(req)
+    return self.recv_forwardTransaction()
 
-  def send_put(self, req=None):
-    self._oprot.writeMessageBegin('put', TMessageType.CALL, self._seqid)
-    args = put_args()
+  def send_forwardTransaction(self, req=None):
+    self._oprot.writeMessageBegin('forwardTransaction', TMessageType.CALL, self._seqid)
+    args = forwardTransaction_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_put(self, ):
+  def recv_forwardTransaction(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = put_result()
+    result = forwardTransaction_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "put failed: unknown result");
-
-  def remove(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    self.send_remove(req)
-    return self.recv_remove()
-
-  def send_remove(self, req=None):
-    self._oprot.writeMessageBegin('remove', TMessageType.CALL, self._seqid)
-    args = remove_args()
-    args.req = req
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_remove(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = remove_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success != None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "remove failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "forwardTransaction failed: unknown result");
 
 
 class Processor(Iface, TProcessor):
@@ -784,12 +547,10 @@ class Processor(Iface, TProcessor):
     self._handler = handler
     self._processMap = {}
     self._priorityMap = {}
-    self._processMap["get"] = Processor.process_get
-    self._priorityMap["get"] = TPriority.NORMAL
-    self._processMap["put"] = Processor.process_put
-    self._priorityMap["put"] = TPriority.NORMAL
-    self._processMap["remove"] = Processor.process_remove
-    self._priorityMap["remove"] = TPriority.NORMAL
+    self._processMap["getValue"] = Processor.process_getValue
+    self._priorityMap["getValue"] = TPriority.NORMAL
+    self._processMap["forwardTransaction"] = Processor.process_forwardTransaction
+    self._priorityMap["forwardTransaction"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -799,36 +560,25 @@ class Processor(Iface, TProcessor):
   @thrift_process_main()
   def process(self,): pass
 
-  @thrift_process_method(get_args, oneway=False)
-  def process_get(self, args, handler_ctx):
-    result = get_result()
+  @thrift_process_method(getValue_args, oneway=False)
+  def process_getValue(self, args, handler_ctx):
+    result = getValue_result()
     try:
-      result.success = self._handler.get(args.req)
+      result.success = self._handler.getValue(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'get', ex)
+      self._event_handler.handlerError(handler_ctx, 'getValue', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(put_args, oneway=False)
-  def process_put(self, args, handler_ctx):
-    result = put_result()
+  @thrift_process_method(forwardTransaction_args, oneway=False)
+  def process_forwardTransaction(self, args, handler_ctx):
+    result = forwardTransaction_result()
     try:
-      result.success = self._handler.put(args.req)
+      result.success = self._handler.forwardTransaction(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'put', ex)
-      result = Thrift.TApplicationException(message=repr(ex))
-    return result
-
-  @thrift_process_method(remove_args, oneway=False)
-  def process_remove(self, args, handler_ctx):
-    result = remove_result()
-    try:
-      result.success = self._handler.remove(args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'remove', ex)
+      self._event_handler.handlerError(handler_ctx, 'forwardTransaction', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -842,12 +592,10 @@ class ContextProcessor(ContextIface, TProcessor):
     self._handler = handler
     self._processMap = {}
     self._priorityMap = {}
-    self._processMap["get"] = ContextProcessor.process_get
-    self._priorityMap["get"] = TPriority.NORMAL
-    self._processMap["put"] = ContextProcessor.process_put
-    self._priorityMap["put"] = TPriority.NORMAL
-    self._processMap["remove"] = ContextProcessor.process_remove
-    self._priorityMap["remove"] = TPriority.NORMAL
+    self._processMap["getValue"] = ContextProcessor.process_getValue
+    self._priorityMap["getValue"] = TPriority.NORMAL
+    self._processMap["forwardTransaction"] = ContextProcessor.process_forwardTransaction
+    self._priorityMap["forwardTransaction"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -857,36 +605,25 @@ class ContextProcessor(ContextIface, TProcessor):
   @thrift_process_main()
   def process(self,): pass
 
-  @thrift_process_method(get_args, oneway=False)
-  def process_get(self, args, handler_ctx):
-    result = get_result()
+  @thrift_process_method(getValue_args, oneway=False)
+  def process_getValue(self, args, handler_ctx):
+    result = getValue_result()
     try:
-      result.success = self._handler.get(handler_ctx, args.req)
+      result.success = self._handler.getValue(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'get', ex)
+      self._event_handler.handlerError(handler_ctx, 'getValue', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(put_args, oneway=False)
-  def process_put(self, args, handler_ctx):
-    result = put_result()
+  @thrift_process_method(forwardTransaction_args, oneway=False)
+  def process_forwardTransaction(self, args, handler_ctx):
+    result = forwardTransaction_result()
     try:
-      result.success = self._handler.put(handler_ctx, args.req)
+      result.success = self._handler.forwardTransaction(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'put', ex)
-      result = Thrift.TApplicationException(message=repr(ex))
-    return result
-
-  @thrift_process_method(remove_args, oneway=False)
-  def process_remove(self, args, handler_ctx):
-    result = remove_result()
-    try:
-      result.success = self._handler.remove(handler_ctx, args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'remove', ex)
+      self._event_handler.handlerError(handler_ctx, 'forwardTransaction', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 

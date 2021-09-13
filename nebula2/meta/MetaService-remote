@@ -39,7 +39,7 @@ from . import MetaService
 from . import ttypes
 
 from nebula2.fbthrift.util.remote import Function
-from nebula2.fbthrift.remote import Remote
+from thrift.remote import Remote
 
 FUNCTIONS = {
     'createSpace': Function('createSpace', 'MetaService', 'ExecResp', [('CreateSpaceReq', 'req', 'CreateSpaceReq')]),
@@ -114,7 +114,7 @@ FUNCTIONS = {
     'addListener': Function('addListener', 'MetaService', 'ExecResp', [('AddListenerReq', 'req', 'AddListenerReq')]),
     'removeListener': Function('removeListener', 'MetaService', 'ExecResp', [('RemoveListenerReq', 'req', 'RemoveListenerReq')]),
     'listListener': Function('listListener', 'MetaService', 'ListListenerResp', [('ListListenerReq', 'req', 'ListListenerReq')]),
-    'getStatis': Function('getStatis', 'MetaService', 'GetStatisResp', [('GetStatisReq', 'req', 'GetStatisReq')]),
+    'getStats': Function('getStats', 'MetaService', 'GetStatsResp', [('GetStatsReq', 'req', 'GetStatsReq')]),
     'signInFTService': Function('signInFTService', 'MetaService', 'ExecResp', [('SignInFTServiceReq', 'req', 'SignInFTServiceReq')]),
     'signOutFTService': Function('signOutFTService', 'MetaService', 'ExecResp', [('SignOutFTServiceReq', 'req', 'SignOutFTServiceReq')]),
     'listFTClients': Function('listFTClients', 'MetaService', 'ListFTClientsResp', [('ListFTClientsReq', 'req', 'ListFTClientsReq')]),

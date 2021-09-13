@@ -22,7 +22,7 @@ from __future__ import unicode_literals
 from nebula2.fbthrift.Thrift import TType
 
 import logging
-_log = logging.getLogger('thrift.validator')
+_log = logging.getLogger('nebula2.fbthrift.validator')
 
 import sys
 if sys.version_info[0] >= 3:

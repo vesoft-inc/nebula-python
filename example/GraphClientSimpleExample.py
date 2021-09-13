@@ -7,9 +7,9 @@
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
 
 import time
-
 from nebula2.gclient.net import ConnectionPool
 from nebula2.Config import Config
+from nebula2.common import *
 from FormatResp import print_resp
 
 if __name__ == '__main__':
@@ -19,31 +19,44 @@ if __name__ == '__main__':
         config.max_connection_pool_size = 2
         # init connection pool
         connection_pool = ConnectionPool()
-        assert connection_pool.init([('127.0.0.1', 9669)], config)
+        assert connection_pool.init([('127.0.0.1', 1774)], config)
 
         # get session from the pool
         client = connection_pool.get_session('root', 'nebula')
         assert client is not None
 
-        client.execute('CREATE SPACE IF NOT EXISTS test; USE test;'
-                       'CREATE TAG IF NOT EXISTS person(name string, age int);')
+        # client.execute('CREATE SPACE IF NOT EXISTS test(vid_type="fixed_string(8)"); :sleep 3; USE test;'
+        #                'CREATE TAG IF NOT EXISTS person(name string, age int);')
 
-        # insert data need to sleep after create schema
-        time.sleep(6)
+        # # insert data need to sleep after create schema
+        # time.sleep(6)
 
-        # insert vertex
-        resp = client.execute('INSERT VERTEX person(name, age) VALUES "Bob":("Bob", 10), "Lily":("Lily", 9)')
-        assert resp.is_succeeded(), resp.error_msg()
+        # # insert vertex
+        # resp = client.execute('INSERT VERTEX person(name, age) VALUES "Bob":("Bob", 10), "Lily":("Lily", 9)')
+        # assert resp.is_succeeded(), resp.error_msg()
 
-        # Insert edges
-        client.execute('INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
-        assert resp.is_succeeded(), resp.error_msg()
+        # # Insert edges
+        # client.execute('INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
+        # assert resp.is_succeeded(), resp.error_msg()
 
-        resp = client.execute('FETCH PROP ON person "Bob"')
+        # resp = client.execute('FETCH PROP ON person "Bob"')
+        # assert resp.is_succeeded(), resp.error_msg()
+        # print_resp(resp)
+
+        bval = ttypes.Value()
+        bval.set_bVal(True)
+        ival = ttypes.Value()
+        ival.set_iVal(3)
+        sval = ttypes.Value()
+        sval.set_sVal("CZP")
+        di={"p1":ival,"p2":bval,"p3":sval}
+
+        # test parameter interface
+        resp = client.executeWithParameter('RETURN abs($p1)+3, toBoolean($p2) and false, toLower($p3)+1',di)
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
-
-        resp = client.execute('FETCH PROP ON like "Bob"->"Lily"')
+        # test compatibility
+        resp = client.execute('RETURN 3')
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
 

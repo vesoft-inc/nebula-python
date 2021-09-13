@@ -37,9 +37,9 @@ if (not sys.argv[0].endswith("par") and
         http://fburl.com/python-remotes""")
         exit()
 
-from . import GeneralStorageService
+from . import InternalStorageService
 from . import ttypes
 from . import constants
 
 import nebula2.fbthrift.util.fuzzer
-nebula2.fbthrift.util.fuzzer.fuzz_service(GeneralStorageService, ttypes, constants)
+nebula2.fbthrift.util.fuzzer.fuzz_service(InternalStorageService, ttypes, constants)

@@ -6,10 +6,8 @@
 #  @generated
 #
 
-from __future__ import absolute_import
-from __future__ import division
 from __future__ import print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import
 
 import os
 import sys
@@ -28,18 +26,27 @@ if (not sys.argv[0].endswith("par") and
     # second line. See fbcode/tools/make_par/make_par.py
     if (not line.startswith('# This par was made')):
         print("""WARNING
-        You are trying to run *-fuzzer.py which is
+        You are trying to run *-remote.py which is
         incorrect as the paths are not set up correctly.
         Instead, you should generate your thrift file with
         thrift_library and then run the resulting
-        *-fuzzer.par.
+        *-remote.par.
         For more information, please read
         http://fburl.com/python-remotes""")
         exit()
 
-from . import GeneralStorageService
+from . import InternalStorageService
 from . import ttypes
-from . import constants
 
-import nebula2.fbthrift.util.fuzzer
-nebula2.fbthrift.util.fuzzer.fuzz_service(GeneralStorageService, ttypes, constants)
+from nebula2.fbthrift.util.remote import Function
+from thrift.remote import Remote
+
+FUNCTIONS = {
+    'getValue': Function('getValue', 'InternalStorageService', 'GetValueResponse', [('GetValueRequest', 'req', 'GetValueRequest')]),
+    'forwardTransaction': Function('forwardTransaction', 'InternalStorageService', 'ExecResponse', [('InternalTxnRequest', 'req', 'InternalTxnRequest')]),
+}
+
+SERVICE_NAMES = ['InternalStorageService', ]
+
+if __name__ == '__main__':
+    Remote.run(FUNCTIONS, SERVICE_NAMES, InternalStorageService, ttypes, sys.argv, default_port=9090)

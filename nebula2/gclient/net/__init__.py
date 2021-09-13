@@ -92,6 +92,37 @@ class Session(object):
         except Exception:
             raise
 
+    def executeWithParameter(self, stmt, params):
+        """execute statement
+
+        :param stmt: the ngql
+        :return: ResultSet
+        """
+        if self._connection is None:
+            raise RuntimeError('The session has released')
+        try:
+            start_time = time.time()
+            resp = self._connection.executeWithParameter(self._session_id, stmt, params)
+            end_time = time.time()
+            return ResultSet(resp,
+                             all_latency=int((end_time - start_time) * 1000000),
+                             timezone_offset=self._timezone_offset)
+        except IOErrorException as ie:
+            if ie.type == IOErrorException.E_CONNECT_BROKEN:
+                self._pool.update_servers_status()
+                if self._retry_connect:
+                    if not self._reconnect():
+                        logging.warning('Retry connect failed')
+                        raise IOErrorException(IOErrorException.E_ALL_BROKEN, ie.message)
+                    resp = self._connection.executeWithParameter(self._session_id, stmt, params)
+                    end_time = time.time()
+                    return ResultSet(resp,
+                                     all_latency=int((end_time - start_time) * 1000000),
+                                     timezone_offset=self._timezone_offset)
+            raise
+        except Exception:
+            raise
+
     def release(self):
         """release the connection to pool, and the session couldn't been use again
 
@@ -462,6 +493,29 @@ class Connection(object):
                     raise IOErrorException(IOErrorException.E_UNKNOWN, te.message);
             raise
 
+    def executeWithParameter(self, session_id, stmt, params):
+        """execute interface with session_id and ngql
+
+        :param session_id: the session id get from result of authenticate interface
+        :param stmt: the ngql
+        :return: ExecutionResponse
+        """
+        try:
+            resp = self._connection.executeWithParameter(session_id, stmt, params)
+            return resp
+        except Exception as te:
+            if isinstance(te, TTransportException):
+                if te.message.find("timed out") > 0:
+                    self._reopen()
+                    raise IOErrorException(IOErrorException.E_TIMEOUT, te.message)
+                elif te.type == TTransportException.END_OF_FILE:
+                    raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
+                elif te.type == TTransportException.NOT_OPEN:
+                    raise IOErrorException(IOErrorException.E_NOT_OPEN, te.message)
+                else:
+                    raise IOErrorException(IOErrorException.E_UNKNOWN, te.message);
+            raise
+
     def signout(self, session_id):
         """tells the graphd can release the session info
 
@@ -490,6 +544,16 @@ class Connection(object):
         """
         try:
             resp = self._connection.execute(0, 'YIELD 1;')
+            return True
+        except Exception:
+            return False
+
+    def pingWithParameter(self):
+        """check the connection if ok
+        :return: True or False
+        """
+        try:
+            resp = self._connection.executeWithParameter(0, 'YIELD 1;', None)
             return True
         except Exception:
             return False
