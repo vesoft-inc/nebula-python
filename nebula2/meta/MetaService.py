@@ -13,7 +13,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, PropertyType, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, SchemaID, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatisItem, CreateSpaceReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceReq, BalanceTask, BalanceResp, LeaderBalanceReq, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddGroupReq, DropGroupReq, AddZoneIntoGroupReq, DropZoneFromGroupReq, GetGroupReq, GetGroupResp, ListGroupsReq, Group, ListGroupsResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatisReq, GetStatisResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, SchemaVer, ClusterID
+from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, PropertyType, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceReq, BalanceTask, BalanceResp, LeaderBalanceReq, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddGroupReq, DropGroupReq, AddZoneIntoGroupReq, DropZoneFromGroupReq, GetGroupReq, GetGroupResp, ListGroupsReq, Group, ListGroupsResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, SchemaVer, ClusterID
 import nebula2.common.ttypes
 
 from nebula2.fbthrift.Thrift import TProcessor
@@ -547,7 +547,7 @@ class Iface:
     """
     pass
 
-  def getStatis(self, req=None):
+  def getStats(self, req=None):
     """
     Parameters:
      - req
@@ -1165,7 +1165,7 @@ class ContextIface:
     """
     pass
 
-  def getStatis(self, handler_ctx, req=None):
+  def getStats(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -15176,7 +15176,7 @@ def listListener_result__setstate__(self, state):
 listListener_result.__getstate__ = lambda self: self.__dict__.copy()
 listListener_result.__setstate__ = listListener_result__setstate__
 
-class getStatis_args:
+class getStats_args:
   """
   Attributes:
    - req
@@ -15204,7 +15204,7 @@ class getStatis_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = GetStatisReq()
+          self.req = GetStatsReq()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -15220,7 +15220,7 @@ class getStatis_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('getStatis_args')
+    oprot.writeStructBegin('getStats_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -15250,30 +15250,30 @@ class getStatis_args:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(getStatis_args)
-getStatis_args.thrift_spec = (
+all_structs.append(getStats_args)
+getStats_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [GetStatisReq, GetStatisReq.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [GetStatsReq, GetStatsReq.thrift_spec, False], None, 2, ), # 1
 )
 
-getStatis_args.thrift_struct_annotations = {
+getStats_args.thrift_struct_annotations = {
 }
-getStatis_args.thrift_field_annotations = {
+getStats_args.thrift_field_annotations = {
 }
 
-def getStatis_args__init__(self, req=None,):
+def getStats_args__init__(self, req=None,):
   self.req = req
 
-getStatis_args.__init__ = getStatis_args__init__
+getStats_args.__init__ = getStats_args__init__
 
-def getStatis_args__setstate__(self, state):
+def getStats_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-getStatis_args.__getstate__ = lambda self: self.__dict__.copy()
-getStatis_args.__setstate__ = getStatis_args__setstate__
+getStats_args.__getstate__ = lambda self: self.__dict__.copy()
+getStats_args.__setstate__ = getStats_args__setstate__
 
-class getStatis_result:
+class getStats_result:
   """
   Attributes:
    - success
@@ -15301,7 +15301,7 @@ class getStatis_result:
         break
       if fid == 0:
         if ftype == TType.STRUCT:
-          self.success = GetStatisResp()
+          self.success = GetStatsResp()
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
@@ -15317,7 +15317,7 @@ class getStatis_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('getStatis_result')
+    oprot.writeStructBegin('getStats_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -15347,27 +15347,27 @@ class getStatis_result:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(getStatis_result)
-getStatis_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [GetStatisResp, GetStatisResp.thrift_spec, False], None, 2, ), # 0
+all_structs.append(getStats_result)
+getStats_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [GetStatsResp, GetStatsResp.thrift_spec, False], None, 2, ), # 0
 )
 
-getStatis_result.thrift_struct_annotations = {
+getStats_result.thrift_struct_annotations = {
 }
-getStatis_result.thrift_field_annotations = {
+getStats_result.thrift_field_annotations = {
 }
 
-def getStatis_result__init__(self, success=None,):
+def getStats_result__init__(self, success=None,):
   self.success = success
 
-getStatis_result.__init__ = getStatis_result__init__
+getStats_result.__init__ = getStats_result__init__
 
-def getStatis_result__setstate__(self, state):
+def getStats_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-getStatis_result.__getstate__ = lambda self: self.__dict__.copy()
-getStatis_result.__setstate__ = getStatis_result__setstate__
+getStats_result.__getstate__ = lambda self: self.__dict__.copy()
+getStats_result.__setstate__ = getStats_result__setstate__
 
 class signInFTService_args:
   """
@@ -20439,35 +20439,35 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "listListener failed: unknown result");
 
-  def getStatis(self, req=None):
+  def getStats(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_getStatis(req)
-    return self.recv_getStatis()
+    self.send_getStats(req)
+    return self.recv_getStats()
 
-  def send_getStatis(self, req=None):
-    self._oprot.writeMessageBegin('getStatis', TMessageType.CALL, self._seqid)
-    args = getStatis_args()
+  def send_getStats(self, req=None):
+    self._oprot.writeMessageBegin('getStats', TMessageType.CALL, self._seqid)
+    args = getStats_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_getStatis(self, ):
+  def recv_getStats(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = getStatis_result()
+    result = getStats_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "getStatis failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "getStats failed: unknown result");
 
   def signInFTService(self, req=None):
     """
@@ -21072,8 +21072,8 @@ class Processor(Iface, TProcessor):
     self._priorityMap["removeListener"] = TPriority.NORMAL
     self._processMap["listListener"] = Processor.process_listListener
     self._priorityMap["listListener"] = TPriority.NORMAL
-    self._processMap["getStatis"] = Processor.process_getStatis
-    self._priorityMap["getStatis"] = TPriority.NORMAL
+    self._processMap["getStats"] = Processor.process_getStats
+    self._priorityMap["getStats"] = TPriority.NORMAL
     self._processMap["signInFTService"] = Processor.process_signInFTService
     self._priorityMap["signInFTService"] = TPriority.NORMAL
     self._processMap["signOutFTService"] = Processor.process_signOutFTService
@@ -21905,14 +21905,14 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(getStatis_args, oneway=False)
-  def process_getStatis(self, args, handler_ctx):
-    result = getStatis_result()
+  @thrift_process_method(getStats_args, oneway=False)
+  def process_getStats(self, args, handler_ctx):
+    result = getStats_result()
     try:
-      result.success = self._handler.getStatis(args.req)
+      result.success = self._handler.getStats(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'getStatis', ex)
+      self._event_handler.handlerError(handler_ctx, 'getStats', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -22235,8 +22235,8 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["removeListener"] = TPriority.NORMAL
     self._processMap["listListener"] = ContextProcessor.process_listListener
     self._priorityMap["listListener"] = TPriority.NORMAL
-    self._processMap["getStatis"] = ContextProcessor.process_getStatis
-    self._priorityMap["getStatis"] = TPriority.NORMAL
+    self._processMap["getStats"] = ContextProcessor.process_getStats
+    self._priorityMap["getStats"] = TPriority.NORMAL
     self._processMap["signInFTService"] = ContextProcessor.process_signInFTService
     self._priorityMap["signInFTService"] = TPriority.NORMAL
     self._processMap["signOutFTService"] = ContextProcessor.process_signOutFTService
@@ -23068,14 +23068,14 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(getStatis_args, oneway=False)
-  def process_getStatis(self, args, handler_ctx):
-    result = getStatis_result()
+  @thrift_process_method(getStats_args, oneway=False)
+  def process_getStats(self, args, handler_ctx):
+    result = getStats_result()
     try:
-      result.success = self._handler.getStatis(handler_ctx, args.req)
+      result.success = self._handler.getStats(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'getStatis', ex)
+      self._event_handler.handlerError(handler_ctx, 'getStats', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 

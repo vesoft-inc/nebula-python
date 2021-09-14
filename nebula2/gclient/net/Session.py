@@ -39,7 +39,8 @@ class Session(object):
             resp = self._connection.execute(self._session_id, stmt)
             end_time = time.time()
             return ResultSet(resp,
-                             all_latency=int((end_time - start_time) * 1000000),
+                             all_latency=int(
+                                 (end_time - start_time) * 1000000),
                              timezone_offset=self._timezone_offset)
         except IOErrorException as ie:
             if ie.type == IOErrorException.E_CONNECT_BROKEN:
@@ -47,12 +48,43 @@ class Session(object):
                 if self._retry_connect:
                     if not self._reconnect():
                         logging.warning('Retry connect failed')
-                        raise IOErrorException(IOErrorException.E_ALL_BROKEN, ie.message)
+                        raise IOErrorException(
+                            IOErrorException.E_ALL_BROKEN, ie.message)
                     resp = self._connection.execute(self._session_id, stmt)
                     end_time = time.time()
                     return ResultSet(resp,
-                                     all_latency=int((end_time - start_time) * 1000000),
+                                     all_latency=int(
+                                         (end_time - start_time) * 1000000),
                                      timezone_offset=self._timezone_offset)
+            raise
+        except Exception:
+            raise
+
+    def execute_json(self, stmt):
+        """execute statement and get the result as a json string
+
+        :param stmt: the ngql
+        :return: json string
+        """
+        if self._connection is None:
+            raise RuntimeError('The session has released')
+        try:
+            start_time = time.time()
+            resp_json = self._connection.execute_json(self._session_id, stmt)
+            end_time = time.time()
+            return resp_json
+        except IOErrorException as ie:
+            if ie.type == IOErrorException.E_CONNECT_BROKEN:
+                self._pool.update_servers_status()
+                if self._retry_connect:
+                    if not self._reconnect():
+                        logging.warning('Retry connect failed')
+                        raise IOErrorException(
+                            IOErrorException.E_ALL_BROKEN, ie.message)
+                    resp = self._connection.execute_json(
+                        self._session_id, stmt)
+                    end_time = time.time()
+                    return resp_json
             raise
         except Exception:
             raise

@@ -48,6 +48,7 @@ FUNCTIONS = {
     'addEdges': Function('addEdges', 'GraphStorageService', 'ExecResponse', [('AddEdgesRequest', 'req', 'AddEdgesRequest')]),
     'deleteEdges': Function('deleteEdges', 'GraphStorageService', 'ExecResponse', [('DeleteEdgesRequest', 'req', 'DeleteEdgesRequest')]),
     'deleteVertices': Function('deleteVertices', 'GraphStorageService', 'ExecResponse', [('DeleteVerticesRequest', 'req', 'DeleteVerticesRequest')]),
+    'deleteTags': Function('deleteTags', 'GraphStorageService', 'ExecResponse', [('DeleteTagsRequest', 'req', 'DeleteTagsRequest')]),
     'updateVertex': Function('updateVertex', 'GraphStorageService', 'UpdateResponse', [('UpdateVertexRequest', 'req', 'UpdateVertexRequest')]),
     'updateEdge': Function('updateEdge', 'GraphStorageService', 'UpdateResponse', [('UpdateEdgeRequest', 'req', 'UpdateEdgeRequest')]),
     'scanVertex': Function('scanVertex', 'GraphStorageService', 'ScanVertexResponse', [('ScanVertexRequest', 'req', 'ScanVertexRequest')]),

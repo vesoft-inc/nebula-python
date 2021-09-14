@@ -29,7 +29,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'NullType', 'ErrorCode', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
+__all__ = ['UTF8STRINGS', 'NullType', 'ErrorCode', 'SchemaID', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
 
 class NullType:
   __NULL__ = 0
@@ -83,6 +83,7 @@ class ErrorCode:
   E_PART_NOT_FOUND = -16
   E_KEY_NOT_FOUND = -17
   E_USER_NOT_FOUND = -18
+  E_STATS_NOT_FOUND = -19
   E_BACKUP_FAILED = -24
   E_BACKUP_EMPTY_TABLE = -25
   E_BACKUP_TABLE_FAILED = -26
@@ -176,6 +177,7 @@ class ErrorCode:
   E_INVALID_TASK_PARA = -3051
   E_USER_CANCEL = -3052
   E_TASK_EXECUTION_FAILED = -3053
+  E_PLAN_IS_KILLED = -3060
   E_UNKNOWN = -8000
 
   _VALUES_TO_NAMES = {
@@ -198,6 +200,7 @@ class ErrorCode:
     -16: "E_PART_NOT_FOUND",
     -17: "E_KEY_NOT_FOUND",
     -18: "E_USER_NOT_FOUND",
+    -19: "E_STATS_NOT_FOUND",
     -24: "E_BACKUP_FAILED",
     -25: "E_BACKUP_EMPTY_TABLE",
     -26: "E_BACKUP_TABLE_FAILED",
@@ -291,6 +294,7 @@ class ErrorCode:
     -3051: "E_INVALID_TASK_PARA",
     -3052: "E_USER_CANCEL",
     -3053: "E_TASK_EXECUTION_FAILED",
+    -3060: "E_PLAN_IS_KILLED",
     -8000: "E_UNKNOWN",
   }
 
@@ -314,6 +318,7 @@ class ErrorCode:
     "E_PART_NOT_FOUND": -16,
     "E_KEY_NOT_FOUND": -17,
     "E_USER_NOT_FOUND": -18,
+    "E_STATS_NOT_FOUND": -19,
     "E_BACKUP_FAILED": -24,
     "E_BACKUP_EMPTY_TABLE": -25,
     "E_BACKUP_TABLE_FAILED": -26,
@@ -407,8 +412,123 @@ class ErrorCode:
     "E_INVALID_TASK_PARA": -3051,
     "E_USER_CANCEL": -3052,
     "E_TASK_EXECUTION_FAILED": -3053,
+    "E_PLAN_IS_KILLED": -3060,
     "E_UNKNOWN": -8000,
   }
+
+class SchemaID(object):
+  """
+  Attributes:
+   - tag_id
+   - edge_type
+  """
+
+  thrift_spec = None
+  __init__ = None
+
+  __EMPTY__ = 0
+  TAG_ID = 1
+  EDGE_TYPE = 2
+  
+  @staticmethod
+  def isUnion():
+    return True
+
+  def get_tag_id(self):
+    assert self.field == 1
+    return self.value
+
+  def get_edge_type(self):
+    assert self.field == 2
+    return self.value
+
+  def set_tag_id(self, value):
+    self.field = 1
+    self.value = value
+
+  def set_edge_type(self, value):
+    self.field = 2
+    self.value = value
+
+  def getType(self):
+    return self.field
+
+  def __repr__(self):
+    value = pprint.pformat(self.value)
+    member = ''
+    if self.field == 1:
+      padding = ' ' * 7
+      value = padding.join(value.splitlines(True))
+      member = '\n    %s=%s' % ('tag_id', value)
+    if self.field == 2:
+      padding = ' ' * 10
+      value = padding.join(value.splitlines(True))
+      member = '\n    %s=%s' % ('edge_type', value)
+    return "%s(%s)" % (self.__class__.__name__, member)
+
+  def read(self, iprot):
+    self.field = 0
+    self.value = None
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+
+      if fid == 1:
+        if ftype == TType.I32:
+          tag_id = iprot.readI32()
+          assert self.field == 0 and self.value is None
+          self.set_tag_id(tag_id)
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I32:
+          edge_type = iprot.readI32()
+          assert self.field == 0 and self.value is None
+          self.set_edge_type(edge_type)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeUnionBegin('SchemaID')
+    if self.field == 1:
+      oprot.writeFieldBegin('tag_id', TType.I32, 1)
+      tag_id = self.value
+      oprot.writeI32(tag_id)
+      oprot.writeFieldEnd()
+    if self.field == 2:
+      oprot.writeFieldBegin('edge_type', TType.I32, 2)
+      edge_type = self.value
+      oprot.writeI32(edge_type)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeUnionEnd()
+  
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
 
 class Date:
   """
@@ -2978,6 +3098,32 @@ IndexID = UnimplementedTypedef()
 Port = UnimplementedTypedef()
 SessionID = UnimplementedTypedef()
 ExecutionPlanID = UnimplementedTypedef()
+all_structs.append(SchemaID)
+SchemaID.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'tag_id', None, None, 2, ), # 1
+  (2, TType.I32, 'edge_type', None, None, 2, ), # 2
+)
+
+SchemaID.thrift_struct_annotations = {
+}
+SchemaID.thrift_field_annotations = {
+}
+
+def SchemaID__init__(self, tag_id=None, edge_type=None,):
+  self.field = 0
+  self.value = None
+  if tag_id is not None:
+    assert self.field == 0 and self.value is None
+    self.field = 1
+    self.value = tag_id
+  if edge_type is not None:
+    assert self.field == 0 and self.value is None
+    self.field = 2
+    self.value = edge_type
+
+SchemaID.__init__ = SchemaID__init__
+
 all_structs.append(Date)
 Date.thrift_spec = (
   None, # 0

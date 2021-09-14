@@ -19,12 +19,13 @@ if __name__ == '__main__':
         config.max_connection_pool_size = 2
         # init connection pool
         connection_pool = ConnectionPool()
-        assert connection_pool.init([('127.0.0.1', 9669)], config)
+        assert connection_pool.init([('127.0.0.1', 29562)], config)
 
         # get session from the pool
         client = connection_pool.get_session('root', 'nebula')
         assert client is not None
-
+        client.execute_json("yield 1")
+        client.execute("yield 1")
         client.execute('CREATE SPACE IF NOT EXISTS test; USE test;'
                        'CREATE TAG IF NOT EXISTS person(name string, age int);')
 
