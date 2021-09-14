@@ -61,10 +61,51 @@ class Session(object):
             raise
 
     def execute_json(self, stmt):
-        """execute statement and get the result as a json string
+        """execute statement and return the result as a JSON string
+            Date and Datetime will be returned in UTC
+            JSON struct:
+              "results": [
+               {
+                  "columns": [],
+                  "data": [
+                    {
+                       "row": [ row-data ],
+                       "meta": [ metadata ]
+                    },
+                  ],
+                  "latencyInUs" : 0,
+                  "spaceName": "",
+                  "planDesc ": {
+                    "planNodeDescs": [ {
+                      "name" : "",
+                      "id" : 0,
+                      "outputVar" : "",
+                      "description" : {"key" : ""},
+                      "profiles" : [{
+                        "rows" : 1,
+                        "execDurationInUs" : 0,
+                        "totalDurationInUs" : 0,
+                        "otherStats" : {}, // map
+                      }],
+                      "branchInfo" : {
+                        "isDoBranch" : false,
+                        "conditionNodeId" : -1,
+                      },
+                      "dependencies" : [] // vector of ints
+                      }
+                    ],
+                    "nodeIndexMap" : {},
+                    "format" : "",
+                    "optimize_time_in_us" : 0,
+                  },
+                  "comment ": "",
+                  "errors" : "" // errorMsg
+                }
+              ]
+            	}]
 
         :param stmt: the ngql
-        :return: json string
+        :return: JSON string
         """
         if self._connection is None:
             raise RuntimeError('The session has released')
