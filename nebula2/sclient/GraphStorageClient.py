@@ -34,13 +34,12 @@ class GraphStorageClient(object):
     DEFAULT_END_TIME = sys.maxsize
     DEFAULT_LIMIT = 1000
 
-    def __init__(self, meta_cache,storage_addrs =None, time_out=60000):
+    def __init__(self, meta_cache, storage_addrs=None, time_out=60000):
         self._meta_cache = meta_cache
         self.storage_addrs = storage_addrs
         self._time_out = time_out
         self._connections = []
         self._create_connection()
-        
 
     def get_conns(self):
         """get all connections which connect to storaged, the ScanResult use it
