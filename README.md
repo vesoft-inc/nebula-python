@@ -127,7 +127,7 @@ graph_storage_client = GraphStorageClient(meta_cache)
 storage_addrs = [HostAddr(host='172.28.1.4', port=9779),
                  HostAddr(host='172.28.1.5', port=9779),
                  HostAddr(host='172.28.1.6', port=9779)]
-graph_storage_client = GraphStorageClient(meta_cache,storage_addrs)
+graph_storage_client = GraphStorageClient(meta_cache, storage_addrs)
 
 resp = graph_storage_client.scan_vertex(
         space_name='ScanSpace',
