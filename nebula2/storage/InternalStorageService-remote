@@ -39,7 +39,7 @@ from . import InternalStorageService
 from . import ttypes
 
 from nebula2.fbthrift.util.remote import Function
-from thrift.remote import Remote
+from nebula2.fbthrift.remote import Remote
 
 FUNCTIONS = {
     'getValue': Function('getValue', 'InternalStorageService', 'GetValueResponse', [('GetValueRequest', 'req', 'GetValueRequest')]),

@@ -39,7 +39,7 @@ from . import GraphService
 from . import ttypes
 
 from nebula2.fbthrift.util.remote import Function
-from thrift.remote import Remote
+from nebula2.fbthrift.remote import Remote
 
 FUNCTIONS = {
     'authenticate': Function('authenticate', 'GraphService', 'AuthResponse', [('binary', 'username', 'binary'), ('binary', 'password', 'binary')]),

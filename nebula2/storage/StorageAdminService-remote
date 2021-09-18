@@ -39,7 +39,7 @@ from . import StorageAdminService
 from . import ttypes
 
 from nebula2.fbthrift.util.remote import Function
-from thrift.remote import Remote
+from nebula2.fbthrift.remote import Remote
 
 FUNCTIONS = {
     'transLeader': Function('transLeader', 'StorageAdminService', 'AdminExecResp', [('TransLeaderReq', 'req', 'TransLeaderReq')]),
