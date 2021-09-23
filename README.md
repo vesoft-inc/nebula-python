@@ -111,7 +111,7 @@ connection_pool.close()
 You should make sure the scan client can connect to the address of storage which see from `SHOW HOSTS` 
 
 ```python
-from nebula2.mclient import MetaCache
+from nebula2.mclient import MetaCache, HostAddr
 from nebula2.sclient.GraphStorageClient import GraphStorageClient
 
 # the metad servers's address
@@ -119,7 +119,15 @@ meta_cache = MetaCache([('172.28.1.1', 9559),
                         ('172.28.1.2', 9559),
                         ('172.28.1.3', 9559)],
                        50000)
+
+# option 1 metad usually discover the storage address automatically
 graph_storage_client = GraphStorageClient(meta_cache)
+
+# option 2 manually specify the storage address
+storage_addrs = [HostAddr(host='172.28.1.4', port=9779),
+                 HostAddr(host='172.28.1.5', port=9779),
+                 HostAddr(host='172.28.1.6', port=9779)]
+graph_storage_client = GraphStorageClient(meta_cache, storage_addrs)
 
 resp = graph_storage_client.scan_vertex(
         space_name='ScanSpace',
