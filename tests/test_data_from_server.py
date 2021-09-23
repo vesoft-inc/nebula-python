@@ -282,21 +282,7 @@ class TestExecuteJson(TestBaseCase):
     def test_error(self):
         resp = self.session.execute_json(
             'MATCH (v:invalidTag {name: \"Bob\"}) RETURN v')
-        exp = [{"person.age":            10,
-               "person.birthday":       '2010-09-10T02:08:02.0Z',
-                "person.book_num":       100,
-                "person.child_name":     "Hello Worl",
-                "person.expend":         100,
-                "person.first_out_city": 1111,
-                "person.friends":        10,
-                "person.grade":          3,
-                "person.hobby":          None,
-                "person.is_girl":        False,
-                "person.morning":        '23:10:00.000000Z',
-                "person.name":           "Bob",
-                "person.property":       1000,
-                "person.start_school":   '2017-09-10',
-                "student.name":          "Bob", }]
+
         json_obj = json.loads(resp)
 
         error_code = "E_SEMANTIC_ERROR"
