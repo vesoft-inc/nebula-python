@@ -8,6 +8,17 @@
 
 import logging
 
+
+from nebula2.common.ttypes import ErrorCode
+from nebula2.Exception import (
+    AuthFailedException,
+    IOErrorException,
+    NotValidConnectionException,
+    InValidHostname,
+)
+
+from nebula2.data.ResultSet import ResultSet
+
 from nebula2.gclient.net.AuthResult import AuthResult
 from nebula2.gclient.net.Session import Session
 from nebula2.gclient.net.Connection import Connection
