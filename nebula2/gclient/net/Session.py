@@ -64,45 +64,54 @@ class Session(object):
         """execute statement and return the result as a JSON string
             Date and Datetime will be returned in UTC
             JSON struct:
-              "results": [
-               {
-                  "columns": [],
-                  "data": [
+            {
+              "results":[
+                {
+                  "columns":[],
+                  "data":[
                     {
-                       "row": [ row-data ],
-                       "meta": [ metadata ]
-                    },
+                      "row":row-data,
+                      "meta":metadata]
+                    }
                   ],
-                  "latencyInUs" : 0,
-                  "spaceName": "",
-                  "planDesc ": {
-                    "planNodeDescs": [ {
-                      "name" : "",
-                      "id" : 0,
-                      "outputVar" : "",
-                      "description" : {"key" : ""},
-                      "profiles" : [{
-                        "rows" : 1,
-                        "execDurationInUs" : 0,
-                        "totalDurationInUs" : 0,
-                        "otherStats" : {}, // map
-                      }],
-                      "branchInfo" : {
-                        "isDoBranch" : false,
-                        "conditionNodeId" : -1,
-                      },
-                      "dependencies" : [] // vector of ints
+                  "latencyInUs":0,
+                  "spaceName":"",
+                  "planDesc ":{
+                    "planNodeDescs":[
+                      {
+                        "name":"",
+                        "id":0,
+                        "outputVar":"",
+                        "description":{
+                          "key":""
+                        },
+                        "profiles":[
+                          {
+                            "rows":1,
+                            "execDurationInUs":0,
+                            "totalDurationInUs":0,
+                            "otherStats":{}
+                          }
+                        ],
+                        "branchInfo":{
+                          "isDoBranch":false,
+                          "conditionNodeId":-1
+                        },
+                        "dependencies":[]
                       }
                     ],
-                    "nodeIndexMap" : {},
-                    "format" : "",
-                    "optimize_time_in_us" : 0,
+                    "nodeIndexMap":{},
+                    "format":"",
+                    "optimize_time_in_us":0
                   },
-                  "comment ": "",
-                  "errors" : "" // errorMsg
+                  "comment ":"",
+                  "errors":{
+                    "errorCode":0,
+                    "errorMsg":""
+                  }
                 }
               ]
-            	}]
+            }
 
         :param stmt: the ngql
         :return: JSON string
@@ -110,9 +119,7 @@ class Session(object):
         if self._connection is None:
             raise RuntimeError('The session has released')
         try:
-            start_time = time.time()
             resp_json = self._connection.execute_json(self._session_id, stmt)
-            end_time = time.time()
             return resp_json
         except IOErrorException as ie:
             if ie.type == IOErrorException.E_CONNECT_BROKEN:
@@ -122,9 +129,8 @@ class Session(object):
                         logging.warning('Retry connect failed')
                         raise IOErrorException(
                             IOErrorException.E_ALL_BROKEN, ie.message)
-                    resp = self._connection.execute_json(
+                    resp_json = self._connection.execute_json(
                         self._session_id, stmt)
-                    end_time = time.time()
                     return resp_json
             raise
         except Exception:
