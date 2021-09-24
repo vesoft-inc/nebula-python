@@ -249,8 +249,8 @@ class TestBaseCase(TestCase):
 
 class TestExecuteJson(TestBaseCase):
     def test_basic_types(self):
-        resp = self.session.execute_json('YIELD 1, 2.2, "hello"')
-        exp = [1, 2.2, "hello"]
+        resp = self.session.execute_json('YIELD 1, 2.2, "hello", [1,2,"abc"], {key: "value"}')
+        exp = [1, 2.2, "hello", [1,2,"abc"], {"key": "value"}]
         json_obj = json.loads(resp)
         assert exp == json_obj["results"][0]["data"][0]["row"]
 
