@@ -39,7 +39,8 @@ class Session(object):
             resp = self._connection.execute(self._session_id, stmt)
             end_time = time.time()
             return ResultSet(resp,
-                             all_latency=int((end_time - start_time) * 1000000),
+                             all_latency=int(
+                                 (end_time - start_time) * 1000000),
                              timezone_offset=self._timezone_offset)
         except IOErrorException as ie:
             if ie.type == IOErrorException.E_CONNECT_BROKEN:
@@ -47,12 +48,90 @@ class Session(object):
                 if self._retry_connect:
                     if not self._reconnect():
                         logging.warning('Retry connect failed')
-                        raise IOErrorException(IOErrorException.E_ALL_BROKEN, ie.message)
+                        raise IOErrorException(
+                            IOErrorException.E_ALL_BROKEN, ie.message)
                     resp = self._connection.execute(self._session_id, stmt)
                     end_time = time.time()
                     return ResultSet(resp,
-                                     all_latency=int((end_time - start_time) * 1000000),
+                                     all_latency=int(
+                                         (end_time - start_time) * 1000000),
                                      timezone_offset=self._timezone_offset)
+            raise
+        except Exception:
+            raise
+
+    def execute_json(self, stmt):
+        """execute statement and return the result as a JSON string
+            Date and Datetime will be returned in UTC
+            JSON struct:
+            {
+              "results":[
+                {
+                  "columns":[],
+                  "data":[
+                    {
+                      "row":row-data,
+                      "meta":metadata]
+                    }
+                  ],
+                  "latencyInUs":0,
+                  "spaceName":"",
+                  "planDesc ":{
+                    "planNodeDescs":[
+                      {
+                        "name":"",
+                        "id":0,
+                        "outputVar":"",
+                        "description":{
+                          "key":""
+                        },
+                        "profiles":[
+                          {
+                            "rows":1,
+                            "execDurationInUs":0,
+                            "totalDurationInUs":0,
+                            "otherStats":{}
+                          }
+                        ],
+                        "branchInfo":{
+                          "isDoBranch":false,
+                          "conditionNodeId":-1
+                        },
+                        "dependencies":[]
+                      }
+                    ],
+                    "nodeIndexMap":{},
+                    "format":"",
+                    "optimize_time_in_us":0
+                  },
+                  "comment ":"",
+                  "errors":{
+                    "errorCode":0,
+                    "errorMsg":""
+                  }
+                }
+              ]
+            }
+
+        :param stmt: the ngql
+        :return: JSON string
+        """
+        if self._connection is None:
+            raise RuntimeError('The session has released')
+        try:
+            resp_json = self._connection.execute_json(self._session_id, stmt)
+            return resp_json
+        except IOErrorException as ie:
+            if ie.type == IOErrorException.E_CONNECT_BROKEN:
+                self._pool.update_servers_status()
+                if self._retry_connect:
+                    if not self._reconnect():
+                        logging.warning('Retry connect failed')
+                        raise IOErrorException(
+                            IOErrorException.E_ALL_BROKEN, ie.message)
+                    resp_json = self._connection.execute_json(
+                        self._session_id, stmt)
+                    return resp_json
             raise
         except Exception:
             raise
