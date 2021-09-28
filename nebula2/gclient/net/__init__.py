@@ -24,4 +24,4 @@ from nebula2.gclient.net.Session import Session
 from nebula2.gclient.net.Connection import Connection
 from nebula2.gclient.net.ConnectionPool import ConnectionPool
 
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s]:%(message)s')
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)-8s [%(filename)s:%(lineno)d]:%(message)s')

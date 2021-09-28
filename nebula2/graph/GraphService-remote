@@ -38,14 +38,15 @@ if (not sys.argv[0].endswith("par") and
 from . import GraphService
 from . import ttypes
 
-from nebula2.fbthrift.util.remote import Function
-from nebula2.fbthrift.remote import Remote
+from thrift.util.remote import Function
+from thrift.remote import Remote
 
 FUNCTIONS = {
     'authenticate': Function('authenticate', 'GraphService', 'AuthResponse', [('binary', 'username', 'binary'), ('binary', 'password', 'binary')]),
     'signout': Function('signout', 'GraphService', None, [('i64', 'sessionId', 'i64')]),
     'execute': Function('execute', 'GraphService', 'ExecutionResponse', [('i64', 'sessionId', 'i64'), ('binary', 'stmt', 'binary')]),
     'executeJson': Function('executeJson', 'GraphService', 'binary', [('i64', 'sessionId', 'i64'), ('binary', 'stmt', 'binary')]),
+    'verifyClientVersion': Function('verifyClientVersion', 'GraphService', 'VerifyClientVersionResp', [('VerifyClientVersionReq', 'req', 'VerifyClientVersionReq')]),
 }
 
 SERVICE_NAMES = ['GraphService', ]

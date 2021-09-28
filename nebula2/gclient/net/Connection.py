@@ -14,10 +14,12 @@ from nebula2.fbthrift.protocol import TBinaryProtocol
 
 from nebula2.common.ttypes import ErrorCode
 from nebula2.graph import GraphService
+from nebula2.graph.ttypes import VerifyClientVersionReq
 
 from nebula2.Exception import (
     AuthFailedException,
     IOErrorException,
+    ClientServerIncompatibleException,
 )
 
 from nebula2.gclient.net.AuthResult import AuthResult
@@ -44,16 +46,17 @@ class Connection(object):
         self._ip = ip
         self._port = port
         self._timeout = timeout
-        try:
-            s = TSocket.TSocket(self._ip, self._port)
-            if timeout > 0:
-                s.setTimeout(timeout)
-            transport = TTransport.TBufferedTransport(s)
-            protocol = TBinaryProtocol.TBinaryProtocol(transport)
-            transport.open()
-            self._connection = GraphService.Client(protocol)
-        except Exception:
-            raise
+        s = TSocket.TSocket(self._ip, self._port)
+        if timeout > 0:
+            s.setTimeout(timeout)
+        transport = TTransport.TBufferedTransport(s)
+        protocol = TBinaryProtocol.TBinaryProtocol(transport)
+        transport.open()
+        self._connection = GraphService.Client(protocol)
+        resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
+        if resp.error_code != ErrorCode.SUCCEEDED:
+            self._connection._iprot.trans.close()
+            raise ClientVersionRejectedException(resp.error_msg)
 
     def _reopen(self):
         """reopen the connection

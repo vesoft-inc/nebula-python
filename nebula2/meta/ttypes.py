@@ -8,9 +8,9 @@
 from __future__ import absolute_import
 import six
 import sys
-from nebula2.fbthrift.util.Recursive import fix_spec
-from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestContext, TProcessorEventHandler, TServerInterface, TProcessor, TException, TApplicationException, UnimplementedTypedef
-from nebula2.fbthrift.protocol.TProtocol import TProtocolException
+from thrift.util.Recursive import fix_spec
+from thrift.Thrift import TType, TMessageType, TPriority, TRequestContext, TProcessorEventHandler, TServerInterface, TProcessor, TException, TApplicationException, UnimplementedTypedef
+from thrift.protocol.TProtocol import TProtocolException
 
 
 import nebula2.common.ttypes
@@ -18,20 +18,20 @@ import nebula2.common.ttypes
 
 import pprint
 import warnings
-from nebula2.fbthrift import Thrift
-from nebula2.fbthrift.transport import TTransport
-from nebula2.fbthrift.protocol import TBinaryProtocol
-from nebula2.fbthrift.protocol import TCompactProtocol
-from nebula2.fbthrift.protocol import THeaderProtocol
+from thrift import Thrift
+from thrift.transport import TTransport
+from thrift.protocol import TBinaryProtocol
+from thrift.protocol import TCompactProtocol
+from thrift.protocol import THeaderProtocol
 fastproto = None
 try:
-  from nebula2.fbthrift.protocol import fastproto
+  from thrift.protocol import fastproto
 except ImportError:
   pass
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'AlterSchemaOp', 'RoleType', 'PropertyType', 'IsolationLevel', 'HostStatus', 'SnapshotStatus', 'AdminJobOp', 'AdminCmd', 'JobStatus', 'ListHostType', 'HostRole', 'TaskResult', 'ConfigModule', 'ConfigMode', 'ListenerType', 'FTServiceType', 'QueryStatus', 'ID', 'ColumnTypeDef', 'ColumnDef', 'SchemaProp', 'Schema', 'IdName', 'SpaceDesc', 'SpaceItem', 'TagItem', 'AlterSchemaItem', 'EdgeItem', 'SchemaID', 'IndexItem', 'HostItem', 'UserItem', 'RoleItem', 'ExecResp', 'AdminJobReq', 'JobDesc', 'TaskDesc', 'AdminJobResult', 'AdminJobResp', 'Correlativity', 'StatisItem', 'CreateSpaceReq', 'DropSpaceReq', 'ListSpacesReq', 'ListSpacesResp', 'GetSpaceReq', 'GetSpaceResp', 'CreateTagReq', 'AlterTagReq', 'DropTagReq', 'ListTagsReq', 'ListTagsResp', 'GetTagReq', 'GetTagResp', 'CreateEdgeReq', 'AlterEdgeReq', 'GetEdgeReq', 'GetEdgeResp', 'DropEdgeReq', 'ListEdgesReq', 'ListEdgesResp', 'ListHostsReq', 'ListHostsResp', 'PartItem', 'ListPartsReq', 'ListPartsResp', 'GetPartsAllocReq', 'GetPartsAllocResp', 'MultiPutReq', 'GetReq', 'GetResp', 'MultiGetReq', 'MultiGetResp', 'RemoveReq', 'RemoveRangeReq', 'ScanReq', 'ScanResp', 'HBResp', 'LeaderInfo', 'HBReq', 'IndexFieldDef', 'CreateTagIndexReq', 'DropTagIndexReq', 'GetTagIndexReq', 'GetTagIndexResp', 'ListTagIndexesReq', 'ListTagIndexesResp', 'CreateEdgeIndexReq', 'DropEdgeIndexReq', 'GetEdgeIndexReq', 'GetEdgeIndexResp', 'ListEdgeIndexesReq', 'ListEdgeIndexesResp', 'RebuildIndexReq', 'CreateUserReq', 'DropUserReq', 'AlterUserReq', 'GrantRoleReq', 'RevokeRoleReq', 'ListUsersReq', 'ListUsersResp', 'ListRolesReq', 'ListRolesResp', 'GetUserRolesReq', 'ChangePasswordReq', 'BalanceReq', 'BalanceTask', 'BalanceResp', 'LeaderBalanceReq', 'ConfigItem', 'RegConfigReq', 'GetConfigReq', 'GetConfigResp', 'SetConfigReq', 'ListConfigsReq', 'ListConfigsResp', 'CreateSnapshotReq', 'DropSnapshotReq', 'ListSnapshotsReq', 'Snapshot', 'ListSnapshotsResp', 'ListIndexStatusReq', 'IndexStatus', 'ListIndexStatusResp', 'AddZoneReq', 'DropZoneReq', 'AddHostIntoZoneReq', 'DropHostFromZoneReq', 'GetZoneReq', 'GetZoneResp', 'ListZonesReq', 'Zone', 'ListZonesResp', 'AddGroupReq', 'DropGroupReq', 'AddZoneIntoGroupReq', 'DropZoneFromGroupReq', 'GetGroupReq', 'GetGroupResp', 'ListGroupsReq', 'Group', 'ListGroupsResp', 'AddListenerReq', 'RemoveListenerReq', 'ListListenerReq', 'ListenerInfo', 'ListListenerResp', 'GetStatisReq', 'GetStatisResp', 'BackupInfo', 'SpaceBackupInfo', 'BackupMeta', 'CreateBackupReq', 'CreateBackupResp', 'HostPair', 'RestoreMetaReq', 'FTClient', 'SignInFTServiceReq', 'SignOutFTServiceReq', 'ListFTClientsReq', 'ListFTClientsResp', 'FTIndex', 'CreateFTIndexReq', 'DropFTIndexReq', 'ListFTIndexesReq', 'ListFTIndexesResp', 'QueryDesc', 'Session', 'CreateSessionReq', 'CreateSessionResp', 'UpdateSessionsReq', 'UpdateSessionsResp', 'ListSessionsReq', 'ListSessionsResp', 'GetSessionReq', 'GetSessionResp', 'RemoveSessionReq', 'KillQueryReq', 'ReportTaskReq', 'ListClusterInfoResp', 'ListClusterInfoReq', 'GetMetaDirInfoResp', 'GetMetaDirInfoReq', 'SchemaVer', 'ClusterID']
+__all__ = ['UTF8STRINGS', 'AlterSchemaOp', 'RoleType', 'GeoShape', 'PropertyType', 'IsolationLevel', 'HostStatus', 'SnapshotStatus', 'AdminJobOp', 'AdminCmd', 'JobStatus', 'ListHostType', 'HostRole', 'TaskResult', 'ConfigModule', 'ConfigMode', 'ListenerType', 'FTServiceType', 'QueryStatus', 'ID', 'ColumnTypeDef', 'ColumnDef', 'SchemaProp', 'Schema', 'IdName', 'SpaceDesc', 'SpaceItem', 'TagItem', 'AlterSchemaItem', 'EdgeItem', 'IndexItem', 'HostItem', 'UserItem', 'RoleItem', 'ExecResp', 'AdminJobReq', 'JobDesc', 'TaskDesc', 'AdminJobResult', 'AdminJobResp', 'Correlativity', 'StatsItem', 'CreateSpaceReq', 'CreateSpaceAsReq', 'DropSpaceReq', 'ListSpacesReq', 'ListSpacesResp', 'GetSpaceReq', 'GetSpaceResp', 'CreateTagReq', 'AlterTagReq', 'DropTagReq', 'ListTagsReq', 'ListTagsResp', 'GetTagReq', 'GetTagResp', 'CreateEdgeReq', 'AlterEdgeReq', 'GetEdgeReq', 'GetEdgeResp', 'DropEdgeReq', 'ListEdgesReq', 'ListEdgesResp', 'ListHostsReq', 'ListHostsResp', 'PartItem', 'ListPartsReq', 'ListPartsResp', 'GetPartsAllocReq', 'GetPartsAllocResp', 'MultiPutReq', 'GetReq', 'GetResp', 'MultiGetReq', 'MultiGetResp', 'RemoveReq', 'RemoveRangeReq', 'ScanReq', 'ScanResp', 'HBResp', 'LeaderInfo', 'HBReq', 'IndexFieldDef', 'CreateTagIndexReq', 'DropTagIndexReq', 'GetTagIndexReq', 'GetTagIndexResp', 'ListTagIndexesReq', 'ListTagIndexesResp', 'CreateEdgeIndexReq', 'DropEdgeIndexReq', 'GetEdgeIndexReq', 'GetEdgeIndexResp', 'ListEdgeIndexesReq', 'ListEdgeIndexesResp', 'RebuildIndexReq', 'CreateUserReq', 'DropUserReq', 'AlterUserReq', 'GrantRoleReq', 'RevokeRoleReq', 'ListUsersReq', 'ListUsersResp', 'ListRolesReq', 'ListRolesResp', 'GetUserRolesReq', 'ChangePasswordReq', 'BalanceReq', 'BalanceTask', 'BalanceResp', 'LeaderBalanceReq', 'ConfigItem', 'RegConfigReq', 'GetConfigReq', 'GetConfigResp', 'SetConfigReq', 'ListConfigsReq', 'ListConfigsResp', 'CreateSnapshotReq', 'DropSnapshotReq', 'ListSnapshotsReq', 'Snapshot', 'ListSnapshotsResp', 'ListIndexStatusReq', 'IndexStatus', 'ListIndexStatusResp', 'AddZoneReq', 'DropZoneReq', 'AddHostIntoZoneReq', 'DropHostFromZoneReq', 'GetZoneReq', 'GetZoneResp', 'ListZonesReq', 'Zone', 'ListZonesResp', 'AddGroupReq', 'DropGroupReq', 'AddZoneIntoGroupReq', 'DropZoneFromGroupReq', 'GetGroupReq', 'GetGroupResp', 'ListGroupsReq', 'Group', 'ListGroupsResp', 'AddListenerReq', 'RemoveListenerReq', 'ListListenerReq', 'ListenerInfo', 'ListListenerResp', 'GetStatsReq', 'GetStatsResp', 'BackupInfo', 'SpaceBackupInfo', 'BackupMeta', 'CreateBackupReq', 'CreateBackupResp', 'HostPair', 'RestoreMetaReq', 'FTClient', 'SignInFTServiceReq', 'SignOutFTServiceReq', 'ListFTClientsReq', 'ListFTClientsResp', 'FTIndex', 'CreateFTIndexReq', 'DropFTIndexReq', 'ListFTIndexesReq', 'ListFTIndexesResp', 'QueryDesc', 'Session', 'CreateSessionReq', 'CreateSessionResp', 'UpdateSessionsReq', 'UpdateSessionsResp', 'ListSessionsReq', 'ListSessionsResp', 'GetSessionReq', 'GetSessionResp', 'RemoveSessionReq', 'KillQueryReq', 'ReportTaskReq', 'ListClusterInfoResp', 'ListClusterInfoReq', 'GetMetaDirInfoResp', 'GetMetaDirInfoReq', 'VerifyClientVersionResp', 'VerifyClientVersionReq', 'SchemaVer', 'ClusterID']
 
 class AlterSchemaOp:
   ADD = 1
@@ -76,6 +76,26 @@ class RoleType:
     "GUEST": 5,
   }
 
+class GeoShape:
+  ANY = 0
+  POINT = 1
+  LINESTRING = 2
+  POLYGON = 3
+
+  _VALUES_TO_NAMES = {
+    0: "ANY",
+    1: "POINT",
+    2: "LINESTRING",
+    3: "POLYGON",
+  }
+
+  _NAMES_TO_VALUES = {
+    "ANY": 0,
+    "POINT": 1,
+    "LINESTRING": 2,
+    "POLYGON": 3,
+  }
+
 class PropertyType:
   UNKNOWN = 0
   BOOL = 1
@@ -92,6 +112,7 @@ class PropertyType:
   DATE = 24
   DATETIME = 25
   TIME = 26
+  GEOGRAPHY = 31
 
   _VALUES_TO_NAMES = {
     0: "UNKNOWN",
@@ -109,6 +130,7 @@ class PropertyType:
     24: "DATE",
     25: "DATETIME",
     26: "TIME",
+    31: "GEOGRAPHY",
   }
 
   _NAMES_TO_VALUES = {
@@ -127,6 +149,7 @@ class PropertyType:
     "DATE": 24,
     "DATETIME": 25,
     "TIME": 26,
+    "GEOGRAPHY": 31,
   }
 
 class IsolationLevel:
@@ -603,6 +626,7 @@ class ColumnTypeDef:
   Attributes:
    - type
    - type_length
+   - geo_shape
   """
 
   thrift_spec = None
@@ -635,6 +659,11 @@ class ColumnTypeDef:
           self.type_length = iprot.readI16()
         else:
           iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.geo_shape = iprot.readI32()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -656,6 +685,10 @@ class ColumnTypeDef:
       oprot.writeFieldBegin('type_length', TType.I16, 2)
       oprot.writeI16(self.type_length)
       oprot.writeFieldEnd()
+    if self.geo_shape != None:
+      oprot.writeFieldBegin('geo_shape', TType.I32, 3)
+      oprot.writeI32(self.geo_shape)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -670,6 +703,10 @@ class ColumnTypeDef:
       value = pprint.pformat(self.type_length, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    type_length=%s' % (value))
+    if self.geo_shape is not None:
+      value = pprint.pformat(self.geo_shape, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    geo_shape=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -1701,120 +1738,6 @@ class EdgeItem:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class SchemaID(object):
-  """
-  Attributes:
-   - tag_id
-   - edge_type
-  """
-
-  thrift_spec = None
-  __init__ = None
-
-  __EMPTY__ = 0
-  TAG_ID = 1
-  EDGE_TYPE = 2
-  
-  @staticmethod
-  def isUnion():
-    return True
-
-  def get_tag_id(self):
-    assert self.field == 1
-    return self.value
-
-  def get_edge_type(self):
-    assert self.field == 2
-    return self.value
-
-  def set_tag_id(self, value):
-    self.field = 1
-    self.value = value
-
-  def set_edge_type(self, value):
-    self.field = 2
-    self.value = value
-
-  def getType(self):
-    return self.field
-
-  def __repr__(self):
-    value = pprint.pformat(self.value)
-    member = ''
-    if self.field == 1:
-      padding = ' ' * 7
-      value = padding.join(value.splitlines(True))
-      member = '\n    %s=%s' % ('tag_id', value)
-    if self.field == 2:
-      padding = ' ' * 10
-      value = padding.join(value.splitlines(True))
-      member = '\n    %s=%s' % ('edge_type', value)
-    return "%s(%s)" % (self.__class__.__name__, member)
-
-  def read(self, iprot):
-    self.field = 0
-    self.value = None
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-
-      if fid == 1:
-        if ftype == TType.I32:
-          tag_id = iprot.readI32()
-          assert self.field == 0 and self.value is None
-          self.set_tag_id(tag_id)
-        else:
-          iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.I32:
-          edge_type = iprot.readI32()
-          assert self.field == 0 and self.value is None
-          self.set_edge_type(edge_type)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, True], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeUnionBegin('SchemaID')
-    if self.field == 1:
-      oprot.writeFieldBegin('tag_id', TType.I32, 1)
-      tag_id = self.value
-      oprot.writeI32(tag_id)
-      oprot.writeFieldEnd()
-    if self.field == 2:
-      oprot.writeFieldBegin('edge_type', TType.I32, 2)
-      edge_type = self.value
-      oprot.writeI32(edge_type)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeUnionEnd()
-  
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__
-
-  def __ne__(self, other):
-    return not (self == other)
-
 class IndexItem:
   """
   Attributes:
@@ -1858,7 +1781,7 @@ class IndexItem:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRUCT:
-          self.schema_id = SchemaID()
+          self.schema_id = nebula2.common.ttypes.SchemaID()
           self.schema_id.read(iprot)
         else:
           iprot.skip(ftype)
@@ -3320,7 +3243,7 @@ class Correlativity:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class StatisItem:
+class StatsItem:
   """
   Attributes:
    - tag_vertices
@@ -3495,7 +3418,7 @@ class StatisItem:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('StatisItem')
+    oprot.writeStructBegin('StatsItem')
     if self.tag_vertices != None:
       oprot.writeFieldBegin('tag_vertices', TType.MAP, 1)
       oprot.writeMapBegin(TType.STRING, TType.I64, len(self.tag_vertices))
@@ -3668,6 +3591,93 @@ class CreateSpaceReq:
       value = pprint.pformat(self.if_not_exists, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    if_not_exists=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class CreateSpaceAsReq:
+  """
+  Attributes:
+   - old_space_name
+   - new_space_name
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.old_space_name = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.new_space_name = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('CreateSpaceAsReq')
+    if self.old_space_name != None:
+      oprot.writeFieldBegin('old_space_name', TType.STRING, 1)
+      oprot.writeString(self.old_space_name)
+      oprot.writeFieldEnd()
+    if self.new_space_name != None:
+      oprot.writeFieldBegin('new_space_name', TType.STRING, 2)
+      oprot.writeString(self.new_space_name)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.old_space_name is not None:
+      value = pprint.pformat(self.old_space_name, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    old_space_name=%s' % (value))
+    if self.new_space_name is not None:
+      value = pprint.pformat(self.new_space_name, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    new_space_name=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -7320,6 +7330,7 @@ class HBResp:
    - leader
    - cluster_id
    - last_update_time_in_ms
+   - meta_version
   """
 
   thrift_spec = None
@@ -7363,6 +7374,11 @@ class HBResp:
           self.last_update_time_in_ms = iprot.readI64()
         else:
           iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.I32:
+          self.meta_version = iprot.readI32()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -7392,6 +7408,10 @@ class HBResp:
       oprot.writeFieldBegin('last_update_time_in_ms', TType.I64, 4)
       oprot.writeI64(self.last_update_time_in_ms)
       oprot.writeFieldEnd()
+    if self.meta_version != None:
+      oprot.writeFieldBegin('meta_version', TType.I32, 5)
+      oprot.writeI32(self.meta_version)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -7414,6 +7434,10 @@ class HBResp:
       value = pprint.pformat(self.last_update_time_in_ms, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    last_update_time_in_ms=%s' % (value))
+    if self.meta_version is not None:
+      value = pprint.pformat(self.meta_version, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    meta_version=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -14014,7 +14038,7 @@ class ListListenerResp:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class GetStatisReq:
+class GetStatsReq:
   """
   Attributes:
    - space_id
@@ -14057,7 +14081,7 @@ class GetStatisReq:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('GetStatisReq')
+    oprot.writeStructBegin('GetStatsReq')
     if self.space_id != None:
       oprot.writeFieldBegin('space_id', TType.I32, 1)
       oprot.writeI32(self.space_id)
@@ -14087,12 +14111,12 @@ class GetStatisReq:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class GetStatisResp:
+class GetStatsResp:
   """
   Attributes:
    - code
    - leader
-   - statis
+   - stats
   """
 
   thrift_spec = None
@@ -14128,8 +14152,8 @@ class GetStatisResp:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRUCT:
-          self.statis = StatisItem()
-          self.statis.read(iprot)
+          self.stats = StatsItem()
+          self.stats.read(iprot)
         else:
           iprot.skip(ftype)
       else:
@@ -14144,7 +14168,7 @@ class GetStatisResp:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('GetStatisResp')
+    oprot.writeStructBegin('GetStatsResp')
     if self.code != None:
       oprot.writeFieldBegin('code', TType.I32, 1)
       oprot.writeI32(self.code)
@@ -14153,9 +14177,9 @@ class GetStatisResp:
       oprot.writeFieldBegin('leader', TType.STRUCT, 2)
       self.leader.write(oprot)
       oprot.writeFieldEnd()
-    if self.statis != None:
-      oprot.writeFieldBegin('statis', TType.STRUCT, 3)
-      self.statis.write(oprot)
+    if self.stats != None:
+      oprot.writeFieldBegin('stats', TType.STRUCT, 3)
+      self.stats.write(oprot)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -14171,10 +14195,10 @@ class GetStatisResp:
       value = pprint.pformat(self.leader, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    leader=%s' % (value))
-    if self.statis is not None:
-      value = pprint.pformat(self.statis, indent=0)
+    if self.stats is not None:
+      value = pprint.pformat(self.stats, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    statis=%s' % (value))
+      L.append('    stats=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -15429,7 +15453,7 @@ class FTIndex:
           iprot.skip(ftype)
       elif fid == 2:
         if ftype == TType.STRUCT:
-          self.depend_schema = SchemaID()
+          self.depend_schema = nebula2.common.ttypes.SchemaID()
           self.depend_schema.read(iprot)
         else:
           iprot.skip(ftype)
@@ -17207,7 +17231,7 @@ class ReportTaskReq:
    - code
    - job_id
    - task_id
-   - statis
+   - stats
   """
 
   thrift_spec = None
@@ -17247,8 +17271,8 @@ class ReportTaskReq:
           iprot.skip(ftype)
       elif fid == 4:
         if ftype == TType.STRUCT:
-          self.statis = StatisItem()
-          self.statis.read(iprot)
+          self.stats = StatsItem()
+          self.stats.read(iprot)
         else:
           iprot.skip(ftype)
       else:
@@ -17276,9 +17300,9 @@ class ReportTaskReq:
       oprot.writeFieldBegin('task_id', TType.I32, 3)
       oprot.writeI32(self.task_id)
       oprot.writeFieldEnd()
-    if self.statis != None:
-      oprot.writeFieldBegin('statis', TType.STRUCT, 4)
-      self.statis.write(oprot)
+    if self.stats != None:
+      oprot.writeFieldBegin('stats', TType.STRUCT, 4)
+      self.stats.write(oprot)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -17298,10 +17322,10 @@ class ReportTaskReq:
       value = pprint.pformat(self.task_id, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    task_id=%s' % (value))
-    if self.statis is not None:
-      value = pprint.pformat(self.statis, indent=0)
+    if self.stats is not None:
+      value = pprint.pformat(self.stats, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    statis=%s' % (value))
+      L.append('    stats=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -17661,6 +17685,181 @@ class GetMetaDirInfoReq:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class VerifyClientVersionResp:
+  """
+  Attributes:
+   - code
+   - leader
+   - error_msg
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I32:
+          self.code = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRUCT:
+          self.leader = nebula2.common.ttypes.HostAddr()
+          self.leader.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.error_msg = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('VerifyClientVersionResp')
+    if self.code != None:
+      oprot.writeFieldBegin('code', TType.I32, 1)
+      oprot.writeI32(self.code)
+      oprot.writeFieldEnd()
+    if self.leader != None:
+      oprot.writeFieldBegin('leader', TType.STRUCT, 2)
+      self.leader.write(oprot)
+      oprot.writeFieldEnd()
+    if self.error_msg != None:
+      oprot.writeFieldBegin('error_msg', TType.STRING, 3)
+      oprot.writeString(self.error_msg)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.code is not None:
+      value = pprint.pformat(self.code, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    code=%s' % (value))
+    if self.leader is not None:
+      value = pprint.pformat(self.leader, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    leader=%s' % (value))
+    if self.error_msg is not None:
+      value = pprint.pformat(self.error_msg, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    error_msg=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class VerifyClientVersionReq:
+  """
+  Attributes:
+   - version
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.version = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('VerifyClientVersionReq')
+    if self.version != None:
+      oprot.writeFieldBegin('version', TType.STRING, 1)
+      oprot.writeString(self.version)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.version is not None:
+      value = pprint.pformat(self.version, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    version=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
 SchemaVer = UnimplementedTypedef()
 ClusterID = UnimplementedTypedef()
 all_structs.append(ID)
@@ -17709,6 +17908,7 @@ ColumnTypeDef.thrift_spec = (
   None, # 0
   (1, TType.I32, 'type', PropertyType, None, 0, ), # 1
   (2, TType.I16, 'type_length', None, 0, 1, ), # 2
+  (3, TType.I32, 'geo_shape', GeoShape, None, 1, ), # 3
 )
 
 ColumnTypeDef.thrift_struct_annotations = {
@@ -17716,15 +17916,17 @@ ColumnTypeDef.thrift_struct_annotations = {
 ColumnTypeDef.thrift_field_annotations = {
 }
 
-def ColumnTypeDef__init__(self, type=None, type_length=ColumnTypeDef.thrift_spec[2][4],):
+def ColumnTypeDef__init__(self, type=None, type_length=ColumnTypeDef.thrift_spec[2][4], geo_shape=None,):
   self.type = type
   self.type_length = type_length
+  self.geo_shape = geo_shape
 
 ColumnTypeDef.__init__ = ColumnTypeDef__init__
 
 def ColumnTypeDef__setstate__(self, state):
   state.setdefault('type', None)
   state.setdefault('type_length', 0)
+  state.setdefault('geo_shape', None)
   self.__dict__ = state
 
 ColumnTypeDef.__getstate__ = lambda self: self.__dict__.copy()
@@ -18020,38 +18222,12 @@ def EdgeItem__setstate__(self, state):
 EdgeItem.__getstate__ = lambda self: self.__dict__.copy()
 EdgeItem.__setstate__ = EdgeItem__setstate__
 
-all_structs.append(SchemaID)
-SchemaID.thrift_spec = (
-  None, # 0
-  (1, TType.I32, 'tag_id', None, None, 2, ), # 1
-  (2, TType.I32, 'edge_type', None, None, 2, ), # 2
-)
-
-SchemaID.thrift_struct_annotations = {
-}
-SchemaID.thrift_field_annotations = {
-}
-
-def SchemaID__init__(self, tag_id=None, edge_type=None,):
-  self.field = 0
-  self.value = None
-  if tag_id is not None:
-    assert self.field == 0 and self.value is None
-    self.field = 1
-    self.value = tag_id
-  if edge_type is not None:
-    assert self.field == 0 and self.value is None
-    self.field = 2
-    self.value = edge_type
-
-SchemaID.__init__ = SchemaID__init__
-
 all_structs.append(IndexItem)
 IndexItem.thrift_spec = (
   None, # 0
   (1, TType.I32, 'index_id', None, None, 2, ), # 1
   (2, TType.STRING, 'index_name', False, None, 2, ), # 2
-  (3, TType.STRUCT, 'schema_id', [SchemaID, SchemaID.thrift_spec, True], None, 2, ), # 3
+  (3, TType.STRUCT, 'schema_id', [nebula2.common.ttypes.SchemaID, nebula2.common.ttypes.SchemaID.thrift_spec, True], None, 2, ), # 3
   (4, TType.STRING, 'schema_name', False, None, 2, ), # 4
   (5, TType.LIST, 'fields', (TType.STRUCT,[ColumnDef, ColumnDef.thrift_spec, False]), None, 2, ), # 5
   (6, TType.STRING, 'comment', False, None, 1, ), # 6
@@ -18416,8 +18592,8 @@ def Correlativity__setstate__(self, state):
 Correlativity.__getstate__ = lambda self: self.__dict__.copy()
 Correlativity.__setstate__ = Correlativity__setstate__
 
-all_structs.append(StatisItem)
-StatisItem.thrift_spec = (
+all_structs.append(StatsItem)
+StatsItem.thrift_spec = (
   None, # 0
   (1, TType.MAP, 'tag_vertices', (TType.STRING,False,TType.I64,None), None, 2, ), # 1
   (2, TType.MAP, 'edges', (TType.STRING,False,TType.I64,None), None, 2, ), # 2
@@ -18428,12 +18604,12 @@ StatisItem.thrift_spec = (
   (7, TType.I32, 'status', JobStatus, None, 2, ), # 7
 )
 
-StatisItem.thrift_struct_annotations = {
+StatsItem.thrift_struct_annotations = {
 }
-StatisItem.thrift_field_annotations = {
+StatsItem.thrift_field_annotations = {
 }
 
-def StatisItem__init__(self, tag_vertices=None, edges=None, space_vertices=None, space_edges=None, positive_part_correlativity=None, negative_part_correlativity=None, status=None,):
+def StatsItem__init__(self, tag_vertices=None, edges=None, space_vertices=None, space_edges=None, positive_part_correlativity=None, negative_part_correlativity=None, status=None,):
   self.tag_vertices = tag_vertices
   self.edges = edges
   self.space_vertices = space_vertices
@@ -18442,9 +18618,9 @@ def StatisItem__init__(self, tag_vertices=None, edges=None, space_vertices=None,
   self.negative_part_correlativity = negative_part_correlativity
   self.status = status
 
-StatisItem.__init__ = StatisItem__init__
+StatsItem.__init__ = StatsItem__init__
 
-def StatisItem__setstate__(self, state):
+def StatsItem__setstate__(self, state):
   state.setdefault('tag_vertices', None)
   state.setdefault('edges', None)
   state.setdefault('space_vertices', None)
@@ -18454,8 +18630,8 @@ def StatisItem__setstate__(self, state):
   state.setdefault('status', None)
   self.__dict__ = state
 
-StatisItem.__getstate__ = lambda self: self.__dict__.copy()
-StatisItem.__setstate__ = StatisItem__setstate__
+StatsItem.__getstate__ = lambda self: self.__dict__.copy()
+StatsItem.__setstate__ = StatsItem__setstate__
 
 all_structs.append(CreateSpaceReq)
 CreateSpaceReq.thrift_spec = (
@@ -18482,6 +18658,32 @@ def CreateSpaceReq__setstate__(self, state):
 
 CreateSpaceReq.__getstate__ = lambda self: self.__dict__.copy()
 CreateSpaceReq.__setstate__ = CreateSpaceReq__setstate__
+
+all_structs.append(CreateSpaceAsReq)
+CreateSpaceAsReq.thrift_spec = (
+  None, # 0
+  (1, TType.STRING, 'old_space_name', False, None, 2, ), # 1
+  (2, TType.STRING, 'new_space_name', False, None, 2, ), # 2
+)
+
+CreateSpaceAsReq.thrift_struct_annotations = {
+}
+CreateSpaceAsReq.thrift_field_annotations = {
+}
+
+def CreateSpaceAsReq__init__(self, old_space_name=None, new_space_name=None,):
+  self.old_space_name = old_space_name
+  self.new_space_name = new_space_name
+
+CreateSpaceAsReq.__init__ = CreateSpaceAsReq__init__
+
+def CreateSpaceAsReq__setstate__(self, state):
+  state.setdefault('old_space_name', None)
+  state.setdefault('new_space_name', None)
+  self.__dict__ = state
+
+CreateSpaceAsReq.__getstate__ = lambda self: self.__dict__.copy()
+CreateSpaceAsReq.__setstate__ = CreateSpaceAsReq__setstate__
 
 all_structs.append(DropSpaceReq)
 DropSpaceReq.thrift_spec = (
@@ -19455,6 +19657,7 @@ HBResp.thrift_spec = (
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
   (3, TType.I64, 'cluster_id', None, None, 2, ), # 3
   (4, TType.I64, 'last_update_time_in_ms', None, None, 2, ), # 4
+  (5, TType.I32, 'meta_version', None, None, 2, ), # 5
 )
 
 HBResp.thrift_struct_annotations = {
@@ -19462,11 +19665,12 @@ HBResp.thrift_struct_annotations = {
 HBResp.thrift_field_annotations = {
 }
 
-def HBResp__init__(self, code=None, leader=None, cluster_id=None, last_update_time_in_ms=None,):
+def HBResp__init__(self, code=None, leader=None, cluster_id=None, last_update_time_in_ms=None, meta_version=None,):
   self.code = code
   self.leader = leader
   self.cluster_id = cluster_id
   self.last_update_time_in_ms = last_update_time_in_ms
+  self.meta_version = meta_version
 
 HBResp.__init__ = HBResp__init__
 
@@ -19475,6 +19679,7 @@ def HBResp__setstate__(self, state):
   state.setdefault('leader', None)
   state.setdefault('cluster_id', None)
   state.setdefault('last_update_time_in_ms', None)
+  state.setdefault('meta_version', None)
   self.__dict__ = state
 
 HBResp.__getstate__ = lambda self: self.__dict__.copy()
@@ -21250,57 +21455,57 @@ def ListListenerResp__setstate__(self, state):
 ListListenerResp.__getstate__ = lambda self: self.__dict__.copy()
 ListListenerResp.__setstate__ = ListListenerResp__setstate__
 
-all_structs.append(GetStatisReq)
-GetStatisReq.thrift_spec = (
+all_structs.append(GetStatsReq)
+GetStatsReq.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
 )
 
-GetStatisReq.thrift_struct_annotations = {
+GetStatsReq.thrift_struct_annotations = {
 }
-GetStatisReq.thrift_field_annotations = {
+GetStatsReq.thrift_field_annotations = {
 }
 
-def GetStatisReq__init__(self, space_id=None,):
+def GetStatsReq__init__(self, space_id=None,):
   self.space_id = space_id
 
-GetStatisReq.__init__ = GetStatisReq__init__
+GetStatsReq.__init__ = GetStatsReq__init__
 
-def GetStatisReq__setstate__(self, state):
+def GetStatsReq__setstate__(self, state):
   state.setdefault('space_id', None)
   self.__dict__ = state
 
-GetStatisReq.__getstate__ = lambda self: self.__dict__.copy()
-GetStatisReq.__setstate__ = GetStatisReq__setstate__
+GetStatsReq.__getstate__ = lambda self: self.__dict__.copy()
+GetStatsReq.__setstate__ = GetStatsReq__setstate__
 
-all_structs.append(GetStatisResp)
-GetStatisResp.thrift_spec = (
+all_structs.append(GetStatsResp)
+GetStatsResp.thrift_spec = (
   None, # 0
   (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
-  (3, TType.STRUCT, 'statis', [StatisItem, StatisItem.thrift_spec, False], None, 2, ), # 3
+  (3, TType.STRUCT, 'stats', [StatsItem, StatsItem.thrift_spec, False], None, 2, ), # 3
 )
 
-GetStatisResp.thrift_struct_annotations = {
+GetStatsResp.thrift_struct_annotations = {
 }
-GetStatisResp.thrift_field_annotations = {
+GetStatsResp.thrift_field_annotations = {
 }
 
-def GetStatisResp__init__(self, code=None, leader=None, statis=None,):
+def GetStatsResp__init__(self, code=None, leader=None, stats=None,):
   self.code = code
   self.leader = leader
-  self.statis = statis
+  self.stats = stats
 
-GetStatisResp.__init__ = GetStatisResp__init__
+GetStatsResp.__init__ = GetStatsResp__init__
 
-def GetStatisResp__setstate__(self, state):
+def GetStatsResp__setstate__(self, state):
   state.setdefault('code', None)
   state.setdefault('leader', None)
-  state.setdefault('statis', None)
+  state.setdefault('stats', None)
   self.__dict__ = state
 
-GetStatisResp.__getstate__ = lambda self: self.__dict__.copy()
-GetStatisResp.__setstate__ = GetStatisResp__setstate__
+GetStatsResp.__getstate__ = lambda self: self.__dict__.copy()
+GetStatsResp.__setstate__ = GetStatsResp__setstate__
 
 all_structs.append(BackupInfo)
 BackupInfo.thrift_spec = (
@@ -21602,7 +21807,7 @@ all_structs.append(FTIndex)
 FTIndex.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
-  (2, TType.STRUCT, 'depend_schema', [SchemaID, SchemaID.thrift_spec, True], None, 2, ), # 2
+  (2, TType.STRUCT, 'depend_schema', [nebula2.common.ttypes.SchemaID, nebula2.common.ttypes.SchemaID.thrift_spec, True], None, 2, ), # 2
   (3, TType.LIST, 'fields', (TType.STRING,False), None, 2, ), # 3
 )
 
@@ -22054,7 +22259,7 @@ ReportTaskReq.thrift_spec = (
   (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
   (2, TType.I32, 'job_id', None, None, 2, ), # 2
   (3, TType.I32, 'task_id', None, None, 2, ), # 3
-  (4, TType.STRUCT, 'statis', [StatisItem, StatisItem.thrift_spec, False], None, 1, ), # 4
+  (4, TType.STRUCT, 'stats', [StatsItem, StatsItem.thrift_spec, False], None, 1, ), # 4
 )
 
 ReportTaskReq.thrift_struct_annotations = {
@@ -22062,11 +22267,11 @@ ReportTaskReq.thrift_struct_annotations = {
 ReportTaskReq.thrift_field_annotations = {
 }
 
-def ReportTaskReq__init__(self, code=None, job_id=None, task_id=None, statis=None,):
+def ReportTaskReq__init__(self, code=None, job_id=None, task_id=None, stats=None,):
   self.code = code
   self.job_id = job_id
   self.task_id = task_id
-  self.statis = statis
+  self.stats = stats
 
 ReportTaskReq.__init__ = ReportTaskReq__init__
 
@@ -22074,7 +22279,7 @@ def ReportTaskReq__setstate__(self, state):
   state.setdefault('code', None)
   state.setdefault('job_id', None)
   state.setdefault('task_id', None)
-  state.setdefault('statis', None)
+  state.setdefault('stats', None)
   self.__dict__ = state
 
 ReportTaskReq.__getstate__ = lambda self: self.__dict__.copy()
@@ -22155,6 +22360,58 @@ GetMetaDirInfoReq.thrift_struct_annotations = {
 }
 GetMetaDirInfoReq.thrift_field_annotations = {
 }
+
+all_structs.append(VerifyClientVersionResp)
+VerifyClientVersionResp.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'code', nebula2.common.ttypes.ErrorCode, None, 2, ), # 1
+  (2, TType.STRUCT, 'leader', [nebula2.common.ttypes.HostAddr, nebula2.common.ttypes.HostAddr.thrift_spec, False], None, 2, ), # 2
+  (3, TType.STRING, 'error_msg', False, None, 1, ), # 3
+)
+
+VerifyClientVersionResp.thrift_struct_annotations = {
+}
+VerifyClientVersionResp.thrift_field_annotations = {
+}
+
+def VerifyClientVersionResp__init__(self, code=None, leader=None, error_msg=None,):
+  self.code = code
+  self.leader = leader
+  self.error_msg = error_msg
+
+VerifyClientVersionResp.__init__ = VerifyClientVersionResp__init__
+
+def VerifyClientVersionResp__setstate__(self, state):
+  state.setdefault('code', None)
+  state.setdefault('leader', None)
+  state.setdefault('error_msg', None)
+  self.__dict__ = state
+
+VerifyClientVersionResp.__getstate__ = lambda self: self.__dict__.copy()
+VerifyClientVersionResp.__setstate__ = VerifyClientVersionResp__setstate__
+
+all_structs.append(VerifyClientVersionReq)
+VerifyClientVersionReq.thrift_spec = (
+  None, # 0
+  (1, TType.STRING, 'version', False, "2.6.0", 0, ), # 1
+)
+
+VerifyClientVersionReq.thrift_struct_annotations = {
+}
+VerifyClientVersionReq.thrift_field_annotations = {
+}
+
+def VerifyClientVersionReq__init__(self, version=VerifyClientVersionReq.thrift_spec[1][4],):
+  self.version = version
+
+VerifyClientVersionReq.__init__ = VerifyClientVersionReq__init__
+
+def VerifyClientVersionReq__setstate__(self, state):
+  state.setdefault('version', "2.6.0")
+  self.__dict__ = state
+
+VerifyClientVersionReq.__getstate__ = lambda self: self.__dict__.copy()
+VerifyClientVersionReq.__setstate__ = VerifyClientVersionReq__setstate__
 
 fix_spec(all_structs)
 del all_structs
