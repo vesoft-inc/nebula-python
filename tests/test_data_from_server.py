@@ -249,12 +249,19 @@ class TestBaseCase(TestCase):
 
 class TestExecuteJson(TestBaseCase):
     def test_basic_types(self):
-        resp = self.session.execute_json('YIELD 1, 2.2, "hello", [1,2,"abc"], {key: "value"}, "汉字"')
-        exp = [1, 2.2, "hello", [1,2,"abc"], {"key": "value"}, "汉字"]
+        resp = self.session.execute_json(
+            'YIELD 1, 2.2, "hello", [1,2,"abc"], {key: "value"}, "汉字"')
+        exp = [1, 2.2, "hello", [1, 2, "abc"], {"key": "value"}, "汉字"]
         json_obj = json.loads(resp)
+
+	# Get errorcode
+        resp_error_code = json_obj["errors"][0]["code"]
+        assert 0 == resp_error_code
+
+        # Get data
         assert exp == json_obj["results"][0]["data"][0]["row"]
 
-        #Get space name
+        # Get space name
         respSpace = json_obj["results"][0]["spaceName"]
         assert "test_data" == respSpace
 
@@ -285,10 +292,10 @@ class TestExecuteJson(TestBaseCase):
 
         json_obj = json.loads(resp)
 
-        error_code = "E_SEMANTIC_ERROR"
-        resp_error_code = json_obj["results"][0]["errors"]["errorCode"]
+        error_code = -1009
+        resp_error_code = json_obj["errors"][0]["code"]
         assert error_code == resp_error_code
 
         error_msg = "SemanticError: `invalidTag': Unknown tag"
-        resp_error_msg = json_obj["results"][0]["errors"]["errorMsg"]
+        resp_error_msg = json_obj["errors"][0]["message"]
         assert error_msg == resp_error_msg
