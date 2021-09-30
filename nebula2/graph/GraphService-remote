@@ -45,7 +45,9 @@ FUNCTIONS = {
     'authenticate': Function('authenticate', 'GraphService', 'AuthResponse', [('binary', 'username', 'binary'), ('binary', 'password', 'binary')]),
     'signout': Function('signout', 'GraphService', None, [('i64', 'sessionId', 'i64')]),
     'execute': Function('execute', 'GraphService', 'ExecutionResponse', [('i64', 'sessionId', 'i64'), ('binary', 'stmt', 'binary')]),
+    'executeWithParameter': Function('executeWithParameter', 'GraphService', 'ExecutionResponse', [('i64', 'sessionId', 'i64'), ('binary', 'stmt', 'binary'), ('map<binary, common.Value>', 'parameterMap', 'map<binary, common.Value>')]),
     'executeJson': Function('executeJson', 'GraphService', 'binary', [('i64', 'sessionId', 'i64'), ('binary', 'stmt', 'binary')]),
+    'executeJsonWithParameter': Function('executeJsonWithParameter', 'GraphService', 'binary', [('i64', 'sessionId', 'i64'), ('binary', 'stmt', 'binary'), ('map<binary, common.Value>', 'parameterMap', 'map<binary, common.Value>')]),
 }
 
 SERVICE_NAMES = ['GraphService', ]

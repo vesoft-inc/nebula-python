@@ -69,8 +69,8 @@ async def ThriftAsyncServerFactory(
     ssl is an instance of ssl.SSLContext. If None (default) or False SSL/TLS is
     not used.
 
-    event_handler must be a subclass of thrift.server.TServer. If None,
-    thrift.server.TServer.TServerEventHandler is used. Specify a custom handler
+    event_handler must be a subclass of nebula2.fbthrift.server.TServer. If None,
+    nebula2.fbthrift.server.TServer.TServerEventHandler is used. Specify a custom handler
     for custom event handling (e.g. handling new connections)
 
     protocol_factory is a function that takes a triplet of
