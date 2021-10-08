@@ -8,7 +8,7 @@
 import logging
 import time
 
-from nebula2.fbthrift.transport import TSocket, TTransport
+from nebula2.fbthrift.transport import TSocket, TTransport, TSSLSocket
 from nebula2.fbthrift.transport.TTransport import TTransportException
 from nebula2.fbthrift.protocol import TBinaryProtocol
 
@@ -57,6 +57,37 @@ class Connection(object):
         if resp.error_code != ErrorCode.SUCCEEDED:
             self._connection._iprot.trans.close()
             raise ClientServerIncompatibleException(resp.error_msg)
+
+    def open_SSL(self, ip, port, timeout, ssl_config):
+        """open the SSL connection
+
+        :param ip: the server ip
+        :param port: the server port
+        :param timeout: the timeout for connect and execute
+        :ssl_config: configs for SSL
+        :return: void
+        """
+        self._ip = ip
+        self._port = port
+        self._timeout = timeout
+        try:
+            s = TSSLSocket.TSSLSocket(self._ip, self._port,
+                                      ssl_config.unix_socket,
+                                      ssl_config.ssl_version,
+                                      ssl_config.cert_reqs,
+                                      ssl_config.ca_certs,
+                                      ssl_config.verify_name,
+                                      ssl_config.keyfile,
+                                      ssl_config.certfile,
+                                      ssl_config.allow_weak_ssl_versions)
+            if timeout > 0:
+                s.setTimeout(timeout)
+            transport = TTransport.TBufferedTransport(s)
+            protocol = TBinaryProtocol.TBinaryProtocol(transport)
+            transport.open()
+            self._connection = GraphService.Client(protocol)
+        except Exception:
+            raise
 
     def _reopen(self):
         """reopen the connection

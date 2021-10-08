@@ -72,13 +72,60 @@ class ConnectionPool(object):
         # init min connections
         ok_num = self.get_ok_servers_num()
         if ok_num < len(self._addresses):
-            raise RuntimeError('The services status exception: {}'.format(self._get_services_status()))
+            raise RuntimeError('The services status exception: {}'.format(
+                self._get_services_status()))
 
-        conns_per_address = int(self._configs.min_connection_pool_size / ok_num)
+        conns_per_address = int(
+            self._configs.min_connection_pool_size / ok_num)
+
         for addr in self._addresses:
             for i in range(0, conns_per_address):
                 connection = Connection()
                 connection.open(addr[0], addr[1], self._configs.timeout)
+                self._connections[addr].append(connection)
+        return True
+
+    def init_SSL(self, addresses, configs, ssl_conf):
+        """init the connection pool using SSL socket
+
+        :param addresses: the graphd servers' addresses
+        :param configs: the config of the pool
+        :return: if all addresses are ok, return True else return False.
+        """
+        if self._close:
+            logging.error('The pool has init or closed.')
+            raise RuntimeError('The pool has init or closed.')
+        self._configs = configs
+        for address in addresses:
+            if address not in self._addresses:
+                try:
+                    ip = socket.gethostbyname(address[0])
+                except Exception:
+                    raise InValidHostname(str(address[0]))
+                ip_port = (ip, address[1])
+                self._addresses.append(ip_port)
+                self._addresses_status[ip_port] = self.S_BAD
+                self._connections[ip_port] = deque()
+
+        self.update_servers_status()
+
+        # detect the services
+        self._period_detect()
+
+        # init min connections
+        ok_num = self.get_ok_servers_num()
+        if ok_num < len(self._addresses):
+            raise RuntimeError('The services status exception: {}'.format(
+                self._get_services_status()))
+
+        conns_per_address = int(
+            self._configs.min_connection_pool_size / ok_num)
+
+        for addr in self._addresses:
+            for i in range(0, conns_per_address):
+                connection = Connection()
+                connection.open_SSL(
+                    addr[0], addr[1], self._configs.timeout, ssl_conf)
                 self._connections[addr].append(connection)
         return True
 
