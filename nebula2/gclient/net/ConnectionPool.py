@@ -90,6 +90,7 @@ class ConnectionPool(object):
 
         :param addresses: the graphd servers' addresses
         :param configs: the config of the pool
+        :param ssl_conf: the config of SSL socket
         :return: if all addresses are ok, return True else return False.
         """
         if self._close:

@@ -8,7 +8,6 @@
 
 import time
 import json
-import ssl
 
 from nebula2.gclient.net import ConnectionPool
 
@@ -20,22 +19,10 @@ if __name__ == '__main__':
     client = None
     try:
         config = Config()
-        ssl_config = SSL_config()
-        ssl_config.cert_reqs = ssl.CERT_REQUIRED
-        ssl_config.ca_certs = '../tests/secrets/test.ca.pem'
-        ssl_config.keyfile = '../tests/secrets/test.client.key'
-        ssl_config.certfile = '../tests/secrets/test.client.crt'
-
         config.max_connection_pool_size = 2
         # init connection pool
         connection_pool = ConnectionPool()
-        if ssl_config is None:
-            assert connection_pool.init(
-                [('127.0.0.1', 9562)], config)
-        else:
-            print("not none\n")
-            assert connection_pool.init_SSL(
-                [('127.0.0.1', 29562)], config, ssl_config)
+        assert connection_pool.init([('127.0.0.1', 9669)], config)
 
         # get session from the pool
         client = connection_pool.get_session('root', 'nebula')

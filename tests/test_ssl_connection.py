@@ -5,21 +5,20 @@
 #
 # This source code is licensed under Apache 2.0 License,
 # attached with Common Clause Condition 1.0, found in the LICENSES directory.
-
-from nebula2.Exception import IOErrorException
-from nebula2.common import ttypes
-from nebula2.gclient.net import Connection
-from nebula2.Config import SSL_config
-from unittest import TestCase
 import sys
 import os
 import time
 import ssl
 
-
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
+
+from unittest import TestCase
+from nebula2.Exception import IOErrorException
+from nebula2.common import ttypes
+from nebula2.gclient.net import Connection
+from nebula2.Config import SSL_config
 
 # set SSL config
 ssl_config = SSL_config()
@@ -29,8 +28,7 @@ ssl_config.keyfile = os.path.join(current_dir, 'secrets/test.client.key')
 ssl_config.certfile = os.path.join(current_dir, 'secrets/test.client.crt')
 
 host = '127.0.0.1'
-port = 29562
-
+port = 9669
 
 class TestSSLConnection(TestCase):
     def test_create(self):

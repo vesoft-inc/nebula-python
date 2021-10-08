@@ -29,12 +29,13 @@ jobs:
     - name: Test with pytest
       run: |
         docker-compose up -d
-        sleep 60
-        pytest -s -v
+        sleep 30
+        pytest -s -v -k "not TestSSLConnection"
+        docker-compose down -v
       working-directory: tests
     - name: Test SSL connection with pytest
       run: |
         enable_ssl=true docker-compose up -d
-        sleep 20
+        sleep 30
         pytest -s -v test_ssl_connection.py
       working-directory: tests
