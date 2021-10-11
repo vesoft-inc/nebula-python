@@ -230,7 +230,6 @@ class ConnectionPool(object):
         """
         try:
             conn = Connection()
-            conn.open(address[0], address[1], 1000)
             if self._ssl_configs is None:
                 conn.open(address[0], address[1], 1000)
             else:
