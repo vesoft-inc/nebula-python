@@ -35,6 +35,7 @@ class ConnectionPool(object):
         # all connections
         self._connections = dict()
         self._configs = None
+        self._ssl_configs = None
         self._lock = RLock()
         self._pos = -1
         self._close = False
@@ -97,6 +98,7 @@ class ConnectionPool(object):
             logging.error('The pool has init or closed.')
             raise RuntimeError('The pool has init or closed.')
         self._configs = configs
+        self._ssl_configs = ssl_conf
         for address in addresses:
             if address not in self._addresses:
                 try:
@@ -126,7 +128,7 @@ class ConnectionPool(object):
             for i in range(0, conns_per_address):
                 connection = Connection()
                 connection.open_SSL(
-                    addr[0], addr[1], self._configs.timeout, ssl_conf)
+                    addr[0], addr[1], self._configs.timeout, self._ssl_configs)
                 self._connections[addr].append(connection)
         return True
 
@@ -200,7 +202,12 @@ class ConnectionPool(object):
 
                         if len(self._connections[addr]) < max_con_per_address:
                             connection = Connection()
-                            connection.open(addr[0], addr[1], self._configs.timeout)
+                            if self._ssl_configs is None:
+                                connection.open(
+                                    addr[0], addr[1], self._configs.timeout)
+                            else:
+                                connection.open_SSL(
+                                    addr[0], addr[1], self._configs.timeout, self._ssl_configs)
                             connection.is_used = True
                             self._connections[addr].append(connection)
                             logging.info('Get connection to {}'.format(addr))
@@ -224,6 +231,10 @@ class ConnectionPool(object):
         try:
             conn = Connection()
             conn.open(address[0], address[1], 1000)
+            if self._ssl_configs is None:
+                conn.open(address[0], address[1], 1000)
+            else:
+                conn.open_SSL(address[0], address[1], 1000, self._ssl_configs)
             conn.close()
             return True
         except Exception as ex:
