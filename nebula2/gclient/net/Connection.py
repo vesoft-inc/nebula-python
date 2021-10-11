@@ -14,10 +14,12 @@ from nebula2.fbthrift.protocol import TBinaryProtocol
 
 from nebula2.common.ttypes import ErrorCode
 from nebula2.graph import GraphService
+from nebula2.graph.ttypes import VerifyClientVersionReq
 
 from nebula2.Exception import (
     AuthFailedException,
     IOErrorException,
+    ClientServerIncompatibleException,
 )
 
 from nebula2.gclient.net.AuthResult import AuthResult
@@ -44,16 +46,17 @@ class Connection(object):
         self._ip = ip
         self._port = port
         self._timeout = timeout
-        try:
-            s = TSocket.TSocket(self._ip, self._port)
-            if timeout > 0:
-                s.setTimeout(timeout)
-            transport = TTransport.TBufferedTransport(s)
-            protocol = TBinaryProtocol.TBinaryProtocol(transport)
-            transport.open()
-            self._connection = GraphService.Client(protocol)
-        except Exception:
-            raise
+        s = TSocket.TSocket(self._ip, self._port)
+        if timeout > 0:
+            s.setTimeout(timeout)
+        transport = TTransport.TBufferedTransport(s)
+        protocol = TBinaryProtocol.TBinaryProtocol(transport)
+        transport.open()
+        self._connection = GraphService.Client(protocol)
+        resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
+        if resp.error_code != ErrorCode.SUCCEEDED:
+            self._connection._iprot.trans.close()
+            raise ClientVersionRejectedException(resp.error_msg)
 
     def _reopen(self):
         """reopen the connection
@@ -91,75 +94,6 @@ class Connection(object):
         """
         try:
             resp = self._connection.execute(session_id, stmt)
-            return resp
-        except Exception as te:
-            if isinstance(te, TTransportException):
-                if te.message.find("timed out") > 0:
-                    self._reopen()
-                    raise IOErrorException(IOErrorException.E_TIMEOUT, te.message)
-                elif te.type == TTransportException.END_OF_FILE:
-                    raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
-                elif te.type == TTransportException.NOT_OPEN:
-                    raise IOErrorException(IOErrorException.E_NOT_OPEN, te.message)
-                else:
-                    raise IOErrorException(IOErrorException.E_UNKNOWN, te.message);
-            raise
-
-    def execute_parameter(self, session_id, stmt, params):
-        """execute interface with session_id and ngql
-        :param session_id: the session id get from result of authenticate interface
-        :param stmt: the ngql
-        :param params: parameter map
-        :return: ExecutionResponse
-        """
-        try:
-            resp = self._connection.executeWithParameter(session_id, stmt, params)
-            return resp
-        except Exception as te:
-            if isinstance(te, TTransportException):
-                if te.message.find("timed out") > 0:
-                    self._reopen()
-                    raise IOErrorException(IOErrorException.E_TIMEOUT, te.message)
-                elif te.type == TTransportException.END_OF_FILE:
-                    raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
-                elif te.type == TTransportException.NOT_OPEN:
-                    raise IOErrorException(IOErrorException.E_NOT_OPEN, te.message)
-                else:
-                    raise IOErrorException(IOErrorException.E_UNKNOWN, te.message);
-            raise
-
-    def execute_json(self, session_id, stmt):
-        """execute_json interface with session_id and ngql
-
-        :param session_id: the session id get from result of authenticate interface
-        :param stmt: the ngql
-        :return: string json representing the execution result
-        """
-        try:
-            resp = self._connection.executeJson(session_id, stmt)
-            return resp
-        except Exception as te:
-            if isinstance(te, TTransportException):
-                if te.message.find("timed out") > 0:
-                    self._reopen()
-                    raise IOErrorException(IOErrorException.E_TIMEOUT, te.message)
-                elif te.type == TTransportException.END_OF_FILE:
-                    raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
-                elif te.type == TTransportException.NOT_OPEN:
-                    raise IOErrorException(IOErrorException.E_NOT_OPEN, te.message)
-                else:
-                    raise IOErrorException(IOErrorException.E_UNKNOWN, te.message);
-            raise
-
-    def execute_json_with_parameter(self, session_id, stmt, params):
-        """execute_json interface with session_id and ngql
-
-        :param session_id: the session id get from result of authenticate interface
-        :param stmt: the ngql
-        :return: string json representing the execution result
-        """
-        try:
-            resp = self._connection.executeJsonWithParameter(session_id, stmt)
             return resp
         except Exception as te:
             if isinstance(te, TTransportException):

@@ -131,6 +131,7 @@ FUNCTIONS = {
     'reportTaskFinish': Function('reportTaskFinish', 'MetaService', 'ExecResp', [('ReportTaskReq', 'req', 'ReportTaskReq')]),
     'listCluster': Function('listCluster', 'MetaService', 'ListClusterInfoResp', [('ListClusterInfoReq', 'req', 'ListClusterInfoReq')]),
     'getMetaDirInfo': Function('getMetaDirInfo', 'MetaService', 'GetMetaDirInfoResp', [('GetMetaDirInfoReq', 'req', 'GetMetaDirInfoReq')]),
+    'verifyClientVersion': Function('verifyClientVersion', 'MetaService', 'VerifyClientVersionResp', [('VerifyClientVersionReq', 'req', 'VerifyClientVersionReq')]),
 }
 
 SERVICE_NAMES = ['MetaService', ]

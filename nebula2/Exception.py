@@ -79,3 +79,6 @@ class IOErrorException(Exception):
         self.type = code
         self.message = message
 
+class ClientServerIncompatibleException(Exception):
+    def __init__(self, message):
+        Exception.__init__(self, f'Current client is not compatible with remote server: {message}')

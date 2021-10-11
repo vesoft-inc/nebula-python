@@ -11,7 +11,6 @@ import json
 
 from nebula2.gclient.net import ConnectionPool
 from nebula2.Config import Config
-from nebula2.common import *
 from FormatResp import print_resp
 
 if __name__ == '__main__':
@@ -45,7 +44,7 @@ if __name__ == '__main__':
         assert resp.is_succeeded(), resp.error_msg()
 
         # insert edges
-        resp = client.execute(
+        client.execute(
             'INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
         assert resp.is_succeeded(), resp.error_msg()
 
@@ -53,27 +52,9 @@ if __name__ == '__main__':
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
 
-        bval = ttypes.Value()
-        bval.set_bVal(True)
-        ival = ttypes.Value()
-        ival.set_iVal(3)
-        sval = ttypes.Value()
-        sval.set_sVal("Cypher Parameter")
-        params={"p1":ival,"p2":bval,"p3":sval}
-
-        # test parameter interface
-        resp = client.execute_parameter('RETURN abs($p1)+3, toBoolean($p2) and false, toLower($p3)+1',params)
+        resp = client.execute('FETCH PROP ON like "Bob"->"Lily"')
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
-        # test compatibility
-        resp = client.execute('RETURN 3')
-        assert resp.is_succeeded(), resp.error_msg()
-        print_resp(resp)
-
-        # get the result in json format
-        resp_json = client.execute_json_with_parameter("yield 1", params)
-        json_obj = json.loads(resp_json)
-        print(json.dumps(json_obj, indent=2, sort_keys=True))
 
         # drop space
         resp = client.execute('DROP SPACE test')
