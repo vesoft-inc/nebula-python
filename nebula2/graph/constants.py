@@ -16,5 +16,5 @@ from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 import nebula2.common.ttypes
 
 
-from .ttypes import UTF8STRINGS, ProfilingStats, PlanNodeBranchInfo, Pair, PlanNodeDescription, PlanDescription, ExecutionResponse, AuthResponse
+from .ttypes import UTF8STRINGS, ProfilingStats, PlanNodeBranchInfo, Pair, PlanNodeDescription, PlanDescription, ExecutionResponse, AuthResponse, VerifyClientVersionResp, VerifyClientVersionReq
 

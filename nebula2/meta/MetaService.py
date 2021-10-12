@@ -13,7 +13,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, PropertyType, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceReq, BalanceTask, BalanceResp, LeaderBalanceReq, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddGroupReq, DropGroupReq, AddZoneIntoGroupReq, DropZoneFromGroupReq, GetGroupReq, GetGroupResp, ListGroupsReq, Group, ListGroupsResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, SchemaVer, ClusterID
+from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, PropertyType, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceReq, BalanceTask, BalanceResp, LeaderBalanceReq, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddGroupReq, DropGroupReq, AddZoneIntoGroupReq, DropZoneFromGroupReq, GetGroupReq, GetGroupResp, ListGroupsReq, Group, ListGroupsResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SchemaVer, ClusterID
 import nebula2.common.ttypes
 
 from nebula2.fbthrift.Thrift import TProcessor
@@ -666,6 +666,13 @@ class Iface:
     """
     pass
 
+  def verifyClientVersion(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
 
 class ContextIface:
   def createSpace(self, handler_ctx, req=None):
@@ -1291,6 +1298,13 @@ class ContextIface:
     """
     pass
 
+  def verifyClientVersion(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
 
 # HELPER FUNCTIONS AND STRUCTURES
 
@@ -1359,7 +1373,7 @@ class createSpace_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1456,7 +1470,7 @@ class createSpace_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1552,7 +1566,7 @@ class dropSpace_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1649,7 +1663,7 @@ class dropSpace_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1745,7 +1759,7 @@ class getSpace_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1842,7 +1856,7 @@ class getSpace_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1938,7 +1952,7 @@ class listSpaces_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2035,7 +2049,7 @@ class listSpaces_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2131,7 +2145,7 @@ class createSpaceAs_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2228,7 +2242,7 @@ class createSpaceAs_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2324,7 +2338,7 @@ class createTag_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2421,7 +2435,7 @@ class createTag_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2517,7 +2531,7 @@ class alterTag_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2614,7 +2628,7 @@ class alterTag_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2710,7 +2724,7 @@ class dropTag_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2807,7 +2821,7 @@ class dropTag_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2903,7 +2917,7 @@ class getTag_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3000,7 +3014,7 @@ class getTag_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3096,7 +3110,7 @@ class listTags_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3193,7 +3207,7 @@ class listTags_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3289,7 +3303,7 @@ class createEdge_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3386,7 +3400,7 @@ class createEdge_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3482,7 +3496,7 @@ class alterEdge_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3579,7 +3593,7 @@ class alterEdge_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3675,7 +3689,7 @@ class dropEdge_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3772,7 +3786,7 @@ class dropEdge_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3868,7 +3882,7 @@ class getEdge_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3965,7 +3979,7 @@ class getEdge_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -4061,7 +4075,7 @@ class listEdges_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -4158,7 +4172,7 @@ class listEdges_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -4254,7 +4268,7 @@ class listHosts_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -4351,7 +4365,7 @@ class listHosts_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -4447,7 +4461,7 @@ class getPartsAlloc_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -4544,7 +4558,7 @@ class getPartsAlloc_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -4640,7 +4654,7 @@ class listParts_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -4737,7 +4751,7 @@ class listParts_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -4833,7 +4847,7 @@ class multiPut_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -4930,7 +4944,7 @@ class multiPut_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5026,7 +5040,7 @@ class get_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5123,7 +5137,7 @@ class get_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5219,7 +5233,7 @@ class multiGet_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5316,7 +5330,7 @@ class multiGet_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5412,7 +5426,7 @@ class remove_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5509,7 +5523,7 @@ class remove_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5605,7 +5619,7 @@ class removeRange_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5702,7 +5716,7 @@ class removeRange_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5798,7 +5812,7 @@ class scan_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5895,7 +5909,7 @@ class scan_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -5991,7 +6005,7 @@ class createTagIndex_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -6088,7 +6102,7 @@ class createTagIndex_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -6184,7 +6198,7 @@ class dropTagIndex_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -6281,7 +6295,7 @@ class dropTagIndex_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -6377,7 +6391,7 @@ class getTagIndex_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -6474,7 +6488,7 @@ class getTagIndex_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -6570,7 +6584,7 @@ class listTagIndexes_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -6667,7 +6681,7 @@ class listTagIndexes_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -6763,7 +6777,7 @@ class rebuildTagIndex_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -6860,7 +6874,7 @@ class rebuildTagIndex_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -6956,7 +6970,7 @@ class listTagIndexStatus_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -7053,7 +7067,7 @@ class listTagIndexStatus_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -7149,7 +7163,7 @@ class createEdgeIndex_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -7246,7 +7260,7 @@ class createEdgeIndex_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -7342,7 +7356,7 @@ class dropEdgeIndex_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -7439,7 +7453,7 @@ class dropEdgeIndex_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -7535,7 +7549,7 @@ class getEdgeIndex_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -7632,7 +7646,7 @@ class getEdgeIndex_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -7728,7 +7742,7 @@ class listEdgeIndexes_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -7825,7 +7839,7 @@ class listEdgeIndexes_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -7921,7 +7935,7 @@ class rebuildEdgeIndex_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8018,7 +8032,7 @@ class rebuildEdgeIndex_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8114,7 +8128,7 @@ class listEdgeIndexStatus_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8211,7 +8225,7 @@ class listEdgeIndexStatus_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8307,7 +8321,7 @@ class createUser_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8404,7 +8418,7 @@ class createUser_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8500,7 +8514,7 @@ class dropUser_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8597,7 +8611,7 @@ class dropUser_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8693,7 +8707,7 @@ class alterUser_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8790,7 +8804,7 @@ class alterUser_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8886,7 +8900,7 @@ class grantRole_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -8983,7 +8997,7 @@ class grantRole_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -9079,7 +9093,7 @@ class revokeRole_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -9176,7 +9190,7 @@ class revokeRole_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -9272,7 +9286,7 @@ class listUsers_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -9369,7 +9383,7 @@ class listUsers_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -9465,7 +9479,7 @@ class listRoles_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -9562,7 +9576,7 @@ class listRoles_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -9658,7 +9672,7 @@ class getUserRoles_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -9755,7 +9769,7 @@ class getUserRoles_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -9851,7 +9865,7 @@ class changePassword_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -9948,7 +9962,7 @@ class changePassword_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -10044,7 +10058,7 @@ class heartBeat_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -10141,7 +10155,7 @@ class heartBeat_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -10237,7 +10251,7 @@ class balance_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -10334,7 +10348,7 @@ class balance_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -10430,7 +10444,7 @@ class leaderBalance_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -10527,7 +10541,7 @@ class leaderBalance_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -10623,7 +10637,7 @@ class regConfig_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -10720,7 +10734,7 @@ class regConfig_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -10816,7 +10830,7 @@ class getConfig_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -10913,7 +10927,7 @@ class getConfig_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11009,7 +11023,7 @@ class setConfig_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11106,7 +11120,7 @@ class setConfig_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11202,7 +11216,7 @@ class listConfigs_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11299,7 +11313,7 @@ class listConfigs_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11395,7 +11409,7 @@ class createSnapshot_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11492,7 +11506,7 @@ class createSnapshot_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11588,7 +11602,7 @@ class dropSnapshot_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11685,7 +11699,7 @@ class dropSnapshot_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11781,7 +11795,7 @@ class listSnapshots_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11878,7 +11892,7 @@ class listSnapshots_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -11974,7 +11988,7 @@ class runAdminJob_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -12071,7 +12085,7 @@ class runAdminJob_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -12167,7 +12181,7 @@ class addZone_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -12264,7 +12278,7 @@ class addZone_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -12360,7 +12374,7 @@ class dropZone_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -12457,7 +12471,7 @@ class dropZone_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -12553,7 +12567,7 @@ class addHostIntoZone_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -12650,7 +12664,7 @@ class addHostIntoZone_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -12746,7 +12760,7 @@ class dropHostFromZone_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -12843,7 +12857,7 @@ class dropHostFromZone_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -12939,7 +12953,7 @@ class getZone_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -13036,7 +13050,7 @@ class getZone_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -13132,7 +13146,7 @@ class listZones_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -13229,7 +13243,7 @@ class listZones_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -13325,7 +13339,7 @@ class addGroup_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -13422,7 +13436,7 @@ class addGroup_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -13518,7 +13532,7 @@ class dropGroup_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -13615,7 +13629,7 @@ class dropGroup_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -13711,7 +13725,7 @@ class addZoneIntoGroup_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -13808,7 +13822,7 @@ class addZoneIntoGroup_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -13904,7 +13918,7 @@ class dropZoneFromGroup_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14001,7 +14015,7 @@ class dropZoneFromGroup_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14097,7 +14111,7 @@ class getGroup_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14194,7 +14208,7 @@ class getGroup_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14290,7 +14304,7 @@ class listGroups_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14387,7 +14401,7 @@ class listGroups_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14483,7 +14497,7 @@ class createBackup_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14580,7 +14594,7 @@ class createBackup_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14676,7 +14690,7 @@ class restoreMeta_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14773,7 +14787,7 @@ class restoreMeta_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14869,7 +14883,7 @@ class addListener_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -14966,7 +14980,7 @@ class addListener_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -15062,7 +15076,7 @@ class removeListener_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -15159,7 +15173,7 @@ class removeListener_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -15255,7 +15269,7 @@ class listListener_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -15352,7 +15366,7 @@ class listListener_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -15448,7 +15462,7 @@ class getStats_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -15545,7 +15559,7 @@ class getStats_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -15641,7 +15655,7 @@ class signInFTService_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -15738,7 +15752,7 @@ class signInFTService_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -15834,7 +15848,7 @@ class signOutFTService_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -15931,7 +15945,7 @@ class signOutFTService_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16027,7 +16041,7 @@ class listFTClients_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16124,7 +16138,7 @@ class listFTClients_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16220,7 +16234,7 @@ class createFTIndex_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16317,7 +16331,7 @@ class createFTIndex_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16413,7 +16427,7 @@ class dropFTIndex_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16510,7 +16524,7 @@ class dropFTIndex_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16606,7 +16620,7 @@ class listFTIndexes_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16703,7 +16717,7 @@ class listFTIndexes_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16799,7 +16813,7 @@ class createSession_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16896,7 +16910,7 @@ class createSession_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -16992,7 +17006,7 @@ class updateSessions_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -17089,7 +17103,7 @@ class updateSessions_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -17185,7 +17199,7 @@ class listSessions_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -17282,7 +17296,7 @@ class listSessions_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -17378,7 +17392,7 @@ class getSession_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -17475,7 +17489,7 @@ class getSession_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -17571,7 +17585,7 @@ class removeSession_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -17668,7 +17682,7 @@ class removeSession_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -17764,7 +17778,7 @@ class killQuery_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -17861,7 +17875,7 @@ class killQuery_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -17957,7 +17971,7 @@ class reportTaskFinish_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -18054,7 +18068,7 @@ class reportTaskFinish_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -18150,7 +18164,7 @@ class listCluster_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -18247,7 +18261,7 @@ class listCluster_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -18343,7 +18357,7 @@ class getMetaDirInfo_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -18440,7 +18454,7 @@ class getMetaDirInfo_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -18470,6 +18484,199 @@ def getMetaDirInfo_result__setstate__(self, state):
 
 getMetaDirInfo_result.__getstate__ = lambda self: self.__dict__.copy()
 getMetaDirInfo_result.__setstate__ = getMetaDirInfo_result__setstate__
+
+class verifyClientVersion_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = VerifyClientVersionReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('verifyClientVersion_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(verifyClientVersion_args)
+verifyClientVersion_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [VerifyClientVersionReq, VerifyClientVersionReq.thrift_spec, False], None, 2, ), # 1
+)
+
+verifyClientVersion_args.thrift_struct_annotations = {
+}
+verifyClientVersion_args.thrift_field_annotations = {
+}
+
+def verifyClientVersion_args__init__(self, req=None,):
+  self.req = req
+
+verifyClientVersion_args.__init__ = verifyClientVersion_args__init__
+
+def verifyClientVersion_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+verifyClientVersion_args.__getstate__ = lambda self: self.__dict__.copy()
+verifyClientVersion_args.__setstate__ = verifyClientVersion_args__setstate__
+
+class verifyClientVersion_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = VerifyClientVersionResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('verifyClientVersion_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(verifyClientVersion_result)
+verifyClientVersion_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [VerifyClientVersionResp, VerifyClientVersionResp.thrift_spec, False], None, 2, ), # 0
+)
+
+verifyClientVersion_result.thrift_struct_annotations = {
+}
+verifyClientVersion_result.thrift_field_annotations = {
+}
+
+def verifyClientVersion_result__init__(self, success=None,):
+  self.success = success
+
+verifyClientVersion_result.__init__ = verifyClientVersion_result__init__
+
+def verifyClientVersion_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+verifyClientVersion_result.__getstate__ = lambda self: self.__dict__.copy()
+verifyClientVersion_result.__setstate__ = verifyClientVersion_result__setstate__
 
 class Client(Iface):
   def __enter__(self):
@@ -21156,6 +21363,36 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "getMetaDirInfo failed: unknown result");
 
+  def verifyClientVersion(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_verifyClientVersion(req)
+    return self.recv_verifyClientVersion()
+
+  def send_verifyClientVersion(self, req=None):
+    self._oprot.writeMessageBegin('verifyClientVersion', TMessageType.CALL, self._seqid)
+    args = verifyClientVersion_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_verifyClientVersion(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = verifyClientVersion_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "verifyClientVersion failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   _onewayMethods = ()
@@ -21343,6 +21580,8 @@ class Processor(Iface, TProcessor):
     self._priorityMap["listCluster"] = TPriority.NORMAL
     self._processMap["getMetaDirInfo"] = Processor.process_getMetaDirInfo
     self._priorityMap["getMetaDirInfo"] = TPriority.NORMAL
+    self._processMap["verifyClientVersion"] = Processor.process_verifyClientVersion
+    self._priorityMap["verifyClientVersion"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -22331,6 +22570,17 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(verifyClientVersion_args, oneway=False)
+  def process_verifyClientVersion(self, args, handler_ctx):
+    result = verifyClientVersion_result()
+    try:
+      result.success = self._handler.verifyClientVersion(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'verifyClientVersion', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
 Iface._processor_type = Processor
 
 class ContextProcessor(ContextIface, TProcessor):
@@ -22519,6 +22769,8 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["listCluster"] = TPriority.NORMAL
     self._processMap["getMetaDirInfo"] = ContextProcessor.process_getMetaDirInfo
     self._priorityMap["getMetaDirInfo"] = TPriority.NORMAL
+    self._processMap["verifyClientVersion"] = ContextProcessor.process_verifyClientVersion
+    self._priorityMap["verifyClientVersion"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -23504,6 +23756,17 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'getMetaDirInfo', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(verifyClientVersion_args, oneway=False)
+  def process_verifyClientVersion(self, args, handler_ctx):
+    result = verifyClientVersion_result()
+    try:
+      result.success = self._handler.verifyClientVersion(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'verifyClientVersion', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 

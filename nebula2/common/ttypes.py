@@ -29,7 +29,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'NullType', 'ErrorCode', 'SchemaID', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
+__all__ = ['UTF8STRINGS', 'NullType', 'ErrorCode', 'SchemaID', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Geography', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
 
 class NullType:
   __NULL__ = 0
@@ -183,6 +183,7 @@ class ErrorCode:
   E_OUTDATED_TERM = -3071
   E_OUTDATED_EDGE = -3072
   E_WRITE_WRITE_CONFLICT = -3073
+  E_CLIENT_SERVER_INCOMPATIBLE = -3061
   E_UNKNOWN = -8000
 
   _VALUES_TO_NAMES = {
@@ -305,6 +306,7 @@ class ErrorCode:
     -3071: "E_OUTDATED_TERM",
     -3072: "E_OUTDATED_EDGE",
     -3073: "E_WRITE_WRITE_CONFLICT",
+    -3061: "E_CLIENT_SERVER_INCOMPATIBLE",
     -8000: "E_UNKNOWN",
   }
 
@@ -428,6 +430,7 @@ class ErrorCode:
     "E_OUTDATED_TERM": -3071,
     "E_OUTDATED_EDGE": -3072,
     "E_WRITE_WRITE_CONFLICT": -3073,
+    "E_CLIENT_SERVER_INCOMPATIBLE": -3061,
     "E_UNKNOWN": -8000,
   }
 
@@ -444,7 +447,7 @@ class SchemaID(object):
   __EMPTY__ = 0
   TAG_ID = 1
   EDGE_TYPE = 2
-  
+
   @staticmethod
   def isUnion():
     return True
@@ -535,7 +538,7 @@ class SchemaID(object):
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeUnionEnd()
-  
+
   def __eq__(self, other):
     if not isinstance(other, self.__class__):
       return False
@@ -637,7 +640,7 @@ class Date:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -752,7 +755,7 @@ class Time:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -909,7 +912,7 @@ class DateTime:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -936,6 +939,7 @@ class Value(object):
    - mVal
    - uVal
    - gVal
+   - ggVal
   """
 
   thrift_spec = None
@@ -957,7 +961,8 @@ class Value(object):
   MVAL = 13
   UVAL = 14
   GVAL = 15
-  
+  GGVAL = 16
+
   @staticmethod
   def isUnion():
     return True
@@ -1022,6 +1027,10 @@ class Value(object):
     assert self.field == 15
     return self.value
 
+  def get_ggVal(self):
+    assert self.field == 16
+    return self.value
+
   def set_nVal(self, value):
     self.field = 1
     self.value = value
@@ -1080,6 +1089,10 @@ class Value(object):
 
   def set_gVal(self, value):
     self.field = 15
+    self.value = value
+
+  def set_ggVal(self, value):
+    self.field = 16
     self.value = value
 
   def getType(self):
@@ -1148,6 +1161,10 @@ class Value(object):
       padding = ' ' * 5
       value = padding.join(value.splitlines(True))
       member = '\n    %s=%s' % ('gVal', value)
+    if self.field == 16:
+      padding = ' ' * 6
+      value = padding.join(value.splitlines(True))
+      member = '\n    %s=%s' % ('ggVal', value)
     return "%s(%s)" % (self.__class__.__name__, member)
 
   def read(self, iprot):
@@ -1280,6 +1297,14 @@ class Value(object):
           self.set_gVal(gVal)
         else:
           iprot.skip(ftype)
+      elif fid == 16:
+        if ftype == TType.STRUCT:
+          ggVal = Geography()
+          ggVal.read(iprot)
+          assert self.field == 0 and self.value is None
+          self.set_ggVal(ggVal)
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -1368,9 +1393,14 @@ class Value(object):
       gVal = self.value
       gVal.write(oprot)
       oprot.writeFieldEnd()
+    if self.field == 16:
+      oprot.writeFieldBegin('ggVal', TType.STRUCT, 16)
+      ggVal = self.value
+      ggVal.write(oprot)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeUnionEnd()
-  
+
   def __eq__(self, other):
     if not isinstance(other, self.__class__):
       return False
@@ -1415,7 +1445,7 @@ class NList:
               _elem5 = Value()
               _elem5.read(iprot)
               self.values.append(_elem5)
-          else: 
+          else:
             while iprot.peekList():
               _elem6 = Value()
               _elem6.read(iprot)
@@ -1459,7 +1489,7 @@ class NList:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1497,14 +1527,14 @@ class NMap:
       if fid == 1:
         if ftype == TType.MAP:
           self.kvs = {}
-          (_ktype9, _vtype10, _size8 ) = iprot.readMapBegin() 
+          (_ktype9, _vtype10, _size8 ) = iprot.readMapBegin()
           if _size8 >= 0:
             for _i12 in six.moves.range(_size8):
               _key13 = iprot.readString()
               _val14 = Value()
               _val14.read(iprot)
               self.kvs[_key13] = _val14
-          else: 
+          else:
             while iprot.peekMap():
               _key15 = iprot.readString()
               _val16 = Value()
@@ -1550,7 +1580,7 @@ class NMap:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1594,7 +1624,7 @@ class NSet:
               _elem24 = Value()
               _elem24.read(iprot)
               self.values.add(_elem24)
-          else: 
+          else:
             while iprot.peekSet():
               _elem25 = Value()
               _elem25.read(iprot)
@@ -1638,7 +1668,7 @@ class NSet:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1682,7 +1712,7 @@ class Row:
               _elem32 = Value()
               _elem32.read(iprot)
               self.values.append(_elem32)
-          else: 
+          else:
             while iprot.peekList():
               _elem33 = Value()
               _elem33.read(iprot)
@@ -1726,7 +1756,7 @@ class Row:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1770,7 +1800,7 @@ class DataSet:
             for _i39 in six.moves.range(_size35):
               _elem40 = iprot.readString()
               self.column_names.append(_elem40)
-          else: 
+          else:
             while iprot.peekList():
               _elem41 = iprot.readString()
               self.column_names.append(_elem41)
@@ -1786,7 +1816,7 @@ class DataSet:
               _elem47 = Row()
               _elem47.read(iprot)
               self.rows.append(_elem47)
-          else: 
+          else:
             while iprot.peekList():
               _elem48 = Row()
               _elem48.read(iprot)
@@ -1841,7 +1871,80 @@ class DataSet:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class Geography:
+  """
+  Attributes:
+   - wkb
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.wkb = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('Geography')
+    if self.wkb != None:
+      oprot.writeFieldBegin('wkb', TType.STRING, 1)
+      oprot.writeString(self.wkb.encode('utf-8')) if UTF8STRINGS and not isinstance(self.wkb, bytes) else oprot.writeString(self.wkb)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.wkb is not None:
+      value = pprint.pformat(self.wkb, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    wkb=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1885,14 +1988,14 @@ class Tag:
       elif fid == 2:
         if ftype == TType.MAP:
           self.props = {}
-          (_ktype52, _vtype53, _size51 ) = iprot.readMapBegin() 
+          (_ktype52, _vtype53, _size51 ) = iprot.readMapBegin()
           if _size51 >= 0:
             for _i55 in six.moves.range(_size51):
               _key56 = iprot.readString()
               _val57 = Value()
               _val57.read(iprot)
               self.props[_key56] = _val57
-          else: 
+          else:
             while iprot.peekMap():
               _key58 = iprot.readString()
               _val59 = Value()
@@ -1946,7 +2049,7 @@ class Tag:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -1997,7 +2100,7 @@ class Vertex:
               _elem67 = Tag()
               _elem67.read(iprot)
               self.tags.append(_elem67)
-          else: 
+          else:
             while iprot.peekList():
               _elem68 = Tag()
               _elem68.read(iprot)
@@ -2049,7 +2152,7 @@ class Vertex:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2119,14 +2222,14 @@ class Edge:
       elif fid == 6:
         if ftype == TType.MAP:
           self.props = {}
-          (_ktype71, _vtype72, _size70 ) = iprot.readMapBegin() 
+          (_ktype71, _vtype72, _size70 ) = iprot.readMapBegin()
           if _size70 >= 0:
             for _i74 in six.moves.range(_size70):
               _key75 = iprot.readString()
               _val76 = Value()
               _val76.read(iprot)
               self.props[_key75] = _val76
-          else: 
+          else:
             while iprot.peekMap():
               _key77 = iprot.readString()
               _val78 = Value()
@@ -2212,7 +2315,7 @@ class Edge:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2275,14 +2378,14 @@ class Step:
       elif fid == 5:
         if ftype == TType.MAP:
           self.props = {}
-          (_ktype82, _vtype83, _size81 ) = iprot.readMapBegin() 
+          (_ktype82, _vtype83, _size81 ) = iprot.readMapBegin()
           if _size81 >= 0:
             for _i85 in six.moves.range(_size81):
               _key86 = iprot.readString()
               _val87 = Value()
               _val87.read(iprot)
               self.props[_key86] = _val87
-          else: 
+          else:
             while iprot.peekMap():
               _key88 = iprot.readString()
               _val89 = Value()
@@ -2360,7 +2463,7 @@ class Step:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2411,7 +2514,7 @@ class Path:
               _elem97 = Step()
               _elem97.read(iprot)
               self.steps.append(_elem97)
-          else: 
+          else:
             while iprot.peekList():
               _elem98 = Step()
               _elem98.read(iprot)
@@ -2463,7 +2566,7 @@ class Path:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2550,7 +2653,7 @@ class HostAddr:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2637,7 +2740,7 @@ class KeyValue:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2724,7 +2827,7 @@ class LogInfo:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2773,7 +2876,7 @@ class DirInfo:
             for _i104 in six.moves.range(_size100):
               _elem105 = iprot.readString()
               self.data.append(_elem105)
-          else: 
+          else:
             while iprot.peekList():
               _elem106 = iprot.readString()
               self.data.append(_elem106)
@@ -2824,7 +2927,7 @@ class DirInfo:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2913,7 +3016,7 @@ class NodeInfo:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -2951,14 +3054,14 @@ class PartitionBackupInfo:
       if fid == 1:
         if ftype == TType.MAP:
           self.info = {}
-          (_ktype109, _vtype110, _size108 ) = iprot.readMapBegin() 
+          (_ktype109, _vtype110, _size108 ) = iprot.readMapBegin()
           if _size108 >= 0:
             for _i112 in six.moves.range(_size108):
               _key113 = iprot.readI32()
               _val114 = LogInfo()
               _val114.read(iprot)
               self.info[_key113] = _val114
-          else: 
+          else:
             while iprot.peekMap():
               _key115 = iprot.readI32()
               _val116 = LogInfo()
@@ -3004,7 +3107,7 @@ class PartitionBackupInfo:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3092,7 +3195,7 @@ class CheckpointInfo:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__ 
+    return self.__dict__ == other.__dict__
 
   def __ne__(self, other):
     return not (self == other)
@@ -3262,6 +3365,7 @@ Value.thrift_spec = (
   (13, TType.STRUCT, 'mVal', [NMap, NMap.thrift_spec, False], None, 2, ), # 13
   (14, TType.STRUCT, 'uVal', [NSet, NSet.thrift_spec, False], None, 2, ), # 14
   (15, TType.STRUCT, 'gVal', [DataSet, DataSet.thrift_spec, False], None, 2, ), # 15
+  (16, TType.STRUCT, 'ggVal', [Geography, Geography.thrift_spec, False], None, 2, ), # 16
 )
 
 Value.thrift_struct_annotations = {
@@ -3289,9 +3393,12 @@ Value.thrift_field_annotations = {
   15: {
     "cpp.ref_type": "unique",
   },
+  16: {
+    "cpp.ref_type": "unique",
+  },
 }
 
-def Value__init__(self, nVal=None, bVal=None, iVal=None, fVal=None, sVal=None, dVal=None, tVal=None, dtVal=None, vVal=None, eVal=None, pVal=None, lVal=None, mVal=None, uVal=None, gVal=None,):
+def Value__init__(self, nVal=None, bVal=None, iVal=None, fVal=None, sVal=None, dVal=None, tVal=None, dtVal=None, vVal=None, eVal=None, pVal=None, lVal=None, mVal=None, uVal=None, gVal=None, ggVal=None,):
   self.field = 0
   self.value = None
   if nVal is not None:
@@ -3354,6 +3461,10 @@ def Value__init__(self, nVal=None, bVal=None, iVal=None, fVal=None, sVal=None, d
     assert self.field == 0 and self.value is None
     self.field = 15
     self.value = gVal
+  if ggVal is not None:
+    assert self.field == 0 and self.value is None
+    self.field = 16
+    self.value = ggVal
 
 Value.__init__ = Value__init__
 
@@ -3479,6 +3590,30 @@ def DataSet__setstate__(self, state):
 
 DataSet.__getstate__ = lambda self: self.__dict__.copy()
 DataSet.__setstate__ = DataSet__setstate__
+
+all_structs.append(Geography)
+Geography.thrift_spec = (
+  None, # 0
+  (1, TType.STRING, 'wkb', True, None, 2, ), # 1
+)
+
+Geography.thrift_struct_annotations = {
+  "cpp.type": "nebula::Geography",
+}
+Geography.thrift_field_annotations = {
+}
+
+def Geography__init__(self, wkb=None,):
+  self.wkb = wkb
+
+Geography.__init__ = Geography__init__
+
+def Geography__setstate__(self, state):
+  state.setdefault('wkb', None)
+  self.__dict__ = state
+
+Geography.__getstate__ = lambda self: self.__dict__.copy()
+Geography.__setstate__ = Geography__setstate__
 
 all_structs.append(Tag)
 Tag.thrift_spec = (
