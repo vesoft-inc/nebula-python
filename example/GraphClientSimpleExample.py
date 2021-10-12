@@ -44,7 +44,7 @@ if __name__ == '__main__':
         assert resp.is_succeeded(), resp.error_msg()
 
         # insert edges
-        client.execute(
+        resp = client.execute(
             'INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
         assert resp.is_succeeded(), resp.error_msg()
 

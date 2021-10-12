@@ -81,4 +81,4 @@ class IOErrorException(Exception):
 
 class ClientServerIncompatibleException(Exception):
     def __init__(self, message):
-        Exception.__init__(self, f'Current client is not compatible with remote server: {message}')
+        Exception.__init__(self, f'Current client is not compatible with the remote server, please check the version: {message}')
