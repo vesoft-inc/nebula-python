@@ -18,6 +18,7 @@ from unittest import TestCase
 from nebula2.gclient.net import Connection
 from nebula2.common import ttypes
 from nebula2.Exception import IOErrorException
+from nebula2.graph.ttypes import VerifyClientVersionReq
 
 
 class TestConnection(TestCase):
@@ -60,4 +61,12 @@ class TestConnection(TestCase):
         except IOErrorException:
             assert True
 
-
+    def test_version_check(self):
+        conn = Connection()
+        conn.open('127.0.0.1', 9669, 1000)
+        req = VerifyClientVersionReq()
+        resp1 = conn._connection.verifyClientVersion(req)
+        assert resp1.error_code == ttypes.ErrorCode.SUCCEEDED
+        req.version = 'v0.0.1'
+        resp = conn._connection.verifyClientVersion(req)
+        assert resp.error_code == ttypes.ErrorCode.E_CLIENT_SERVER_INCOMPATIBLE
