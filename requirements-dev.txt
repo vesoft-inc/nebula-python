@@ -1,6 +1,0 @@
-future
-six
-httplib2  
-prettytable
-pytest
-pytz
