@@ -68,5 +68,5 @@ class TestConnection(TestCase):
         resp1 = conn._connection.verifyClientVersion(req)
         assert resp1.error_code == ttypes.ErrorCode.SUCCEEDED
         req.version = 'v0.0.1'
-        resp = conn._connection.verifyClientVersion(req)
-        assert resp.error_code == ttypes.ErrorCode.E_CLIENT_SERVER_INCOMPATIBLE
+        resp2 = conn._connection.verifyClientVersion(req)
+        assert resp2.error_code == ttypes.ErrorCode.E_CLIENT_SERVER_INCOMPATIBLE
