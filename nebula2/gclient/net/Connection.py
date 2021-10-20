@@ -56,7 +56,7 @@ class Connection(object):
         resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
         if resp.error_code != ErrorCode.SUCCEEDED:
             self._connection._iprot.trans.close()
-            raise ClientVersionRejectedException(resp.error_msg)
+            raise ClientServerIncompatibleException(resp.error_msg)
 
     def _reopen(self):
         """reopen the connection
