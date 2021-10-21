@@ -111,7 +111,9 @@ class TestBaseCase(TestCase):
         coord.y = y
         point = ttypes.Point()
         point.coord = coord
-        return point
+        geog = ttypes.Geography()
+        geog.set_ptVal(point)
+        return geog
 
     @classmethod
     def get_data_set(cls):

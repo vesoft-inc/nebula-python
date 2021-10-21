@@ -1058,6 +1058,7 @@ class PolygonWrapper(BaseObject):
 
 class GeographyWrapper(BaseObject):
     def __init__(self, geography):
+        assert isinstance(geography, Geography)
         super(GeographyWrapper, self).__init__()
         self._geography = geography
 
