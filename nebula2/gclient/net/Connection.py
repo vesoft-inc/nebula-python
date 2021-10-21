@@ -76,6 +76,11 @@ class Connection(object):
             protocol = TBinaryProtocol.TBinaryProtocol(transport)
             transport.open()
             self._connection = GraphService.Client(protocol)
+            resp = self._connection.verifyClientVersion(
+            VerifyClientVersionReq())
+            if resp.error_code != ErrorCode.SUCCEEDED:
+                self._connection._iprot.trans.close()
+                raise ClientServerIncompatibleException(resp.error_msg)
         except Exception:
             raise
 
