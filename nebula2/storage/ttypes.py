@@ -121,6 +121,7 @@ class RequestCommon:
   Attributes:
    - session_id
    - plan_id
+   - profile_detail
   """
 
   thrift_spec = None
@@ -153,6 +154,11 @@ class RequestCommon:
           self.plan_id = iprot.readI64()
         else:
           iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.BOOL:
+          self.profile_detail = iprot.readBool()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -174,6 +180,10 @@ class RequestCommon:
       oprot.writeFieldBegin('plan_id', TType.I64, 2)
       oprot.writeI64(self.plan_id)
       oprot.writeFieldEnd()
+    if self.profile_detail != None:
+      oprot.writeFieldBegin('profile_detail', TType.BOOL, 3)
+      oprot.writeBool(self.profile_detail)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -188,6 +198,10 @@ class RequestCommon:
       value = pprint.pformat(self.plan_id, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    plan_id=%s' % (value))
+    if self.profile_detail is not None:
+      value = pprint.pformat(self.profile_detail, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    profile_detail=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -8541,6 +8555,7 @@ RequestCommon.thrift_spec = (
   None, # 0
   (1, TType.I64, 'session_id', None, None, 1, ), # 1
   (2, TType.I64, 'plan_id', None, None, 1, ), # 2
+  (3, TType.BOOL, 'profile_detail', None, None, 1, ), # 3
 )
 
 RequestCommon.thrift_struct_annotations = {
@@ -8548,15 +8563,17 @@ RequestCommon.thrift_struct_annotations = {
 RequestCommon.thrift_field_annotations = {
 }
 
-def RequestCommon__init__(self, session_id=None, plan_id=None,):
+def RequestCommon__init__(self, session_id=None, plan_id=None, profile_detail=None,):
   self.session_id = session_id
   self.plan_id = plan_id
+  self.profile_detail = profile_detail
 
 RequestCommon.__init__ = RequestCommon__init__
 
 def RequestCommon__setstate__(self, state):
   state.setdefault('session_id', None)
   state.setdefault('plan_id', None)
+  state.setdefault('profile_detail', None)
   self.__dict__ = state
 
 RequestCommon.__getstate__ = lambda self: self.__dict__.copy()

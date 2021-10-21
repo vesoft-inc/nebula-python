@@ -448,7 +448,7 @@ class ID(object):
   EDGE_TYPE = 3
   INDEX_ID = 4
   CLUSTER_ID = 5
-
+  
   @staticmethod
   def isUnion():
     return True
@@ -611,7 +611,7 @@ class ID(object):
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeUnionEnd()
-
+  
   def __eq__(self, other):
     if not isinstance(other, self.__class__):
       return False
@@ -713,7 +713,7 @@ class ColumnTypeDef:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -843,7 +843,7 @@ class ColumnDef:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -944,7 +944,7 @@ class SchemaProp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -989,7 +989,7 @@ class Schema:
               _elem5 = ColumnDef()
               _elem5.read(iprot)
               self.columns.append(_elem5)
-          else:
+          else: 
             while iprot.peekList():
               _elem6 = ColumnDef()
               _elem6.read(iprot)
@@ -1047,7 +1047,7 @@ class Schema:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1135,7 +1135,7 @@ class IdName:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1321,7 +1321,7 @@ class SpaceDesc:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1409,7 +1409,7 @@ class SpaceItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1525,7 +1525,7 @@ class TagItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1613,7 +1613,7 @@ class AlterSchemaItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1729,7 +1729,7 @@ class EdgeItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1799,7 +1799,7 @@ class IndexItem:
               _elem13 = ColumnDef()
               _elem13.read(iprot)
               self.fields.append(_elem13)
-          else:
+          else: 
             while iprot.peekList():
               _elem14 = ColumnDef()
               _elem14.read(iprot)
@@ -1888,7 +1888,7 @@ class IndexItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1944,7 +1944,7 @@ class HostItem:
       elif fid == 3:
         if ftype == TType.MAP:
           self.leader_parts = {}
-          (_ktype17, _vtype18, _size16 ) = iprot.readMapBegin()
+          (_ktype17, _vtype18, _size16 ) = iprot.readMapBegin() 
           if _size16 >= 0:
             for _i20 in six.moves.range(_size16):
               _key21 = iprot.readString()
@@ -1954,13 +1954,13 @@ class HostItem:
                 for _i27 in six.moves.range(_size23):
                   _elem28 = iprot.readI32()
                   _val22.append(_elem28)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem29 = iprot.readI32()
                   _val22.append(_elem29)
               iprot.readListEnd()
               self.leader_parts[_key21] = _val22
-          else:
+          else: 
             while iprot.peekMap():
               _key30 = iprot.readString()
               _val31 = []
@@ -1969,7 +1969,7 @@ class HostItem:
                 for _i36 in six.moves.range(_size32):
                   _elem37 = iprot.readI32()
                   _val31.append(_elem37)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem38 = iprot.readI32()
                   _val31.append(_elem38)
@@ -1981,7 +1981,7 @@ class HostItem:
       elif fid == 4:
         if ftype == TType.MAP:
           self.all_parts = {}
-          (_ktype40, _vtype41, _size39 ) = iprot.readMapBegin()
+          (_ktype40, _vtype41, _size39 ) = iprot.readMapBegin() 
           if _size39 >= 0:
             for _i43 in six.moves.range(_size39):
               _key44 = iprot.readString()
@@ -1991,13 +1991,13 @@ class HostItem:
                 for _i50 in six.moves.range(_size46):
                   _elem51 = iprot.readI32()
                   _val45.append(_elem51)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem52 = iprot.readI32()
                   _val45.append(_elem52)
               iprot.readListEnd()
               self.all_parts[_key44] = _val45
-          else:
+          else: 
             while iprot.peekMap():
               _key53 = iprot.readString()
               _val54 = []
@@ -2006,7 +2006,7 @@ class HostItem:
                 for _i59 in six.moves.range(_size55):
                   _elem60 = iprot.readI32()
                   _val54.append(_elem60)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem61 = iprot.readI32()
                   _val54.append(_elem61)
@@ -2138,7 +2138,7 @@ class HostItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -2281,7 +2281,7 @@ class UserItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -2382,7 +2382,7 @@ class RoleItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -2485,7 +2485,7 @@ class ExecResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -2540,7 +2540,7 @@ class AdminJobReq:
             for _i72 in six.moves.range(_size68):
               _elem73 = iprot.readString()
               self.paras.append(_elem73)
-          else:
+          else: 
             while iprot.peekList():
               _elem74 = iprot.readString()
               self.paras.append(_elem74)
@@ -2599,7 +2599,7 @@ class AdminJobReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -2657,7 +2657,7 @@ class JobDesc:
             for _i80 in six.moves.range(_size76):
               _elem81 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
               self.paras.append(_elem81)
-          else:
+          else: 
             while iprot.peekList():
               _elem82 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
               self.paras.append(_elem82)
@@ -2755,7 +2755,7 @@ class JobDesc:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -2899,7 +2899,7 @@ class TaskDesc:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -2951,7 +2951,7 @@ class AdminJobResult:
               _elem89 = JobDesc()
               _elem89.read(iprot)
               self.job_desc.append(_elem89)
-          else:
+          else: 
             while iprot.peekList():
               _elem90 = JobDesc()
               _elem90.read(iprot)
@@ -2968,7 +2968,7 @@ class AdminJobResult:
               _elem96 = TaskDesc()
               _elem96.read(iprot)
               self.task_desc.append(_elem96)
-          else:
+          else: 
             while iprot.peekList():
               _elem97 = TaskDesc()
               _elem97.read(iprot)
@@ -3044,7 +3044,7 @@ class AdminJobResult:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -3147,7 +3147,7 @@ class AdminJobResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -3234,7 +3234,7 @@ class Correlativity:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -3278,13 +3278,13 @@ class StatsItem:
       if fid == 1:
         if ftype == TType.MAP:
           self.tag_vertices = {}
-          (_ktype101, _vtype102, _size100 ) = iprot.readMapBegin()
+          (_ktype101, _vtype102, _size100 ) = iprot.readMapBegin() 
           if _size100 >= 0:
             for _i104 in six.moves.range(_size100):
               _key105 = iprot.readString()
               _val106 = iprot.readI64()
               self.tag_vertices[_key105] = _val106
-          else:
+          else: 
             while iprot.peekMap():
               _key107 = iprot.readString()
               _val108 = iprot.readI64()
@@ -3295,13 +3295,13 @@ class StatsItem:
       elif fid == 2:
         if ftype == TType.MAP:
           self.edges = {}
-          (_ktype110, _vtype111, _size109 ) = iprot.readMapBegin()
+          (_ktype110, _vtype111, _size109 ) = iprot.readMapBegin() 
           if _size109 >= 0:
             for _i113 in six.moves.range(_size109):
               _key114 = iprot.readString()
               _val115 = iprot.readI64()
               self.edges[_key114] = _val115
-          else:
+          else: 
             while iprot.peekMap():
               _key116 = iprot.readString()
               _val117 = iprot.readI64()
@@ -3322,7 +3322,7 @@ class StatsItem:
       elif fid == 5:
         if ftype == TType.MAP:
           self.positive_part_correlativity = {}
-          (_ktype119, _vtype120, _size118 ) = iprot.readMapBegin()
+          (_ktype119, _vtype120, _size118 ) = iprot.readMapBegin() 
           if _size118 >= 0:
             for _i122 in six.moves.range(_size118):
               _key123 = iprot.readI32()
@@ -3333,14 +3333,14 @@ class StatsItem:
                   _elem130 = Correlativity()
                   _elem130.read(iprot)
                   _val124.append(_elem130)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem131 = Correlativity()
                   _elem131.read(iprot)
                   _val124.append(_elem131)
               iprot.readListEnd()
               self.positive_part_correlativity[_key123] = _val124
-          else:
+          else: 
             while iprot.peekMap():
               _key132 = iprot.readI32()
               _val133 = []
@@ -3350,7 +3350,7 @@ class StatsItem:
                   _elem139 = Correlativity()
                   _elem139.read(iprot)
                   _val133.append(_elem139)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem140 = Correlativity()
                   _elem140.read(iprot)
@@ -3363,7 +3363,7 @@ class StatsItem:
       elif fid == 6:
         if ftype == TType.MAP:
           self.negative_part_correlativity = {}
-          (_ktype142, _vtype143, _size141 ) = iprot.readMapBegin()
+          (_ktype142, _vtype143, _size141 ) = iprot.readMapBegin() 
           if _size141 >= 0:
             for _i145 in six.moves.range(_size141):
               _key146 = iprot.readI32()
@@ -3374,14 +3374,14 @@ class StatsItem:
                   _elem153 = Correlativity()
                   _elem153.read(iprot)
                   _val147.append(_elem153)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem154 = Correlativity()
                   _elem154.read(iprot)
                   _val147.append(_elem154)
               iprot.readListEnd()
               self.negative_part_correlativity[_key146] = _val147
-          else:
+          else: 
             while iprot.peekMap():
               _key155 = iprot.readI32()
               _val156 = []
@@ -3391,7 +3391,7 @@ class StatsItem:
                   _elem162 = Correlativity()
                   _elem162.read(iprot)
                   _val156.append(_elem162)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem163 = Correlativity()
                   _elem163.read(iprot)
@@ -3509,7 +3509,7 @@ class StatsItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -3597,7 +3597,7 @@ class CreateSpaceReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -3684,7 +3684,7 @@ class CreateSpaceAsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -3771,7 +3771,7 @@ class DropSpaceReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -3826,7 +3826,7 @@ class ListSpacesReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -3883,7 +3883,7 @@ class ListSpacesResp:
               _elem179 = IdName()
               _elem179.read(iprot)
               self.spaces.append(_elem179)
-          else:
+          else: 
             while iprot.peekList():
               _elem180 = IdName()
               _elem180.read(iprot)
@@ -3943,7 +3943,7 @@ class ListSpacesResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -4016,7 +4016,7 @@ class GetSpaceReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -4119,7 +4119,7 @@ class GetSpaceResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -4235,7 +4235,7 @@ class CreateTagReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -4292,7 +4292,7 @@ class AlterTagReq:
               _elem187 = AlterSchemaItem()
               _elem187.read(iprot)
               self.tag_items.append(_elem187)
-          else:
+          else: 
             while iprot.peekList():
               _elem188 = AlterSchemaItem()
               _elem188.read(iprot)
@@ -4366,7 +4366,7 @@ class AlterTagReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -4467,7 +4467,7 @@ class DropTagReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -4540,7 +4540,7 @@ class ListTagsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -4597,7 +4597,7 @@ class ListTagsResp:
               _elem195 = TagItem()
               _elem195.read(iprot)
               self.tags.append(_elem195)
-          else:
+          else: 
             while iprot.peekList():
               _elem196 = TagItem()
               _elem196.read(iprot)
@@ -4657,7 +4657,7 @@ class ListTagsResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -4758,7 +4758,7 @@ class GetTagReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -4861,7 +4861,7 @@ class GetTagResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -4977,7 +4977,7 @@ class CreateEdgeReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -5034,7 +5034,7 @@ class AlterEdgeReq:
               _elem203 = AlterSchemaItem()
               _elem203.read(iprot)
               self.edge_items.append(_elem203)
-          else:
+          else: 
             while iprot.peekList():
               _elem204 = AlterSchemaItem()
               _elem204.read(iprot)
@@ -5108,7 +5108,7 @@ class AlterEdgeReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -5209,7 +5209,7 @@ class GetEdgeReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -5312,7 +5312,7 @@ class GetEdgeResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -5413,7 +5413,7 @@ class DropEdgeReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -5486,7 +5486,7 @@ class ListEdgesReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -5543,7 +5543,7 @@ class ListEdgesResp:
               _elem211 = EdgeItem()
               _elem211.read(iprot)
               self.edges.append(_elem211)
-          else:
+          else: 
             while iprot.peekList():
               _elem212 = EdgeItem()
               _elem212.read(iprot)
@@ -5603,7 +5603,7 @@ class ListEdgesResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -5676,7 +5676,7 @@ class ListHostsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -5733,7 +5733,7 @@ class ListHostsResp:
               _elem219 = HostItem()
               _elem219.read(iprot)
               self.hosts.append(_elem219)
-          else:
+          else: 
             while iprot.peekList():
               _elem220 = HostItem()
               _elem220.read(iprot)
@@ -5793,7 +5793,7 @@ class ListHostsResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -5851,7 +5851,7 @@ class PartItem:
               _elem227 = nebula2.common.ttypes.HostAddr()
               _elem227.read(iprot)
               self.peers.append(_elem227)
-          else:
+          else: 
             while iprot.peekList():
               _elem228 = nebula2.common.ttypes.HostAddr()
               _elem228.read(iprot)
@@ -5868,7 +5868,7 @@ class PartItem:
               _elem234 = nebula2.common.ttypes.HostAddr()
               _elem234.read(iprot)
               self.losts.append(_elem234)
-          else:
+          else: 
             while iprot.peekList():
               _elem235 = nebula2.common.ttypes.HostAddr()
               _elem235.read(iprot)
@@ -5939,7 +5939,7 @@ class PartItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -5988,7 +5988,7 @@ class ListPartsReq:
             for _i242 in six.moves.range(_size238):
               _elem243 = iprot.readI32()
               self.part_ids.append(_elem243)
-          else:
+          else: 
             while iprot.peekList():
               _elem244 = iprot.readI32()
               self.part_ids.append(_elem244)
@@ -6039,7 +6039,7 @@ class ListPartsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -6096,7 +6096,7 @@ class ListPartsResp:
               _elem251 = PartItem()
               _elem251.read(iprot)
               self.parts.append(_elem251)
-          else:
+          else: 
             while iprot.peekList():
               _elem252 = PartItem()
               _elem252.read(iprot)
@@ -6156,7 +6156,7 @@ class ListPartsResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -6229,7 +6229,7 @@ class GetPartsAllocReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -6281,7 +6281,7 @@ class GetPartsAllocResp:
       elif fid == 3:
         if ftype == TType.MAP:
           self.parts = {}
-          (_ktype255, _vtype256, _size254 ) = iprot.readMapBegin()
+          (_ktype255, _vtype256, _size254 ) = iprot.readMapBegin() 
           if _size254 >= 0:
             for _i258 in six.moves.range(_size254):
               _key259 = iprot.readI32()
@@ -6292,14 +6292,14 @@ class GetPartsAllocResp:
                   _elem266 = nebula2.common.ttypes.HostAddr()
                   _elem266.read(iprot)
                   _val260.append(_elem266)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem267 = nebula2.common.ttypes.HostAddr()
                   _elem267.read(iprot)
                   _val260.append(_elem267)
               iprot.readListEnd()
               self.parts[_key259] = _val260
-          else:
+          else: 
             while iprot.peekMap():
               _key268 = iprot.readI32()
               _val269 = []
@@ -6309,7 +6309,7 @@ class GetPartsAllocResp:
                   _elem275 = nebula2.common.ttypes.HostAddr()
                   _elem275.read(iprot)
                   _val269.append(_elem275)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem276 = nebula2.common.ttypes.HostAddr()
                   _elem276.read(iprot)
@@ -6322,13 +6322,13 @@ class GetPartsAllocResp:
       elif fid == 4:
         if ftype == TType.MAP:
           self.terms = {}
-          (_ktype278, _vtype279, _size277 ) = iprot.readMapBegin()
+          (_ktype278, _vtype279, _size277 ) = iprot.readMapBegin() 
           if _size277 >= 0:
             for _i281 in six.moves.range(_size277):
               _key282 = iprot.readI32()
               _val283 = iprot.readI64()
               self.terms[_key282] = _val283
-          else:
+          else: 
             while iprot.peekMap():
               _key284 = iprot.readI32()
               _val285 = iprot.readI64()
@@ -6404,7 +6404,7 @@ class GetPartsAllocResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -6454,7 +6454,7 @@ class MultiPutReq:
               _elem296 = nebula2.common.ttypes.KeyValue()
               _elem296.read(iprot)
               self.pairs.append(_elem296)
-          else:
+          else: 
             while iprot.peekList():
               _elem297 = nebula2.common.ttypes.KeyValue()
               _elem297.read(iprot)
@@ -6506,7 +6506,7 @@ class MultiPutReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -6593,7 +6593,7 @@ class GetReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -6695,7 +6695,7 @@ class GetResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -6744,7 +6744,7 @@ class MultiGetReq:
             for _i303 in six.moves.range(_size299):
               _elem304 = iprot.readString()
               self.keys.append(_elem304)
-          else:
+          else: 
             while iprot.peekList():
               _elem305 = iprot.readString()
               self.keys.append(_elem305)
@@ -6795,7 +6795,7 @@ class MultiGetReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -6851,7 +6851,7 @@ class MultiGetResp:
             for _i311 in six.moves.range(_size307):
               _elem312 = iprot.readString()
               self.values.append(_elem312)
-          else:
+          else: 
             while iprot.peekList():
               _elem313 = iprot.readString()
               self.values.append(_elem313)
@@ -6910,7 +6910,7 @@ class MultiGetResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -6997,7 +6997,7 @@ class RemoveReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -7098,7 +7098,7 @@ class RemoveRangeReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -7199,7 +7199,7 @@ class ScanReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -7255,7 +7255,7 @@ class ScanResp:
             for _i319 in six.moves.range(_size315):
               _elem320 = iprot.readString()
               self.values.append(_elem320)
-          else:
+          else: 
             while iprot.peekList():
               _elem321 = iprot.readString()
               self.values.append(_elem321)
@@ -7314,7 +7314,7 @@ class ScanResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -7444,7 +7444,7 @@ class HBResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -7531,7 +7531,7 @@ class LeaderInfo:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -7590,7 +7590,7 @@ class HBReq:
       elif fid == 4:
         if ftype == TType.MAP:
           self.leader_partIds = {}
-          (_ktype324, _vtype325, _size323 ) = iprot.readMapBegin()
+          (_ktype324, _vtype325, _size323 ) = iprot.readMapBegin() 
           if _size323 >= 0:
             for _i327 in six.moves.range(_size323):
               _key328 = iprot.readI32()
@@ -7601,14 +7601,14 @@ class HBReq:
                   _elem335 = LeaderInfo()
                   _elem335.read(iprot)
                   _val329.append(_elem335)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem336 = LeaderInfo()
                   _elem336.read(iprot)
                   _val329.append(_elem336)
               iprot.readListEnd()
               self.leader_partIds[_key328] = _val329
-          else:
+          else: 
             while iprot.peekMap():
               _key337 = iprot.readI32()
               _val338 = []
@@ -7618,7 +7618,7 @@ class HBReq:
                   _elem344 = LeaderInfo()
                   _elem344.read(iprot)
                   _val338.append(_elem344)
-              else:
+              else: 
                 while iprot.peekList():
                   _elem345 = LeaderInfo()
                   _elem345.read(iprot)
@@ -7718,7 +7718,7 @@ class HBReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -7805,7 +7805,7 @@ class IndexFieldDef:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -7869,7 +7869,7 @@ class CreateTagIndexReq:
               _elem354 = IndexFieldDef()
               _elem354.read(iprot)
               self.fields.append(_elem354)
-          else:
+          else: 
             while iprot.peekList():
               _elem355 = IndexFieldDef()
               _elem355.read(iprot)
@@ -7963,7 +7963,7 @@ class CreateTagIndexReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -8064,7 +8064,7 @@ class DropTagIndexReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -8151,7 +8151,7 @@ class GetTagIndexReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -8254,7 +8254,7 @@ class GetTagIndexResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -8327,7 +8327,7 @@ class ListTagIndexesReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -8384,7 +8384,7 @@ class ListTagIndexesResp:
               _elem362 = IndexItem()
               _elem362.read(iprot)
               self.items.append(_elem362)
-          else:
+          else: 
             while iprot.peekList():
               _elem363 = IndexItem()
               _elem363.read(iprot)
@@ -8444,7 +8444,7 @@ class ListTagIndexesResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -8508,7 +8508,7 @@ class CreateEdgeIndexReq:
               _elem370 = IndexFieldDef()
               _elem370.read(iprot)
               self.fields.append(_elem370)
-          else:
+          else: 
             while iprot.peekList():
               _elem371 = IndexFieldDef()
               _elem371.read(iprot)
@@ -8602,7 +8602,7 @@ class CreateEdgeIndexReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -8703,7 +8703,7 @@ class DropEdgeIndexReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -8790,7 +8790,7 @@ class GetEdgeIndexReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -8893,7 +8893,7 @@ class GetEdgeIndexResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -8966,7 +8966,7 @@ class ListEdgeIndexesReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9023,7 +9023,7 @@ class ListEdgeIndexesResp:
               _elem378 = IndexItem()
               _elem378.read(iprot)
               self.items.append(_elem378)
-          else:
+          else: 
             while iprot.peekList():
               _elem379 = IndexItem()
               _elem379.read(iprot)
@@ -9083,7 +9083,7 @@ class ListEdgeIndexesResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9170,7 +9170,7 @@ class RebuildIndexReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9271,7 +9271,7 @@ class CreateUserReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9358,7 +9358,7 @@ class DropUserReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9445,7 +9445,7 @@ class AlterUserReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9519,7 +9519,7 @@ class GrantRoleReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9593,7 +9593,7 @@ class RevokeRoleReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9648,7 +9648,7 @@ class ListUsersReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9699,13 +9699,13 @@ class ListUsersResp:
       elif fid == 3:
         if ftype == TType.MAP:
           self.users = {}
-          (_ktype382, _vtype383, _size381 ) = iprot.readMapBegin()
+          (_ktype382, _vtype383, _size381 ) = iprot.readMapBegin() 
           if _size381 >= 0:
             for _i385 in six.moves.range(_size381):
               _key386 = iprot.readString()
               _val387 = iprot.readString()
               self.users[_key386] = _val387
-          else:
+          else: 
             while iprot.peekMap():
               _key388 = iprot.readString()
               _val389 = iprot.readString()
@@ -9766,7 +9766,7 @@ class ListUsersResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9839,7 +9839,7 @@ class ListRolesReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -9896,7 +9896,7 @@ class ListRolesResp:
               _elem397 = RoleItem()
               _elem397.read(iprot)
               self.roles.append(_elem397)
-          else:
+          else: 
             while iprot.peekList():
               _elem398 = RoleItem()
               _elem398.read(iprot)
@@ -9956,7 +9956,7 @@ class ListRolesResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -10029,7 +10029,7 @@ class GetUserRolesReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -10130,7 +10130,7 @@ class ChangePasswordReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -10188,7 +10188,7 @@ class BalanceReq:
               _elem405 = nebula2.common.ttypes.HostAddr()
               _elem405.read(iprot)
               self.host_del.append(_elem405)
-          else:
+          else: 
             while iprot.peekList():
               _elem406 = nebula2.common.ttypes.HostAddr()
               _elem406.read(iprot)
@@ -10274,7 +10274,7 @@ class BalanceReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -10361,7 +10361,7 @@ class BalanceTask:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -10424,7 +10424,7 @@ class BalanceResp:
               _elem413 = BalanceTask()
               _elem413.read(iprot)
               self.tasks.append(_elem413)
-          else:
+          else: 
             while iprot.peekList():
               _elem414 = BalanceTask()
               _elem414.read(iprot)
@@ -10492,7 +10492,7 @@ class BalanceResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -10547,7 +10547,7 @@ class LeaderBalanceReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -10663,7 +10663,7 @@ class ConfigItem:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -10707,7 +10707,7 @@ class RegConfigReq:
               _elem421 = ConfigItem()
               _elem421.read(iprot)
               self.items.append(_elem421)
-          else:
+          else: 
             while iprot.peekList():
               _elem422 = ConfigItem()
               _elem422.read(iprot)
@@ -10751,7 +10751,7 @@ class RegConfigReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -10825,7 +10825,7 @@ class GetConfigReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -10882,7 +10882,7 @@ class GetConfigResp:
               _elem429 = ConfigItem()
               _elem429.read(iprot)
               self.items.append(_elem429)
-          else:
+          else: 
             while iprot.peekList():
               _elem430 = ConfigItem()
               _elem430.read(iprot)
@@ -10942,7 +10942,7 @@ class GetConfigResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11016,7 +11016,7 @@ class SetConfigReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11103,7 +11103,7 @@ class ListConfigsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11160,7 +11160,7 @@ class ListConfigsResp:
               _elem437 = ConfigItem()
               _elem437.read(iprot)
               self.items.append(_elem437)
-          else:
+          else: 
             while iprot.peekList():
               _elem438 = ConfigItem()
               _elem438.read(iprot)
@@ -11220,7 +11220,7 @@ class ListConfigsResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11275,7 +11275,7 @@ class CreateSnapshotReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11348,7 +11348,7 @@ class DropSnapshotReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11403,7 +11403,7 @@ class ListSnapshotsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11504,7 +11504,7 @@ class Snapshot:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11561,7 +11561,7 @@ class ListSnapshotsResp:
               _elem445 = Snapshot()
               _elem445.read(iprot)
               self.snapshots.append(_elem445)
-          else:
+          else: 
             while iprot.peekList():
               _elem446 = Snapshot()
               _elem446.read(iprot)
@@ -11621,7 +11621,7 @@ class ListSnapshotsResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11694,7 +11694,7 @@ class ListIndexStatusReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11781,7 +11781,7 @@ class IndexStatus:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11838,7 +11838,7 @@ class ListIndexStatusResp:
               _elem453 = IndexStatus()
               _elem453.read(iprot)
               self.statuses.append(_elem453)
-          else:
+          else: 
             while iprot.peekList():
               _elem454 = IndexStatus()
               _elem454.read(iprot)
@@ -11898,7 +11898,7 @@ class ListIndexStatusResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -11948,7 +11948,7 @@ class AddZoneReq:
               _elem461 = nebula2.common.ttypes.HostAddr()
               _elem461.read(iprot)
               self.nodes.append(_elem461)
-          else:
+          else: 
             while iprot.peekList():
               _elem462 = nebula2.common.ttypes.HostAddr()
               _elem462.read(iprot)
@@ -12000,7 +12000,7 @@ class AddZoneReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12073,7 +12073,7 @@ class DropZoneReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12161,7 +12161,7 @@ class AddHostIntoZoneReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12249,7 +12249,7 @@ class DropHostFromZoneReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12322,7 +12322,7 @@ class GetZoneReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12379,7 +12379,7 @@ class GetZoneResp:
               _elem469 = nebula2.common.ttypes.HostAddr()
               _elem469.read(iprot)
               self.hosts.append(_elem469)
-          else:
+          else: 
             while iprot.peekList():
               _elem470 = nebula2.common.ttypes.HostAddr()
               _elem470.read(iprot)
@@ -12439,7 +12439,7 @@ class GetZoneResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12494,7 +12494,7 @@ class ListZonesReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12544,7 +12544,7 @@ class Zone:
               _elem477 = nebula2.common.ttypes.HostAddr()
               _elem477.read(iprot)
               self.nodes.append(_elem477)
-          else:
+          else: 
             while iprot.peekList():
               _elem478 = nebula2.common.ttypes.HostAddr()
               _elem478.read(iprot)
@@ -12596,7 +12596,7 @@ class Zone:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12653,7 +12653,7 @@ class ListZonesResp:
               _elem485 = Zone()
               _elem485.read(iprot)
               self.zones.append(_elem485)
-          else:
+          else: 
             while iprot.peekList():
               _elem486 = Zone()
               _elem486.read(iprot)
@@ -12713,7 +12713,7 @@ class ListZonesResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12762,7 +12762,7 @@ class AddGroupReq:
             for _i492 in six.moves.range(_size488):
               _elem493 = iprot.readString()
               self.zone_names.append(_elem493)
-          else:
+          else: 
             while iprot.peekList():
               _elem494 = iprot.readString()
               self.zone_names.append(_elem494)
@@ -12813,7 +12813,7 @@ class AddGroupReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12886,7 +12886,7 @@ class DropGroupReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -12973,7 +12973,7 @@ class AddZoneIntoGroupReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13060,7 +13060,7 @@ class DropZoneFromGroupReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13133,7 +13133,7 @@ class GetGroupReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13189,7 +13189,7 @@ class GetGroupResp:
             for _i500 in six.moves.range(_size496):
               _elem501 = iprot.readString()
               self.zone_names.append(_elem501)
-          else:
+          else: 
             while iprot.peekList():
               _elem502 = iprot.readString()
               self.zone_names.append(_elem502)
@@ -13248,7 +13248,7 @@ class GetGroupResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13303,7 +13303,7 @@ class ListGroupsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13352,7 +13352,7 @@ class Group:
             for _i508 in six.moves.range(_size504):
               _elem509 = iprot.readString()
               self.zone_names.append(_elem509)
-          else:
+          else: 
             while iprot.peekList():
               _elem510 = iprot.readString()
               self.zone_names.append(_elem510)
@@ -13403,7 +13403,7 @@ class Group:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13460,7 +13460,7 @@ class ListGroupsResp:
               _elem517 = Group()
               _elem517.read(iprot)
               self.groups.append(_elem517)
-          else:
+          else: 
             while iprot.peekList():
               _elem518 = Group()
               _elem518.read(iprot)
@@ -13520,7 +13520,7 @@ class ListGroupsResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13576,7 +13576,7 @@ class AddListenerReq:
               _elem525 = nebula2.common.ttypes.HostAddr()
               _elem525.read(iprot)
               self.hosts.append(_elem525)
-          else:
+          else: 
             while iprot.peekList():
               _elem526 = nebula2.common.ttypes.HostAddr()
               _elem526.read(iprot)
@@ -13636,7 +13636,7 @@ class AddListenerReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13723,7 +13723,7 @@ class RemoveListenerReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13796,7 +13796,7 @@ class ListListenerReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13912,7 +13912,7 @@ class ListenerInfo:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -13969,7 +13969,7 @@ class ListListenerResp:
               _elem533 = ListenerInfo()
               _elem533.read(iprot)
               self.listeners.append(_elem533)
-          else:
+          else: 
             while iprot.peekList():
               _elem534 = ListenerInfo()
               _elem534.read(iprot)
@@ -14029,7 +14029,7 @@ class ListListenerResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -14102,7 +14102,7 @@ class GetStatsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -14205,7 +14205,7 @@ class GetStatsResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -14256,7 +14256,7 @@ class BackupInfo:
               _elem541 = nebula2.common.ttypes.CheckpointInfo()
               _elem541.read(iprot)
               self.info.append(_elem541)
-          else:
+          else: 
             while iprot.peekList():
               _elem542 = nebula2.common.ttypes.CheckpointInfo()
               _elem542.read(iprot)
@@ -14308,7 +14308,7 @@ class BackupInfo:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -14359,7 +14359,7 @@ class SpaceBackupInfo:
               _elem549 = BackupInfo()
               _elem549.read(iprot)
               self.info.append(_elem549)
-          else:
+          else: 
             while iprot.peekList():
               _elem550 = BackupInfo()
               _elem550.read(iprot)
@@ -14411,7 +14411,7 @@ class SpaceBackupInfo:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -14454,14 +14454,14 @@ class BackupMeta:
       if fid == 1:
         if ftype == TType.MAP:
           self.backup_info = {}
-          (_ktype553, _vtype554, _size552 ) = iprot.readMapBegin()
+          (_ktype553, _vtype554, _size552 ) = iprot.readMapBegin() 
           if _size552 >= 0:
             for _i556 in six.moves.range(_size552):
               _key557 = iprot.readI32()
               _val558 = SpaceBackupInfo()
               _val558.read(iprot)
               self.backup_info[_key557] = _val558
-          else:
+          else: 
             while iprot.peekMap():
               _key559 = iprot.readI32()
               _val560 = SpaceBackupInfo()
@@ -14478,7 +14478,7 @@ class BackupMeta:
             for _i565 in six.moves.range(_size561):
               _elem566 = iprot.readString()
               self.meta_files.append(_elem566)
-          else:
+          else: 
             while iprot.peekList():
               _elem567 = iprot.readString()
               self.meta_files.append(_elem567)
@@ -14585,7 +14585,7 @@ class BackupMeta:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -14628,7 +14628,7 @@ class CreateBackupReq:
             for _i575 in six.moves.range(_size571):
               _elem576 = iprot.readString()
               self.spaces.append(_elem576)
-          else:
+          else: 
             while iprot.peekList():
               _elem577 = iprot.readString()
               self.spaces.append(_elem577)
@@ -14671,7 +14671,7 @@ class CreateBackupReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -14774,7 +14774,7 @@ class CreateBackupResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -14863,7 +14863,7 @@ class HostPair:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -14907,7 +14907,7 @@ class RestoreMetaReq:
             for _i583 in six.moves.range(_size579):
               _elem584 = iprot.readString()
               self.files.append(_elem584)
-          else:
+          else: 
             while iprot.peekList():
               _elem585 = iprot.readString()
               self.files.append(_elem585)
@@ -14923,7 +14923,7 @@ class RestoreMetaReq:
               _elem591 = HostPair()
               _elem591.read(iprot)
               self.hosts.append(_elem591)
-          else:
+          else: 
             while iprot.peekList():
               _elem592 = HostPair()
               _elem592.read(iprot)
@@ -14978,7 +14978,7 @@ class RestoreMetaReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -15080,7 +15080,7 @@ class FTClient:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -15130,7 +15130,7 @@ class SignInFTServiceReq:
               _elem600 = FTClient()
               _elem600.read(iprot)
               self.clients.append(_elem600)
-          else:
+          else: 
             while iprot.peekList():
               _elem601 = FTClient()
               _elem601.read(iprot)
@@ -15182,7 +15182,7 @@ class SignInFTServiceReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -15237,7 +15237,7 @@ class SignOutFTServiceReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -15292,7 +15292,7 @@ class ListFTClientsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -15349,7 +15349,7 @@ class ListFTClientsResp:
               _elem608 = FTClient()
               _elem608.read(iprot)
               self.clients.append(_elem608)
-          else:
+          else: 
             while iprot.peekList():
               _elem609 = FTClient()
               _elem609.read(iprot)
@@ -15409,7 +15409,7 @@ class ListFTClientsResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -15465,7 +15465,7 @@ class FTIndex:
             for _i615 in six.moves.range(_size611):
               _elem616 = iprot.readString()
               self.fields.append(_elem616)
-          else:
+          else: 
             while iprot.peekList():
               _elem617 = iprot.readString()
               self.fields.append(_elem617)
@@ -15524,7 +15524,7 @@ class FTIndex:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -15612,7 +15612,7 @@ class CreateFTIndexReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -15699,7 +15699,7 @@ class DropFTIndexReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -15754,7 +15754,7 @@ class ListFTIndexesReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -15805,14 +15805,14 @@ class ListFTIndexesResp:
       elif fid == 3:
         if ftype == TType.MAP:
           self.indexes = {}
-          (_ktype620, _vtype621, _size619 ) = iprot.readMapBegin()
+          (_ktype620, _vtype621, _size619 ) = iprot.readMapBegin() 
           if _size619 >= 0:
             for _i623 in six.moves.range(_size619):
               _key624 = iprot.readString()
               _val625 = FTIndex()
               _val625.read(iprot)
               self.indexes[_key624] = _val625
-          else:
+          else: 
             while iprot.peekMap():
               _key626 = iprot.readString()
               _val627 = FTIndex()
@@ -15874,7 +15874,7 @@ class ListFTIndexesResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -16004,7 +16004,7 @@ class QueryDesc:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -16092,14 +16092,14 @@ class Session:
       elif fid == 9:
         if ftype == TType.MAP:
           self.configs = {}
-          (_ktype631, _vtype632, _size630 ) = iprot.readMapBegin()
+          (_ktype631, _vtype632, _size630 ) = iprot.readMapBegin() 
           if _size630 >= 0:
             for _i634 in six.moves.range(_size630):
               _key635 = iprot.readString()
               _val636 = nebula2.common.ttypes.Value()
               _val636.read(iprot)
               self.configs[_key635] = _val636
-          else:
+          else: 
             while iprot.peekMap():
               _key637 = iprot.readString()
               _val638 = nebula2.common.ttypes.Value()
@@ -16111,14 +16111,14 @@ class Session:
       elif fid == 10:
         if ftype == TType.MAP:
           self.queries = {}
-          (_ktype640, _vtype641, _size639 ) = iprot.readMapBegin()
+          (_ktype640, _vtype641, _size639 ) = iprot.readMapBegin() 
           if _size639 >= 0:
             for _i643 in six.moves.range(_size639):
               _key644 = iprot.readI64()
               _val645 = QueryDesc()
               _val645.read(iprot)
               self.queries[_key644] = _val645
-          else:
+          else: 
             while iprot.peekMap():
               _key646 = iprot.readI64()
               _val647 = QueryDesc()
@@ -16240,7 +16240,7 @@ class Session:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -16342,7 +16342,7 @@ class CreateSessionReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -16445,7 +16445,7 @@ class CreateSessionResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -16489,7 +16489,7 @@ class UpdateSessionsReq:
               _elem657 = Session()
               _elem657.read(iprot)
               self.sessions.append(_elem657)
-          else:
+          else: 
             while iprot.peekList():
               _elem658 = Session()
               _elem658.read(iprot)
@@ -16533,7 +16533,7 @@ class UpdateSessionsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -16584,19 +16584,19 @@ class UpdateSessionsResp:
       elif fid == 3:
         if ftype == TType.MAP:
           self.killed_queries = {}
-          (_ktype661, _vtype662, _size660 ) = iprot.readMapBegin()
+          (_ktype661, _vtype662, _size660 ) = iprot.readMapBegin() 
           if _size660 >= 0:
             for _i664 in six.moves.range(_size660):
               _key665 = iprot.readI64()
               _val666 = {}
-              (_ktype668, _vtype669, _size667 ) = iprot.readMapBegin()
+              (_ktype668, _vtype669, _size667 ) = iprot.readMapBegin() 
               if _size667 >= 0:
                 for _i671 in six.moves.range(_size667):
                   _key672 = iprot.readI64()
                   _val673 = QueryDesc()
                   _val673.read(iprot)
                   _val666[_key672] = _val673
-              else:
+              else: 
                 while iprot.peekMap():
                   _key674 = iprot.readI64()
                   _val675 = QueryDesc()
@@ -16604,18 +16604,18 @@ class UpdateSessionsResp:
                   _val666[_key674] = _val675
               iprot.readMapEnd()
               self.killed_queries[_key665] = _val666
-          else:
+          else: 
             while iprot.peekMap():
               _key676 = iprot.readI64()
               _val677 = {}
-              (_ktype679, _vtype680, _size678 ) = iprot.readMapBegin()
+              (_ktype679, _vtype680, _size678 ) = iprot.readMapBegin() 
               if _size678 >= 0:
                 for _i682 in six.moves.range(_size678):
                   _key683 = iprot.readI64()
                   _val684 = QueryDesc()
                   _val684.read(iprot)
                   _val677[_key683] = _val684
-              else:
+              else: 
                 while iprot.peekMap():
                   _key685 = iprot.readI64()
                   _val686 = QueryDesc()
@@ -16683,7 +16683,7 @@ class UpdateSessionsResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -16738,7 +16738,7 @@ class ListSessionsReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -16795,7 +16795,7 @@ class ListSessionsResp:
               _elem696 = Session()
               _elem696.read(iprot)
               self.sessions.append(_elem696)
-          else:
+          else: 
             while iprot.peekList():
               _elem697 = Session()
               _elem697.read(iprot)
@@ -16855,7 +16855,7 @@ class ListSessionsResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -16928,7 +16928,7 @@ class GetSessionReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -17031,7 +17031,7 @@ class GetSessionResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -17104,7 +17104,7 @@ class RemoveSessionReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -17142,7 +17142,7 @@ class KillQueryReq:
       if fid == 1:
         if ftype == TType.MAP:
           self.kill_queries = {}
-          (_ktype700, _vtype701, _size699 ) = iprot.readMapBegin()
+          (_ktype700, _vtype701, _size699 ) = iprot.readMapBegin() 
           if _size699 >= 0:
             for _i703 in six.moves.range(_size699):
               _key704 = iprot.readI64()
@@ -17152,13 +17152,13 @@ class KillQueryReq:
                 for _i710 in six.moves.range(_size706):
                   _elem711 = iprot.readI64()
                   _val705.add(_elem711)
-              else:
+              else: 
                 while iprot.peekSet():
                   _elem712 = iprot.readI64()
                   _val705.add(_elem712)
               iprot.readSetEnd()
               self.kill_queries[_key704] = _val705
-          else:
+          else: 
             while iprot.peekMap():
               _key713 = iprot.readI64()
               _val714 = set()
@@ -17167,7 +17167,7 @@ class KillQueryReq:
                 for _i719 in six.moves.range(_size715):
                   _elem720 = iprot.readI64()
                   _val714.add(_elem720)
-              else:
+              else: 
                 while iprot.peekSet():
                   _elem721 = iprot.readI64()
                   _val714.add(_elem721)
@@ -17216,7 +17216,7 @@ class KillQueryReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -17332,7 +17332,7 @@ class ReportTaskReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -17390,7 +17390,7 @@ class ListClusterInfoResp:
               _elem730 = nebula2.common.ttypes.HostAddr()
               _elem730.read(iprot)
               self.meta_servers.append(_elem730)
-          else:
+          else: 
             while iprot.peekList():
               _elem731 = nebula2.common.ttypes.HostAddr()
               _elem731.read(iprot)
@@ -17407,7 +17407,7 @@ class ListClusterInfoResp:
               _elem737 = nebula2.common.ttypes.NodeInfo()
               _elem737.read(iprot)
               self.storage_servers.append(_elem737)
-          else:
+          else: 
             while iprot.peekList():
               _elem738 = nebula2.common.ttypes.NodeInfo()
               _elem738.read(iprot)
@@ -17478,7 +17478,7 @@ class ListClusterInfoResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -17533,7 +17533,7 @@ class ListClusterInfoReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -17621,7 +17621,7 @@ class GetMetaDirInfoResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -17676,7 +17676,7 @@ class GetMetaDirInfoReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -17778,7 +17778,7 @@ class VerifyClientVersionResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -17851,7 +17851,7 @@ class VerifyClientVersionReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
