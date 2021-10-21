@@ -43,7 +43,7 @@ class Connection(object):
         :param timeout: the timeout for connect and execute
         :return: void
         """
-        self.open_SSL(self, ip, port, timeout, None)
+        self.open_SSL(ip, port, timeout, None)
 
     def open_SSL(self, ip, port, timeout, ssl_config=None):
         """open the SSL connection
