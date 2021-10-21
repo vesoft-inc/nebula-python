@@ -10,7 +10,9 @@ import time
 import json
 
 from nebula2.gclient.net import ConnectionPool
+
 from nebula2.Config import Config
+from nebula2.common import *
 from FormatResp import print_resp
 
 if __name__ == '__main__':

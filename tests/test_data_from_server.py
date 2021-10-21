@@ -254,7 +254,7 @@ class TestExecuteJson(TestBaseCase):
         exp = [1, 2.2, "hello", [1, 2, "abc"], {"key": "value"}, "汉字"]
         json_obj = json.loads(resp)
 
-	# Get errorcode
+	    # Get errorcode
         resp_error_code = json_obj["errors"][0]["code"]
         assert 0 == resp_error_code
 

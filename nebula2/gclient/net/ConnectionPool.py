@@ -35,6 +35,7 @@ class ConnectionPool(object):
         # all connections
         self._connections = dict()
         self._configs = None
+        self._ssl_configs = None
         self._lock = RLock()
         self._pos = -1
         self._close = False
@@ -42,11 +43,12 @@ class ConnectionPool(object):
     def __del__(self):
         self.close()
 
-    def init(self, addresses, configs):
+    def init(self, addresses, configs, ssl_conf=None):
         """init the connection pool
 
         :param addresses: the graphd servers' addresses
         :param configs: the config of the pool
+        :param ssl_conf: the config of SSL socket
         :return: if all addresses are ok, return True else return False.
         """
         if self._close:
@@ -72,14 +74,25 @@ class ConnectionPool(object):
         # init min connections
         ok_num = self.get_ok_servers_num()
         if ok_num < len(self._addresses):
-            raise RuntimeError('The services status exception: {}'.format(self._get_services_status()))
+            raise RuntimeError('The services status exception: {}'.format(
+                self._get_services_status()))
 
-        conns_per_address = int(self._configs.min_connection_pool_size / ok_num)
-        for addr in self._addresses:
-            for i in range(0, conns_per_address):
-                connection = Connection()
-                connection.open(addr[0], addr[1], self._configs.timeout)
-                self._connections[addr].append(connection)
+        conns_per_address = int(
+            self._configs.min_connection_pool_size / ok_num)
+
+        if ssl_conf is None:
+            for addr in self._addresses:
+                for i in range(0, conns_per_address):
+                    connection = Connection()
+                    connection.open(addr[0], addr[1], self._configs.timeout)
+                    self._connections[addr].append(connection)
+        else:
+            for addr in self._addresses:
+                for i in range(0, conns_per_address):
+                    connection = Connection()
+                    connection.open_SSL(
+                        addr[0], addr[1], self._configs.timeout, self._ssl_configs)
+                    self._connections[addr].append(connection)
         return True
 
     def get_session(self, user_name, password, retry_connect=True):
@@ -152,7 +165,12 @@ class ConnectionPool(object):
 
                         if len(self._connections[addr]) < max_con_per_address:
                             connection = Connection()
-                            connection.open(addr[0], addr[1], self._configs.timeout)
+                            if self._ssl_configs is None:
+                                connection.open(
+                                    addr[0], addr[1], self._configs.timeout)
+                            else:
+                                connection.open_SSL(
+                                    addr[0], addr[1], self._configs.timeout, self._ssl_configs)
                             connection.is_used = True
                             self._connections[addr].append(connection)
                             logging.info('Get connection to {}'.format(addr))
@@ -175,7 +193,10 @@ class ConnectionPool(object):
         """
         try:
             conn = Connection()
-            conn.open(address[0], address[1], 1000)
+            if self._ssl_configs is None:
+                conn.open(address[0], address[1], 1000)
+            else:
+                conn.open_SSL(address[0], address[1], 1000, self._ssl_configs)
             conn.close()
             return True
         except Exception as ex:
