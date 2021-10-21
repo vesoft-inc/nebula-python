@@ -43,22 +43,9 @@ class Connection(object):
         :param timeout: the timeout for connect and execute
         :return: void
         """
-        self._ip = ip
-        self._port = port
-        self._timeout = timeout
-        s = TSocket.TSocket(self._ip, self._port)
-        if timeout > 0:
-            s.setTimeout(timeout)
-        transport = TTransport.TBufferedTransport(s)
-        protocol = TBinaryProtocol.TBinaryProtocol(transport)
-        transport.open()
-        self._connection = GraphService.Client(protocol)
-        resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
-        if resp.error_code != ErrorCode.SUCCEEDED:
-            self._connection._iprot.trans.close()
-            raise ClientServerIncompatibleException(resp.error_msg)
+        self.open_SSL(self, ip, port, timeout, None)
 
-    def open_SSL(self, ip, port, timeout, ssl_config):
+    def open_SSL(self, ip, port, timeout, ssl_config=None):
         """open the SSL connection
 
         :param ip: the server ip
@@ -71,15 +58,18 @@ class Connection(object):
         self._port = port
         self._timeout = timeout
         try:
-            s = TSSLSocket.TSSLSocket(self._ip, self._port,
-                                      ssl_config.unix_socket,
-                                      ssl_config.ssl_version,
-                                      ssl_config.cert_reqs,
-                                      ssl_config.ca_certs,
-                                      ssl_config.verify_name,
-                                      ssl_config.keyfile,
-                                      ssl_config.certfile,
-                                      ssl_config.allow_weak_ssl_versions)
+            if ssl_config is not None:
+                s = TSSLSocket.TSSLSocket(self._ip, self._port,
+                                        ssl_config.unix_socket,
+                                        ssl_config.ssl_version,
+                                        ssl_config.cert_reqs,
+                                        ssl_config.ca_certs,
+                                        ssl_config.verify_name,
+                                        ssl_config.keyfile,
+                                        ssl_config.certfile,
+                                        ssl_config.allow_weak_ssl_versions)
+            else:
+                s = TSocket.TSocket(self._ip, self._port)
             if timeout > 0:
                 s.setTimeout(timeout)
             transport = TTransport.TBufferedTransport(s)

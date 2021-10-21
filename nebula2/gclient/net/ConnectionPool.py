@@ -43,7 +43,7 @@ class ConnectionPool(object):
     def __del__(self):
         self.close()
 
-    def init(self, addresses, configs, ssl_conf=NULL):
+    def init(self, addresses, configs, ssl_conf=None):
         """init the connection pool
 
         :param addresses: the graphd servers' addresses
@@ -80,7 +80,7 @@ class ConnectionPool(object):
         conns_per_address = int(
             self._configs.min_connection_pool_size / ok_num)
 
-        if ssl_conf is NULL:
+        if ssl_conf is None:
             for addr in self._addresses:
                 for i in range(0, conns_per_address):
                     connection = Connection()
