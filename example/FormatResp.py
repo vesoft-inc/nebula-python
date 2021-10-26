@@ -46,6 +46,8 @@ def print_resp(resp):
                 value_list.append(col.as_relationship())
             elif col.is_path():
                 value_list.append(col.as_path())
+            elif col.is_geography():
+                value_list.append(col.as_geography())
             else:
                 print('ERROR: Type unsupported')
                 return

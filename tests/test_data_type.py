@@ -25,6 +25,7 @@ from nebula2.common.ttypes import (
     Date,
     NList,
     NMap,
+    Geography,
     ErrorCode
 )
 from nebula2.common import ttypes
@@ -41,7 +42,8 @@ from nebula2.data.DataObject import (
     DateWrapper,
     Null,
     Segment,
-    DataSetWrapper
+    DataSetWrapper,
+    GeographyWrapper
 )
 
 
@@ -103,6 +105,17 @@ class TestBaseCase(TestCase):
         return path
 
     @classmethod
+    def get_geography_value(cls, x, y):
+        coord = ttypes.Coordinate()
+        coord.x = x
+        coord.y = y
+        point = ttypes.Point()
+        point.coord = coord
+        geog = ttypes.Geography()
+        geog.set_ptVal(point)
+        return geog
+
+    @classmethod
     def get_data_set(cls):
         data_set = ttypes.DataSet()
         data_set.column_names = [b"col1_empty",
@@ -119,7 +132,8 @@ class TestBaseCase(TestCase):
                                  b"col12_datetime",
                                  b"col13_vertex",
                                  b"col14_edge",
-                                 b"col15_path"]
+                                 b"col15_path",
+                                 b"col16_geography"]
         row = ttypes.Row()
         row.values = []
         value1 = ttypes.Value()
@@ -178,6 +192,9 @@ class TestBaseCase(TestCase):
         value15 = ttypes.Value()
         value15.set_pVal(cls.get_path_value(b"Tom", 3))
         row.values.append(value15)
+        value16 = ttypes.Value()
+        value16.set_ggVal(cls.get_geography_value(4.8, 5.2))
+        row.values.append(value16)
         data_set.rows = []
         data_set.rows.append(row)
         data_set.rows.append(row)
@@ -431,6 +448,15 @@ class TesValueWrapper(TestBaseCase):
         node = vaue_wrapper.as_path()
         assert isinstance(node, PathWrapper)
 
+    def test_as_geography(self):
+        value = ttypes.Value()
+        value.set_ggVal(self.get_geography_value(3.0, 5.2))
+        vaue_wrapper = ValueWrapper(value)
+        assert vaue_wrapper.is_geography()
+
+        geog = vaue_wrapper.as_geography()
+        assert isinstance(geog, GeographyWrapper)
+
 
 class TestNode(TestBaseCase):
     def test_node_api(self):
@@ -530,6 +556,7 @@ class TestDatesetWrapper(TestBaseCase):
             assert data_set_warpper1.row_values(i)[12] == data_set_warpper2.row_values(i)[12]
             assert data_set_warpper1.row_values(i)[13] == data_set_warpper2.row_values(i)[13]
             assert data_set_warpper1.row_values(i)[14] == data_set_warpper2.row_values(i)[14]
+            assert data_set_warpper1.row_values(i)[15] == data_set_warpper2.row_values(i)[15]
             assert data_set_warpper1.row_values(i)[9] != data_set_warpper2.row_values(i)[8]
 
         assert 2 == row_count
@@ -570,9 +597,10 @@ class TestResultset(TestBaseCase):
                        "col12_datetime",
                        "col13_vertex",
                        "col14_edge",
-                       "col15_path"]
+                       "col15_path",
+                       "col16_geography"]
         assert result.keys() == expect_keys
-        assert result.col_size() == 15
+        assert result.col_size() == 16
         assert result.row_size() == 2
 
         # test column_values
@@ -580,13 +608,13 @@ class TestResultset(TestBaseCase):
         assert result.column_values("col6_string")[0].is_string()
         assert result.column_values("col6_string")[0].as_string() == "hello world"
         # test row_values
-        assert len(result.row_values(0)) == 15
+        assert len(result.row_values(0)) == 16
         assert result.row_values(0)[5].is_string()
         assert result.row_values(0)[5].as_string() == "hello world"
 
         # test rows
         assert len(result.rows()) == 2
-        assert len(result.rows()[0].values) == 15
+        assert len(result.rows()[0].values) == 16
         assert isinstance(result.rows()[0].values[0], Value)
         assert isinstance(result.get_row_types(), list)
 
@@ -605,19 +633,20 @@ class TestResultset(TestBaseCase):
                                           ttypes.Value.DTVAL,
                                           ttypes.Value.VVAL,
                                           ttypes.Value.EVAL,
-                                          ttypes.Value.PVAL]
+                                          ttypes.Value.PVAL,
+                                          ttypes.Value.GGVAL]
 
         # test record
         in_use = False
         for record in result:
             in_use = True
-            record.size() == 15
+            record.size() == 16
 
             # test keys()
             assert record.keys() == expect_keys
             # test values()
             values = record.values()
-            assert len(record.values()) == 15
+            assert len(record.values()) == 16
             assert record.values()[0].is_empty()
             assert record.values()[5].is_string()
             assert record.values()[5].is_string()
@@ -663,12 +692,13 @@ class TestResultset(TestBaseCase):
             assert record.get_value(12).is_vertex()
             assert record.get_value(13).is_edge()
             assert record.get_value(14).is_path()
+            assert record.get_value(15).is_geography()
         assert in_use
 
         # test use iterator again
         in_use = False
         for record in result:
             in_use = True
-            record.size() == 15
+            record.size() == 16
         assert in_use
 

@@ -150,6 +150,7 @@ class ResultSet(object):
           ttypes.Value.MVAL = 13
           ttypes.Value.UVAL = 14
           ttypes.Value.GVAL = 15
+          ttypes.Value.GGVAL = 16
         """
         if self._data_set_wrapper is None:
             return []

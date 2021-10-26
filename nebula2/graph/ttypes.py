@@ -80,13 +80,13 @@ class ProfilingStats:
       elif fid == 4:
         if ftype == TType.MAP:
           self.other_stats = {}
-          (_ktype1, _vtype2, _size0 ) = iprot.readMapBegin()
+          (_ktype1, _vtype2, _size0 ) = iprot.readMapBegin() 
           if _size0 >= 0:
             for _i4 in six.moves.range(_size0):
               _key5 = iprot.readString()
               _val6 = iprot.readString()
               self.other_stats[_key5] = _val6
-          else:
+          else: 
             while iprot.peekMap():
               _key7 = iprot.readString()
               _val8 = iprot.readString()
@@ -155,7 +155,7 @@ class ProfilingStats:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -242,7 +242,7 @@ class PlanNodeBranchInfo:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -329,7 +329,7 @@ class Pair:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -394,7 +394,7 @@ class PlanNodeDescription:
               _elem16 = Pair()
               _elem16.read(iprot)
               self.description.append(_elem16)
-          else:
+          else: 
             while iprot.peekList():
               _elem17 = Pair()
               _elem17.read(iprot)
@@ -411,7 +411,7 @@ class PlanNodeDescription:
               _elem23 = ProfilingStats()
               _elem23.read(iprot)
               self.profiles.append(_elem23)
-          else:
+          else: 
             while iprot.peekList():
               _elem24 = ProfilingStats()
               _elem24.read(iprot)
@@ -433,7 +433,7 @@ class PlanNodeDescription:
             for _i29 in six.moves.range(_size25):
               _elem30 = iprot.readI64()
               self.dependencies.append(_elem30)
-          else:
+          else: 
             while iprot.peekList():
               _elem31 = iprot.readI64()
               self.dependencies.append(_elem31)
@@ -530,7 +530,7 @@ class PlanNodeDescription:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -577,7 +577,7 @@ class PlanDescription:
               _elem40 = PlanNodeDescription()
               _elem40.read(iprot)
               self.plan_node_descs.append(_elem40)
-          else:
+          else: 
             while iprot.peekList():
               _elem41 = PlanNodeDescription()
               _elem41.read(iprot)
@@ -588,13 +588,13 @@ class PlanDescription:
       elif fid == 2:
         if ftype == TType.MAP:
           self.node_index_map = {}
-          (_ktype43, _vtype44, _size42 ) = iprot.readMapBegin()
+          (_ktype43, _vtype44, _size42 ) = iprot.readMapBegin() 
           if _size42 >= 0:
             for _i46 in six.moves.range(_size42):
               _key47 = iprot.readI64()
               _val48 = iprot.readI64()
               self.node_index_map[_key47] = _val48
-          else:
+          else: 
             while iprot.peekMap():
               _key49 = iprot.readI64()
               _val50 = iprot.readI64()
@@ -676,7 +676,7 @@ class PlanDescription:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -835,7 +835,7 @@ class ExecutionResponse:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -964,7 +964,7 @@ class AuthResponse:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1051,7 +1051,7 @@ class VerifyClientVersionResp:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1124,7 +1124,7 @@ class VerifyClientVersionReq:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
