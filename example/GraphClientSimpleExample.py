@@ -50,11 +50,11 @@ if __name__ == '__main__':
             'INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
         assert resp.is_succeeded(), resp.error_msg()
 
-        resp = client.execute('FETCH PROP ON person "Bob"')
+        resp = client.execute('FETCH PROP ON person "Bob" YIELD vertex as node')
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
 
-        resp = client.execute('FETCH PROP ON like "Bob"->"Lily"')
+        resp = client.execute('FETCH PROP ON like "Bob"->"Lily" YIELD edge as e')
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
 
