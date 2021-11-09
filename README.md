@@ -37,7 +37,13 @@ Before you start, please read this section to choose the right branch for you. I
 
 ## How to get nebula2-python
 
-### Option one: clone from GitHub
+### Option one: install with pip
+
+```python
+pip install nebula2-python==$version
+```
+
+### Option two: install from the source code
 
 - Clone from GitHub
 
@@ -49,23 +55,7 @@ cd nebula-python
 - Install
 
 ```python
-sudo python3 setup.py install
-```
-
-When your environment cannot access `pypi`, you need to install the following packages manually.
-
-```
-pip install -r requirements.txt
-```
-dev version
-```
-pip install -r requirements-dev.txt
-```
-
-### Option two: using pip
-
-```python
-pip install nebula2-python==$version
+pip install .
 ```
 
 ## Quick example to use graph-client to connect graphd
