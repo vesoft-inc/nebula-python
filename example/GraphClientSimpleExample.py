@@ -3,14 +3,16 @@
 
 # Copyright (c) 2020 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
-# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+# This source code is licensed under Apache 2.0 License.
+
 
 import time
 import json
 
 from nebula2.gclient.net import ConnectionPool
+
 from nebula2.Config import Config
+from nebula2.common import *
 from FormatResp import print_resp
 
 if __name__ == '__main__':
@@ -48,11 +50,11 @@ if __name__ == '__main__':
             'INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
         assert resp.is_succeeded(), resp.error_msg()
 
-        resp = client.execute('FETCH PROP ON person "Bob"')
+        resp = client.execute('FETCH PROP ON person "Bob" YIELD vertex as node')
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
 
-        resp = client.execute('FETCH PROP ON like "Bob"->"Lily"')
+        resp = client.execute('FETCH PROP ON like "Bob"->"Lily" YIELD edge as e')
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
 
