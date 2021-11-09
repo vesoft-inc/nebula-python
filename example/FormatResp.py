@@ -3,8 +3,8 @@
 
 # Copyright (c) 2020 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
-# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+# This source code is licensed under Apache 2.0 License.
+
 
 import prettytable
 
@@ -46,6 +46,8 @@ def print_resp(resp):
                 value_list.append(col.as_relationship())
             elif col.is_path():
                 value_list.append(col.as_path())
+            elif col.is_geography():
+                value_list.append(col.as_geography())
             else:
                 print('ERROR: Type unsupported')
                 return

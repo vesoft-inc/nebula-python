@@ -3,8 +3,8 @@
 
 # Copyright (c) 2020 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
-# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+# This source code is licensed under Apache 2.0 License.
+
 
 from unittest import TestCase
 from nebula2.gclient.net import ConnectionPool
@@ -126,8 +126,7 @@ class TestBaseCase(TestCase):
         assert 'test_data' == resp.space_name()
         assert not resp.is_empty()
         assert 1 == resp.row_size()
-        names = ['VertexID',
-                 'person.name',
+        names = ['person.name',
                  'person.age',
                  'person.grade',
                  'person.friends',
@@ -144,12 +143,11 @@ class TestBaseCase(TestCase):
         assert names == resp.keys()
 
         assert 'Bob' == resp.row_values(0)[0].as_string()
-        assert 'Bob' == resp.row_values(0)[1].as_string()
-        assert 10 == resp.row_values(0)[2].as_int()
-        assert 3 == resp.row_values(0)[3].as_int()
-        assert 10 == resp.row_values(0)[4].as_int()
-        assert 100 == resp.row_values(0)[5].as_int()
-        return_data_time_val = resp.row_values(0)[6].as_datetime()
+        assert 10 == resp.row_values(0)[1].as_int()
+        assert 3 == resp.row_values(0)[2].as_int()
+        assert 10 == resp.row_values(0)[3].as_int()
+        assert 100 == resp.row_values(0)[4].as_int()
+        return_data_time_val = resp.row_values(0)[5].as_datetime()
         assert return_data_time_val == \
             DateTimeWrapper(DateTime(2010, 9, 10, 2, 8, 2, 0))
         assert '2010-09-10T10:08:02.000000' == return_data_time_val.get_local_datetime_str()
@@ -157,21 +155,21 @@ class TestBaseCase(TestCase):
             return_data_time_val)
 
         assert DateWrapper(Date(2017, 9, 10)) == resp.row_values(0)[
-            7].as_date()
+            6].as_date()
 
         expected_time_val = TimeWrapper(Time(23, 10, 0, 0))
-        return_time_val = resp.row_values(0)[8].as_time()
+        return_time_val = resp.row_values(0)[7].as_time()
         assert expected_time_val == return_time_val
         assert '07:10:00.000000' == return_time_val.get_local_time_str()
         assert 'utc time: 23:10:00.000000, timezone_offset: 28800' == str(
             return_time_val)
 
-        assert 1000.0 == resp.row_values(0)[9].as_double()
-        assert False == resp.row_values(0)[10].as_bool()
-        assert 'Hello Worl' == resp.row_values(0)[11].as_string()
-        assert 100.0 == resp.row_values(0)[12].as_double()
-        assert 1111 == resp.row_values(0)[13].as_int()
-        assert Null(Null.__NULL__) == resp.row_values(0)[14].as_null()
+        assert 1000.0 == resp.row_values(0)[8].as_double()
+        assert False == resp.row_values(0)[9].as_bool()
+        assert 'Hello Worl' == resp.row_values(0)[10].as_string()
+        assert 100.0 == resp.row_values(0)[11].as_double()
+        assert 1111 == resp.row_values(0)[12].as_int()
+        assert Null(Null.__NULL__) == resp.row_values(0)[13].as_null()
 
     def test_list_type(self):
         resp = self.session.execute("YIELD ['name', 'age', 'birthday'];")
@@ -254,7 +252,7 @@ class TestExecuteJson(TestBaseCase):
         exp = [1, 2.2, "hello", [1, 2, "abc"], {"key": "value"}, "汉字"]
         json_obj = json.loads(resp)
 
-	# Get errorcode
+	    # Get errorcode
         resp_error_code = json_obj["errors"][0]["code"]
         assert 0 == resp_error_code
 

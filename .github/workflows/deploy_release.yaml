@@ -20,17 +20,23 @@ jobs:
 
     - name: Test with pytest
       run: |
-        mkdir tmp
-        pushd tmp
-        git clone https://github.com/vesoft-inc/nebula-docker-compose.git
-        pushd nebula-docker-compose/
-        cp ../../tests/docker-compose.yaml ./
         docker-compose up -d
-        sleep 60
-        popd
-        popd
-        cd tests
-        pytest -s -v
+        sleep 45
+        pytest -s -v -k "not TestSSLConnection and not TestSSLConnectionSelfSigned"
+        docker-compose down -v
+      working-directory: tests
+    - name: Test SSL connection with pytest
+      run: |
+        enable_ssl=true docker-compose up -d
+        sleep 45
+        pytest -s -v test_ssl_connection.py::TestSSLConnection
+      working-directory: tests
+    - name: Test self-signed SSL connection with pytest
+      run: |
+        enable_ssl=true docker-compose up -d
+        sleep 45
+        pytest -s -v test_ssl_connection.py::TestSSLConnectionSelfSigned
+      working-directory: tests
 
     - name: Build and publish
       env:
