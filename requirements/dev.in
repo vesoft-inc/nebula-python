@@ -1,0 +1,4 @@
+-r base.in
+prettytable
+pytest
+pip-tools

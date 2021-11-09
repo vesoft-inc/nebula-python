@@ -16,7 +16,7 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         pip3 install setuptools wheel twine
-        pip install -r requirements-dev.txt
+        pip install -r requirements/dev.txt
 
     - name: Test with pytest
       run: |
