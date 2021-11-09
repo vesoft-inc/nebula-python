@@ -46,6 +46,7 @@ FUNCTIONS = {
     'signout': Function('signout', 'GraphService', None, [('i64', 'sessionId', 'i64')]),
     'execute': Function('execute', 'GraphService', 'ExecutionResponse', [('i64', 'sessionId', 'i64'), ('binary', 'stmt', 'binary')]),
     'executeJson': Function('executeJson', 'GraphService', 'binary', [('i64', 'sessionId', 'i64'), ('binary', 'stmt', 'binary')]),
+    'verifyClientVersion': Function('verifyClientVersion', 'GraphService', 'VerifyClientVersionResp', [('VerifyClientVersionReq', 'req', 'VerifyClientVersionReq')]),
 }
 
 SERVICE_NAMES = ['GraphService', ]

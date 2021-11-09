@@ -3,8 +3,8 @@
 
 # Copyright (c) 2020 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
-# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+# This source code is licensed under Apache 2.0 License.
+
 
 from nebula2.common import ttypes
 from nebula2.common.ttypes import Vertex, Tag, Edge
@@ -166,7 +166,6 @@ class EdgeData(object):
             raise RuntimeError('The row value is bad format, '
                                'get edge dst id failed: len is {}'
                                .format(len(self._row.values)))
-        assert self._row.values[3].getType() == ttypes.Value.SVAL
         return ValueWrapper(self._row.values[3], self._decode_type)
 
     def as_relationship(self):

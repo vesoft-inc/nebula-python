@@ -109,3 +109,8 @@ nebula/graph.thrift
 
 # ide
 .idea/
+.vscode/
+
+# CI data
+tests/data
+tests/logs

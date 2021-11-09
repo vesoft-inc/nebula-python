@@ -13,7 +13,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, ProfilingStats, PlanNodeBranchInfo, Pair, PlanNodeDescription, PlanDescription, ExecutionResponse, AuthResponse
+from .ttypes import UTF8STRINGS, ProfilingStats, PlanNodeBranchInfo, Pair, PlanNodeDescription, PlanDescription, ExecutionResponse, AuthResponse, VerifyClientVersionResp, VerifyClientVersionReq
 import nebula2.common.ttypes
 
 from nebula2.fbthrift.Thrift import TProcessor
@@ -74,6 +74,13 @@ class Iface:
     """
     pass
 
+  def verifyClientVersion(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
 
 class ContextIface:
   def authenticate(self, handler_ctx, username=None, password=None):
@@ -104,6 +111,13 @@ class ContextIface:
     Parameters:
      - sessionId
      - stmt
+    """
+    pass
+
+  def verifyClientVersion(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
     """
     pass
 
@@ -832,6 +846,199 @@ def executeJson_result__setstate__(self, state):
 executeJson_result.__getstate__ = lambda self: self.__dict__.copy()
 executeJson_result.__setstate__ = executeJson_result__setstate__
 
+class verifyClientVersion_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = VerifyClientVersionReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('verifyClientVersion_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(verifyClientVersion_args)
+verifyClientVersion_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [VerifyClientVersionReq, VerifyClientVersionReq.thrift_spec, False], None, 2, ), # 1
+)
+
+verifyClientVersion_args.thrift_struct_annotations = {
+}
+verifyClientVersion_args.thrift_field_annotations = {
+}
+
+def verifyClientVersion_args__init__(self, req=None,):
+  self.req = req
+
+verifyClientVersion_args.__init__ = verifyClientVersion_args__init__
+
+def verifyClientVersion_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+verifyClientVersion_args.__getstate__ = lambda self: self.__dict__.copy()
+verifyClientVersion_args.__setstate__ = verifyClientVersion_args__setstate__
+
+class verifyClientVersion_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = VerifyClientVersionResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('verifyClientVersion_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(verifyClientVersion_result)
+verifyClientVersion_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [VerifyClientVersionResp, VerifyClientVersionResp.thrift_spec, False], None, 2, ), # 0
+)
+
+verifyClientVersion_result.thrift_struct_annotations = {
+}
+verifyClientVersion_result.thrift_field_annotations = {
+}
+
+def verifyClientVersion_result__init__(self, success=None,):
+  self.success = success
+
+verifyClientVersion_result.__init__ = verifyClientVersion_result__init__
+
+def verifyClientVersion_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+verifyClientVersion_result.__getstate__ = lambda self: self.__dict__.copy()
+verifyClientVersion_result.__setstate__ = verifyClientVersion_result__setstate__
+
 class Client(Iface):
   def __enter__(self):
     return self
@@ -957,6 +1164,36 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "executeJson failed: unknown result");
 
+  def verifyClientVersion(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_verifyClientVersion(req)
+    return self.recv_verifyClientVersion()
+
+  def send_verifyClientVersion(self, req=None):
+    self._oprot.writeMessageBegin('verifyClientVersion', TMessageType.CALL, self._seqid)
+    args = verifyClientVersion_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_verifyClientVersion(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = verifyClientVersion_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "verifyClientVersion failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   _onewayMethods = ("signout",)
@@ -974,6 +1211,8 @@ class Processor(Iface, TProcessor):
     self._priorityMap["execute"] = TPriority.NORMAL
     self._processMap["executeJson"] = Processor.process_executeJson
     self._priorityMap["executeJson"] = TPriority.NORMAL
+    self._processMap["verifyClientVersion"] = Processor.process_verifyClientVersion
+    self._priorityMap["verifyClientVersion"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -1025,6 +1264,17 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(verifyClientVersion_args, oneway=False)
+  def process_verifyClientVersion(self, args, handler_ctx):
+    result = verifyClientVersion_result()
+    try:
+      result.success = self._handler.verifyClientVersion(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'verifyClientVersion', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
 Iface._processor_type = Processor
 
 class ContextProcessor(ContextIface, TProcessor):
@@ -1043,6 +1293,8 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["execute"] = TPriority.NORMAL
     self._processMap["executeJson"] = ContextProcessor.process_executeJson
     self._priorityMap["executeJson"] = TPriority.NORMAL
+    self._processMap["verifyClientVersion"] = ContextProcessor.process_verifyClientVersion
+    self._priorityMap["verifyClientVersion"] = TPriority.NORMAL
 
   def onewayMethods(self):
     l = []
@@ -1091,6 +1343,17 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'executeJson', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(verifyClientVersion_args, oneway=False)
+  def process_verifyClientVersion(self, args, handler_ctx):
+    result = verifyClientVersion_result()
+    try:
+      result.success = self._handler.verifyClientVersion(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'verifyClientVersion', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 

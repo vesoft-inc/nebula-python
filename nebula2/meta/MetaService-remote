@@ -46,6 +46,7 @@ FUNCTIONS = {
     'dropSpace': Function('dropSpace', 'MetaService', 'ExecResp', [('DropSpaceReq', 'req', 'DropSpaceReq')]),
     'getSpace': Function('getSpace', 'MetaService', 'GetSpaceResp', [('GetSpaceReq', 'req', 'GetSpaceReq')]),
     'listSpaces': Function('listSpaces', 'MetaService', 'ListSpacesResp', [('ListSpacesReq', 'req', 'ListSpacesReq')]),
+    'createSpaceAs': Function('createSpaceAs', 'MetaService', 'ExecResp', [('CreateSpaceAsReq', 'req', 'CreateSpaceAsReq')]),
     'createTag': Function('createTag', 'MetaService', 'ExecResp', [('CreateTagReq', 'req', 'CreateTagReq')]),
     'alterTag': Function('alterTag', 'MetaService', 'ExecResp', [('AlterTagReq', 'req', 'AlterTagReq')]),
     'dropTag': Function('dropTag', 'MetaService', 'ExecResp', [('DropTagReq', 'req', 'DropTagReq')]),
@@ -114,7 +115,7 @@ FUNCTIONS = {
     'addListener': Function('addListener', 'MetaService', 'ExecResp', [('AddListenerReq', 'req', 'AddListenerReq')]),
     'removeListener': Function('removeListener', 'MetaService', 'ExecResp', [('RemoveListenerReq', 'req', 'RemoveListenerReq')]),
     'listListener': Function('listListener', 'MetaService', 'ListListenerResp', [('ListListenerReq', 'req', 'ListListenerReq')]),
-    'getStatis': Function('getStatis', 'MetaService', 'GetStatisResp', [('GetStatisReq', 'req', 'GetStatisReq')]),
+    'getStats': Function('getStats', 'MetaService', 'GetStatsResp', [('GetStatsReq', 'req', 'GetStatsReq')]),
     'signInFTService': Function('signInFTService', 'MetaService', 'ExecResp', [('SignInFTServiceReq', 'req', 'SignInFTServiceReq')]),
     'signOutFTService': Function('signOutFTService', 'MetaService', 'ExecResp', [('SignOutFTServiceReq', 'req', 'SignOutFTServiceReq')]),
     'listFTClients': Function('listFTClients', 'MetaService', 'ListFTClientsResp', [('ListFTClientsReq', 'req', 'ListFTClientsReq')]),
@@ -130,6 +131,7 @@ FUNCTIONS = {
     'reportTaskFinish': Function('reportTaskFinish', 'MetaService', 'ExecResp', [('ReportTaskReq', 'req', 'ReportTaskReq')]),
     'listCluster': Function('listCluster', 'MetaService', 'ListClusterInfoResp', [('ListClusterInfoReq', 'req', 'ListClusterInfoReq')]),
     'getMetaDirInfo': Function('getMetaDirInfo', 'MetaService', 'GetMetaDirInfoResp', [('GetMetaDirInfoReq', 'req', 'GetMetaDirInfoReq')]),
+    'verifyClientVersion': Function('verifyClientVersion', 'MetaService', 'VerifyClientVersionResp', [('VerifyClientVersionReq', 'req', 'VerifyClientVersionReq')]),
 }
 
 SERVICE_NAMES = ['MetaService', ]
