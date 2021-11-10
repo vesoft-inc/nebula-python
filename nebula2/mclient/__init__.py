@@ -207,7 +207,7 @@ class MetaClient(object):
             raise
 
     def update_leader(self, leader):
-        """update the leader meta info when hanppen leader change
+        """update the leader meta info when happen leader change
 
         :param leader: the address of meta leader
         :eturn:
