@@ -721,7 +721,7 @@ class Remote(object):
                     'type': lambda x: get_helper_for_format(x, "output"),
                     'help': (
                         'Change the output format for the return value. The '
-                        'default is "python", which direclty prints out strings '
+                        'default is "python", which directly prints out strings '
                         'and pprint() other types. Available formats: {}.'
                     ).format(','.join(format_to_helper["output"].keys()))
                 },
