@@ -34,7 +34,7 @@ class ResultSet(object):
                                                     timezone_offset=self._timezone_offset)
 
     def is_succeeded(self):
-        """check the response from the sesrvice is succeeded
+        """check the response from the service is succeeded
 
         :return: bool
         """
