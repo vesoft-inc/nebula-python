@@ -473,10 +473,10 @@ class TestNode(TestBaseCase):
 
         assert ['tag0', 'tag1', 'tag2'] == node.tags()
 
-        expect_propertys = {}
+        expect_properties = {}
         for key in node.properties('tag2').keys():
-            expect_propertys[key] = node.properties('tag2')[key].as_int()
-        assert {'prop0': 0, 'prop1': 1, 'prop2': 2, 'prop3': 3, 'prop4': 4} == expect_propertys
+            expect_properties[key] = node.properties('tag2')[key].as_int()
+        assert {'prop0': 0, 'prop1': 1, 'prop2': 2, 'prop3': 3, 'prop4': 4} == expect_properties
 
 
 class TestRelationship(TestBaseCase):
@@ -495,10 +495,10 @@ class TestRelationship(TestBaseCase):
 
         assert ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'] == relationship.keys()
 
-        expect_propertys = {}
+        expect_properties = {}
         for key in relationship.properties().keys():
-            expect_propertys[key] = relationship.properties()[key].as_int()
-        assert {'prop0': 0, 'prop1': 1, 'prop2': 2, 'prop3': 3, 'prop4': 4} == expect_propertys
+            expect_properties[key] = relationship.properties()[key].as_int()
+        assert {'prop0': 0, 'prop1': 1, 'prop2': 2, 'prop3': 3, 'prop4': 4} == expect_properties
 
 
 class TestPath(TestBaseCase):
