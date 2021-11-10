@@ -5535,7 +5535,7 @@ class TaskPara:
   Attributes:
    - space_id
    - parts
-   - task_specfic_paras
+   - task_specific_paras
   """
 
   thrift_spec = None
@@ -5580,16 +5580,16 @@ class TaskPara:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.LIST:
-          self.task_specfic_paras = []
+          self.task_specific_paras = []
           (_etype453, _size450) = iprot.readListBegin()
           if _size450 >= 0:
             for _i454 in six.moves.range(_size450):
               _elem455 = iprot.readString()
-              self.task_specfic_paras.append(_elem455)
+              self.task_specific_paras.append(_elem455)
           else: 
             while iprot.peekList():
               _elem456 = iprot.readString()
-              self.task_specfic_paras.append(_elem456)
+              self.task_specific_paras.append(_elem456)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -5617,10 +5617,10 @@ class TaskPara:
         oprot.writeI32(iter457)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
-    if self.task_specfic_paras != None:
-      oprot.writeFieldBegin('task_specfic_paras', TType.LIST, 3)
-      oprot.writeListBegin(TType.STRING, len(self.task_specfic_paras))
-      for iter458 in self.task_specfic_paras:
+    if self.task_specific_paras != None:
+      oprot.writeFieldBegin('task_specific_paras', TType.LIST, 3)
+      oprot.writeListBegin(TType.STRING, len(self.task_specific_paras))
+      for iter458 in self.task_specific_paras:
         oprot.writeString(iter458)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
@@ -5638,10 +5638,10 @@ class TaskPara:
       value = pprint.pformat(self.parts, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    parts=%s' % (value))
-    if self.task_specfic_paras is not None:
-      value = pprint.pformat(self.task_specfic_paras, indent=0)
+    if self.task_specific_paras is not None:
+      value = pprint.pformat(self.task_specific_paras, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    task_specfic_paras=%s' % (value))
+      L.append('    task_specific_paras=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -9838,7 +9838,7 @@ TaskPara.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
   (2, TType.LIST, 'parts', (TType.I32,None), None, 1, ), # 2
-  (3, TType.LIST, 'task_specfic_paras', (TType.STRING,False), None, 1, ), # 3
+  (3, TType.LIST, 'task_specific_paras', (TType.STRING,False), None, 1, ), # 3
 )
 
 TaskPara.thrift_struct_annotations = {
@@ -9846,17 +9846,17 @@ TaskPara.thrift_struct_annotations = {
 TaskPara.thrift_field_annotations = {
 }
 
-def TaskPara__init__(self, space_id=None, parts=None, task_specfic_paras=None,):
+def TaskPara__init__(self, space_id=None, parts=None, task_specific_paras=None,):
   self.space_id = space_id
   self.parts = parts
-  self.task_specfic_paras = task_specfic_paras
+  self.task_specific_paras = task_specific_paras
 
 TaskPara.__init__ = TaskPara__init__
 
 def TaskPara__setstate__(self, state):
   state.setdefault('space_id', None)
   state.setdefault('parts', None)
-  state.setdefault('task_specfic_paras', None)
+  state.setdefault('task_specific_paras', None)
   self.__dict__ = state
 
 TaskPara.__getstate__ = lambda self: self.__dict__.copy()
