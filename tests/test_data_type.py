@@ -442,19 +442,19 @@ class TesValueWrapper(TestBaseCase):
     def test_as_path(self):
         value = ttypes.Value()
         value.set_pVal(self.get_path_value(b'Tom'))
-        vaue_wrapper = ValueWrapper(value)
-        assert vaue_wrapper.is_path()
+        value_wrapper = ValueWrapper(value)
+        assert value_wrapper.is_path()
 
-        node = vaue_wrapper.as_path()
+        node = value_wrapper.as_path()
         assert isinstance(node, PathWrapper)
 
     def test_as_geography(self):
         value = ttypes.Value()
         value.set_ggVal(self.get_geography_value(3.0, 5.2))
-        vaue_wrapper = ValueWrapper(value)
-        assert vaue_wrapper.is_geography()
+        value_wrapper = ValueWrapper(value)
+        assert value_wrapper.is_geography()
 
-        geog = vaue_wrapper.as_geography()
+        geog = value_wrapper.as_geography()
         assert isinstance(geog, GeographyWrapper)
 
 
