@@ -202,7 +202,7 @@ class authenticate_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -302,7 +302,7 @@ class authenticate_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -397,7 +397,7 @@ class signout_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -507,7 +507,7 @@ class execute_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -607,7 +607,7 @@ class execute_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -716,7 +716,7 @@ class executeJson_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -815,7 +815,7 @@ class executeJson_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -911,7 +911,7 @@ class verifyClientVersion_args:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)
@@ -1008,7 +1008,7 @@ class verifyClientVersion_result:
     if not isinstance(other, self.__class__):
       return False
 
-    return self.__dict__ == other.__dict__
+    return self.__dict__ == other.__dict__ 
 
   def __ne__(self, other):
     return not (self == other)

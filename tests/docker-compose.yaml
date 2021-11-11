@@ -15,6 +15,11 @@ services:
       - --v=0
       - --minloglevel=0
       - --heartbeat_interval_secs=2
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://172.28.1.1:11000/status"]
       interval: 30s
@@ -26,6 +31,7 @@ services:
       - 11000
       - 11002
     volumes:
+      - ./secrets:/secrets
       - ./data/meta0:/data/meta:Z
       - ./logs/meta0:/logs:Z
     networks:
@@ -50,6 +56,11 @@ services:
       - --v=0
       - --minloglevel=0
       - --heartbeat_interval_secs=2
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://172.28.1.2:11000/status"]
       interval: 30s
@@ -61,6 +72,7 @@ services:
       - 11000
       - 11002
     volumes:
+      - ./secrets:/secrets
       - ./data/meta1:/data/meta:Z
       - ./logs/meta1:/logs:Z
     networks:
@@ -85,6 +97,11 @@ services:
       - --v=0
       - --minloglevel=0
       - --heartbeat_interval_secs=2
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://172.28.1.3:11000/status"]
       interval: 30s
@@ -96,6 +113,7 @@ services:
       - 11000
       - 11002
     volumes:
+      - ./secrets:/secrets
       - ./data/meta2:/data/meta:Z
       - ./logs/meta2:/logs:Z
     networks:
@@ -121,6 +139,11 @@ services:
       - --minloglevel=0
       - --heartbeat_interval_secs=2
       - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
     depends_on:
       - metad0
       - metad1
@@ -136,6 +159,7 @@ services:
       - 12000
       - 12002
     volumes:
+      - ./secrets:/secrets
       - ./data/storage0:/data/storage:Z
       - ./logs/storage0:/logs:Z
     networks:
@@ -161,6 +185,11 @@ services:
       - --minloglevel=0
       - --heartbeat_interval_secs=2
       - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
     depends_on:
       - metad0
       - metad1
@@ -176,6 +205,7 @@ services:
       - 12000
       - 12002
     volumes:
+      - ./secrets:/secrets
       - ./data/storage1:/data/storage:Z
       - ./logs/storage1:/logs:Z
     networks:
@@ -201,6 +231,11 @@ services:
       - --minloglevel=0
       - --heartbeat_interval_secs=2
       - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
     depends_on:
       - metad0
       - metad1
@@ -216,6 +251,7 @@ services:
       - 12000
       - 12002
     volumes:
+      - ./secrets:/secrets
       - ./data/storage2:/data/storage:Z
       - ./logs/storage2:/logs:Z
     networks:
@@ -239,6 +275,11 @@ services:
       - --minloglevel=0
       - --heartbeat_interval_secs=2
       - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
     depends_on:
       - metad0
       - metad1
@@ -254,6 +295,7 @@ services:
       - 13000
       - 13002
     volumes:
+      - ./secrets:/secrets
       - ./logs/graph0:/logs:Z
     networks:
       nebula-net:
@@ -276,6 +318,11 @@ services:
       - --minloglevel=0
       - --heartbeat_interval_secs=2
       - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
     depends_on:
       - metad0
       - metad1
@@ -291,6 +338,7 @@ services:
       - 13000
       - 13002
     volumes:
+      - ./secrets:/secrets
       - ./logs/graph1:/logs:Z
     networks:
       nebula-net:
@@ -313,6 +361,11 @@ services:
       - --minloglevel=0
       - --heartbeat_interval_secs=2
       - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
     depends_on:
       - metad0
       - metad1
@@ -328,6 +381,7 @@ services:
       - 13000
       - 13002
     volumes:
+      - ./secrets:/secrets
       - ./logs/graph2:/logs:Z
     networks:
       nebula-net:

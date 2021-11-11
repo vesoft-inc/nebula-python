@@ -3,8 +3,8 @@
 
 # Copyright (c) 2020 vesoft inc. All rights reserved.
 #
-# This source code is licensed under Apache 2.0 License,
-# attached with Common Clause Condition 1.0, found in the LICENSES directory.
+# This source code is licensed under Apache 2.0 License.
+
 
 from nebula2.common.ttypes import ErrorCode
 
@@ -150,6 +150,7 @@ class ResultSet(object):
           ttypes.Value.MVAL = 13
           ttypes.Value.UVAL = 14
           ttypes.Value.GVAL = 15
+          ttypes.Value.GGVAL = 16
         """
         if self._data_set_wrapper is None:
             return []
