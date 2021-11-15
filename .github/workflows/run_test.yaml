@@ -30,14 +30,14 @@ jobs:
       run: |
         docker-compose up -d
         sleep 45
-        pytest -s -v -k "not TestSSLConnection and not TestSSLConnectionSelfSigned"
+        pytest -s -v -k "not TestSSLConnection and not TestSSLConnectionSelfSigned" --log-level=debug
         docker-compose down -v
       working-directory: tests
     - name: Test SSL connection with pytest
       run: |
         enable_ssl=true docker-compose up -d
         sleep 45
-        pytest -s -v test_ssl_connection.py::TestSSLConnection
+        pytest -s -v test_ssl_connection.py::TestSSLConnection 
       working-directory: tests
     - name: Test self-signed SSL connection with pytest
       run: |

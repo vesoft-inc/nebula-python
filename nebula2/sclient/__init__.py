@@ -180,14 +180,14 @@ def do_scan_job(storage_connection,
                 if scan_vertex:
                     logging.debug("resp.vertex_data size: {}".format(len(resp.vertex_data.rows)))
                     if len(resp.vertex_data.column_names) == 0:
-                        return 'Part id: {} return empty column names'.format(part_info.part_id)
+                        return 'Part id: {} return empty column names'.format(part_info.part_id), None
                     if len(resp.vertex_data.rows) == 0:
                         continue
                     data_sets.append(resp.vertex_data)
                 else:
                     logging.debug("resp.edge_data size: {}".format(len(resp.edge_data.rows)))
                     if len(resp.edge_data.column_names) == 0:
-                        return 'Part id: {} return empty column names'.format(part_info.part_id)
+                        return 'Part id: {} return empty column names'.format(part_info.part_id), None
                     if len(resp.edge_data.rows) == 0:
                         continue
                     data_sets.append(resp.edge_data)
