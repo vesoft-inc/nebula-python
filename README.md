@@ -144,3 +144,25 @@ while resp.has_next():
 | 2.0.0rc1  | 2.0.0-rc1 |
 | 2.0.0  | 2.0.0/2.0.1 |
 | 2.5.0  | 2.5.0 |
+
+## How to contribute to nebula-python
+
+[Fork](https://github.com/vesoft-inc/nebula-python/fork) this repo, then clone it locally
+(be sure to replace the `{username}` in the repo URL below with your GitHub username):
+```
+git clone https://github.com/{username}/nebula-python.git
+cd nebula-python
+```
+
+Install the package in the editable mode, then install all the dev dependencies:
+```
+pip install -e .
+pip install -r requirements/dev.txt
+```
+
+Make sure the Nebula server in running, then run the tests with pytest:
+```
+pytest
+```
+
+See [How to contribute](https://github.com/vesoft-inc/nebula-community/blob/master/Contributors/how-to-contribute.md) for the general process of contributing to Nebula projects.
