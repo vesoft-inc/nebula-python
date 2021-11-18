@@ -29,7 +29,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'NullType', 'ErrorCode', 'SchemaID', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Coordinate', 'Point', 'LineString', 'Polygon', 'Geography', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
+__all__ = ['UTF8STRINGS', 'NullType', 'PropertyType', 'ErrorCode', 'SchemaID', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Coordinate', 'Point', 'LineString', 'Polygon', 'Geography', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'LogEntry', 'ClusterID', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
 
 class NullType:
   __NULL__ = 0
@@ -61,6 +61,62 @@ class NullType:
     "UNKNOWN_PROP": 5,
     "DIV_BY_ZERO": 6,
     "OUT_OF_RANGE": 7,
+  }
+
+class PropertyType:
+  UNKNOWN = 0
+  BOOL = 1
+  INT64 = 2
+  VID = 3
+  FLOAT = 4
+  DOUBLE = 5
+  STRING = 6
+  FIXED_STRING = 7
+  INT8 = 8
+  INT16 = 9
+  INT32 = 10
+  TIMESTAMP = 21
+  DATE = 24
+  DATETIME = 25
+  TIME = 26
+  GEOGRAPHY = 31
+
+  _VALUES_TO_NAMES = {
+    0: "UNKNOWN",
+    1: "BOOL",
+    2: "INT64",
+    3: "VID",
+    4: "FLOAT",
+    5: "DOUBLE",
+    6: "STRING",
+    7: "FIXED_STRING",
+    8: "INT8",
+    9: "INT16",
+    10: "INT32",
+    21: "TIMESTAMP",
+    24: "DATE",
+    25: "DATETIME",
+    26: "TIME",
+    31: "GEOGRAPHY",
+  }
+
+  _NAMES_TO_VALUES = {
+    "UNKNOWN": 0,
+    "BOOL": 1,
+    "INT64": 2,
+    "VID": 3,
+    "FLOAT": 4,
+    "DOUBLE": 5,
+    "STRING": 6,
+    "FIXED_STRING": 7,
+    "INT8": 8,
+    "INT16": 9,
+    "INT32": 10,
+    "TIMESTAMP": 21,
+    "DATE": 24,
+    "DATETIME": 25,
+    "TIME": 26,
+    "GEOGRAPHY": 31,
   }
 
 class ErrorCode:
@@ -117,7 +173,7 @@ class ErrorCode:
   E_BALANCED = -2024
   E_NO_RUNNING_BALANCE_PLAN = -2025
   E_NO_VALID_HOST = -2026
-  E_CORRUPTTED_BALANCE_PLAN = -2027
+  E_CORRUPTED_BALANCE_PLAN = -2027
   E_NO_INVALID_BALANCE_PLAN = -2028
   E_IMPROPER_ROLE = -2030
   E_INVALID_PARTITION_NUM = -2031
@@ -240,7 +296,7 @@ class ErrorCode:
     -2024: "E_BALANCED",
     -2025: "E_NO_RUNNING_BALANCE_PLAN",
     -2026: "E_NO_VALID_HOST",
-    -2027: "E_CORRUPTTED_BALANCE_PLAN",
+    -2027: "E_CORRUPTED_BALANCE_PLAN",
     -2028: "E_NO_INVALID_BALANCE_PLAN",
     -2030: "E_IMPROPER_ROLE",
     -2031: "E_INVALID_PARTITION_NUM",
@@ -364,7 +420,7 @@ class ErrorCode:
     "E_BALANCED": -2024,
     "E_NO_RUNNING_BALANCE_PLAN": -2025,
     "E_NO_VALID_HOST": -2026,
-    "E_CORRUPTTED_BALANCE_PLAN": -2027,
+    "E_CORRUPTED_BALANCE_PLAN": -2027,
     "E_NO_INVALID_BALANCE_PLAN": -2028,
     "E_IMPROPER_ROLE": -2030,
     "E_INVALID_PARTITION_NUM": -2031,
@@ -3636,6 +3692,94 @@ class CheckpointInfo:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class LogEntry:
+  """
+  Attributes:
+   - cluster
+   - log_str
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.cluster = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.log_str = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('LogEntry')
+    if self.cluster != None:
+      oprot.writeFieldBegin('cluster', TType.I64, 1)
+      oprot.writeI64(self.cluster)
+      oprot.writeFieldEnd()
+    if self.log_str != None:
+      oprot.writeFieldBegin('log_str', TType.STRING, 2)
+      oprot.writeString(self.log_str)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.cluster is not None:
+      value = pprint.pformat(self.cluster, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    cluster=%s' % (value))
+    if self.log_str is not None:
+      value = pprint.pformat(self.log_str, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    log_str=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+ClusterID = UnimplementedTypedef()
 GraphSpaceID = UnimplementedTypedef()
 PartitionID = UnimplementedTypedef()
 TagID = UnimplementedTypedef()
@@ -4499,6 +4643,32 @@ def CheckpointInfo__setstate__(self, state):
 
 CheckpointInfo.__getstate__ = lambda self: self.__dict__.copy()
 CheckpointInfo.__setstate__ = CheckpointInfo__setstate__
+
+all_structs.append(LogEntry)
+LogEntry.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'cluster', None, None, 2, ), # 1
+  (2, TType.STRING, 'log_str', False, None, 2, ), # 2
+)
+
+LogEntry.thrift_struct_annotations = {
+}
+LogEntry.thrift_field_annotations = {
+}
+
+def LogEntry__init__(self, cluster=None, log_str=None,):
+  self.cluster = cluster
+  self.log_str = log_str
+
+LogEntry.__init__ = LogEntry__init__
+
+def LogEntry__setstate__(self, state):
+  state.setdefault('cluster', None)
+  state.setdefault('log_str', None)
+  self.__dict__ = state
+
+LogEntry.__getstate__ = lambda self: self.__dict__.copy()
+LogEntry.__setstate__ = LogEntry__setstate__
 
 fix_spec(all_structs)
 del all_structs
