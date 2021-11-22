@@ -8,9 +8,11 @@
 
 import copy
 import logging
+import pdb
 from threading import RLock, Condition
 
 from nebula2.common.ttypes import HostAddr, ErrorCode
+from nebula2.storage.ttypes import ScanCursor
 
 
 class PartInfo(object):
@@ -21,8 +23,9 @@ class PartInfo(object):
         self.has_done = False
 
     def __repr__(self) -> str:
-        return 'PartInfo: part_id: {}, leader: {}, cursor: {}, has_done: {}'\
-            .format(self.part_id, self.leader, self.cursor, self.has_done)
+        return 'PartInfo: part_id: {}, leader: {}, cursor: {}, has_done: {}'.format(
+            self.part_id, self.leader, self.cursor, self.has_done
+        )
 
 
 class PartManager(object):
@@ -39,8 +42,10 @@ class PartManager(object):
         try:
             self._condition.acquire()
             for part_id in self._parts.keys():
-                if self._parts[part_id].leader == addr \
-                        and not self._parts[part_id].has_done:
+                if (
+                    self._parts[part_id].leader == addr
+                    and not self._parts[part_id].has_done
+                ):
                     return self._parts[part_id]
             return None
         finally:
@@ -93,7 +98,7 @@ class PartManager(object):
         try:
             self._condition.acquire()
             if self._stop:
-                return 
+                return
             self._part_jobs = len(self._parts)
             self._reset_parts_status()
         finally:
@@ -120,11 +125,9 @@ class PartManager(object):
             self._condition.release()
 
 
-def do_scan_job(storage_connection,
-                parts_manager,
-                in_req,
-                scan_vertex=True,
-                partial_success=False):
+def do_scan_job(
+    storage_connection, parts_manager, in_req, scan_vertex=True, partial_success=False
+):
     data_sets = []
     req = copy.deepcopy(in_req)
     while True:
@@ -136,10 +139,13 @@ def do_scan_job(storage_connection,
             parts_manager.wait_task()
             continue
         else:
-            req.part_id = part_info.part_id
-            logging.debug('Scan =====> req: {}'.format(req))
             if part_info.cursor is not None:
-                req.cursor = part_info.cursor
+                parts = {part_info.part_id: part_info.cursor}
+            else:
+                parts = {part_info.part_id: ScanCursor()}
+
+            req.parts = parts
+            logging.debug('Scan =====> req: {}'.format(req))
             try:
                 if scan_vertex:
                     resp = storage_connection.scan_vertex(req)
@@ -149,21 +155,35 @@ def do_scan_job(storage_connection,
                 if len(resp.result.failed_parts) != 0:
                     if resp.result.failed_parts[0].code == ErrorCode.E_LEADER_CHANGED:
                         if resp.result.failed_parts[0].leader is None:
-                            logging.error('Happen leader change, but the leader is None')
-                            raise RuntimeError('Happen leader change, but the leader is None')
-                        parts_manager.update_part_leader(resp.result.failed_parts[0].part_id,
-                                                         resp.result.failed_parts[0].leader)
-                        logging.warning('part_id {} has leader change, '
-                                        'old leader is {}, new leader is {}'
-                                        .format(part_info.part_id, storage_connection.storage_addr(),
-                                                resp.result.failed_parts[0].leader))
-                        storage_connection.update_leader_info(req.space_id,
-                                                              req.part_id,
-                                                              resp.result.failed_parts[0].leader)
+                            logging.error(
+                                'Happen leader change, but the leader is None'
+                            )
+                            raise RuntimeError(
+                                'Happen leader change, but the leader is None'
+                            )
+                        parts_manager.update_part_leader(
+                            resp.result.failed_parts[0].part_id,
+                            resp.result.failed_parts[0].leader,
+                        )
+                        logging.warning(
+                            'part_id {} has leader change, '
+                            'old leader is {}, new leader is {}'.format(
+                                part_info.part_id,
+                                storage_connection.storage_addr(),
+                                resp.result.failed_parts[0].leader,
+                            )
+                        )
+                        storage_connection.update_leader_info(
+                            req.space_id,
+                            req.part_id,
+                            resp.result.failed_parts[0].leader,
+                        )
                         continue
-                    error = 'Query storage: {}, part id: {} failed: {}' \
-                        .format(storage_connection.storage_addr(),
-                                part_info.part_id, resp.result.failed_parts[0].code)
+                    error = 'Query storage: {}, part id: {} failed: {}'.format(
+                        storage_connection.storage_addr(),
+                        part_info.part_id,
+                        resp.result.failed_parts[0].code,
+                    )
                     if not partial_success:
                         logging.error(error)
                         parts_manager.set_stop()
@@ -172,27 +192,38 @@ def do_scan_job(storage_connection,
                     is_finished = True
                     continue
                 part_info.has_done = True
-                if resp.has_next:
-                    part_info.cursor = resp.next_cursor
-                    logging.debug("Get next next_cursor: {}".format(resp.next_cursor))
+                cursor = resp.cursors[part_info.part_id]
+                if cursor.has_next:
+                    #TODO cannot convert binary to cursor
+                    part_info.cursor = cursor.next_cursor
+                    logging.debug("Get next next_cursor: {}".format(cursor.next_cursor))
                 else:
                     is_finished = True
                 if scan_vertex:
-                    logging.debug("resp.vertex_data size: {}".format(len(resp.vertex_data.rows)))
+                    logging.debug(
+                        "resp.vertex_data size: {}".format(len(resp.vertex_data.rows))
+                    )
                     if len(resp.vertex_data.column_names) == 0:
-                        return 'Part id: {} return empty column names'.format(part_info.part_id)
+                        return 'Part id: {} return empty column names'.format(
+                            part_info.part_id
+                        )
                     if len(resp.vertex_data.rows) == 0:
                         continue
                     data_sets.append(resp.vertex_data)
                 else:
-                    logging.debug("resp.edge_data size: {}".format(len(resp.edge_data.rows)))
+                    logging.debug(
+                        "resp.edge_data size: {}".format(len(resp.edge_data.rows))
+                    )
                     if len(resp.edge_data.column_names) == 0:
-                        return 'Part id: {} return empty column names'.format(part_info.part_id)
+                        return 'Part id: {} return empty column names'.format(
+                            part_info.part_id
+                        )
                     if len(resp.edge_data.rows) == 0:
                         continue
                     data_sets.append(resp.edge_data)
             except Exception as e:
                 import traceback
+
                 logging.error(traceback.format_exc())
                 parts_manager.set_stop()
                 return str(e), None

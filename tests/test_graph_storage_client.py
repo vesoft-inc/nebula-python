@@ -10,7 +10,6 @@ import random
 import sys
 import os
 import time
-
 import logging
 
 import pytest
@@ -52,6 +51,8 @@ class TestGraphStorageClient(object):
         try:
             conn = Connection()
             conn.open('127.0.0.1', 9671, 3000)
+            # conn.open('127.0.0.1', 29562, 3000) # local test
+
             auth_result = conn.authenticate('root', 'nebula')
             session_id = auth_result.get_session_id()
             assert session_id != 0
@@ -85,6 +86,8 @@ class TestGraphStorageClient(object):
                                     ('172.28.1.2', 9559),
                                     ('172.28.1.3', 9559)],
                                    50000)
+            # meta_cache = MetaCache([('127.0.0.1', 38295)],
+            #                        50000)
             cls.graph_storage_client = GraphStorageClient(meta_cache)
 
         except Exception:
@@ -127,7 +130,7 @@ class TestGraphStorageClient(object):
         # test get_data_set
         data_set = result.get_data_set_wrapper()
         assert data_set.get_row_size() == 10
-        assert data_set.get_col_names() == ['person._vid', 'person.name', 'person.age']
+        assert data_set.get_col_names() == ['_vid', 'person._vid', 'person.name', 'person.age']
 
         # test as nodes
         assert len(result.as_nodes()) >= 10
