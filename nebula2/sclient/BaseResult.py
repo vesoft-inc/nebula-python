@@ -8,21 +8,15 @@
 
 from nebula2.common import ttypes
 from nebula2.common.ttypes import Vertex, Tag, Edge
-from nebula2.data.DataObject import (
-    DataSetWrapper,
-    Node,
-    ValueWrapper,
-    Relationship
-)
+from nebula2.data.DataObject import DataSetWrapper, Node, ValueWrapper, Relationship
 
 
 class VertexData(object):
+    #TODO just ignore '_vid' column
+    PROP_START_INDEX_with_vid = 2
     PROP_START_INDEX = 1
 
-    def __init__(self,
-                 row,
-                 col_names,
-                 decode_type='utf-8'):
+    def __init__(self, row, col_names, decode_type='utf-8'):
         """
         the format is
         '''
@@ -31,14 +25,19 @@ class VertexData(object):
         """
         if len(row.values) != len(col_names):
             raise RuntimeError(
-                'Input row size is not equal with the col name size, {} != {}'
-                    .format(row.values, col_names))
+                'Input row size is not equal with the col name size, {} != {}'.format(
+                    row.values, col_names
+                )
+            )
         self._row = row
         self._decode_type = decode_type
         self._col_names = []
         self._tag_name = ''
         for col_name in col_names:
             names = col_name.split(b'.')
+            # TODO, just keep some behevior with before
+            if len(names) == 1 and names[0] == b'_vid':
+                continue
             if len(names) != 2:
                 raise RuntimeError('Input wrong col name format of tag')
             self._col_names.append(names[1])
@@ -51,9 +50,10 @@ class VertexData(object):
         :return: ValueWrapper
         """
         if len(self._row.values) < 1:
-            raise RuntimeError('The row value is bad format, '
-                               'get vertex id failed: len is {}'
-                               .format(len(self._row.values)))
+            raise RuntimeError(
+                'The row value is bad format, '
+                'get vertex id failed: len is {}'.format(len(self._row.values))
+            )
         return ValueWrapper(self._row.values[0], self._decode_type)
 
     def as_node(self):
@@ -62,9 +62,10 @@ class VertexData(object):
         :return: Node
         """
         if len(self._row.values) < self.PROP_START_INDEX:
-            raise RuntimeError('The row value is bad format, '
-                               'as node failed: len is {}'
-                               .format(len(self._row.values)))
+            raise RuntimeError(
+                'The row value is bad format, '
+                'as node failed: len is {}'.format(len(self._row.values))
+            )
 
         vertex = Vertex()
         vertex.tags = []
@@ -85,11 +86,12 @@ class VertexData(object):
 
         :return: list<ValueWrapper>
         """
-        index = self.PROP_START_INDEX
+        index = self.PROP_START_INDEX_with_vid
         prop_values = []
         while index < len(self._row.values):
-            prop_values.append(ValueWrapper(self._row.values[index],
-                                            decode_type=self._decode_type))
+            prop_values.append(
+                ValueWrapper(self._row.values[index], decode_type=self._decode_type)
+            )
             index = index + 1
         return prop_values
 
@@ -100,10 +102,7 @@ class VertexData(object):
 class EdgeData(object):
     PROP_START_INDEX = 4
 
-    def __init__(self,
-                 row,
-                 col_names,
-                 decode_type='utf-8'):
+    def __init__(self, row, col_names, decode_type='utf-8'):
         """
         the format is
         '''
@@ -111,9 +110,12 @@ class EdgeData(object):
         '''
         """
         if len(row.values) != len(col_names):
-            raise RuntimeError('Input row size is not equal '
-                               'with the col name size, {} != {}'
-                               .format(len(row.values), len(col_names)))
+            raise RuntimeError(
+                'Input row size is not equal '
+                'with the col name size, {} != {}'.format(
+                    len(row.values), len(col_names)
+                )
+            )
         self._row = row
         self._decode_type = decode_type
         self._col_names = []
@@ -132,9 +134,10 @@ class EdgeData(object):
         :return: ValueWrapper
         """
         if len(self._row.values) < 1:
-            raise RuntimeError('The row value is bad format, '
-                               'get edge src id failed: len is {}'
-                               .format(len(self._row.values)))
+            raise RuntimeError(
+                'The row value is bad format, '
+                'get edge src id failed: len is {}'.format(len(self._row.values))
+            )
         return ValueWrapper(self._row.values[0], self._decode_type)
 
     def get_edge_name(self):
@@ -150,9 +153,10 @@ class EdgeData(object):
         :return: ranking
         """
         if len(self._row.values) < 3:
-            raise RuntimeError('The row value is bad format, '
-                               'get edge ranking failed: len is {}'
-                               .format(len(self._row.values)))
+            raise RuntimeError(
+                'The row value is bad format, '
+                'get edge ranking failed: len is {}'.format(len(self._row.values))
+            )
         assert self._row.values[2].getType() == ttypes.Value.IVAL
         return self._row.values[2].get_iVal()
 
@@ -163,9 +167,10 @@ class EdgeData(object):
         :return: ValueWrapper
         """
         if len(self._row.values) < 4:
-            raise RuntimeError('The row value is bad format, '
-                               'get edge dst id failed: len is {}'
-                               .format(len(self._row.values)))
+            raise RuntimeError(
+                'The row value is bad format, '
+                'get edge dst id failed: len is {}'.format(len(self._row.values))
+            )
         return ValueWrapper(self._row.values[3], self._decode_type)
 
     def as_relationship(self):
@@ -174,9 +179,10 @@ class EdgeData(object):
         :return: Relationship
         """
         if len(self._row.values) < self.PROP_START_INDEX:
-            raise RuntimeError('The row value is bad format, '
-                               'as relationship failed: len is {}'
-                               .format(len(self._row.values)))
+            raise RuntimeError(
+                'The row value is bad format, '
+                'as relationship failed: len is {}'.format(len(self._row.values))
+            )
         edge = Edge()
         edge.src = self._row.values[0]
         edge.type = self._row.values[1].get_iVal()
@@ -199,7 +205,9 @@ class EdgeData(object):
         index = self.PROP_START_INDEX
         prop_values = []
         while index < len(self._row.values):
-            prop_values.append(ValueWrapper(self._row.values[index], decode_type=self._decode_type))
+            prop_values.append(
+                ValueWrapper(self._row.values[index], decode_type=self._decode_type)
+            )
             index = index + 1
         return prop_values
 
@@ -208,10 +216,7 @@ class EdgeData(object):
 
 
 class BaseResult(object):
-    def __init__(self,
-                 data_sets: list,
-                 decode_type='utf-8',
-                 is_vertex=True):
+    def __init__(self, data_sets: list, decode_type='utf-8', is_vertex=True):
         assert data_sets is not None
         self.is_vertex = is_vertex
         self._data_sets = data_sets
@@ -282,4 +287,3 @@ class BaseResult(object):
             return VertexData(row, col_names, self._decode_type)
         else:
             return EdgeData(row, col_names, self._decode_type)
-

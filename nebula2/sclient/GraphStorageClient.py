@@ -16,6 +16,7 @@ import sys
 from nebula2.sclient.ScanResult import ScanResult
 from nebula2.sclient.net import GraphStorageConnection
 from nebula2.storage.ttypes import (
+    ScanCursor,
     ScanEdgeRequest,
     ScanVertexRequest,
     VertexProp,
@@ -198,11 +199,16 @@ class GraphStorageClient(object):
             schema = self._meta_cache.get_tag_schema(space_name, tag_name)
             for col in schema.columns:
                 vertex_prop.props.append(col.name)
+        
+        parts = {}
+        for id in part_leaders.keys():
+            parts[id] = ScanCursor()
 
+        # construct request
         req = ScanVertexRequest()
         req.space_id = space_id
-        req.part_id = 0
-        req.return_columns = vertex_prop
+        req.parts = parts
+        req.return_columns = [vertex_prop]
         req.limit = limit
         req.start_time = start_time
         req.end_time = end_time
@@ -326,9 +332,13 @@ class GraphStorageClient(object):
             for col in schema.columns:
                 edge_prop.props.append(col.name)
 
+        parts = {}
+        for id in part_leaders.keys():
+            parts[id] = ScanCursor()
+
         req = ScanEdgeRequest()
         req.space_id = space_id
-        req.part_id = 0
+        req.parts = parts
         req.return_columns = edge_prop
         req.limit = limit
         req.start_time = start_time
