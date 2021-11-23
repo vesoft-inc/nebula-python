@@ -59,15 +59,18 @@ class Connection(object):
         self._timeout = timeout
         try:
             if ssl_config is not None:
-                s = TSSLSocket.TSSLSocket(self._ip, self._port,
-                                        ssl_config.unix_socket,
-                                        ssl_config.ssl_version,
-                                        ssl_config.cert_reqs,
-                                        ssl_config.ca_certs,
-                                        ssl_config.verify_name,
-                                        ssl_config.keyfile,
-                                        ssl_config.certfile,
-                                        ssl_config.allow_weak_ssl_versions)
+                s = TSSLSocket.TSSLSocket(
+                    self._ip,
+                    self._port,
+                    ssl_config.unix_socket,
+                    ssl_config.ssl_version,
+                    ssl_config.cert_reqs,
+                    ssl_config.ca_certs,
+                    ssl_config.verify_name,
+                    ssl_config.keyfile,
+                    ssl_config.certfile,
+                    ssl_config.allow_weak_ssl_versions,
+                )
             else:
                 s = TSocket.TSocket(self._ip, self._port)
             if timeout > 0:
@@ -76,8 +79,7 @@ class Connection(object):
             protocol = TBinaryProtocol.TBinaryProtocol(transport)
             transport.open()
             self._connection = GraphService.Client(protocol)
-            resp = self._connection.verifyClientVersion(
-            VerifyClientVersionReq())
+            resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
             if resp.error_code != ErrorCode.SUCCEEDED:
                 self._connection._iprot.trans.close()
                 raise ClientServerIncompatibleException(resp.error_msg)
@@ -103,7 +105,9 @@ class Connection(object):
             resp = self._connection.authenticate(user_name, password)
             if resp.error_code != ErrorCode.SUCCEEDED:
                 raise AuthFailedException(resp.error_msg)
-            return AuthResult(resp.session_id, resp.time_zone_offset_seconds, resp.time_zone_name)
+            return AuthResult(
+                resp.session_id, resp.time_zone_offset_seconds, resp.time_zone_name
+            )
         except TTransportException as te:
             if te.message.find("timed out"):
                 self._reopen()
@@ -127,11 +131,13 @@ class Connection(object):
                     self._reopen()
                     raise IOErrorException(IOErrorException.E_TIMEOUT, te.message)
                 elif te.type == TTransportException.END_OF_FILE:
-                    raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
+                    raise IOErrorException(
+                        IOErrorException.E_CONNECT_BROKEN, te.message
+                    )
                 elif te.type == TTransportException.NOT_OPEN:
                     raise IOErrorException(IOErrorException.E_NOT_OPEN, te.message)
                 else:
-                    raise IOErrorException(IOErrorException.E_UNKNOWN, te.message);
+                    raise IOErrorException(IOErrorException.E_UNKNOWN, te.message)
             raise
 
     def execute_json(self, session_id, stmt):
@@ -149,11 +155,13 @@ class Connection(object):
                     self._reopen()
                     raise IOErrorException(IOErrorException.E_TIMEOUT, te.message)
                 elif te.type == TTransportException.END_OF_FILE:
-                    raise IOErrorException(IOErrorException.E_CONNECT_BROKEN, te.message)
+                    raise IOErrorException(
+                        IOErrorException.E_CONNECT_BROKEN, te.message
+                    )
                 elif te.type == TTransportException.NOT_OPEN:
                     raise IOErrorException(IOErrorException.E_NOT_OPEN, te.message)
                 else:
-                    raise IOErrorException(IOErrorException.E_UNKNOWN, te.message);
+                    raise IOErrorException(IOErrorException.E_UNKNOWN, te.message)
             raise
 
     def signout(self, session_id):
@@ -176,7 +184,9 @@ class Connection(object):
         try:
             self._connection._iprot.trans.close()
         except Exception as e:
-            logging.error('Close connection to {}:{} failed:{}'.format(self._ip, self._port, e))
+            logging.error(
+                'Close connection to {}:{} failed:{}'.format(self._ip, self._port, e)
+            )
 
     def ping(self):
         """check the connection if ok

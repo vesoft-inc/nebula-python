@@ -8,18 +8,8 @@
 
 from unittest import TestCase
 from nebula2.gclient.net import ConnectionPool
-from nebula2.data.DataObject import (
-    DateTimeWrapper,
-    DateWrapper,
-    TimeWrapper,
-    Null
-)
-from nebula2.common.ttypes import (
-    DateTime,
-    Date,
-    Time,
-    ErrorCode
-)
+from nebula2.data.DataObject import DateTimeWrapper, DateWrapper, TimeWrapper, Null
+from nebula2.common.ttypes import DateTime, Date, Time, ErrorCode
 from nebula2.Config import Config
 import sys
 import os
@@ -85,7 +75,8 @@ class TestBaseCase(TestCase):
         resp = cls.session.execute(
             "INSERT VERTEX student(name) VALUES "
             "'Bob':('Bob'), 'Lily':('Lily'), "
-            "'Tom':('Tom'), 'Jerry':('Jerry'), 'John':('John')")
+            "'Tom':('Tom'), 'Jerry':('Jerry'), 'John':('John')"
+        )
         assert resp.is_succeeded(), resp.error_msg()
 
         resp = cls.session.execute(
@@ -94,7 +85,8 @@ class TestBaseCase(TestCase):
             "'Bob'->'Tom':(70.0), "
             "'Jerry'->'Lily':(84.0),"
             "'Tom'->'Jerry':(68.3), "
-            "'Bob'->'John':(97.2)")
+            "'Bob'->'John':(97.2)"
+        )
         assert resp.is_succeeded(), resp.error_msg()
         resp = cls.session.execute(
             "INSERT EDGE friend(start_year, end_year) VALUES "
@@ -102,7 +94,8 @@ class TestBaseCase(TestCase):
             "'Bob'->'Tom':(2018, 2020), "
             "'Jerry'->'Lily':(2018, 2020),"
             "'Tom'->'Jerry':(2018, 2020), "
-            "'Bob'->'John':(2018, 2020)")
+            "'Bob'->'John':(2018, 2020)"
+        )
         assert resp.is_succeeded(), resp.error_msg()
 
     @classmethod
@@ -113,11 +106,13 @@ class TestBaseCase(TestCase):
             cls.pool.close()
 
     def test_base_type(self):
-        resp = self.session.execute('FETCH PROP ON person "Bob" YIELD person.name, person.age, person.grade,'
-                                    'person.friends, person.book_num, person.birthday, '
-                                    'person.start_school, person.morning, '
-                                    'person.property, person.is_girl, person.child_name, '
-                                    'person.expend, person.first_out_city, person.hobby')
+        resp = self.session.execute(
+            'FETCH PROP ON person "Bob" YIELD person.name, person.age, person.grade,'
+            'person.friends, person.book_num, person.birthday, '
+            'person.start_school, person.morning, '
+            'person.property, person.is_girl, person.child_name, '
+            'person.expend, person.first_out_city, person.hobby'
+        )
         assert resp.is_succeeded(), resp.error_msg()
         assert '' == resp.error_msg()
         assert resp.latency() > 0
@@ -126,20 +121,22 @@ class TestBaseCase(TestCase):
         assert 'test_data' == resp.space_name()
         assert not resp.is_empty()
         assert 1 == resp.row_size()
-        names = ['person.name',
-                 'person.age',
-                 'person.grade',
-                 'person.friends',
-                 'person.book_num',
-                 'person.birthday',
-                 'person.start_school',
-                 'person.morning',
-                 'person.property',
-                 'person.is_girl',
-                 'person.child_name',
-                 'person.expend',
-                 'person.first_out_city',
-                 'person.hobby']
+        names = [
+            'person.name',
+            'person.age',
+            'person.grade',
+            'person.friends',
+            'person.book_num',
+            'person.birthday',
+            'person.start_school',
+            'person.morning',
+            'person.property',
+            'person.is_girl',
+            'person.child_name',
+            'person.expend',
+            'person.first_out_city',
+            'person.hobby',
+        ]
         assert names == resp.keys()
 
         assert 'Bob' == resp.row_values(0)[0].as_string()
@@ -148,21 +145,27 @@ class TestBaseCase(TestCase):
         assert 10 == resp.row_values(0)[3].as_int()
         assert 100 == resp.row_values(0)[4].as_int()
         return_data_time_val = resp.row_values(0)[5].as_datetime()
-        assert return_data_time_val == \
-            DateTimeWrapper(DateTime(2010, 9, 10, 2, 8, 2, 0))
-        assert '2010-09-10T10:08:02.000000' == return_data_time_val.get_local_datetime_str()
-        assert 'utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800' == str(
-            return_data_time_val)
+        assert return_data_time_val == DateTimeWrapper(
+            DateTime(2010, 9, 10, 2, 8, 2, 0)
+        )
+        assert (
+            '2010-09-10T10:08:02.000000'
+            == return_data_time_val.get_local_datetime_str()
+        )
+        assert (
+            'utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800'
+            == str(return_data_time_val)
+        )
 
-        assert DateWrapper(Date(2017, 9, 10)) == resp.row_values(0)[
-            6].as_date()
+        assert DateWrapper(Date(2017, 9, 10)) == resp.row_values(0)[6].as_date()
 
         expected_time_val = TimeWrapper(Time(23, 10, 0, 0))
         return_time_val = resp.row_values(0)[7].as_time()
         assert expected_time_val == return_time_val
         assert '07:10:00.000000' == return_time_val.get_local_time_str()
         assert 'utc time: 23:10:00.000000, timezone_offset: 28800' == str(
-            return_time_val)
+            return_time_val
+        )
 
         assert 1000.0 == resp.row_values(0)[8].as_double()
         assert False == resp.row_values(0)[9].as_bool()
@@ -179,8 +182,7 @@ class TestBaseCase(TestCase):
         assert ["name", "age", "birthday"] == result
 
     def test_set_type(self):
-        resp = self.session.execute(
-            "YIELD {'name', 'name', 'age', 'birthday'};")
+        resp = self.session.execute("YIELD {'name', 'name', 'age', 'birthday'};")
         assert resp.is_succeeded()
         assert 1 == resp.row_size()
         assert resp.row_values(0)[0].is_set()
@@ -189,7 +191,8 @@ class TestBaseCase(TestCase):
 
     def test_map_type(self):
         resp = self.session.execute(
-            "YIELD {name:'Tom', age:18, birthday: '2010-10-10'};")
+            "YIELD {name:'Tom', age:18, birthday: '2010-10-10'};"
+        )
         assert resp.is_succeeded()
         assert 1 == resp.row_size()
         assert resp.row_values(0)[0].is_map()
@@ -210,36 +213,42 @@ class TestBaseCase(TestCase):
 
     def test_relationship_type(self):
         resp = self.session.execute(
-            'MATCH (:person{name: "Bob"}) -[e:friend]-> (:person{name: "Lily"}) RETURN e')
+            'MATCH (:person{name: "Bob"}) -[e:friend]-> (:person{name: "Lily"}) RETURN e'
+        )
         assert resp.is_succeeded()
         assert 1 == resp.row_size()
         assert resp.row_values(0)[0].is_edge()
         rel = resp.row_values(0)[0].as_relationship()
 
-        assert '("Bob")-[:friend@0{end_year: 2020, start_year: 2018}]->("Lily")' == str(rel)
+        assert '("Bob")-[:friend@0{end_year: 2020, start_year: 2018}]->("Lily")' == str(
+            rel
+        )
 
     def test_path_type(self):
         resp = self.session.execute(
-            'MATCH p = (:person{name: "Bob"})-[:friend]->(:person{name: "Lily"}) return p')
+            'MATCH p = (:person{name: "Bob"})-[:friend]->(:person{name: "Lily"}) return p'
+        )
         assert resp.is_succeeded()
         assert 1 == resp.row_size()
         assert resp.row_values(0)[0].is_path()
         path = resp.row_values(0)[0].as_path()
-        expected_str = '("Bob" :student{name: "Bob"} ' \
-                       ':person{hobby: __NULL__, expend: 100.0, book_num: 100, ' \
-                       'property: 1000.0, grade: 3, child_name: "Hello Worl", ' \
-                       'start_school: 2017-09-10, friends: 10, ' \
-                       'morning: utc time: 23:10:00.000000, timezone_offset: 28800, first_out_city: 1111, ' \
-                       'name: "Bob", age: 10, ' \
-                       'birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800, is_girl: False})' \
-                       '-[:friend@0{end_year: 2020, start_year: 2018}]->' \
-                       '("Lily" :student{name: "Lily"} ' \
-                       ':person{is_girl: False, ' \
-                       'birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800, age: 9, ' \
-                       'book_num: 100, grade: 3, property: 1000.0, hobby: __NULL__, expend: 100.0, ' \
-                       'start_school: 2017-09-10, child_name: "Hello Worl", ' \
-                       'morning: utc time: 23:10:00.000000, timezone_offset: 28800, ' \
-                       'friends: 10, first_out_city: 1111, name: "Lily"})'
+        expected_str = (
+            '("Bob" :student{name: "Bob"} '
+            ':person{hobby: __NULL__, expend: 100.0, book_num: 100, '
+            'property: 1000.0, grade: 3, child_name: "Hello Worl", '
+            'start_school: 2017-09-10, friends: 10, '
+            'morning: utc time: 23:10:00.000000, timezone_offset: 28800, first_out_city: 1111, '
+            'name: "Bob", age: 10, '
+            'birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800, is_girl: False})'
+            '-[:friend@0{end_year: 2020, start_year: 2018}]->'
+            '("Lily" :student{name: "Lily"} '
+            ':person{is_girl: False, '
+            'birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800, age: 9, '
+            'book_num: 100, grade: 3, property: 1000.0, hobby: __NULL__, expend: 100.0, '
+            'start_school: 2017-09-10, child_name: "Hello Worl", '
+            'morning: utc time: 23:10:00.000000, timezone_offset: 28800, '
+            'friends: 10, first_out_city: 1111, name: "Lily"})'
+        )
         assert expected_str == str(path)
 
         assert resp.whole_latency() > 100
@@ -248,11 +257,12 @@ class TestBaseCase(TestCase):
 class TestExecuteJson(TestBaseCase):
     def test_basic_types(self):
         resp = self.session.execute_json(
-            'YIELD 1, 2.2, "hello", [1,2,"abc"], {key: "value"}, "汉字"')
+            'YIELD 1, 2.2, "hello", [1,2,"abc"], {key: "value"}, "汉字"'
+        )
         exp = [1, 2.2, "hello", [1, 2, "abc"], {"key": "value"}, "汉字"]
         json_obj = json.loads(resp)
 
-	    # Get errorcode
+        # Get errorcode
         resp_error_code = json_obj["errors"][0]["code"]
         assert 0 == resp_error_code
 
@@ -264,29 +274,33 @@ class TestExecuteJson(TestBaseCase):
         assert "test_data" == respSpace
 
     def test_complex_types(self):
-        resp = self.session.execute_json(
-            'MATCH (v:person {name: "Bob"}) RETURN v')
-        exp = [{"person.age":            10,
-               "person.birthday":       '2010-09-10T02:08:02.0Z',
-                "person.book_num":       100,
-                "person.child_name":     "Hello Worl",
-                "person.expend":         100,
+        resp = self.session.execute_json('MATCH (v:person {name: "Bob"}) RETURN v')
+        exp = [
+            {
+                "person.age": 10,
+                "person.birthday": '2010-09-10T02:08:02.0Z',
+                "person.book_num": 100,
+                "person.child_name": "Hello Worl",
+                "person.expend": 100,
                 "person.first_out_city": 1111,
-                "person.friends":        10,
-                "person.grade":          3,
-                "person.hobby":          None,
-                "person.is_girl":        False,
-                "person.morning":        '23:10:00.000000Z',
-                "person.name":           "Bob",
-                "person.property":       1000,
-                "person.start_school":   '2017-09-10',
-                "student.name":          "Bob", }]
+                "person.friends": 10,
+                "person.grade": 3,
+                "person.hobby": None,
+                "person.is_girl": False,
+                "person.morning": '23:10:00.000000Z',
+                "person.name": "Bob",
+                "person.property": 1000,
+                "person.start_school": '2017-09-10',
+                "student.name": "Bob",
+            }
+        ]
         json_obj = json.loads(resp)
         assert exp == json_obj["results"][0]["data"][0]["row"]
 
     def test_error(self):
         resp = self.session.execute_json(
-            'MATCH (v:invalidTag {name: \"Bob\"}) RETURN v')
+            'MATCH (v:invalidTag {name: \"Bob\"}) RETURN v'
+        )
 
         json_obj = json.loads(resp)
 

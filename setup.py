@@ -5,7 +5,6 @@
 # This source code is licensed under Apache 2.0 License.
 
 
-
 from setuptools import setup, find_packages
 from pathlib import Path
 
@@ -23,11 +22,8 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/vesoft-inc/nebula-python',
-    install_requires=['httplib2',
-                      'future',
-                      'six',
-                      'pytz'],
+    install_requires=['httplib2', 'future', 'six', 'pytz'],
     packages=find_packages(),
-    platforms=['3.5, 3.7'],
+    platforms=['3.6, 3.7'],
     package_dir={'nebula2': 'nebula2'},
 )

@@ -59,5 +59,3 @@ class TestConnection(TestCase):
             conn.authenticate('root', 'nebula')
         except IOErrorException:
             assert True
-
-
