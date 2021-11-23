@@ -17,7 +17,7 @@ fmt:
 	fi
 
 fmt-check:
-	# pip install --user black
+	pip install --user black
 	@if [ -x $(LINUX_BLACK) ];then \
 		$(LINUX_BLACK) -S --check $(FMT_EXCLUDE) .; \
 	else \
