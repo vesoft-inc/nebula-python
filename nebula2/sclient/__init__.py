@@ -192,11 +192,14 @@ def do_scan_job(
                     is_finished = True
                     continue
                 part_info.has_done = True
-                cursor = resp.cursors[part_info.part_id]
-                if cursor.has_next:
-                    #TODO cannot convert binary to cursor
-                    part_info.cursor = cursor.next_cursor
-                    logging.debug("Get next next_cursor: {}".format(cursor.next_cursor))
+                cursor = parts[part_info.part_id]
+                resp_cursor = resp.cursors[part_info.part_id]
+                if resp_cursor.has_next:
+                    cursor.has_next = True
+                    cursor.next_cursor = resp_cursor.next_cursor
+                    logging.debug(
+                        "Get next next_cursor: {}".format(resp_cursor.next_cursor)
+                    )
                 else:
                     is_finished = True
                 if scan_vertex:
