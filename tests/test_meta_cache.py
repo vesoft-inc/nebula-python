@@ -15,8 +15,8 @@ root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
 from nebula2.gclient.net import Connection
-from nebula2.meta import ttypes
 from nebula2.mclient import MetaCache
+from nebula2.common import ttypes
 
 
 class TestMetaCache(object):

@@ -14,7 +14,7 @@ from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
 
-from .ttypes import UTF8STRINGS, NullType, ErrorCode, SchemaID, Date, Time, DateTime, Value, NList, NMap, NSet, Row, DataSet, Coordinate, Point, LineString, Polygon, Geography, Tag, Vertex, Edge, Step, Path, HostAddr, KeyValue, LogInfo, DirInfo, NodeInfo, PartitionBackupInfo, CheckpointInfo, GraphSpaceID, PartitionID, TagID, EdgeType, EdgeRanking, LogID, TermID, Timestamp, IndexID, Port, SessionID, ExecutionPlanID
+from .ttypes import UTF8STRINGS, NullType, PropertyType, ErrorCode, SchemaID, Date, Time, DateTime, Value, NList, NMap, NSet, Row, DataSet, Coordinate, Point, LineString, Polygon, Geography, Tag, Vertex, Edge, Step, Path, HostAddr, KeyValue, LogInfo, DirInfo, NodeInfo, PartitionBackupInfo, CheckpointInfo, LogEntry, ClusterID, GraphSpaceID, PartitionID, TagID, EdgeType, EdgeRanking, LogID, TermID, Timestamp, IndexID, Port, SessionID, ExecutionPlanID
 
 version = "2.6.0"
 

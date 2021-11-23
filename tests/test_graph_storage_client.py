@@ -10,7 +10,6 @@ import random
 import sys
 import os
 import time
-
 import logging
 
 import pytest
@@ -52,6 +51,7 @@ class TestGraphStorageClient(object):
         try:
             conn = Connection()
             conn.open('127.0.0.1', 9671, 3000)
+
             auth_result = conn.authenticate('root', 'nebula')
             session_id = auth_result.get_session_id()
             assert session_id != 0
@@ -127,7 +127,7 @@ class TestGraphStorageClient(object):
         # test get_data_set
         data_set = result.get_data_set_wrapper()
         assert data_set.get_row_size() == 10
-        assert data_set.get_col_names() == ['person._vid', 'person.name', 'person.age']
+        assert data_set.get_col_names() == ['_vid', 'person._vid', 'person.name', 'person.age']
 
         # test as nodes
         assert len(result.as_nodes()) >= 10
@@ -153,6 +153,7 @@ class TestGraphStorageClient(object):
             assert node.get_id().as_string().find('person') >= 0
         assert count > 1
 
+    @pytest.mark.skip(reason='cannot test with next cursor yet')
     def test_scan_vertex(self):
         # test get all by once
         resp = self.graph_storage_client.scan_vertex(
@@ -234,6 +235,7 @@ class TestGraphStorageClient(object):
             assert prop_values[1].as_int() >= 2010
         assert count > 1
 
+    @pytest.mark.skip(reason='cannot test with next cursor yet')
     def test_scan_edge(self):
         # test get all by once
         resp = self.graph_storage_client.scan_edge(
