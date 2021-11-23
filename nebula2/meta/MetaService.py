@@ -13,7 +13,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, PropertyType, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceReq, BalanceTask, BalanceResp, LeaderBalanceReq, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddGroupReq, DropGroupReq, AddZoneIntoGroupReq, DropZoneFromGroupReq, GetGroupReq, GetGroupResp, ListGroupsReq, Group, ListGroupsResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SchemaVer, ClusterID
+from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceTask, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddGroupReq, DropGroupReq, AddZoneIntoGroupReq, DropZoneFromGroupReq, GetGroupReq, GetGroupResp, ListGroupsReq, Group, ListGroupsResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SchemaVer, ClusterID
 import nebula2.common.ttypes
 
 from nebula2.fbthrift.Thrift import TProcessor
@@ -359,20 +359,6 @@ class Iface:
     pass
 
   def heartBeat(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def balance(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def leaderBalance(self, req=None):
     """
     Parameters:
      - req
@@ -991,20 +977,6 @@ class ContextIface:
     pass
 
   def heartBeat(self, handler_ctx, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def balance(self, handler_ctx, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def leaderBalance(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -10185,392 +10157,6 @@ def heartBeat_result__setstate__(self, state):
 
 heartBeat_result.__getstate__ = lambda self: self.__dict__.copy()
 heartBeat_result.__setstate__ = heartBeat_result__setstate__
-
-class balance_args:
-  """
-  Attributes:
-   - req
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.req = BalanceReq()
-          self.req.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('balance_args')
-    if self.req != None:
-      oprot.writeFieldBegin('req', TType.STRUCT, 1)
-      self.req.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.req is not None:
-      value = pprint.pformat(self.req, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    req=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(balance_args)
-balance_args.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'req', [BalanceReq, BalanceReq.thrift_spec, False], None, 2, ), # 1
-)
-
-balance_args.thrift_struct_annotations = {
-}
-balance_args.thrift_field_annotations = {
-}
-
-def balance_args__init__(self, req=None,):
-  self.req = req
-
-balance_args.__init__ = balance_args__init__
-
-def balance_args__setstate__(self, state):
-  state.setdefault('req', None)
-  self.__dict__ = state
-
-balance_args.__getstate__ = lambda self: self.__dict__.copy()
-balance_args.__setstate__ = balance_args__setstate__
-
-class balance_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.STRUCT:
-          self.success = BalanceResp()
-          self.success.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('balance_result')
-    if self.success != None:
-      oprot.writeFieldBegin('success', TType.STRUCT, 0)
-      self.success.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.success is not None:
-      value = pprint.pformat(self.success, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    success=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(balance_result)
-balance_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [BalanceResp, BalanceResp.thrift_spec, False], None, 2, ), # 0
-)
-
-balance_result.thrift_struct_annotations = {
-}
-balance_result.thrift_field_annotations = {
-}
-
-def balance_result__init__(self, success=None,):
-  self.success = success
-
-balance_result.__init__ = balance_result__init__
-
-def balance_result__setstate__(self, state):
-  state.setdefault('success', None)
-  self.__dict__ = state
-
-balance_result.__getstate__ = lambda self: self.__dict__.copy()
-balance_result.__setstate__ = balance_result__setstate__
-
-class leaderBalance_args:
-  """
-  Attributes:
-   - req
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.req = LeaderBalanceReq()
-          self.req.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('leaderBalance_args')
-    if self.req != None:
-      oprot.writeFieldBegin('req', TType.STRUCT, 1)
-      self.req.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.req is not None:
-      value = pprint.pformat(self.req, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    req=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(leaderBalance_args)
-leaderBalance_args.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'req', [LeaderBalanceReq, LeaderBalanceReq.thrift_spec, False], None, 2, ), # 1
-)
-
-leaderBalance_args.thrift_struct_annotations = {
-}
-leaderBalance_args.thrift_field_annotations = {
-}
-
-def leaderBalance_args__init__(self, req=None,):
-  self.req = req
-
-leaderBalance_args.__init__ = leaderBalance_args__init__
-
-def leaderBalance_args__setstate__(self, state):
-  state.setdefault('req', None)
-  self.__dict__ = state
-
-leaderBalance_args.__getstate__ = lambda self: self.__dict__.copy()
-leaderBalance_args.__setstate__ = leaderBalance_args__setstate__
-
-class leaderBalance_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.STRUCT:
-          self.success = ExecResp()
-          self.success.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('leaderBalance_result')
-    if self.success != None:
-      oprot.writeFieldBegin('success', TType.STRUCT, 0)
-      self.success.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.success is not None:
-      value = pprint.pformat(self.success, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    success=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(leaderBalance_result)
-leaderBalance_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
-)
-
-leaderBalance_result.thrift_struct_annotations = {
-}
-leaderBalance_result.thrift_field_annotations = {
-}
-
-def leaderBalance_result__init__(self, success=None,):
-  self.success = success
-
-leaderBalance_result.__init__ = leaderBalance_result__init__
-
-def leaderBalance_result__setstate__(self, state):
-  state.setdefault('success', None)
-  self.__dict__ = state
-
-leaderBalance_result.__getstate__ = lambda self: self.__dict__.copy()
-leaderBalance_result.__setstate__ = leaderBalance_result__setstate__
 
 class regConfig_args:
   """
@@ -20073,66 +19659,6 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "heartBeat failed: unknown result");
 
-  def balance(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    self.send_balance(req)
-    return self.recv_balance()
-
-  def send_balance(self, req=None):
-    self._oprot.writeMessageBegin('balance', TMessageType.CALL, self._seqid)
-    args = balance_args()
-    args.req = req
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_balance(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = balance_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success != None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "balance failed: unknown result");
-
-  def leaderBalance(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    self.send_leaderBalance(req)
-    return self.recv_leaderBalance()
-
-  def send_leaderBalance(self, req=None):
-    self._oprot.writeMessageBegin('leaderBalance', TMessageType.CALL, self._seqid)
-    args = leaderBalance_args()
-    args.req = req
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_leaderBalance(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = leaderBalance_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success != None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "leaderBalance failed: unknown result");
-
   def regConfig(self, req=None):
     """
     Parameters:
@@ -21494,10 +21020,6 @@ class Processor(Iface, TProcessor):
     self._priorityMap["changePassword"] = TPriority.NORMAL
     self._processMap["heartBeat"] = Processor.process_heartBeat
     self._priorityMap["heartBeat"] = TPriority.NORMAL
-    self._processMap["balance"] = Processor.process_balance
-    self._priorityMap["balance"] = TPriority.NORMAL
-    self._processMap["leaderBalance"] = Processor.process_leaderBalance
-    self._priorityMap["leaderBalance"] = TPriority.NORMAL
     self._processMap["regConfig"] = Processor.process_regConfig
     self._priorityMap["regConfig"] = TPriority.NORMAL
     self._processMap["getConfig"] = Processor.process_getConfig
@@ -22097,28 +21619,6 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(balance_args, oneway=False)
-  def process_balance(self, args, handler_ctx):
-    result = balance_result()
-    try:
-      result.success = self._handler.balance(args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'balance', ex)
-      result = Thrift.TApplicationException(message=repr(ex))
-    return result
-
-  @thrift_process_method(leaderBalance_args, oneway=False)
-  def process_leaderBalance(self, args, handler_ctx):
-    result = leaderBalance_result()
-    try:
-      result.success = self._handler.leaderBalance(args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'leaderBalance', ex)
-      result = Thrift.TApplicationException(message=repr(ex))
-    return result
-
   @thrift_process_method(regConfig_args, oneway=False)
   def process_regConfig(self, args, handler_ctx):
     result = regConfig_result()
@@ -22683,10 +22183,6 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["changePassword"] = TPriority.NORMAL
     self._processMap["heartBeat"] = ContextProcessor.process_heartBeat
     self._priorityMap["heartBeat"] = TPriority.NORMAL
-    self._processMap["balance"] = ContextProcessor.process_balance
-    self._priorityMap["balance"] = TPriority.NORMAL
-    self._processMap["leaderBalance"] = ContextProcessor.process_leaderBalance
-    self._priorityMap["leaderBalance"] = TPriority.NORMAL
     self._processMap["regConfig"] = ContextProcessor.process_regConfig
     self._priorityMap["regConfig"] = TPriority.NORMAL
     self._processMap["getConfig"] = ContextProcessor.process_getConfig
@@ -23283,28 +22779,6 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'heartBeat', ex)
-      result = Thrift.TApplicationException(message=repr(ex))
-    return result
-
-  @thrift_process_method(balance_args, oneway=False)
-  def process_balance(self, args, handler_ctx):
-    result = balance_result()
-    try:
-      result.success = self._handler.balance(handler_ctx, args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'balance', ex)
-      result = Thrift.TApplicationException(message=repr(ex))
-    return result
-
-  @thrift_process_method(leaderBalance_args, oneway=False)
-  def process_leaderBalance(self, args, handler_ctx):
-    result = leaderBalance_result()
-    try:
-      result.success = self._handler.leaderBalance(handler_ctx, args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'leaderBalance', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
