@@ -8,7 +8,7 @@
 
 import copy
 import logging
-import pdb
+
 from threading import RLock, Condition
 
 from nebula2.common.ttypes import HostAddr, ErrorCode

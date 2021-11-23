@@ -51,7 +51,6 @@ class TestGraphStorageClient(object):
         try:
             conn = Connection()
             conn.open('127.0.0.1', 9671, 3000)
-            # conn.open('127.0.0.1', 29562, 3000) # local test
 
             auth_result = conn.authenticate('root', 'nebula')
             session_id = auth_result.get_session_id()
@@ -86,8 +85,6 @@ class TestGraphStorageClient(object):
                                     ('172.28.1.2', 9559),
                                     ('172.28.1.3', 9559)],
                                    50000)
-            # meta_cache = MetaCache([('127.0.0.1', 38295)],
-            #                        50000)
             cls.graph_storage_client = GraphStorageClient(meta_cache)
 
         except Exception:
