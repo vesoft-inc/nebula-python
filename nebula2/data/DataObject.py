@@ -1635,18 +1635,22 @@ class PathWrapper(BaseObject):
     def __repr__(self):
         edge_strs = []
         for step in self._path.steps:
-            relationship = Relationship(
-                GenValue.gen_edge(
-                    step.dst.vid,
-                    step.dst.vid,
-                    type,
-                    step.name,
-                    step.ranking,
-                    step.props,
+
+            relationship = (
+                Relationship(
+                    GenValue.gen_edge(
+                        step.dst.vid,
+                        step.dst.vid,
+                        type,
+                        step.name,
+                        step.ranking,
+                        step.props,
+                    )
                 )
                 .set_decode_type(self.get_decode_type())
                 .set_timezone_offset(self.get_timezone_offset())
             )
+
             edge_str = ''
             prop_strs = [
                 '%s: %s' % (key, str(val))

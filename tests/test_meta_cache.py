@@ -44,7 +44,7 @@ class TestMetaCache(object):
             conn.close()
             time.sleep(10)
             cls.meta_cache = MetaCache(
-                [('127.0.0.1', 9559), ('127.0.0.1', 9560), ('127.0.0.1', 9560)], 50000
+                [('127.0.0.1', 9559), ('127.0.0.1', 9560), ('127.0.0.1', 9561)], 50000
             )
         except Exception as x:
             import traceback
