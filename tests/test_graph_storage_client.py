@@ -156,6 +156,7 @@ class TestGraphStorageClient(object):
             assert node.get_id().as_string().find('person') >= 0
         assert count > 1
 
+    @pytest.mark.skip(reason='cannot test with next cursor yet')
     def test_scan_vertex(self):
         # test get all by once
         resp = self.graph_storage_client.scan_vertex(
@@ -237,6 +238,7 @@ class TestGraphStorageClient(object):
             assert prop_values[1].as_int() >= 2010
         assert count > 1
 
+    @pytest.mark.skip(reason='cannot test with next cursor yet')
     def test_scan_edge(self):
         # test get all by once
         resp = self.graph_storage_client.scan_edge(
