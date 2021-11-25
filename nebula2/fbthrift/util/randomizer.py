@@ -221,7 +221,7 @@ class BaseRandomizer(object):
         return seed
 
 class ScalarTypeRandomizer(BaseRandomizer):
-    """Randomizer for types that do not constain other types, including
+    """Randomizer for types that do not contain other types, including
     enum, byte, i16, i32, i64, float, double and string. Bool is excluded
     because it does not need to inherit any properties from this class"""
 

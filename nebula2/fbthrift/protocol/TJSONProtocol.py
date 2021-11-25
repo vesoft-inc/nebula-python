@@ -267,7 +267,7 @@ class TJSONProtocolBase(TProtocolBase):
             return int(numeric)
         except ValueError:
             raise TProtocolException(TProtocolException.INVALID_DATA,
-                                     "Bad data encounted in numeric data")
+                                     "Bad data encountered in numeric data")
 
     def readJSONDouble(self):
         self.context.read()
@@ -285,7 +285,7 @@ class TJSONProtocolBase(TProtocolBase):
                 return double
             except ValueError:
                 raise TProtocolException(TProtocolException.INVALID_DATA,
-                                         "Bad data encounted in numeric data")
+                                         "Bad data encountered in numeric data")
         else:
             if self.context.escapeNum() is True:
                 self.readJSONSyntaxChar(QUOTE)
@@ -293,7 +293,7 @@ class TJSONProtocolBase(TProtocolBase):
                 return float(self.readJSONNumericChars())
             except ValueError:
                 raise TProtocolException(TProtocolException.INVALID_DATA,
-                                         "Bad data encounted in numeric data")
+                                         "Bad data encountered in numeric data")
 
     def readJSONBase64(self):
         string = self.readJSONString(False)

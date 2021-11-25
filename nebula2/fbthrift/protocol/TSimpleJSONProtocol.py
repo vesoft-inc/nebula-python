@@ -600,7 +600,7 @@ class TSimpleJSONProtocolBase(TProtocolBase, object):
             return int(numeric)
         except ValueError:
             raise TProtocolException(TProtocolException.INVALID_DATA,
-                                     "Bad data encounted in numeric data")
+                                     "Bad data encountered in numeric data")
 
     def readJSONDouble(self):
         self.context.read(self.reader)

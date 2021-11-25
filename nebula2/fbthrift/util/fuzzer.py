@@ -234,8 +234,8 @@ class FuzzerConfiguration(object):
                                          add_help=False)
         parser.add_argument('-C', '--config', dest='config_filename',
                             help='JSON Configuration file. '
-                            'All settings can be specified as commandline '
-                            'args and config file settings. Commandline args '
+                            'All settings can be specified as command-line '
+                            'args and config file settings. Command-line args '
                             'override config file settings.')
 
         parser.add_argument('-?', '--help', action='help',

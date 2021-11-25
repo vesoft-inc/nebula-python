@@ -9,24 +9,14 @@
 import concurrent
 import logging
 
-from nebula2.sclient import (
-    PartManager,
-    do_scan_job,
-    PartInfo
-)
+from nebula2.sclient import PartManager, do_scan_job, PartInfo
 
-from nebula2.sclient.BaseResult import (
-    BaseResult,
-    VertexData,
-    EdgeData
-)
+from nebula2.sclient.BaseResult import BaseResult, VertexData, EdgeData
 
 
 class VertexResult(BaseResult):
     def __init__(self, data_sets, decode_type='utf-8'):
-        super().__init__(data_sets=data_sets,
-                         decode_type=decode_type,
-                         is_vertex=True)
+        super().__init__(data_sets=data_sets, decode_type=decode_type, is_vertex=True)
 
     def as_nodes(self):
         """convert the vertexes to relationships
@@ -36,18 +26,14 @@ class VertexResult(BaseResult):
         nodes = []
         for data_set in self._data_sets:
             for row in data_set.rows:
-                vertex_data = VertexData(row,
-                                         data_set.column_names,
-                                         self._decode_type)
+                vertex_data = VertexData(row, data_set.column_names, self._decode_type)
                 nodes.append(vertex_data.as_node())
         return nodes
 
 
 class EdgeResult(BaseResult):
     def __init__(self, data_sets: list, decode_type='utf-8'):
-        super().__init__(data_sets=data_sets,
-                         decode_type=decode_type,
-                         is_vertex=False)
+        super().__init__(data_sets=data_sets, decode_type=decode_type, is_vertex=False)
 
     def as_relationships(self):
         """convert the edges to relationships
@@ -57,23 +43,23 @@ class EdgeResult(BaseResult):
         relationships = []
         for data_set in self._data_sets:
             for row in data_set.rows:
-                edge_data = EdgeData(row,
-                                     data_set.column_names,
-                                     self._decode_type)
+                edge_data = EdgeData(row, data_set.column_names, self._decode_type)
                 relationships.append(edge_data.as_relationship())
         return relationships
 
 
 class ScanResult(object):
-    """the scan result
-    """
-    def __init__(self,
-                 graph_storage_client,
-                 req,
-                 part_addrs,
-                 partial_success=False,
-                 is_vertex=True,
-                 decode_type='utf-8'):
+    """the scan result"""
+
+    def __init__(
+        self,
+        graph_storage_client,
+        req,
+        part_addrs,
+        partial_success=False,
+        is_vertex=True,
+        decode_type='utf-8',
+    ):
         self._is_vertex = is_vertex
         self._decode_type = decode_type
         self._data_sets = []
@@ -107,12 +93,14 @@ class ScanResult(object):
         with concurrent.futures.ThreadPoolExecutor(num) as executor:
             do_scan = []
             for i, conn in enumerate(conns):
-                future = executor.submit(do_scan_job,
-                                         conns[i],
-                                         self._parts_manager,
-                                         self._req,
-                                         self._is_vertex,
-                                         self._partial_success)
+                future = executor.submit(
+                    do_scan_job,
+                    conns[i],
+                    self._parts_manager,
+                    self._req,
+                    self._is_vertex,
+                    self._partial_success,
+                )
                 do_scan.append(future)
 
             for future in concurrent.futures.as_completed(do_scan):

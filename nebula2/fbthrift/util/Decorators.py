@@ -260,7 +260,7 @@ def _done(future, processor, handler_ctx, fn_name, oprot, reply_type, seqid,
 
 
 def future_process_method(argtype, oneway=False):
-    """Decorator for process_xxx methods of futuer processor.
+    """Decorator for process_xxx methods of future processor.
 
     TODO haijunz: handler_ctx is not supported in FutureProcessor's handler
     methods. handler_ctx should only be used by processor event handlers

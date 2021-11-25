@@ -146,3 +146,8 @@ while resp.has_next():
 | 2.5.0  | 2.5.0 |
 | 2.6.0  | 2.6.0/2.6.1 |
 
+## Contributing
+
+Using the default formatter with [black](https://github.com/psf/black).
+
+Please run `make fmt` to format python code.
