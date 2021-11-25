@@ -20,7 +20,7 @@ from nebula2.storage.ttypes import (
     ScanEdgeRequest,
     ScanVertexRequest,
     VertexProp,
-    EdgeProp
+    EdgeProp,
 )
 
 kVid = b'_vid'
@@ -90,17 +90,19 @@ class GraphStorageClient(object):
         """
         return self.meta_cache.get_space_addrs(space_name)
 
-    def scan_vertex(self,
-                    space_name,
-                    tag_name,
-                    prop_names=[],
-                    limit=DEFAULT_LIMIT,
-                    start_time=DEFAULT_START_TIME,
-                    end_time=DEFAULT_END_TIME,
-                    where=None,
-                    only_latest_version=False,
-                    enable_read_from_follower=True,
-                    partial_success=False):
+    def scan_vertex(
+        self,
+        space_name,
+        tag_name,
+        prop_names=[],
+        limit=DEFAULT_LIMIT,
+        start_time=DEFAULT_START_TIME,
+        end_time=DEFAULT_END_TIME,
+        where=None,
+        only_latest_version=False,
+        enable_read_from_follower=True,
+        partial_success=False,
+    ):
         """scan vertex with the specified space_name, tag_name,
         if the prop_names is empty, will return all properties of the tag
 
@@ -119,30 +121,34 @@ class GraphStorageClient(object):
         :return: ScanResult
         """
         part_leaders = self._meta_cache.get_part_leaders(space_name)
-        return self._scan_vertex(space_name,
-                                 part_leaders,
-                                 tag_name,
-                                 prop_names,
-                                 limit,
-                                 start_time,
-                                 end_time,
-                                 where,
-                                 only_latest_version,
-                                 enable_read_from_follower,
-                                 partial_success)
+        return self._scan_vertex(
+            space_name,
+            part_leaders,
+            tag_name,
+            prop_names,
+            limit,
+            start_time,
+            end_time,
+            where,
+            only_latest_version,
+            enable_read_from_follower,
+            partial_success,
+        )
 
-    def scan_vertex_with_part(self,
-                              space_name,
-                              part,
-                              tag_name,
-                              prop_names=[],
-                              limit=DEFAULT_LIMIT,
-                              start_time=DEFAULT_START_TIME,
-                              end_time=DEFAULT_END_TIME,
-                              where=None,
-                              only_latest_version=False,
-                              enable_read_from_follower=True,
-                              partial_success=False):
+    def scan_vertex_with_part(
+        self,
+        space_name,
+        part,
+        tag_name,
+        prop_names=[],
+        limit=DEFAULT_LIMIT,
+        start_time=DEFAULT_START_TIME,
+        end_time=DEFAULT_END_TIME,
+        where=None,
+        only_latest_version=False,
+        enable_read_from_follower=True,
+        partial_success=False,
+    ):
         """scan vertex with the specified space_name, partId, tag_name,
         if the prop_names is empty, will return all properties of the tag
 
@@ -163,30 +169,34 @@ class GraphStorageClient(object):
         """
 
         part_leaders = {part: self._meta_cache.get_part_leader(space_name, part)}
-        return self._scan_vertex(space_name,
-                                 part_leaders,
-                                 tag_name,
-                                 prop_names,
-                                 limit,
-                                 start_time,
-                                 end_time,
-                                 where,
-                                 only_latest_version,
-                                 enable_read_from_follower,
-                                 partial_success)
+        return self._scan_vertex(
+            space_name,
+            part_leaders,
+            tag_name,
+            prop_names,
+            limit,
+            start_time,
+            end_time,
+            where,
+            only_latest_version,
+            enable_read_from_follower,
+            partial_success,
+        )
 
-    def _scan_vertex(self,
-                     space_name,
-                     part_leaders,
-                     tag_name,
-                     prop_names,
-                     limit,
-                     start_time,
-                     end_time,
-                     where,
-                     only_latest_version,
-                     enable_read_from_follower,
-                     partial_success=False):
+    def _scan_vertex(
+        self,
+        space_name,
+        part_leaders,
+        tag_name,
+        prop_names,
+        limit,
+        start_time,
+        end_time,
+        where,
+        only_latest_version,
+        enable_read_from_follower,
+        partial_success=False,
+    ):
         space_id = self._meta_cache.get_space_id(space_name)
         tag_id = self._meta_cache.get_tag_id(space_name, tag_name)
         vertex_prop: VertexProp = VertexProp()
@@ -215,23 +225,27 @@ class GraphStorageClient(object):
         req.filter = where
         req.only_latest_version = only_latest_version
         req.enable_read_from_follower = enable_read_from_follower
-        return ScanResult(self,
-                          req=req,
-                          part_addrs=part_leaders,
-                          is_vertex=True,
-                          partial_success=partial_success)
+        return ScanResult(
+            self,
+            req=req,
+            part_addrs=part_leaders,
+            is_vertex=True,
+            partial_success=partial_success,
+        )
 
-    def scan_edge(self,
-                  space_name,
-                  edge_name,
-                  prop_names=[],
-                  limit=DEFAULT_LIMIT,
-                  start_time=DEFAULT_START_TIME,
-                  end_time=DEFAULT_END_TIME,
-                  where=None,
-                  only_latest_version=False,
-                  enable_read_from_follower=True,
-                  partial_success=False):
+    def scan_edge(
+        self,
+        space_name,
+        edge_name,
+        prop_names=[],
+        limit=DEFAULT_LIMIT,
+        start_time=DEFAULT_START_TIME,
+        end_time=DEFAULT_END_TIME,
+        where=None,
+        only_latest_version=False,
+        enable_read_from_follower=True,
+        partial_success=False,
+    ):
         """scan edge with the specified space_name, edge_name,
         if the prop_names is empty, will return all properties of the edge
 
@@ -250,30 +264,34 @@ class GraphStorageClient(object):
         :return: ScanResult
         """
         part_leaders = self._meta_cache.get_part_leaders(space_name)
-        return self._scan_edge(space_name,
-                               part_leaders,
-                               edge_name,
-                               prop_names,
-                               limit,
-                               start_time,
-                               end_time,
-                               where,
-                               only_latest_version,
-                               enable_read_from_follower,
-                               partial_success)
+        return self._scan_edge(
+            space_name,
+            part_leaders,
+            edge_name,
+            prop_names,
+            limit,
+            start_time,
+            end_time,
+            where,
+            only_latest_version,
+            enable_read_from_follower,
+            partial_success,
+        )
 
-    def scan_edge_with_part(self,
-                            space_name,
-                            part,
-                            edge_name,
-                            prop_names=[],
-                            limit=DEFAULT_LIMIT,
-                            start_time=DEFAULT_START_TIME,
-                            end_time=DEFAULT_END_TIME,
-                            where=None,
-                            only_latest_version=False,
-                            enable_read_from_follower=True,
-                            partial_success=False):
+    def scan_edge_with_part(
+        self,
+        space_name,
+        part,
+        edge_name,
+        prop_names=[],
+        limit=DEFAULT_LIMIT,
+        start_time=DEFAULT_START_TIME,
+        end_time=DEFAULT_END_TIME,
+        where=None,
+        only_latest_version=False,
+        enable_read_from_follower=True,
+        partial_success=False,
+    ):
         """scan edge with the specified space_name, partId, edge_name,
         if the prop_names is empty, will return all properties of the edge
 
@@ -293,30 +311,34 @@ class GraphStorageClient(object):
         :return: ScanResult
         """
         part_leaders = {part: self._meta_cache.get_part_leader(space_name, part)}
-        return self._scan_edge(space_name,
-                               part_leaders,
-                               edge_name,
-                               prop_names,
-                               limit,
-                               start_time,
-                               end_time,
-                               where,
-                               only_latest_version,
-                               enable_read_from_follower,
-                               partial_success)
+        return self._scan_edge(
+            space_name,
+            part_leaders,
+            edge_name,
+            prop_names,
+            limit,
+            start_time,
+            end_time,
+            where,
+            only_latest_version,
+            enable_read_from_follower,
+            partial_success,
+        )
 
-    def _scan_edge(self,
-                   space_name,
-                   part_leaders,
-                   edge_name,
-                   prop_names,
-                   limit,
-                   start_time,
-                   end_time,
-                   where,
-                   only_latest_version,
-                   enable_read_from_follower,
-                   partial_success):
+    def _scan_edge(
+        self,
+        space_name,
+        part_leaders,
+        edge_name,
+        prop_names,
+        limit,
+        start_time,
+        end_time,
+        where,
+        only_latest_version,
+        enable_read_from_follower,
+        partial_success,
+    ):
         space_id = self._meta_cache.get_space_id(space_name)
         edge_type = self._meta_cache.get_edge_type(space_name, edge_name)
         edge_prop = EdgeProp()
@@ -346,9 +368,10 @@ class GraphStorageClient(object):
         req.filter = where
         req.only_latest_version = only_latest_version
         req.enable_read_from_follower = enable_read_from_follower
-        return ScanResult(self,
-                          req=req,
-                          part_addrs=part_leaders,
-                          is_vertex=False,
-                          partial_success=partial_success)
-
+        return ScanResult(
+            self,
+            req=req,
+            part_addrs=part_leaders,
+            is_vertex=False,
+            partial_success=partial_success,
+        )

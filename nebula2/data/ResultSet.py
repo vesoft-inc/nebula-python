@@ -12,7 +12,9 @@ from nebula2.data.DataObject import DataSetWrapper
 
 
 class ResultSet(object):
-    def __init__(self, resp, all_latency, decode_type='utf-8', timezone_offset: int = 0):
+    def __init__(
+        self, resp, all_latency, decode_type='utf-8', timezone_offset: int = 0
+    ):
         """Constructor method
 
         :param resp: the response from the service
@@ -29,9 +31,11 @@ class ResultSet(object):
         self._all_latency = all_latency
         self._timezone_offset = timezone_offset
         if self._resp.data is not None:
-            self._data_set_wrapper = DataSetWrapper(data_set=resp.data,
-                                                    decode_type=self._decode_type,
-                                                    timezone_offset=self._timezone_offset)
+            self._data_set_wrapper = DataSetWrapper(
+                data_set=resp.data,
+                decode_type=self._decode_type,
+                timezone_offset=self._timezone_offset,
+            )
 
     def is_succeeded(self):
         """check the response from the service is succeeded
@@ -101,7 +105,9 @@ class ResultSet(object):
 
         :return: true of false
         """
-        return self._data_set_wrapper is None or self._data_set_wrapper.get_row_size() == 0
+        return (
+            self._data_set_wrapper is None or self._data_set_wrapper.get_row_size() == 0
+        )
 
     def keys(self):
         """get the column names
@@ -203,5 +209,3 @@ class ResultSet(object):
 
     def __ne__(self, other):
         return not (self == other)
-
-

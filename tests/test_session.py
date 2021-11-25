@@ -45,7 +45,9 @@ class TestSession(TestCase):
     def test_2_reconnect(self):
         try:
             session = self.pool.get_session('root', 'nebula')
-            session.execute('CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;')
+            session.execute(
+                'CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;'
+            )
             for i in range(0, 5):
                 if i == 3:
                     os.system('docker stop nebula-docker-compose_graphd0_1')

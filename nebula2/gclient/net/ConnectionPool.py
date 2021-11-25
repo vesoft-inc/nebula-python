@@ -12,10 +12,7 @@ import socket
 from collections import deque
 from threading import RLock, Timer
 
-from nebula2.Exception import (
-    NotValidConnectionException,
-    InValidHostname
-)
+from nebula2.Exception import NotValidConnectionException, InValidHostname
 
 from nebula2.gclient.net.Session import Session
 from nebula2.gclient.net.Connection import Connection
@@ -74,11 +71,11 @@ class ConnectionPool(object):
         # init min connections
         ok_num = self.get_ok_servers_num()
         if ok_num < len(self._addresses):
-            raise RuntimeError('The services status exception: {}'.format(
-                self._get_services_status()))
+            raise RuntimeError(
+                'The services status exception: {}'.format(self._get_services_status())
+            )
 
-        conns_per_address = int(
-            self._configs.min_connection_pool_size / ok_num)
+        conns_per_address = int(self._configs.min_connection_pool_size / ok_num)
 
         if ssl_conf is None:
             for addr in self._addresses:
@@ -91,7 +88,8 @@ class ConnectionPool(object):
                 for i in range(0, conns_per_address):
                     connection = Connection()
                     connection.open_SSL(
-                        addr[0], addr[1], self._configs.timeout, self._ssl_configs)
+                        addr[0], addr[1], self._configs.timeout, self._ssl_configs
+                    )
                     self._connections[addr].append(connection)
         return True
 
@@ -150,7 +148,9 @@ class ConnectionPool(object):
                 ok_num = self.get_ok_servers_num()
                 if ok_num == 0:
                     return None
-                max_con_per_address = int(self._configs.max_connection_pool_size / ok_num)
+                max_con_per_address = int(
+                    self._configs.max_connection_pool_size / ok_num
+                )
                 try_count = 0
                 while try_count <= len(self._addresses):
                     self._pos = (self._pos + 1) % len(self._addresses)
@@ -166,11 +166,14 @@ class ConnectionPool(object):
                         if len(self._connections[addr]) < max_con_per_address:
                             connection = Connection()
                             if self._ssl_configs is None:
-                                connection.open(
-                                    addr[0], addr[1], self._configs.timeout)
+                                connection.open(addr[0], addr[1], self._configs.timeout)
                             else:
                                 connection.open_SSL(
-                                    addr[0], addr[1], self._configs.timeout, self._ssl_configs)
+                                    addr[0],
+                                    addr[1],
+                                    self._configs.timeout,
+                                    self._ssl_configs,
+                                )
                             connection.is_used = True
                             self._connections[addr].append(connection)
                             logging.info('Get connection to {}'.format(addr))
@@ -200,7 +203,9 @@ class ConnectionPool(object):
             conn.close()
             return True
         except Exception as ex:
-            logging.warning('Connect {}:{} failed: {}'.format(address[0], address[1], ex))
+            logging.warning(
+                'Connect {}:{} failed: {}'.format(address[0], address[1], ex)
+            )
             return False
 
     def close(self):
@@ -212,7 +217,9 @@ class ConnectionPool(object):
             for addr in self._connections.keys():
                 for connection in self._connections[addr]:
                     if connection.is_used:
-                        logging.error('The connection using by someone, but now want to close it')
+                        logging.error(
+                            'The connection using by someone, but now want to close it'
+                        )
                     connection.close()
             self._close = True
 
@@ -261,8 +268,7 @@ class ConnectionPool(object):
         return ', '.join(msg_list)
 
     def update_servers_status(self):
-        """update the servers' status
-        """
+        """update the servers' status"""
         for address in self._addresses:
             if self.ping(address):
                 self._addresses_status[address] = self.S_OK
@@ -278,11 +284,22 @@ class ConnectionPool(object):
                 for connection in list(conns):
                     if not connection.is_used:
                         if not connection.ping():
-                            logging.debug('Remove the not unusable connection to {}'.format(connection.get_address()))
+                            logging.debug(
+                                'Remove the not unusable connection to {}'.format(
+                                    connection.get_address()
+                                )
+                            )
                             conns.remove(connection)
                             continue
-                        if self._configs.idle_time != 0 and connection.idle_time() > self._configs.idle_time:
-                            logging.debug('Remove the idle connection to {}'.format(connection.get_address()))
+                        if (
+                            self._configs.idle_time != 0
+                            and connection.idle_time() > self._configs.idle_time
+                        ):
+                            logging.debug(
+                                'Remove the idle connection to {}'.format(
+                                    connection.get_address()
+                                )
+                            )
                             conns.remove(connection)
 
     def _period_detect(self):

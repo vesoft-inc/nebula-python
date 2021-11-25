@@ -144,3 +144,9 @@ while resp.has_next():
 | 2.0.0rc1  | 2.0.0-rc1 |
 | 2.0.0  | 2.0.0/2.0.1 |
 | 2.5.0  | 2.5.0 |
+
+## Contributing
+
+Using the default formatter with [black](https://github.com/psf/black).
+
+Please run `make fmt` to format python code.

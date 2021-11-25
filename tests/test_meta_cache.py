@@ -29,23 +29,26 @@ class TestMetaCache(object):
             auth_result = conn.authenticate('root', 'nebula')
             session_id = auth_result.get_session_id()
             assert session_id != 0
-            resp = conn.execute(session_id,
-                                'CREATE SPACE IF NOT EXISTS test_meta_cache1(REPLICA_FACTOR=3, vid_type=FIXED_STRING(8));'
-                                'USE test_meta_cache1;'
-                                'CREATE TAG IF NOT EXISTS tag11(name string);'
-                                'CREATE EDGE IF NOT EXISTS edge11(name string);'
-                                'CREATE SPACE IF NOT EXISTS test_meta_cache2(vid_type=FIXED_STRING(8));'
-                                'USE test_meta_cache2;'
-                                'CREATE TAG IF NOT EXISTS tag22(name string);'
-                                'CREATE EDGE IF NOT EXISTS edge22(name string);')
+            resp = conn.execute(
+                session_id,
+                'CREATE SPACE IF NOT EXISTS test_meta_cache1(REPLICA_FACTOR=3, vid_type=FIXED_STRING(8));'
+                'USE test_meta_cache1;'
+                'CREATE TAG IF NOT EXISTS tag11(name string);'
+                'CREATE EDGE IF NOT EXISTS edge11(name string);'
+                'CREATE SPACE IF NOT EXISTS test_meta_cache2(vid_type=FIXED_STRING(8));'
+                'USE test_meta_cache2;'
+                'CREATE TAG IF NOT EXISTS tag22(name string);'
+                'CREATE EDGE IF NOT EXISTS edge22(name string);',
+            )
             assert resp.error_code == 0
             conn.close()
             time.sleep(10)
-            cls.meta_cache = MetaCache([('127.0.0.1', 9559),
-                                        ('127.0.0.1', 9560),
-                                        ('127.0.0.1', 9560)], 50000)
+            cls.meta_cache = MetaCache(
+                [('127.0.0.1', 9559), ('127.0.0.1', 9560), ('127.0.0.1', 9561)], 50000
+            )
         except Exception as x:
             import traceback
+
             print(traceback.format_exc())
             assert False
 
@@ -56,7 +59,9 @@ class TestMetaCache(object):
 
         # test not existed
         try:
-            space_id = self.meta_cache.get_tag_id('test_meta_cache1', 'space_not_existed')
+            space_id = self.meta_cache.get_tag_id(
+                'test_meta_cache1', 'space_not_existed'
+            )
             assert False
         except Exception:
             assert True
@@ -80,7 +85,9 @@ class TestMetaCache(object):
 
         # test not existed
         try:
-            edge_id = self.meta_cache.get_edge_type('test_meta_cache1', 'edge_not_existed')
+            edge_id = self.meta_cache.get_edge_type(
+                'test_meta_cache1', 'edge_not_existed'
+            )
             assert False
         except Exception:
             assert True
@@ -97,7 +104,9 @@ class TestMetaCache(object):
 
         # test not existed
         try:
-            tag_item = self.meta_cache.get_tag_schema('test_meta_cache1', 'tag_not_existed')
+            tag_item = self.meta_cache.get_tag_schema(
+                'test_meta_cache1', 'tag_not_existed'
+            )
             assert False
         except Exception:
             assert True
@@ -114,7 +123,9 @@ class TestMetaCache(object):
 
         # test not existed
         try:
-            edge_item = self.meta_cache.get_edge_schema('test_meta_cache1', 'edge_not_existed')
+            edge_item = self.meta_cache.get_edge_schema(
+                'test_meta_cache1', 'edge_not_existed'
+            )
             assert False
         except Exception:
             assert True
@@ -133,7 +144,11 @@ class TestMetaCache(object):
         assert sorted(parts) == sorted(expected_parts)
 
         for part in part_addresses.keys():
-            assert part_addresses[part].host in ['172.28.2.1', '172.28.2.2', '172.28.2.3']
+            assert part_addresses[part].host in [
+                '172.28.2.1',
+                '172.28.2.2',
+                '172.28.2.3',
+            ]
 
         ports = [part_addresses[part].port for part in part_addresses.keys()]
         expected_hosts = [9779 for i in range(1, 101)]
@@ -167,5 +182,3 @@ class TestMetaCache(object):
         ports = [addr.port for addr in part_alloc[1]]
         expected_ports = [9779, 9779, 9779]
         assert sorted(ports) == sorted(expected_ports)
-
-
