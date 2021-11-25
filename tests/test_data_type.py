@@ -497,7 +497,13 @@ class TestNode(TestBaseCase):
         expect_properties = {}
         for key in node.properties('tag2').keys():
             expect_properties[key] = node.properties('tag2')[key].as_int()
-        assert {'prop0': 0, 'prop1': 1, 'prop2': 2, 'prop3': 3, 'prop4': 4} == expect_properties
+        assert {
+            'prop0': 0,
+            'prop1': 1,
+            'prop2': 2,
+            'prop3': 3,
+            'prop4': 4,
+        } == expect_properties
 
 
 class TestRelationship(TestBaseCase):
@@ -519,7 +525,13 @@ class TestRelationship(TestBaseCase):
         expect_properties = {}
         for key in relationship.properties().keys():
             expect_properties[key] = relationship.properties()[key].as_int()
-        assert {'prop0': 0, 'prop1': 1, 'prop2': 2, 'prop3': 3, 'prop4': 4} == expect_properties
+        assert {
+            'prop0': 0,
+            'prop1': 1,
+            'prop2': 2,
+            'prop3': 3,
+            'prop4': 4,
+        } == expect_properties
 
 
 class TestPath(TestBaseCase):
@@ -576,35 +588,82 @@ class TestDatesetWrapper(TestBaseCase):
         row_count = 0
         for i in range(data_set_wrapper1.get_row_size()):
             row_count = row_count + 1
-            assert data_set_wrapper1.row_values(i)[0] == data_set_wrapper2.row_values(i)[0]
-            assert data_set_wrapper1.row_values(i)[1] == data_set_wrapper2.row_values(i)[1]
-            assert data_set_wrapper1.row_values(i)[2] == data_set_wrapper2.row_values(i)[2]
-            assert data_set_wrapper1.row_values(i)[3] == data_set_wrapper2.row_values(i)[3]
-            assert data_set_wrapper1.row_values(i)[4] == data_set_wrapper2.row_values(i)[4]
-            assert data_set_wrapper1.row_values(i)[5] == data_set_wrapper2.row_values(i)[5]
-            assert data_set_wrapper1.row_values(i)[6] == data_set_wrapper2.row_values(i)[6]
-            assert data_set_wrapper1.row_values(i)[7] == data_set_wrapper2.row_values(i)[7]
-            assert data_set_wrapper1.row_values(i)[8] == data_set_wrapper2.row_values(i)[8]
-            assert data_set_wrapper1.row_values(i)[9] == data_set_wrapper2.row_values(i)[9]
-            assert data_set_wrapper1.row_values(i)[10] == data_set_wrapper2.row_values(i)[10]
-            assert data_set_wrapper1.row_values(i)[11] == data_set_wrapper2.row_values(i)[11]
-            assert data_set_wrapper1.row_values(i)[12] == data_set_wrapper2.row_values(i)[12]
-            assert data_set_wrapper1.row_values(i)[13] == data_set_wrapper2.row_values(i)[13]
-            assert data_set_wrapper1.row_values(i)[14] == data_set_wrapper2.row_values(i)[14]
-            assert data_set_wrapper1.row_values(i)[15] == data_set_wrapper2.row_values(i)[15]
-            assert data_set_wrapper1.row_values(i)[9] != data_set_wrapper2.row_values(i)[8]
+            assert (
+                data_set_wrapper1.row_values(i)[0] == data_set_wrapper2.row_values(i)[0]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[1] == data_set_wrapper2.row_values(i)[1]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[2] == data_set_wrapper2.row_values(i)[2]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[3] == data_set_wrapper2.row_values(i)[3]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[4] == data_set_wrapper2.row_values(i)[4]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[5] == data_set_wrapper2.row_values(i)[5]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[6] == data_set_wrapper2.row_values(i)[6]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[7] == data_set_wrapper2.row_values(i)[7]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[8] == data_set_wrapper2.row_values(i)[8]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[9] == data_set_wrapper2.row_values(i)[9]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[10]
+                == data_set_wrapper2.row_values(i)[10]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[11]
+                == data_set_wrapper2.row_values(i)[11]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[12]
+                == data_set_wrapper2.row_values(i)[12]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[13]
+                == data_set_wrapper2.row_values(i)[13]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[14]
+                == data_set_wrapper2.row_values(i)[14]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[15]
+                == data_set_wrapper2.row_values(i)[15]
+            )
+            assert (
+                data_set_wrapper1.row_values(i)[9] != data_set_wrapper2.row_values(i)[8]
+            )
 
         assert 2 == row_count
         assert 2 == data_set_wrapper1.get_row_size()
         assert len(data_set_wrapper1.column_values("col6_string")) == 2
         assert data_set_wrapper1.column_values("col6_string")[0].is_string()
-        assert data_set_wrapper1.column_values("col6_string")[0].as_string() == 'hello world'
-        assert data_set_wrapper1.column_values("col6_string")[1].as_string() == 'hello world'
+        assert (
+            data_set_wrapper1.column_values("col6_string")[0].as_string()
+            == 'hello world'
+        )
+        assert (
+            data_set_wrapper1.column_values("col6_string")[1].as_string()
+            == 'hello world'
+        )
 
         assert data_set_wrapper1.row_values(0)[5].is_string()
         assert data_set_wrapper1.row_values(1)[5].is_string()
         assert data_set_wrapper1.row_values(0)[5].as_string() == 'hello world'
         assert data_set_wrapper1.row_values(1)[5].as_string() == 'hello world'
+
 
 class TestResultset(TestBaseCase):
     def test_all_interface(self):

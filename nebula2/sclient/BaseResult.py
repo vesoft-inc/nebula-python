@@ -12,7 +12,7 @@ from nebula2.data.DataObject import DataSetWrapper, Node, ValueWrapper, Relation
 
 
 class VertexData(object):
-    #TODO just ignore '_vid' column
+    # TODO just ignore '_vid' column
     PROP_START_INDEX_with_vid = 2
     PROP_START_INDEX = 1
 

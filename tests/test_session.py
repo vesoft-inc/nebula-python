@@ -27,10 +27,10 @@ class TestSession(TestCase):
         self.configs = Config()
         self.configs.max_connection_pool_size = 6
         self.pool = ConnectionPool()
-        assert self.pool.init([('127.0.0.1', 9669),
-                               ('127.0.0.1', 9670),
-                               ('127.0.0.1', 9671)],
-                              self.configs)
+        assert self.pool.init(
+            [('127.0.0.1', 9669), ('127.0.0.1', 9670), ('127.0.0.1', 9671)],
+            self.configs,
+        )
         assert self.pool.connects() == 0
         assert self.pool.in_used_connects() == 0
 

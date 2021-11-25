@@ -135,7 +135,12 @@ class TestGraphStorageClient(object):
         # test get_data_set
         data_set = result.get_data_set_wrapper()
         assert data_set.get_row_size() == 10
-        assert data_set.get_col_names() == ['_vid', 'person._vid', 'person.name', 'person.age']
+        assert data_set.get_col_names() == [
+            '_vid',
+            'person._vid',
+            'person.name',
+            'person.age',
+        ]
 
         # test as nodes
         assert len(result.as_nodes()) >= 10

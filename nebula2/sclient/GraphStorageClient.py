@@ -209,7 +209,7 @@ class GraphStorageClient(object):
             schema = self._meta_cache.get_tag_schema(space_name, tag_name)
             for col in schema.columns:
                 vertex_prop.props.append(col.name)
-        
+
         parts = {}
         for id in part_leaders.keys():
             parts[id] = ScanCursor()
