@@ -223,7 +223,7 @@ class ConnectionPool(object):
                     connection.close()
             self._close = True
 
-    def connnects(self):
+    def connects(self):
         """get the number of existing connections
 
         :return: the number of connections

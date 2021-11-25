@@ -417,7 +417,7 @@ class ThriftHeaderClientProtocolBase(FramedProtocol):
 
         try:
             # Closing the wrapped sender transport will cascade closing
-            # of the underlying tranports, too.
+            # of the underlying transport, too.
             self.transport.close()
         except Exception:
             pass

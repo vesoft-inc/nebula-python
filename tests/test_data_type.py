@@ -461,19 +461,19 @@ class TesValueWrapper(TestBaseCase):
     def test_as_path(self):
         value = ttypes.Value()
         value.set_pVal(self.get_path_value(b'Tom'))
-        vaue_wrapper = ValueWrapper(value)
-        assert vaue_wrapper.is_path()
+        value_wrapper = ValueWrapper(value)
+        assert value_wrapper.is_path()
 
-        node = vaue_wrapper.as_path()
+        node = value_wrapper.as_path()
         assert isinstance(node, PathWrapper)
 
     def test_as_geography(self):
         value = ttypes.Value()
         value.set_ggVal(self.get_geography_value(3.0, 5.2))
-        vaue_wrapper = ValueWrapper(value)
-        assert vaue_wrapper.is_geography()
+        value_wrapper = ValueWrapper(value)
+        assert value_wrapper.is_geography()
 
-        geog = vaue_wrapper.as_geography()
+        geog = value_wrapper.as_geography()
         assert isinstance(geog, GeographyWrapper)
 
 
@@ -494,16 +494,16 @@ class TestNode(TestBaseCase):
 
         assert ['tag0', 'tag1', 'tag2'] == node.tags()
 
-        expect_propertys = {}
+        expect_properties = {}
         for key in node.properties('tag2').keys():
-            expect_propertys[key] = node.properties('tag2')[key].as_int()
+            expect_properties[key] = node.properties('tag2')[key].as_int()
         assert {
             'prop0': 0,
             'prop1': 1,
             'prop2': 2,
             'prop3': 3,
             'prop4': 4,
-        } == expect_propertys
+        } == expect_properties
 
 
 class TestRelationship(TestBaseCase):
@@ -522,16 +522,16 @@ class TestRelationship(TestBaseCase):
 
         assert ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'] == relationship.keys()
 
-        expect_propertys = {}
+        expect_properties = {}
         for key in relationship.properties().keys():
-            expect_propertys[key] = relationship.properties()[key].as_int()
+            expect_properties[key] = relationship.properties()[key].as_int()
         assert {
             'prop0': 0,
             'prop1': 1,
             'prop2': 2,
             'prop3': 3,
             'prop4': 4,
-        } == expect_propertys
+        } == expect_properties
 
 
 class TestPath(TestBaseCase):
@@ -581,88 +581,88 @@ class TestPath(TestBaseCase):
 
 class TestDatesetWrapper(TestBaseCase):
     def test_all(self):
-        data_set_warpper1 = DataSetWrapper(self.get_data_set())
-        data_set_warpper2 = DataSetWrapper(self.get_data_set())
+        data_set_wrapper1 = DataSetWrapper(self.get_data_set())
+        data_set_wrapper2 = DataSetWrapper(self.get_data_set())
 
         # test iterator and compare
         row_count = 0
-        for i in range(data_set_warpper1.get_row_size()):
+        for i in range(data_set_wrapper1.get_row_size()):
             row_count = row_count + 1
             assert (
-                data_set_warpper1.row_values(i)[0] == data_set_warpper2.row_values(i)[0]
+                data_set_wrapper1.row_values(i)[0] == data_set_wrapper2.row_values(i)[0]
             )
             assert (
-                data_set_warpper1.row_values(i)[1] == data_set_warpper2.row_values(i)[1]
+                data_set_wrapper1.row_values(i)[1] == data_set_wrapper2.row_values(i)[1]
             )
             assert (
-                data_set_warpper1.row_values(i)[2] == data_set_warpper2.row_values(i)[2]
+                data_set_wrapper1.row_values(i)[2] == data_set_wrapper2.row_values(i)[2]
             )
             assert (
-                data_set_warpper1.row_values(i)[3] == data_set_warpper2.row_values(i)[3]
+                data_set_wrapper1.row_values(i)[3] == data_set_wrapper2.row_values(i)[3]
             )
             assert (
-                data_set_warpper1.row_values(i)[4] == data_set_warpper2.row_values(i)[4]
+                data_set_wrapper1.row_values(i)[4] == data_set_wrapper2.row_values(i)[4]
             )
             assert (
-                data_set_warpper1.row_values(i)[5] == data_set_warpper2.row_values(i)[5]
+                data_set_wrapper1.row_values(i)[5] == data_set_wrapper2.row_values(i)[5]
             )
             assert (
-                data_set_warpper1.row_values(i)[6] == data_set_warpper2.row_values(i)[6]
+                data_set_wrapper1.row_values(i)[6] == data_set_wrapper2.row_values(i)[6]
             )
             assert (
-                data_set_warpper1.row_values(i)[7] == data_set_warpper2.row_values(i)[7]
+                data_set_wrapper1.row_values(i)[7] == data_set_wrapper2.row_values(i)[7]
             )
             assert (
-                data_set_warpper1.row_values(i)[8] == data_set_warpper2.row_values(i)[8]
+                data_set_wrapper1.row_values(i)[8] == data_set_wrapper2.row_values(i)[8]
             )
             assert (
-                data_set_warpper1.row_values(i)[9] == data_set_warpper2.row_values(i)[9]
+                data_set_wrapper1.row_values(i)[9] == data_set_wrapper2.row_values(i)[9]
             )
             assert (
-                data_set_warpper1.row_values(i)[10]
-                == data_set_warpper2.row_values(i)[10]
+                data_set_wrapper1.row_values(i)[10]
+                == data_set_wrapper2.row_values(i)[10]
             )
             assert (
-                data_set_warpper1.row_values(i)[11]
-                == data_set_warpper2.row_values(i)[11]
+                data_set_wrapper1.row_values(i)[11]
+                == data_set_wrapper2.row_values(i)[11]
             )
             assert (
-                data_set_warpper1.row_values(i)[12]
-                == data_set_warpper2.row_values(i)[12]
+                data_set_wrapper1.row_values(i)[12]
+                == data_set_wrapper2.row_values(i)[12]
             )
             assert (
-                data_set_warpper1.row_values(i)[13]
-                == data_set_warpper2.row_values(i)[13]
+                data_set_wrapper1.row_values(i)[13]
+                == data_set_wrapper2.row_values(i)[13]
             )
             assert (
-                data_set_warpper1.row_values(i)[14]
-                == data_set_warpper2.row_values(i)[14]
+                data_set_wrapper1.row_values(i)[14]
+                == data_set_wrapper2.row_values(i)[14]
             )
             assert (
-                data_set_warpper1.row_values(i)[15]
-                == data_set_warpper2.row_values(i)[15]
+                data_set_wrapper1.row_values(i)[15]
+                == data_set_wrapper2.row_values(i)[15]
             )
             assert (
-                data_set_warpper1.row_values(i)[9] != data_set_warpper2.row_values(i)[8]
+                data_set_wrapper1.row_values(i)[9] != data_set_wrapper2.row_values(i)[8]
             )
 
         assert 2 == row_count
-        assert 2 == data_set_warpper1.get_row_size()
-        assert len(data_set_warpper1.column_values("col6_string")) == 2
-        assert data_set_warpper1.column_values("col6_string")[0].is_string()
+        assert 2 == data_set_wrapper1.get_row_size()
+        assert len(data_set_wrapper1.column_values("col6_string")) == 2
+        assert data_set_wrapper1.column_values("col6_string")[0].is_string()
         assert (
-            data_set_warpper1.column_values("col6_string")[0].as_string()
+            data_set_wrapper1.column_values("col6_string")[0].as_string()
             == 'hello world'
         )
         assert (
-            data_set_warpper1.column_values("col6_string")[1].as_string()
+            data_set_wrapper1.column_values("col6_string")[1].as_string()
             == 'hello world'
         )
 
-        assert data_set_warpper1.row_values(0)[5].is_string()
-        assert data_set_warpper1.row_values(1)[5].is_string()
-        assert data_set_warpper1.row_values(0)[5].as_string() == 'hello world'
-        assert data_set_warpper1.row_values(1)[5].as_string() == 'hello world'
+        assert data_set_wrapper1.row_values(0)[5].is_string()
+        assert data_set_wrapper1.row_values(1)[5].is_string()
+        assert data_set_wrapper1.row_values(0)[5].as_string() == 'hello world'
+        assert data_set_wrapper1.row_values(1)[5].as_string() == 'hello world'
 
 
 class TestResultset(TestBaseCase):
