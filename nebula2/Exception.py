@@ -6,7 +6,6 @@
 # This source code is licensed under Apache 2.0 License.
 
 
-
 class OutOfRangeException(Exception):
     def __init__(self):
         Exception.__init__(self)
@@ -79,6 +78,10 @@ class IOErrorException(Exception):
         self.type = code
         self.message = message
 
+
 class ClientServerIncompatibleException(Exception):
     def __init__(self, message):
-        Exception.__init__(self, f'Current client is not compatible with the remote server, please check the version: {message}')
+        Exception.__init__(
+            self,
+            f'Current client is not compatible with the remote server, please check the version: {message}',
+        )

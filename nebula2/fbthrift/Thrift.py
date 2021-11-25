@@ -185,7 +185,7 @@ class TProcessor:
 
     @staticmethod
     def _get_exception_from_thrift_result(result):
-        """Returns the wrapped exception, if pressent. None if not.
+        """Returns the wrapped exception, if present. None if not.
 
         result is a generated *_result object. This object either has a
         'success' field set indicating the call succeeded, or a field set

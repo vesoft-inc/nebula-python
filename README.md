@@ -144,6 +144,7 @@ while resp.has_next():
 | 2.0.0rc1  | 2.0.0-rc1 |
 | 2.0.0  | 2.0.0/2.0.1 |
 | 2.5.0  | 2.5.0 |
+| 2.6.0  | 2.6.0/2.6.1 |
 
 ## How to contribute to nebula-python
 
@@ -164,5 +165,8 @@ Make sure the Nebula server in running, then run the tests with pytest:
 ```
 pytest
 ```
+Using the default formatter with [black](https://github.com/psf/black).
+
+Please run `make fmt` to format python code before submitting.
 
 See [How to contribute](https://github.com/vesoft-inc/nebula-community/blob/master/Contributors/how-to-contribute.md) for the general process of contributing to Nebula projects.

@@ -134,7 +134,7 @@ class TServer:
         and a processor will be created automatically:
 
     4) (handler, serverTransport)
-    5) (handler, serverTransport, transportFacotry, protocolFactory)
+    5) (handler, serverTransport, transportFactory, protocolFactory)
     6) (handler, serverTransport,
         inputTransportFactory, outputTransportFactory,
         inputProtocolFactory, outputProtocolFactory)

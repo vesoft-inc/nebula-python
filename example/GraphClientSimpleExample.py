@@ -33,21 +33,23 @@ if __name__ == '__main__':
         json_obj = json.loads(resp_json)
         print(json.dumps(json_obj, indent=2, sort_keys=True))
 
-        client.execute('CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30)); USE test;'
-                       'CREATE TAG IF NOT EXISTS person(name string, age int);'
-                       'CREATE EDGE like (likeness double);')
+        client.execute(
+            'CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30)); USE test;'
+            'CREATE TAG IF NOT EXISTS person(name string, age int);'
+            'CREATE EDGE like (likeness double);'
+        )
 
         # insert data need to sleep after create schema
         time.sleep(6)
 
         # insert vertex
         resp = client.execute(
-            'INSERT VERTEX person(name, age) VALUES "Bob":("Bob", 10), "Lily":("Lily", 9)')
+            'INSERT VERTEX person(name, age) VALUES "Bob":("Bob", 10), "Lily":("Lily", 9)'
+        )
         assert resp.is_succeeded(), resp.error_msg()
 
         # insert edges
-        resp = client.execute(
-            'INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
+        resp = client.execute('INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
         assert resp.is_succeeded(), resp.error_msg()
 
         resp = client.execute('FETCH PROP ON person "Bob" YIELD vertex as node')
@@ -64,6 +66,7 @@ if __name__ == '__main__':
 
     except Exception as x:
         import traceback
+
         print(traceback.format_exc())
         if client is not None:
             client.release()

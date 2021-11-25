@@ -2,11 +2,11 @@ name: Test ci
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   schedule:
-    - cron: '0 6 * * *'
+    - cron: "0 6 * * *"
 
 jobs:
   ci:
@@ -17,32 +17,34 @@ jobs:
         python-version: [3.6, 3.7]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install .
-        pip install -r requirements/dev.txt
-    - name: Test with pytest
-      run: |
-        docker-compose up -d
-        sleep 45
-        pytest -s -v -k "not TestSSLConnection and not TestSSLConnectionSelfSigned"
-        docker-compose down -v
-      working-directory: tests
-    - name: Test SSL connection with pytest
-      run: |
-        enable_ssl=true docker-compose up -d
-        sleep 45
-        pytest -s -v test_ssl_connection.py::TestSSLConnection
-      working-directory: tests
-    - name: Test self-signed SSL connection with pytest
-      run: |
-        enable_ssl=true docker-compose up -d
-        sleep 45
-        pytest -s -v test_ssl_connection.py::TestSSLConnectionSelfSigned
-      working-directory: tests
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: lint
+        run: make fmt-check
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+          pip install -r requirements/dev.txt
+      - name: Test with pytest
+        run: |
+          docker-compose up -d
+          sleep 45
+          pytest -s -v -k "not TestSSLConnection and not TestSSLConnectionSelfSigned"
+          docker-compose down -v
+        working-directory: tests
+      - name: Test SSL connection with pytest
+        run: |
+          enable_ssl=true docker-compose up -d
+          sleep 45
+          pytest -s -v test_ssl_connection.py::TestSSLConnection
+        working-directory: tests
+      - name: Test self-signed SSL connection with pytest
+        run: |
+          enable_ssl=true docker-compose up -d
+          sleep 45
+          pytest -s -v test_ssl_connection.py::TestSSLConnectionSelfSigned
+        working-directory: tests

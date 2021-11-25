@@ -75,7 +75,7 @@ class ConnectionEpoll:
     def process(self, timeout):
         # poll() invokes a "long" syscall that will be interrupted by any signal
         # that comes in, causing an EINTR error.  If this happens, avoid dying
-        # horribly by trying again with the appropriately shortened timout.
+        # horribly by trying again with the appropriately shortened timeout.
         process_time = py2_compatible_process_time()
 
         deadline = process_time + float(timeout or 0)
@@ -134,7 +134,7 @@ class ConnectionSelect:
         # select() invokes a "long" syscall that will be interrupted by any
         # signal that comes in, causing an EINTR error.  If this happens,
         # avoid dying horribly by trying again with the appropriately
-        # shortened timout.
+        # shortened timeout.
         deadline = py2_compatible_process_time() + float(timeout or 0)
         poll_timeout = timeout if timeout is None or timeout > 0 else None
         while True:
