@@ -38,21 +38,27 @@ class Session(object):
             start_time = time.time()
             resp = self._connection.execute(self._session_id, stmt)
             end_time = time.time()
-            return ResultSet(resp,
-                             all_latency=int((end_time - start_time) * 1000000),
-                             timezone_offset=self._timezone_offset)
+            return ResultSet(
+                resp,
+                all_latency=int((end_time - start_time) * 1000000),
+                timezone_offset=self._timezone_offset,
+            )
         except IOErrorException as ie:
             if ie.type == IOErrorException.E_CONNECT_BROKEN:
                 self._pool.update_servers_status()
                 if self._retry_connect:
                     if not self._reconnect():
                         logging.warning('Retry connect failed')
-                        raise IOErrorException(IOErrorException.E_ALL_BROKEN, ie.message)
+                        raise IOErrorException(
+                            IOErrorException.E_ALL_BROKEN, ie.message
+                        )
                     resp = self._connection.execute(self._session_id, stmt)
                     end_time = time.time()
-                    return ResultSet(resp,
-                                     all_latency=int((end_time - start_time) * 1000000),
-                                     timezone_offset=self._timezone_offset)
+                    return ResultSet(
+                        resp,
+                        all_latency=int((end_time - start_time) * 1000000),
+                        timezone_offset=self._timezone_offset,
+                    )
             raise
         except Exception:
             raise
@@ -130,9 +136,9 @@ class Session(object):
                     if not self._reconnect():
                         logging.warning('Retry connect failed')
                         raise IOErrorException(
-                            IOErrorException.E_ALL_BROKEN, ie.message)
-                    resp_json = self._connection.execute_json(
-                        self._session_id, stmt)
+                            IOErrorException.E_ALL_BROKEN, ie.message
+                        )
+                    resp_json = self._connection.execute_json(self._session_id, stmt)
                     return resp_json
             raise
         except Exception:

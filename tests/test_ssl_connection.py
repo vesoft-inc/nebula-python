@@ -31,12 +31,19 @@ ssl_config.certfile = os.path.join(current_dir, 'secrets/test.client.crt')
 ssl_selfs_signed_config = SSL_config()
 ssl_selfs_signed_config.cert_reqs = ssl.CERT_OPTIONAL
 ssl_selfs_signed_config.cert_reqs = ssl.CERT_OPTIONAL
-ssl_selfs_signed_config.ca_certs = os.path.join(current_dir, 'secrets/test.self-signed.pem')
-ssl_selfs_signed_config.keyfile = os.path.join(current_dir, 'secrets/test.self-signed.key')
-ssl_selfs_signed_config.certfile = os.path.join(current_dir, 'secrets/test.self-signed.pem')
+ssl_selfs_signed_config.ca_certs = os.path.join(
+    current_dir, 'secrets/test.self-signed.pem'
+)
+ssl_selfs_signed_config.keyfile = os.path.join(
+    current_dir, 'secrets/test.self-signed.key'
+)
+ssl_selfs_signed_config.certfile = os.path.join(
+    current_dir, 'secrets/test.self-signed.pem'
+)
 
 host = '127.0.0.1'
 port = 9669
+
 
 class TestSSLConnection(TestCase):
     def test_create(self):
@@ -77,6 +84,7 @@ class TestSSLConnection(TestCase):
             conn.authenticate('root', 'nebula')
         except IOErrorException:
             assert True
+
 
 class TestSSLConnectionSelfSigned(TestCase):
     def test_create_self_signed(self):

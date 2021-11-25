@@ -15,7 +15,7 @@ from nebula2.Exception import (
     PartNotFoundException,
     SpaceNotFoundException,
     TagNotFoundException,
-    EdgeNotFoundException
+    EdgeNotFoundException,
 )
 from nebula2.common.ttypes import HostAddr, ErrorCode
 from nebula2.meta.ttypes import (
@@ -25,12 +25,9 @@ from nebula2.meta.ttypes import (
     ListSpacesReq,
     GetPartsAllocReq,
     ListHostsReq,
-    HostRole
+    HostRole,
 )
-from nebula2.meta import (
-    ttypes,
-    MetaService
-)
+from nebula2.meta import ttypes, MetaService
 
 from nebula2.fbthrift.transport import TSocket, TTransport
 from nebula2.fbthrift.protocol import TBinaryProtocol
@@ -88,18 +85,24 @@ class MetaClient(object):
                         self.update_leader(resp.leader)
                         count = count + 1
                         continue
-                    raise RuntimeError("List tags from space id:{} failed, error code: {}"
-                                       .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
+                    raise RuntimeError(
+                        "List tags from space id:{} failed, error code: {}".format(
+                            space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)
+                        )
+                    )
                 return resp.tags
-            raise RuntimeError("List tags from space id:{} failed, error code: {}"
-                               .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
+            raise RuntimeError(
+                "List tags from space id:{} failed, error code: {}".format(
+                    space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)
+                )
+            )
 
     def list_edges(self, space_id):
         """get all version edge
 
-       :param space_id: the specified space id
-       :eturn: list<EdgeItem>
-       """
+        :param space_id: the specified space id
+        :return: list<EdgeItem>
+        """
         with self._lock:
             if self._connection is None:
                 raise RuntimeError('The connection is no open')
@@ -113,11 +116,17 @@ class MetaClient(object):
                         self.update_leader(resp.leader)
                         count = count + 1
                         continue
-                    raise RuntimeError("List edges from space id:{} failed, error code: {}"
-                                       .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
+                    raise RuntimeError(
+                        "List edges from space id:{} failed, error code: {}".format(
+                            space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)
+                        )
+                    )
                 return resp.edges
-            raise RuntimeError("List edges from space id:{} failed, error code: {}"
-                               .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
+            raise RuntimeError(
+                "List edges from space id:{} failed, error code: {}".format(
+                    space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)
+                )
+            )
 
     def list_spaces(self):
         """get all spaces info
@@ -136,11 +145,17 @@ class MetaClient(object):
                         self.update_leader(resp.leader)
                         count = count + 1
                         continue
-                    raise RuntimeError("List spaces failed, error code: {}"
-                                       .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
+                    raise RuntimeError(
+                        "List spaces failed, error code: {}".format(
+                            ErrorCode._VALUES_TO_NAMES.get(resp.code)
+                        )
+                    )
                 return resp.spaces
-            raise RuntimeError("List spaces failed, error code: {}"
-                               .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
+            raise RuntimeError(
+                "List spaces failed, error code: {}".format(
+                    ErrorCode._VALUES_TO_NAMES.get(resp.code)
+                )
+            )
 
     def list_hosts(self):
         """get all online hosts info
@@ -160,15 +175,21 @@ class MetaClient(object):
                         self.update_leader(resp.leader)
                         count = count + 1
                         continue
-                    raise RuntimeError("List spaces failed, error code: {}"
-                                       .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
+                    raise RuntimeError(
+                        "List spaces failed, error code: {}".format(
+                            ErrorCode._VALUES_TO_NAMES.get(resp.code)
+                        )
+                    )
                 valid_hosts = []
                 for host in resp.hosts:
                     if host.status == HostStatus.ONLINE:
                         valid_hosts.append(host)
                 return valid_hosts
-            raise RuntimeError("List spaces failed, error code: {}"
-                               .format(ErrorCode._VALUES_TO_NAMES.get(resp.code)))
+            raise RuntimeError(
+                "List spaces failed, error code: {}".format(
+                    ErrorCode._VALUES_TO_NAMES.get(resp.code)
+                )
+            )
 
     def get_parts_alloc(self, space_id):
         """get all parts info of the specified space id
@@ -189,11 +210,17 @@ class MetaClient(object):
                         self.update_leader(resp.leader)
                         count = count + 1
                         continue
-                    raise RuntimeError("List parts from space id:{} failed, error code: {}"
-                                       .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
+                    raise RuntimeError(
+                        "List parts from space id:{} failed, error code: {}".format(
+                            space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)
+                        )
+                    )
                 return resp.parts
-            raise RuntimeError("List parts from space id:{} failed, error code: {}"
-                               .format(space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)))
+            raise RuntimeError(
+                "List parts from space id:{} failed, error code: {}".format(
+                    space_id, ErrorCode._VALUES_TO_NAMES.get(resp.code)
+                )
+            )
 
     def close(self):
         """close the connection
@@ -232,12 +259,13 @@ class MetaCache(object):
             self.parts_alloc = {}
 
         def __repr__(self):
-            return 'space_id: {}, space_name: {}, tag_items: {}, edge_items: {}, parts_alloc: {}'\
-                .format(self.space_id,
-                        self.space_name,
-                        self.tag_items,
-                        self.edge_items,
-                        self.parts_alloc)
+            return 'space_id: {}, space_name: {}, tag_items: {}, edge_items: {}, parts_alloc: {}'.format(
+                self.space_id,
+                self.space_name,
+                self.tag_items,
+                self.edge_items,
+                self.parts_alloc,
+            )
 
     def __init__(self, meta_addrs, timeout=2000, load_period=10, decode_type='utf-8'):
         self._decode_type = decode_type
@@ -300,7 +328,9 @@ class MetaCache(object):
                     else:
                         if space_cache.edge_items[edge_name].version < edge.version:
                             space_cache.edge_items[edge_name] = edge
-                    space_cache.edge_items[edge.edge_name.decode(self._decode_type)] = edge
+                    space_cache.edge_items[
+                        edge.edge_name.decode(self._decode_type)
+                    ] = edge
                 space_cache.parts_alloc = parts_alloc
                 space_caches[space.name.decode(self._decode_type)] = space_cache
 
@@ -319,10 +349,13 @@ class MetaCache(object):
                     parts_alloc = self._space_caches[space_name].parts_alloc
                     self._storage_leader[space_name] = {}
                     for part_id in parts_alloc:
-                        self._storage_leader[space_name][part_id] = parts_alloc[part_id][0]
+                        self._storage_leader[space_name][part_id] = parts_alloc[
+                            part_id
+                        ][0]
         except Exception as x:
             logging.error('Update meta data failed: {}'.format(x))
             import traceback
+
             logging.error(traceback.format_exc())
 
     def get_all_storage_addrs(self):
@@ -476,5 +509,3 @@ class MetaCache(object):
                 if part_addr == address:
                     continue
                 self._storage_leader[space_name][part_id] = part_addr
-
-

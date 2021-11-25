@@ -7,6 +7,5 @@
 
 
 from nebula2.common.ttypes import Value
+
 Value.__hash__ = lambda self: self.value.__hash__()
-
-

@@ -26,7 +26,7 @@ from nebula2.common.ttypes import (
     NList,
     NMap,
     Geography,
-    ErrorCode
+    ErrorCode,
 )
 from nebula2.common import ttypes
 from nebula2.graph import ttypes as graphTtype
@@ -43,7 +43,7 @@ from nebula2.data.DataObject import (
     Null,
     Segment,
     DataSetWrapper,
-    GeographyWrapper
+    GeographyWrapper,
 )
 
 
@@ -118,22 +118,24 @@ class TestBaseCase(TestCase):
     @classmethod
     def get_data_set(cls):
         data_set = ttypes.DataSet()
-        data_set.column_names = [b"col1_empty",
-                                 b"col2_null",
-                                 b"col3_bool",
-                                 b"col4_int",
-                                 b"col5_double",
-                                 b"col6_string",
-                                 b"col7_list",
-                                 b"col8_set",
-                                 b"col9_map",
-                                 b"col10_time",
-                                 b"col11_date",
-                                 b"col12_datetime",
-                                 b"col13_vertex",
-                                 b"col14_edge",
-                                 b"col15_path",
-                                 b"col16_geography"]
+        data_set.column_names = [
+            b"col1_empty",
+            b"col2_null",
+            b"col3_bool",
+            b"col4_int",
+            b"col5_double",
+            b"col6_string",
+            b"col7_list",
+            b"col8_set",
+            b"col9_map",
+            b"col10_time",
+            b"col11_date",
+            b"col12_datetime",
+            b"col13_vertex",
+            b"col14_edge",
+            b"col15_path",
+            b"col16_geography",
+        ]
         row = ttypes.Row()
         row.values = []
         value1 = ttypes.Value()
@@ -264,8 +266,10 @@ class TesValueWrapper(TestBaseCase):
 
         list_val = value_wrapper.as_list()
         assert isinstance(list_val, list)
-        expect_result = [ValueWrapper(ttypes.Value(sVal=b"word")),
-                         ValueWrapper(ttypes.Value(sVal=b"car"))]
+        expect_result = [
+            ValueWrapper(ttypes.Value(sVal=b"word")),
+            ValueWrapper(ttypes.Value(sVal=b"car")),
+        ]
         assert list_val == expect_result
 
     def test_as_set(self):
@@ -371,7 +375,9 @@ class TesValueWrapper(TestBaseCase):
         assert datetime_val.get_minute() == 20
         assert datetime_val.get_sec() == 10
         assert datetime_val.get_microsec() == 100
-        assert 'utc datetime: 123-02-01T10:20:10.000100, timezone_offset: 28800' == str(datetime_val)
+        assert 'utc datetime: 123-02-01T10:20:10.000100, timezone_offset: 28800' == str(
+            datetime_val
+        )
         assert '123-02-01T18:20:10.000100' == datetime_val.get_local_datetime_str()
         new_datetime = copy.deepcopy(datetime)
         new_datetime.hour = 18
@@ -379,7 +385,9 @@ class TesValueWrapper(TestBaseCase):
 
         new_datetime_2 = copy.deepcopy(datetime)
         new_datetime_2.hour = 12
-        assert new_datetime_2 == datetime_val.get_local_datetime_by_timezone_offset(7200)
+        assert new_datetime_2 == datetime_val.get_local_datetime_by_timezone_offset(
+            7200
+        )
 
     def test_as_node(self):
         value = ttypes.Value()
@@ -391,11 +399,17 @@ class TesValueWrapper(TestBaseCase):
         assert isinstance(node, Node)
         assert node.get_id().as_string() == 'Tom'
         assert node.has_tag('tag1')
-        assert node.prop_names('tag1').sort() == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+        assert (
+            node.prop_names('tag1').sort()
+            == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+        )
         expect_values = [(v.as_int()) for v in node.prop_values('tag1')]
         assert expect_values == [0, 1, 2, 3, 4]
         assert node.tags() == ['tag0', 'tag1', 'tag2']
-        assert list(node.properties('tag1').keys()).sort() == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+        assert (
+            list(node.properties('tag1').keys()).sort()
+            == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+        )
         expect_values = [(v.as_int()) for v in node.properties('tag1').values()]
         assert expect_values == [0, 1, 2, 3, 4]
 
@@ -428,12 +442,17 @@ class TesValueWrapper(TestBaseCase):
         assert relationship.keys() == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4']
         expect_values = [(v.as_int()) for v in relationship.values()]
         assert expect_values == [0, 1, 2, 3, 4]
-        assert list(relationship.properties().keys()).sort() == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+        assert (
+            list(relationship.properties().keys()).sort()
+            == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+        )
         expect_values = [(v.as_int()) for v in relationship.properties().values()]
         assert expect_values == [0, 1, 2, 3, 4]
 
         # test empty props
-        value = ttypes.Value(eVal=self.get_edge_value(b'Tom', b'Lily', empty_props=True))
+        value = ttypes.Value(
+            eVal=self.get_edge_value(b'Tom', b'Lily', empty_props=True)
+        )
         relationship = ValueWrapper(value).as_relationship()
         assert relationship.keys() == []
         assert relationship.values() == []
@@ -469,14 +488,22 @@ class TestNode(TestBaseCase):
 
         assert ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'] == node.prop_names('tag2')
 
-        assert [0, 1, 2, 3, 4] == [(value.as_int()) for value in node.prop_values('tag2')]
+        assert [0, 1, 2, 3, 4] == [
+            (value.as_int()) for value in node.prop_values('tag2')
+        ]
 
         assert ['tag0', 'tag1', 'tag2'] == node.tags()
 
         expect_propertys = {}
         for key in node.properties('tag2').keys():
             expect_propertys[key] = node.properties('tag2')[key].as_int()
-        assert {'prop0': 0, 'prop1': 1, 'prop2': 2, 'prop3': 3, 'prop4': 4} == expect_propertys
+        assert {
+            'prop0': 0,
+            'prop1': 1,
+            'prop2': 2,
+            'prop3': 3,
+            'prop4': 4,
+        } == expect_propertys
 
 
 class TestRelationship(TestBaseCase):
@@ -498,7 +525,13 @@ class TestRelationship(TestBaseCase):
         expect_propertys = {}
         for key in relationship.properties().keys():
             expect_propertys[key] = relationship.properties()[key].as_int()
-        assert {'prop0': 0, 'prop1': 1, 'prop2': 2, 'prop3': 3, 'prop4': 4} == expect_propertys
+        assert {
+            'prop0': 0,
+            'prop1': 1,
+            'prop2': 2,
+            'prop3': 3,
+            'prop4': 4,
+        } == expect_propertys
 
 
 class TestPath(TestBaseCase):
@@ -510,24 +543,38 @@ class TestPath(TestBaseCase):
 
         assert path.contain_node(Node(self.get_vertex_value(b'vertex3')))
 
-        assert path.contain_relationship(Relationship(self.get_edge_value(b'vertex3', b'vertex2')))
+        assert path.contain_relationship(
+            Relationship(self.get_edge_value(b'vertex3', b'vertex2'))
+        )
 
         nodes = list()
         nodes.append(path.start_node())
         for i in range(0, 5):
-            nodes.append(Node(self.get_vertex_value(('vertex'.format(i)).encode('utf-8'))))
+            nodes.append(
+                Node(self.get_vertex_value(('vertex'.format(i)).encode('utf-8')))
+            )
 
         relationships = list()
         relationships.append(Relationship(self.get_edge_value(b'Tom', b'vertex0')))
         for i in range(0, 4):
             if i % 2 == 0:
-                relationships.append(Relationship(
-                    self.get_edge_value(('vertex{}'.format(i + 1)).encode('utf-8'),
-                                        ('vertex{}'.format(i)).encode('utf-8'))))
+                relationships.append(
+                    Relationship(
+                        self.get_edge_value(
+                            ('vertex{}'.format(i + 1)).encode('utf-8'),
+                            ('vertex{}'.format(i)).encode('utf-8'),
+                        )
+                    )
+                )
             else:
-                relationships.append(Relationship(
-                    self.get_edge_value(('vertex{}'.format(i)).encode('utf-8'),
-                                        ('vertex{}'.format(i + 1)).encode('utf-8'))))
+                relationships.append(
+                    Relationship(
+                        self.get_edge_value(
+                            ('vertex{}'.format(i)).encode('utf-8'),
+                            ('vertex{}'.format(i + 1)).encode('utf-8'),
+                        )
+                    )
+                )
 
         assert relationships == path.relationships()
 
@@ -541,30 +588,76 @@ class TestDatesetWrapper(TestBaseCase):
         row_count = 0
         for i in range(data_set_warpper1.get_row_size()):
             row_count = row_count + 1
-            assert data_set_warpper1.row_values(i)[0] == data_set_warpper2.row_values(i)[0]
-            assert data_set_warpper1.row_values(i)[1] == data_set_warpper2.row_values(i)[1]
-            assert data_set_warpper1.row_values(i)[2] == data_set_warpper2.row_values(i)[2]
-            assert data_set_warpper1.row_values(i)[3] == data_set_warpper2.row_values(i)[3]
-            assert data_set_warpper1.row_values(i)[4] == data_set_warpper2.row_values(i)[4]
-            assert data_set_warpper1.row_values(i)[5] == data_set_warpper2.row_values(i)[5]
-            assert data_set_warpper1.row_values(i)[6] == data_set_warpper2.row_values(i)[6]
-            assert data_set_warpper1.row_values(i)[7] == data_set_warpper2.row_values(i)[7]
-            assert data_set_warpper1.row_values(i)[8] == data_set_warpper2.row_values(i)[8]
-            assert data_set_warpper1.row_values(i)[9] == data_set_warpper2.row_values(i)[9]
-            assert data_set_warpper1.row_values(i)[10] == data_set_warpper2.row_values(i)[10]
-            assert data_set_warpper1.row_values(i)[11] == data_set_warpper2.row_values(i)[11]
-            assert data_set_warpper1.row_values(i)[12] == data_set_warpper2.row_values(i)[12]
-            assert data_set_warpper1.row_values(i)[13] == data_set_warpper2.row_values(i)[13]
-            assert data_set_warpper1.row_values(i)[14] == data_set_warpper2.row_values(i)[14]
-            assert data_set_warpper1.row_values(i)[15] == data_set_warpper2.row_values(i)[15]
-            assert data_set_warpper1.row_values(i)[9] != data_set_warpper2.row_values(i)[8]
+            assert (
+                data_set_warpper1.row_values(i)[0] == data_set_warpper2.row_values(i)[0]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[1] == data_set_warpper2.row_values(i)[1]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[2] == data_set_warpper2.row_values(i)[2]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[3] == data_set_warpper2.row_values(i)[3]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[4] == data_set_warpper2.row_values(i)[4]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[5] == data_set_warpper2.row_values(i)[5]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[6] == data_set_warpper2.row_values(i)[6]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[7] == data_set_warpper2.row_values(i)[7]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[8] == data_set_warpper2.row_values(i)[8]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[9] == data_set_warpper2.row_values(i)[9]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[10]
+                == data_set_warpper2.row_values(i)[10]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[11]
+                == data_set_warpper2.row_values(i)[11]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[12]
+                == data_set_warpper2.row_values(i)[12]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[13]
+                == data_set_warpper2.row_values(i)[13]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[14]
+                == data_set_warpper2.row_values(i)[14]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[15]
+                == data_set_warpper2.row_values(i)[15]
+            )
+            assert (
+                data_set_warpper1.row_values(i)[9] != data_set_warpper2.row_values(i)[8]
+            )
 
         assert 2 == row_count
         assert 2 == data_set_warpper1.get_row_size()
         assert len(data_set_warpper1.column_values("col6_string")) == 2
         assert data_set_warpper1.column_values("col6_string")[0].is_string()
-        assert data_set_warpper1.column_values("col6_string")[0].as_string() == 'hello world'
-        assert data_set_warpper1.column_values("col6_string")[1].as_string() == 'hello world'
+        assert (
+            data_set_warpper1.column_values("col6_string")[0].as_string()
+            == 'hello world'
+        )
+        assert (
+            data_set_warpper1.column_values("col6_string")[1].as_string()
+            == 'hello world'
+        )
 
         assert data_set_warpper1.row_values(0)[5].is_string()
         assert data_set_warpper1.row_values(1)[5].is_string()
@@ -583,22 +676,24 @@ class TestResultset(TestBaseCase):
         assert result.latency() == 100
         assert not result.is_empty()
         assert not result.is_succeeded()
-        expect_keys = ["col1_empty",
-                       "col2_null",
-                       "col3_bool",
-                       "col4_int",
-                       "col5_double",
-                       "col6_string",
-                       "col7_list",
-                       "col8_set",
-                       "col9_map",
-                       "col10_time",
-                       "col11_date",
-                       "col12_datetime",
-                       "col13_vertex",
-                       "col14_edge",
-                       "col15_path",
-                       "col16_geography"]
+        expect_keys = [
+            "col1_empty",
+            "col2_null",
+            "col3_bool",
+            "col4_int",
+            "col5_double",
+            "col6_string",
+            "col7_list",
+            "col8_set",
+            "col9_map",
+            "col10_time",
+            "col11_date",
+            "col12_datetime",
+            "col13_vertex",
+            "col14_edge",
+            "col15_path",
+            "col16_geography",
+        ]
         assert result.keys() == expect_keys
         assert result.col_size() == 16
         assert result.row_size() == 2
@@ -619,22 +714,24 @@ class TestResultset(TestBaseCase):
         assert isinstance(result.get_row_types(), list)
 
         # test get_row_types
-        assert result.get_row_types() == [ttypes.Value.__EMPTY__,
-                                          ttypes.Value.NVAL,
-                                          ttypes.Value.BVAL,
-                                          ttypes.Value.IVAL,
-                                          ttypes.Value.FVAL,
-                                          ttypes.Value.SVAL,
-                                          ttypes.Value.LVAL,
-                                          ttypes.Value.UVAL,
-                                          ttypes.Value.MVAL,
-                                          ttypes.Value.TVAL,
-                                          ttypes.Value.DVAL,
-                                          ttypes.Value.DTVAL,
-                                          ttypes.Value.VVAL,
-                                          ttypes.Value.EVAL,
-                                          ttypes.Value.PVAL,
-                                          ttypes.Value.GGVAL]
+        assert result.get_row_types() == [
+            ttypes.Value.__EMPTY__,
+            ttypes.Value.NVAL,
+            ttypes.Value.BVAL,
+            ttypes.Value.IVAL,
+            ttypes.Value.FVAL,
+            ttypes.Value.SVAL,
+            ttypes.Value.LVAL,
+            ttypes.Value.UVAL,
+            ttypes.Value.MVAL,
+            ttypes.Value.TVAL,
+            ttypes.Value.DVAL,
+            ttypes.Value.DTVAL,
+            ttypes.Value.VVAL,
+            ttypes.Value.EVAL,
+            ttypes.Value.PVAL,
+            ttypes.Value.GGVAL,
+        ]
 
         # test record
         in_use = False
@@ -701,4 +798,3 @@ class TestResultset(TestBaseCase):
             in_use = True
             record.size() == 16
         assert in_use
-

@@ -25,7 +25,7 @@ from nebula2.Config import Config
 from nebula2.Exception import (
     NotValidConnectionException,
     InValidHostname,
-    IOErrorException
+    IOErrorException,
 )
 
 
@@ -152,7 +152,9 @@ class TestConnectionPool(TestCase):
         assert pool.init([('127.0.0.1', 9669)], config)
         session = pool.get_session('root', 'nebula')
         try:
-            resp = session.execute('USE nba;GO 1000 STEPS FROM \"Tim Duncan\" OVER like')
+            resp = session.execute(
+                'USE nba;GO 1000 STEPS FROM \"Tim Duncan\" OVER like'
+            )
             assert False
         except IOErrorException as e:
             assert True
@@ -186,7 +188,9 @@ def test_multi_thread():
             space_name = 'space_' + threading.current_thread().getName()
 
             session.execute('DROP SPACE %s' % space_name)
-            resp = session.execute('CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))' % space_name)
+            resp = session.execute(
+                'CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))' % space_name
+            )
             if not resp.is_succeeded():
                 raise RuntimeError('CREATE SPACE failed: {}'.format(resp.error_msg()))
 
@@ -220,4 +224,3 @@ def test_multi_thread():
 
     pool.close()
     assert success_flag
-
