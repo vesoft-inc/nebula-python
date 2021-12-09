@@ -122,8 +122,17 @@ class Connection(object):
         :param stmt: the ngql
         :return: ExecutionResponse
         """
+        return self.execute_parameter(session_id, stmt, None)
+
+    def execute_parameter(self, session_id, stmt, params):
+        """execute interface with session_id and ngql
+        :param session_id: the session id get from result of authenticate interface
+        :param stmt: the ngql
+        :param params: parameter map
+        :return: ExecutionResponse
+        """
         try:
-            resp = self._connection.execute(session_id, stmt)
+            resp = self._connection.executeWithParameter(session_id, stmt, params)
             return resp
         except Exception as te:
             if isinstance(te, TTransportException):
@@ -146,8 +155,16 @@ class Connection(object):
         :param stmt: the ngql
         :return: string json representing the execution result
         """
+        return self.execute_json_with_parameter(session_id, stmt, None)
+
+    def execute_json_with_parameter(self, session_id, stmt, params):
+        """execute_json interface with session_id and ngql
+        :param session_id: the session id get from result of authenticate interface
+        :param stmt: the ngql
+        :return: string json representing the execution result
+        """
         try:
-            resp = self._connection.executeJson(session_id, stmt)
+            resp = self._connection.executeJsonWithParameter(session_id, stmt)
             return resp
         except Exception as te:
             if isinstance(te, TTransportException):
