@@ -723,8 +723,8 @@ class ExecutionResponse:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.latency_in_us = iprot.readI32()
+        if ftype == TType.I64:
+          self.latency_in_us = iprot.readI64()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -772,8 +772,8 @@ class ExecutionResponse:
       oprot.writeI32(self.error_code)
       oprot.writeFieldEnd()
     if self.latency_in_us != None:
-      oprot.writeFieldBegin('latency_in_us', TType.I32, 2)
-      oprot.writeI32(self.latency_in_us)
+      oprot.writeFieldBegin('latency_in_us', TType.I64, 2)
+      oprot.writeI64(self.latency_in_us)
       oprot.writeFieldEnd()
     if self.data != None:
       oprot.writeFieldBegin('data', TType.STRUCT, 3)
@@ -1299,7 +1299,7 @@ all_structs.append(ExecutionResponse)
 ExecutionResponse.thrift_spec = (
   None, # 0
   (1, TType.I32, 'error_code', nebula2.common.ttypes.ErrorCode, None, 0, ), # 1
-  (2, TType.I32, 'latency_in_us', None, None, 0, ), # 2
+  (2, TType.I64, 'latency_in_us', None, None, 0, ), # 2
   (3, TType.STRUCT, 'data', [nebula2.common.ttypes.DataSet, nebula2.common.ttypes.DataSet.thrift_spec, False], None, 1, ), # 3
   (4, TType.STRING, 'space_name', False, None, 1, ), # 4
   (5, TType.STRING, 'error_msg', False, None, 1, ), # 5

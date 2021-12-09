@@ -32,7 +32,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'StatType', 'OrderDirection', 'EdgeDirection', 'ScanType', 'EngineSignType', 'RequestCommon', 'PartitionResult', 'ResponseCommon', 'StatProp', 'Expr', 'EdgeProp', 'VertexProp', 'OrderBy', 'TraverseSpec', 'GetNeighborsRequest', 'GetNeighborsResponse', 'ExecResponse', 'GetPropRequest', 'GetPropResponse', 'NewTag', 'NewVertex', 'EdgeKey', 'NewEdge', 'AddVerticesRequest', 'AddEdgesRequest', 'DeleteVerticesRequest', 'DeleteEdgesRequest', 'DelTags', 'DeleteTagsRequest', 'UpdateResponse', 'UpdatedProp', 'UpdateVertexRequest', 'UpdateEdgeRequest', 'GetUUIDReq', 'GetUUIDResp', 'LookupIndexResp', 'IndexColumnHint', 'IndexQueryContext', 'IndexSpec', 'LookupIndexRequest', 'LookupAndTraverseRequest', 'ScanCursor', 'ScanVertexRequest', 'ScanVertexResponse', 'ScanEdgeRequest', 'ScanEdgeResponse', 'TaskPara', 'AddAdminTaskRequest', 'StopAdminTaskRequest', 'AdminExecResp', 'TransLeaderReq', 'AddPartReq', 'AddLearnerReq', 'RemovePartReq', 'MemberChangeReq', 'CatchUpDataReq', 'GetLeaderReq', 'CreateCPRequest', 'DropCPRequest', 'BlockingSignRequest', 'GetLeaderPartsResp', 'CheckPeersReq', 'RebuildIndexRequest', 'CreateCPResp', 'ListClusterInfoResp', 'ListClusterInfoReq', 'KVGetRequest', 'KVGetResponse', 'KVPutRequest', 'KVRemoveRequest', 'InternalTxnRequest', 'ChainAddEdgesRequest', 'ChainUpdateEdgeRequest']
+__all__ = ['UTF8STRINGS', 'StatType', 'OrderDirection', 'EdgeDirection', 'ScanType', 'EngineSignType', 'RequestCommon', 'PartitionResult', 'ResponseCommon', 'StatProp', 'Expr', 'EdgeProp', 'VertexProp', 'OrderBy', 'TraverseSpec', 'GetNeighborsRequest', 'GetNeighborsResponse', 'ExecResponse', 'GetPropRequest', 'GetPropResponse', 'NewTag', 'NewVertex', 'EdgeKey', 'NewEdge', 'AddVerticesRequest', 'AddEdgesRequest', 'DeleteVerticesRequest', 'DeleteEdgesRequest', 'DelTags', 'DeleteTagsRequest', 'UpdateResponse', 'UpdatedProp', 'UpdateVertexRequest', 'UpdateEdgeRequest', 'GetUUIDReq', 'GetUUIDResp', 'LookupIndexResp', 'IndexColumnHint', 'IndexQueryContext', 'IndexSpec', 'LookupIndexRequest', 'LookupAndTraverseRequest', 'ScanCursor', 'ScanVertexRequest', 'ScanVertexResponse', 'ScanEdgeRequest', 'ScanEdgeResponse', 'TaskPara', 'KVGetRequest', 'KVGetResponse', 'KVPutRequest', 'KVRemoveRequest', 'AdminExecResp', 'TransLeaderReq', 'AddPartReq', 'AddLearnerReq', 'RemovePartReq', 'MemberChangeReq', 'CatchUpDataReq', 'GetLeaderReq', 'CreateCPRequest', 'DropCPRequest', 'BlockingSignRequest', 'GetLeaderPartsResp', 'CheckPeersReq', 'RebuildIndexRequest', 'CreateCPResp', 'ListClusterInfoResp', 'ListClusterInfoReq', 'AddAdminTaskRequest', 'StopAdminTaskRequest', 'InternalTxnRequest', 'ChainAddEdgesRequest', 'ChainUpdateEdgeRequest']
 
 class StatType:
   SUM = 1
@@ -365,8 +365,8 @@ class ResponseCommon:
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.latency_in_us = iprot.readI32()
+        if ftype == TType.I64:
+          self.latency_in_us = iprot.readI64()
         else:
           iprot.skip(ftype)
       elif fid == 3:
@@ -407,8 +407,8 @@ class ResponseCommon:
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.latency_in_us != None:
-      oprot.writeFieldBegin('latency_in_us', TType.I32, 2)
-      oprot.writeI32(self.latency_in_us)
+      oprot.writeFieldBegin('latency_in_us', TType.I64, 2)
+      oprot.writeI64(self.latency_in_us)
       oprot.writeFieldEnd()
     if self.latency_detail_us != None:
       oprot.writeFieldBegin('latency_detail_us', TType.MAP, 3)
@@ -5802,14 +5802,12 @@ class TaskPara:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class AddAdminTaskRequest:
+class KVGetRequest:
   """
   Attributes:
-   - cmd
-   - job_id
-   - task_id
-   - para
-   - concurrency
+   - space_id
+   - parts
+   - return_partly
   """
 
   thrift_spec = None
@@ -5834,28 +5832,49 @@ class AddAdminTaskRequest:
         break
       if fid == 1:
         if ftype == TType.I32:
-          self.cmd = iprot.readI32()
+          self.space_id = iprot.readI32()
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.job_id = iprot.readI32()
+        if ftype == TType.MAP:
+          self.parts = {}
+          (_ktype512, _vtype513, _size511 ) = iprot.readMapBegin() 
+          if _size511 >= 0:
+            for _i515 in six.moves.range(_size511):
+              _key516 = iprot.readI32()
+              _val517 = []
+              (_etype521, _size518) = iprot.readListBegin()
+              if _size518 >= 0:
+                for _i522 in six.moves.range(_size518):
+                  _elem523 = iprot.readString()
+                  _val517.append(_elem523)
+              else: 
+                while iprot.peekList():
+                  _elem524 = iprot.readString()
+                  _val517.append(_elem524)
+              iprot.readListEnd()
+              self.parts[_key516] = _val517
+          else: 
+            while iprot.peekMap():
+              _key525 = iprot.readI32()
+              _val526 = []
+              (_etype530, _size527) = iprot.readListBegin()
+              if _size527 >= 0:
+                for _i531 in six.moves.range(_size527):
+                  _elem532 = iprot.readString()
+                  _val526.append(_elem532)
+              else: 
+                while iprot.peekList():
+                  _elem533 = iprot.readString()
+                  _val526.append(_elem533)
+              iprot.readListEnd()
+              self.parts[_key525] = _val526
+          iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.I32:
-          self.task_id = iprot.readI32()
-        else:
-          iprot.skip(ftype)
-      elif fid == 4:
-        if ftype == TType.STRUCT:
-          self.para = TaskPara()
-          self.para.read(iprot)
-        else:
-          iprot.skip(ftype)
-      elif fid == 5:
-        if ftype == TType.I32:
-          self.concurrency = iprot.readI32()
+        if ftype == TType.BOOL:
+          self.return_partly = iprot.readBool()
         else:
           iprot.skip(ftype)
       else:
@@ -5870,26 +5889,25 @@ class AddAdminTaskRequest:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('AddAdminTaskRequest')
-    if self.cmd != None:
-      oprot.writeFieldBegin('cmd', TType.I32, 1)
-      oprot.writeI32(self.cmd)
+    oprot.writeStructBegin('KVGetRequest')
+    if self.space_id != None:
+      oprot.writeFieldBegin('space_id', TType.I32, 1)
+      oprot.writeI32(self.space_id)
       oprot.writeFieldEnd()
-    if self.job_id != None:
-      oprot.writeFieldBegin('job_id', TType.I32, 2)
-      oprot.writeI32(self.job_id)
+    if self.parts != None:
+      oprot.writeFieldBegin('parts', TType.MAP, 2)
+      oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
+      for kiter534,viter535 in self.parts.items():
+        oprot.writeI32(kiter534)
+        oprot.writeListBegin(TType.STRING, len(viter535))
+        for iter536 in viter535:
+          oprot.writeString(iter536)
+        oprot.writeListEnd()
+      oprot.writeMapEnd()
       oprot.writeFieldEnd()
-    if self.task_id != None:
-      oprot.writeFieldBegin('task_id', TType.I32, 3)
-      oprot.writeI32(self.task_id)
-      oprot.writeFieldEnd()
-    if self.para != None:
-      oprot.writeFieldBegin('para', TType.STRUCT, 4)
-      self.para.write(oprot)
-      oprot.writeFieldEnd()
-    if self.concurrency != None:
-      oprot.writeFieldBegin('concurrency', TType.I32, 5)
-      oprot.writeI32(self.concurrency)
+    if self.return_partly != None:
+      oprot.writeFieldBegin('return_partly', TType.BOOL, 3)
+      oprot.writeBool(self.return_partly)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -5897,26 +5915,18 @@ class AddAdminTaskRequest:
   def __repr__(self):
     L = []
     padding = ' ' * 4
-    if self.cmd is not None:
-      value = pprint.pformat(self.cmd, indent=0)
+    if self.space_id is not None:
+      value = pprint.pformat(self.space_id, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    cmd=%s' % (value))
-    if self.job_id is not None:
-      value = pprint.pformat(self.job_id, indent=0)
+      L.append('    space_id=%s' % (value))
+    if self.parts is not None:
+      value = pprint.pformat(self.parts, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    job_id=%s' % (value))
-    if self.task_id is not None:
-      value = pprint.pformat(self.task_id, indent=0)
+      L.append('    parts=%s' % (value))
+    if self.return_partly is not None:
+      value = pprint.pformat(self.return_partly, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    task_id=%s' % (value))
-    if self.para is not None:
-      value = pprint.pformat(self.para, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    para=%s' % (value))
-    if self.concurrency is not None:
-      value = pprint.pformat(self.concurrency, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    concurrency=%s' % (value))
+      L.append('    return_partly=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -5932,11 +5942,115 @@ class AddAdminTaskRequest:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class StopAdminTaskRequest:
+class KVGetResponse:
   """
   Attributes:
-   - job_id
-   - task_id
+   - result
+   - key_values
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.result = ResponseCommon()
+          self.result.read(iprot)
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.MAP:
+          self.key_values = {}
+          (_ktype538, _vtype539, _size537 ) = iprot.readMapBegin() 
+          if _size537 >= 0:
+            for _i541 in six.moves.range(_size537):
+              _key542 = iprot.readString()
+              _val543 = iprot.readString()
+              self.key_values[_key542] = _val543
+          else: 
+            while iprot.peekMap():
+              _key544 = iprot.readString()
+              _val545 = iprot.readString()
+              self.key_values[_key544] = _val545
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('KVGetResponse')
+    if self.result != None:
+      oprot.writeFieldBegin('result', TType.STRUCT, 1)
+      self.result.write(oprot)
+      oprot.writeFieldEnd()
+    if self.key_values != None:
+      oprot.writeFieldBegin('key_values', TType.MAP, 2)
+      oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.key_values))
+      for kiter546,viter547 in self.key_values.items():
+        oprot.writeString(kiter546)
+        oprot.writeString(viter547)
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.result is not None:
+      value = pprint.pformat(self.result, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    result=%s' % (value))
+    if self.key_values is not None:
+      value = pprint.pformat(self.key_values, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    key_values=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class KVPutRequest:
+  """
+  Attributes:
+   - space_id
+   - parts
   """
 
   thrift_spec = None
@@ -5961,12 +6075,48 @@ class StopAdminTaskRequest:
         break
       if fid == 1:
         if ftype == TType.I32:
-          self.job_id = iprot.readI32()
+          self.space_id = iprot.readI32()
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.I32:
-          self.task_id = iprot.readI32()
+        if ftype == TType.MAP:
+          self.parts = {}
+          (_ktype549, _vtype550, _size548 ) = iprot.readMapBegin() 
+          if _size548 >= 0:
+            for _i552 in six.moves.range(_size548):
+              _key553 = iprot.readI32()
+              _val554 = []
+              (_etype558, _size555) = iprot.readListBegin()
+              if _size555 >= 0:
+                for _i559 in six.moves.range(_size555):
+                  _elem560 = nebula2.common.ttypes.KeyValue()
+                  _elem560.read(iprot)
+                  _val554.append(_elem560)
+              else: 
+                while iprot.peekList():
+                  _elem561 = nebula2.common.ttypes.KeyValue()
+                  _elem561.read(iprot)
+                  _val554.append(_elem561)
+              iprot.readListEnd()
+              self.parts[_key553] = _val554
+          else: 
+            while iprot.peekMap():
+              _key562 = iprot.readI32()
+              _val563 = []
+              (_etype567, _size564) = iprot.readListBegin()
+              if _size564 >= 0:
+                for _i568 in six.moves.range(_size564):
+                  _elem569 = nebula2.common.ttypes.KeyValue()
+                  _elem569.read(iprot)
+                  _val563.append(_elem569)
+              else: 
+                while iprot.peekList():
+                  _elem570 = nebula2.common.ttypes.KeyValue()
+                  _elem570.read(iprot)
+                  _val563.append(_elem570)
+              iprot.readListEnd()
+              self.parts[_key562] = _val563
+          iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -5981,14 +6131,21 @@ class StopAdminTaskRequest:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('StopAdminTaskRequest')
-    if self.job_id != None:
-      oprot.writeFieldBegin('job_id', TType.I32, 1)
-      oprot.writeI32(self.job_id)
+    oprot.writeStructBegin('KVPutRequest')
+    if self.space_id != None:
+      oprot.writeFieldBegin('space_id', TType.I32, 1)
+      oprot.writeI32(self.space_id)
       oprot.writeFieldEnd()
-    if self.task_id != None:
-      oprot.writeFieldBegin('task_id', TType.I32, 2)
-      oprot.writeI32(self.task_id)
+    if self.parts != None:
+      oprot.writeFieldBegin('parts', TType.MAP, 2)
+      oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
+      for kiter571,viter572 in self.parts.items():
+        oprot.writeI32(kiter571)
+        oprot.writeListBegin(TType.STRUCT, len(viter572))
+        for iter573 in viter572:
+          iter573.write(oprot)
+        oprot.writeListEnd()
+      oprot.writeMapEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -5996,14 +6153,140 @@ class StopAdminTaskRequest:
   def __repr__(self):
     L = []
     padding = ' ' * 4
-    if self.job_id is not None:
-      value = pprint.pformat(self.job_id, indent=0)
+    if self.space_id is not None:
+      value = pprint.pformat(self.space_id, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    job_id=%s' % (value))
-    if self.task_id is not None:
-      value = pprint.pformat(self.task_id, indent=0)
+      L.append('    space_id=%s' % (value))
+    if self.parts is not None:
+      value = pprint.pformat(self.parts, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    task_id=%s' % (value))
+      L.append('    parts=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+class KVRemoveRequest:
+  """
+  Attributes:
+   - space_id
+   - parts
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I32:
+          self.space_id = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.MAP:
+          self.parts = {}
+          (_ktype575, _vtype576, _size574 ) = iprot.readMapBegin() 
+          if _size574 >= 0:
+            for _i578 in six.moves.range(_size574):
+              _key579 = iprot.readI32()
+              _val580 = []
+              (_etype584, _size581) = iprot.readListBegin()
+              if _size581 >= 0:
+                for _i585 in six.moves.range(_size581):
+                  _elem586 = iprot.readString()
+                  _val580.append(_elem586)
+              else: 
+                while iprot.peekList():
+                  _elem587 = iprot.readString()
+                  _val580.append(_elem587)
+              iprot.readListEnd()
+              self.parts[_key579] = _val580
+          else: 
+            while iprot.peekMap():
+              _key588 = iprot.readI32()
+              _val589 = []
+              (_etype593, _size590) = iprot.readListBegin()
+              if _size590 >= 0:
+                for _i594 in six.moves.range(_size590):
+                  _elem595 = iprot.readString()
+                  _val589.append(_elem595)
+              else: 
+                while iprot.peekList():
+                  _elem596 = iprot.readString()
+                  _val589.append(_elem596)
+              iprot.readListEnd()
+              self.parts[_key588] = _val589
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('KVRemoveRequest')
+    if self.space_id != None:
+      oprot.writeFieldBegin('space_id', TType.I32, 1)
+      oprot.writeI32(self.space_id)
+      oprot.writeFieldEnd()
+    if self.parts != None:
+      oprot.writeFieldBegin('parts', TType.MAP, 2)
+      oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
+      for kiter597,viter598 in self.parts.items():
+        oprot.writeI32(kiter597)
+        oprot.writeListBegin(TType.STRING, len(viter598))
+        for iter599 in viter598:
+          oprot.writeString(iter599)
+        oprot.writeListEnd()
+      oprot.writeMapEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.space_id is not None:
+      value = pprint.pformat(self.space_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    space_id=%s' % (value))
+    if self.parts is not None:
+      value = pprint.pformat(self.parts, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    parts=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -6257,17 +6540,17 @@ class AddPartReq:
       elif fid == 4:
         if ftype == TType.LIST:
           self.peers = []
-          (_etype514, _size511) = iprot.readListBegin()
-          if _size511 >= 0:
-            for _i515 in six.moves.range(_size511):
-              _elem516 = nebula2.common.ttypes.HostAddr()
-              _elem516.read(iprot)
-              self.peers.append(_elem516)
+          (_etype603, _size600) = iprot.readListBegin()
+          if _size600 >= 0:
+            for _i604 in six.moves.range(_size600):
+              _elem605 = nebula2.common.ttypes.HostAddr()
+              _elem605.read(iprot)
+              self.peers.append(_elem605)
           else: 
             while iprot.peekList():
-              _elem517 = nebula2.common.ttypes.HostAddr()
-              _elem517.read(iprot)
-              self.peers.append(_elem517)
+              _elem606 = nebula2.common.ttypes.HostAddr()
+              _elem606.read(iprot)
+              self.peers.append(_elem606)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -6299,8 +6582,8 @@ class AddPartReq:
     if self.peers != None:
       oprot.writeFieldBegin('peers', TType.LIST, 4)
       oprot.writeListBegin(TType.STRUCT, len(self.peers))
-      for iter518 in self.peers:
-        iter518.write(oprot)
+      for iter607 in self.peers:
+        iter607.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7099,37 +7382,37 @@ class GetLeaderPartsResp:
       elif fid == 2:
         if ftype == TType.MAP:
           self.leader_parts = {}
-          (_ktype520, _vtype521, _size519 ) = iprot.readMapBegin() 
-          if _size519 >= 0:
-            for _i523 in six.moves.range(_size519):
-              _key524 = iprot.readI32()
-              _val525 = []
-              (_etype529, _size526) = iprot.readListBegin()
-              if _size526 >= 0:
-                for _i530 in six.moves.range(_size526):
-                  _elem531 = iprot.readI32()
-                  _val525.append(_elem531)
+          (_ktype609, _vtype610, _size608 ) = iprot.readMapBegin() 
+          if _size608 >= 0:
+            for _i612 in six.moves.range(_size608):
+              _key613 = iprot.readI32()
+              _val614 = []
+              (_etype618, _size615) = iprot.readListBegin()
+              if _size615 >= 0:
+                for _i619 in six.moves.range(_size615):
+                  _elem620 = iprot.readI32()
+                  _val614.append(_elem620)
               else: 
                 while iprot.peekList():
-                  _elem532 = iprot.readI32()
-                  _val525.append(_elem532)
+                  _elem621 = iprot.readI32()
+                  _val614.append(_elem621)
               iprot.readListEnd()
-              self.leader_parts[_key524] = _val525
+              self.leader_parts[_key613] = _val614
           else: 
             while iprot.peekMap():
-              _key533 = iprot.readI32()
-              _val534 = []
-              (_etype538, _size535) = iprot.readListBegin()
-              if _size535 >= 0:
-                for _i539 in six.moves.range(_size535):
-                  _elem540 = iprot.readI32()
-                  _val534.append(_elem540)
+              _key622 = iprot.readI32()
+              _val623 = []
+              (_etype627, _size624) = iprot.readListBegin()
+              if _size624 >= 0:
+                for _i628 in six.moves.range(_size624):
+                  _elem629 = iprot.readI32()
+                  _val623.append(_elem629)
               else: 
                 while iprot.peekList():
-                  _elem541 = iprot.readI32()
-                  _val534.append(_elem541)
+                  _elem630 = iprot.readI32()
+                  _val623.append(_elem630)
               iprot.readListEnd()
-              self.leader_parts[_key533] = _val534
+              self.leader_parts[_key622] = _val623
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -7153,11 +7436,11 @@ class GetLeaderPartsResp:
     if self.leader_parts != None:
       oprot.writeFieldBegin('leader_parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.leader_parts))
-      for kiter542,viter543 in self.leader_parts.items():
-        oprot.writeI32(kiter542)
-        oprot.writeListBegin(TType.I32, len(viter543))
-        for iter544 in viter543:
-          oprot.writeI32(iter544)
+      for kiter631,viter632 in self.leader_parts.items():
+        oprot.writeI32(kiter631)
+        oprot.writeListBegin(TType.I32, len(viter632))
+        for iter633 in viter632:
+          oprot.writeI32(iter633)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -7231,17 +7514,17 @@ class CheckPeersReq:
       elif fid == 3:
         if ftype == TType.LIST:
           self.peers = []
-          (_etype548, _size545) = iprot.readListBegin()
-          if _size545 >= 0:
-            for _i549 in six.moves.range(_size545):
-              _elem550 = nebula2.common.ttypes.HostAddr()
-              _elem550.read(iprot)
-              self.peers.append(_elem550)
+          (_etype637, _size634) = iprot.readListBegin()
+          if _size634 >= 0:
+            for _i638 in six.moves.range(_size634):
+              _elem639 = nebula2.common.ttypes.HostAddr()
+              _elem639.read(iprot)
+              self.peers.append(_elem639)
           else: 
             while iprot.peekList():
-              _elem551 = nebula2.common.ttypes.HostAddr()
-              _elem551.read(iprot)
-              self.peers.append(_elem551)
+              _elem640 = nebula2.common.ttypes.HostAddr()
+              _elem640.read(iprot)
+              self.peers.append(_elem640)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7269,8 +7552,8 @@ class CheckPeersReq:
     if self.peers != None:
       oprot.writeFieldBegin('peers', TType.LIST, 3)
       oprot.writeListBegin(TType.STRUCT, len(self.peers))
-      for iter552 in self.peers:
-        iter552.write(oprot)
+      for iter641 in self.peers:
+        iter641.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7342,15 +7625,15 @@ class RebuildIndexRequest:
       elif fid == 2:
         if ftype == TType.LIST:
           self.parts = []
-          (_etype556, _size553) = iprot.readListBegin()
-          if _size553 >= 0:
-            for _i557 in six.moves.range(_size553):
-              _elem558 = iprot.readI32()
-              self.parts.append(_elem558)
+          (_etype645, _size642) = iprot.readListBegin()
+          if _size642 >= 0:
+            for _i646 in six.moves.range(_size642):
+              _elem647 = iprot.readI32()
+              self.parts.append(_elem647)
           else: 
             while iprot.peekList():
-              _elem559 = iprot.readI32()
-              self.parts.append(_elem559)
+              _elem648 = iprot.readI32()
+              self.parts.append(_elem648)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7379,8 +7662,8 @@ class RebuildIndexRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.LIST, 2)
       oprot.writeListBegin(TType.I32, len(self.parts))
-      for iter560 in self.parts:
-        oprot.writeI32(iter560)
+      for iter649 in self.parts:
+        oprot.writeI32(iter649)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.index_id != None:
@@ -7456,17 +7739,17 @@ class CreateCPResp:
       elif fid == 2:
         if ftype == TType.LIST:
           self.info = []
-          (_etype564, _size561) = iprot.readListBegin()
-          if _size561 >= 0:
-            for _i565 in six.moves.range(_size561):
-              _elem566 = nebula2.common.ttypes.CheckpointInfo()
-              _elem566.read(iprot)
-              self.info.append(_elem566)
+          (_etype653, _size650) = iprot.readListBegin()
+          if _size650 >= 0:
+            for _i654 in six.moves.range(_size650):
+              _elem655 = nebula2.common.ttypes.CheckpointInfo()
+              _elem655.read(iprot)
+              self.info.append(_elem655)
           else: 
             while iprot.peekList():
-              _elem567 = nebula2.common.ttypes.CheckpointInfo()
-              _elem567.read(iprot)
-              self.info.append(_elem567)
+              _elem656 = nebula2.common.ttypes.CheckpointInfo()
+              _elem656.read(iprot)
+              self.info.append(_elem656)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7490,8 +7773,8 @@ class CreateCPResp:
     if self.info != None:
       oprot.writeFieldBegin('info', TType.LIST, 2)
       oprot.writeListBegin(TType.STRUCT, len(self.info))
-      for iter568 in self.info:
-        iter568.write(oprot)
+      for iter657 in self.info:
+        iter657.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7667,12 +7950,14 @@ class ListClusterInfoReq:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class KVGetRequest:
+class AddAdminTaskRequest:
   """
   Attributes:
-   - space_id
-   - parts
-   - return_partly
+   - cmd
+   - job_id
+   - task_id
+   - para
+   - concurrency
   """
 
   thrift_spec = None
@@ -7697,164 +7982,28 @@ class KVGetRequest:
         break
       if fid == 1:
         if ftype == TType.I32:
-          self.space_id = iprot.readI32()
+          self.cmd = iprot.readI32()
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.MAP:
-          self.parts = {}
-          (_ktype570, _vtype571, _size569 ) = iprot.readMapBegin() 
-          if _size569 >= 0:
-            for _i573 in six.moves.range(_size569):
-              _key574 = iprot.readI32()
-              _val575 = []
-              (_etype579, _size576) = iprot.readListBegin()
-              if _size576 >= 0:
-                for _i580 in six.moves.range(_size576):
-                  _elem581 = iprot.readString()
-                  _val575.append(_elem581)
-              else: 
-                while iprot.peekList():
-                  _elem582 = iprot.readString()
-                  _val575.append(_elem582)
-              iprot.readListEnd()
-              self.parts[_key574] = _val575
-          else: 
-            while iprot.peekMap():
-              _key583 = iprot.readI32()
-              _val584 = []
-              (_etype588, _size585) = iprot.readListBegin()
-              if _size585 >= 0:
-                for _i589 in six.moves.range(_size585):
-                  _elem590 = iprot.readString()
-                  _val584.append(_elem590)
-              else: 
-                while iprot.peekList():
-                  _elem591 = iprot.readString()
-                  _val584.append(_elem591)
-              iprot.readListEnd()
-              self.parts[_key583] = _val584
-          iprot.readMapEnd()
+        if ftype == TType.I32:
+          self.job_id = iprot.readI32()
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.BOOL:
-          self.return_partly = iprot.readBool()
+        if ftype == TType.I32:
+          self.task_id = iprot.readI32()
         else:
           iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('KVGetRequest')
-    if self.space_id != None:
-      oprot.writeFieldBegin('space_id', TType.I32, 1)
-      oprot.writeI32(self.space_id)
-      oprot.writeFieldEnd()
-    if self.parts != None:
-      oprot.writeFieldBegin('parts', TType.MAP, 2)
-      oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
-      for kiter592,viter593 in self.parts.items():
-        oprot.writeI32(kiter592)
-        oprot.writeListBegin(TType.STRING, len(viter593))
-        for iter594 in viter593:
-          oprot.writeString(iter594)
-        oprot.writeListEnd()
-      oprot.writeMapEnd()
-      oprot.writeFieldEnd()
-    if self.return_partly != None:
-      oprot.writeFieldBegin('return_partly', TType.BOOL, 3)
-      oprot.writeBool(self.return_partly)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.space_id is not None:
-      value = pprint.pformat(self.space_id, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    space_id=%s' % (value))
-    if self.parts is not None:
-      value = pprint.pformat(self.parts, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    parts=%s' % (value))
-    if self.return_partly is not None:
-      value = pprint.pformat(self.return_partly, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    return_partly=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-class KVGetResponse:
-  """
-  Attributes:
-   - result
-   - key_values
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
+      elif fid == 4:
         if ftype == TType.STRUCT:
-          self.result = ResponseCommon()
-          self.result.read(iprot)
+          self.para = TaskPara()
+          self.para.read(iprot)
         else:
           iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.MAP:
-          self.key_values = {}
-          (_ktype596, _vtype597, _size595 ) = iprot.readMapBegin() 
-          if _size595 >= 0:
-            for _i599 in six.moves.range(_size595):
-              _key600 = iprot.readString()
-              _val601 = iprot.readString()
-              self.key_values[_key600] = _val601
-          else: 
-            while iprot.peekMap():
-              _key602 = iprot.readString()
-              _val603 = iprot.readString()
-              self.key_values[_key602] = _val603
-          iprot.readMapEnd()
+      elif fid == 5:
+        if ftype == TType.I32:
+          self.concurrency = iprot.readI32()
         else:
           iprot.skip(ftype)
       else:
@@ -7869,18 +8018,26 @@ class KVGetResponse:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('KVGetResponse')
-    if self.result != None:
-      oprot.writeFieldBegin('result', TType.STRUCT, 1)
-      self.result.write(oprot)
+    oprot.writeStructBegin('AddAdminTaskRequest')
+    if self.cmd != None:
+      oprot.writeFieldBegin('cmd', TType.I32, 1)
+      oprot.writeI32(self.cmd)
       oprot.writeFieldEnd()
-    if self.key_values != None:
-      oprot.writeFieldBegin('key_values', TType.MAP, 2)
-      oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.key_values))
-      for kiter604,viter605 in self.key_values.items():
-        oprot.writeString(kiter604)
-        oprot.writeString(viter605)
-      oprot.writeMapEnd()
+    if self.job_id != None:
+      oprot.writeFieldBegin('job_id', TType.I32, 2)
+      oprot.writeI32(self.job_id)
+      oprot.writeFieldEnd()
+    if self.task_id != None:
+      oprot.writeFieldBegin('task_id', TType.I32, 3)
+      oprot.writeI32(self.task_id)
+      oprot.writeFieldEnd()
+    if self.para != None:
+      oprot.writeFieldBegin('para', TType.STRUCT, 4)
+      self.para.write(oprot)
+      oprot.writeFieldEnd()
+    if self.concurrency != None:
+      oprot.writeFieldBegin('concurrency', TType.I32, 5)
+      oprot.writeI32(self.concurrency)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -7888,14 +8045,26 @@ class KVGetResponse:
   def __repr__(self):
     L = []
     padding = ' ' * 4
-    if self.result is not None:
-      value = pprint.pformat(self.result, indent=0)
+    if self.cmd is not None:
+      value = pprint.pformat(self.cmd, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    result=%s' % (value))
-    if self.key_values is not None:
-      value = pprint.pformat(self.key_values, indent=0)
+      L.append('    cmd=%s' % (value))
+    if self.job_id is not None:
+      value = pprint.pformat(self.job_id, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    key_values=%s' % (value))
+      L.append('    job_id=%s' % (value))
+    if self.task_id is not None:
+      value = pprint.pformat(self.task_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    task_id=%s' % (value))
+    if self.para is not None:
+      value = pprint.pformat(self.para, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    para=%s' % (value))
+    if self.concurrency is not None:
+      value = pprint.pformat(self.concurrency, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    concurrency=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -7911,11 +8080,11 @@ class KVGetResponse:
   if not six.PY2:
     __hash__ = object.__hash__
 
-class KVPutRequest:
+class StopAdminTaskRequest:
   """
   Attributes:
-   - space_id
-   - parts
+   - job_id
+   - task_id
   """
 
   thrift_spec = None
@@ -7940,174 +8109,12 @@ class KVPutRequest:
         break
       if fid == 1:
         if ftype == TType.I32:
-          self.space_id = iprot.readI32()
+          self.job_id = iprot.readI32()
         else:
           iprot.skip(ftype)
       elif fid == 2:
-        if ftype == TType.MAP:
-          self.parts = {}
-          (_ktype607, _vtype608, _size606 ) = iprot.readMapBegin() 
-          if _size606 >= 0:
-            for _i610 in six.moves.range(_size606):
-              _key611 = iprot.readI32()
-              _val612 = []
-              (_etype616, _size613) = iprot.readListBegin()
-              if _size613 >= 0:
-                for _i617 in six.moves.range(_size613):
-                  _elem618 = nebula2.common.ttypes.KeyValue()
-                  _elem618.read(iprot)
-                  _val612.append(_elem618)
-              else: 
-                while iprot.peekList():
-                  _elem619 = nebula2.common.ttypes.KeyValue()
-                  _elem619.read(iprot)
-                  _val612.append(_elem619)
-              iprot.readListEnd()
-              self.parts[_key611] = _val612
-          else: 
-            while iprot.peekMap():
-              _key620 = iprot.readI32()
-              _val621 = []
-              (_etype625, _size622) = iprot.readListBegin()
-              if _size622 >= 0:
-                for _i626 in six.moves.range(_size622):
-                  _elem627 = nebula2.common.ttypes.KeyValue()
-                  _elem627.read(iprot)
-                  _val621.append(_elem627)
-              else: 
-                while iprot.peekList():
-                  _elem628 = nebula2.common.ttypes.KeyValue()
-                  _elem628.read(iprot)
-                  _val621.append(_elem628)
-              iprot.readListEnd()
-              self.parts[_key620] = _val621
-          iprot.readMapEnd()
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('KVPutRequest')
-    if self.space_id != None:
-      oprot.writeFieldBegin('space_id', TType.I32, 1)
-      oprot.writeI32(self.space_id)
-      oprot.writeFieldEnd()
-    if self.parts != None:
-      oprot.writeFieldBegin('parts', TType.MAP, 2)
-      oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
-      for kiter629,viter630 in self.parts.items():
-        oprot.writeI32(kiter629)
-        oprot.writeListBegin(TType.STRUCT, len(viter630))
-        for iter631 in viter630:
-          iter631.write(oprot)
-        oprot.writeListEnd()
-      oprot.writeMapEnd()
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.space_id is not None:
-      value = pprint.pformat(self.space_id, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    space_id=%s' % (value))
-    if self.parts is not None:
-      value = pprint.pformat(self.parts, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    parts=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-class KVRemoveRequest:
-  """
-  Attributes:
-   - space_id
-   - parts
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
         if ftype == TType.I32:
-          self.space_id = iprot.readI32()
-        else:
-          iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.MAP:
-          self.parts = {}
-          (_ktype633, _vtype634, _size632 ) = iprot.readMapBegin() 
-          if _size632 >= 0:
-            for _i636 in six.moves.range(_size632):
-              _key637 = iprot.readI32()
-              _val638 = []
-              (_etype642, _size639) = iprot.readListBegin()
-              if _size639 >= 0:
-                for _i643 in six.moves.range(_size639):
-                  _elem644 = iprot.readString()
-                  _val638.append(_elem644)
-              else: 
-                while iprot.peekList():
-                  _elem645 = iprot.readString()
-                  _val638.append(_elem645)
-              iprot.readListEnd()
-              self.parts[_key637] = _val638
-          else: 
-            while iprot.peekMap():
-              _key646 = iprot.readI32()
-              _val647 = []
-              (_etype651, _size648) = iprot.readListBegin()
-              if _size648 >= 0:
-                for _i652 in six.moves.range(_size648):
-                  _elem653 = iprot.readString()
-                  _val647.append(_elem653)
-              else: 
-                while iprot.peekList():
-                  _elem654 = iprot.readString()
-                  _val647.append(_elem654)
-              iprot.readListEnd()
-              self.parts[_key646] = _val647
-          iprot.readMapEnd()
+          self.task_id = iprot.readI32()
         else:
           iprot.skip(ftype)
       else:
@@ -8122,21 +8129,14 @@ class KVRemoveRequest:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('KVRemoveRequest')
-    if self.space_id != None:
-      oprot.writeFieldBegin('space_id', TType.I32, 1)
-      oprot.writeI32(self.space_id)
+    oprot.writeStructBegin('StopAdminTaskRequest')
+    if self.job_id != None:
+      oprot.writeFieldBegin('job_id', TType.I32, 1)
+      oprot.writeI32(self.job_id)
       oprot.writeFieldEnd()
-    if self.parts != None:
-      oprot.writeFieldBegin('parts', TType.MAP, 2)
-      oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
-      for kiter655,viter656 in self.parts.items():
-        oprot.writeI32(kiter655)
-        oprot.writeListBegin(TType.STRING, len(viter656))
-        for iter657 in viter656:
-          oprot.writeString(iter657)
-        oprot.writeListEnd()
-      oprot.writeMapEnd()
+    if self.task_id != None:
+      oprot.writeFieldBegin('task_id', TType.I32, 2)
+      oprot.writeI32(self.task_id)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -8144,14 +8144,14 @@ class KVRemoveRequest:
   def __repr__(self):
     L = []
     padding = ' ' * 4
-    if self.space_id is not None:
-      value = pprint.pformat(self.space_id, indent=0)
+    if self.job_id is not None:
+      value = pprint.pformat(self.job_id, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    space_id=%s' % (value))
-    if self.parts is not None:
-      value = pprint.pformat(self.parts, indent=0)
+      L.append('    job_id=%s' % (value))
+    if self.task_id is not None:
+      value = pprint.pformat(self.task_id, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    parts=%s' % (value))
+      L.append('    task_id=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -8757,7 +8757,7 @@ all_structs.append(ResponseCommon)
 ResponseCommon.thrift_spec = (
   None, # 0
   (1, TType.LIST, 'failed_parts', (TType.STRUCT,[PartitionResult, PartitionResult.thrift_spec, False]), None, 0, ), # 1
-  (2, TType.I32, 'latency_in_us', None, None, 0, ), # 2
+  (2, TType.I64, 'latency_in_us', None, None, 0, ), # 2
   (3, TType.MAP, 'latency_detail_us', (TType.STRING,True,TType.I32,None), None, 1, ), # 3
 )
 
@@ -10029,66 +10029,112 @@ def TaskPara__setstate__(self, state):
 TaskPara.__getstate__ = lambda self: self.__dict__.copy()
 TaskPara.__setstate__ = TaskPara__setstate__
 
-all_structs.append(AddAdminTaskRequest)
-AddAdminTaskRequest.thrift_spec = (
+all_structs.append(KVGetRequest)
+KVGetRequest.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'cmd', nebula2.meta.ttypes.AdminCmd, None, 2, ), # 1
-  (2, TType.I32, 'job_id', None, None, 2, ), # 2
-  (3, TType.I32, 'task_id', None, None, 2, ), # 3
-  (4, TType.STRUCT, 'para', [TaskPara, TaskPara.thrift_spec, False], None, 2, ), # 4
-  (5, TType.I32, 'concurrency', None, None, 1, ), # 5
+  (1, TType.I32, 'space_id', None, None, 2, ), # 1
+  (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRING,False)), None, 2, ), # 2
+  (3, TType.BOOL, 'return_partly', None, None, 2, ), # 3
 )
 
-AddAdminTaskRequest.thrift_struct_annotations = {
+KVGetRequest.thrift_struct_annotations = {
 }
-AddAdminTaskRequest.thrift_field_annotations = {
+KVGetRequest.thrift_field_annotations = {
 }
 
-def AddAdminTaskRequest__init__(self, cmd=None, job_id=None, task_id=None, para=None, concurrency=None,):
-  self.cmd = cmd
-  self.job_id = job_id
-  self.task_id = task_id
-  self.para = para
-  self.concurrency = concurrency
+def KVGetRequest__init__(self, space_id=None, parts=None, return_partly=None,):
+  self.space_id = space_id
+  self.parts = parts
+  self.return_partly = return_partly
 
-AddAdminTaskRequest.__init__ = AddAdminTaskRequest__init__
+KVGetRequest.__init__ = KVGetRequest__init__
 
-def AddAdminTaskRequest__setstate__(self, state):
-  state.setdefault('cmd', None)
-  state.setdefault('job_id', None)
-  state.setdefault('task_id', None)
-  state.setdefault('para', None)
-  state.setdefault('concurrency', None)
+def KVGetRequest__setstate__(self, state):
+  state.setdefault('space_id', None)
+  state.setdefault('parts', None)
+  state.setdefault('return_partly', None)
   self.__dict__ = state
 
-AddAdminTaskRequest.__getstate__ = lambda self: self.__dict__.copy()
-AddAdminTaskRequest.__setstate__ = AddAdminTaskRequest__setstate__
+KVGetRequest.__getstate__ = lambda self: self.__dict__.copy()
+KVGetRequest.__setstate__ = KVGetRequest__setstate__
 
-all_structs.append(StopAdminTaskRequest)
-StopAdminTaskRequest.thrift_spec = (
+all_structs.append(KVGetResponse)
+KVGetResponse.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'job_id', None, None, 2, ), # 1
-  (2, TType.I32, 'task_id', None, None, 2, ), # 2
+  (1, TType.STRUCT, 'result', [ResponseCommon, ResponseCommon.thrift_spec, False], None, 0, ), # 1
+  (2, TType.MAP, 'key_values', (TType.STRING,False,TType.STRING,False), None, 2, ), # 2
 )
 
-StopAdminTaskRequest.thrift_struct_annotations = {
+KVGetResponse.thrift_struct_annotations = {
 }
-StopAdminTaskRequest.thrift_field_annotations = {
+KVGetResponse.thrift_field_annotations = {
 }
 
-def StopAdminTaskRequest__init__(self, job_id=None, task_id=None,):
-  self.job_id = job_id
-  self.task_id = task_id
+def KVGetResponse__init__(self, result=None, key_values=None,):
+  self.result = result
+  self.key_values = key_values
 
-StopAdminTaskRequest.__init__ = StopAdminTaskRequest__init__
+KVGetResponse.__init__ = KVGetResponse__init__
 
-def StopAdminTaskRequest__setstate__(self, state):
-  state.setdefault('job_id', None)
-  state.setdefault('task_id', None)
+def KVGetResponse__setstate__(self, state):
+  state.setdefault('result', None)
+  state.setdefault('key_values', None)
   self.__dict__ = state
 
-StopAdminTaskRequest.__getstate__ = lambda self: self.__dict__.copy()
-StopAdminTaskRequest.__setstate__ = StopAdminTaskRequest__setstate__
+KVGetResponse.__getstate__ = lambda self: self.__dict__.copy()
+KVGetResponse.__setstate__ = KVGetResponse__setstate__
+
+all_structs.append(KVPutRequest)
+KVPutRequest.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'space_id', None, None, 2, ), # 1
+  (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRUCT,[nebula2.common.ttypes.KeyValue, nebula2.common.ttypes.KeyValue.thrift_spec, False])), None, 2, ), # 2
+)
+
+KVPutRequest.thrift_struct_annotations = {
+}
+KVPutRequest.thrift_field_annotations = {
+}
+
+def KVPutRequest__init__(self, space_id=None, parts=None,):
+  self.space_id = space_id
+  self.parts = parts
+
+KVPutRequest.__init__ = KVPutRequest__init__
+
+def KVPutRequest__setstate__(self, state):
+  state.setdefault('space_id', None)
+  state.setdefault('parts', None)
+  self.__dict__ = state
+
+KVPutRequest.__getstate__ = lambda self: self.__dict__.copy()
+KVPutRequest.__setstate__ = KVPutRequest__setstate__
+
+all_structs.append(KVRemoveRequest)
+KVRemoveRequest.thrift_spec = (
+  None, # 0
+  (1, TType.I32, 'space_id', None, None, 2, ), # 1
+  (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRING,False)), None, 2, ), # 2
+)
+
+KVRemoveRequest.thrift_struct_annotations = {
+}
+KVRemoveRequest.thrift_field_annotations = {
+}
+
+def KVRemoveRequest__init__(self, space_id=None, parts=None,):
+  self.space_id = space_id
+  self.parts = parts
+
+KVRemoveRequest.__init__ = KVRemoveRequest__init__
+
+def KVRemoveRequest__setstate__(self, state):
+  state.setdefault('space_id', None)
+  state.setdefault('parts', None)
+  self.__dict__ = state
+
+KVRemoveRequest.__getstate__ = lambda self: self.__dict__.copy()
+KVRemoveRequest.__setstate__ = KVRemoveRequest__setstate__
 
 all_structs.append(AdminExecResp)
 AdminExecResp.thrift_spec = (
@@ -10525,112 +10571,66 @@ ListClusterInfoReq.thrift_struct_annotations = {
 ListClusterInfoReq.thrift_field_annotations = {
 }
 
-all_structs.append(KVGetRequest)
-KVGetRequest.thrift_spec = (
+all_structs.append(AddAdminTaskRequest)
+AddAdminTaskRequest.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'space_id', None, None, 2, ), # 1
-  (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRING,False)), None, 2, ), # 2
-  (3, TType.BOOL, 'return_partly', None, None, 2, ), # 3
+  (1, TType.I32, 'cmd', nebula2.meta.ttypes.AdminCmd, None, 2, ), # 1
+  (2, TType.I32, 'job_id', None, None, 2, ), # 2
+  (3, TType.I32, 'task_id', None, None, 2, ), # 3
+  (4, TType.STRUCT, 'para', [TaskPara, TaskPara.thrift_spec, False], None, 2, ), # 4
+  (5, TType.I32, 'concurrency', None, None, 1, ), # 5
 )
 
-KVGetRequest.thrift_struct_annotations = {
+AddAdminTaskRequest.thrift_struct_annotations = {
 }
-KVGetRequest.thrift_field_annotations = {
+AddAdminTaskRequest.thrift_field_annotations = {
 }
 
-def KVGetRequest__init__(self, space_id=None, parts=None, return_partly=None,):
-  self.space_id = space_id
-  self.parts = parts
-  self.return_partly = return_partly
+def AddAdminTaskRequest__init__(self, cmd=None, job_id=None, task_id=None, para=None, concurrency=None,):
+  self.cmd = cmd
+  self.job_id = job_id
+  self.task_id = task_id
+  self.para = para
+  self.concurrency = concurrency
 
-KVGetRequest.__init__ = KVGetRequest__init__
+AddAdminTaskRequest.__init__ = AddAdminTaskRequest__init__
 
-def KVGetRequest__setstate__(self, state):
-  state.setdefault('space_id', None)
-  state.setdefault('parts', None)
-  state.setdefault('return_partly', None)
+def AddAdminTaskRequest__setstate__(self, state):
+  state.setdefault('cmd', None)
+  state.setdefault('job_id', None)
+  state.setdefault('task_id', None)
+  state.setdefault('para', None)
+  state.setdefault('concurrency', None)
   self.__dict__ = state
 
-KVGetRequest.__getstate__ = lambda self: self.__dict__.copy()
-KVGetRequest.__setstate__ = KVGetRequest__setstate__
+AddAdminTaskRequest.__getstate__ = lambda self: self.__dict__.copy()
+AddAdminTaskRequest.__setstate__ = AddAdminTaskRequest__setstate__
 
-all_structs.append(KVGetResponse)
-KVGetResponse.thrift_spec = (
+all_structs.append(StopAdminTaskRequest)
+StopAdminTaskRequest.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'result', [ResponseCommon, ResponseCommon.thrift_spec, False], None, 0, ), # 1
-  (2, TType.MAP, 'key_values', (TType.STRING,False,TType.STRING,False), None, 2, ), # 2
+  (1, TType.I32, 'job_id', None, None, 2, ), # 1
+  (2, TType.I32, 'task_id', None, None, 2, ), # 2
 )
 
-KVGetResponse.thrift_struct_annotations = {
+StopAdminTaskRequest.thrift_struct_annotations = {
 }
-KVGetResponse.thrift_field_annotations = {
+StopAdminTaskRequest.thrift_field_annotations = {
 }
 
-def KVGetResponse__init__(self, result=None, key_values=None,):
-  self.result = result
-  self.key_values = key_values
+def StopAdminTaskRequest__init__(self, job_id=None, task_id=None,):
+  self.job_id = job_id
+  self.task_id = task_id
 
-KVGetResponse.__init__ = KVGetResponse__init__
+StopAdminTaskRequest.__init__ = StopAdminTaskRequest__init__
 
-def KVGetResponse__setstate__(self, state):
-  state.setdefault('result', None)
-  state.setdefault('key_values', None)
+def StopAdminTaskRequest__setstate__(self, state):
+  state.setdefault('job_id', None)
+  state.setdefault('task_id', None)
   self.__dict__ = state
 
-KVGetResponse.__getstate__ = lambda self: self.__dict__.copy()
-KVGetResponse.__setstate__ = KVGetResponse__setstate__
-
-all_structs.append(KVPutRequest)
-KVPutRequest.thrift_spec = (
-  None, # 0
-  (1, TType.I32, 'space_id', None, None, 2, ), # 1
-  (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRUCT,[nebula2.common.ttypes.KeyValue, nebula2.common.ttypes.KeyValue.thrift_spec, False])), None, 2, ), # 2
-)
-
-KVPutRequest.thrift_struct_annotations = {
-}
-KVPutRequest.thrift_field_annotations = {
-}
-
-def KVPutRequest__init__(self, space_id=None, parts=None,):
-  self.space_id = space_id
-  self.parts = parts
-
-KVPutRequest.__init__ = KVPutRequest__init__
-
-def KVPutRequest__setstate__(self, state):
-  state.setdefault('space_id', None)
-  state.setdefault('parts', None)
-  self.__dict__ = state
-
-KVPutRequest.__getstate__ = lambda self: self.__dict__.copy()
-KVPutRequest.__setstate__ = KVPutRequest__setstate__
-
-all_structs.append(KVRemoveRequest)
-KVRemoveRequest.thrift_spec = (
-  None, # 0
-  (1, TType.I32, 'space_id', None, None, 2, ), # 1
-  (2, TType.MAP, 'parts', (TType.I32,None,TType.LIST,(TType.STRING,False)), None, 2, ), # 2
-)
-
-KVRemoveRequest.thrift_struct_annotations = {
-}
-KVRemoveRequest.thrift_field_annotations = {
-}
-
-def KVRemoveRequest__init__(self, space_id=None, parts=None,):
-  self.space_id = space_id
-  self.parts = parts
-
-KVRemoveRequest.__init__ = KVRemoveRequest__init__
-
-def KVRemoveRequest__setstate__(self, state):
-  state.setdefault('space_id', None)
-  state.setdefault('parts', None)
-  self.__dict__ = state
-
-KVRemoveRequest.__getstate__ = lambda self: self.__dict__.copy()
-KVRemoveRequest.__setstate__ = KVRemoveRequest__setstate__
+StopAdminTaskRequest.__getstate__ = lambda self: self.__dict__.copy()
+StopAdminTaskRequest.__setstate__ = StopAdminTaskRequest__setstate__
 
 all_structs.append(InternalTxnRequest)
 InternalTxnRequest.thrift_spec = (
