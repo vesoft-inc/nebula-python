@@ -10,7 +10,6 @@
 The client to scan vertex and edge from storage,
 the return data is from thr graph database
 """
-import logging
 import sys
 
 from nebula2.sclient.ScanResult import ScanResult
@@ -22,6 +21,7 @@ from nebula2.storage.ttypes import (
     VertexProp,
     EdgeProp,
 )
+from nebula2.logger import logger
 
 kVid = b'_vid'
 kSrc = b'_src'
@@ -61,7 +61,7 @@ class GraphStorageClient(object):
             for conn in self._connections:
                 conn.close()
         except Exception as e:
-            logging.error('Close connection failed: {}'.format(e))
+            logger.error('Close connection failed: {}'.format(e))
             raise
 
     def _create_connection(self):
@@ -79,7 +79,7 @@ class GraphStorageClient(object):
                 conn.open()
                 self._connections.append(conn)
         except Exception as e:
-            logging.error('Create storage connection failed: {}'.format(e))
+            logger.error('Create storage connection failed: {}'.format(e))
             raise
 
     def get_space_addrs(self, space_name):

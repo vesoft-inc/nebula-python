@@ -7,11 +7,11 @@
 
 
 import concurrent
-import logging
 
 from nebula2.sclient import PartManager, do_scan_job, PartInfo
 
 from nebula2.sclient.BaseResult import BaseResult, VertexData, EdgeData
+from nebula2.logger import logger
 
 
 class VertexResult(BaseResult):
@@ -87,7 +87,7 @@ class ScanResult(object):
         num = len(conns)
         if num == 0:
             raise RuntimeError('There is no storage connection')
-        logging.debug('Graph storage client num: {}'.format(num))
+        logger.debug('Graph storage client num: {}'.format(num))
         exceptions = []
         result = []
         with concurrent.futures.ThreadPoolExecutor(num) as executor:
@@ -105,12 +105,12 @@ class ScanResult(object):
 
             for future in concurrent.futures.as_completed(do_scan):
                 if future.exception() is not None:
-                    logging.error(future.exception())
+                    logger.error(future.exception())
                     exceptions.append(future.exception())
                 else:
                     ret, data_sets = future.result()
                     if ret is not None:
-                        logging.error('Scan failed: {}'.format(ret))
+                        logger.error('Scan failed: {}'.format(ret))
                         exceptions.append(RuntimeError('Scan failed: {}'.format(ret)))
                         continue
                     if len(data_sets) != 0:
@@ -118,7 +118,7 @@ class ScanResult(object):
             self._parts_manager.reset_jobs()
         if len(exceptions) == 0:
             if len(result) == 0:
-                logging.warning('Get empty result')
+                logger.warning('Get empty result')
                 return None
             else:
                 if self._is_vertex:

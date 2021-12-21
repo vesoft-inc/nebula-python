@@ -6,7 +6,6 @@
 # This source code is licensed under Apache 2.0 License.
 
 
-import logging
 import socket
 
 from _thread import RLock
@@ -31,6 +30,7 @@ from nebula2.meta import ttypes, MetaService
 
 from nebula2.fbthrift.transport import TSocket, TTransport
 from nebula2.fbthrift.protocol import TBinaryProtocol
+from nebula2.logger import logger
 
 
 class MetaClient(object):
@@ -243,7 +243,7 @@ class MetaClient(object):
             self._leader = (leader.host, leader.port)
             self.open()
         except Exception as e:
-            logging.error(e)
+            logger.error(e)
 
     def __del__(self):
         self.close()
@@ -353,10 +353,10 @@ class MetaCache(object):
                             part_id
                         ][0]
         except Exception as x:
-            logging.error('Update meta data failed: {}'.format(x))
+            logger.error('Update meta data failed: {}'.format(x))
             import traceback
 
-            logging.error(traceback.format_exc())
+            logger.error(traceback.format_exc())
 
     def get_all_storage_addrs(self):
         """get all storage address
@@ -495,11 +495,11 @@ class MetaCache(object):
         """
         with self._lock:
             if space_id not in self._space_id_names.keys():
-                logging.error("Space name:{} is not found".format(space_id))
+                logger.error("Space name:{} is not found".format(space_id))
                 return
             space_name = self._space_id_names.get(space_id)
             if part_id not in self._storage_leader[space_name].keys():
-                logging.error("part_id:{} is not found".format(space_name))
+                logger.error("part_id:{} is not found".format(space_name))
                 return
             if address is not None:
                 self._storage_leader[space_name][part_id] = address

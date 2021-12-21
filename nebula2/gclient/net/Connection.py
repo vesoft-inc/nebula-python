@@ -5,7 +5,6 @@
 # This source code is licensed under Apache 2.0 License.
 
 
-import logging
 import time
 
 from nebula2.fbthrift.transport import TSocket, TTransport, TSSLSocket
@@ -15,6 +14,7 @@ from nebula2.fbthrift.protocol import TBinaryProtocol
 from nebula2.common.ttypes import ErrorCode
 from nebula2.graph import GraphService
 from nebula2.graph.ttypes import VerifyClientVersionReq
+from nebula2.logger import logger
 
 from nebula2.Exception import (
     AuthFailedException,
@@ -184,7 +184,7 @@ class Connection(object):
         try:
             self._connection._iprot.trans.close()
         except Exception as e:
-            logging.error(
+            logger.error(
                 'Close connection to {}:{} failed:{}'.format(self._ip, self._port, e)
             )
 

@@ -6,9 +6,6 @@
 # This source code is licensed under Apache 2.0 License.
 
 
-import logging
-
-
 from nebula2.common.ttypes import ErrorCode
 from nebula2.Exception import (
     AuthFailedException,
@@ -23,8 +20,3 @@ from nebula2.gclient.net.AuthResult import AuthResult
 from nebula2.gclient.net.Session import Session
 from nebula2.gclient.net.Connection import Connection
 from nebula2.gclient.net.ConnectionPool import ConnectionPool
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='[%(asctime)s] %(levelname)-8s [%(filename)s:%(lineno)d]:%(message)s',
-)

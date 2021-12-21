@@ -7,12 +7,12 @@
 
 
 import copy
-import logging
 
 from threading import RLock, Condition
 
 from nebula2.common.ttypes import HostAddr, ErrorCode
 from nebula2.storage.ttypes import ScanCursor
+from nebula2.logger import logger
 
 
 class PartInfo(object):
@@ -85,7 +85,7 @@ class PartManager(object):
             self._condition.release()
 
     def set_stop(self):
-        logging.debug("Stop the jobs")
+        logger.debug("Stop the jobs")
         try:
             self._condition.acquire()
             self._stop = True
@@ -94,7 +94,7 @@ class PartManager(object):
             self._condition.release()
 
     def reset_jobs(self):
-        logging.debug("Reset the jobs' status ")
+        logger.debug("Reset the jobs' status ")
         try:
             self._condition.acquire()
             if self._stop:
@@ -145,19 +145,17 @@ def do_scan_job(
                 parts = {part_info.part_id: ScanCursor()}
 
             req.parts = parts
-            logging.debug('Scan =====> req: {}'.format(req))
+            logger.debug('Scan =====> req: {}'.format(req))
             try:
                 if scan_vertex:
                     resp = storage_connection.scan_vertex(req)
                 else:
                     resp = storage_connection.scan_edge(req)
-                logging.debug('Scan <==== get resp: {}'.format(resp))
+                logger.debug('Scan <==== get resp: {}'.format(resp))
                 if len(resp.result.failed_parts) != 0:
                     if resp.result.failed_parts[0].code == ErrorCode.E_LEADER_CHANGED:
                         if resp.result.failed_parts[0].leader is None:
-                            logging.error(
-                                'Happen leader change, but the leader is None'
-                            )
+                            logger.error('Happen leader change, but the leader is None')
                             raise RuntimeError(
                                 'Happen leader change, but the leader is None'
                             )
@@ -165,7 +163,7 @@ def do_scan_job(
                             resp.result.failed_parts[0].part_id,
                             resp.result.failed_parts[0].leader,
                         )
-                        logging.warning(
+                        logger.warning(
                             'part_id {} has leader change, '
                             'old leader is {}, new leader is {}'.format(
                                 part_info.part_id,
@@ -185,10 +183,10 @@ def do_scan_job(
                         resp.result.failed_parts[0].code,
                     )
                     if not partial_success:
-                        logging.error(error)
+                        logger.error(error)
                         parts_manager.set_stop()
                         return error, []
-                    logging.error(error)
+                    logger.error(error)
                     is_finished = True
                     continue
                 part_info.has_done = True
@@ -197,13 +195,13 @@ def do_scan_job(
                 if resp_cursor.has_next:
                     cursor.has_next = True
                     cursor.next_cursor = resp_cursor.next_cursor
-                    logging.debug(
+                    logger.debug(
                         "Get next next_cursor: {}".format(resp_cursor.next_cursor)
                     )
                 else:
                     is_finished = True
                 if scan_vertex:
-                    logging.debug(
+                    logger.debug(
                         "resp.vertex_data size: {}".format(len(resp.vertex_data.rows))
                     )
                     if len(resp.vertex_data.column_names) == 0:
@@ -214,7 +212,7 @@ def do_scan_job(
                         continue
                     data_sets.append(resp.vertex_data)
                 else:
-                    logging.debug(
+                    logger.debug(
                         "resp.edge_data size: {}".format(len(resp.edge_data.rows))
                     )
                     if len(resp.edge_data.column_names) == 0:
@@ -227,7 +225,7 @@ def do_scan_job(
             except Exception as e:
                 import traceback
 
-                logging.error(traceback.format_exc())
+                logger.error(traceback.format_exc())
                 parts_manager.set_stop()
                 return str(e), None
             finally:

@@ -5,7 +5,6 @@
 # This source code is licensed under Apache 2.0 License.
 
 
-import logging
 import time
 
 from nebula2.Exception import (
@@ -15,6 +14,7 @@ from nebula2.Exception import (
 
 from nebula2.data.ResultSet import ResultSet
 from nebula2.gclient.net.AuthResult import AuthResult
+from nebula2.logger import logger
 
 
 class Session(object):
@@ -48,7 +48,7 @@ class Session(object):
                 self._pool.update_servers_status()
                 if self._retry_connect:
                     if not self._reconnect():
-                        logging.warning('Retry connect failed')
+                        logger.warning('Retry connect failed')
                         raise IOErrorException(
                             IOErrorException.E_ALL_BROKEN, ie.message
                         )
@@ -134,7 +134,7 @@ class Session(object):
                 self._pool.update_servers_status()
                 if self._retry_connect:
                     if not self._reconnect():
-                        logging.warning('Retry connect failed')
+                        logger.warning('Retry connect failed')
                         raise IOErrorException(
                             IOErrorException.E_ALL_BROKEN, ie.message
                         )
