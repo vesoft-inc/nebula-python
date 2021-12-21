@@ -13,7 +13,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, StatType, OrderDirection, EdgeDirection, ScanType, EngineSignType, RequestCommon, PartitionResult, ResponseCommon, StatProp, Expr, EdgeProp, VertexProp, OrderBy, TraverseSpec, GetNeighborsRequest, GetNeighborsResponse, ExecResponse, GetPropRequest, GetPropResponse, NewTag, NewVertex, EdgeKey, NewEdge, AddVerticesRequest, AddEdgesRequest, DeleteVerticesRequest, DeleteEdgesRequest, DelTags, DeleteTagsRequest, UpdateResponse, UpdatedProp, UpdateVertexRequest, UpdateEdgeRequest, GetUUIDReq, GetUUIDResp, LookupIndexResp, IndexColumnHint, IndexQueryContext, IndexSpec, LookupIndexRequest, LookupAndTraverseRequest, ScanCursor, ScanVertexRequest, ScanVertexResponse, ScanEdgeRequest, ScanEdgeResponse, TaskPara, KVGetRequest, KVGetResponse, KVPutRequest, KVRemoveRequest, AdminExecResp, TransLeaderReq, AddPartReq, AddLearnerReq, RemovePartReq, MemberChangeReq, CatchUpDataReq, GetLeaderReq, CreateCPRequest, DropCPRequest, BlockingSignRequest, GetLeaderPartsResp, CheckPeersReq, RebuildIndexRequest, CreateCPResp, ListClusterInfoResp, ListClusterInfoReq, AddAdminTaskRequest, StopAdminTaskRequest, InternalTxnRequest, ChainAddEdgesRequest, ChainUpdateEdgeRequest
+from .ttypes import UTF8STRINGS, StatType, OrderDirection, EdgeDirection, ScanType, EngineSignType, RequestCommon, PartitionResult, ResponseCommon, StatProp, Expr, EdgeProp, VertexProp, OrderBy, TraverseSpec, GetNeighborsRequest, GetNeighborsResponse, ExecResponse, GetPropRequest, GetPropResponse, NewTag, NewVertex, EdgeKey, NewEdge, AddVerticesRequest, AddEdgesRequest, DeleteVerticesRequest, DeleteEdgesRequest, DelTags, DeleteTagsRequest, UpdateResponse, UpdatedProp, UpdateVertexRequest, UpdateEdgeRequest, GetUUIDReq, GetUUIDResp, LookupIndexResp, IndexColumnHint, IndexQueryContext, IndexSpec, LookupIndexRequest, LookupAndTraverseRequest, ScanCursor, ScanVertexRequest, ScanEdgeRequest, ScanResponse, TaskPara, KVGetRequest, KVGetResponse, KVPutRequest, KVRemoveRequest, AdminExecResp, TransLeaderReq, AddPartReq, AddLearnerReq, RemovePartReq, MemberChangeReq, CatchUpDataReq, GetLeaderReq, CreateCPRequest, DropCPRequest, BlockingSignRequest, GetLeaderPartsResp, CheckPeersReq, RebuildIndexRequest, CreateCPResp, ListClusterInfoResp, ListClusterInfoReq, AddAdminTaskRequest, StopAdminTaskRequest, InternalTxnRequest, ChainAddEdgesRequest, ChainUpdateEdgeRequest
 import nebula2.common.ttypes
 import nebula2.meta.ttypes
 
@@ -2177,7 +2177,7 @@ class scanVertex_result:
         break
       if fid == 0:
         if ftype == TType.STRUCT:
-          self.success = ScanVertexResponse()
+          self.success = ScanResponse()
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
@@ -2225,7 +2225,7 @@ class scanVertex_result:
 
 all_structs.append(scanVertex_result)
 scanVertex_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ScanVertexResponse, ScanVertexResponse.thrift_spec, False], None, 2, ), # 0
+  (0, TType.STRUCT, 'success', [ScanResponse, ScanResponse.thrift_spec, False], None, 2, ), # 0
 )
 
 scanVertex_result.thrift_struct_annotations = {
@@ -2370,7 +2370,7 @@ class scanEdge_result:
         break
       if fid == 0:
         if ftype == TType.STRUCT:
-          self.success = ScanEdgeResponse()
+          self.success = ScanResponse()
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
@@ -2418,7 +2418,7 @@ class scanEdge_result:
 
 all_structs.append(scanEdge_result)
 scanEdge_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ScanEdgeResponse, ScanEdgeResponse.thrift_spec, False], None, 2, ), # 0
+  (0, TType.STRUCT, 'success', [ScanResponse, ScanResponse.thrift_spec, False], None, 2, ), # 0
 )
 
 scanEdge_result.thrift_struct_annotations = {

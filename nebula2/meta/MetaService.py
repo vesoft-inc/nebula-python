@@ -13,7 +13,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, PartitionList, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceTask, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, AddZoneReq, DropZoneReq, AddHostIntoZoneReq, DropHostFromZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SchemaVer, ClusterID
+from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, AddHostsReq, DropHostsReq, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, PartitionList, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceTask, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, MergeZoneReq, DropZoneReq, SplitZoneReq, RenameZoneReq, AddHostsIntoZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SchemaVer, ClusterID
 import nebula2.common.ttypes
 
 from nebula2.fbthrift.Thrift import TProcessor
@@ -142,6 +142,27 @@ class Iface:
     pass
 
   def listEdges(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def addHosts(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def addHostsIntoZone(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def dropHosts(self, req=None):
     """
     Parameters:
      - req
@@ -421,7 +442,7 @@ class Iface:
     """
     pass
 
-  def addZone(self, req=None):
+  def mergeZone(self, req=None):
     """
     Parameters:
      - req
@@ -435,14 +456,14 @@ class Iface:
     """
     pass
 
-  def addHostIntoZone(self, req=None):
+  def splitZone(self, req=None):
     """
     Parameters:
      - req
     """
     pass
 
-  def dropHostFromZone(self, req=None):
+  def renameZone(self, req=None):
     """
     Parameters:
      - req
@@ -724,6 +745,27 @@ class ContextIface:
     """
     pass
 
+  def addHosts(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def addHostsIntoZone(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def dropHosts(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def listHosts(self, handler_ctx, req=None):
     """
     Parameters:
@@ -997,7 +1039,7 @@ class ContextIface:
     """
     pass
 
-  def addZone(self, handler_ctx, req=None):
+  def mergeZone(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -1011,14 +1053,14 @@ class ContextIface:
     """
     pass
 
-  def addHostIntoZone(self, handler_ctx, req=None):
+  def splitZone(self, handler_ctx, req=None):
     """
     Parameters:
      - req
     """
     pass
 
-  def dropHostFromZone(self, handler_ctx, req=None):
+  def renameZone(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -4090,6 +4132,585 @@ def listEdges_result__setstate__(self, state):
 
 listEdges_result.__getstate__ = lambda self: self.__dict__.copy()
 listEdges_result.__setstate__ = listEdges_result__setstate__
+
+class addHosts_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = AddHostsReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('addHosts_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(addHosts_args)
+addHosts_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [AddHostsReq, AddHostsReq.thrift_spec, False], None, 2, ), # 1
+)
+
+addHosts_args.thrift_struct_annotations = {
+}
+addHosts_args.thrift_field_annotations = {
+}
+
+def addHosts_args__init__(self, req=None,):
+  self.req = req
+
+addHosts_args.__init__ = addHosts_args__init__
+
+def addHosts_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+addHosts_args.__getstate__ = lambda self: self.__dict__.copy()
+addHosts_args.__setstate__ = addHosts_args__setstate__
+
+class addHosts_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('addHosts_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(addHosts_result)
+addHosts_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+addHosts_result.thrift_struct_annotations = {
+}
+addHosts_result.thrift_field_annotations = {
+}
+
+def addHosts_result__init__(self, success=None,):
+  self.success = success
+
+addHosts_result.__init__ = addHosts_result__init__
+
+def addHosts_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+addHosts_result.__getstate__ = lambda self: self.__dict__.copy()
+addHosts_result.__setstate__ = addHosts_result__setstate__
+
+class addHostsIntoZone_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = AddHostsIntoZoneReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('addHostsIntoZone_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(addHostsIntoZone_args)
+addHostsIntoZone_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [AddHostsIntoZoneReq, AddHostsIntoZoneReq.thrift_spec, False], None, 2, ), # 1
+)
+
+addHostsIntoZone_args.thrift_struct_annotations = {
+}
+addHostsIntoZone_args.thrift_field_annotations = {
+}
+
+def addHostsIntoZone_args__init__(self, req=None,):
+  self.req = req
+
+addHostsIntoZone_args.__init__ = addHostsIntoZone_args__init__
+
+def addHostsIntoZone_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+addHostsIntoZone_args.__getstate__ = lambda self: self.__dict__.copy()
+addHostsIntoZone_args.__setstate__ = addHostsIntoZone_args__setstate__
+
+class addHostsIntoZone_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('addHostsIntoZone_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(addHostsIntoZone_result)
+addHostsIntoZone_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+addHostsIntoZone_result.thrift_struct_annotations = {
+}
+addHostsIntoZone_result.thrift_field_annotations = {
+}
+
+def addHostsIntoZone_result__init__(self, success=None,):
+  self.success = success
+
+addHostsIntoZone_result.__init__ = addHostsIntoZone_result__init__
+
+def addHostsIntoZone_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+addHostsIntoZone_result.__getstate__ = lambda self: self.__dict__.copy()
+addHostsIntoZone_result.__setstate__ = addHostsIntoZone_result__setstate__
+
+class dropHosts_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = DropHostsReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('dropHosts_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(dropHosts_args)
+dropHosts_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [DropHostsReq, DropHostsReq.thrift_spec, False], None, 2, ), # 1
+)
+
+dropHosts_args.thrift_struct_annotations = {
+}
+dropHosts_args.thrift_field_annotations = {
+}
+
+def dropHosts_args__init__(self, req=None,):
+  self.req = req
+
+dropHosts_args.__init__ = dropHosts_args__init__
+
+def dropHosts_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+dropHosts_args.__getstate__ = lambda self: self.__dict__.copy()
+dropHosts_args.__setstate__ = dropHosts_args__setstate__
+
+class dropHosts_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('dropHosts_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
+all_structs.append(dropHosts_result)
+dropHosts_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+dropHosts_result.thrift_struct_annotations = {
+}
+dropHosts_result.thrift_field_annotations = {
+}
+
+def dropHosts_result__init__(self, success=None,):
+  self.success = success
+
+dropHosts_result.__init__ = dropHosts_result__init__
+
+def dropHosts_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+dropHosts_result.__getstate__ = lambda self: self.__dict__.copy()
+dropHosts_result.__setstate__ = dropHosts_result__setstate__
 
 class listHosts_args:
   """
@@ -11618,7 +12239,7 @@ def runAdminJob_result__setstate__(self, state):
 runAdminJob_result.__getstate__ = lambda self: self.__dict__.copy()
 runAdminJob_result.__setstate__ = runAdminJob_result__setstate__
 
-class addZone_args:
+class mergeZone_args:
   """
   Attributes:
    - req
@@ -11646,7 +12267,7 @@ class addZone_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = AddZoneReq()
+          self.req = MergeZoneReq()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -11662,7 +12283,7 @@ class addZone_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('addZone_args')
+    oprot.writeStructBegin('mergeZone_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -11692,30 +12313,30 @@ class addZone_args:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(addZone_args)
-addZone_args.thrift_spec = (
+all_structs.append(mergeZone_args)
+mergeZone_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [AddZoneReq, AddZoneReq.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [MergeZoneReq, MergeZoneReq.thrift_spec, False], None, 2, ), # 1
 )
 
-addZone_args.thrift_struct_annotations = {
+mergeZone_args.thrift_struct_annotations = {
 }
-addZone_args.thrift_field_annotations = {
+mergeZone_args.thrift_field_annotations = {
 }
 
-def addZone_args__init__(self, req=None,):
+def mergeZone_args__init__(self, req=None,):
   self.req = req
 
-addZone_args.__init__ = addZone_args__init__
+mergeZone_args.__init__ = mergeZone_args__init__
 
-def addZone_args__setstate__(self, state):
+def mergeZone_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-addZone_args.__getstate__ = lambda self: self.__dict__.copy()
-addZone_args.__setstate__ = addZone_args__setstate__
+mergeZone_args.__getstate__ = lambda self: self.__dict__.copy()
+mergeZone_args.__setstate__ = mergeZone_args__setstate__
 
-class addZone_result:
+class mergeZone_result:
   """
   Attributes:
    - success
@@ -11759,7 +12380,7 @@ class addZone_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('addZone_result')
+    oprot.writeStructBegin('mergeZone_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -11789,27 +12410,27 @@ class addZone_result:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(addZone_result)
-addZone_result.thrift_spec = (
+all_structs.append(mergeZone_result)
+mergeZone_result.thrift_spec = (
   (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
 )
 
-addZone_result.thrift_struct_annotations = {
+mergeZone_result.thrift_struct_annotations = {
 }
-addZone_result.thrift_field_annotations = {
+mergeZone_result.thrift_field_annotations = {
 }
 
-def addZone_result__init__(self, success=None,):
+def mergeZone_result__init__(self, success=None,):
   self.success = success
 
-addZone_result.__init__ = addZone_result__init__
+mergeZone_result.__init__ = mergeZone_result__init__
 
-def addZone_result__setstate__(self, state):
+def mergeZone_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-addZone_result.__getstate__ = lambda self: self.__dict__.copy()
-addZone_result.__setstate__ = addZone_result__setstate__
+mergeZone_result.__getstate__ = lambda self: self.__dict__.copy()
+mergeZone_result.__setstate__ = mergeZone_result__setstate__
 
 class dropZone_args:
   """
@@ -12004,7 +12625,7 @@ def dropZone_result__setstate__(self, state):
 dropZone_result.__getstate__ = lambda self: self.__dict__.copy()
 dropZone_result.__setstate__ = dropZone_result__setstate__
 
-class addHostIntoZone_args:
+class splitZone_args:
   """
   Attributes:
    - req
@@ -12032,7 +12653,7 @@ class addHostIntoZone_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = AddHostIntoZoneReq()
+          self.req = SplitZoneReq()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -12048,7 +12669,7 @@ class addHostIntoZone_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('addHostIntoZone_args')
+    oprot.writeStructBegin('splitZone_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -12078,30 +12699,30 @@ class addHostIntoZone_args:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(addHostIntoZone_args)
-addHostIntoZone_args.thrift_spec = (
+all_structs.append(splitZone_args)
+splitZone_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [AddHostIntoZoneReq, AddHostIntoZoneReq.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [SplitZoneReq, SplitZoneReq.thrift_spec, False], None, 2, ), # 1
 )
 
-addHostIntoZone_args.thrift_struct_annotations = {
+splitZone_args.thrift_struct_annotations = {
 }
-addHostIntoZone_args.thrift_field_annotations = {
+splitZone_args.thrift_field_annotations = {
 }
 
-def addHostIntoZone_args__init__(self, req=None,):
+def splitZone_args__init__(self, req=None,):
   self.req = req
 
-addHostIntoZone_args.__init__ = addHostIntoZone_args__init__
+splitZone_args.__init__ = splitZone_args__init__
 
-def addHostIntoZone_args__setstate__(self, state):
+def splitZone_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-addHostIntoZone_args.__getstate__ = lambda self: self.__dict__.copy()
-addHostIntoZone_args.__setstate__ = addHostIntoZone_args__setstate__
+splitZone_args.__getstate__ = lambda self: self.__dict__.copy()
+splitZone_args.__setstate__ = splitZone_args__setstate__
 
-class addHostIntoZone_result:
+class splitZone_result:
   """
   Attributes:
    - success
@@ -12145,7 +12766,7 @@ class addHostIntoZone_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('addHostIntoZone_result')
+    oprot.writeStructBegin('splitZone_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -12175,29 +12796,29 @@ class addHostIntoZone_result:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(addHostIntoZone_result)
-addHostIntoZone_result.thrift_spec = (
+all_structs.append(splitZone_result)
+splitZone_result.thrift_spec = (
   (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
 )
 
-addHostIntoZone_result.thrift_struct_annotations = {
+splitZone_result.thrift_struct_annotations = {
 }
-addHostIntoZone_result.thrift_field_annotations = {
+splitZone_result.thrift_field_annotations = {
 }
 
-def addHostIntoZone_result__init__(self, success=None,):
+def splitZone_result__init__(self, success=None,):
   self.success = success
 
-addHostIntoZone_result.__init__ = addHostIntoZone_result__init__
+splitZone_result.__init__ = splitZone_result__init__
 
-def addHostIntoZone_result__setstate__(self, state):
+def splitZone_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-addHostIntoZone_result.__getstate__ = lambda self: self.__dict__.copy()
-addHostIntoZone_result.__setstate__ = addHostIntoZone_result__setstate__
+splitZone_result.__getstate__ = lambda self: self.__dict__.copy()
+splitZone_result.__setstate__ = splitZone_result__setstate__
 
-class dropHostFromZone_args:
+class renameZone_args:
   """
   Attributes:
    - req
@@ -12225,7 +12846,7 @@ class dropHostFromZone_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = DropHostFromZoneReq()
+          self.req = RenameZoneReq()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -12241,7 +12862,7 @@ class dropHostFromZone_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('dropHostFromZone_args')
+    oprot.writeStructBegin('renameZone_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -12271,30 +12892,30 @@ class dropHostFromZone_args:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(dropHostFromZone_args)
-dropHostFromZone_args.thrift_spec = (
+all_structs.append(renameZone_args)
+renameZone_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [DropHostFromZoneReq, DropHostFromZoneReq.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [RenameZoneReq, RenameZoneReq.thrift_spec, False], None, 2, ), # 1
 )
 
-dropHostFromZone_args.thrift_struct_annotations = {
+renameZone_args.thrift_struct_annotations = {
 }
-dropHostFromZone_args.thrift_field_annotations = {
+renameZone_args.thrift_field_annotations = {
 }
 
-def dropHostFromZone_args__init__(self, req=None,):
+def renameZone_args__init__(self, req=None,):
   self.req = req
 
-dropHostFromZone_args.__init__ = dropHostFromZone_args__init__
+renameZone_args.__init__ = renameZone_args__init__
 
-def dropHostFromZone_args__setstate__(self, state):
+def renameZone_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-dropHostFromZone_args.__getstate__ = lambda self: self.__dict__.copy()
-dropHostFromZone_args.__setstate__ = dropHostFromZone_args__setstate__
+renameZone_args.__getstate__ = lambda self: self.__dict__.copy()
+renameZone_args.__setstate__ = renameZone_args__setstate__
 
-class dropHostFromZone_result:
+class renameZone_result:
   """
   Attributes:
    - success
@@ -12338,7 +12959,7 @@ class dropHostFromZone_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('dropHostFromZone_result')
+    oprot.writeStructBegin('renameZone_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -12368,27 +12989,27 @@ class dropHostFromZone_result:
   if not six.PY2:
     __hash__ = object.__hash__
 
-all_structs.append(dropHostFromZone_result)
-dropHostFromZone_result.thrift_spec = (
+all_structs.append(renameZone_result)
+renameZone_result.thrift_spec = (
   (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
 )
 
-dropHostFromZone_result.thrift_struct_annotations = {
+renameZone_result.thrift_struct_annotations = {
 }
-dropHostFromZone_result.thrift_field_annotations = {
+renameZone_result.thrift_field_annotations = {
 }
 
-def dropHostFromZone_result__init__(self, success=None,):
+def renameZone_result__init__(self, success=None,):
   self.success = success
 
-dropHostFromZone_result.__init__ = dropHostFromZone_result__init__
+renameZone_result.__init__ = renameZone_result__init__
 
-def dropHostFromZone_result__setstate__(self, state):
+def renameZone_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-dropHostFromZone_result.__getstate__ = lambda self: self.__dict__.copy()
-dropHostFromZone_result.__setstate__ = dropHostFromZone_result__setstate__
+renameZone_result.__getstate__ = lambda self: self.__dict__.copy()
+renameZone_result.__setstate__ = renameZone_result__setstate__
 
 class getZone_args:
   """
@@ -17487,6 +18108,96 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "listEdges failed: unknown result");
 
+  def addHosts(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_addHosts(req)
+    return self.recv_addHosts()
+
+  def send_addHosts(self, req=None):
+    self._oprot.writeMessageBegin('addHosts', TMessageType.CALL, self._seqid)
+    args = addHosts_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_addHosts(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = addHosts_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "addHosts failed: unknown result");
+
+  def addHostsIntoZone(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_addHostsIntoZone(req)
+    return self.recv_addHostsIntoZone()
+
+  def send_addHostsIntoZone(self, req=None):
+    self._oprot.writeMessageBegin('addHostsIntoZone', TMessageType.CALL, self._seqid)
+    args = addHostsIntoZone_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_addHostsIntoZone(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = addHostsIntoZone_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "addHostsIntoZone failed: unknown result");
+
+  def dropHosts(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_dropHosts(req)
+    return self.recv_dropHosts()
+
+  def send_dropHosts(self, req=None):
+    self._oprot.writeMessageBegin('dropHosts', TMessageType.CALL, self._seqid)
+    args = dropHosts_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_dropHosts(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = dropHosts_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "dropHosts failed: unknown result");
+
   def listHosts(self, req=None):
     """
     Parameters:
@@ -18657,35 +19368,35 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "runAdminJob failed: unknown result");
 
-  def addZone(self, req=None):
+  def mergeZone(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_addZone(req)
-    return self.recv_addZone()
+    self.send_mergeZone(req)
+    return self.recv_mergeZone()
 
-  def send_addZone(self, req=None):
-    self._oprot.writeMessageBegin('addZone', TMessageType.CALL, self._seqid)
-    args = addZone_args()
+  def send_mergeZone(self, req=None):
+    self._oprot.writeMessageBegin('mergeZone', TMessageType.CALL, self._seqid)
+    args = mergeZone_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_addZone(self, ):
+  def recv_mergeZone(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = addZone_result()
+    result = mergeZone_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "addZone failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "mergeZone failed: unknown result");
 
   def dropZone(self, req=None):
     """
@@ -18717,65 +19428,65 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "dropZone failed: unknown result");
 
-  def addHostIntoZone(self, req=None):
+  def splitZone(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_addHostIntoZone(req)
-    return self.recv_addHostIntoZone()
+    self.send_splitZone(req)
+    return self.recv_splitZone()
 
-  def send_addHostIntoZone(self, req=None):
-    self._oprot.writeMessageBegin('addHostIntoZone', TMessageType.CALL, self._seqid)
-    args = addHostIntoZone_args()
+  def send_splitZone(self, req=None):
+    self._oprot.writeMessageBegin('splitZone', TMessageType.CALL, self._seqid)
+    args = splitZone_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_addHostIntoZone(self, ):
+  def recv_splitZone(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = addHostIntoZone_result()
+    result = splitZone_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "addHostIntoZone failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "splitZone failed: unknown result");
 
-  def dropHostFromZone(self, req=None):
+  def renameZone(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_dropHostFromZone(req)
-    return self.recv_dropHostFromZone()
+    self.send_renameZone(req)
+    return self.recv_renameZone()
 
-  def send_dropHostFromZone(self, req=None):
-    self._oprot.writeMessageBegin('dropHostFromZone', TMessageType.CALL, self._seqid)
-    args = dropHostFromZone_args()
+  def send_renameZone(self, req=None):
+    self._oprot.writeMessageBegin('renameZone', TMessageType.CALL, self._seqid)
+    args = renameZone_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_dropHostFromZone(self, ):
+  def recv_renameZone(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = dropHostFromZone_result()
+    result = renameZone_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "dropHostFromZone failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "renameZone failed: unknown result");
 
   def getZone(self, req=None):
     """
@@ -19536,6 +20247,12 @@ class Processor(Iface, TProcessor):
     self._priorityMap["getEdge"] = TPriority.NORMAL
     self._processMap["listEdges"] = Processor.process_listEdges
     self._priorityMap["listEdges"] = TPriority.NORMAL
+    self._processMap["addHosts"] = Processor.process_addHosts
+    self._priorityMap["addHosts"] = TPriority.NORMAL
+    self._processMap["addHostsIntoZone"] = Processor.process_addHostsIntoZone
+    self._priorityMap["addHostsIntoZone"] = TPriority.NORMAL
+    self._processMap["dropHosts"] = Processor.process_dropHosts
+    self._priorityMap["dropHosts"] = TPriority.NORMAL
     self._processMap["listHosts"] = Processor.process_listHosts
     self._priorityMap["listHosts"] = TPriority.NORMAL
     self._processMap["getPartsAlloc"] = Processor.process_getPartsAlloc
@@ -19614,14 +20331,14 @@ class Processor(Iface, TProcessor):
     self._priorityMap["listSnapshots"] = TPriority.NORMAL
     self._processMap["runAdminJob"] = Processor.process_runAdminJob
     self._priorityMap["runAdminJob"] = TPriority.NORMAL
-    self._processMap["addZone"] = Processor.process_addZone
-    self._priorityMap["addZone"] = TPriority.NORMAL
+    self._processMap["mergeZone"] = Processor.process_mergeZone
+    self._priorityMap["mergeZone"] = TPriority.NORMAL
     self._processMap["dropZone"] = Processor.process_dropZone
     self._priorityMap["dropZone"] = TPriority.NORMAL
-    self._processMap["addHostIntoZone"] = Processor.process_addHostIntoZone
-    self._priorityMap["addHostIntoZone"] = TPriority.NORMAL
-    self._processMap["dropHostFromZone"] = Processor.process_dropHostFromZone
-    self._priorityMap["dropHostFromZone"] = TPriority.NORMAL
+    self._processMap["splitZone"] = Processor.process_splitZone
+    self._priorityMap["splitZone"] = TPriority.NORMAL
+    self._processMap["renameZone"] = Processor.process_renameZone
+    self._priorityMap["renameZone"] = TPriority.NORMAL
     self._processMap["getZone"] = Processor.process_getZone
     self._priorityMap["getZone"] = TPriority.NORMAL
     self._processMap["listZones"] = Processor.process_listZones
@@ -19841,6 +20558,39 @@ class Processor(Iface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'listEdges', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(addHosts_args, oneway=False)
+  def process_addHosts(self, args, handler_ctx):
+    result = addHosts_result()
+    try:
+      result.success = self._handler.addHosts(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'addHosts', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(addHostsIntoZone_args, oneway=False)
+  def process_addHostsIntoZone(self, args, handler_ctx):
+    result = addHostsIntoZone_result()
+    try:
+      result.success = self._handler.addHostsIntoZone(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'addHostsIntoZone', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(dropHosts_args, oneway=False)
+  def process_dropHosts(self, args, handler_ctx):
+    result = dropHosts_result()
+    try:
+      result.success = self._handler.dropHosts(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'dropHosts', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -20273,14 +21023,14 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(addZone_args, oneway=False)
-  def process_addZone(self, args, handler_ctx):
-    result = addZone_result()
+  @thrift_process_method(mergeZone_args, oneway=False)
+  def process_mergeZone(self, args, handler_ctx):
+    result = mergeZone_result()
     try:
-      result.success = self._handler.addZone(args.req)
+      result.success = self._handler.mergeZone(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'addZone', ex)
+      self._event_handler.handlerError(handler_ctx, 'mergeZone', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -20295,25 +21045,25 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(addHostIntoZone_args, oneway=False)
-  def process_addHostIntoZone(self, args, handler_ctx):
-    result = addHostIntoZone_result()
+  @thrift_process_method(splitZone_args, oneway=False)
+  def process_splitZone(self, args, handler_ctx):
+    result = splitZone_result()
     try:
-      result.success = self._handler.addHostIntoZone(args.req)
+      result.success = self._handler.splitZone(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'addHostIntoZone', ex)
+      self._event_handler.handlerError(handler_ctx, 'splitZone', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(dropHostFromZone_args, oneway=False)
-  def process_dropHostFromZone(self, args, handler_ctx):
-    result = dropHostFromZone_result()
+  @thrift_process_method(renameZone_args, oneway=False)
+  def process_renameZone(self, args, handler_ctx):
+    result = renameZone_result()
     try:
-      result.success = self._handler.dropHostFromZone(args.req)
+      result.success = self._handler.renameZone(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'dropHostFromZone', ex)
+      self._event_handler.handlerError(handler_ctx, 'renameZone', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -20621,6 +21371,12 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["getEdge"] = TPriority.NORMAL
     self._processMap["listEdges"] = ContextProcessor.process_listEdges
     self._priorityMap["listEdges"] = TPriority.NORMAL
+    self._processMap["addHosts"] = ContextProcessor.process_addHosts
+    self._priorityMap["addHosts"] = TPriority.NORMAL
+    self._processMap["addHostsIntoZone"] = ContextProcessor.process_addHostsIntoZone
+    self._priorityMap["addHostsIntoZone"] = TPriority.NORMAL
+    self._processMap["dropHosts"] = ContextProcessor.process_dropHosts
+    self._priorityMap["dropHosts"] = TPriority.NORMAL
     self._processMap["listHosts"] = ContextProcessor.process_listHosts
     self._priorityMap["listHosts"] = TPriority.NORMAL
     self._processMap["getPartsAlloc"] = ContextProcessor.process_getPartsAlloc
@@ -20699,14 +21455,14 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["listSnapshots"] = TPriority.NORMAL
     self._processMap["runAdminJob"] = ContextProcessor.process_runAdminJob
     self._priorityMap["runAdminJob"] = TPriority.NORMAL
-    self._processMap["addZone"] = ContextProcessor.process_addZone
-    self._priorityMap["addZone"] = TPriority.NORMAL
+    self._processMap["mergeZone"] = ContextProcessor.process_mergeZone
+    self._priorityMap["mergeZone"] = TPriority.NORMAL
     self._processMap["dropZone"] = ContextProcessor.process_dropZone
     self._priorityMap["dropZone"] = TPriority.NORMAL
-    self._processMap["addHostIntoZone"] = ContextProcessor.process_addHostIntoZone
-    self._priorityMap["addHostIntoZone"] = TPriority.NORMAL
-    self._processMap["dropHostFromZone"] = ContextProcessor.process_dropHostFromZone
-    self._priorityMap["dropHostFromZone"] = TPriority.NORMAL
+    self._processMap["splitZone"] = ContextProcessor.process_splitZone
+    self._priorityMap["splitZone"] = TPriority.NORMAL
+    self._processMap["renameZone"] = ContextProcessor.process_renameZone
+    self._priorityMap["renameZone"] = TPriority.NORMAL
     self._processMap["getZone"] = ContextProcessor.process_getZone
     self._priorityMap["getZone"] = TPriority.NORMAL
     self._processMap["listZones"] = ContextProcessor.process_listZones
@@ -20926,6 +21682,39 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'listEdges', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(addHosts_args, oneway=False)
+  def process_addHosts(self, args, handler_ctx):
+    result = addHosts_result()
+    try:
+      result.success = self._handler.addHosts(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'addHosts', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(addHostsIntoZone_args, oneway=False)
+  def process_addHostsIntoZone(self, args, handler_ctx):
+    result = addHostsIntoZone_result()
+    try:
+      result.success = self._handler.addHostsIntoZone(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'addHostsIntoZone', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(dropHosts_args, oneway=False)
+  def process_dropHosts(self, args, handler_ctx):
+    result = dropHosts_result()
+    try:
+      result.success = self._handler.dropHosts(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'dropHosts', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -21358,14 +22147,14 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(addZone_args, oneway=False)
-  def process_addZone(self, args, handler_ctx):
-    result = addZone_result()
+  @thrift_process_method(mergeZone_args, oneway=False)
+  def process_mergeZone(self, args, handler_ctx):
+    result = mergeZone_result()
     try:
-      result.success = self._handler.addZone(handler_ctx, args.req)
+      result.success = self._handler.mergeZone(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'addZone', ex)
+      self._event_handler.handlerError(handler_ctx, 'mergeZone', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -21380,25 +22169,25 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(addHostIntoZone_args, oneway=False)
-  def process_addHostIntoZone(self, args, handler_ctx):
-    result = addHostIntoZone_result()
+  @thrift_process_method(splitZone_args, oneway=False)
+  def process_splitZone(self, args, handler_ctx):
+    result = splitZone_result()
     try:
-      result.success = self._handler.addHostIntoZone(handler_ctx, args.req)
+      result.success = self._handler.splitZone(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'addHostIntoZone', ex)
+      self._event_handler.handlerError(handler_ctx, 'splitZone', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(dropHostFromZone_args, oneway=False)
-  def process_dropHostFromZone(self, args, handler_ctx):
-    result = dropHostFromZone_result()
+  @thrift_process_method(renameZone_args, oneway=False)
+  def process_renameZone(self, args, handler_ctx):
+    result = renameZone_result()
     try:
-      result.success = self._handler.dropHostFromZone(handler_ctx, args.req)
+      result.success = self._handler.renameZone(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'dropHostFromZone', ex)
+      self._event_handler.handlerError(handler_ctx, 'renameZone', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
