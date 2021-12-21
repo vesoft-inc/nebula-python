@@ -18,30 +18,30 @@ jobs:
         pip3 install setuptools wheel twine
         pip install .
         pip install -r requirements/dev.txt
-      - name: Test with pytest
-        run: |
-          docker-compose up -d
-          sleep 45
-          pytest -s -v -k "not TestSSLConnection and not TestSSLConnectionSelfSigned"
-          docker-compose down -v
-        working-directory: tests
-      - name: Test SSL connection with pytest
-        run: |
-          enable_ssl=true docker-compose up -d
-          sleep 45
-          pytest -s -v test_ssl_connection.py::TestSSLConnection
-        working-directory: tests
-      - name: Test self-signed SSL connection with pytest
-        run: |
-          enable_ssl=true docker-compose up -d
-          sleep 45
-          pytest -s -v test_ssl_connection.py::TestSSLConnectionSelfSigned
-        working-directory: tests
+    - name: Test with pytest
+      run: |
+        docker-compose up -d
+        sleep 45
+        pytest -s -v -k "not TestSSLConnection and not TestSSLConnectionSelfSigned"
+        docker-compose down -v
+      working-directory: tests
+    - name: Test SSL connection with pytest
+      run: |
+        enable_ssl=true docker-compose up -d
+        sleep 45
+        pytest -s -v test_ssl_connection.py::TestSSLConnection
+      working-directory: tests
+    - name: Test self-signed SSL connection with pytest
+      run: |
+        enable_ssl=true docker-compose up -d
+        sleep 45
+        pytest -s -v test_ssl_connection.py::TestSSLConnectionSelfSigned
+      working-directory: tests
 
-      - name: Build and publish
-        env:
-          TWINE_USERNAME: ${{ secrets.PYPI_NAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: |
-          python3 setup.py sdist bdist_wheel
-          twine upload dist/*
+    - name: Build and publish
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_NAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        python3 setup.py sdist bdist_wheel
+        twine upload dist/*

@@ -192,36 +192,26 @@ def do_scan_job(
                 part_info.has_done = True
                 cursor = parts[part_info.part_id]
                 resp_cursor = resp.cursors[part_info.part_id]
-                if resp_cursor.has_next:
-                    cursor.has_next = True
+                if resp_cursor.next_cursor:
                     cursor.next_cursor = resp_cursor.next_cursor
                     logger.debug(
                         "Get next next_cursor: {}".format(resp_cursor.next_cursor)
                     )
                 else:
                     is_finished = True
-                if scan_vertex:
-                    logger.debug(
-                        "resp.vertex_data size: {}".format(len(resp.vertex_data.rows))
-                    )
-                    if len(resp.vertex_data.column_names) == 0:
-                        return 'Part id: {} return empty column names'.format(
+
+                logger.debug("resp.props size: {}".format(len(resp.props.rows)))
+                if len(resp.props.column_names) == 0:
+                    return (
+                        'Part id: {} return empty column names'.format(
                             part_info.part_id
-                        )
-                    if len(resp.vertex_data.rows) == 0:
-                        continue
-                    data_sets.append(resp.vertex_data)
-                else:
-                    logger.debug(
-                        "resp.edge_data size: {}".format(len(resp.edge_data.rows))
+                        ),
+                        None,
                     )
-                    if len(resp.edge_data.column_names) == 0:
-                        return 'Part id: {} return empty column names'.format(
-                            part_info.part_id
-                        )
-                    if len(resp.edge_data.rows) == 0:
-                        continue
-                    data_sets.append(resp.edge_data)
+                if len(resp.props.rows) == 0:
+                    continue
+                data_sets.append(resp.props)
+
             except Exception as e:
                 import traceback
 

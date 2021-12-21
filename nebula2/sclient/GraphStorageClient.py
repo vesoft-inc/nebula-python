@@ -361,7 +361,7 @@ class GraphStorageClient(object):
         req = ScanEdgeRequest()
         req.space_id = space_id
         req.parts = parts
-        req.return_columns = edge_prop
+        req.return_columns = [edge_prop]
         req.limit = limit
         req.start_time = start_time
         req.end_time = end_time

@@ -29,7 +29,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'NullType', 'PropertyType', 'ErrorCode', 'SchemaID', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Coordinate', 'Point', 'LineString', 'Polygon', 'Geography', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'LogEntry', 'ClusterID', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
+__all__ = ['UTF8STRINGS', 'NullType', 'PropertyType', 'ErrorCode', 'SchemaID', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Coordinate', 'Point', 'LineString', 'Polygon', 'Geography', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'Duration', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'LogEntry', 'ClusterID', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
 
 class NullType:
   __NULL__ = 0
@@ -76,6 +76,7 @@ class PropertyType:
   INT16 = 9
   INT32 = 10
   TIMESTAMP = 21
+  DURATION = 23
   DATE = 24
   DATETIME = 25
   TIME = 26
@@ -94,6 +95,7 @@ class PropertyType:
     9: "INT16",
     10: "INT32",
     21: "TIMESTAMP",
+    23: "DURATION",
     24: "DATE",
     25: "DATETIME",
     26: "TIME",
@@ -113,6 +115,7 @@ class PropertyType:
     "INT16": 9,
     "INT32": 10,
     "TIMESTAMP": 21,
+    "DURATION": 23,
     "DATE": 24,
     "DATETIME": 25,
     "TIME": 26,
@@ -133,7 +136,7 @@ class ErrorCode:
   E_TAG_PROP_NOT_FOUND = -10
   E_ROLE_NOT_FOUND = -11
   E_CONFIG_NOT_FOUND = -12
-  E_GROUP_NOT_FOUND = -13
+  E_MACHINE_NOT_FOUND = -13
   E_ZONE_NOT_FOUND = -14
   E_LISTENER_NOT_FOUND = -15
   E_PART_NOT_FOUND = -16
@@ -256,7 +259,7 @@ class ErrorCode:
     -10: "E_TAG_PROP_NOT_FOUND",
     -11: "E_ROLE_NOT_FOUND",
     -12: "E_CONFIG_NOT_FOUND",
-    -13: "E_GROUP_NOT_FOUND",
+    -13: "E_MACHINE_NOT_FOUND",
     -14: "E_ZONE_NOT_FOUND",
     -15: "E_LISTENER_NOT_FOUND",
     -16: "E_PART_NOT_FOUND",
@@ -380,7 +383,7 @@ class ErrorCode:
     "E_TAG_PROP_NOT_FOUND": -10,
     "E_ROLE_NOT_FOUND": -11,
     "E_CONFIG_NOT_FOUND": -12,
-    "E_GROUP_NOT_FOUND": -13,
+    "E_MACHINE_NOT_FOUND": -13,
     "E_ZONE_NOT_FOUND": -14,
     "E_LISTENER_NOT_FOUND": -15,
     "E_PART_NOT_FOUND": -16,
@@ -3237,6 +3240,107 @@ class KeyValue:
   if not six.PY2:
     __hash__ = object.__hash__
 
+class Duration:
+  """
+  Attributes:
+   - seconds
+   - microseconds
+   - months
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.I64:
+          self.seconds = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.I32:
+          self.microseconds = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I32:
+          self.months = iprot.readI32()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('Duration')
+    if self.seconds != None:
+      oprot.writeFieldBegin('seconds', TType.I64, 1)
+      oprot.writeI64(self.seconds)
+      oprot.writeFieldEnd()
+    if self.microseconds != None:
+      oprot.writeFieldBegin('microseconds', TType.I32, 2)
+      oprot.writeI32(self.microseconds)
+      oprot.writeFieldEnd()
+    if self.months != None:
+      oprot.writeFieldBegin('months', TType.I32, 3)
+      oprot.writeI32(self.months)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.seconds is not None:
+      value = pprint.pformat(self.seconds, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    seconds=%s' % (value))
+    if self.microseconds is not None:
+      value = pprint.pformat(self.microseconds, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    microseconds=%s' % (value))
+    if self.months is not None:
+      value = pprint.pformat(self.months, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    months=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  if not six.PY2:
+    __hash__ = object.__hash__
+
 class LogInfo:
   """
   Attributes:
@@ -4516,6 +4620,36 @@ def KeyValue__setstate__(self, state):
 
 KeyValue.__getstate__ = lambda self: self.__dict__.copy()
 KeyValue.__setstate__ = KeyValue__setstate__
+
+all_structs.append(Duration)
+Duration.thrift_spec = (
+  None, # 0
+  (1, TType.I64, 'seconds', None, None, 2, ), # 1
+  (2, TType.I32, 'microseconds', None, None, 2, ), # 2
+  (3, TType.I32, 'months', None, None, 2, ), # 3
+)
+
+Duration.thrift_struct_annotations = {
+  "cpp.type": "nebula::Duration",
+}
+Duration.thrift_field_annotations = {
+}
+
+def Duration__init__(self, seconds=None, microseconds=None, months=None,):
+  self.seconds = seconds
+  self.microseconds = microseconds
+  self.months = months
+
+Duration.__init__ = Duration__init__
+
+def Duration__setstate__(self, state):
+  state.setdefault('seconds', None)
+  state.setdefault('microseconds', None)
+  state.setdefault('months', None)
+  self.__dict__ = state
+
+Duration.__getstate__ = lambda self: self.__dict__.copy()
+Duration.__setstate__ = Duration__setstate__
 
 all_structs.append(LogInfo)
 LogInfo.thrift_spec = (
