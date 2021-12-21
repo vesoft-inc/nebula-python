@@ -51,13 +51,16 @@ FUNCTIONS = {
     'deleteTags': Function('deleteTags', 'GraphStorageService', 'ExecResponse', [('DeleteTagsRequest', 'req', 'DeleteTagsRequest')]),
     'updateVertex': Function('updateVertex', 'GraphStorageService', 'UpdateResponse', [('UpdateVertexRequest', 'req', 'UpdateVertexRequest')]),
     'updateEdge': Function('updateEdge', 'GraphStorageService', 'UpdateResponse', [('UpdateEdgeRequest', 'req', 'UpdateEdgeRequest')]),
-    'scanVertex': Function('scanVertex', 'GraphStorageService', 'ScanVertexResponse', [('ScanVertexRequest', 'req', 'ScanVertexRequest')]),
-    'scanEdge': Function('scanEdge', 'GraphStorageService', 'ScanEdgeResponse', [('ScanEdgeRequest', 'req', 'ScanEdgeRequest')]),
+    'scanVertex': Function('scanVertex', 'GraphStorageService', 'ScanResponse', [('ScanVertexRequest', 'req', 'ScanVertexRequest')]),
+    'scanEdge': Function('scanEdge', 'GraphStorageService', 'ScanResponse', [('ScanEdgeRequest', 'req', 'ScanEdgeRequest')]),
     'getUUID': Function('getUUID', 'GraphStorageService', 'GetUUIDResp', [('GetUUIDReq', 'req', 'GetUUIDReq')]),
     'lookupIndex': Function('lookupIndex', 'GraphStorageService', 'LookupIndexResp', [('LookupIndexRequest', 'req', 'LookupIndexRequest')]),
     'lookupAndTraverse': Function('lookupAndTraverse', 'GraphStorageService', 'GetNeighborsResponse', [('LookupAndTraverseRequest', 'req', 'LookupAndTraverseRequest')]),
     'chainUpdateEdge': Function('chainUpdateEdge', 'GraphStorageService', 'UpdateResponse', [('UpdateEdgeRequest', 'req', 'UpdateEdgeRequest')]),
     'chainAddEdges': Function('chainAddEdges', 'GraphStorageService', 'ExecResponse', [('AddEdgesRequest', 'req', 'AddEdgesRequest')]),
+    'get': Function('get', 'GraphStorageService', 'KVGetResponse', [('KVGetRequest', 'req', 'KVGetRequest')]),
+    'put': Function('put', 'GraphStorageService', 'ExecResponse', [('KVPutRequest', 'req', 'KVPutRequest')]),
+    'remove': Function('remove', 'GraphStorageService', 'ExecResponse', [('KVRemoveRequest', 'req', 'KVRemoveRequest')]),
 }
 
 SERVICE_NAMES = ['GraphStorageService', ]

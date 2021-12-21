@@ -278,7 +278,7 @@ class TestExecuteJson(TestBaseCase):
         exp = [
             {
                 "person.age": 10,
-                "person.birthday": '2010-09-10T02:08:02.0Z',
+                "person.birthday": '2010-09-10T02:08:02.000000000Z',
                 "person.book_num": 100,
                 "person.child_name": "Hello Worl",
                 "person.expend": 100,
@@ -287,7 +287,7 @@ class TestExecuteJson(TestBaseCase):
                 "person.grade": 3,
                 "person.hobby": None,
                 "person.is_girl": False,
-                "person.morning": '23:10:00.000000Z',
+                "person.morning": '23:10:00.000000000Z',
                 "person.name": "Bob",
                 "person.property": 1000,
                 "person.start_school": '2017-09-10',
