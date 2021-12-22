@@ -397,7 +397,7 @@ services:
       - sh
       - -c
       - |
-        sleep 3 &&
+        sleep 5 &&
         nebula-console -addr graphd0 -port 9669 -u root -p nebula -e 'ADD HOSTS "172.28.2.1":9779,"172.28.2.2":9779,"172.28.2.3":9779' &&
         sleep 36000
     depends_on:
