@@ -6,7 +6,6 @@
 
 
 import contextlib
-import logging
 import socket
 
 from collections import deque
@@ -16,6 +15,7 @@ from nebula2.Exception import NotValidConnectionException, InValidHostname
 
 from nebula2.gclient.net.Session import Session
 from nebula2.gclient.net.Connection import Connection
+from nebula2.logger import logger
 
 
 class ConnectionPool(object):
@@ -49,7 +49,7 @@ class ConnectionPool(object):
         :return: if all addresses are ok, return True else return False.
         """
         if self._close:
-            logging.error('The pool has init or closed.')
+            logger.error('The pool has init or closed.')
             raise RuntimeError('The pool has init or closed.')
         self._configs = configs
         for address in addresses:
@@ -141,7 +141,7 @@ class ConnectionPool(object):
         """
         with self._lock:
             if self._close:
-                logging.error('The pool is closed')
+                logger.error('The pool is closed')
                 raise NotValidConnectionException()
 
             try:
@@ -160,7 +160,7 @@ class ConnectionPool(object):
                             if not connection.is_used:
                                 if connection.ping():
                                     connection.is_used = True
-                                    logging.info('Get connection to {}'.format(addr))
+                                    logger.info('Get connection to {}'.format(addr))
                                     return connection
 
                         if len(self._connections[addr]) < max_con_per_address:
@@ -176,7 +176,7 @@ class ConnectionPool(object):
                                 )
                             connection.is_used = True
                             self._connections[addr].append(connection)
-                            logging.info('Get connection to {}'.format(addr))
+                            logger.info('Get connection to {}'.format(addr))
                             return connection
                     else:
                         for connection in list(self._connections[addr]):
@@ -185,7 +185,7 @@ class ConnectionPool(object):
                     try_count = try_count + 1
                 return None
             except Exception as ex:
-                logging.error('Get connection failed: {}'.format(ex))
+                logger.error('Get connection failed: {}'.format(ex))
                 return None
 
     def ping(self, address):
@@ -203,7 +203,7 @@ class ConnectionPool(object):
             conn.close()
             return True
         except Exception as ex:
-            logging.warning(
+            logger.warning(
                 'Connect {}:{} failed: {}'.format(address[0], address[1], ex)
             )
             return False
@@ -217,7 +217,7 @@ class ConnectionPool(object):
             for addr in self._connections.keys():
                 for connection in self._connections[addr]:
                     if connection.is_used:
-                        logging.error(
+                        logger.error(
                             'The connection using by someone, but now want to close it'
                         )
                     connection.close()
@@ -284,7 +284,7 @@ class ConnectionPool(object):
                 for connection in list(conns):
                     if not connection.is_used:
                         if not connection.ping():
-                            logging.debug(
+                            logger.debug(
                                 'Remove the not unusable connection to {}'.format(
                                     connection.get_address()
                                 )
@@ -295,7 +295,7 @@ class ConnectionPool(object):
                             self._configs.idle_time != 0
                             and connection.idle_time() > self._configs.idle_time
                         ):
-                            logging.debug(
+                            logger.debug(
                                 'Remove the idle connection to {}'.format(
                                     connection.get_address()
                                 )
