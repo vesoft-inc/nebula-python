@@ -48,6 +48,7 @@ class TestSession(TestCase):
             session.execute(
                 'CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;'
             )
+            time.sleep(3)
             for i in range(0, 5):
                 if i == 3:
                     os.system('docker stop tests_graphd0_1')
