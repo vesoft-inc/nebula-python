@@ -33,6 +33,7 @@ jobs:
         run: |
           docker-compose up -d
           sleep 45
+          docker-compose logs console
           pytest -s -v -k "not SSL and not self_signed_SSL"
           docker-compose down -v
         working-directory: tests
