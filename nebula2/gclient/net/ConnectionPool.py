@@ -52,6 +52,7 @@ class ConnectionPool(object):
             logger.error('The pool has init or closed.')
             raise RuntimeError('The pool has init or closed.')
         self._configs = configs
+        self._ssl_configs = ssl_conf
         for address in addresses:
             if address not in self._addresses:
                 try:
@@ -77,7 +78,7 @@ class ConnectionPool(object):
 
         conns_per_address = int(self._configs.min_connection_pool_size / ok_num)
 
-        if ssl_conf is None:
+        if self._ssl_configs is None:
             for addr in self._addresses:
                 for i in range(0, conns_per_address):
                     connection = Connection()

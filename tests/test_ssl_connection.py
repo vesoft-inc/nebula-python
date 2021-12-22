@@ -9,6 +9,7 @@ import sys
 import os
 import time
 import ssl
+import pytest
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
@@ -45,6 +46,7 @@ host = '127.0.0.1'
 port = 9669
 
 
+@pytest.mark.SSL
 class TestSSLConnection(TestCase):
     def test_create(self):
         try:
@@ -86,6 +88,7 @@ class TestSSLConnection(TestCase):
             assert True
 
 
+@pytest.mark.self_signed_SSL
 class TestSSLConnectionSelfSigned(TestCase):
     def test_create_self_signed(self):
         try:
