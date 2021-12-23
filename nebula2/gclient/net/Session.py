@@ -26,17 +26,17 @@ class Session(object):
         self._pool = pool
         self._retry_connect = retry_connect
 
-    def execute(self, stmt):
+    def execute_parameter(self, stmt, params):
         """execute statement
-
         :param stmt: the ngql
+        :param params: parameter map
         :return: ResultSet
         """
         if self._connection is None:
             raise RuntimeError('The session has released')
         try:
             start_time = time.time()
-            resp = self._connection.execute(self._session_id, stmt)
+            resp = self._connection.execute_parameter(self._session_id, stmt, params)
             end_time = time.time()
             return ResultSet(
                 resp,
@@ -52,7 +52,9 @@ class Session(object):
                         raise IOErrorException(
                             IOErrorException.E_ALL_BROKEN, ie.message
                         )
-                    resp = self._connection.execute(self._session_id, stmt)
+                    resp = self._connection.execute_parameter(
+                        self._session_id, stmt, params
+                    )
                     end_time = time.time()
                     return ResultSet(
                         resp,
@@ -62,6 +64,14 @@ class Session(object):
             raise
         except Exception:
             raise
+
+    def execute(self, stmt):
+        """execute statement
+
+        :param stmt: the ngql
+        :return: ResultSet
+        """
+        return self.execute_parameter(stmt, None)
 
     def execute_json(self, stmt):
         """execute statement and return the result as a JSON string
@@ -124,10 +134,76 @@ class Session(object):
         :param stmt: the ngql
         :return: JSON string
         """
+        return self.execute_json_with_parameter(stmt, None)
+
+    def execute_json_with_parameter(self, stmt, params):
+        """execute statement and return the result as a JSON string
+            Date and Datetime will be returned in UTC
+            JSON struct:
+            {
+                "results": [
+                {
+                    "columns": [],
+                    "data": [
+                    {
+                        "row": [
+                        "row-data"
+                        ],
+                        "meta": [
+                        "metadata"
+                        ]
+                    }
+                    ],
+                    "latencyInUs": 0,
+                    "spaceName": "",
+                    "planDesc ": {
+                    "planNodeDescs": [
+                        {
+                        "name": "",
+                        "id": 0,
+                        "outputVar": "",
+                        "description": {
+                            "key": ""
+                        },
+                        "profiles": [
+                            {
+                            "rows": 1,
+                            "execDurationInUs": 0,
+                            "totalDurationInUs": 0,
+                            "otherStats": {}
+                            }
+                        ],
+                        "branchInfo": {
+                            "isDoBranch": false,
+                            "conditionNodeId": -1
+                        },
+                        "dependencies": []
+                        }
+                    ],
+                    "nodeIndexMap": {},
+                    "format": "",
+                    "optimize_time_in_us": 0
+                    },
+                    "comment ": ""
+                }
+                ],
+                "errors": [
+                {
+                    "code": 0,
+                    "message": ""
+                }
+                ]
+            }
+        :param stmt: the ngql
+        :param params: parameter map
+        :return: JSON string
+        """
         if self._connection is None:
             raise RuntimeError('The session has released')
         try:
-            resp_json = self._connection.execute_json(self._session_id, stmt)
+            resp_json = self._connection.execute_json_with_parameter(
+                self._session_id, stmt, params
+            )
             return resp_json
         except IOErrorException as ie:
             if ie.type == IOErrorException.E_CONNECT_BROKEN:
@@ -138,7 +214,9 @@ class Session(object):
                         raise IOErrorException(
                             IOErrorException.E_ALL_BROKEN, ie.message
                         )
-                    resp_json = self._connection.execute_json(self._session_id, stmt)
+                    resp_json = self._connection.execute_json_with_parameter(
+                        self._session_id, stmt, params
+                    )
                     return resp_json
             raise
         except Exception:
