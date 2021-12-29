@@ -6,7 +6,6 @@
 #
 
 from __future__ import absolute_import
-import six
 import sys
 from nebula2.fbthrift.util.Recursive import fix_spec
 from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestContext, TProcessorEventHandler, TServerInterface, TProcessor, TException, TApplicationException, UnimplementedTypedef
@@ -244,8 +243,7 @@ class authenticate_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(authenticate_args)
 authenticate_args.thrift_spec = (
@@ -344,8 +342,7 @@ class authenticate_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(authenticate_result)
 authenticate_result.thrift_spec = (
@@ -439,8 +436,7 @@ class signout_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(signout_args)
 signout_args.thrift_spec = (
@@ -549,8 +545,7 @@ class execute_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(execute_args)
 execute_args.thrift_spec = (
@@ -649,8 +644,7 @@ class execute_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(execute_result)
 execute_result.thrift_spec = (
@@ -717,7 +711,7 @@ class executeWithParameter_args:
           self.parameterMap = {}
           (_ktype55, _vtype56, _size54 ) = iprot.readMapBegin() 
           if _size54 >= 0:
-            for _i58 in six.moves.range(_size54):
+            for _i58 in range(_size54):
               _key59 = iprot.readString()
               _val60 = nebula2.common.ttypes.Value()
               _val60.read(iprot)
@@ -790,8 +784,7 @@ class executeWithParameter_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(executeWithParameter_args)
 executeWithParameter_args.thrift_spec = (
@@ -893,8 +886,7 @@ class executeWithParameter_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(executeWithParameter_result)
 executeWithParameter_result.thrift_spec = (
@@ -1002,8 +994,7 @@ class executeJson_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(executeJson_args)
 executeJson_args.thrift_spec = (
@@ -1101,8 +1092,7 @@ class executeJson_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(executeJson_result)
 executeJson_result.thrift_spec = (
@@ -1169,7 +1159,7 @@ class executeJsonWithParameter_args:
           self.parameterMap = {}
           (_ktype66, _vtype67, _size65 ) = iprot.readMapBegin() 
           if _size65 >= 0:
-            for _i69 in six.moves.range(_size65):
+            for _i69 in range(_size65):
               _key70 = iprot.readString()
               _val71 = nebula2.common.ttypes.Value()
               _val71.read(iprot)
@@ -1242,8 +1232,7 @@ class executeJsonWithParameter_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(executeJsonWithParameter_args)
 executeJsonWithParameter_args.thrift_spec = (
@@ -1344,8 +1333,7 @@ class executeJsonWithParameter_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(executeJsonWithParameter_result)
 executeJsonWithParameter_result.thrift_spec = (
@@ -1440,8 +1428,7 @@ class verifyClientVersion_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(verifyClientVersion_args)
 verifyClientVersion_args.thrift_spec = (
@@ -1537,8 +1524,7 @@ class verifyClientVersion_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(verifyClientVersion_result)
 verifyClientVersion_result.thrift_spec = (

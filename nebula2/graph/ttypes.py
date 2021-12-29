@@ -6,7 +6,6 @@
 #
 
 from __future__ import absolute_import
-import six
 import sys
 from nebula2.fbthrift.util.Recursive import fix_spec
 from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestContext, TProcessorEventHandler, TServerInterface, TProcessor, TException, TApplicationException, UnimplementedTypedef
@@ -82,7 +81,7 @@ class ProfilingStats:
           self.other_stats = {}
           (_ktype1, _vtype2, _size0 ) = iprot.readMapBegin() 
           if _size0 >= 0:
-            for _i4 in six.moves.range(_size0):
+            for _i4 in range(_size0):
               _key5 = iprot.readString()
               _val6 = iprot.readString()
               self.other_stats[_key5] = _val6
@@ -161,8 +160,7 @@ class ProfilingStats:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class PlanNodeBranchInfo:
   """
@@ -248,8 +246,7 @@ class PlanNodeBranchInfo:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Pair:
   """
@@ -335,8 +332,7 @@ class Pair:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class PlanNodeDescription:
   """
@@ -390,7 +386,7 @@ class PlanNodeDescription:
           self.description = []
           (_etype14, _size11) = iprot.readListBegin()
           if _size11 >= 0:
-            for _i15 in six.moves.range(_size11):
+            for _i15 in range(_size11):
               _elem16 = Pair()
               _elem16.read(iprot)
               self.description.append(_elem16)
@@ -407,7 +403,7 @@ class PlanNodeDescription:
           self.profiles = []
           (_etype21, _size18) = iprot.readListBegin()
           if _size18 >= 0:
-            for _i22 in six.moves.range(_size18):
+            for _i22 in range(_size18):
               _elem23 = ProfilingStats()
               _elem23.read(iprot)
               self.profiles.append(_elem23)
@@ -430,7 +426,7 @@ class PlanNodeDescription:
           self.dependencies = []
           (_etype28, _size25) = iprot.readListBegin()
           if _size25 >= 0:
-            for _i29 in six.moves.range(_size25):
+            for _i29 in range(_size25):
               _elem30 = iprot.readI64()
               self.dependencies.append(_elem30)
           else: 
@@ -536,8 +532,7 @@ class PlanNodeDescription:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class PlanDescription:
   """
@@ -573,7 +568,7 @@ class PlanDescription:
           self.plan_node_descs = []
           (_etype38, _size35) = iprot.readListBegin()
           if _size35 >= 0:
-            for _i39 in six.moves.range(_size35):
+            for _i39 in range(_size35):
               _elem40 = PlanNodeDescription()
               _elem40.read(iprot)
               self.plan_node_descs.append(_elem40)
@@ -590,7 +585,7 @@ class PlanDescription:
           self.node_index_map = {}
           (_ktype43, _vtype44, _size42 ) = iprot.readMapBegin() 
           if _size42 >= 0:
-            for _i46 in six.moves.range(_size42):
+            for _i46 in range(_size42):
               _key47 = iprot.readI64()
               _val48 = iprot.readI64()
               self.node_index_map[_key47] = _val48
@@ -682,8 +677,7 @@ class PlanDescription:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ExecutionResponse:
   """
@@ -841,8 +835,7 @@ class ExecutionResponse:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class AuthResponse:
   """
@@ -970,8 +963,7 @@ class AuthResponse:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class VerifyClientVersionResp:
   """
@@ -1057,8 +1049,7 @@ class VerifyClientVersionResp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class VerifyClientVersionReq:
   """
@@ -1130,8 +1121,7 @@ class VerifyClientVersionReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(ProfilingStats)
 ProfilingStats.thrift_spec = (
@@ -1143,6 +1133,7 @@ ProfilingStats.thrift_spec = (
 )
 
 ProfilingStats.thrift_struct_annotations = {
+  "cpp.noncopyable": "1",
   "cpp.type": "nebula::ProfilingStats",
 }
 ProfilingStats.thrift_field_annotations = {
@@ -1233,6 +1224,7 @@ PlanNodeDescription.thrift_spec = (
 )
 
 PlanNodeDescription.thrift_struct_annotations = {
+  "cpp.noncopyable": "1",
   "cpp.type": "nebula::PlanNodeDescription",
 }
 PlanNodeDescription.thrift_field_annotations = {
@@ -1272,6 +1264,7 @@ PlanDescription.thrift_spec = (
 )
 
 PlanDescription.thrift_struct_annotations = {
+  "cpp.noncopyable": "1",
   "cpp.type": "nebula::PlanDescription",
 }
 PlanDescription.thrift_field_annotations = {
@@ -1308,6 +1301,7 @@ ExecutionResponse.thrift_spec = (
 )
 
 ExecutionResponse.thrift_struct_annotations = {
+  "cpp.noncopyable": "1",
   "cpp.type": "nebula::ExecutionResponse",
 }
 ExecutionResponse.thrift_field_annotations = {
@@ -1348,6 +1342,7 @@ AuthResponse.thrift_spec = (
 )
 
 AuthResponse.thrift_struct_annotations = {
+  "cpp.noncopyable": "1",
   "cpp.type": "nebula::AuthResponse",
 }
 AuthResponse.thrift_field_annotations = {

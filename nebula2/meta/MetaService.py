@@ -6,14 +6,13 @@
 #
 
 from __future__ import absolute_import
-import six
 import sys
 from nebula2.fbthrift.util.Recursive import fix_spec
 from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestContext, TProcessorEventHandler, TServerInterface, TProcessor, TException, TApplicationException, UnimplementedTypedef
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, AddHostsReq, DropHostsReq, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, PartitionList, HBReq, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceTask, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, MergeZoneReq, DropZoneReq, SplitZoneReq, RenameZoneReq, AddHostsIntoZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, BackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SchemaVer, ClusterID
+from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexParams, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, AddHostsReq, DropHostsReq, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, PartitionList, HBReq, ServiceInfo, AgentHBReq, AgentHBResp, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceTask, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, MergeZoneReq, DropZoneReq, DivideZoneReq, RenameZoneReq, AddHostsIntoZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, HostBackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SchemaVer, ClusterID
 import nebula2.common.ttypes
 
 from nebula2.fbthrift.Thrift import TProcessor
@@ -386,6 +385,13 @@ class Iface:
     """
     pass
 
+  def agentHeartbeat(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def regConfig(self, req=None):
     """
     Parameters:
@@ -456,7 +462,7 @@ class Iface:
     """
     pass
 
-  def splitZone(self, req=None):
+  def divideZone(self, req=None):
     """
     Parameters:
      - req
@@ -478,20 +484,6 @@ class Iface:
     pass
 
   def listZones(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def createBackup(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def restoreMeta(self, req=None):
     """
     Parameters:
      - req
@@ -611,6 +603,20 @@ class Iface:
     pass
 
   def reportTaskFinish(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def createBackup(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def restoreMeta(self, req=None):
     """
     Parameters:
      - req
@@ -983,6 +989,13 @@ class ContextIface:
     """
     pass
 
+  def agentHeartbeat(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def regConfig(self, handler_ctx, req=None):
     """
     Parameters:
@@ -1053,7 +1066,7 @@ class ContextIface:
     """
     pass
 
-  def splitZone(self, handler_ctx, req=None):
+  def divideZone(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -1075,20 +1088,6 @@ class ContextIface:
     pass
 
   def listZones(self, handler_ctx, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def createBackup(self, handler_ctx, req=None):
-    """
-    Parameters:
-     - req
-    """
-    pass
-
-  def restoreMeta(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -1214,6 +1213,20 @@ class ContextIface:
     """
     pass
 
+  def createBackup(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def restoreMeta(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def listCluster(self, handler_ctx, req=None):
     """
     Parameters:
@@ -1309,8 +1322,7 @@ class createSpace_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createSpace_args)
 createSpace_args.thrift_spec = (
@@ -1406,8 +1418,7 @@ class createSpace_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createSpace_result)
 createSpace_result.thrift_spec = (
@@ -1502,8 +1513,7 @@ class dropSpace_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropSpace_args)
 dropSpace_args.thrift_spec = (
@@ -1599,8 +1609,7 @@ class dropSpace_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropSpace_result)
 dropSpace_result.thrift_spec = (
@@ -1695,8 +1704,7 @@ class getSpace_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getSpace_args)
 getSpace_args.thrift_spec = (
@@ -1792,8 +1800,7 @@ class getSpace_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getSpace_result)
 getSpace_result.thrift_spec = (
@@ -1888,8 +1895,7 @@ class listSpaces_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listSpaces_args)
 listSpaces_args.thrift_spec = (
@@ -1985,8 +1991,7 @@ class listSpaces_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listSpaces_result)
 listSpaces_result.thrift_spec = (
@@ -2081,8 +2086,7 @@ class createSpaceAs_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createSpaceAs_args)
 createSpaceAs_args.thrift_spec = (
@@ -2178,8 +2182,7 @@ class createSpaceAs_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createSpaceAs_result)
 createSpaceAs_result.thrift_spec = (
@@ -2274,8 +2277,7 @@ class createTag_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createTag_args)
 createTag_args.thrift_spec = (
@@ -2371,8 +2373,7 @@ class createTag_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createTag_result)
 createTag_result.thrift_spec = (
@@ -2467,8 +2468,7 @@ class alterTag_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(alterTag_args)
 alterTag_args.thrift_spec = (
@@ -2564,8 +2564,7 @@ class alterTag_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(alterTag_result)
 alterTag_result.thrift_spec = (
@@ -2660,8 +2659,7 @@ class dropTag_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropTag_args)
 dropTag_args.thrift_spec = (
@@ -2757,8 +2755,7 @@ class dropTag_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropTag_result)
 dropTag_result.thrift_spec = (
@@ -2853,8 +2850,7 @@ class getTag_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getTag_args)
 getTag_args.thrift_spec = (
@@ -2950,8 +2946,7 @@ class getTag_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getTag_result)
 getTag_result.thrift_spec = (
@@ -3046,8 +3041,7 @@ class listTags_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listTags_args)
 listTags_args.thrift_spec = (
@@ -3143,8 +3137,7 @@ class listTags_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listTags_result)
 listTags_result.thrift_spec = (
@@ -3239,8 +3232,7 @@ class createEdge_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createEdge_args)
 createEdge_args.thrift_spec = (
@@ -3336,8 +3328,7 @@ class createEdge_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createEdge_result)
 createEdge_result.thrift_spec = (
@@ -3432,8 +3423,7 @@ class alterEdge_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(alterEdge_args)
 alterEdge_args.thrift_spec = (
@@ -3529,8 +3519,7 @@ class alterEdge_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(alterEdge_result)
 alterEdge_result.thrift_spec = (
@@ -3625,8 +3614,7 @@ class dropEdge_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropEdge_args)
 dropEdge_args.thrift_spec = (
@@ -3722,8 +3710,7 @@ class dropEdge_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropEdge_result)
 dropEdge_result.thrift_spec = (
@@ -3818,8 +3805,7 @@ class getEdge_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getEdge_args)
 getEdge_args.thrift_spec = (
@@ -3915,8 +3901,7 @@ class getEdge_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getEdge_result)
 getEdge_result.thrift_spec = (
@@ -4011,8 +3996,7 @@ class listEdges_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listEdges_args)
 listEdges_args.thrift_spec = (
@@ -4108,8 +4092,7 @@ class listEdges_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listEdges_result)
 listEdges_result.thrift_spec = (
@@ -4204,8 +4187,7 @@ class addHosts_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(addHosts_args)
 addHosts_args.thrift_spec = (
@@ -4301,8 +4283,7 @@ class addHosts_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(addHosts_result)
 addHosts_result.thrift_spec = (
@@ -4397,8 +4378,7 @@ class addHostsIntoZone_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(addHostsIntoZone_args)
 addHostsIntoZone_args.thrift_spec = (
@@ -4494,8 +4474,7 @@ class addHostsIntoZone_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(addHostsIntoZone_result)
 addHostsIntoZone_result.thrift_spec = (
@@ -4590,8 +4569,7 @@ class dropHosts_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropHosts_args)
 dropHosts_args.thrift_spec = (
@@ -4687,8 +4665,7 @@ class dropHosts_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropHosts_result)
 dropHosts_result.thrift_spec = (
@@ -4783,8 +4760,7 @@ class listHosts_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listHosts_args)
 listHosts_args.thrift_spec = (
@@ -4880,8 +4856,7 @@ class listHosts_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listHosts_result)
 listHosts_result.thrift_spec = (
@@ -4976,8 +4951,7 @@ class getPartsAlloc_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getPartsAlloc_args)
 getPartsAlloc_args.thrift_spec = (
@@ -5073,8 +5047,7 @@ class getPartsAlloc_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getPartsAlloc_result)
 getPartsAlloc_result.thrift_spec = (
@@ -5169,8 +5142,7 @@ class listParts_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listParts_args)
 listParts_args.thrift_spec = (
@@ -5266,8 +5238,7 @@ class listParts_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listParts_result)
 listParts_result.thrift_spec = (
@@ -5362,8 +5333,7 @@ class multiPut_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(multiPut_args)
 multiPut_args.thrift_spec = (
@@ -5459,8 +5429,7 @@ class multiPut_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(multiPut_result)
 multiPut_result.thrift_spec = (
@@ -5555,8 +5524,7 @@ class get_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(get_args)
 get_args.thrift_spec = (
@@ -5652,8 +5620,7 @@ class get_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(get_result)
 get_result.thrift_spec = (
@@ -5748,8 +5715,7 @@ class multiGet_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(multiGet_args)
 multiGet_args.thrift_spec = (
@@ -5845,8 +5811,7 @@ class multiGet_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(multiGet_result)
 multiGet_result.thrift_spec = (
@@ -5941,8 +5906,7 @@ class remove_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(remove_args)
 remove_args.thrift_spec = (
@@ -6038,8 +6002,7 @@ class remove_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(remove_result)
 remove_result.thrift_spec = (
@@ -6134,8 +6097,7 @@ class removeRange_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(removeRange_args)
 removeRange_args.thrift_spec = (
@@ -6231,8 +6193,7 @@ class removeRange_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(removeRange_result)
 removeRange_result.thrift_spec = (
@@ -6327,8 +6288,7 @@ class scan_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(scan_args)
 scan_args.thrift_spec = (
@@ -6424,8 +6384,7 @@ class scan_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(scan_result)
 scan_result.thrift_spec = (
@@ -6520,8 +6479,7 @@ class createTagIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createTagIndex_args)
 createTagIndex_args.thrift_spec = (
@@ -6617,8 +6575,7 @@ class createTagIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createTagIndex_result)
 createTagIndex_result.thrift_spec = (
@@ -6713,8 +6670,7 @@ class dropTagIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropTagIndex_args)
 dropTagIndex_args.thrift_spec = (
@@ -6810,8 +6766,7 @@ class dropTagIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropTagIndex_result)
 dropTagIndex_result.thrift_spec = (
@@ -6906,8 +6861,7 @@ class getTagIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getTagIndex_args)
 getTagIndex_args.thrift_spec = (
@@ -7003,8 +6957,7 @@ class getTagIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getTagIndex_result)
 getTagIndex_result.thrift_spec = (
@@ -7099,8 +7052,7 @@ class listTagIndexes_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listTagIndexes_args)
 listTagIndexes_args.thrift_spec = (
@@ -7196,8 +7148,7 @@ class listTagIndexes_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listTagIndexes_result)
 listTagIndexes_result.thrift_spec = (
@@ -7292,8 +7243,7 @@ class rebuildTagIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(rebuildTagIndex_args)
 rebuildTagIndex_args.thrift_spec = (
@@ -7389,8 +7339,7 @@ class rebuildTagIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(rebuildTagIndex_result)
 rebuildTagIndex_result.thrift_spec = (
@@ -7485,8 +7434,7 @@ class listTagIndexStatus_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listTagIndexStatus_args)
 listTagIndexStatus_args.thrift_spec = (
@@ -7582,8 +7530,7 @@ class listTagIndexStatus_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listTagIndexStatus_result)
 listTagIndexStatus_result.thrift_spec = (
@@ -7678,8 +7625,7 @@ class createEdgeIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createEdgeIndex_args)
 createEdgeIndex_args.thrift_spec = (
@@ -7775,8 +7721,7 @@ class createEdgeIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createEdgeIndex_result)
 createEdgeIndex_result.thrift_spec = (
@@ -7871,8 +7816,7 @@ class dropEdgeIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropEdgeIndex_args)
 dropEdgeIndex_args.thrift_spec = (
@@ -7968,8 +7912,7 @@ class dropEdgeIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropEdgeIndex_result)
 dropEdgeIndex_result.thrift_spec = (
@@ -8064,8 +8007,7 @@ class getEdgeIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getEdgeIndex_args)
 getEdgeIndex_args.thrift_spec = (
@@ -8161,8 +8103,7 @@ class getEdgeIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getEdgeIndex_result)
 getEdgeIndex_result.thrift_spec = (
@@ -8257,8 +8198,7 @@ class listEdgeIndexes_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listEdgeIndexes_args)
 listEdgeIndexes_args.thrift_spec = (
@@ -8354,8 +8294,7 @@ class listEdgeIndexes_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listEdgeIndexes_result)
 listEdgeIndexes_result.thrift_spec = (
@@ -8450,8 +8389,7 @@ class rebuildEdgeIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(rebuildEdgeIndex_args)
 rebuildEdgeIndex_args.thrift_spec = (
@@ -8547,8 +8485,7 @@ class rebuildEdgeIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(rebuildEdgeIndex_result)
 rebuildEdgeIndex_result.thrift_spec = (
@@ -8643,8 +8580,7 @@ class listEdgeIndexStatus_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listEdgeIndexStatus_args)
 listEdgeIndexStatus_args.thrift_spec = (
@@ -8740,8 +8676,7 @@ class listEdgeIndexStatus_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listEdgeIndexStatus_result)
 listEdgeIndexStatus_result.thrift_spec = (
@@ -8836,8 +8771,7 @@ class createUser_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createUser_args)
 createUser_args.thrift_spec = (
@@ -8933,8 +8867,7 @@ class createUser_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createUser_result)
 createUser_result.thrift_spec = (
@@ -9029,8 +8962,7 @@ class dropUser_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropUser_args)
 dropUser_args.thrift_spec = (
@@ -9126,8 +9058,7 @@ class dropUser_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropUser_result)
 dropUser_result.thrift_spec = (
@@ -9222,8 +9153,7 @@ class alterUser_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(alterUser_args)
 alterUser_args.thrift_spec = (
@@ -9319,8 +9249,7 @@ class alterUser_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(alterUser_result)
 alterUser_result.thrift_spec = (
@@ -9415,8 +9344,7 @@ class grantRole_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(grantRole_args)
 grantRole_args.thrift_spec = (
@@ -9512,8 +9440,7 @@ class grantRole_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(grantRole_result)
 grantRole_result.thrift_spec = (
@@ -9608,8 +9535,7 @@ class revokeRole_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(revokeRole_args)
 revokeRole_args.thrift_spec = (
@@ -9705,8 +9631,7 @@ class revokeRole_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(revokeRole_result)
 revokeRole_result.thrift_spec = (
@@ -9801,8 +9726,7 @@ class listUsers_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listUsers_args)
 listUsers_args.thrift_spec = (
@@ -9898,8 +9822,7 @@ class listUsers_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listUsers_result)
 listUsers_result.thrift_spec = (
@@ -9994,8 +9917,7 @@ class listRoles_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listRoles_args)
 listRoles_args.thrift_spec = (
@@ -10091,8 +10013,7 @@ class listRoles_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listRoles_result)
 listRoles_result.thrift_spec = (
@@ -10187,8 +10108,7 @@ class getUserRoles_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getUserRoles_args)
 getUserRoles_args.thrift_spec = (
@@ -10284,8 +10204,7 @@ class getUserRoles_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getUserRoles_result)
 getUserRoles_result.thrift_spec = (
@@ -10380,8 +10299,7 @@ class changePassword_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(changePassword_args)
 changePassword_args.thrift_spec = (
@@ -10477,8 +10395,7 @@ class changePassword_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(changePassword_result)
 changePassword_result.thrift_spec = (
@@ -10573,8 +10490,7 @@ class heartBeat_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(heartBeat_args)
 heartBeat_args.thrift_spec = (
@@ -10670,8 +10586,7 @@ class heartBeat_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(heartBeat_result)
 heartBeat_result.thrift_spec = (
@@ -10694,6 +10609,197 @@ def heartBeat_result__setstate__(self, state):
 
 heartBeat_result.__getstate__ = lambda self: self.__dict__.copy()
 heartBeat_result.__setstate__ = heartBeat_result__setstate__
+
+class agentHeartbeat_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = AgentHBReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('agentHeartbeat_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(agentHeartbeat_args)
+agentHeartbeat_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [AgentHBReq, AgentHBReq.thrift_spec, False], None, 2, ), # 1
+)
+
+agentHeartbeat_args.thrift_struct_annotations = {
+}
+agentHeartbeat_args.thrift_field_annotations = {
+}
+
+def agentHeartbeat_args__init__(self, req=None,):
+  self.req = req
+
+agentHeartbeat_args.__init__ = agentHeartbeat_args__init__
+
+def agentHeartbeat_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+agentHeartbeat_args.__getstate__ = lambda self: self.__dict__.copy()
+agentHeartbeat_args.__setstate__ = agentHeartbeat_args__setstate__
+
+class agentHeartbeat_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = AgentHBResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('agentHeartbeat_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(agentHeartbeat_result)
+agentHeartbeat_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [AgentHBResp, AgentHBResp.thrift_spec, False], None, 2, ), # 0
+)
+
+agentHeartbeat_result.thrift_struct_annotations = {
+}
+agentHeartbeat_result.thrift_field_annotations = {
+}
+
+def agentHeartbeat_result__init__(self, success=None,):
+  self.success = success
+
+agentHeartbeat_result.__init__ = agentHeartbeat_result__init__
+
+def agentHeartbeat_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+agentHeartbeat_result.__getstate__ = lambda self: self.__dict__.copy()
+agentHeartbeat_result.__setstate__ = agentHeartbeat_result__setstate__
 
 class regConfig_args:
   """
@@ -10766,8 +10872,7 @@ class regConfig_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(regConfig_args)
 regConfig_args.thrift_spec = (
@@ -10863,8 +10968,7 @@ class regConfig_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(regConfig_result)
 regConfig_result.thrift_spec = (
@@ -10959,8 +11063,7 @@ class getConfig_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getConfig_args)
 getConfig_args.thrift_spec = (
@@ -11056,8 +11159,7 @@ class getConfig_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getConfig_result)
 getConfig_result.thrift_spec = (
@@ -11152,8 +11254,7 @@ class setConfig_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(setConfig_args)
 setConfig_args.thrift_spec = (
@@ -11249,8 +11350,7 @@ class setConfig_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(setConfig_result)
 setConfig_result.thrift_spec = (
@@ -11345,8 +11445,7 @@ class listConfigs_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listConfigs_args)
 listConfigs_args.thrift_spec = (
@@ -11442,8 +11541,7 @@ class listConfigs_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listConfigs_result)
 listConfigs_result.thrift_spec = (
@@ -11538,8 +11636,7 @@ class createSnapshot_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createSnapshot_args)
 createSnapshot_args.thrift_spec = (
@@ -11635,8 +11732,7 @@ class createSnapshot_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createSnapshot_result)
 createSnapshot_result.thrift_spec = (
@@ -11731,8 +11827,7 @@ class dropSnapshot_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropSnapshot_args)
 dropSnapshot_args.thrift_spec = (
@@ -11828,8 +11923,7 @@ class dropSnapshot_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropSnapshot_result)
 dropSnapshot_result.thrift_spec = (
@@ -11924,8 +12018,7 @@ class listSnapshots_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listSnapshots_args)
 listSnapshots_args.thrift_spec = (
@@ -12021,8 +12114,7 @@ class listSnapshots_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listSnapshots_result)
 listSnapshots_result.thrift_spec = (
@@ -12117,8 +12209,7 @@ class runAdminJob_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(runAdminJob_args)
 runAdminJob_args.thrift_spec = (
@@ -12214,8 +12305,7 @@ class runAdminJob_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(runAdminJob_result)
 runAdminJob_result.thrift_spec = (
@@ -12310,8 +12400,7 @@ class mergeZone_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(mergeZone_args)
 mergeZone_args.thrift_spec = (
@@ -12407,8 +12496,7 @@ class mergeZone_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(mergeZone_result)
 mergeZone_result.thrift_spec = (
@@ -12503,8 +12591,7 @@ class dropZone_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropZone_args)
 dropZone_args.thrift_spec = (
@@ -12600,8 +12687,7 @@ class dropZone_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropZone_result)
 dropZone_result.thrift_spec = (
@@ -12625,7 +12711,7 @@ def dropZone_result__setstate__(self, state):
 dropZone_result.__getstate__ = lambda self: self.__dict__.copy()
 dropZone_result.__setstate__ = dropZone_result__setstate__
 
-class splitZone_args:
+class divideZone_args:
   """
   Attributes:
    - req
@@ -12653,7 +12739,7 @@ class splitZone_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = SplitZoneReq()
+          self.req = DivideZoneReq()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -12669,7 +12755,7 @@ class splitZone_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('splitZone_args')
+    oprot.writeStructBegin('divideZone_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -12696,33 +12782,32 @@ class splitZone_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
-all_structs.append(splitZone_args)
-splitZone_args.thrift_spec = (
+all_structs.append(divideZone_args)
+divideZone_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [SplitZoneReq, SplitZoneReq.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [DivideZoneReq, DivideZoneReq.thrift_spec, False], None, 2, ), # 1
 )
 
-splitZone_args.thrift_struct_annotations = {
+divideZone_args.thrift_struct_annotations = {
 }
-splitZone_args.thrift_field_annotations = {
+divideZone_args.thrift_field_annotations = {
 }
 
-def splitZone_args__init__(self, req=None,):
+def divideZone_args__init__(self, req=None,):
   self.req = req
 
-splitZone_args.__init__ = splitZone_args__init__
+divideZone_args.__init__ = divideZone_args__init__
 
-def splitZone_args__setstate__(self, state):
+def divideZone_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-splitZone_args.__getstate__ = lambda self: self.__dict__.copy()
-splitZone_args.__setstate__ = splitZone_args__setstate__
+divideZone_args.__getstate__ = lambda self: self.__dict__.copy()
+divideZone_args.__setstate__ = divideZone_args__setstate__
 
-class splitZone_result:
+class divideZone_result:
   """
   Attributes:
    - success
@@ -12766,7 +12851,7 @@ class splitZone_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('splitZone_result')
+    oprot.writeStructBegin('divideZone_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -12793,30 +12878,29 @@ class splitZone_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
-all_structs.append(splitZone_result)
-splitZone_result.thrift_spec = (
+all_structs.append(divideZone_result)
+divideZone_result.thrift_spec = (
   (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
 )
 
-splitZone_result.thrift_struct_annotations = {
+divideZone_result.thrift_struct_annotations = {
 }
-splitZone_result.thrift_field_annotations = {
+divideZone_result.thrift_field_annotations = {
 }
 
-def splitZone_result__init__(self, success=None,):
+def divideZone_result__init__(self, success=None,):
   self.success = success
 
-splitZone_result.__init__ = splitZone_result__init__
+divideZone_result.__init__ = divideZone_result__init__
 
-def splitZone_result__setstate__(self, state):
+def divideZone_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-splitZone_result.__getstate__ = lambda self: self.__dict__.copy()
-splitZone_result.__setstate__ = splitZone_result__setstate__
+divideZone_result.__getstate__ = lambda self: self.__dict__.copy()
+divideZone_result.__setstate__ = divideZone_result__setstate__
 
 class renameZone_args:
   """
@@ -12889,8 +12973,7 @@ class renameZone_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(renameZone_args)
 renameZone_args.thrift_spec = (
@@ -12986,8 +13069,7 @@ class renameZone_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(renameZone_result)
 renameZone_result.thrift_spec = (
@@ -13082,8 +13164,7 @@ class getZone_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getZone_args)
 getZone_args.thrift_spec = (
@@ -13179,8 +13260,7 @@ class getZone_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getZone_result)
 getZone_result.thrift_spec = (
@@ -13275,8 +13355,7 @@ class listZones_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listZones_args)
 listZones_args.thrift_spec = (
@@ -13372,8 +13451,7 @@ class listZones_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listZones_result)
 listZones_result.thrift_spec = (
@@ -13396,392 +13474,6 @@ def listZones_result__setstate__(self, state):
 
 listZones_result.__getstate__ = lambda self: self.__dict__.copy()
 listZones_result.__setstate__ = listZones_result__setstate__
-
-class createBackup_args:
-  """
-  Attributes:
-   - req
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.req = CreateBackupReq()
-          self.req.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('createBackup_args')
-    if self.req != None:
-      oprot.writeFieldBegin('req', TType.STRUCT, 1)
-      self.req.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.req is not None:
-      value = pprint.pformat(self.req, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    req=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(createBackup_args)
-createBackup_args.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'req', [CreateBackupReq, CreateBackupReq.thrift_spec, False], None, 2, ), # 1
-)
-
-createBackup_args.thrift_struct_annotations = {
-}
-createBackup_args.thrift_field_annotations = {
-}
-
-def createBackup_args__init__(self, req=None,):
-  self.req = req
-
-createBackup_args.__init__ = createBackup_args__init__
-
-def createBackup_args__setstate__(self, state):
-  state.setdefault('req', None)
-  self.__dict__ = state
-
-createBackup_args.__getstate__ = lambda self: self.__dict__.copy()
-createBackup_args.__setstate__ = createBackup_args__setstate__
-
-class createBackup_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.STRUCT:
-          self.success = CreateBackupResp()
-          self.success.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('createBackup_result')
-    if self.success != None:
-      oprot.writeFieldBegin('success', TType.STRUCT, 0)
-      self.success.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.success is not None:
-      value = pprint.pformat(self.success, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    success=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(createBackup_result)
-createBackup_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [CreateBackupResp, CreateBackupResp.thrift_spec, False], None, 2, ), # 0
-)
-
-createBackup_result.thrift_struct_annotations = {
-}
-createBackup_result.thrift_field_annotations = {
-}
-
-def createBackup_result__init__(self, success=None,):
-  self.success = success
-
-createBackup_result.__init__ = createBackup_result__init__
-
-def createBackup_result__setstate__(self, state):
-  state.setdefault('success', None)
-  self.__dict__ = state
-
-createBackup_result.__getstate__ = lambda self: self.__dict__.copy()
-createBackup_result.__setstate__ = createBackup_result__setstate__
-
-class restoreMeta_args:
-  """
-  Attributes:
-   - req
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.req = RestoreMetaReq()
-          self.req.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('restoreMeta_args')
-    if self.req != None:
-      oprot.writeFieldBegin('req', TType.STRUCT, 1)
-      self.req.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.req is not None:
-      value = pprint.pformat(self.req, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    req=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(restoreMeta_args)
-restoreMeta_args.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'req', [RestoreMetaReq, RestoreMetaReq.thrift_spec, False], None, 2, ), # 1
-)
-
-restoreMeta_args.thrift_struct_annotations = {
-}
-restoreMeta_args.thrift_field_annotations = {
-}
-
-def restoreMeta_args__init__(self, req=None,):
-  self.req = req
-
-restoreMeta_args.__init__ = restoreMeta_args__init__
-
-def restoreMeta_args__setstate__(self, state):
-  state.setdefault('req', None)
-  self.__dict__ = state
-
-restoreMeta_args.__getstate__ = lambda self: self.__dict__.copy()
-restoreMeta_args.__setstate__ = restoreMeta_args__setstate__
-
-class restoreMeta_result:
-  """
-  Attributes:
-   - success
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 0:
-        if ftype == TType.STRUCT:
-          self.success = ExecResp()
-          self.success.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('restoreMeta_result')
-    if self.success != None:
-      oprot.writeFieldBegin('success', TType.STRUCT, 0)
-      self.success.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.success is not None:
-      value = pprint.pformat(self.success, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    success=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-all_structs.append(restoreMeta_result)
-restoreMeta_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
-)
-
-restoreMeta_result.thrift_struct_annotations = {
-}
-restoreMeta_result.thrift_field_annotations = {
-}
-
-def restoreMeta_result__init__(self, success=None,):
-  self.success = success
-
-restoreMeta_result.__init__ = restoreMeta_result__init__
-
-def restoreMeta_result__setstate__(self, state):
-  state.setdefault('success', None)
-  self.__dict__ = state
-
-restoreMeta_result.__getstate__ = lambda self: self.__dict__.copy()
-restoreMeta_result.__setstate__ = restoreMeta_result__setstate__
 
 class addListener_args:
   """
@@ -13854,8 +13546,7 @@ class addListener_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(addListener_args)
 addListener_args.thrift_spec = (
@@ -13951,8 +13642,7 @@ class addListener_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(addListener_result)
 addListener_result.thrift_spec = (
@@ -14047,8 +13737,7 @@ class removeListener_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(removeListener_args)
 removeListener_args.thrift_spec = (
@@ -14144,8 +13833,7 @@ class removeListener_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(removeListener_result)
 removeListener_result.thrift_spec = (
@@ -14240,8 +13928,7 @@ class listListener_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listListener_args)
 listListener_args.thrift_spec = (
@@ -14337,8 +14024,7 @@ class listListener_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listListener_result)
 listListener_result.thrift_spec = (
@@ -14433,8 +14119,7 @@ class getStats_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getStats_args)
 getStats_args.thrift_spec = (
@@ -14530,8 +14215,7 @@ class getStats_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getStats_result)
 getStats_result.thrift_spec = (
@@ -14626,8 +14310,7 @@ class signInFTService_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(signInFTService_args)
 signInFTService_args.thrift_spec = (
@@ -14723,8 +14406,7 @@ class signInFTService_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(signInFTService_result)
 signInFTService_result.thrift_spec = (
@@ -14819,8 +14501,7 @@ class signOutFTService_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(signOutFTService_args)
 signOutFTService_args.thrift_spec = (
@@ -14916,8 +14597,7 @@ class signOutFTService_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(signOutFTService_result)
 signOutFTService_result.thrift_spec = (
@@ -15012,8 +14692,7 @@ class listFTClients_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listFTClients_args)
 listFTClients_args.thrift_spec = (
@@ -15109,8 +14788,7 @@ class listFTClients_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listFTClients_result)
 listFTClients_result.thrift_spec = (
@@ -15205,8 +14883,7 @@ class createFTIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createFTIndex_args)
 createFTIndex_args.thrift_spec = (
@@ -15302,8 +14979,7 @@ class createFTIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createFTIndex_result)
 createFTIndex_result.thrift_spec = (
@@ -15398,8 +15074,7 @@ class dropFTIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropFTIndex_args)
 dropFTIndex_args.thrift_spec = (
@@ -15495,8 +15170,7 @@ class dropFTIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(dropFTIndex_result)
 dropFTIndex_result.thrift_spec = (
@@ -15591,8 +15265,7 @@ class listFTIndexes_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listFTIndexes_args)
 listFTIndexes_args.thrift_spec = (
@@ -15688,8 +15361,7 @@ class listFTIndexes_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listFTIndexes_result)
 listFTIndexes_result.thrift_spec = (
@@ -15784,8 +15456,7 @@ class createSession_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createSession_args)
 createSession_args.thrift_spec = (
@@ -15881,8 +15552,7 @@ class createSession_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(createSession_result)
 createSession_result.thrift_spec = (
@@ -15977,8 +15647,7 @@ class updateSessions_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(updateSessions_args)
 updateSessions_args.thrift_spec = (
@@ -16074,8 +15743,7 @@ class updateSessions_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(updateSessions_result)
 updateSessions_result.thrift_spec = (
@@ -16170,8 +15838,7 @@ class listSessions_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listSessions_args)
 listSessions_args.thrift_spec = (
@@ -16267,8 +15934,7 @@ class listSessions_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listSessions_result)
 listSessions_result.thrift_spec = (
@@ -16363,8 +16029,7 @@ class getSession_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getSession_args)
 getSession_args.thrift_spec = (
@@ -16460,8 +16125,7 @@ class getSession_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getSession_result)
 getSession_result.thrift_spec = (
@@ -16556,8 +16220,7 @@ class removeSession_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(removeSession_args)
 removeSession_args.thrift_spec = (
@@ -16653,8 +16316,7 @@ class removeSession_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(removeSession_result)
 removeSession_result.thrift_spec = (
@@ -16749,8 +16411,7 @@ class killQuery_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(killQuery_args)
 killQuery_args.thrift_spec = (
@@ -16846,8 +16507,7 @@ class killQuery_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(killQuery_result)
 killQuery_result.thrift_spec = (
@@ -16942,8 +16602,7 @@ class reportTaskFinish_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(reportTaskFinish_args)
 reportTaskFinish_args.thrift_spec = (
@@ -17039,8 +16698,7 @@ class reportTaskFinish_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(reportTaskFinish_result)
 reportTaskFinish_result.thrift_spec = (
@@ -17063,6 +16721,388 @@ def reportTaskFinish_result__setstate__(self, state):
 
 reportTaskFinish_result.__getstate__ = lambda self: self.__dict__.copy()
 reportTaskFinish_result.__setstate__ = reportTaskFinish_result__setstate__
+
+class createBackup_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = CreateBackupReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('createBackup_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(createBackup_args)
+createBackup_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [CreateBackupReq, CreateBackupReq.thrift_spec, False], None, 2, ), # 1
+)
+
+createBackup_args.thrift_struct_annotations = {
+}
+createBackup_args.thrift_field_annotations = {
+}
+
+def createBackup_args__init__(self, req=None,):
+  self.req = req
+
+createBackup_args.__init__ = createBackup_args__init__
+
+def createBackup_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+createBackup_args.__getstate__ = lambda self: self.__dict__.copy()
+createBackup_args.__setstate__ = createBackup_args__setstate__
+
+class createBackup_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = CreateBackupResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('createBackup_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(createBackup_result)
+createBackup_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [CreateBackupResp, CreateBackupResp.thrift_spec, False], None, 2, ), # 0
+)
+
+createBackup_result.thrift_struct_annotations = {
+}
+createBackup_result.thrift_field_annotations = {
+}
+
+def createBackup_result__init__(self, success=None,):
+  self.success = success
+
+createBackup_result.__init__ = createBackup_result__init__
+
+def createBackup_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+createBackup_result.__getstate__ = lambda self: self.__dict__.copy()
+createBackup_result.__setstate__ = createBackup_result__setstate__
+
+class restoreMeta_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = RestoreMetaReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('restoreMeta_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(restoreMeta_args)
+restoreMeta_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [RestoreMetaReq, RestoreMetaReq.thrift_spec, False], None, 2, ), # 1
+)
+
+restoreMeta_args.thrift_struct_annotations = {
+}
+restoreMeta_args.thrift_field_annotations = {
+}
+
+def restoreMeta_args__init__(self, req=None,):
+  self.req = req
+
+restoreMeta_args.__init__ = restoreMeta_args__init__
+
+def restoreMeta_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+restoreMeta_args.__getstate__ = lambda self: self.__dict__.copy()
+restoreMeta_args.__setstate__ = restoreMeta_args__setstate__
+
+class restoreMeta_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('restoreMeta_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(restoreMeta_result)
+restoreMeta_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+restoreMeta_result.thrift_struct_annotations = {
+}
+restoreMeta_result.thrift_field_annotations = {
+}
+
+def restoreMeta_result__init__(self, success=None,):
+  self.success = success
+
+restoreMeta_result.__init__ = restoreMeta_result__init__
+
+def restoreMeta_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+restoreMeta_result.__getstate__ = lambda self: self.__dict__.copy()
+restoreMeta_result.__setstate__ = restoreMeta_result__setstate__
 
 class listCluster_args:
   """
@@ -17135,8 +17175,7 @@ class listCluster_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listCluster_args)
 listCluster_args.thrift_spec = (
@@ -17232,8 +17271,7 @@ class listCluster_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(listCluster_result)
 listCluster_result.thrift_spec = (
@@ -17328,8 +17366,7 @@ class getMetaDirInfo_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getMetaDirInfo_args)
 getMetaDirInfo_args.thrift_spec = (
@@ -17425,8 +17462,7 @@ class getMetaDirInfo_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getMetaDirInfo_result)
 getMetaDirInfo_result.thrift_spec = (
@@ -17521,8 +17557,7 @@ class verifyClientVersion_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(verifyClientVersion_args)
 verifyClientVersion_args.thrift_spec = (
@@ -17618,8 +17653,7 @@ class verifyClientVersion_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(verifyClientVersion_result)
 verifyClientVersion_result.thrift_spec = (
@@ -19128,6 +19162,36 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "heartBeat failed: unknown result");
 
+  def agentHeartbeat(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_agentHeartbeat(req)
+    return self.recv_agentHeartbeat()
+
+  def send_agentHeartbeat(self, req=None):
+    self._oprot.writeMessageBegin('agentHeartbeat', TMessageType.CALL, self._seqid)
+    args = agentHeartbeat_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_agentHeartbeat(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = agentHeartbeat_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "agentHeartbeat failed: unknown result");
+
   def regConfig(self, req=None):
     """
     Parameters:
@@ -19428,35 +19492,35 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "dropZone failed: unknown result");
 
-  def splitZone(self, req=None):
+  def divideZone(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_splitZone(req)
-    return self.recv_splitZone()
+    self.send_divideZone(req)
+    return self.recv_divideZone()
 
-  def send_splitZone(self, req=None):
-    self._oprot.writeMessageBegin('splitZone', TMessageType.CALL, self._seqid)
-    args = splitZone_args()
+  def send_divideZone(self, req=None):
+    self._oprot.writeMessageBegin('divideZone', TMessageType.CALL, self._seqid)
+    args = divideZone_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_splitZone(self, ):
+  def recv_divideZone(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = splitZone_result()
+    result = divideZone_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "splitZone failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "divideZone failed: unknown result");
 
   def renameZone(self, req=None):
     """
@@ -19547,66 +19611,6 @@ class Client(Iface):
     if result.success != None:
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "listZones failed: unknown result");
-
-  def createBackup(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    self.send_createBackup(req)
-    return self.recv_createBackup()
-
-  def send_createBackup(self, req=None):
-    self._oprot.writeMessageBegin('createBackup', TMessageType.CALL, self._seqid)
-    args = createBackup_args()
-    args.req = req
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_createBackup(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = createBackup_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success != None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "createBackup failed: unknown result");
-
-  def restoreMeta(self, req=None):
-    """
-    Parameters:
-     - req
-    """
-    self.send_restoreMeta(req)
-    return self.recv_restoreMeta()
-
-  def send_restoreMeta(self, req=None):
-    self._oprot.writeMessageBegin('restoreMeta', TMessageType.CALL, self._seqid)
-    args = restoreMeta_args()
-    args.req = req
-    args.write(self._oprot)
-    self._oprot.writeMessageEnd()
-    self._oprot.trans.flush()
-
-  def recv_restoreMeta(self, ):
-    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
-    if mtype == TMessageType.EXCEPTION:
-      x = TApplicationException()
-      x.read(self._iprot)
-      self._iprot.readMessageEnd()
-      raise x
-    result = restoreMeta_result()
-    result.read(self._iprot)
-    self._iprot.readMessageEnd()
-    if result.success != None:
-      return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "restoreMeta failed: unknown result");
 
   def addListener(self, req=None):
     """
@@ -20118,6 +20122,66 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "reportTaskFinish failed: unknown result");
 
+  def createBackup(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_createBackup(req)
+    return self.recv_createBackup()
+
+  def send_createBackup(self, req=None):
+    self._oprot.writeMessageBegin('createBackup', TMessageType.CALL, self._seqid)
+    args = createBackup_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_createBackup(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = createBackup_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "createBackup failed: unknown result");
+
+  def restoreMeta(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_restoreMeta(req)
+    return self.recv_restoreMeta()
+
+  def send_restoreMeta(self, req=None):
+    self._oprot.writeMessageBegin('restoreMeta', TMessageType.CALL, self._seqid)
+    args = restoreMeta_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_restoreMeta(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = restoreMeta_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "restoreMeta failed: unknown result");
+
   def listCluster(self, req=None):
     """
     Parameters:
@@ -20315,6 +20379,8 @@ class Processor(Iface, TProcessor):
     self._priorityMap["changePassword"] = TPriority.NORMAL
     self._processMap["heartBeat"] = Processor.process_heartBeat
     self._priorityMap["heartBeat"] = TPriority.NORMAL
+    self._processMap["agentHeartbeat"] = Processor.process_agentHeartbeat
+    self._priorityMap["agentHeartbeat"] = TPriority.NORMAL
     self._processMap["regConfig"] = Processor.process_regConfig
     self._priorityMap["regConfig"] = TPriority.NORMAL
     self._processMap["getConfig"] = Processor.process_getConfig
@@ -20335,18 +20401,14 @@ class Processor(Iface, TProcessor):
     self._priorityMap["mergeZone"] = TPriority.NORMAL
     self._processMap["dropZone"] = Processor.process_dropZone
     self._priorityMap["dropZone"] = TPriority.NORMAL
-    self._processMap["splitZone"] = Processor.process_splitZone
-    self._priorityMap["splitZone"] = TPriority.NORMAL
+    self._processMap["divideZone"] = Processor.process_divideZone
+    self._priorityMap["divideZone"] = TPriority.NORMAL
     self._processMap["renameZone"] = Processor.process_renameZone
     self._priorityMap["renameZone"] = TPriority.NORMAL
     self._processMap["getZone"] = Processor.process_getZone
     self._priorityMap["getZone"] = TPriority.NORMAL
     self._processMap["listZones"] = Processor.process_listZones
     self._priorityMap["listZones"] = TPriority.NORMAL
-    self._processMap["createBackup"] = Processor.process_createBackup
-    self._priorityMap["createBackup"] = TPriority.NORMAL
-    self._processMap["restoreMeta"] = Processor.process_restoreMeta
-    self._priorityMap["restoreMeta"] = TPriority.NORMAL
     self._processMap["addListener"] = Processor.process_addListener
     self._priorityMap["addListener"] = TPriority.NORMAL
     self._processMap["removeListener"] = Processor.process_removeListener
@@ -20381,6 +20443,10 @@ class Processor(Iface, TProcessor):
     self._priorityMap["killQuery"] = TPriority.NORMAL
     self._processMap["reportTaskFinish"] = Processor.process_reportTaskFinish
     self._priorityMap["reportTaskFinish"] = TPriority.NORMAL
+    self._processMap["createBackup"] = Processor.process_createBackup
+    self._priorityMap["createBackup"] = TPriority.NORMAL
+    self._processMap["restoreMeta"] = Processor.process_restoreMeta
+    self._priorityMap["restoreMeta"] = TPriority.NORMAL
     self._processMap["listCluster"] = Processor.process_listCluster
     self._priorityMap["listCluster"] = TPriority.NORMAL
     self._processMap["getMetaDirInfo"] = Processor.process_getMetaDirInfo
@@ -20935,6 +21001,17 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(agentHeartbeat_args, oneway=False)
+  def process_agentHeartbeat(self, args, handler_ctx):
+    result = agentHeartbeat_result()
+    try:
+      result.success = self._handler.agentHeartbeat(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'agentHeartbeat', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
   @thrift_process_method(regConfig_args, oneway=False)
   def process_regConfig(self, args, handler_ctx):
     result = regConfig_result()
@@ -21045,14 +21122,14 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(splitZone_args, oneway=False)
-  def process_splitZone(self, args, handler_ctx):
-    result = splitZone_result()
+  @thrift_process_method(divideZone_args, oneway=False)
+  def process_divideZone(self, args, handler_ctx):
+    result = divideZone_result()
     try:
-      result.success = self._handler.splitZone(args.req)
+      result.success = self._handler.divideZone(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'splitZone', ex)
+      self._event_handler.handlerError(handler_ctx, 'divideZone', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -21086,28 +21163,6 @@ class Processor(Iface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'listZones', ex)
-      result = Thrift.TApplicationException(message=repr(ex))
-    return result
-
-  @thrift_process_method(createBackup_args, oneway=False)
-  def process_createBackup(self, args, handler_ctx):
-    result = createBackup_result()
-    try:
-      result.success = self._handler.createBackup(args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'createBackup', ex)
-      result = Thrift.TApplicationException(message=repr(ex))
-    return result
-
-  @thrift_process_method(restoreMeta_args, oneway=False)
-  def process_restoreMeta(self, args, handler_ctx):
-    result = restoreMeta_result()
-    try:
-      result.success = self._handler.restoreMeta(args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'restoreMeta', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -21298,6 +21353,28 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(createBackup_args, oneway=False)
+  def process_createBackup(self, args, handler_ctx):
+    result = createBackup_result()
+    try:
+      result.success = self._handler.createBackup(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'createBackup', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(restoreMeta_args, oneway=False)
+  def process_restoreMeta(self, args, handler_ctx):
+    result = restoreMeta_result()
+    try:
+      result.success = self._handler.restoreMeta(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'restoreMeta', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
   @thrift_process_method(listCluster_args, oneway=False)
   def process_listCluster(self, args, handler_ctx):
     result = listCluster_result()
@@ -21439,6 +21516,8 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["changePassword"] = TPriority.NORMAL
     self._processMap["heartBeat"] = ContextProcessor.process_heartBeat
     self._priorityMap["heartBeat"] = TPriority.NORMAL
+    self._processMap["agentHeartbeat"] = ContextProcessor.process_agentHeartbeat
+    self._priorityMap["agentHeartbeat"] = TPriority.NORMAL
     self._processMap["regConfig"] = ContextProcessor.process_regConfig
     self._priorityMap["regConfig"] = TPriority.NORMAL
     self._processMap["getConfig"] = ContextProcessor.process_getConfig
@@ -21459,18 +21538,14 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["mergeZone"] = TPriority.NORMAL
     self._processMap["dropZone"] = ContextProcessor.process_dropZone
     self._priorityMap["dropZone"] = TPriority.NORMAL
-    self._processMap["splitZone"] = ContextProcessor.process_splitZone
-    self._priorityMap["splitZone"] = TPriority.NORMAL
+    self._processMap["divideZone"] = ContextProcessor.process_divideZone
+    self._priorityMap["divideZone"] = TPriority.NORMAL
     self._processMap["renameZone"] = ContextProcessor.process_renameZone
     self._priorityMap["renameZone"] = TPriority.NORMAL
     self._processMap["getZone"] = ContextProcessor.process_getZone
     self._priorityMap["getZone"] = TPriority.NORMAL
     self._processMap["listZones"] = ContextProcessor.process_listZones
     self._priorityMap["listZones"] = TPriority.NORMAL
-    self._processMap["createBackup"] = ContextProcessor.process_createBackup
-    self._priorityMap["createBackup"] = TPriority.NORMAL
-    self._processMap["restoreMeta"] = ContextProcessor.process_restoreMeta
-    self._priorityMap["restoreMeta"] = TPriority.NORMAL
     self._processMap["addListener"] = ContextProcessor.process_addListener
     self._priorityMap["addListener"] = TPriority.NORMAL
     self._processMap["removeListener"] = ContextProcessor.process_removeListener
@@ -21505,6 +21580,10 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["killQuery"] = TPriority.NORMAL
     self._processMap["reportTaskFinish"] = ContextProcessor.process_reportTaskFinish
     self._priorityMap["reportTaskFinish"] = TPriority.NORMAL
+    self._processMap["createBackup"] = ContextProcessor.process_createBackup
+    self._priorityMap["createBackup"] = TPriority.NORMAL
+    self._processMap["restoreMeta"] = ContextProcessor.process_restoreMeta
+    self._priorityMap["restoreMeta"] = TPriority.NORMAL
     self._processMap["listCluster"] = ContextProcessor.process_listCluster
     self._priorityMap["listCluster"] = TPriority.NORMAL
     self._processMap["getMetaDirInfo"] = ContextProcessor.process_getMetaDirInfo
@@ -22059,6 +22138,17 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(agentHeartbeat_args, oneway=False)
+  def process_agentHeartbeat(self, args, handler_ctx):
+    result = agentHeartbeat_result()
+    try:
+      result.success = self._handler.agentHeartbeat(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'agentHeartbeat', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
   @thrift_process_method(regConfig_args, oneway=False)
   def process_regConfig(self, args, handler_ctx):
     result = regConfig_result()
@@ -22169,14 +22259,14 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(splitZone_args, oneway=False)
-  def process_splitZone(self, args, handler_ctx):
-    result = splitZone_result()
+  @thrift_process_method(divideZone_args, oneway=False)
+  def process_divideZone(self, args, handler_ctx):
+    result = divideZone_result()
     try:
-      result.success = self._handler.splitZone(handler_ctx, args.req)
+      result.success = self._handler.divideZone(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'splitZone', ex)
+      self._event_handler.handlerError(handler_ctx, 'divideZone', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -22210,28 +22300,6 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'listZones', ex)
-      result = Thrift.TApplicationException(message=repr(ex))
-    return result
-
-  @thrift_process_method(createBackup_args, oneway=False)
-  def process_createBackup(self, args, handler_ctx):
-    result = createBackup_result()
-    try:
-      result.success = self._handler.createBackup(handler_ctx, args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'createBackup', ex)
-      result = Thrift.TApplicationException(message=repr(ex))
-    return result
-
-  @thrift_process_method(restoreMeta_args, oneway=False)
-  def process_restoreMeta(self, args, handler_ctx):
-    result = restoreMeta_result()
-    try:
-      result.success = self._handler.restoreMeta(handler_ctx, args.req)
-    except:
-      ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'restoreMeta', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -22419,6 +22487,28 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'reportTaskFinish', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(createBackup_args, oneway=False)
+  def process_createBackup(self, args, handler_ctx):
+    result = createBackup_result()
+    try:
+      result.success = self._handler.createBackup(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'createBackup', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(restoreMeta_args, oneway=False)
+  def process_restoreMeta(self, args, handler_ctx):
+    result = restoreMeta_result()
+    try:
+      result.success = self._handler.restoreMeta(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'restoreMeta', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
