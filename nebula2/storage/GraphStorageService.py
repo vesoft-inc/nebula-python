@@ -6,7 +6,6 @@
 #
 
 from __future__ import absolute_import
-import six
 import sys
 from nebula2.fbthrift.util.Recursive import fix_spec
 from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestContext, TProcessorEventHandler, TServerInterface, TProcessor, TException, TApplicationException, UnimplementedTypedef
@@ -386,8 +385,7 @@ class getNeighbors_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getNeighbors_args)
 getNeighbors_args.thrift_spec = (
@@ -483,8 +481,7 @@ class getNeighbors_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getNeighbors_result)
 getNeighbors_result.thrift_spec = (
@@ -579,8 +576,7 @@ class getProps_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getProps_args)
 getProps_args.thrift_spec = (
@@ -676,8 +672,7 @@ class getProps_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getProps_result)
 getProps_result.thrift_spec = (
@@ -772,8 +767,7 @@ class addVertices_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(addVertices_args)
 addVertices_args.thrift_spec = (
@@ -869,8 +863,7 @@ class addVertices_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(addVertices_result)
 addVertices_result.thrift_spec = (
@@ -965,8 +958,7 @@ class addEdges_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(addEdges_args)
 addEdges_args.thrift_spec = (
@@ -1062,8 +1054,7 @@ class addEdges_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(addEdges_result)
 addEdges_result.thrift_spec = (
@@ -1158,8 +1149,7 @@ class deleteEdges_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(deleteEdges_args)
 deleteEdges_args.thrift_spec = (
@@ -1255,8 +1245,7 @@ class deleteEdges_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(deleteEdges_result)
 deleteEdges_result.thrift_spec = (
@@ -1351,8 +1340,7 @@ class deleteVertices_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(deleteVertices_args)
 deleteVertices_args.thrift_spec = (
@@ -1448,8 +1436,7 @@ class deleteVertices_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(deleteVertices_result)
 deleteVertices_result.thrift_spec = (
@@ -1544,8 +1531,7 @@ class deleteTags_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(deleteTags_args)
 deleteTags_args.thrift_spec = (
@@ -1641,8 +1627,7 @@ class deleteTags_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(deleteTags_result)
 deleteTags_result.thrift_spec = (
@@ -1737,8 +1722,7 @@ class updateVertex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(updateVertex_args)
 updateVertex_args.thrift_spec = (
@@ -1834,8 +1818,7 @@ class updateVertex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(updateVertex_result)
 updateVertex_result.thrift_spec = (
@@ -1930,8 +1913,7 @@ class updateEdge_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(updateEdge_args)
 updateEdge_args.thrift_spec = (
@@ -2027,8 +2009,7 @@ class updateEdge_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(updateEdge_result)
 updateEdge_result.thrift_spec = (
@@ -2123,8 +2104,7 @@ class scanVertex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(scanVertex_args)
 scanVertex_args.thrift_spec = (
@@ -2220,8 +2200,7 @@ class scanVertex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(scanVertex_result)
 scanVertex_result.thrift_spec = (
@@ -2316,8 +2295,7 @@ class scanEdge_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(scanEdge_args)
 scanEdge_args.thrift_spec = (
@@ -2413,8 +2391,7 @@ class scanEdge_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(scanEdge_result)
 scanEdge_result.thrift_spec = (
@@ -2509,8 +2486,7 @@ class getUUID_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getUUID_args)
 getUUID_args.thrift_spec = (
@@ -2606,8 +2582,7 @@ class getUUID_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(getUUID_result)
 getUUID_result.thrift_spec = (
@@ -2702,8 +2677,7 @@ class lookupIndex_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(lookupIndex_args)
 lookupIndex_args.thrift_spec = (
@@ -2799,8 +2773,7 @@ class lookupIndex_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(lookupIndex_result)
 lookupIndex_result.thrift_spec = (
@@ -2895,8 +2868,7 @@ class lookupAndTraverse_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(lookupAndTraverse_args)
 lookupAndTraverse_args.thrift_spec = (
@@ -2992,8 +2964,7 @@ class lookupAndTraverse_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(lookupAndTraverse_result)
 lookupAndTraverse_result.thrift_spec = (
@@ -3088,8 +3059,7 @@ class chainUpdateEdge_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(chainUpdateEdge_args)
 chainUpdateEdge_args.thrift_spec = (
@@ -3185,8 +3155,7 @@ class chainUpdateEdge_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(chainUpdateEdge_result)
 chainUpdateEdge_result.thrift_spec = (
@@ -3281,8 +3250,7 @@ class chainAddEdges_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(chainAddEdges_args)
 chainAddEdges_args.thrift_spec = (
@@ -3378,8 +3346,7 @@ class chainAddEdges_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(chainAddEdges_result)
 chainAddEdges_result.thrift_spec = (
@@ -3474,8 +3441,7 @@ class get_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(get_args)
 get_args.thrift_spec = (
@@ -3571,8 +3537,7 @@ class get_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(get_result)
 get_result.thrift_spec = (
@@ -3667,8 +3632,7 @@ class put_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(put_args)
 put_args.thrift_spec = (
@@ -3764,8 +3728,7 @@ class put_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(put_result)
 put_result.thrift_spec = (
@@ -3860,8 +3823,7 @@ class remove_args:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(remove_args)
 remove_args.thrift_spec = (
@@ -3957,8 +3919,7 @@ class remove_result:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(remove_result)
 remove_result.thrift_spec = (

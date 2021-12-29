@@ -6,7 +6,6 @@
 #
 
 from __future__ import absolute_import
-import six
 import sys
 from nebula2.fbthrift.util.Recursive import fix_spec
 from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestContext, TProcessorEventHandler, TServerInterface, TProcessor, TException, TApplicationException, UnimplementedTypedef
@@ -29,7 +28,7 @@ except ImportError:
 all_structs = []
 UTF8STRINGS = bool(0) or sys.version_info.major >= 3
 
-__all__ = ['UTF8STRINGS', 'NullType', 'PropertyType', 'ErrorCode', 'SchemaID', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Coordinate', 'Point', 'LineString', 'Polygon', 'Geography', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'Duration', 'LogInfo', 'DirInfo', 'NodeInfo', 'PartitionBackupInfo', 'CheckpointInfo', 'LogEntry', 'ClusterID', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
+__all__ = ['UTF8STRINGS', 'NullType', 'PropertyType', 'ErrorCode', 'SchemaID', 'Date', 'Time', 'DateTime', 'Value', 'NList', 'NMap', 'NSet', 'Row', 'DataSet', 'Coordinate', 'Point', 'LineString', 'Polygon', 'Geography', 'Tag', 'Vertex', 'Edge', 'Step', 'Path', 'HostAddr', 'KeyValue', 'Duration', 'LogInfo', 'DirInfo', 'CheckpointInfo', 'LogEntry', 'ClusterID', 'GraphSpaceID', 'PartitionID', 'TagID', 'EdgeType', 'EdgeRanking', 'LogID', 'TermID', 'Timestamp', 'IndexID', 'Port', 'SessionID', 'ExecutionPlanID']
 
 class NullType:
   __NULL__ = 0
@@ -204,6 +203,7 @@ class ErrorCode:
   E_LIST_CLUSTER_GET_ABS_PATH_FAILURE = -2071
   E_GET_META_DIR_FAILURE = -2072
   E_QUERY_NOT_FOUND = -2073
+  E_AGENT_HB_FAILUE = -2074
   E_CONSENSUS_ERROR = -3001
   E_KEY_HAS_EXISTS = -3002
   E_DATA_TYPE_MISMATCH = -3003
@@ -327,6 +327,7 @@ class ErrorCode:
     -2071: "E_LIST_CLUSTER_GET_ABS_PATH_FAILURE",
     -2072: "E_GET_META_DIR_FAILURE",
     -2073: "E_QUERY_NOT_FOUND",
+    -2074: "E_AGENT_HB_FAILUE",
     -3001: "E_CONSENSUS_ERROR",
     -3002: "E_KEY_HAS_EXISTS",
     -3003: "E_DATA_TYPE_MISMATCH",
@@ -451,6 +452,7 @@ class ErrorCode:
     "E_LIST_CLUSTER_GET_ABS_PATH_FAILURE": -2071,
     "E_GET_META_DIR_FAILURE": -2072,
     "E_QUERY_NOT_FOUND": -2073,
+    "E_AGENT_HB_FAILUE": -2074,
     "E_CONSENSUS_ERROR": -3001,
     "E_KEY_HAS_EXISTS": -3002,
     "E_DATA_TYPE_MISMATCH": -3003,
@@ -705,8 +707,7 @@ class Date:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Time:
   """
@@ -820,8 +821,7 @@ class Time:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class DateTime:
   """
@@ -977,8 +977,7 @@ class DateTime:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Value(object):
   """
@@ -999,6 +998,7 @@ class Value(object):
    - uVal
    - gVal
    - ggVal
+   - duVal
   """
 
   thrift_spec = None
@@ -1021,6 +1021,7 @@ class Value(object):
   UVAL = 14
   GVAL = 15
   GGVAL = 16
+  DUVAL = 17
   
   @staticmethod
   def isUnion():
@@ -1090,6 +1091,10 @@ class Value(object):
     assert self.field == 16
     return self.value
 
+  def get_duVal(self):
+    assert self.field == 17
+    return self.value
+
   def set_nVal(self, value):
     self.field = 1
     self.value = value
@@ -1152,6 +1157,10 @@ class Value(object):
 
   def set_ggVal(self, value):
     self.field = 16
+    self.value = value
+
+  def set_duVal(self, value):
+    self.field = 17
     self.value = value
 
   def getType(self):
@@ -1224,6 +1233,10 @@ class Value(object):
       padding = ' ' * 6
       value = padding.join(value.splitlines(True))
       member = '\n    %s=%s' % ('ggVal', value)
+    if self.field == 17:
+      padding = ' ' * 6
+      value = padding.join(value.splitlines(True))
+      member = '\n    %s=%s' % ('duVal', value)
     return "%s(%s)" % (self.__class__.__name__, member)
 
   def read(self, iprot):
@@ -1364,6 +1377,14 @@ class Value(object):
           self.set_ggVal(ggVal)
         else:
           iprot.skip(ftype)
+      elif fid == 17:
+        if ftype == TType.STRUCT:
+          duVal = Duration()
+          duVal.read(iprot)
+          assert self.field == 0 and self.value is None
+          self.set_duVal(duVal)
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -1457,6 +1478,11 @@ class Value(object):
       ggVal = self.value
       ggVal.write(oprot)
       oprot.writeFieldEnd()
+    if self.field == 17:
+      oprot.writeFieldBegin('duVal', TType.STRUCT, 17)
+      duVal = self.value
+      duVal.write(oprot)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeUnionEnd()
   
@@ -1500,7 +1526,7 @@ class NList:
           self.values = []
           (_etype3, _size0) = iprot.readListBegin()
           if _size0 >= 0:
-            for _i4 in six.moves.range(_size0):
+            for _i4 in range(_size0):
               _elem5 = Value()
               _elem5.read(iprot)
               self.values.append(_elem5)
@@ -1554,8 +1580,7 @@ class NList:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class NMap:
   """
@@ -1588,7 +1613,7 @@ class NMap:
           self.kvs = {}
           (_ktype9, _vtype10, _size8 ) = iprot.readMapBegin() 
           if _size8 >= 0:
-            for _i12 in six.moves.range(_size8):
+            for _i12 in range(_size8):
               _key13 = iprot.readString()
               _val14 = Value()
               _val14.read(iprot)
@@ -1645,8 +1670,7 @@ class NMap:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class NSet:
   """
@@ -1679,7 +1703,7 @@ class NSet:
           self.values = set()
           (_etype22, _size19) = iprot.readSetBegin()
           if _size19 >= 0:
-            for _i23 in six.moves.range(_size19):
+            for _i23 in range(_size19):
               _elem24 = Value()
               _elem24.read(iprot)
               self.values.add(_elem24)
@@ -1733,8 +1757,7 @@ class NSet:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Row:
   """
@@ -1767,7 +1790,7 @@ class Row:
           self.values = []
           (_etype30, _size27) = iprot.readListBegin()
           if _size27 >= 0:
-            for _i31 in six.moves.range(_size27):
+            for _i31 in range(_size27):
               _elem32 = Value()
               _elem32.read(iprot)
               self.values.append(_elem32)
@@ -1821,8 +1844,7 @@ class Row:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class DataSet:
   """
@@ -1856,7 +1878,7 @@ class DataSet:
           self.column_names = []
           (_etype38, _size35) = iprot.readListBegin()
           if _size35 >= 0:
-            for _i39 in six.moves.range(_size35):
+            for _i39 in range(_size35):
               _elem40 = iprot.readString()
               self.column_names.append(_elem40)
           else: 
@@ -1871,7 +1893,7 @@ class DataSet:
           self.rows = []
           (_etype45, _size42) = iprot.readListBegin()
           if _size42 >= 0:
-            for _i46 in six.moves.range(_size42):
+            for _i46 in range(_size42):
               _elem47 = Row()
               _elem47.read(iprot)
               self.rows.append(_elem47)
@@ -1936,8 +1958,7 @@ class DataSet:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Coordinate:
   """
@@ -2023,8 +2044,7 @@ class Coordinate:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Point:
   """
@@ -2097,8 +2117,7 @@ class Point:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class LineString:
   """
@@ -2131,7 +2150,7 @@ class LineString:
           self.coordList = []
           (_etype54, _size51) = iprot.readListBegin()
           if _size51 >= 0:
-            for _i55 in six.moves.range(_size51):
+            for _i55 in range(_size51):
               _elem56 = Coordinate()
               _elem56.read(iprot)
               self.coordList.append(_elem56)
@@ -2185,8 +2204,7 @@ class LineString:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Polygon:
   """
@@ -2219,11 +2237,11 @@ class Polygon:
           self.coordListList = []
           (_etype62, _size59) = iprot.readListBegin()
           if _size59 >= 0:
-            for _i63 in six.moves.range(_size59):
+            for _i63 in range(_size59):
               _elem64 = []
               (_etype68, _size65) = iprot.readListBegin()
               if _size65 >= 0:
-                for _i69 in six.moves.range(_size65):
+                for _i69 in range(_size65):
                   _elem70 = Coordinate()
                   _elem70.read(iprot)
                   _elem64.append(_elem70)
@@ -2239,7 +2257,7 @@ class Polygon:
               _elem72 = []
               (_etype76, _size73) = iprot.readListBegin()
               if _size73 >= 0:
-                for _i77 in six.moves.range(_size73):
+                for _i77 in range(_size73):
                   _elem78 = Coordinate()
                   _elem78.read(iprot)
                   _elem72.append(_elem78)
@@ -2298,8 +2316,7 @@ class Polygon:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Geography(object):
   """
@@ -2481,7 +2498,7 @@ class Tag:
           self.props = {}
           (_ktype83, _vtype84, _size82 ) = iprot.readMapBegin() 
           if _size82 >= 0:
-            for _i86 in six.moves.range(_size82):
+            for _i86 in range(_size82):
               _key87 = iprot.readString()
               _val88 = Value()
               _val88.read(iprot)
@@ -2546,8 +2563,7 @@ class Tag:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Vertex:
   """
@@ -2587,7 +2603,7 @@ class Vertex:
           self.tags = []
           (_etype96, _size93) = iprot.readListBegin()
           if _size93 >= 0:
-            for _i97 in six.moves.range(_size93):
+            for _i97 in range(_size93):
               _elem98 = Tag()
               _elem98.read(iprot)
               self.tags.append(_elem98)
@@ -2649,8 +2665,7 @@ class Vertex:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Edge:
   """
@@ -2715,7 +2730,7 @@ class Edge:
           self.props = {}
           (_ktype102, _vtype103, _size101 ) = iprot.readMapBegin() 
           if _size101 >= 0:
-            for _i105 in six.moves.range(_size101):
+            for _i105 in range(_size101):
               _key106 = iprot.readString()
               _val107 = Value()
               _val107.read(iprot)
@@ -2812,8 +2827,7 @@ class Edge:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Step:
   """
@@ -2871,7 +2885,7 @@ class Step:
           self.props = {}
           (_ktype113, _vtype114, _size112 ) = iprot.readMapBegin() 
           if _size112 >= 0:
-            for _i116 in six.moves.range(_size112):
+            for _i116 in range(_size112):
               _key117 = iprot.readString()
               _val118 = Value()
               _val118.read(iprot)
@@ -2960,8 +2974,7 @@ class Step:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Path:
   """
@@ -3001,7 +3014,7 @@ class Path:
           self.steps = []
           (_etype126, _size123) = iprot.readListBegin()
           if _size123 >= 0:
-            for _i127 in six.moves.range(_size123):
+            for _i127 in range(_size123):
               _elem128 = Step()
               _elem128.read(iprot)
               self.steps.append(_elem128)
@@ -3063,8 +3076,7 @@ class Path:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class HostAddr:
   """
@@ -3150,8 +3162,7 @@ class HostAddr:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class KeyValue:
   """
@@ -3237,8 +3248,7 @@ class KeyValue:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Duration:
   """
@@ -3338,8 +3348,7 @@ class Duration:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class LogInfo:
   """
@@ -3425,8 +3434,7 @@ class LogInfo:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class DirInfo:
   """
@@ -3465,7 +3473,7 @@ class DirInfo:
           self.data = []
           (_etype134, _size131) = iprot.readListBegin()
           if _size131 >= 0:
-            for _i135 in six.moves.range(_size131):
+            for _i135 in range(_size131):
               _elem136 = iprot.readString()
               self.data.append(_elem136)
           else: 
@@ -3525,193 +3533,13 @@ class DirInfo:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-class NodeInfo:
-  """
-  Attributes:
-   - host
-   - dir
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.STRUCT:
-          self.host = HostAddr()
-          self.host.read(iprot)
-        else:
-          iprot.skip(ftype)
-      elif fid == 2:
-        if ftype == TType.STRUCT:
-          self.dir = DirInfo()
-          self.dir.read(iprot)
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('NodeInfo')
-    if self.host != None:
-      oprot.writeFieldBegin('host', TType.STRUCT, 1)
-      self.host.write(oprot)
-      oprot.writeFieldEnd()
-    if self.dir != None:
-      oprot.writeFieldBegin('dir', TType.STRUCT, 2)
-      self.dir.write(oprot)
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.host is not None:
-      value = pprint.pformat(self.host, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    host=%s' % (value))
-    if self.dir is not None:
-      value = pprint.pformat(self.dir, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    dir=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
-
-class PartitionBackupInfo:
-  """
-  Attributes:
-   - info
-  """
-
-  thrift_spec = None
-  thrift_field_annotations = None
-  thrift_struct_annotations = None
-  __init__ = None
-  @staticmethod
-  def isUnion():
-    return False
-
-  def read(self, iprot):
-    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
-      return
-    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
-      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
-      return
-    iprot.readStructBegin()
-    while True:
-      (fname, ftype, fid) = iprot.readFieldBegin()
-      if ftype == TType.STOP:
-        break
-      if fid == 1:
-        if ftype == TType.MAP:
-          self.info = {}
-          (_ktype140, _vtype141, _size139 ) = iprot.readMapBegin() 
-          if _size139 >= 0:
-            for _i143 in six.moves.range(_size139):
-              _key144 = iprot.readI32()
-              _val145 = LogInfo()
-              _val145.read(iprot)
-              self.info[_key144] = _val145
-          else: 
-            while iprot.peekMap():
-              _key146 = iprot.readI32()
-              _val147 = LogInfo()
-              _val147.read(iprot)
-              self.info[_key146] = _val147
-          iprot.readMapEnd()
-        else:
-          iprot.skip(ftype)
-      else:
-        iprot.skip(ftype)
-      iprot.readFieldEnd()
-    iprot.readStructEnd()
-
-  def write(self, oprot):
-    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
-      return
-    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
-      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
-      return
-    oprot.writeStructBegin('PartitionBackupInfo')
-    if self.info != None:
-      oprot.writeFieldBegin('info', TType.MAP, 1)
-      oprot.writeMapBegin(TType.I32, TType.STRUCT, len(self.info))
-      for kiter148,viter149 in self.info.items():
-        oprot.writeI32(kiter148)
-        viter149.write(oprot)
-      oprot.writeMapEnd()
-      oprot.writeFieldEnd()
-    oprot.writeFieldStop()
-    oprot.writeStructEnd()
-
-  def __repr__(self):
-    L = []
-    padding = ' ' * 4
-    if self.info is not None:
-      value = pprint.pformat(self.info, indent=0)
-      value = padding.join(value.splitlines(True))
-      L.append('    info=%s' % (value))
-    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
-
-  def __eq__(self, other):
-    if not isinstance(other, self.__class__):
-      return False
-
-    return self.__dict__ == other.__dict__ 
-
-  def __ne__(self, other):
-    return not (self == other)
-
-  # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class CheckpointInfo:
   """
   Attributes:
-   - partition_info
+   - space_id
+   - parts
    - path
   """
 
@@ -3736,12 +3564,30 @@ class CheckpointInfo:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.STRUCT:
-          self.partition_info = PartitionBackupInfo()
-          self.partition_info.read(iprot)
+        if ftype == TType.I32:
+          self.space_id = iprot.readI32()
         else:
           iprot.skip(ftype)
       elif fid == 2:
+        if ftype == TType.MAP:
+          self.parts = {}
+          (_ktype140, _vtype141, _size139 ) = iprot.readMapBegin() 
+          if _size139 >= 0:
+            for _i143 in range(_size139):
+              _key144 = iprot.readI32()
+              _val145 = LogInfo()
+              _val145.read(iprot)
+              self.parts[_key144] = _val145
+          else: 
+            while iprot.peekMap():
+              _key146 = iprot.readI32()
+              _val147 = LogInfo()
+              _val147.read(iprot)
+              self.parts[_key146] = _val147
+          iprot.readMapEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
         if ftype == TType.STRING:
           self.path = iprot.readString()
         else:
@@ -3759,12 +3605,20 @@ class CheckpointInfo:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
     oprot.writeStructBegin('CheckpointInfo')
-    if self.partition_info != None:
-      oprot.writeFieldBegin('partition_info', TType.STRUCT, 1)
-      self.partition_info.write(oprot)
+    if self.space_id != None:
+      oprot.writeFieldBegin('space_id', TType.I32, 1)
+      oprot.writeI32(self.space_id)
+      oprot.writeFieldEnd()
+    if self.parts != None:
+      oprot.writeFieldBegin('parts', TType.MAP, 2)
+      oprot.writeMapBegin(TType.I32, TType.STRUCT, len(self.parts))
+      for kiter148,viter149 in self.parts.items():
+        oprot.writeI32(kiter148)
+        viter149.write(oprot)
+      oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.path != None:
-      oprot.writeFieldBegin('path', TType.STRING, 2)
+      oprot.writeFieldBegin('path', TType.STRING, 3)
       oprot.writeString(self.path)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -3773,10 +3627,14 @@ class CheckpointInfo:
   def __repr__(self):
     L = []
     padding = ' ' * 4
-    if self.partition_info is not None:
-      value = pprint.pformat(self.partition_info, indent=0)
+    if self.space_id is not None:
+      value = pprint.pformat(self.space_id, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    partition_info=%s' % (value))
+      L.append('    space_id=%s' % (value))
+    if self.parts is not None:
+      value = pprint.pformat(self.parts, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    parts=%s' % (value))
     if self.path is not None:
       value = pprint.pformat(self.path, indent=0)
       value = padding.join(value.splitlines(True))
@@ -3793,8 +3651,7 @@ class CheckpointInfo:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class LogEntry:
   """
@@ -3880,8 +3737,7 @@ class LogEntry:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 ClusterID = UnimplementedTypedef()
 GraphSpaceID = UnimplementedTypedef()
@@ -4046,6 +3902,7 @@ Value.thrift_spec = (
   (14, TType.STRUCT, 'uVal', [NSet, NSet.thrift_spec, False], None, 2, ), # 14
   (15, TType.STRUCT, 'gVal', [DataSet, DataSet.thrift_spec, False], None, 2, ), # 15
   (16, TType.STRUCT, 'ggVal', [Geography, Geography.thrift_spec, True], None, 2, ), # 16
+  (17, TType.STRUCT, 'duVal', [Duration, Duration.thrift_spec, False], None, 2, ), # 17
 )
 
 Value.thrift_struct_annotations = {
@@ -4076,9 +3933,12 @@ Value.thrift_field_annotations = {
   16: {
     "cpp.ref_type": "unique",
   },
+  17: {
+    "cpp.ref_type": "unique",
+  },
 }
 
-def Value__init__(self, nVal=None, bVal=None, iVal=None, fVal=None, sVal=None, dVal=None, tVal=None, dtVal=None, vVal=None, eVal=None, pVal=None, lVal=None, mVal=None, uVal=None, gVal=None, ggVal=None,):
+def Value__init__(self, nVal=None, bVal=None, iVal=None, fVal=None, sVal=None, dVal=None, tVal=None, dtVal=None, vVal=None, eVal=None, pVal=None, lVal=None, mVal=None, uVal=None, gVal=None, ggVal=None, duVal=None,):
   self.field = 0
   self.value = None
   if nVal is not None:
@@ -4145,6 +4005,10 @@ def Value__init__(self, nVal=None, bVal=None, iVal=None, fVal=None, sVal=None, d
     assert self.field == 0 and self.value is None
     self.field = 16
     self.value = ggVal
+  if duVal is not None:
+    assert self.field == 0 and self.value is None
+    self.field = 17
+    self.value = duVal
 
 Value.__init__ = Value__init__
 
@@ -4703,60 +4567,12 @@ def DirInfo__setstate__(self, state):
 DirInfo.__getstate__ = lambda self: self.__dict__.copy()
 DirInfo.__setstate__ = DirInfo__setstate__
 
-all_structs.append(NodeInfo)
-NodeInfo.thrift_spec = (
-  None, # 0
-  (1, TType.STRUCT, 'host', [HostAddr, HostAddr.thrift_spec, False], None, 2, ), # 1
-  (2, TType.STRUCT, 'dir', [DirInfo, DirInfo.thrift_spec, False], None, 2, ), # 2
-)
-
-NodeInfo.thrift_struct_annotations = {
-}
-NodeInfo.thrift_field_annotations = {
-}
-
-def NodeInfo__init__(self, host=None, dir=None,):
-  self.host = host
-  self.dir = dir
-
-NodeInfo.__init__ = NodeInfo__init__
-
-def NodeInfo__setstate__(self, state):
-  state.setdefault('host', None)
-  state.setdefault('dir', None)
-  self.__dict__ = state
-
-NodeInfo.__getstate__ = lambda self: self.__dict__.copy()
-NodeInfo.__setstate__ = NodeInfo__setstate__
-
-all_structs.append(PartitionBackupInfo)
-PartitionBackupInfo.thrift_spec = (
-  None, # 0
-  (1, TType.MAP, 'info', (TType.I32,None,TType.STRUCT,[LogInfo, LogInfo.thrift_spec, False]), None, 2, ), # 1
-)
-
-PartitionBackupInfo.thrift_struct_annotations = {
-}
-PartitionBackupInfo.thrift_field_annotations = {
-}
-
-def PartitionBackupInfo__init__(self, info=None,):
-  self.info = info
-
-PartitionBackupInfo.__init__ = PartitionBackupInfo__init__
-
-def PartitionBackupInfo__setstate__(self, state):
-  state.setdefault('info', None)
-  self.__dict__ = state
-
-PartitionBackupInfo.__getstate__ = lambda self: self.__dict__.copy()
-PartitionBackupInfo.__setstate__ = PartitionBackupInfo__setstate__
-
 all_structs.append(CheckpointInfo)
 CheckpointInfo.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'partition_info', [PartitionBackupInfo, PartitionBackupInfo.thrift_spec, False], None, 2, ), # 1
-  (2, TType.STRING, 'path', False, None, 2, ), # 2
+  (1, TType.I32, 'space_id', None, None, 2, ), # 1
+  (2, TType.MAP, 'parts', (TType.I32,None,TType.STRUCT,[LogInfo, LogInfo.thrift_spec, False]), None, 2, ), # 2
+  (3, TType.STRING, 'path', False, None, 2, ), # 3
 )
 
 CheckpointInfo.thrift_struct_annotations = {
@@ -4764,14 +4580,16 @@ CheckpointInfo.thrift_struct_annotations = {
 CheckpointInfo.thrift_field_annotations = {
 }
 
-def CheckpointInfo__init__(self, partition_info=None, path=None,):
-  self.partition_info = partition_info
+def CheckpointInfo__init__(self, space_id=None, parts=None, path=None,):
+  self.space_id = space_id
+  self.parts = parts
   self.path = path
 
 CheckpointInfo.__init__ = CheckpointInfo__init__
 
 def CheckpointInfo__setstate__(self, state):
-  state.setdefault('partition_info', None)
+  state.setdefault('space_id', None)
+  state.setdefault('parts', None)
   state.setdefault('path', None)
   self.__dict__ = state
 

@@ -6,7 +6,6 @@
 #
 
 from __future__ import absolute_import
-import six
 import sys
 from nebula2.fbthrift.util.Recursive import fix_spec
 from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestContext, TProcessorEventHandler, TServerInterface, TProcessor, TException, TApplicationException, UnimplementedTypedef
@@ -214,8 +213,7 @@ class RequestCommon:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class PartitionResult:
   """
@@ -316,8 +314,7 @@ class PartitionResult:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ResponseCommon:
   """
@@ -352,7 +349,7 @@ class ResponseCommon:
           self.failed_parts = []
           (_etype3, _size0) = iprot.readListBegin()
           if _size0 >= 0:
-            for _i4 in six.moves.range(_size0):
+            for _i4 in range(_size0):
               _elem5 = PartitionResult()
               _elem5.read(iprot)
               self.failed_parts.append(_elem5)
@@ -374,7 +371,7 @@ class ResponseCommon:
           self.latency_detail_us = {}
           (_ktype8, _vtype9, _size7 ) = iprot.readMapBegin() 
           if _size7 >= 0:
-            for _i11 in six.moves.range(_size7):
+            for _i11 in range(_size7):
               _key12 = iprot.readString().decode('utf-8') if UTF8STRINGS else iprot.readString()
               _val13 = iprot.readI32()
               self.latency_detail_us[_key12] = _val13
@@ -448,8 +445,7 @@ class ResponseCommon:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class StatProp:
   """
@@ -549,8 +545,7 @@ class StatProp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class Expr:
   """
@@ -636,8 +631,7 @@ class Expr:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class EdgeProp:
   """
@@ -676,7 +670,7 @@ class EdgeProp:
           self.props = []
           (_etype22, _size19) = iprot.readListBegin()
           if _size19 >= 0:
-            for _i23 in six.moves.range(_size19):
+            for _i23 in range(_size19):
               _elem24 = iprot.readString()
               self.props.append(_elem24)
           else: 
@@ -736,8 +730,7 @@ class EdgeProp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class VertexProp:
   """
@@ -776,7 +769,7 @@ class VertexProp:
           self.props = []
           (_etype30, _size27) = iprot.readListBegin()
           if _size27 >= 0:
-            for _i31 in six.moves.range(_size27):
+            for _i31 in range(_size27):
               _elem32 = iprot.readString()
               self.props.append(_elem32)
           else: 
@@ -836,8 +829,7 @@ class VertexProp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class OrderBy:
   """
@@ -923,8 +915,7 @@ class OrderBy:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class TraverseSpec:
   """
@@ -967,7 +958,7 @@ class TraverseSpec:
           self.edge_types = []
           (_etype38, _size35) = iprot.readListBegin()
           if _size35 >= 0:
-            for _i39 in six.moves.range(_size35):
+            for _i39 in range(_size35):
               _elem40 = iprot.readI32()
               self.edge_types.append(_elem40)
           else: 
@@ -992,7 +983,7 @@ class TraverseSpec:
           self.stat_props = []
           (_etype45, _size42) = iprot.readListBegin()
           if _size42 >= 0:
-            for _i46 in six.moves.range(_size42):
+            for _i46 in range(_size42):
               _elem47 = StatProp()
               _elem47.read(iprot)
               self.stat_props.append(_elem47)
@@ -1009,7 +1000,7 @@ class TraverseSpec:
           self.vertex_props = []
           (_etype52, _size49) = iprot.readListBegin()
           if _size49 >= 0:
-            for _i53 in six.moves.range(_size49):
+            for _i53 in range(_size49):
               _elem54 = VertexProp()
               _elem54.read(iprot)
               self.vertex_props.append(_elem54)
@@ -1026,7 +1017,7 @@ class TraverseSpec:
           self.edge_props = []
           (_etype59, _size56) = iprot.readListBegin()
           if _size56 >= 0:
-            for _i60 in six.moves.range(_size56):
+            for _i60 in range(_size56):
               _elem61 = EdgeProp()
               _elem61.read(iprot)
               self.edge_props.append(_elem61)
@@ -1043,7 +1034,7 @@ class TraverseSpec:
           self.expressions = []
           (_etype66, _size63) = iprot.readListBegin()
           if _size63 >= 0:
-            for _i67 in six.moves.range(_size63):
+            for _i67 in range(_size63):
               _elem68 = Expr()
               _elem68.read(iprot)
               self.expressions.append(_elem68)
@@ -1060,7 +1051,7 @@ class TraverseSpec:
           self.order_by = []
           (_etype73, _size70) = iprot.readListBegin()
           if _size70 >= 0:
-            for _i74 in six.moves.range(_size70):
+            for _i74 in range(_size70):
               _elem75 = OrderBy()
               _elem75.read(iprot)
               self.order_by.append(_elem75)
@@ -1224,8 +1215,7 @@ class TraverseSpec:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class GetNeighborsRequest:
   """
@@ -1267,7 +1257,7 @@ class GetNeighborsRequest:
           self.column_names = []
           (_etype86, _size83) = iprot.readListBegin()
           if _size83 >= 0:
-            for _i87 in six.moves.range(_size83):
+            for _i87 in range(_size83):
               _elem88 = iprot.readString()
               self.column_names.append(_elem88)
           else: 
@@ -1282,12 +1272,12 @@ class GetNeighborsRequest:
           self.parts = {}
           (_ktype91, _vtype92, _size90 ) = iprot.readMapBegin() 
           if _size90 >= 0:
-            for _i94 in six.moves.range(_size90):
+            for _i94 in range(_size90):
               _key95 = iprot.readI32()
               _val96 = []
               (_etype100, _size97) = iprot.readListBegin()
               if _size97 >= 0:
-                for _i101 in six.moves.range(_size97):
+                for _i101 in range(_size97):
                   _elem102 = nebula2.common.ttypes.Row()
                   _elem102.read(iprot)
                   _val96.append(_elem102)
@@ -1304,7 +1294,7 @@ class GetNeighborsRequest:
               _val105 = []
               (_etype109, _size106) = iprot.readListBegin()
               if _size106 >= 0:
-                for _i110 in six.moves.range(_size106):
+                for _i110 in range(_size106):
                   _elem111 = nebula2.common.ttypes.Row()
                   _elem111.read(iprot)
                   _val105.append(_elem111)
@@ -1411,8 +1401,7 @@ class GetNeighborsRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class GetNeighborsResponse:
   """
@@ -1500,8 +1489,7 @@ class GetNeighborsResponse:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ExecResponse:
   """
@@ -1574,8 +1562,7 @@ class ExecResponse:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class GetPropRequest:
   """
@@ -1622,12 +1609,12 @@ class GetPropRequest:
           self.parts = {}
           (_ktype118, _vtype119, _size117 ) = iprot.readMapBegin() 
           if _size117 >= 0:
-            for _i121 in six.moves.range(_size117):
+            for _i121 in range(_size117):
               _key122 = iprot.readI32()
               _val123 = []
               (_etype127, _size124) = iprot.readListBegin()
               if _size124 >= 0:
-                for _i128 in six.moves.range(_size124):
+                for _i128 in range(_size124):
                   _elem129 = nebula2.common.ttypes.Row()
                   _elem129.read(iprot)
                   _val123.append(_elem129)
@@ -1644,7 +1631,7 @@ class GetPropRequest:
               _val132 = []
               (_etype136, _size133) = iprot.readListBegin()
               if _size133 >= 0:
-                for _i137 in six.moves.range(_size133):
+                for _i137 in range(_size133):
                   _elem138 = nebula2.common.ttypes.Row()
                   _elem138.read(iprot)
                   _val132.append(_elem138)
@@ -1663,7 +1650,7 @@ class GetPropRequest:
           self.vertex_props = []
           (_etype143, _size140) = iprot.readListBegin()
           if _size140 >= 0:
-            for _i144 in six.moves.range(_size140):
+            for _i144 in range(_size140):
               _elem145 = VertexProp()
               _elem145.read(iprot)
               self.vertex_props.append(_elem145)
@@ -1680,7 +1667,7 @@ class GetPropRequest:
           self.edge_props = []
           (_etype150, _size147) = iprot.readListBegin()
           if _size147 >= 0:
-            for _i151 in six.moves.range(_size147):
+            for _i151 in range(_size147):
               _elem152 = EdgeProp()
               _elem152.read(iprot)
               self.edge_props.append(_elem152)
@@ -1697,7 +1684,7 @@ class GetPropRequest:
           self.expressions = []
           (_etype157, _size154) = iprot.readListBegin()
           if _size154 >= 0:
-            for _i158 in six.moves.range(_size154):
+            for _i158 in range(_size154):
               _elem159 = Expr()
               _elem159.read(iprot)
               self.expressions.append(_elem159)
@@ -1719,7 +1706,7 @@ class GetPropRequest:
           self.order_by = []
           (_etype164, _size161) = iprot.readListBegin()
           if _size161 >= 0:
-            for _i165 in six.moves.range(_size161):
+            for _i165 in range(_size161):
               _elem166 = OrderBy()
               _elem166.read(iprot)
               self.order_by.append(_elem166)
@@ -1877,8 +1864,7 @@ class GetPropRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class GetPropResponse:
   """
@@ -1966,8 +1952,7 @@ class GetPropResponse:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class NewTag:
   """
@@ -2006,7 +1991,7 @@ class NewTag:
           self.props = []
           (_etype178, _size175) = iprot.readListBegin()
           if _size175 >= 0:
-            for _i179 in six.moves.range(_size175):
+            for _i179 in range(_size175):
               _elem180 = nebula2.common.ttypes.Value()
               _elem180.read(iprot)
               self.props.append(_elem180)
@@ -2068,8 +2053,7 @@ class NewTag:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class NewVertex:
   """
@@ -2109,7 +2093,7 @@ class NewVertex:
           self.tags = []
           (_etype186, _size183) = iprot.readListBegin()
           if _size183 >= 0:
-            for _i187 in six.moves.range(_size183):
+            for _i187 in range(_size183):
               _elem188 = NewTag()
               _elem188.read(iprot)
               self.tags.append(_elem188)
@@ -2171,8 +2155,7 @@ class NewVertex:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class EdgeKey:
   """
@@ -2288,8 +2271,7 @@ class EdgeKey:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class NewEdge:
   """
@@ -2329,7 +2311,7 @@ class NewEdge:
           self.props = []
           (_etype194, _size191) = iprot.readListBegin()
           if _size191 >= 0:
-            for _i195 in six.moves.range(_size191):
+            for _i195 in range(_size191):
               _elem196 = nebula2.common.ttypes.Value()
               _elem196.read(iprot)
               self.props.append(_elem196)
@@ -2391,8 +2373,7 @@ class NewEdge:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class AddVerticesRequest:
   """
@@ -2435,12 +2416,12 @@ class AddVerticesRequest:
           self.parts = {}
           (_ktype200, _vtype201, _size199 ) = iprot.readMapBegin() 
           if _size199 >= 0:
-            for _i203 in six.moves.range(_size199):
+            for _i203 in range(_size199):
               _key204 = iprot.readI32()
               _val205 = []
               (_etype209, _size206) = iprot.readListBegin()
               if _size206 >= 0:
-                for _i210 in six.moves.range(_size206):
+                for _i210 in range(_size206):
                   _elem211 = NewVertex()
                   _elem211.read(iprot)
                   _val205.append(_elem211)
@@ -2457,7 +2438,7 @@ class AddVerticesRequest:
               _val214 = []
               (_etype218, _size215) = iprot.readListBegin()
               if _size215 >= 0:
-                for _i219 in six.moves.range(_size215):
+                for _i219 in range(_size215):
                   _elem220 = NewVertex()
                   _elem220.read(iprot)
                   _val214.append(_elem220)
@@ -2476,12 +2457,12 @@ class AddVerticesRequest:
           self.prop_names = {}
           (_ktype223, _vtype224, _size222 ) = iprot.readMapBegin() 
           if _size222 >= 0:
-            for _i226 in six.moves.range(_size222):
+            for _i226 in range(_size222):
               _key227 = iprot.readI32()
               _val228 = []
               (_etype232, _size229) = iprot.readListBegin()
               if _size229 >= 0:
-                for _i233 in six.moves.range(_size229):
+                for _i233 in range(_size229):
                   _elem234 = iprot.readString()
                   _val228.append(_elem234)
               else: 
@@ -2496,7 +2477,7 @@ class AddVerticesRequest:
               _val237 = []
               (_etype241, _size238) = iprot.readListBegin()
               if _size238 >= 0:
-                for _i242 in six.moves.range(_size238):
+                for _i242 in range(_size238):
                   _elem243 = iprot.readString()
                   _val237.append(_elem243)
               else: 
@@ -2617,8 +2598,7 @@ class AddVerticesRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class AddEdgesRequest:
   """
@@ -2661,12 +2641,12 @@ class AddEdgesRequest:
           self.parts = {}
           (_ktype252, _vtype253, _size251 ) = iprot.readMapBegin() 
           if _size251 >= 0:
-            for _i255 in six.moves.range(_size251):
+            for _i255 in range(_size251):
               _key256 = iprot.readI32()
               _val257 = []
               (_etype261, _size258) = iprot.readListBegin()
               if _size258 >= 0:
-                for _i262 in six.moves.range(_size258):
+                for _i262 in range(_size258):
                   _elem263 = NewEdge()
                   _elem263.read(iprot)
                   _val257.append(_elem263)
@@ -2683,7 +2663,7 @@ class AddEdgesRequest:
               _val266 = []
               (_etype270, _size267) = iprot.readListBegin()
               if _size267 >= 0:
-                for _i271 in six.moves.range(_size267):
+                for _i271 in range(_size267):
                   _elem272 = NewEdge()
                   _elem272.read(iprot)
                   _val266.append(_elem272)
@@ -2702,7 +2682,7 @@ class AddEdgesRequest:
           self.prop_names = []
           (_etype277, _size274) = iprot.readListBegin()
           if _size274 >= 0:
-            for _i278 in six.moves.range(_size274):
+            for _i278 in range(_size274):
               _elem279 = iprot.readString()
               self.prop_names.append(_elem279)
           else: 
@@ -2817,8 +2797,7 @@ class AddEdgesRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class DeleteVerticesRequest:
   """
@@ -2858,12 +2837,12 @@ class DeleteVerticesRequest:
           self.parts = {}
           (_ktype286, _vtype287, _size285 ) = iprot.readMapBegin() 
           if _size285 >= 0:
-            for _i289 in six.moves.range(_size285):
+            for _i289 in range(_size285):
               _key290 = iprot.readI32()
               _val291 = []
               (_etype295, _size292) = iprot.readListBegin()
               if _size292 >= 0:
-                for _i296 in six.moves.range(_size292):
+                for _i296 in range(_size292):
                   _elem297 = nebula2.common.ttypes.Value()
                   _elem297.read(iprot)
                   _val291.append(_elem297)
@@ -2880,7 +2859,7 @@ class DeleteVerticesRequest:
               _val300 = []
               (_etype304, _size301) = iprot.readListBegin()
               if _size301 >= 0:
-                for _i305 in six.moves.range(_size301):
+                for _i305 in range(_size301):
                   _elem306 = nebula2.common.ttypes.Value()
                   _elem306.read(iprot)
                   _val300.append(_elem306)
@@ -2962,8 +2941,7 @@ class DeleteVerticesRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class DeleteEdgesRequest:
   """
@@ -3003,12 +2981,12 @@ class DeleteEdgesRequest:
           self.parts = {}
           (_ktype312, _vtype313, _size311 ) = iprot.readMapBegin() 
           if _size311 >= 0:
-            for _i315 in six.moves.range(_size311):
+            for _i315 in range(_size311):
               _key316 = iprot.readI32()
               _val317 = []
               (_etype321, _size318) = iprot.readListBegin()
               if _size318 >= 0:
-                for _i322 in six.moves.range(_size318):
+                for _i322 in range(_size318):
                   _elem323 = EdgeKey()
                   _elem323.read(iprot)
                   _val317.append(_elem323)
@@ -3025,7 +3003,7 @@ class DeleteEdgesRequest:
               _val326 = []
               (_etype330, _size327) = iprot.readListBegin()
               if _size327 >= 0:
-                for _i331 in six.moves.range(_size327):
+                for _i331 in range(_size327):
                   _elem332 = EdgeKey()
                   _elem332.read(iprot)
                   _val326.append(_elem332)
@@ -3107,8 +3085,7 @@ class DeleteEdgesRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class DelTags:
   """
@@ -3148,7 +3125,7 @@ class DelTags:
           self.tags = []
           (_etype340, _size337) = iprot.readListBegin()
           if _size337 >= 0:
-            for _i341 in six.moves.range(_size337):
+            for _i341 in range(_size337):
               _elem342 = iprot.readI32()
               self.tags.append(_elem342)
           else: 
@@ -3208,8 +3185,7 @@ class DelTags:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class DeleteTagsRequest:
   """
@@ -3249,12 +3225,12 @@ class DeleteTagsRequest:
           self.parts = {}
           (_ktype346, _vtype347, _size345 ) = iprot.readMapBegin() 
           if _size345 >= 0:
-            for _i349 in six.moves.range(_size345):
+            for _i349 in range(_size345):
               _key350 = iprot.readI32()
               _val351 = []
               (_etype355, _size352) = iprot.readListBegin()
               if _size352 >= 0:
-                for _i356 in six.moves.range(_size352):
+                for _i356 in range(_size352):
                   _elem357 = DelTags()
                   _elem357.read(iprot)
                   _val351.append(_elem357)
@@ -3271,7 +3247,7 @@ class DeleteTagsRequest:
               _val360 = []
               (_etype364, _size361) = iprot.readListBegin()
               if _size361 >= 0:
-                for _i365 in six.moves.range(_size361):
+                for _i365 in range(_size361):
                   _elem366 = DelTags()
                   _elem366.read(iprot)
                   _val360.append(_elem366)
@@ -3353,8 +3329,7 @@ class DeleteTagsRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class UpdateResponse:
   """
@@ -3442,8 +3417,7 @@ class UpdateResponse:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class UpdatedProp:
   """
@@ -3529,8 +3503,7 @@ class UpdatedProp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class UpdateVertexRequest:
   """
@@ -3592,7 +3565,7 @@ class UpdateVertexRequest:
           self.updated_props = []
           (_etype374, _size371) = iprot.readListBegin()
           if _size371 >= 0:
-            for _i375 in six.moves.range(_size371):
+            for _i375 in range(_size371):
               _elem376 = UpdatedProp()
               _elem376.read(iprot)
               self.updated_props.append(_elem376)
@@ -3614,7 +3587,7 @@ class UpdateVertexRequest:
           self.return_props = []
           (_etype381, _size378) = iprot.readListBegin()
           if _size378 >= 0:
-            for _i382 in six.moves.range(_size378):
+            for _i382 in range(_size378):
               _elem383 = iprot.readString()
               self.return_props.append(_elem383)
           else: 
@@ -3744,8 +3717,7 @@ class UpdateVertexRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class UpdateEdgeRequest:
   """
@@ -3801,7 +3773,7 @@ class UpdateEdgeRequest:
           self.updated_props = []
           (_etype390, _size387) = iprot.readListBegin()
           if _size387 >= 0:
-            for _i391 in six.moves.range(_size387):
+            for _i391 in range(_size387):
               _elem392 = UpdatedProp()
               _elem392.read(iprot)
               self.updated_props.append(_elem392)
@@ -3823,7 +3795,7 @@ class UpdateEdgeRequest:
           self.return_props = []
           (_etype397, _size394) = iprot.readListBegin()
           if _size394 >= 0:
-            for _i398 in six.moves.range(_size394):
+            for _i398 in range(_size394):
               _elem399 = iprot.readString()
               self.return_props.append(_elem399)
           else: 
@@ -3945,8 +3917,7 @@ class UpdateEdgeRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class GetUUIDReq:
   """
@@ -4061,8 +4032,7 @@ class GetUUIDReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class GetUUIDResp:
   """
@@ -4150,8 +4120,7 @@ class GetUUIDResp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class LookupIndexResp:
   """
@@ -4239,8 +4208,7 @@ class LookupIndexResp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class IndexColumnHint:
   """
@@ -4384,8 +4352,7 @@ class IndexColumnHint:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class IndexQueryContext:
   """
@@ -4430,7 +4397,7 @@ class IndexQueryContext:
           self.column_hints = []
           (_etype406, _size403) = iprot.readListBegin()
           if _size403 >= 0:
-            for _i407 in six.moves.range(_size403):
+            for _i407 in range(_size403):
               _elem408 = IndexColumnHint()
               _elem408.read(iprot)
               self.column_hints.append(_elem408)
@@ -4500,8 +4467,7 @@ class IndexQueryContext:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class IndexSpec:
   """
@@ -4535,7 +4501,7 @@ class IndexSpec:
           self.contexts = []
           (_etype414, _size411) = iprot.readListBegin()
           if _size411 >= 0:
-            for _i415 in six.moves.range(_size411):
+            for _i415 in range(_size411):
               _elem416 = IndexQueryContext()
               _elem416.read(iprot)
               self.contexts.append(_elem416)
@@ -4603,8 +4569,7 @@ class IndexSpec:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class LookupIndexRequest:
   """
@@ -4647,7 +4612,7 @@ class LookupIndexRequest:
           self.parts = []
           (_etype422, _size419) = iprot.readListBegin()
           if _size419 >= 0:
-            for _i423 in six.moves.range(_size419):
+            for _i423 in range(_size419):
               _elem424 = iprot.readI32()
               self.parts.append(_elem424)
           else: 
@@ -4668,7 +4633,7 @@ class LookupIndexRequest:
           self.return_columns = []
           (_etype429, _size426) = iprot.readListBegin()
           if _size426 >= 0:
-            for _i430 in six.moves.range(_size426):
+            for _i430 in range(_size426):
               _elem431 = iprot.readString()
               self.return_columns.append(_elem431)
           else: 
@@ -4774,8 +4739,7 @@ class LookupIndexRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class LookupAndTraverseRequest:
   """
@@ -4817,7 +4781,7 @@ class LookupAndTraverseRequest:
           self.parts = []
           (_etype438, _size435) = iprot.readListBegin()
           if _size435 >= 0:
-            for _i439 in six.moves.range(_size435):
+            for _i439 in range(_size435):
               _elem440 = iprot.readI32()
               self.parts.append(_elem440)
           else: 
@@ -4919,8 +4883,7 @@ class LookupAndTraverseRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ScanCursor:
   """
@@ -4992,8 +4955,7 @@ class ScanCursor:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ScanVertexRequest:
   """
@@ -5040,7 +5002,7 @@ class ScanVertexRequest:
           self.parts = {}
           (_ktype444, _vtype445, _size443 ) = iprot.readMapBegin() 
           if _size443 >= 0:
-            for _i447 in six.moves.range(_size443):
+            for _i447 in range(_size443):
               _key448 = iprot.readI32()
               _val449 = ScanCursor()
               _val449.read(iprot)
@@ -5059,7 +5021,7 @@ class ScanVertexRequest:
           self.return_columns = []
           (_etype455, _size452) = iprot.readListBegin()
           if _size452 >= 0:
-            for _i456 in six.moves.range(_size452):
+            for _i456 in range(_size452):
               _elem457 = VertexProp()
               _elem457.read(iprot)
               self.return_columns.append(_elem457)
@@ -5225,8 +5187,7 @@ class ScanVertexRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ScanEdgeRequest:
   """
@@ -5273,7 +5234,7 @@ class ScanEdgeRequest:
           self.parts = {}
           (_ktype463, _vtype464, _size462 ) = iprot.readMapBegin() 
           if _size462 >= 0:
-            for _i466 in six.moves.range(_size462):
+            for _i466 in range(_size462):
               _key467 = iprot.readI32()
               _val468 = ScanCursor()
               _val468.read(iprot)
@@ -5292,7 +5253,7 @@ class ScanEdgeRequest:
           self.return_columns = []
           (_etype474, _size471) = iprot.readListBegin()
           if _size471 >= 0:
-            for _i475 in six.moves.range(_size471):
+            for _i475 in range(_size471):
               _elem476 = EdgeProp()
               _elem476.read(iprot)
               self.return_columns.append(_elem476)
@@ -5458,8 +5419,7 @@ class ScanEdgeRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ScanResponse:
   """
@@ -5506,7 +5466,7 @@ class ScanResponse:
           self.cursors = {}
           (_ktype482, _vtype483, _size481 ) = iprot.readMapBegin() 
           if _size481 >= 0:
-            for _i485 in six.moves.range(_size481):
+            for _i485 in range(_size481):
               _key486 = iprot.readI32()
               _val487 = ScanCursor()
               _val487.read(iprot)
@@ -5579,8 +5539,7 @@ class ScanResponse:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class TaskPara:
   """
@@ -5620,7 +5579,7 @@ class TaskPara:
           self.parts = []
           (_etype495, _size492) = iprot.readListBegin()
           if _size492 >= 0:
-            for _i496 in six.moves.range(_size492):
+            for _i496 in range(_size492):
               _elem497 = iprot.readI32()
               self.parts.append(_elem497)
           else: 
@@ -5635,7 +5594,7 @@ class TaskPara:
           self.task_specific_paras = []
           (_etype502, _size499) = iprot.readListBegin()
           if _size499 >= 0:
-            for _i503 in six.moves.range(_size499):
+            for _i503 in range(_size499):
               _elem504 = iprot.readString()
               self.task_specific_paras.append(_elem504)
           else: 
@@ -5706,8 +5665,7 @@ class TaskPara:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class KVGetRequest:
   """
@@ -5747,12 +5705,12 @@ class KVGetRequest:
           self.parts = {}
           (_ktype509, _vtype510, _size508 ) = iprot.readMapBegin() 
           if _size508 >= 0:
-            for _i512 in six.moves.range(_size508):
+            for _i512 in range(_size508):
               _key513 = iprot.readI32()
               _val514 = []
               (_etype518, _size515) = iprot.readListBegin()
               if _size515 >= 0:
-                for _i519 in six.moves.range(_size515):
+                for _i519 in range(_size515):
                   _elem520 = iprot.readString()
                   _val514.append(_elem520)
               else: 
@@ -5767,7 +5725,7 @@ class KVGetRequest:
               _val523 = []
               (_etype527, _size524) = iprot.readListBegin()
               if _size524 >= 0:
-                for _i528 in six.moves.range(_size524):
+                for _i528 in range(_size524):
                   _elem529 = iprot.readString()
                   _val523.append(_elem529)
               else: 
@@ -5846,8 +5804,7 @@ class KVGetRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class KVGetResponse:
   """
@@ -5887,7 +5844,7 @@ class KVGetResponse:
           self.key_values = {}
           (_ktype535, _vtype536, _size534 ) = iprot.readMapBegin() 
           if _size534 >= 0:
-            for _i538 in six.moves.range(_size534):
+            for _i538 in range(_size534):
               _key539 = iprot.readString()
               _val540 = iprot.readString()
               self.key_values[_key539] = _val540
@@ -5950,8 +5907,7 @@ class KVGetResponse:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class KVPutRequest:
   """
@@ -5990,12 +5946,12 @@ class KVPutRequest:
           self.parts = {}
           (_ktype546, _vtype547, _size545 ) = iprot.readMapBegin() 
           if _size545 >= 0:
-            for _i549 in six.moves.range(_size545):
+            for _i549 in range(_size545):
               _key550 = iprot.readI32()
               _val551 = []
               (_etype555, _size552) = iprot.readListBegin()
               if _size552 >= 0:
-                for _i556 in six.moves.range(_size552):
+                for _i556 in range(_size552):
                   _elem557 = nebula2.common.ttypes.KeyValue()
                   _elem557.read(iprot)
                   _val551.append(_elem557)
@@ -6012,7 +5968,7 @@ class KVPutRequest:
               _val560 = []
               (_etype564, _size561) = iprot.readListBegin()
               if _size561 >= 0:
-                for _i565 in six.moves.range(_size561):
+                for _i565 in range(_size561):
                   _elem566 = nebula2.common.ttypes.KeyValue()
                   _elem566.read(iprot)
                   _val560.append(_elem566)
@@ -6080,8 +6036,7 @@ class KVPutRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class KVRemoveRequest:
   """
@@ -6120,12 +6075,12 @@ class KVRemoveRequest:
           self.parts = {}
           (_ktype572, _vtype573, _size571 ) = iprot.readMapBegin() 
           if _size571 >= 0:
-            for _i575 in six.moves.range(_size571):
+            for _i575 in range(_size571):
               _key576 = iprot.readI32()
               _val577 = []
               (_etype581, _size578) = iprot.readListBegin()
               if _size578 >= 0:
-                for _i582 in six.moves.range(_size578):
+                for _i582 in range(_size578):
                   _elem583 = iprot.readString()
                   _val577.append(_elem583)
               else: 
@@ -6140,7 +6095,7 @@ class KVRemoveRequest:
               _val586 = []
               (_etype590, _size587) = iprot.readListBegin()
               if _size587 >= 0:
-                for _i591 in six.moves.range(_size587):
+                for _i591 in range(_size587):
                   _elem592 = iprot.readString()
                   _val586.append(_elem592)
               else: 
@@ -6206,8 +6161,7 @@ class KVRemoveRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class AdminExecResp:
   """
@@ -6295,8 +6249,7 @@ class AdminExecResp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class TransLeaderReq:
   """
@@ -6397,8 +6350,7 @@ class TransLeaderReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class AddPartReq:
   """
@@ -6449,7 +6401,7 @@ class AddPartReq:
           self.peers = []
           (_etype600, _size597) = iprot.readListBegin()
           if _size597 >= 0:
-            for _i601 in six.moves.range(_size597):
+            for _i601 in range(_size597):
               _elem602 = nebula2.common.ttypes.HostAddr()
               _elem602.read(iprot)
               self.peers.append(_elem602)
@@ -6527,8 +6479,7 @@ class AddPartReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class AddLearnerReq:
   """
@@ -6629,8 +6580,7 @@ class AddLearnerReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class RemovePartReq:
   """
@@ -6716,8 +6666,7 @@ class RemovePartReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class MemberChangeReq:
   """
@@ -6832,8 +6781,7 @@ class MemberChangeReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class CatchUpDataReq:
   """
@@ -6934,8 +6882,7 @@ class CatchUpDataReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class GetLeaderReq:
 
@@ -6989,13 +6936,12 @@ class GetLeaderReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class CreateCPRequest:
   """
   Attributes:
-   - space_id
+   - space_ids
    - name
   """
 
@@ -7020,8 +6966,18 @@ class CreateCPRequest:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.I32:
-          self.space_id = iprot.readI32()
+        if ftype == TType.LIST:
+          self.space_ids = []
+          (_etype608, _size605) = iprot.readListBegin()
+          if _size605 >= 0:
+            for _i609 in range(_size605):
+              _elem610 = iprot.readI32()
+              self.space_ids.append(_elem610)
+          else: 
+            while iprot.peekList():
+              _elem611 = iprot.readI32()
+              self.space_ids.append(_elem611)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       elif fid == 2:
@@ -7042,9 +6998,12 @@ class CreateCPRequest:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
     oprot.writeStructBegin('CreateCPRequest')
-    if self.space_id != None:
-      oprot.writeFieldBegin('space_id', TType.I32, 1)
-      oprot.writeI32(self.space_id)
+    if self.space_ids != None:
+      oprot.writeFieldBegin('space_ids', TType.LIST, 1)
+      oprot.writeListBegin(TType.I32, len(self.space_ids))
+      for iter612 in self.space_ids:
+        oprot.writeI32(iter612)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.name != None:
       oprot.writeFieldBegin('name', TType.STRING, 2)
@@ -7056,10 +7015,10 @@ class CreateCPRequest:
   def __repr__(self):
     L = []
     padding = ' ' * 4
-    if self.space_id is not None:
-      value = pprint.pformat(self.space_id, indent=0)
+    if self.space_ids is not None:
+      value = pprint.pformat(self.space_ids, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    space_id=%s' % (value))
+      L.append('    space_ids=%s' % (value))
     if self.name is not None:
       value = pprint.pformat(self.name, indent=0)
       value = padding.join(value.splitlines(True))
@@ -7076,13 +7035,12 @@ class CreateCPRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class DropCPRequest:
   """
   Attributes:
-   - space_id
+   - space_ids
    - name
   """
 
@@ -7107,8 +7065,18 @@ class DropCPRequest:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.I32:
-          self.space_id = iprot.readI32()
+        if ftype == TType.LIST:
+          self.space_ids = []
+          (_etype616, _size613) = iprot.readListBegin()
+          if _size613 >= 0:
+            for _i617 in range(_size613):
+              _elem618 = iprot.readI32()
+              self.space_ids.append(_elem618)
+          else: 
+            while iprot.peekList():
+              _elem619 = iprot.readI32()
+              self.space_ids.append(_elem619)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       elif fid == 2:
@@ -7129,9 +7097,12 @@ class DropCPRequest:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
     oprot.writeStructBegin('DropCPRequest')
-    if self.space_id != None:
-      oprot.writeFieldBegin('space_id', TType.I32, 1)
-      oprot.writeI32(self.space_id)
+    if self.space_ids != None:
+      oprot.writeFieldBegin('space_ids', TType.LIST, 1)
+      oprot.writeListBegin(TType.I32, len(self.space_ids))
+      for iter620 in self.space_ids:
+        oprot.writeI32(iter620)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.name != None:
       oprot.writeFieldBegin('name', TType.STRING, 2)
@@ -7143,10 +7114,10 @@ class DropCPRequest:
   def __repr__(self):
     L = []
     padding = ' ' * 4
-    if self.space_id is not None:
-      value = pprint.pformat(self.space_id, indent=0)
+    if self.space_ids is not None:
+      value = pprint.pformat(self.space_ids, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    space_id=%s' % (value))
+      L.append('    space_ids=%s' % (value))
     if self.name is not None:
       value = pprint.pformat(self.name, indent=0)
       value = padding.join(value.splitlines(True))
@@ -7163,13 +7134,12 @@ class DropCPRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class BlockingSignRequest:
   """
   Attributes:
-   - space_id
+   - space_ids
    - sign
   """
 
@@ -7194,8 +7164,18 @@ class BlockingSignRequest:
       if ftype == TType.STOP:
         break
       if fid == 1:
-        if ftype == TType.I32:
-          self.space_id = iprot.readI32()
+        if ftype == TType.LIST:
+          self.space_ids = []
+          (_etype624, _size621) = iprot.readListBegin()
+          if _size621 >= 0:
+            for _i625 in range(_size621):
+              _elem626 = iprot.readI32()
+              self.space_ids.append(_elem626)
+          else: 
+            while iprot.peekList():
+              _elem627 = iprot.readI32()
+              self.space_ids.append(_elem627)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       elif fid == 2:
@@ -7216,9 +7196,12 @@ class BlockingSignRequest:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
     oprot.writeStructBegin('BlockingSignRequest')
-    if self.space_id != None:
-      oprot.writeFieldBegin('space_id', TType.I32, 1)
-      oprot.writeI32(self.space_id)
+    if self.space_ids != None:
+      oprot.writeFieldBegin('space_ids', TType.LIST, 1)
+      oprot.writeListBegin(TType.I32, len(self.space_ids))
+      for iter628 in self.space_ids:
+        oprot.writeI32(iter628)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.sign != None:
       oprot.writeFieldBegin('sign', TType.I32, 2)
@@ -7230,10 +7213,10 @@ class BlockingSignRequest:
   def __repr__(self):
     L = []
     padding = ' ' * 4
-    if self.space_id is not None:
-      value = pprint.pformat(self.space_id, indent=0)
+    if self.space_ids is not None:
+      value = pprint.pformat(self.space_ids, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    space_id=%s' % (value))
+      L.append('    space_ids=%s' % (value))
     if self.sign is not None:
       value = pprint.pformat(self.sign, indent=0)
       value = padding.join(value.splitlines(True))
@@ -7250,8 +7233,7 @@ class BlockingSignRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class GetLeaderPartsResp:
   """
@@ -7289,37 +7271,37 @@ class GetLeaderPartsResp:
       elif fid == 2:
         if ftype == TType.MAP:
           self.leader_parts = {}
-          (_ktype606, _vtype607, _size605 ) = iprot.readMapBegin() 
-          if _size605 >= 0:
-            for _i609 in six.moves.range(_size605):
-              _key610 = iprot.readI32()
-              _val611 = []
-              (_etype615, _size612) = iprot.readListBegin()
-              if _size612 >= 0:
-                for _i616 in six.moves.range(_size612):
-                  _elem617 = iprot.readI32()
-                  _val611.append(_elem617)
+          (_ktype630, _vtype631, _size629 ) = iprot.readMapBegin() 
+          if _size629 >= 0:
+            for _i633 in range(_size629):
+              _key634 = iprot.readI32()
+              _val635 = []
+              (_etype639, _size636) = iprot.readListBegin()
+              if _size636 >= 0:
+                for _i640 in range(_size636):
+                  _elem641 = iprot.readI32()
+                  _val635.append(_elem641)
               else: 
                 while iprot.peekList():
-                  _elem618 = iprot.readI32()
-                  _val611.append(_elem618)
+                  _elem642 = iprot.readI32()
+                  _val635.append(_elem642)
               iprot.readListEnd()
-              self.leader_parts[_key610] = _val611
+              self.leader_parts[_key634] = _val635
           else: 
             while iprot.peekMap():
-              _key619 = iprot.readI32()
-              _val620 = []
-              (_etype624, _size621) = iprot.readListBegin()
-              if _size621 >= 0:
-                for _i625 in six.moves.range(_size621):
-                  _elem626 = iprot.readI32()
-                  _val620.append(_elem626)
+              _key643 = iprot.readI32()
+              _val644 = []
+              (_etype648, _size645) = iprot.readListBegin()
+              if _size645 >= 0:
+                for _i649 in range(_size645):
+                  _elem650 = iprot.readI32()
+                  _val644.append(_elem650)
               else: 
                 while iprot.peekList():
-                  _elem627 = iprot.readI32()
-                  _val620.append(_elem627)
+                  _elem651 = iprot.readI32()
+                  _val644.append(_elem651)
               iprot.readListEnd()
-              self.leader_parts[_key619] = _val620
+              self.leader_parts[_key643] = _val644
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -7343,11 +7325,11 @@ class GetLeaderPartsResp:
     if self.leader_parts != None:
       oprot.writeFieldBegin('leader_parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.leader_parts))
-      for kiter628,viter629 in self.leader_parts.items():
-        oprot.writeI32(kiter628)
-        oprot.writeListBegin(TType.I32, len(viter629))
-        for iter630 in viter629:
-          oprot.writeI32(iter630)
+      for kiter652,viter653 in self.leader_parts.items():
+        oprot.writeI32(kiter652)
+        oprot.writeListBegin(TType.I32, len(viter653))
+        for iter654 in viter653:
+          oprot.writeI32(iter654)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -7377,8 +7359,7 @@ class GetLeaderPartsResp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class CheckPeersReq:
   """
@@ -7421,17 +7402,17 @@ class CheckPeersReq:
       elif fid == 3:
         if ftype == TType.LIST:
           self.peers = []
-          (_etype634, _size631) = iprot.readListBegin()
-          if _size631 >= 0:
-            for _i635 in six.moves.range(_size631):
-              _elem636 = nebula2.common.ttypes.HostAddr()
-              _elem636.read(iprot)
-              self.peers.append(_elem636)
+          (_etype658, _size655) = iprot.readListBegin()
+          if _size655 >= 0:
+            for _i659 in range(_size655):
+              _elem660 = nebula2.common.ttypes.HostAddr()
+              _elem660.read(iprot)
+              self.peers.append(_elem660)
           else: 
             while iprot.peekList():
-              _elem637 = nebula2.common.ttypes.HostAddr()
-              _elem637.read(iprot)
-              self.peers.append(_elem637)
+              _elem661 = nebula2.common.ttypes.HostAddr()
+              _elem661.read(iprot)
+              self.peers.append(_elem661)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7459,8 +7440,8 @@ class CheckPeersReq:
     if self.peers != None:
       oprot.writeFieldBegin('peers', TType.LIST, 3)
       oprot.writeListBegin(TType.STRUCT, len(self.peers))
-      for iter638 in self.peers:
-        iter638.write(oprot)
+      for iter662 in self.peers:
+        iter662.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7493,8 +7474,7 @@ class CheckPeersReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class RebuildIndexRequest:
   """
@@ -7532,15 +7512,15 @@ class RebuildIndexRequest:
       elif fid == 2:
         if ftype == TType.LIST:
           self.parts = []
-          (_etype642, _size639) = iprot.readListBegin()
-          if _size639 >= 0:
-            for _i643 in six.moves.range(_size639):
-              _elem644 = iprot.readI32()
-              self.parts.append(_elem644)
+          (_etype666, _size663) = iprot.readListBegin()
+          if _size663 >= 0:
+            for _i667 in range(_size663):
+              _elem668 = iprot.readI32()
+              self.parts.append(_elem668)
           else: 
             while iprot.peekList():
-              _elem645 = iprot.readI32()
-              self.parts.append(_elem645)
+              _elem669 = iprot.readI32()
+              self.parts.append(_elem669)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7569,8 +7549,8 @@ class RebuildIndexRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.LIST, 2)
       oprot.writeListBegin(TType.I32, len(self.parts))
-      for iter646 in self.parts:
-        oprot.writeI32(iter646)
+      for iter670 in self.parts:
+        oprot.writeI32(iter670)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.index_id != None:
@@ -7607,8 +7587,7 @@ class RebuildIndexRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class CreateCPResp:
   """
@@ -7646,17 +7625,17 @@ class CreateCPResp:
       elif fid == 2:
         if ftype == TType.LIST:
           self.info = []
-          (_etype650, _size647) = iprot.readListBegin()
-          if _size647 >= 0:
-            for _i651 in six.moves.range(_size647):
-              _elem652 = nebula2.common.ttypes.CheckpointInfo()
-              _elem652.read(iprot)
-              self.info.append(_elem652)
+          (_etype674, _size671) = iprot.readListBegin()
+          if _size671 >= 0:
+            for _i675 in range(_size671):
+              _elem676 = nebula2.common.ttypes.CheckpointInfo()
+              _elem676.read(iprot)
+              self.info.append(_elem676)
           else: 
             while iprot.peekList():
-              _elem653 = nebula2.common.ttypes.CheckpointInfo()
-              _elem653.read(iprot)
-              self.info.append(_elem653)
+              _elem677 = nebula2.common.ttypes.CheckpointInfo()
+              _elem677.read(iprot)
+              self.info.append(_elem677)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -7680,8 +7659,8 @@ class CreateCPResp:
     if self.info != None:
       oprot.writeFieldBegin('info', TType.LIST, 2)
       oprot.writeListBegin(TType.STRUCT, len(self.info))
-      for iter654 in self.info:
-        iter654.write(oprot)
+      for iter678 in self.info:
+        iter678.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -7710,8 +7689,7 @@ class CreateCPResp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ListClusterInfoResp:
   """
@@ -7799,8 +7777,7 @@ class ListClusterInfoResp:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ListClusterInfoReq:
 
@@ -7854,8 +7831,7 @@ class ListClusterInfoReq:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class AddAdminTaskRequest:
   """
@@ -7984,8 +7960,7 @@ class AddAdminTaskRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class StopAdminTaskRequest:
   """
@@ -8071,8 +8046,7 @@ class StopAdminTaskRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class InternalTxnRequest:
   """
@@ -8112,17 +8086,17 @@ class InternalTxnRequest:
       elif fid == 2:
         if ftype == TType.MAP:
           self.term_of_parts = {}
-          (_ktype656, _vtype657, _size655 ) = iprot.readMapBegin() 
-          if _size655 >= 0:
-            for _i659 in six.moves.range(_size655):
-              _key660 = iprot.readI32()
-              _val661 = iprot.readI64()
-              self.term_of_parts[_key660] = _val661
+          (_ktype680, _vtype681, _size679 ) = iprot.readMapBegin() 
+          if _size679 >= 0:
+            for _i683 in range(_size679):
+              _key684 = iprot.readI32()
+              _val685 = iprot.readI64()
+              self.term_of_parts[_key684] = _val685
           else: 
             while iprot.peekMap():
-              _key662 = iprot.readI32()
-              _val663 = iprot.readI64()
-              self.term_of_parts[_key662] = _val663
+              _key686 = iprot.readI32()
+              _val687 = iprot.readI64()
+              self.term_of_parts[_key686] = _val687
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -8141,37 +8115,37 @@ class InternalTxnRequest:
       elif fid == 5:
         if ftype == TType.MAP:
           self.edge_ver = {}
-          (_ktype665, _vtype666, _size664 ) = iprot.readMapBegin() 
-          if _size664 >= 0:
-            for _i668 in six.moves.range(_size664):
-              _key669 = iprot.readI32()
-              _val670 = []
-              (_etype674, _size671) = iprot.readListBegin()
-              if _size671 >= 0:
-                for _i675 in six.moves.range(_size671):
-                  _elem676 = iprot.readI64()
-                  _val670.append(_elem676)
+          (_ktype689, _vtype690, _size688 ) = iprot.readMapBegin() 
+          if _size688 >= 0:
+            for _i692 in range(_size688):
+              _key693 = iprot.readI32()
+              _val694 = []
+              (_etype698, _size695) = iprot.readListBegin()
+              if _size695 >= 0:
+                for _i699 in range(_size695):
+                  _elem700 = iprot.readI64()
+                  _val694.append(_elem700)
               else: 
                 while iprot.peekList():
-                  _elem677 = iprot.readI64()
-                  _val670.append(_elem677)
+                  _elem701 = iprot.readI64()
+                  _val694.append(_elem701)
               iprot.readListEnd()
-              self.edge_ver[_key669] = _val670
+              self.edge_ver[_key693] = _val694
           else: 
             while iprot.peekMap():
-              _key678 = iprot.readI32()
-              _val679 = []
-              (_etype683, _size680) = iprot.readListBegin()
-              if _size680 >= 0:
-                for _i684 in six.moves.range(_size680):
-                  _elem685 = iprot.readI64()
-                  _val679.append(_elem685)
+              _key702 = iprot.readI32()
+              _val703 = []
+              (_etype707, _size704) = iprot.readListBegin()
+              if _size704 >= 0:
+                for _i708 in range(_size704):
+                  _elem709 = iprot.readI64()
+                  _val703.append(_elem709)
               else: 
                 while iprot.peekList():
-                  _elem686 = iprot.readI64()
-                  _val679.append(_elem686)
+                  _elem710 = iprot.readI64()
+                  _val703.append(_elem710)
               iprot.readListEnd()
-              self.edge_ver[_key678] = _val679
+              self.edge_ver[_key702] = _val703
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
@@ -8195,9 +8169,9 @@ class InternalTxnRequest:
     if self.term_of_parts != None:
       oprot.writeFieldBegin('term_of_parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.I64, len(self.term_of_parts))
-      for kiter687,viter688 in self.term_of_parts.items():
-        oprot.writeI32(kiter687)
-        oprot.writeI64(viter688)
+      for kiter711,viter712 in self.term_of_parts.items():
+        oprot.writeI32(kiter711)
+        oprot.writeI64(viter712)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.add_edge_req != None:
@@ -8211,11 +8185,11 @@ class InternalTxnRequest:
     if self.edge_ver != None:
       oprot.writeFieldBegin('edge_ver', TType.MAP, 5)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.edge_ver))
-      for kiter689,viter690 in self.edge_ver.items():
-        oprot.writeI32(kiter689)
-        oprot.writeListBegin(TType.I64, len(viter690))
-        for iter691 in viter690:
-          oprot.writeI64(iter691)
+      for kiter713,viter714 in self.edge_ver.items():
+        oprot.writeI32(kiter713)
+        oprot.writeListBegin(TType.I64, len(viter714))
+        for iter715 in viter714:
+          oprot.writeI64(iter715)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
@@ -8257,8 +8231,7 @@ class InternalTxnRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ChainAddEdgesRequest:
   """
@@ -8299,56 +8272,56 @@ class ChainAddEdgesRequest:
       elif fid == 2:
         if ftype == TType.MAP:
           self.parts = {}
-          (_ktype693, _vtype694, _size692 ) = iprot.readMapBegin() 
-          if _size692 >= 0:
-            for _i696 in six.moves.range(_size692):
-              _key697 = iprot.readI32()
-              _val698 = []
-              (_etype702, _size699) = iprot.readListBegin()
-              if _size699 >= 0:
-                for _i703 in six.moves.range(_size699):
-                  _elem704 = NewEdge()
-                  _elem704.read(iprot)
-                  _val698.append(_elem704)
+          (_ktype717, _vtype718, _size716 ) = iprot.readMapBegin() 
+          if _size716 >= 0:
+            for _i720 in range(_size716):
+              _key721 = iprot.readI32()
+              _val722 = []
+              (_etype726, _size723) = iprot.readListBegin()
+              if _size723 >= 0:
+                for _i727 in range(_size723):
+                  _elem728 = NewEdge()
+                  _elem728.read(iprot)
+                  _val722.append(_elem728)
               else: 
                 while iprot.peekList():
-                  _elem705 = NewEdge()
-                  _elem705.read(iprot)
-                  _val698.append(_elem705)
+                  _elem729 = NewEdge()
+                  _elem729.read(iprot)
+                  _val722.append(_elem729)
               iprot.readListEnd()
-              self.parts[_key697] = _val698
+              self.parts[_key721] = _val722
           else: 
             while iprot.peekMap():
-              _key706 = iprot.readI32()
-              _val707 = []
-              (_etype711, _size708) = iprot.readListBegin()
-              if _size708 >= 0:
-                for _i712 in six.moves.range(_size708):
-                  _elem713 = NewEdge()
-                  _elem713.read(iprot)
-                  _val707.append(_elem713)
+              _key730 = iprot.readI32()
+              _val731 = []
+              (_etype735, _size732) = iprot.readListBegin()
+              if _size732 >= 0:
+                for _i736 in range(_size732):
+                  _elem737 = NewEdge()
+                  _elem737.read(iprot)
+                  _val731.append(_elem737)
               else: 
                 while iprot.peekList():
-                  _elem714 = NewEdge()
-                  _elem714.read(iprot)
-                  _val707.append(_elem714)
+                  _elem738 = NewEdge()
+                  _elem738.read(iprot)
+                  _val731.append(_elem738)
               iprot.readListEnd()
-              self.parts[_key706] = _val707
+              self.parts[_key730] = _val731
           iprot.readMapEnd()
         else:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.LIST:
           self.prop_names = []
-          (_etype718, _size715) = iprot.readListBegin()
-          if _size715 >= 0:
-            for _i719 in six.moves.range(_size715):
-              _elem720 = iprot.readString()
-              self.prop_names.append(_elem720)
+          (_etype742, _size739) = iprot.readListBegin()
+          if _size739 >= 0:
+            for _i743 in range(_size739):
+              _elem744 = iprot.readString()
+              self.prop_names.append(_elem744)
           else: 
             while iprot.peekList():
-              _elem721 = iprot.readString()
-              self.prop_names.append(_elem721)
+              _elem745 = iprot.readString()
+              self.prop_names.append(_elem745)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -8387,19 +8360,19 @@ class ChainAddEdgesRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.MAP, 2)
       oprot.writeMapBegin(TType.I32, TType.LIST, len(self.parts))
-      for kiter722,viter723 in self.parts.items():
-        oprot.writeI32(kiter722)
-        oprot.writeListBegin(TType.STRUCT, len(viter723))
-        for iter724 in viter723:
-          iter724.write(oprot)
+      for kiter746,viter747 in self.parts.items():
+        oprot.writeI32(kiter746)
+        oprot.writeListBegin(TType.STRUCT, len(viter747))
+        for iter748 in viter747:
+          iter748.write(oprot)
         oprot.writeListEnd()
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
     if self.prop_names != None:
       oprot.writeFieldBegin('prop_names', TType.LIST, 3)
       oprot.writeListBegin(TType.STRING, len(self.prop_names))
-      for iter725 in self.prop_names:
-        oprot.writeString(iter725)
+      for iter749 in self.prop_names:
+        oprot.writeString(iter749)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     if self.if_not_exists != None:
@@ -8456,8 +8429,7 @@ class ChainAddEdgesRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 class ChainUpdateEdgeRequest:
   """
@@ -8513,15 +8485,15 @@ class ChainUpdateEdgeRequest:
       elif fid == 5:
         if ftype == TType.LIST:
           self.parts = []
-          (_etype729, _size726) = iprot.readListBegin()
-          if _size726 >= 0:
-            for _i730 in six.moves.range(_size726):
-              _elem731 = iprot.readI32()
-              self.parts.append(_elem731)
+          (_etype753, _size750) = iprot.readListBegin()
+          if _size750 >= 0:
+            for _i754 in range(_size750):
+              _elem755 = iprot.readI32()
+              self.parts.append(_elem755)
           else: 
             while iprot.peekList():
-              _elem732 = iprot.readI32()
-              self.parts.append(_elem732)
+              _elem756 = iprot.readI32()
+              self.parts.append(_elem756)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -8557,8 +8529,8 @@ class ChainUpdateEdgeRequest:
     if self.parts != None:
       oprot.writeFieldBegin('parts', TType.LIST, 5)
       oprot.writeListBegin(TType.I32, len(self.parts))
-      for iter733 in self.parts:
-        oprot.writeI32(iter733)
+      for iter757 in self.parts:
+        oprot.writeI32(iter757)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -8599,8 +8571,7 @@ class ChainUpdateEdgeRequest:
     return not (self == other)
 
   # Override the __hash__ function for Python3 - t10434117
-  if not six.PY2:
-    __hash__ = object.__hash__
+  __hash__ = object.__hash__
 
 all_structs.append(RequestCommon)
 RequestCommon.thrift_spec = (
@@ -10230,7 +10201,7 @@ GetLeaderReq.thrift_field_annotations = {
 all_structs.append(CreateCPRequest)
 CreateCPRequest.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'space_id', None, None, 2, ), # 1
+  (1, TType.LIST, 'space_ids', (TType.I32,None), None, 2, ), # 1
   (2, TType.STRING, 'name', False, None, 2, ), # 2
 )
 
@@ -10239,14 +10210,14 @@ CreateCPRequest.thrift_struct_annotations = {
 CreateCPRequest.thrift_field_annotations = {
 }
 
-def CreateCPRequest__init__(self, space_id=None, name=None,):
-  self.space_id = space_id
+def CreateCPRequest__init__(self, space_ids=None, name=None,):
+  self.space_ids = space_ids
   self.name = name
 
 CreateCPRequest.__init__ = CreateCPRequest__init__
 
 def CreateCPRequest__setstate__(self, state):
-  state.setdefault('space_id', None)
+  state.setdefault('space_ids', None)
   state.setdefault('name', None)
   self.__dict__ = state
 
@@ -10256,7 +10227,7 @@ CreateCPRequest.__setstate__ = CreateCPRequest__setstate__
 all_structs.append(DropCPRequest)
 DropCPRequest.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'space_id', None, None, 2, ), # 1
+  (1, TType.LIST, 'space_ids', (TType.I32,None), None, 2, ), # 1
   (2, TType.STRING, 'name', False, None, 2, ), # 2
 )
 
@@ -10265,14 +10236,14 @@ DropCPRequest.thrift_struct_annotations = {
 DropCPRequest.thrift_field_annotations = {
 }
 
-def DropCPRequest__init__(self, space_id=None, name=None,):
-  self.space_id = space_id
+def DropCPRequest__init__(self, space_ids=None, name=None,):
+  self.space_ids = space_ids
   self.name = name
 
 DropCPRequest.__init__ = DropCPRequest__init__
 
 def DropCPRequest__setstate__(self, state):
-  state.setdefault('space_id', None)
+  state.setdefault('space_ids', None)
   state.setdefault('name', None)
   self.__dict__ = state
 
@@ -10282,7 +10253,7 @@ DropCPRequest.__setstate__ = DropCPRequest__setstate__
 all_structs.append(BlockingSignRequest)
 BlockingSignRequest.thrift_spec = (
   None, # 0
-  (1, TType.I32, 'space_id', None, None, 2, ), # 1
+  (1, TType.LIST, 'space_ids', (TType.I32,None), None, 2, ), # 1
   (2, TType.I32, 'sign', EngineSignType, None, 0, ), # 2
 )
 
@@ -10291,14 +10262,14 @@ BlockingSignRequest.thrift_struct_annotations = {
 BlockingSignRequest.thrift_field_annotations = {
 }
 
-def BlockingSignRequest__init__(self, space_id=None, sign=None,):
-  self.space_id = space_id
+def BlockingSignRequest__init__(self, space_ids=None, sign=None,):
+  self.space_ids = space_ids
   self.sign = sign
 
 BlockingSignRequest.__init__ = BlockingSignRequest__init__
 
 def BlockingSignRequest__setstate__(self, state):
-  state.setdefault('space_id', None)
+  state.setdefault('space_ids', None)
   state.setdefault('sign', None)
   self.__dict__ = state
 
