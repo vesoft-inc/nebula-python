@@ -55,13 +55,7 @@ class TestParameter(TestCase):
         assert resp.is_succeeded(), resp.error_msg()
 
         # prepare parameters
-        bval = ttypes.Value()
-        bval.set_bVal(True)
-        ival = ttypes.Value()
-        ival.set_iVal(3)
-        sval = ttypes.Value()
-        sval.set_sVal("Bob")
-        self.params = {"p1": ival, "p2": bval, "p3": sval}
+        self.params = {"p1": 3, "p2": True, "p3": "Bob"}
 
         assert self.pool.connects() == 1
         assert self.pool.in_used_connects() == 1

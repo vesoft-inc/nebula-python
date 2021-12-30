@@ -35,6 +35,11 @@ class Session(object):
         if self._connection is None:
             raise RuntimeError('The session has released')
         try:
+            for (k, v) in params.items():
+                params[k] = value2Nvalue(v)
+        except:
+            raise ValueError("preload parameters failed!")
+        try:
             start_time = time.time()
             resp = self._connection.execute_parameter(self._session_id, stmt, params)
             end_time = time.time()
@@ -252,6 +257,40 @@ class Session(object):
         except NotValidConnectionException:
             return False
         return True
+
+def value2Nvalue(any):
+    v = Value()
+    if (any is None):
+        v.set_NVal(NullType.__NULL__)
+    elif (isinstance(any, bool)):
+        v.set_bVal(any)
+    elif (isinstance(any, int)):
+        v.set_iVal(any)
+    elif (isinstance(any, str)):
+        v.set_sVal(any)
+    elif (isinstance(any, float)):
+        v.set_fVal(any)
+    elif (isinstance(any, list)):
+        v.set_lVal(list2Nlist(any))
+    elif (isinstance(any, dict)):
+        v.set_mVal(map2NMap(any))
+    else:
+        raise TypeError("Do not support convert "+str(type(any))+" to nebula.Value")
+    return v
+
+def list2Nlist(list):
+    nlist = NList()
+    nlist.values = []
+    for item in list:
+        nlist.values.append(value2Nvalue(item))
+    return nlist
+
+def map2NMap(map):
+    nmap = NMap()
+    nmap.kvs={}
+    for k,v in map.items():
+        nmap.kvs[k]=vavalue2Nvaluelue(v)
+    return nmap
 
     def __del__(self):
         self.release()
