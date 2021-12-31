@@ -15,7 +15,15 @@ from nebula2.Exception import (
 from nebula2.data.ResultSet import ResultSet
 from nebula2.gclient.net.AuthResult import AuthResult
 from nebula2.logger import logger
-
+from nebula2.common.ttypes import (
+    Geography,
+    Value,
+    NullType,
+    DateTime,
+    Date,
+    Duration,
+    Time,
+)
 
 class Session(object):
     def __init__(self, connection, auth_result: AuthResult, pool, retry_connect=True):
@@ -274,6 +282,18 @@ def value2Nvalue(any):
         v.set_lVal(list2Nlist(any))
     elif (isinstance(any, dict)):
         v.set_mVal(map2NMap(any))
+    elif (isinstance(any, Value)):
+        return any
+    elif (isinstance(any, Date)):
+        v.set_dVal(any)
+    elif (isinstance(any, DateTime)):
+        v.set_dtVal(any)
+    elif (isinstance(any, Duration)):
+        v.set_duVal(any)
+    elif (isinstance(any, Time)):
+        v.set_tVal(any)
+    elif (isinstance(any, Geography)):
+        v.set_ggVal(any)
     else:
         raise TypeError("Do not support convert "+str(type(any))+" to nebula.Value")
     return v
