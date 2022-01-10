@@ -6,6 +6,7 @@
 
 
 import time
+from nebula2.Config import SSL_config
 
 from nebula2.fbthrift.transport import TSocket, TTransport, TSSLSocket
 from nebula2.fbthrift.transport.TTransport import TTransportException
@@ -34,6 +35,7 @@ class Connection(object):
         self._ip = None
         self._port = None
         self._timeout = 0
+        self._ssl_conf = None
 
     def open(self, ip, port, timeout):
         """open the connection
@@ -57,6 +59,7 @@ class Connection(object):
         self._ip = ip
         self._port = port
         self._timeout = timeout
+        self._ssl_conf = ssl_config
         try:
             if ssl_config is not None:
                 s = TSSLSocket.TSSLSocket(
@@ -92,7 +95,10 @@ class Connection(object):
         :return:
         """
         self.close()
-        self.open(self._ip, self._port, self._timeout)
+        if self._ssl_conf != None:
+            self.open_SSL(self._ip, self._port, self._timeout, self._ssl_conf)
+        else:
+            self.open(self._ip, self._port, self._timeout)
 
     def authenticate(self, user_name, password):
         """authenticate to graphd
