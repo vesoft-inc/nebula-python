@@ -58,6 +58,7 @@ FUNCTIONS = {
     'lookupAndTraverse': Function('lookupAndTraverse', 'GraphStorageService', 'GetNeighborsResponse', [('LookupAndTraverseRequest', 'req', 'LookupAndTraverseRequest')]),
     'chainUpdateEdge': Function('chainUpdateEdge', 'GraphStorageService', 'UpdateResponse', [('UpdateEdgeRequest', 'req', 'UpdateEdgeRequest')]),
     'chainAddEdges': Function('chainAddEdges', 'GraphStorageService', 'ExecResponse', [('AddEdgesRequest', 'req', 'AddEdgesRequest')]),
+    'chainDeleteEdges': Function('chainDeleteEdges', 'GraphStorageService', 'ExecResponse', [('DeleteEdgesRequest', 'req', 'DeleteEdgesRequest')]),
     'get': Function('get', 'GraphStorageService', 'KVGetResponse', [('KVGetRequest', 'req', 'KVGetRequest')]),
     'put': Function('put', 'GraphStorageService', 'ExecResponse', [('KVPutRequest', 'req', 'KVPutRequest')]),
     'remove': Function('remove', 'GraphStorageService', 'ExecResponse', [('KVRemoveRequest', 'req', 'KVRemoveRequest')]),
