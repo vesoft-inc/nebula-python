@@ -12,7 +12,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, IsolationLevel, HostStatus, SnapshotStatus, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, FTServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexParams, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, AddHostsReq, DropHostsReq, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, PartitionList, HBReq, ServiceInfo, AgentHBReq, AgentHBResp, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceTask, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, MergeZoneReq, DropZoneReq, DivideZoneReq, RenameZoneReq, AddHostsIntoZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, HostBackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, FTClient, SignInFTServiceReq, SignOutFTServiceReq, ListFTClientsReq, ListFTClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SchemaVer, ClusterID
+from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, IsolationLevel, HostStatus, SnapshotStatus, AlterSpaceOp, AdminJobOp, AdminCmd, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, ExternalServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexParams, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AlterSpaceReq, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, AddHostsReq, DropHostsReq, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, GetWorkerIdReq, GetWorkerIdResp, MultiPutReq, GetReq, GetResp, MultiGetReq, MultiGetResp, RemoveReq, RemoveRangeReq, ScanReq, ScanResp, HBResp, LeaderInfo, PartitionList, HBReq, ServiceInfo, AgentHBReq, AgentHBResp, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceTask, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, MergeZoneReq, DropZoneReq, DivideZoneReq, RenameZoneReq, AddHostsIntoZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, HostBackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, ServiceClient, SignInServiceReq, SignOutServiceReq, ListServiceClientsReq, ListServiceClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SchemaVer, ClusterID
 import nebula2.common.ttypes
 
 from nebula2.fbthrift.Thrift import TProcessor
@@ -64,6 +64,13 @@ class Iface:
     pass
 
   def listSpaces(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def alterSpace(self, req=None):
     """
     Parameters:
      - req
@@ -183,6 +190,13 @@ class Iface:
     pass
 
   def listParts(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def getWorkerId(self, req=None):
     """
     Parameters:
      - req
@@ -518,21 +532,21 @@ class Iface:
     """
     pass
 
-  def signInFTService(self, req=None):
+  def signInService(self, req=None):
     """
     Parameters:
      - req
     """
     pass
 
-  def signOutFTService(self, req=None):
+  def signOutService(self, req=None):
     """
     Parameters:
      - req
     """
     pass
 
-  def listFTClients(self, req=None):
+  def listServiceClients(self, req=None):
     """
     Parameters:
      - req
@@ -674,6 +688,13 @@ class ContextIface:
     """
     pass
 
+  def alterSpace(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def createSpaceAs(self, handler_ctx, req=None):
     """
     Parameters:
@@ -787,6 +808,13 @@ class ContextIface:
     pass
 
   def listParts(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def getWorkerId(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -1122,21 +1150,21 @@ class ContextIface:
     """
     pass
 
-  def signInFTService(self, handler_ctx, req=None):
+  def signInService(self, handler_ctx, req=None):
     """
     Parameters:
      - req
     """
     pass
 
-  def signOutFTService(self, handler_ctx, req=None):
+  def signOutService(self, handler_ctx, req=None):
     """
     Parameters:
      - req
     """
     pass
 
-  def listFTClients(self, handler_ctx, req=None):
+  def listServiceClients(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -2014,6 +2042,197 @@ def listSpaces_result__setstate__(self, state):
 
 listSpaces_result.__getstate__ = lambda self: self.__dict__.copy()
 listSpaces_result.__setstate__ = listSpaces_result__setstate__
+
+class alterSpace_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = AlterSpaceReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('alterSpace_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(alterSpace_args)
+alterSpace_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [AlterSpaceReq, AlterSpaceReq.thrift_spec, False], None, 2, ), # 1
+)
+
+alterSpace_args.thrift_struct_annotations = {
+}
+alterSpace_args.thrift_field_annotations = {
+}
+
+def alterSpace_args__init__(self, req=None,):
+  self.req = req
+
+alterSpace_args.__init__ = alterSpace_args__init__
+
+def alterSpace_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+alterSpace_args.__getstate__ = lambda self: self.__dict__.copy()
+alterSpace_args.__setstate__ = alterSpace_args__setstate__
+
+class alterSpace_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('alterSpace_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(alterSpace_result)
+alterSpace_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+)
+
+alterSpace_result.thrift_struct_annotations = {
+}
+alterSpace_result.thrift_field_annotations = {
+}
+
+def alterSpace_result__init__(self, success=None,):
+  self.success = success
+
+alterSpace_result.__init__ = alterSpace_result__init__
+
+def alterSpace_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+alterSpace_result.__getstate__ = lambda self: self.__dict__.copy()
+alterSpace_result.__setstate__ = alterSpace_result__setstate__
 
 class createSpaceAs_args:
   """
@@ -5261,6 +5480,197 @@ def listParts_result__setstate__(self, state):
 
 listParts_result.__getstate__ = lambda self: self.__dict__.copy()
 listParts_result.__setstate__ = listParts_result__setstate__
+
+class getWorkerId_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = GetWorkerIdReq()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('getWorkerId_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(getWorkerId_args)
+getWorkerId_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [GetWorkerIdReq, GetWorkerIdReq.thrift_spec, False], None, 2, ), # 1
+)
+
+getWorkerId_args.thrift_struct_annotations = {
+}
+getWorkerId_args.thrift_field_annotations = {
+}
+
+def getWorkerId_args__init__(self, req=None,):
+  self.req = req
+
+getWorkerId_args.__init__ = getWorkerId_args__init__
+
+def getWorkerId_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+getWorkerId_args.__getstate__ = lambda self: self.__dict__.copy()
+getWorkerId_args.__setstate__ = getWorkerId_args__setstate__
+
+class getWorkerId_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = GetWorkerIdResp()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('getWorkerId_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(getWorkerId_result)
+getWorkerId_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [GetWorkerIdResp, GetWorkerIdResp.thrift_spec, False], None, 2, ), # 0
+)
+
+getWorkerId_result.thrift_struct_annotations = {
+}
+getWorkerId_result.thrift_field_annotations = {
+}
+
+def getWorkerId_result__init__(self, success=None,):
+  self.success = success
+
+getWorkerId_result.__init__ = getWorkerId_result__init__
+
+def getWorkerId_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+getWorkerId_result.__getstate__ = lambda self: self.__dict__.copy()
+getWorkerId_result.__setstate__ = getWorkerId_result__setstate__
 
 class multiPut_args:
   """
@@ -14239,7 +14649,7 @@ def getStats_result__setstate__(self, state):
 getStats_result.__getstate__ = lambda self: self.__dict__.copy()
 getStats_result.__setstate__ = getStats_result__setstate__
 
-class signInFTService_args:
+class signInService_args:
   """
   Attributes:
    - req
@@ -14267,7 +14677,7 @@ class signInFTService_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = SignInFTServiceReq()
+          self.req = SignInServiceReq()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -14283,7 +14693,7 @@ class signInFTService_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('signInFTService_args')
+    oprot.writeStructBegin('signInService_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -14312,30 +14722,30 @@ class signInFTService_args:
   # Override the __hash__ function for Python3 - t10434117
   __hash__ = object.__hash__
 
-all_structs.append(signInFTService_args)
-signInFTService_args.thrift_spec = (
+all_structs.append(signInService_args)
+signInService_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [SignInFTServiceReq, SignInFTServiceReq.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [SignInServiceReq, SignInServiceReq.thrift_spec, False], None, 2, ), # 1
 )
 
-signInFTService_args.thrift_struct_annotations = {
+signInService_args.thrift_struct_annotations = {
 }
-signInFTService_args.thrift_field_annotations = {
+signInService_args.thrift_field_annotations = {
 }
 
-def signInFTService_args__init__(self, req=None,):
+def signInService_args__init__(self, req=None,):
   self.req = req
 
-signInFTService_args.__init__ = signInFTService_args__init__
+signInService_args.__init__ = signInService_args__init__
 
-def signInFTService_args__setstate__(self, state):
+def signInService_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-signInFTService_args.__getstate__ = lambda self: self.__dict__.copy()
-signInFTService_args.__setstate__ = signInFTService_args__setstate__
+signInService_args.__getstate__ = lambda self: self.__dict__.copy()
+signInService_args.__setstate__ = signInService_args__setstate__
 
-class signInFTService_result:
+class signInService_result:
   """
   Attributes:
    - success
@@ -14379,7 +14789,7 @@ class signInFTService_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('signInFTService_result')
+    oprot.writeStructBegin('signInService_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -14408,29 +14818,29 @@ class signInFTService_result:
   # Override the __hash__ function for Python3 - t10434117
   __hash__ = object.__hash__
 
-all_structs.append(signInFTService_result)
-signInFTService_result.thrift_spec = (
+all_structs.append(signInService_result)
+signInService_result.thrift_spec = (
   (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
 )
 
-signInFTService_result.thrift_struct_annotations = {
+signInService_result.thrift_struct_annotations = {
 }
-signInFTService_result.thrift_field_annotations = {
+signInService_result.thrift_field_annotations = {
 }
 
-def signInFTService_result__init__(self, success=None,):
+def signInService_result__init__(self, success=None,):
   self.success = success
 
-signInFTService_result.__init__ = signInFTService_result__init__
+signInService_result.__init__ = signInService_result__init__
 
-def signInFTService_result__setstate__(self, state):
+def signInService_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-signInFTService_result.__getstate__ = lambda self: self.__dict__.copy()
-signInFTService_result.__setstate__ = signInFTService_result__setstate__
+signInService_result.__getstate__ = lambda self: self.__dict__.copy()
+signInService_result.__setstate__ = signInService_result__setstate__
 
-class signOutFTService_args:
+class signOutService_args:
   """
   Attributes:
    - req
@@ -14458,7 +14868,7 @@ class signOutFTService_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = SignOutFTServiceReq()
+          self.req = SignOutServiceReq()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -14474,7 +14884,7 @@ class signOutFTService_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('signOutFTService_args')
+    oprot.writeStructBegin('signOutService_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -14503,30 +14913,30 @@ class signOutFTService_args:
   # Override the __hash__ function for Python3 - t10434117
   __hash__ = object.__hash__
 
-all_structs.append(signOutFTService_args)
-signOutFTService_args.thrift_spec = (
+all_structs.append(signOutService_args)
+signOutService_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [SignOutFTServiceReq, SignOutFTServiceReq.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [SignOutServiceReq, SignOutServiceReq.thrift_spec, False], None, 2, ), # 1
 )
 
-signOutFTService_args.thrift_struct_annotations = {
+signOutService_args.thrift_struct_annotations = {
 }
-signOutFTService_args.thrift_field_annotations = {
+signOutService_args.thrift_field_annotations = {
 }
 
-def signOutFTService_args__init__(self, req=None,):
+def signOutService_args__init__(self, req=None,):
   self.req = req
 
-signOutFTService_args.__init__ = signOutFTService_args__init__
+signOutService_args.__init__ = signOutService_args__init__
 
-def signOutFTService_args__setstate__(self, state):
+def signOutService_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-signOutFTService_args.__getstate__ = lambda self: self.__dict__.copy()
-signOutFTService_args.__setstate__ = signOutFTService_args__setstate__
+signOutService_args.__getstate__ = lambda self: self.__dict__.copy()
+signOutService_args.__setstate__ = signOutService_args__setstate__
 
-class signOutFTService_result:
+class signOutService_result:
   """
   Attributes:
    - success
@@ -14570,7 +14980,7 @@ class signOutFTService_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('signOutFTService_result')
+    oprot.writeStructBegin('signOutService_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -14599,29 +15009,29 @@ class signOutFTService_result:
   # Override the __hash__ function for Python3 - t10434117
   __hash__ = object.__hash__
 
-all_structs.append(signOutFTService_result)
-signOutFTService_result.thrift_spec = (
+all_structs.append(signOutService_result)
+signOutService_result.thrift_spec = (
   (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
 )
 
-signOutFTService_result.thrift_struct_annotations = {
+signOutService_result.thrift_struct_annotations = {
 }
-signOutFTService_result.thrift_field_annotations = {
+signOutService_result.thrift_field_annotations = {
 }
 
-def signOutFTService_result__init__(self, success=None,):
+def signOutService_result__init__(self, success=None,):
   self.success = success
 
-signOutFTService_result.__init__ = signOutFTService_result__init__
+signOutService_result.__init__ = signOutService_result__init__
 
-def signOutFTService_result__setstate__(self, state):
+def signOutService_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-signOutFTService_result.__getstate__ = lambda self: self.__dict__.copy()
-signOutFTService_result.__setstate__ = signOutFTService_result__setstate__
+signOutService_result.__getstate__ = lambda self: self.__dict__.copy()
+signOutService_result.__setstate__ = signOutService_result__setstate__
 
-class listFTClients_args:
+class listServiceClients_args:
   """
   Attributes:
    - req
@@ -14649,7 +15059,7 @@ class listFTClients_args:
         break
       if fid == 1:
         if ftype == TType.STRUCT:
-          self.req = ListFTClientsReq()
+          self.req = ListServiceClientsReq()
           self.req.read(iprot)
         else:
           iprot.skip(ftype)
@@ -14665,7 +15075,7 @@ class listFTClients_args:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('listFTClients_args')
+    oprot.writeStructBegin('listServiceClients_args')
     if self.req != None:
       oprot.writeFieldBegin('req', TType.STRUCT, 1)
       self.req.write(oprot)
@@ -14694,30 +15104,30 @@ class listFTClients_args:
   # Override the __hash__ function for Python3 - t10434117
   __hash__ = object.__hash__
 
-all_structs.append(listFTClients_args)
-listFTClients_args.thrift_spec = (
+all_structs.append(listServiceClients_args)
+listServiceClients_args.thrift_spec = (
   None, # 0
-  (1, TType.STRUCT, 'req', [ListFTClientsReq, ListFTClientsReq.thrift_spec, False], None, 2, ), # 1
+  (1, TType.STRUCT, 'req', [ListServiceClientsReq, ListServiceClientsReq.thrift_spec, False], None, 2, ), # 1
 )
 
-listFTClients_args.thrift_struct_annotations = {
+listServiceClients_args.thrift_struct_annotations = {
 }
-listFTClients_args.thrift_field_annotations = {
+listServiceClients_args.thrift_field_annotations = {
 }
 
-def listFTClients_args__init__(self, req=None,):
+def listServiceClients_args__init__(self, req=None,):
   self.req = req
 
-listFTClients_args.__init__ = listFTClients_args__init__
+listServiceClients_args.__init__ = listServiceClients_args__init__
 
-def listFTClients_args__setstate__(self, state):
+def listServiceClients_args__setstate__(self, state):
   state.setdefault('req', None)
   self.__dict__ = state
 
-listFTClients_args.__getstate__ = lambda self: self.__dict__.copy()
-listFTClients_args.__setstate__ = listFTClients_args__setstate__
+listServiceClients_args.__getstate__ = lambda self: self.__dict__.copy()
+listServiceClients_args.__setstate__ = listServiceClients_args__setstate__
 
-class listFTClients_result:
+class listServiceClients_result:
   """
   Attributes:
    - success
@@ -14745,7 +15155,7 @@ class listFTClients_result:
         break
       if fid == 0:
         if ftype == TType.STRUCT:
-          self.success = ListFTClientsResp()
+          self.success = ListServiceClientsResp()
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
@@ -14761,7 +15171,7 @@ class listFTClients_result:
     if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
       oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
       return
-    oprot.writeStructBegin('listFTClients_result')
+    oprot.writeStructBegin('listServiceClients_result')
     if self.success != None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
@@ -14790,27 +15200,27 @@ class listFTClients_result:
   # Override the __hash__ function for Python3 - t10434117
   __hash__ = object.__hash__
 
-all_structs.append(listFTClients_result)
-listFTClients_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ListFTClientsResp, ListFTClientsResp.thrift_spec, False], None, 2, ), # 0
+all_structs.append(listServiceClients_result)
+listServiceClients_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ListServiceClientsResp, ListServiceClientsResp.thrift_spec, False], None, 2, ), # 0
 )
 
-listFTClients_result.thrift_struct_annotations = {
+listServiceClients_result.thrift_struct_annotations = {
 }
-listFTClients_result.thrift_field_annotations = {
+listServiceClients_result.thrift_field_annotations = {
 }
 
-def listFTClients_result__init__(self, success=None,):
+def listServiceClients_result__init__(self, success=None,):
   self.success = success
 
-listFTClients_result.__init__ = listFTClients_result__init__
+listServiceClients_result.__init__ = listServiceClients_result__init__
 
-def listFTClients_result__setstate__(self, state):
+def listServiceClients_result__setstate__(self, state):
   state.setdefault('success', None)
   self.__dict__ = state
 
-listFTClients_result.__getstate__ = lambda self: self.__dict__.copy()
-listFTClients_result.__setstate__ = listFTClients_result__setstate__
+listServiceClients_result.__getstate__ = lambda self: self.__dict__.copy()
+listServiceClients_result.__setstate__ = listServiceClients_result__setstate__
 
 class createFTIndex_args:
   """
@@ -17812,6 +18222,36 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "listSpaces failed: unknown result");
 
+  def alterSpace(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_alterSpace(req)
+    return self.recv_alterSpace()
+
+  def send_alterSpace(self, req=None):
+    self._oprot.writeMessageBegin('alterSpace', TMessageType.CALL, self._seqid)
+    args = alterSpace_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_alterSpace(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = alterSpace_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "alterSpace failed: unknown result");
+
   def createSpaceAs(self, req=None):
     """
     Parameters:
@@ -18321,6 +18761,36 @@ class Client(Iface):
     if result.success != None:
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "listParts failed: unknown result");
+
+  def getWorkerId(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_getWorkerId(req)
+    return self.recv_getWorkerId()
+
+  def send_getWorkerId(self, req=None):
+    self._oprot.writeMessageBegin('getWorkerId', TMessageType.CALL, self._seqid)
+    args = getWorkerId_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_getWorkerId(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = getWorkerId_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "getWorkerId failed: unknown result");
 
   def multiPut(self, req=None):
     """
@@ -19732,95 +20202,95 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "getStats failed: unknown result");
 
-  def signInFTService(self, req=None):
+  def signInService(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_signInFTService(req)
-    return self.recv_signInFTService()
+    self.send_signInService(req)
+    return self.recv_signInService()
 
-  def send_signInFTService(self, req=None):
-    self._oprot.writeMessageBegin('signInFTService', TMessageType.CALL, self._seqid)
-    args = signInFTService_args()
+  def send_signInService(self, req=None):
+    self._oprot.writeMessageBegin('signInService', TMessageType.CALL, self._seqid)
+    args = signInService_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_signInFTService(self, ):
+  def recv_signInService(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = signInFTService_result()
+    result = signInService_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "signInFTService failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "signInService failed: unknown result");
 
-  def signOutFTService(self, req=None):
+  def signOutService(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_signOutFTService(req)
-    return self.recv_signOutFTService()
+    self.send_signOutService(req)
+    return self.recv_signOutService()
 
-  def send_signOutFTService(self, req=None):
-    self._oprot.writeMessageBegin('signOutFTService', TMessageType.CALL, self._seqid)
-    args = signOutFTService_args()
+  def send_signOutService(self, req=None):
+    self._oprot.writeMessageBegin('signOutService', TMessageType.CALL, self._seqid)
+    args = signOutService_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_signOutFTService(self, ):
+  def recv_signOutService(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = signOutFTService_result()
+    result = signOutService_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "signOutFTService failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "signOutService failed: unknown result");
 
-  def listFTClients(self, req=None):
+  def listServiceClients(self, req=None):
     """
     Parameters:
      - req
     """
-    self.send_listFTClients(req)
-    return self.recv_listFTClients()
+    self.send_listServiceClients(req)
+    return self.recv_listServiceClients()
 
-  def send_listFTClients(self, req=None):
-    self._oprot.writeMessageBegin('listFTClients', TMessageType.CALL, self._seqid)
-    args = listFTClients_args()
+  def send_listServiceClients(self, req=None):
+    self._oprot.writeMessageBegin('listServiceClients', TMessageType.CALL, self._seqid)
+    args = listServiceClients_args()
     args.req = req
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_listFTClients(self, ):
+  def recv_listServiceClients(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = listFTClients_result()
+    result = listServiceClients_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success != None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "listFTClients failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "listServiceClients failed: unknown result");
 
   def createFTIndex(self, req=None):
     """
@@ -20289,6 +20759,8 @@ class Processor(Iface, TProcessor):
     self._priorityMap["getSpace"] = TPriority.NORMAL
     self._processMap["listSpaces"] = Processor.process_listSpaces
     self._priorityMap["listSpaces"] = TPriority.NORMAL
+    self._processMap["alterSpace"] = Processor.process_alterSpace
+    self._priorityMap["alterSpace"] = TPriority.NORMAL
     self._processMap["createSpaceAs"] = Processor.process_createSpaceAs
     self._priorityMap["createSpaceAs"] = TPriority.NORMAL
     self._processMap["createTag"] = Processor.process_createTag
@@ -20323,6 +20795,8 @@ class Processor(Iface, TProcessor):
     self._priorityMap["getPartsAlloc"] = TPriority.NORMAL
     self._processMap["listParts"] = Processor.process_listParts
     self._priorityMap["listParts"] = TPriority.NORMAL
+    self._processMap["getWorkerId"] = Processor.process_getWorkerId
+    self._priorityMap["getWorkerId"] = TPriority.NORMAL
     self._processMap["multiPut"] = Processor.process_multiPut
     self._priorityMap["multiPut"] = TPriority.NORMAL
     self._processMap["get"] = Processor.process_get
@@ -20417,12 +20891,12 @@ class Processor(Iface, TProcessor):
     self._priorityMap["listListener"] = TPriority.NORMAL
     self._processMap["getStats"] = Processor.process_getStats
     self._priorityMap["getStats"] = TPriority.NORMAL
-    self._processMap["signInFTService"] = Processor.process_signInFTService
-    self._priorityMap["signInFTService"] = TPriority.NORMAL
-    self._processMap["signOutFTService"] = Processor.process_signOutFTService
-    self._priorityMap["signOutFTService"] = TPriority.NORMAL
-    self._processMap["listFTClients"] = Processor.process_listFTClients
-    self._priorityMap["listFTClients"] = TPriority.NORMAL
+    self._processMap["signInService"] = Processor.process_signInService
+    self._priorityMap["signInService"] = TPriority.NORMAL
+    self._processMap["signOutService"] = Processor.process_signOutService
+    self._priorityMap["signOutService"] = TPriority.NORMAL
+    self._processMap["listServiceClients"] = Processor.process_listServiceClients
+    self._priorityMap["listServiceClients"] = TPriority.NORMAL
     self._processMap["createFTIndex"] = Processor.process_createFTIndex
     self._priorityMap["createFTIndex"] = TPriority.NORMAL
     self._processMap["dropFTIndex"] = Processor.process_dropFTIndex
@@ -20503,6 +20977,17 @@ class Processor(Iface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'listSpaces', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(alterSpace_args, oneway=False)
+  def process_alterSpace(self, args, handler_ctx):
+    result = alterSpace_result()
+    try:
+      result.success = self._handler.alterSpace(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'alterSpace', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -20690,6 +21175,17 @@ class Processor(Iface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'listParts', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(getWorkerId_args, oneway=False)
+  def process_getWorkerId(self, args, handler_ctx):
+    result = getWorkerId_result()
+    try:
+      result.success = self._handler.getWorkerId(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'getWorkerId', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -21210,36 +21706,36 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(signInFTService_args, oneway=False)
-  def process_signInFTService(self, args, handler_ctx):
-    result = signInFTService_result()
+  @thrift_process_method(signInService_args, oneway=False)
+  def process_signInService(self, args, handler_ctx):
+    result = signInService_result()
     try:
-      result.success = self._handler.signInFTService(args.req)
+      result.success = self._handler.signInService(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'signInFTService', ex)
+      self._event_handler.handlerError(handler_ctx, 'signInService', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(signOutFTService_args, oneway=False)
-  def process_signOutFTService(self, args, handler_ctx):
-    result = signOutFTService_result()
+  @thrift_process_method(signOutService_args, oneway=False)
+  def process_signOutService(self, args, handler_ctx):
+    result = signOutService_result()
     try:
-      result.success = self._handler.signOutFTService(args.req)
+      result.success = self._handler.signOutService(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'signOutFTService', ex)
+      self._event_handler.handlerError(handler_ctx, 'signOutService', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(listFTClients_args, oneway=False)
-  def process_listFTClients(self, args, handler_ctx):
-    result = listFTClients_result()
+  @thrift_process_method(listServiceClients_args, oneway=False)
+  def process_listServiceClients(self, args, handler_ctx):
+    result = listServiceClients_result()
     try:
-      result.success = self._handler.listFTClients(args.req)
+      result.success = self._handler.listServiceClients(args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'listFTClients', ex)
+      self._event_handler.handlerError(handler_ctx, 'listServiceClients', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -21426,6 +21922,8 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["getSpace"] = TPriority.NORMAL
     self._processMap["listSpaces"] = ContextProcessor.process_listSpaces
     self._priorityMap["listSpaces"] = TPriority.NORMAL
+    self._processMap["alterSpace"] = ContextProcessor.process_alterSpace
+    self._priorityMap["alterSpace"] = TPriority.NORMAL
     self._processMap["createSpaceAs"] = ContextProcessor.process_createSpaceAs
     self._priorityMap["createSpaceAs"] = TPriority.NORMAL
     self._processMap["createTag"] = ContextProcessor.process_createTag
@@ -21460,6 +21958,8 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["getPartsAlloc"] = TPriority.NORMAL
     self._processMap["listParts"] = ContextProcessor.process_listParts
     self._priorityMap["listParts"] = TPriority.NORMAL
+    self._processMap["getWorkerId"] = ContextProcessor.process_getWorkerId
+    self._priorityMap["getWorkerId"] = TPriority.NORMAL
     self._processMap["multiPut"] = ContextProcessor.process_multiPut
     self._priorityMap["multiPut"] = TPriority.NORMAL
     self._processMap["get"] = ContextProcessor.process_get
@@ -21554,12 +22054,12 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["listListener"] = TPriority.NORMAL
     self._processMap["getStats"] = ContextProcessor.process_getStats
     self._priorityMap["getStats"] = TPriority.NORMAL
-    self._processMap["signInFTService"] = ContextProcessor.process_signInFTService
-    self._priorityMap["signInFTService"] = TPriority.NORMAL
-    self._processMap["signOutFTService"] = ContextProcessor.process_signOutFTService
-    self._priorityMap["signOutFTService"] = TPriority.NORMAL
-    self._processMap["listFTClients"] = ContextProcessor.process_listFTClients
-    self._priorityMap["listFTClients"] = TPriority.NORMAL
+    self._processMap["signInService"] = ContextProcessor.process_signInService
+    self._priorityMap["signInService"] = TPriority.NORMAL
+    self._processMap["signOutService"] = ContextProcessor.process_signOutService
+    self._priorityMap["signOutService"] = TPriority.NORMAL
+    self._processMap["listServiceClients"] = ContextProcessor.process_listServiceClients
+    self._priorityMap["listServiceClients"] = TPriority.NORMAL
     self._processMap["createFTIndex"] = ContextProcessor.process_createFTIndex
     self._priorityMap["createFTIndex"] = TPriority.NORMAL
     self._processMap["dropFTIndex"] = ContextProcessor.process_dropFTIndex
@@ -21640,6 +22140,17 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'listSpaces', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(alterSpace_args, oneway=False)
+  def process_alterSpace(self, args, handler_ctx):
+    result = alterSpace_result()
+    try:
+      result.success = self._handler.alterSpace(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'alterSpace', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -21827,6 +22338,17 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'listParts', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(getWorkerId_args, oneway=False)
+  def process_getWorkerId(self, args, handler_ctx):
+    result = getWorkerId_result()
+    try:
+      result.success = self._handler.getWorkerId(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'getWorkerId', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
@@ -22347,36 +22869,36 @@ class ContextProcessor(ContextIface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(signInFTService_args, oneway=False)
-  def process_signInFTService(self, args, handler_ctx):
-    result = signInFTService_result()
+  @thrift_process_method(signInService_args, oneway=False)
+  def process_signInService(self, args, handler_ctx):
+    result = signInService_result()
     try:
-      result.success = self._handler.signInFTService(handler_ctx, args.req)
+      result.success = self._handler.signInService(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'signInFTService', ex)
+      self._event_handler.handlerError(handler_ctx, 'signInService', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(signOutFTService_args, oneway=False)
-  def process_signOutFTService(self, args, handler_ctx):
-    result = signOutFTService_result()
+  @thrift_process_method(signOutService_args, oneway=False)
+  def process_signOutService(self, args, handler_ctx):
+    result = signOutService_result()
     try:
-      result.success = self._handler.signOutFTService(handler_ctx, args.req)
+      result.success = self._handler.signOutService(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'signOutFTService', ex)
+      self._event_handler.handlerError(handler_ctx, 'signOutService', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
-  @thrift_process_method(listFTClients_args, oneway=False)
-  def process_listFTClients(self, args, handler_ctx):
-    result = listFTClients_result()
+  @thrift_process_method(listServiceClients_args, oneway=False)
+  def process_listServiceClients(self, args, handler_ctx):
+    result = listServiceClients_result()
     try:
-      result.success = self._handler.listFTClients(handler_ctx, args.req)
+      result.success = self._handler.listServiceClients(handler_ctx, args.req)
     except:
       ex = sys.exc_info()[1]
-      self._event_handler.handlerError(handler_ctx, 'listFTClients', ex)
+      self._event_handler.handlerError(handler_ctx, 'listServiceClients', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 

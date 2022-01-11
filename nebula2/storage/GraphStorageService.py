@@ -12,7 +12,7 @@ from nebula2.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula2.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, StatType, OrderDirection, EdgeDirection, ScanType, EngineSignType, RequestCommon, PartitionResult, ResponseCommon, StatProp, Expr, EdgeProp, VertexProp, OrderBy, TraverseSpec, GetNeighborsRequest, GetNeighborsResponse, ExecResponse, GetPropRequest, GetPropResponse, NewTag, NewVertex, EdgeKey, NewEdge, AddVerticesRequest, AddEdgesRequest, DeleteVerticesRequest, DeleteEdgesRequest, DelTags, DeleteTagsRequest, UpdateResponse, UpdatedProp, UpdateVertexRequest, UpdateEdgeRequest, GetUUIDReq, GetUUIDResp, LookupIndexResp, IndexColumnHint, IndexQueryContext, IndexSpec, LookupIndexRequest, LookupAndTraverseRequest, ScanCursor, ScanVertexRequest, ScanEdgeRequest, ScanResponse, TaskPara, KVGetRequest, KVGetResponse, KVPutRequest, KVRemoveRequest, AdminExecResp, TransLeaderReq, AddPartReq, AddLearnerReq, RemovePartReq, MemberChangeReq, CatchUpDataReq, GetLeaderReq, CreateCPRequest, DropCPRequest, BlockingSignRequest, GetLeaderPartsResp, CheckPeersReq, RebuildIndexRequest, CreateCPResp, ListClusterInfoResp, ListClusterInfoReq, AddAdminTaskRequest, StopAdminTaskRequest, InternalTxnRequest, ChainAddEdgesRequest, ChainUpdateEdgeRequest
+from .ttypes import UTF8STRINGS, StatType, OrderDirection, EdgeDirection, ScanType, EngineSignType, RequestCommon, PartitionResult, ResponseCommon, StatProp, Expr, EdgeProp, VertexProp, OrderBy, TraverseSpec, GetNeighborsRequest, GetNeighborsResponse, ExecResponse, GetPropRequest, GetPropResponse, NewTag, NewVertex, EdgeKey, NewEdge, AddVerticesRequest, AddEdgesRequest, DeleteVerticesRequest, DeleteEdgesRequest, DelTags, DeleteTagsRequest, UpdateResponse, UpdatedProp, UpdateVertexRequest, UpdateEdgeRequest, GetUUIDReq, GetUUIDResp, LookupIndexResp, IndexColumnHint, IndexQueryContext, IndexSpec, LookupIndexRequest, LookupAndTraverseRequest, ScanCursor, ScanVertexRequest, ScanEdgeRequest, ScanResponse, TaskPara, KVGetRequest, KVGetResponse, KVPutRequest, KVRemoveRequest, AdminExecResp, TransLeaderReq, AddPartReq, AddLearnerReq, RemovePartReq, MemberChangeReq, CatchUpDataReq, GetLeaderReq, CreateCPRequest, DropCPRequest, BlockingSignRequest, GetLeaderPartsResp, CheckPeersReq, RebuildIndexRequest, CreateCPResp, ListClusterInfoResp, ListClusterInfoReq, AddAdminTaskRequest, StopAdminTaskRequest, ChainAddEdgesRequest, ChainUpdateEdgeRequest, ChainDeleteEdgesRequest
 import nebula2.common.ttypes
 import nebula2.meta.ttypes
 
@@ -155,6 +155,13 @@ class Iface:
     """
     pass
 
+  def chainDeleteEdges(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
   def get(self, req=None):
     """
     Parameters:
@@ -284,6 +291,13 @@ class ContextIface:
     pass
 
   def chainAddEdges(self, handler_ctx, req=None):
+    """
+    Parameters:
+     - req
+    """
+    pass
+
+  def chainDeleteEdges(self, handler_ctx, req=None):
     """
     Parameters:
      - req
@@ -3370,6 +3384,197 @@ def chainAddEdges_result__setstate__(self, state):
 chainAddEdges_result.__getstate__ = lambda self: self.__dict__.copy()
 chainAddEdges_result.__setstate__ = chainAddEdges_result__setstate__
 
+class chainDeleteEdges_args:
+  """
+  Attributes:
+   - req
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRUCT:
+          self.req = DeleteEdgesRequest()
+          self.req.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('chainDeleteEdges_args')
+    if self.req != None:
+      oprot.writeFieldBegin('req', TType.STRUCT, 1)
+      self.req.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.req is not None:
+      value = pprint.pformat(self.req, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    req=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(chainDeleteEdges_args)
+chainDeleteEdges_args.thrift_spec = (
+  None, # 0
+  (1, TType.STRUCT, 'req', [DeleteEdgesRequest, DeleteEdgesRequest.thrift_spec, False], None, 2, ), # 1
+)
+
+chainDeleteEdges_args.thrift_struct_annotations = {
+}
+chainDeleteEdges_args.thrift_field_annotations = {
+}
+
+def chainDeleteEdges_args__init__(self, req=None,):
+  self.req = req
+
+chainDeleteEdges_args.__init__ = chainDeleteEdges_args__init__
+
+def chainDeleteEdges_args__setstate__(self, state):
+  state.setdefault('req', None)
+  self.__dict__ = state
+
+chainDeleteEdges_args.__getstate__ = lambda self: self.__dict__.copy()
+chainDeleteEdges_args.__setstate__ = chainDeleteEdges_args__setstate__
+
+class chainDeleteEdges_result:
+  """
+  Attributes:
+   - success
+  """
+
+  thrift_spec = None
+  thrift_field_annotations = None
+  thrift_struct_annotations = None
+  __init__ = None
+  @staticmethod
+  def isUnion():
+    return False
+
+  def read(self, iprot):
+    if (isinstance(iprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0)
+      return
+    if (isinstance(iprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(iprot, THeaderProtocol.THeaderProtocolAccelerate) and iprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastproto is not None:
+      fastproto.decode(self, iprot.trans, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2)
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ExecResponse()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if (isinstance(oprot, TBinaryProtocol.TBinaryProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_BINARY_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=0))
+      return
+    if (isinstance(oprot, TCompactProtocol.TCompactProtocolAccelerated) or (isinstance(oprot, THeaderProtocol.THeaderProtocolAccelerate) and oprot.get_protocol_id() == THeaderProtocol.THeaderProtocol.T_COMPACT_PROTOCOL)) and self.thrift_spec is not None and fastproto is not None:
+      oprot.trans.write(fastproto.encode(self, [self.__class__, self.thrift_spec, False], utf8strings=UTF8STRINGS, protoid=2))
+      return
+    oprot.writeStructBegin('chainDeleteEdges_result')
+    if self.success != None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def __repr__(self):
+    L = []
+    padding = ' ' * 4
+    if self.success is not None:
+      value = pprint.pformat(self.success, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    success=%s' % (value))
+    return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+
+    return self.__dict__ == other.__dict__ 
+
+  def __ne__(self, other):
+    return not (self == other)
+
+  # Override the __hash__ function for Python3 - t10434117
+  __hash__ = object.__hash__
+
+all_structs.append(chainDeleteEdges_result)
+chainDeleteEdges_result.thrift_spec = (
+  (0, TType.STRUCT, 'success', [ExecResponse, ExecResponse.thrift_spec, False], None, 2, ), # 0
+)
+
+chainDeleteEdges_result.thrift_struct_annotations = {
+}
+chainDeleteEdges_result.thrift_field_annotations = {
+}
+
+def chainDeleteEdges_result__init__(self, success=None,):
+  self.success = success
+
+chainDeleteEdges_result.__init__ = chainDeleteEdges_result__init__
+
+def chainDeleteEdges_result__setstate__(self, state):
+  state.setdefault('success', None)
+  self.__dict__ = state
+
+chainDeleteEdges_result.__getstate__ = lambda self: self.__dict__.copy()
+chainDeleteEdges_result.__setstate__ = chainDeleteEdges_result__setstate__
+
 class get_args:
   """
   Attributes:
@@ -4438,6 +4643,36 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "chainAddEdges failed: unknown result");
 
+  def chainDeleteEdges(self, req=None):
+    """
+    Parameters:
+     - req
+    """
+    self.send_chainDeleteEdges(req)
+    return self.recv_chainDeleteEdges()
+
+  def send_chainDeleteEdges(self, req=None):
+    self._oprot.writeMessageBegin('chainDeleteEdges', TMessageType.CALL, self._seqid)
+    args = chainDeleteEdges_args()
+    args.req = req
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_chainDeleteEdges(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = chainDeleteEdges_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success != None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "chainDeleteEdges failed: unknown result");
+
   def get(self, req=None):
     """
     Parameters:
@@ -4569,6 +4804,8 @@ class Processor(Iface, TProcessor):
     self._priorityMap["chainUpdateEdge"] = TPriority.NORMAL
     self._processMap["chainAddEdges"] = Processor.process_chainAddEdges
     self._priorityMap["chainAddEdges"] = TPriority.NORMAL
+    self._processMap["chainDeleteEdges"] = Processor.process_chainDeleteEdges
+    self._priorityMap["chainDeleteEdges"] = TPriority.NORMAL
     self._processMap["get"] = Processor.process_get
     self._priorityMap["get"] = TPriority.NORMAL
     self._processMap["put"] = Processor.process_put
@@ -4760,6 +4997,17 @@ class Processor(Iface, TProcessor):
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
+  @thrift_process_method(chainDeleteEdges_args, oneway=False)
+  def process_chainDeleteEdges(self, args, handler_ctx):
+    result = chainDeleteEdges_result()
+    try:
+      result.success = self._handler.chainDeleteEdges(args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'chainDeleteEdges', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
   @thrift_process_method(get_args, oneway=False)
   def process_get(self, args, handler_ctx):
     result = get_result()
@@ -4835,6 +5083,8 @@ class ContextProcessor(ContextIface, TProcessor):
     self._priorityMap["chainUpdateEdge"] = TPriority.NORMAL
     self._processMap["chainAddEdges"] = ContextProcessor.process_chainAddEdges
     self._priorityMap["chainAddEdges"] = TPriority.NORMAL
+    self._processMap["chainDeleteEdges"] = ContextProcessor.process_chainDeleteEdges
+    self._priorityMap["chainDeleteEdges"] = TPriority.NORMAL
     self._processMap["get"] = ContextProcessor.process_get
     self._priorityMap["get"] = TPriority.NORMAL
     self._processMap["put"] = ContextProcessor.process_put
@@ -5023,6 +5273,17 @@ class ContextProcessor(ContextIface, TProcessor):
     except:
       ex = sys.exc_info()[1]
       self._event_handler.handlerError(handler_ctx, 'chainAddEdges', ex)
+      result = Thrift.TApplicationException(message=repr(ex))
+    return result
+
+  @thrift_process_method(chainDeleteEdges_args, oneway=False)
+  def process_chainDeleteEdges(self, args, handler_ctx):
+    result = chainDeleteEdges_result()
+    try:
+      result.success = self._handler.chainDeleteEdges(handler_ctx, args.req)
+    except:
+      ex = sys.exc_info()[1]
+      self._event_handler.handlerError(handler_ctx, 'chainDeleteEdges', ex)
       result = Thrift.TApplicationException(message=repr(ex))
     return result
 
