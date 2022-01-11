@@ -41,7 +41,6 @@ class TestConnectionPool(TestCase):
         # self signed SSL config
         self.ssl_selfs_signed_config = SSL_config()
         self.ssl_selfs_signed_config.cert_reqs = ssl.CERT_OPTIONAL
-        self.ssl_selfs_signed_config.cert_reqs = ssl.CERT_OPTIONAL
         self.ssl_selfs_signed_config.ca_certs = os.path.join(
             current_dir, 'secrets/test.self-signed.pem'
         )

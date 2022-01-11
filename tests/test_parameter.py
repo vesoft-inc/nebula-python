@@ -90,7 +90,8 @@ class TestParameter(TestCase):
             assert 'bob1' == resp.row_values(0)[2].as_string()
             # test cypher parameter
             resp = client.execute_parameter(
-                'MATCH (v:person)--() WHERE v.age>abs($p1)+3 RETURN v.name AS vname,v.age AS vage ORDER BY vage, $p3 LIMIT $p1+1',
+                f'''MATCH (v:person)--() WHERE v.person.age>abs($p1)+3
+                RETURN v.person.name AS vname,v.person.age AS vage ORDER BY vage, $p3 LIMIT $p1+1''',
                 self.params,
             )
             assert resp.is_succeeded(), resp.error_msg()

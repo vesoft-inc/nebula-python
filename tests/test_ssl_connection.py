@@ -88,7 +88,7 @@ class TestSSLConnection(TestCase):
             assert True
 
 
-@pytest.mark.self_signed_SSL
+@pytest.mark.SSL
 class TestSSLConnectionSelfSigned(TestCase):
     def test_create_self_signed(self):
         try:
