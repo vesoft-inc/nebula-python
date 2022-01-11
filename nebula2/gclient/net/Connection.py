@@ -6,7 +6,6 @@
 
 
 import time
-from nebula2.Config import SSL_config
 
 from nebula2.fbthrift.transport import TSocket, TTransport, TSSLSocket
 from nebula2.fbthrift.transport.TTransport import TTransportException
@@ -95,7 +94,7 @@ class Connection(object):
         :return:
         """
         self.close()
-        if self._ssl_conf != None:
+        if self._ssl_conf is not None:
             self.open_SSL(self._ip, self._port, self._timeout, self._ssl_conf)
         else:
             self.open(self._ip, self._port, self._timeout)
