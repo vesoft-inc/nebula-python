@@ -490,7 +490,7 @@ class TesValueWrapper(TestBaseCase):
 
         duration = value_wrapper.as_duration()
         assert isinstance(duration, DurationWrapper)
-        assert str(duration) == b'P12MT86400.003000000S'
+        assert str(duration) == 'P12MT86400.003000000S'
 
 
 class TestNode(TestBaseCase):

@@ -738,7 +738,7 @@ class ValueWrapper(object):
         elif self.is_geography():
             return self.as_geography() == o.as_geography()
         elif self.is_duration():
-            return self.as_duration() == o.as_geography()
+            return self.as_duration() == o.as_duration()
         else:
             raise RuntimeError(
                 'Unsupported type:{} to compare'.format(self._get_type_name())
@@ -1296,9 +1296,9 @@ class DurationWrapper(BaseObject):
         )
 
     def __repr__(self):
-        totalSeconds = self._duration.seconds + (self._duration.microseconds) / 1000000
+        totalSeconds = self._duration.seconds + (self._duration.microseconds) // 1000000
         remainMicroSeconds = self._duration.microseconds % 1000000
-        return f"P{self._duration.months}MT{totalSeconds}.{remainMicroSeconds}S"
+        return f"P{self._duration.months}MT{totalSeconds}.{remainMicroSeconds:06d}000S"
 
 
 class GenValue(object):
