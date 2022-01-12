@@ -175,9 +175,6 @@ class Record(object):
 
         return self.__dict__ == other.__dict__
 
-    def __ne__(self, other):
-        return not (self == other)
-
 
 class DataSetWrapper(object):
     def __init__(self, data_set, decode_type='utf-8', timezone_offset: int = 0):
@@ -1440,9 +1437,6 @@ class Node(BaseObject):
 
         return self.get_id() == other.get_id()
 
-    def __ne__(self, other):
-        return not (self == other)
-
 
 class Relationship(BaseObject):
     def __init__(self, edge: Edge):
@@ -1547,9 +1541,6 @@ class Relationship(BaseObject):
             and self.edge_name() == other.edge_name()
             and self.ranking() == self.ranking()
         )
-
-    def __ne__(self, other):
-        return not (self == other)
 
 
 class Segment:
@@ -1755,6 +1746,3 @@ class PathWrapper(BaseObject):
             return False
 
         return self._segments == other.segments()
-
-    def __ne__(self, other):
-        return not (self == other)
