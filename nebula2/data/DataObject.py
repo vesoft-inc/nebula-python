@@ -22,6 +22,7 @@ from nebula2.common.ttypes import (
     NullType,
     DateTime,
     Time,
+    Duration,
 )
 
 
@@ -223,6 +224,7 @@ class DataSetWrapper(object):
           ttypes.Value.UVAL = 14
           ttypes.Value.GVAL = 15
           ttypes.Value.GGVAL = 16
+          ttypes.Value.DUVAL = 16
         """
         if len(self._data_set.rows) == 0:
             return []
@@ -324,116 +326,123 @@ class ValueWrapper(object):
         return self._value
 
     def is_null(self):
-        """judge the value if is Null type
+        """check if the value is Null type
 
         :return: true or false
         """
         return self._value.getType() == Value.NVAL
 
     def is_empty(self):
-        """judge the value if is Empty type
+        """check if the value is Empty type
 
         :return: true or false
         """
         return self._value.getType() == Value.__EMPTY__
 
     def is_bool(self):
-        """judge the value if is Bool type
+        """check if the value is Bool type
 
         :return: true or false
         """
         return self._value.getType() == Value.BVAL
 
     def is_int(self):
-        """judge the value if is Int type
+        """check if the value is Int type
 
         :return: true or false
         """
         return self._value.getType() == Value.IVAL
 
     def is_double(self):
-        """judge the value if is Double type
+        """check if the value is Double type
 
         :return: true or false
         """
         return self._value.getType() == Value.FVAL
 
     def is_string(self):
-        """judge the value if is String type
+        """check if the value is String type
 
         :return: true or false
         """
         return self._value.getType() == Value.SVAL
 
     def is_list(self):
-        """judge the value if is List type
+        """check if the value is List type
 
         :return: true or false
         """
         return self._value.getType() == Value.LVAL
 
     def is_set(self):
-        """judge the value if is Set type
+        """check if the value is Set type
 
         :return: true or false
         """
         return self._value.getType() == Value.UVAL
 
     def is_map(self):
-        """judge the value if is Map type
+        """check if the value is Map type
 
         :return: true or false
         """
         return self._value.getType() == Value.MVAL
 
     def is_time(self):
-        """judge the value if is Time type
+        """check if the value is Time type
 
         :return: true or false
         """
         return self._value.getType() == Value.TVAL
 
     def is_date(self):
-        """judge the value if is Date type
+        """check if the value is Date type
 
         :return: true or false
         """
         return self._value.getType() == Value.DVAL
 
     def is_datetime(self):
-        """judge the value if is Datetime type
+        """check if the value is Datetime type
 
         :return: true or false
         """
         return self._value.getType() == Value.DTVAL
 
     def is_vertex(self):
-        """judge the value if is Vertex type
+        """check if the value is Vertex type
 
         :return: true or false
         """
         return self._value.getType() == Value.VVAL
 
     def is_edge(self):
-        """judge the value if is Edge type
+        """check if the value is Edge type
 
         :return: true or false
         """
         return self._value.getType() == Value.EVAL
 
     def is_path(self):
-        """judge the value if is Path type
+        """check if the value is Path type
 
         :return: true or false
         """
         return self._value.getType() == Value.PVAL
 
     def is_geography(self):
-        """judge the value if is Geography type
+        """check if the value is Geography type
 
         :return: true or false
         """
         return self._value.getType() == Value.GGVAL
+
+    def is_duration(self):
+        """check if the value is Duration type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.DUVAL
 
     def as_null(self):
         """converts the original data type to Null type
@@ -646,6 +655,17 @@ class ValueWrapper(object):
             "expect geography type, but is " + self._get_type_name()
         )
 
+    def as_duration(self):
+        """converts the original data type to Duration type
+
+        :return: DurationWrapper type
+        """
+        if self._value.getType() == Value.DUVAL:
+            return DurationWrapper(self._value.get_duVal())
+        raise InvalidValueTypeException(
+            "expect duration type, but is " + self._get_type_name()
+        )
+
     def _get_type_name(self):
         if self.is_empty():
             return "empty"
@@ -679,6 +699,8 @@ class ValueWrapper(object):
             return "path"
         if self.is_geography():
             return "geography"
+        if self.is_duration():
+            return "duration"
         return "unknown"
 
     def __eq__(self, o: object) -> bool:
@@ -711,13 +733,15 @@ class ValueWrapper(object):
         elif self.is_path():
             return self.as_path() == o.as_path()
         elif self.is_time():
-            return self.as_time() == self.as_time()
+            return self.as_time() == o.as_time()
         elif self.is_date():
-            return self.as_date() == self.as_date()
+            return self.as_date() == o.as_date()
         elif self.is_datetime():
-            return self.as_datetime() == self.as_datetime()
+            return self.as_datetime() == o.as_datetime()
         elif self.is_geography():
-            return self.as_geography() == self.as_geography()
+            return self.as_geography() == o.as_geography()
+        elif self.is_duration():
+            return self.as_duration() == o.as_geography()
         else:
             raise RuntimeError(
                 'Unsupported type:{} to compare'.format(self._get_type_name())
@@ -757,6 +781,8 @@ class ValueWrapper(object):
             return str(self.as_datetime())
         elif self.is_geography():
             return str(self.as_geography())
+        elif self.is_duration():
+            return str(self.as_duration())
         else:
             raise RuntimeError(
                 'Unsupported type:{} to compare'.format(self._get_type_name())
@@ -1235,6 +1261,47 @@ class GeographyWrapper(BaseObject):
             raise RuntimeError(
                 'Unsupported type:{} to compare'.format(self._get_type_name())
             )
+
+
+class DurationWrapper(BaseObject):
+    def __init__(self, duration):
+        super(DurationWrapper, self).__init__()
+        self._duration = duration
+
+    def get_seconds(self):
+        """get seconds
+
+        :return: int64 seconds
+        """
+        return self._duration.seconds
+
+    def get_microseconds(self):
+        """get microseconds
+
+        :return: int32 microseconds
+        """
+        return self._duration.microseconds
+
+    def get_months(self):
+        """get month
+
+        :return: int32 month
+        """
+        return self._duration.months
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return (
+            self._duration.seconds == other.get_seconds()
+            and self._duration.microseconds == other.get_microseconds()
+            and self._duration.months == other.get_months()
+        )
+
+    def __repr__(self):
+        totalSeconds = self._duration.seconds + (self._duration.microseconds) / 1000000
+        remainMicroSeconds = self._duration.microseconds % 1000000
+        return f"P{self._duration.months}MT{totalSeconds}.{remainMicroSeconds}S"
 
 
 class GenValue(object):
