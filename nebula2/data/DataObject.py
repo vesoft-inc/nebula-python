@@ -221,7 +221,7 @@ class DataSetWrapper(object):
           ttypes.Value.UVAL = 14
           ttypes.Value.GVAL = 15
           ttypes.Value.GGVAL = 16
-          ttypes.Value.DUVAL = 16
+          ttypes.Value.DUVAL = 17
         """
         if len(self._data_set.rows) == 0:
             return []
