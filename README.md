@@ -1,10 +1,10 @@
 # nebula-python
 
-This directory holds the Python API for Nebula Graph. It is used to connect with Nebula Graph 2.0.
+This directory holds the Python API for Nebula Graph. It is used to connect with Nebula Graph 3.0.
 
 ## Before you start
 
-Before you start, please read this section to choose the right branch for you. In branch v1.0, the API works only for Nebula Graph 1.0. In the master branch, the API works only for Nebula Graph 2.0.
+Before you start, please read this section to choose the right branch for you. In branch v1.0, the API works only for Nebula Graph 1.0. In the master branch, the API works only for Nebula Graph 3.0.
 
 ## The directory structure
 
@@ -138,13 +138,14 @@ while resp.has_next():
 
 ## How to choose nebula-python
 
-| Nebula2-Python Version | NebulaGraph Version |
+| Nebula3-Python Version | NebulaGraph Version |
 |---|---|
 | 2.0.0b1  | 2.0.0beta |
 | 2.0.0rc1  | 2.0.0-rc1 |
 | 2.0.0  | 2.0.0/2.0.1 |
 | 2.5.0  | 2.5.0 |
 | 2.6.0  | 2.6.0/2.6.1 |
+| 3.0.0  | 3.0.0 |
 
 ## How to contribute to nebula-python
 

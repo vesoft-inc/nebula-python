@@ -64,6 +64,8 @@ if __name__ == '__main__':
         resp = client.execute('DROP SPACE test')
         assert resp.is_succeeded(), resp.error_msg()
 
+        print("Example finished")
+
     except Exception as x:
         import traceback
 
