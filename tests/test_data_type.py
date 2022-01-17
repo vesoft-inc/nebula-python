@@ -26,6 +26,7 @@ from nebula2.common.ttypes import (
     NList,
     NMap,
     Geography,
+    Duration,
     ErrorCode,
 )
 from nebula2.common import ttypes
@@ -44,6 +45,7 @@ from nebula2.data.DataObject import (
     Segment,
     DataSetWrapper,
     GeographyWrapper,
+    DurationWrapper,
 )
 
 
@@ -135,6 +137,7 @@ class TestBaseCase(TestCase):
             b"col14_edge",
             b"col15_path",
             b"col16_geography",
+            b"col17_duration",
         ]
         row = ttypes.Row()
         row.values = []
@@ -197,6 +200,9 @@ class TestBaseCase(TestCase):
         value16 = ttypes.Value()
         value16.set_ggVal(cls.get_geography_value(4.8, 5.2))
         row.values.append(value16)
+        value17 = ttypes.Value()
+        value17.set_duVal(Duration(86400, 3000, 12))
+        row.values.append(value17)
         data_set.rows = []
         data_set.rows.append(row)
         data_set.rows.append(row)
@@ -476,6 +482,16 @@ class TesValueWrapper(TestBaseCase):
         geog = value_wrapper.as_geography()
         assert isinstance(geog, GeographyWrapper)
 
+    def test_as_duration(self):
+        value = ttypes.Value()
+        value.set_duVal(Duration(86400, 3000, 12))
+        value_wrapper = ValueWrapper(value)
+        assert value_wrapper.is_duration()
+
+        duration = value_wrapper.as_duration()
+        assert isinstance(duration, DurationWrapper)
+        assert str(duration) == 'P12MT86400.003000000S'
+
 
 class TestNode(TestBaseCase):
     def test_node_api(self):
@@ -643,6 +659,10 @@ class TestDatesetWrapper(TestBaseCase):
                 == data_set_wrapper2.row_values(i)[15]
             )
             assert (
+                data_set_wrapper1.row_values(i)[16]
+                == data_set_wrapper2.row_values(i)[16]
+            )
+            assert (
                 data_set_wrapper1.row_values(i)[9] != data_set_wrapper2.row_values(i)[8]
             )
 
@@ -693,9 +713,10 @@ class TestResultset(TestBaseCase):
             "col14_edge",
             "col15_path",
             "col16_geography",
+            "col17_duration",
         ]
         assert result.keys() == expect_keys
-        assert result.col_size() == 16
+        assert result.col_size() == 17
         assert result.row_size() == 2
 
         # test column_values
@@ -703,13 +724,13 @@ class TestResultset(TestBaseCase):
         assert result.column_values("col6_string")[0].is_string()
         assert result.column_values("col6_string")[0].as_string() == "hello world"
         # test row_values
-        assert len(result.row_values(0)) == 16
+        assert len(result.row_values(0)) == 17
         assert result.row_values(0)[5].is_string()
         assert result.row_values(0)[5].as_string() == "hello world"
 
         # test rows
         assert len(result.rows()) == 2
-        assert len(result.rows()[0].values) == 16
+        assert len(result.rows()[0].values) == 17
         assert isinstance(result.rows()[0].values[0], Value)
         assert isinstance(result.get_row_types(), list)
 
@@ -731,19 +752,20 @@ class TestResultset(TestBaseCase):
             ttypes.Value.EVAL,
             ttypes.Value.PVAL,
             ttypes.Value.GGVAL,
+            ttypes.Value.DUVAL,
         ]
 
         # test record
         in_use = False
         for record in result:
             in_use = True
-            record.size() == 16
+            record.size() == 17
 
             # test keys()
             assert record.keys() == expect_keys
             # test values()
             values = record.values()
-            assert len(record.values()) == 16
+            assert len(record.values()) == 17
             assert record.values()[0].is_empty()
             assert record.values()[5].is_string()
             assert record.values()[5].is_string()
@@ -790,11 +812,12 @@ class TestResultset(TestBaseCase):
             assert record.get_value(13).is_edge()
             assert record.get_value(14).is_path()
             assert record.get_value(15).is_geography()
+            assert record.get_value(16).is_duration()
         assert in_use
 
         # test use iterator again
         in_use = False
         for record in result:
             in_use = True
-            record.size() == 16
+            record.size() == 17
         assert in_use
