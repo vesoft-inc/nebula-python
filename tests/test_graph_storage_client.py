@@ -18,18 +18,18 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
-from nebula2.Exception import (
+from nebula3.Exception import (
     EdgeNotFoundException,
     TagNotFoundException,
     SpaceNotFoundException,
     PartNotFoundException,
 )
 
-from nebula2.sclient.BaseResult import EdgeData
-from nebula2.sclient.ScanResult import VertexData
-from nebula2.mclient import MetaCache
-from nebula2.sclient.GraphStorageClient import GraphStorageClient
-from nebula2.gclient.net import Connection
+from nebula3.sclient.BaseResult import EdgeData
+from nebula3.sclient.ScanResult import VertexData
+from nebula3.mclient import MetaCache
+from nebula3.sclient.GraphStorageClient import GraphStorageClient
+from nebula3.gclient.net import Connection
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s]:%(message)s')
 

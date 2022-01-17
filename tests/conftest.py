@@ -5,4 +5,4 @@ logging.basicConfig(
     format='[%(asctime)s] %(levelname)-8s [%(filename)s:%(lineno)d]:%(message)s',
 )
 
-logging.getLogger('nebula2').setLevel(logging.DEBUG)
+logging.getLogger('nebula3').setLevel(logging.DEBUG)
