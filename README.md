@@ -1,17 +1,17 @@
 # nebula-python
 
-This directory holds the Python API for Nebula Graph. It is used to connect with Nebula Graph 2.0.
+This directory holds the Python API for Nebula Graph. It is used to connect with Nebula Graph 3.0.
 
 ## Before you start
 
-Before you start, please read this section to choose the right branch for you. In branch v1.0, the API works only for Nebula Graph 1.0. In the master branch, the API works only for Nebula Graph 2.0.
+Before you start, please read this section to choose the right branch for you. In branch v1.0, the API works only for Nebula Graph 1.0. In the master branch, the API works only for Nebula Graph 3.0.
 
 ## The directory structure
 
 ```text
 |--nebula-python
     |
-    |-- nebula2                               // client code
+    |-- nebula3                               // client code
     |   |-- fbthrift                          // the fbthrift lib code
     |   |-- common           
     |   |-- data           
@@ -31,16 +31,16 @@ Before you start, please read this section to choose the right branch for you. I
     |                      
     |-- setup.py                              // used to install or package
     |                      
-    |__ README.md                             // the introduction of nebula2-python
+    |__ README.md                             // the introduction of nebula3-python
 
 ```
 
-## How to get nebula2-python
+## How to get nebula3-python
 
 ### Option one: install with pip
 
 ```python
-pip install nebula2-python==$version
+pip install nebula3-python==$version
 ```
 
 ### Option two: install from the source code
@@ -61,8 +61,8 @@ pip install .
 ## Quick example to use graph-client to connect graphd
 
 ```python
-from nebula2.gclient.net import ConnectionPool
-from nebula2.Config import Config
+from nebula3.gclient.net import ConnectionPool
+from nebula3.Config import Config
 
 # define a config
 config = Config()
@@ -101,8 +101,8 @@ connection_pool.close()
 You should make sure the scan client can connect to the address of storage which see from `SHOW HOSTS` 
 
 ```python
-from nebula2.mclient import MetaCache, HostAddr
-from nebula2.sclient.GraphStorageClient import GraphStorageClient
+from nebula3.mclient import MetaCache, HostAddr
+from nebula3.sclient.GraphStorageClient import GraphStorageClient
 
 # the metad servers's address
 meta_cache = MetaCache([('172.28.1.1', 9559),
@@ -138,13 +138,14 @@ while resp.has_next():
 
 ## How to choose nebula-python
 
-| Nebula2-Python Version | NebulaGraph Version |
+| Nebula3-Python Version | NebulaGraph Version |
 |---|---|
 | 2.0.0b1  | 2.0.0beta |
 | 2.0.0rc1  | 2.0.0-rc1 |
 | 2.0.0  | 2.0.0/2.0.1 |
 | 2.5.0  | 2.5.0 |
 | 2.6.0  | 2.6.0/2.6.1 |
+| 3.0.0  | 3.0.0 |
 
 ## How to contribute to nebula-python
 

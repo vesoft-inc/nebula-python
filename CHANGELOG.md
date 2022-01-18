@@ -9,7 +9,7 @@ Compatible with the v2.5.0 version of nebula-graph
 	- fix get offline host info from list_hosts https://github.com/vesoft-inc/nebula-python/pull/104
 	- fix fbthrift timeout bug https://github.com/vesoft-inc/nebula-python/pull/126
 - incompatible
-	- the ErrorCode define is changed, all ErrorCode is defined in nebula2.common.ttypes.ErrorCode
+	- the ErrorCode define is changed, all ErrorCode is defined in nebula3.common.ttypes.ErrorCode
 	
 ## v2.0.0(2021-03-23)
 Compatible with the v2.0.0 version of nebula-graph

@@ -7,10 +7,10 @@
 
 
 from unittest import TestCase
-from nebula2.gclient.net import ConnectionPool
-from nebula2.data.DataObject import DateTimeWrapper, DateWrapper, TimeWrapper, Null
-from nebula2.common.ttypes import DateTime, Date, Time, ErrorCode
-from nebula2.Config import Config
+from nebula3.gclient.net import ConnectionPool
+from nebula3.data.DataObject import DateTimeWrapper, DateWrapper, TimeWrapper, Null
+from nebula3.common.ttypes import DateTime, Date, Time, ErrorCode
+from nebula3.Config import Config
 import sys
 import os
 import time

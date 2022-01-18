@@ -15,9 +15,9 @@ root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
 from unittest import TestCase
-from nebula2.gclient.net import Connection
-from nebula2.common import ttypes
-from nebula2.Exception import IOErrorException
+from nebula3.gclient.net import Connection
+from nebula3.common import ttypes
+from nebula3.Exception import IOErrorException
 
 
 class TestConnection(TestCase):

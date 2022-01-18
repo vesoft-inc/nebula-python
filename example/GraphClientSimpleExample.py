@@ -9,10 +9,10 @@
 import time
 import json
 
-from nebula2.gclient.net import ConnectionPool
+from nebula3.gclient.net import ConnectionPool
 
-from nebula2.Config import Config
-from nebula2.common import *
+from nebula3.Config import Config
+from nebula3.common import *
 from FormatResp import print_resp
 
 if __name__ == '__main__':
@@ -63,6 +63,8 @@ if __name__ == '__main__':
         # drop space
         resp = client.execute('DROP SPACE test')
         assert resp.is_succeeded(), resp.error_msg()
+
+        print("Example finished")
 
     except Exception as x:
         import traceback
