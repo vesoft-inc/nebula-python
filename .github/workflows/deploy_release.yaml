@@ -30,7 +30,6 @@ jobs:
           sleep 45
           pytest -s -v -k "SSL"
         working-directory: tests
-
       - name: Build and publish
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_NAME }}
