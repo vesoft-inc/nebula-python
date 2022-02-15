@@ -31,10 +31,10 @@ jobs:
           pytest -s -v -k "SSL"
         working-directory: tests
 
-    - name: Build and publish
-      env:
-        TWINE_USERNAME: ${{ secrets.PYPI_NAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      run: |
-        python3 setup.py sdist bdist_wheel
-        twine upload dist/*
+      - name: Build and publish
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_NAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          python3 setup.py sdist bdist_wheel
+          twine upload dist/*
