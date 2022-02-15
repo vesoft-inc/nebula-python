@@ -1,10 +1,10 @@
 # nebula-python
 
-This directory holds the Python API for Nebula Graph. It is used to connect with Nebula Graph 3.0.
+This repository holds the official Python API for Nebula Graph.
 
 ## Before you start
 
-Before you start, please read this section to choose the right branch for you. In branch v1.0, the API works only for Nebula Graph 1.0. In the master branch, the API works only for Nebula Graph 3.0.
+Before you start, please read this section to choose the right branch for you. The compatibility between the API and Nebula Graph service can be found in [How to choose nebula-python](##How-to-choose-nebula-python). The current master branch is compatible with Nebula Graph 3.0.
 
 ## The directory structure
 
@@ -40,7 +40,10 @@ Before you start, please read this section to choose the right branch for you. I
 ### Option one: install with pip
 
 ```python
+# for v3.x
 pip install nebula3-python==$version
+# for v2.x
+pip install nebula2-python==$version
 ```
 
 ### Option two: install from the source code
@@ -138,14 +141,14 @@ while resp.has_next():
 
 ## How to choose nebula-python
 
-| Nebula3-Python Version | NebulaGraph Version |
+| Nebula-Python Version | NebulaGraph Version |
 |---|---|
-| 2.0.0b1  | 2.0.0beta |
-| 2.0.0rc1  | 2.0.0-rc1 |
+| 1.0  | 1.x |
 | 2.0.0  | 2.0.0/2.0.1 |
 | 2.5.0  | 2.5.0 |
 | 2.6.0  | 2.6.0/2.6.1 |
 | 3.0.0  | 3.0.0 |
+| master  | master |
 
 ## How to contribute to nebula-python
 
