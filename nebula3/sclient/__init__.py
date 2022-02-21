@@ -192,6 +192,7 @@ def do_scan_job(
                 part_info.has_done = True
                 cursor = parts[part_info.part_id]
                 resp_cursor = resp.cursors[part_info.part_id]
+                part_info.cursor = cursor
                 if resp_cursor.next_cursor:
                     cursor.next_cursor = resp_cursor.next_cursor
                     logger.debug(

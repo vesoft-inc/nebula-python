@@ -57,7 +57,7 @@ def prepare_data():
 
 def scan_person_vertex(graph_storage_client):
     resp = graph_storage_client.scan_vertex(
-        space_name='ScanSpace', tag_name='person', limit=100
+        space_name='ScanSpace', tag_name='person', limit=1
     )
     print('======== Scan vertexes in ScanSpace ======')
     while resp.has_next():
