@@ -163,13 +163,14 @@ class Connection(object):
         return self.execute_json_with_parameter(session_id, stmt, None)
 
     def execute_json_with_parameter(self, session_id, stmt, params):
-        """execute_json interface with session_id and ngql
+        """execute_json interface with session_id and ngql with parameter
         :param session_id: the session id get from result of authenticate interface
         :param stmt: the ngql
+        :param params: parameter map
         :return: string json representing the execution result
         """
         try:
-            resp = self._connection.executeJsonWithParameter(session_id, stmt)
+            resp = self._connection.executeJsonWithParameter(session_id, stmt, params)
             return resp
         except Exception as te:
             if isinstance(te, TTransportException):
