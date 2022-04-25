@@ -44,6 +44,7 @@ from nebula3.fbthrift.remote import Remote
 FUNCTIONS = {
     'createSpace': Function('createSpace', 'MetaService', 'ExecResp', [('CreateSpaceReq', 'req', 'CreateSpaceReq')]),
     'dropSpace': Function('dropSpace', 'MetaService', 'ExecResp', [('DropSpaceReq', 'req', 'DropSpaceReq')]),
+    'clearSpace': Function('clearSpace', 'MetaService', 'ExecResp', [('ClearSpaceReq', 'req', 'ClearSpaceReq')]),
     'getSpace': Function('getSpace', 'MetaService', 'GetSpaceResp', [('GetSpaceReq', 'req', 'GetSpaceReq')]),
     'listSpaces': Function('listSpaces', 'MetaService', 'ListSpacesResp', [('ListSpacesReq', 'req', 'ListSpacesReq')]),
     'alterSpace': Function('alterSpace', 'MetaService', 'ExecResp', [('AlterSpaceReq', 'req', 'AlterSpaceReq')]),
@@ -65,12 +66,6 @@ FUNCTIONS = {
     'getPartsAlloc': Function('getPartsAlloc', 'MetaService', 'GetPartsAllocResp', [('GetPartsAllocReq', 'req', 'GetPartsAllocReq')]),
     'listParts': Function('listParts', 'MetaService', 'ListPartsResp', [('ListPartsReq', 'req', 'ListPartsReq')]),
     'getWorkerId': Function('getWorkerId', 'MetaService', 'GetWorkerIdResp', [('GetWorkerIdReq', 'req', 'GetWorkerIdReq')]),
-    'multiPut': Function('multiPut', 'MetaService', 'ExecResp', [('MultiPutReq', 'req', 'MultiPutReq')]),
-    'get': Function('get', 'MetaService', 'GetResp', [('GetReq', 'req', 'GetReq')]),
-    'multiGet': Function('multiGet', 'MetaService', 'MultiGetResp', [('MultiGetReq', 'req', 'MultiGetReq')]),
-    'remove': Function('remove', 'MetaService', 'ExecResp', [('RemoveReq', 'req', 'RemoveReq')]),
-    'removeRange': Function('removeRange', 'MetaService', 'ExecResp', [('RemoveRangeReq', 'req', 'RemoveRangeReq')]),
-    'scan': Function('scan', 'MetaService', 'ScanResp', [('ScanReq', 'req', 'ScanReq')]),
     'createTagIndex': Function('createTagIndex', 'MetaService', 'ExecResp', [('CreateTagIndexReq', 'req', 'CreateTagIndexReq')]),
     'dropTagIndex': Function('dropTagIndex', 'MetaService', 'ExecResp', [('DropTagIndexReq', 'req', 'DropTagIndexReq')]),
     'getTagIndex': Function('getTagIndex', 'MetaService', 'GetTagIndexResp', [('GetTagIndexReq', 'req', 'GetTagIndexReq')]),
@@ -130,6 +125,8 @@ FUNCTIONS = {
     'listCluster': Function('listCluster', 'MetaService', 'ListClusterInfoResp', [('ListClusterInfoReq', 'req', 'ListClusterInfoReq')]),
     'getMetaDirInfo': Function('getMetaDirInfo', 'MetaService', 'GetMetaDirInfoResp', [('GetMetaDirInfoReq', 'req', 'GetMetaDirInfoReq')]),
     'verifyClientVersion': Function('verifyClientVersion', 'MetaService', 'VerifyClientVersionResp', [('VerifyClientVersionReq', 'req', 'VerifyClientVersionReq')]),
+    'saveGraphVersion': Function('saveGraphVersion', 'MetaService', 'SaveGraphVersionResp', [('SaveGraphVersionReq', 'req', 'SaveGraphVersionReq')]),
+    'getSegmentId': Function('getSegmentId', 'MetaService', 'GetSegmentIdResp', [('GetSegmentIdReq', 'req', 'GetSegmentIdReq')]),
 }
 
 SERVICE_NAMES = ['MetaService', ]

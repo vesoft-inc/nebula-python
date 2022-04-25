@@ -49,14 +49,13 @@ FUNCTIONS = {
     'memberChange': Function('memberChange', 'StorageAdminService', 'AdminExecResp', [('MemberChangeReq', 'req', 'MemberChangeReq')]),
     'waitingForCatchUpData': Function('waitingForCatchUpData', 'StorageAdminService', 'AdminExecResp', [('CatchUpDataReq', 'req', 'CatchUpDataReq')]),
     'createCheckpoint': Function('createCheckpoint', 'StorageAdminService', 'CreateCPResp', [('CreateCPRequest', 'req', 'CreateCPRequest')]),
-    'dropCheckpoint': Function('dropCheckpoint', 'StorageAdminService', 'AdminExecResp', [('DropCPRequest', 'req', 'DropCPRequest')]),
-    'blockingWrites': Function('blockingWrites', 'StorageAdminService', 'AdminExecResp', [('BlockingSignRequest', 'req', 'BlockingSignRequest')]),
-    'rebuildTagIndex': Function('rebuildTagIndex', 'StorageAdminService', 'AdminExecResp', [('RebuildIndexRequest', 'req', 'RebuildIndexRequest')]),
-    'rebuildEdgeIndex': Function('rebuildEdgeIndex', 'StorageAdminService', 'AdminExecResp', [('RebuildIndexRequest', 'req', 'RebuildIndexRequest')]),
+    'dropCheckpoint': Function('dropCheckpoint', 'StorageAdminService', 'DropCPResp', [('DropCPRequest', 'req', 'DropCPRequest')]),
+    'blockingWrites': Function('blockingWrites', 'StorageAdminService', 'BlockingSignResp', [('BlockingSignRequest', 'req', 'BlockingSignRequest')]),
     'getLeaderParts': Function('getLeaderParts', 'StorageAdminService', 'GetLeaderPartsResp', [('GetLeaderReq', 'req', 'GetLeaderReq')]),
     'checkPeers': Function('checkPeers', 'StorageAdminService', 'AdminExecResp', [('CheckPeersReq', 'req', 'CheckPeersReq')]),
-    'addAdminTask': Function('addAdminTask', 'StorageAdminService', 'AdminExecResp', [('AddAdminTaskRequest', 'req', 'AddAdminTaskRequest')]),
-    'stopAdminTask': Function('stopAdminTask', 'StorageAdminService', 'AdminExecResp', [('StopAdminTaskRequest', 'req', 'StopAdminTaskRequest')]),
+    'addAdminTask': Function('addAdminTask', 'StorageAdminService', 'AddTaskResp', [('AddTaskRequest', 'req', 'AddTaskRequest')]),
+    'stopAdminTask': Function('stopAdminTask', 'StorageAdminService', 'StopTaskResp', [('StopTaskRequest', 'req', 'StopTaskRequest')]),
+    'clearSpace': Function('clearSpace', 'StorageAdminService', 'ClearSpaceResp', [('ClearSpaceReq', 'req', 'ClearSpaceReq')]),
 }
 
 SERVICE_NAMES = ['StorageAdminService', ]
