@@ -75,7 +75,7 @@ class VertexData(object):
         tag.props = {}
         index = self.PROP_START_INDEX
         while index < len(self._col_names):
-            tag.props[self._col_names[index]] = self._row.values[index]
+            tag.props[self._col_names[index]] = self._row.values[index + 1]
             index = index + 1
         vertex.tags.append(tag)
 
