@@ -8,6 +8,45 @@
 
 import prettytable
 
+from nebula3.data.DataObject import ValueWrapper
+
+def cast(val: ValueWrapper):
+    if val.is_empty():
+        return '__EMPTY__'
+    elif val.is_null():
+        return '__NULL__'
+    elif val.is_bool():
+        return val.as_bool()
+    elif val.is_int():
+        return val.as_int()
+    elif val.is_double():
+        return val.as_double()
+    elif val.is_string():
+        return val.as_string()
+    elif val.is_time():
+        return val.as_time()
+    elif val.is_date():
+        return val.as_date()
+    elif val.is_datetime():
+        return val.as_datetime()
+    elif val.is_list():
+        return [cast(x) for x in val.as_list()]
+    elif val.is_set():
+        return {cast(x) for x in val.as_set()}
+    elif val.is_map():
+        return {k:cast(v) for k, v in val.as_map()}
+    elif val.is_vertex():
+        return val.as_node()
+    elif val.is_edge():
+        return val.as_relationship()
+    elif val.is_path():
+        return val.as_path()
+    elif val.is_geography():
+        return val.as_geography()
+    else:
+        print("ERROR: Type unsupported")
+        return None
+
 
 def print_resp(resp):
     assert resp.is_succeeded()
@@ -16,40 +55,7 @@ def print_resp(resp):
     for recode in resp:
         value_list = []
         for col in recode:
-            if col.is_empty():
-                value_list.append('__EMPTY__')
-            elif col.is_null():
-                value_list.append('__NULL__')
-            elif col.is_bool():
-                value_list.append(col.as_bool())
-            elif col.is_int():
-                value_list.append(col.as_int())
-            elif col.is_double():
-                value_list.append(col.as_double())
-            elif col.is_string():
-                value_list.append(col.as_string())
-            elif col.is_time():
-                value_list.append(col.as_time())
-            elif col.is_date():
-                value_list.append(col.as_date())
-            elif col.is_datetime():
-                value_list.append(col.as_datetime())
-            elif col.is_list():
-                value_list.append(col.as_list())
-            elif col.is_set():
-                value_list.append(col.as_set())
-            elif col.is_map():
-                value_list.append(col.as_map())
-            elif col.is_vertex():
-                value_list.append(col.as_node())
-            elif col.is_edge():
-                value_list.append(col.as_relationship())
-            elif col.is_path():
-                value_list.append(col.as_path())
-            elif col.is_geography():
-                value_list.append(col.as_geography())
-            else:
-                print('ERROR: Type unsupported')
-                return
+            val = cast(col)
+            value_list.append(val)
         output_table.add_row(value_list)
     print(output_table)
