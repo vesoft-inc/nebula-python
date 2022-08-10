@@ -5,6 +5,7 @@
 #
 # This source code is licensed under Apache 2.0 License.
 
+from __future__ import annotations
 
 from typing import Dict, List, Set
 import pytz
@@ -25,7 +26,6 @@ from nebula3.common.ttypes import (
     Time,
 )
 
-from __future__ import annotations
 
 
 def date_time_convert_with_timezone(date_time: DateTime, timezone_offset: int):
