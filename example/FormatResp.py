@@ -10,6 +10,7 @@ import prettytable
 
 from nebula3.data.DataObject import ValueWrapper
 
+
 def cast(val: ValueWrapper):
     if val.is_empty():
         return '__EMPTY__'
@@ -34,7 +35,7 @@ def cast(val: ValueWrapper):
     elif val.is_set():
         return {cast(x) for x in val.as_set()}
     elif val.is_map():
-        return {k:cast(v) for k, v in val.as_map()}
+        return {k: cast(v) for k, v in val.as_map()}
     elif val.is_vertex():
         return val.as_node()
     elif val.is_edge():
