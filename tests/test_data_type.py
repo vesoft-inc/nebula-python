@@ -318,6 +318,64 @@ class TesValueWrapper(TestBaseCase):
         expect_result["b"] = ValueWrapper(ttypes.Value(sVal=b"car"))
         assert map_val == expect_result
 
+    def test_cast(self):
+        value = ttypes.Value()
+
+        bool_val = ttypes.Value()
+        bool_val.set_bVal(False)
+
+        int_val = ttypes.Value()
+        int_val.set_iVal(100)
+
+        float_val = ttypes.Value()
+        float_val.set_fVal(10.10)
+
+        str_val1 = ttypes.Value()
+        str_val1.set_sVal(b"word")
+
+        str_val2 = ttypes.Value()
+        str_val2.set_sVal(b"car")
+
+        set_val = ttypes.Value()
+        tmp_set_val = NSet()
+        tmp_set_val.values = set()
+        tmp_set_val.values.add(str_val1)
+        tmp_set_val.values.add(str_val2)
+        set_val.set_uVal(tmp_set_val)
+
+        map_val = ttypes.Value()
+        tmp_map_val = NMap()
+        tmp_map_val.kvs = {b"a": str_val1, b"b": str_val2}
+        map_val.set_mVal(tmp_map_val)
+
+        tmp_list_val = NList()
+        tmp_list_val.values = [
+            bool_val,
+            int_val,
+            float_val,
+            str_val1,
+            str_val2,
+            set_val,
+            map_val,
+        ]
+        value.set_lVal(tmp_list_val)
+
+        value = ValueWrapper(value)
+
+        list_val = value.cast()
+        assert isinstance(list_val, list)
+
+        expect_result = [
+            False,
+            100,
+            10.10,
+            "word",
+            "car",
+            {"word", "car"},
+            {"a": "word", "b": "car"},
+        ]
+        assert list_val == expect_result
+
     def test_as_time(self):
         time = Time()
         time.hour = 10

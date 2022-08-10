@@ -5,7 +5,7 @@
 #
 # This source code is licensed under Apache 2.0 License.
 
-from typing import Dict, List, Set
+from typing import Any, Dict, List, Set
 import pytz
 from datetime import datetime, timezone, timedelta
 from nebula3.Exception import (
@@ -23,6 +23,23 @@ from nebula3.common.ttypes import (
     DateTime,
     Time,
 )
+
+__AS_MAP__ = {
+    Value.NVAL: "as_null",
+    Value.__EMPTY__: "as_empty",
+    Value.BVAL: "as_bool",
+    Value.IVAL: "as_int",
+    Value.FVAL: "as_double",
+    Value.SVAL: "as_string",
+    Value.TVAL: "as_time",
+    Value.DVAL: "as_date",
+    Value.DTVAL: "as_datetime",
+    Value.VVAL: "as_vertex",
+    Value.EVAL: "as_edge",
+    Value.PVAL: "as_path",
+    Value.GGVAL: "as_geography",
+    Value.DUVAL: "as_duration",
+}
 
 
 def date_time_convert_with_timezone(date_time: DateTime, timezone_offset: int):
@@ -661,6 +678,40 @@ class ValueWrapper(object):
         raise InvalidValueTypeException(
             "expect duration type, but is " + self._get_type_name()
         )
+
+    def cast(self) -> Any:
+        """
+        automatically convert value wrapper to concrete type by calling casting method.
+
+        : return: Any type (e.g. int, float, List[Dict[str, int]], Set[List[float]])
+        """
+        _type = self._value.getType()
+        if _type in {
+            Value.NVAL,
+            Value.__EMPTY__,
+            Value.BVAL,
+            Value.IVAL,
+            Value.FVAL,
+            Value.SVAL,
+            Value.TVAL,
+            Value.DVAL,
+            Value.DTVAL,
+            Value.VVAL,
+            Value.EVAL,
+            Value.PVAL,
+            Value.GGVAL,
+            Value.DUVAL,
+        }:
+            # Considering the most efficient way, we should call `cast` in every iterable method over their items,
+            # such as `as_list`, `as_set`, and `as_map`. However, the returned type will change and cause incompatibility.
+            # So I put the common types set (time complexity O(1)) at first, and call their method via dict ( O(1) )
+            return getattr(self, __AS_MAP__[_type])()
+        if _type == Value.LVAL:
+            return [x.cast() for x in self.as_list()]
+        if _type == Value.UVAL:
+            return {x.cast() for x in self.as_set()}
+        if _type == Value.MVAL:
+            return {k: v.cast() for k, v in self.as_map().items()}
 
     def _get_type_name(self):
         if self.is_empty():
