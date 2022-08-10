@@ -6,6 +6,7 @@
 # This source code is licensed under Apache 2.0 License.
 
 
+from typing import Dict, List, Set
 import pytz
 from datetime import datetime, timezone, timedelta
 from nebula3.Exception import (
@@ -22,8 +23,9 @@ from nebula3.common.ttypes import (
     NullType,
     DateTime,
     Time,
-    Duration,
 )
+
+from __future__ import annotations
 
 
 def date_time_convert_with_timezone(date_time: DateTime, timezone_offset: int):
@@ -87,7 +89,7 @@ def time_convert_with_timezone(n_time: Time, timezone_offset: int):
 
 class BaseObject(object):
     def __init__(self):
-        self._decode_type = 'utf-8'
+        self._decode_type = "utf-8"
         self._timezone_offset = 0
 
     def set_decode_type(self, decode_type):
@@ -106,10 +108,10 @@ class BaseObject(object):
 
 
 class Record(object):
-    def __init__(self, values, names, decode_type='utf-8', timezone_offset: int = 0):
+    def __init__(self, values, names, decode_type="utf-8", timezone_offset: int = 0):
         assert len(names) == len(
             values
-        ), 'len(names): {} != len(values): {}, names: {}, values: {}'.format(
+        ), "len(names): {} != len(values): {}, names: {}, values: {}".format(
             len(names), len(values), str(names), str(values)
         )
         self._record = list()
@@ -167,7 +169,7 @@ class Record(object):
         return self._record
 
     def __repr__(self):
-        return "{}".format('\n'.join([str(val_wrap) for val_wrap in self._record]))
+        return "{}".format("\n".join([str(val_wrap) for val_wrap in self._record]))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -177,7 +179,7 @@ class Record(object):
 
 
 class DataSetWrapper(object):
-    def __init__(self, data_set, decode_type='utf-8', timezone_offset: int = 0):
+    def __init__(self, data_set, decode_type="utf-8", timezone_offset: int = 0):
         assert data_set is not None
         self._decode_type = decode_type
         self._timezone_offset = timezone_offset
@@ -285,8 +287,8 @@ class DataSetWrapper(object):
         data_str = []
         for i in range(self.get_row_size()):
             data_str.append(str(self.row_values(i)))
-        value_str = ','.join(data_str)
-        return 'keys: {}, values: {}'.format(self._column_names, value_str)
+        value_str = ",".join(data_str)
+        return "keys: {}, values: {}".format(self._column_names, value_str)
 
 
 class Null(object):
@@ -310,131 +312,131 @@ class Null(object):
 
 
 class ValueWrapper(object):
-    def __init__(self, value, decode_type='utf-8', timezone_offset: int = 0):
-        self._value = value
+    def __init__(self, value, decode_type="utf-8", timezone_offset: int = 0):
+        self._value: Value = value
         self._decode_type = decode_type
         self._timezone_offset = timezone_offset
 
-    def get_value(self):
+    def get_value(self) -> Value:
         """get raw data
 
         :return: Value
         """
         return self._value
 
-    def is_null(self):
+    def is_null(self) -> bool:
         """check if the value is Null type
 
         :return: true or false
         """
         return self._value.getType() == Value.NVAL
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         """check if the value is Empty type
 
         :return: true or false
         """
         return self._value.getType() == Value.__EMPTY__
 
-    def is_bool(self):
+    def is_bool(self) -> bool:
         """check if the value is Bool type
 
         :return: true or false
         """
         return self._value.getType() == Value.BVAL
 
-    def is_int(self):
+    def is_int(self) -> bool:
         """check if the value is Int type
 
         :return: true or false
         """
         return self._value.getType() == Value.IVAL
 
-    def is_double(self):
+    def is_double(self) -> bool:
         """check if the value is Double type
 
         :return: true or false
         """
         return self._value.getType() == Value.FVAL
 
-    def is_string(self):
+    def is_string(self) -> bool:
         """check if the value is String type
 
         :return: true or false
         """
         return self._value.getType() == Value.SVAL
 
-    def is_list(self):
+    def is_list(self) -> bool:
         """check if the value is List type
 
         :return: true or false
         """
         return self._value.getType() == Value.LVAL
 
-    def is_set(self):
+    def is_set(self) -> bool:
         """check if the value is Set type
 
         :return: true or false
         """
         return self._value.getType() == Value.UVAL
 
-    def is_map(self):
+    def is_map(self) -> bool:
         """check if the value is Map type
 
         :return: true or false
         """
         return self._value.getType() == Value.MVAL
 
-    def is_time(self):
+    def is_time(self) -> bool:
         """check if the value is Time type
 
         :return: true or false
         """
         return self._value.getType() == Value.TVAL
 
-    def is_date(self):
+    def is_date(self) -> bool:
         """check if the value is Date type
 
         :return: true or false
         """
         return self._value.getType() == Value.DVAL
 
-    def is_datetime(self):
+    def is_datetime(self) -> bool:
         """check if the value is Datetime type
 
         :return: true or false
         """
         return self._value.getType() == Value.DTVAL
 
-    def is_vertex(self):
+    def is_vertex(self) -> bool:
         """check if the value is Vertex type
 
         :return: true or false
         """
         return self._value.getType() == Value.VVAL
 
-    def is_edge(self):
+    def is_edge(self) -> bool:
         """check if the value is Edge type
 
         :return: true or false
         """
         return self._value.getType() == Value.EVAL
 
-    def is_path(self):
+    def is_path(self) -> bool:
         """check if the value is Path type
 
         :return: true or false
         """
         return self._value.getType() == Value.PVAL
 
-    def is_geography(self):
+    def is_geography(self) -> bool:
         """check if the value is Geography type
 
         :return: true or false
         """
         return self._value.getType() == Value.GGVAL
 
-    def is_duration(self):
+    def is_duration(self) -> bool:
         """check if the value is Duration type
 
         :return: true or false
@@ -452,7 +454,7 @@ class ValueWrapper(object):
             "expect NULL type, but is " + self._get_type_name()
         )
 
-    def as_bool(self):
+    def as_bool(self) -> bool:
         """converts the original data type to Bool type
 
         :return: Bool value
@@ -463,7 +465,7 @@ class ValueWrapper(object):
             "expect bool type, but is " + self._get_type_name()
         )
 
-    def as_int(self):
+    def as_int(self) -> int:
         """converts the original data type to Int type
 
         :return: Int value
@@ -474,7 +476,7 @@ class ValueWrapper(object):
             "expect bool type, but is " + self._get_type_name()
         )
 
-    def as_double(self):
+    def as_double(self) -> float:
         """converts the original data type to Double type
 
         :return: Double value
@@ -485,7 +487,7 @@ class ValueWrapper(object):
             "expect int type, but is " + self._get_type_name()
         )
 
-    def as_string(self):
+    def as_string(self) -> str:
         """converts the original data type to String type
 
         :return: String value
@@ -496,7 +498,7 @@ class ValueWrapper(object):
             "expect string type, but is " + self._get_type_name()
         )
 
-    def as_time(self):
+    def as_time(self) -> TimeWrapper:
         """converts the original data type to Time type
 
         :return: Time value
@@ -509,7 +511,7 @@ class ValueWrapper(object):
             "expect time type, but is " + self._get_type_name()
         )
 
-    def as_date(self):
+    def as_date(self) -> DateWrapper:
         """converts the original data type to Date type
 
         :return: Date value
@@ -520,7 +522,7 @@ class ValueWrapper(object):
             "expect date type, but is " + self._get_type_name()
         )
 
-    def as_datetime(self):
+    def as_datetime(self) -> DateTimeWrapper:
         """converts the original data type to Datetime type
 
         :return: Datetime value
@@ -533,7 +535,7 @@ class ValueWrapper(object):
             "expect datetime type, but is " + self._get_type_name()
         )
 
-    def as_list(self):
+    def as_list(self) -> List[ValueWrapper]:
         """converts the original data type to list of ValueWrapper
 
         :return: list<ValueWrapper>
@@ -553,7 +555,7 @@ class ValueWrapper(object):
             "expect list type, but is " + self._get_type_name()
         )
 
-    def as_set(self):
+    def as_set(self) -> Set[ValueWrapper]:
         """converts the original data type to set of ValueWrapper
 
         :return: set<ValueWrapper>
@@ -573,7 +575,7 @@ class ValueWrapper(object):
             "expect set type, but is " + self._get_type_name()
         )
 
-    def as_map(self):
+    def as_map(self) -> Dict[str, ValueWrapper]:
         """converts the original data type to map type
 
         :return: map<String, ValueWrapper>
@@ -592,7 +594,7 @@ class ValueWrapper(object):
             "expect map type, but is " + self._get_type_name()
         )
 
-    def as_node(self):
+    def as_node(self) -> Node:
         """converts the original data type to Node type
 
         :return: Node type
@@ -607,7 +609,7 @@ class ValueWrapper(object):
             "expect vertex type, but is " + self._get_type_name()
         )
 
-    def as_relationship(self):
+    def as_relationship(self) -> Relationship:
         """converts the original data type to Relationship type
 
         :return: Relationship type
@@ -622,7 +624,7 @@ class ValueWrapper(object):
             "expect edge type, but is " + self._get_type_name()
         )
 
-    def as_path(self):
+    def as_path(self) -> PathWrapper:
         """converts the original data type to PathWrapper type
 
         :return: PathWrapper type
@@ -637,7 +639,7 @@ class ValueWrapper(object):
             "expect path type, but is " + self._get_type_name()
         )
 
-    def as_geography(self):
+    def as_geography(self) -> GeographyWrapper:
         """converts the original data type to GeographyWrapper type
 
         :return: GeographyWrapper type
@@ -652,7 +654,7 @@ class ValueWrapper(object):
             "expect geography type, but is " + self._get_type_name()
         )
 
-    def as_duration(self):
+    def as_duration(self) -> DurationWrapper:
         """converts the original data type to Duration type
 
         :return: DurationWrapper type
@@ -741,23 +743,23 @@ class ValueWrapper(object):
             return self.as_duration() == o.as_duration()
         else:
             raise RuntimeError(
-                'Unsupported type:{} to compare'.format(self._get_type_name())
+                "Unsupported type:{} to compare".format(self._get_type_name())
             )
         return False
 
     def __repr__(self):
         if self.is_empty():
-            return '__EMPTY__'
+            return "__EMPTY__"
         elif self.is_null():
             return str(self.as_null())
         elif self.is_bool():
-            return 'True' if self.as_bool() else 'False'
+            return "True" if self.as_bool() else "False"
         elif self.is_int():
             return str(self.as_int())
         elif self.is_double():
             return str(self.as_double())
         elif self.is_string():
-            return '\"{}\"'.format(self.as_string())
+            return '"{}"'.format(self.as_string())
         elif self.is_list():
             return str(self.as_list())
         elif self.is_set():
@@ -782,7 +784,7 @@ class ValueWrapper(object):
             return str(self.as_duration())
         else:
             raise RuntimeError(
-                'Unsupported type:{} to compare'.format(self._get_type_name())
+                "Unsupported type:{} to compare".format(self._get_type_name())
             )
         return False
 
@@ -1244,7 +1246,7 @@ class GeographyWrapper(BaseObject):
             return self.as_polygon() == o.as_polygon()
         else:
             raise RuntimeError(
-                'Unsupported type:{} to compare'.format(self._get_type_name())
+                "Unsupported type:{} to compare".format(self._get_type_name())
             )
 
     def __repr__(self):
@@ -1256,7 +1258,7 @@ class GeographyWrapper(BaseObject):
             return str(self.as_polygon())
         else:
             raise RuntimeError(
-                'Unsupported type:{} to compare'.format(self._get_type_name())
+                "Unsupported type:{} to compare".format(self._get_type_name())
             )
 
 
@@ -1426,10 +1428,10 @@ class Node(BaseObject):
         tag_str_list = list()
         for tag in self._tag_indexes.keys():
             prop_strs = [
-                '%s: %s' % (key, str(val)) for key, val in self.properties(tag).items()
+                "%s: %s" % (key, str(val)) for key, val in self.properties(tag).items()
             ]
-            tag_str_list.append(':%s{%s}' % (tag, ', '.join(prop_strs)))
-        return '({} {})'.format(str(self.get_id()), ' '.join(tag_str_list))
+            tag_str_list.append(":%s{%s}" % (tag, ", ".join(prop_strs)))
+        return "({} {})".format(str(self.get_id()), " ".join(tag_str_list))
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -1522,13 +1524,13 @@ class Relationship(BaseObject):
 
     def __repr__(self):
         prop_strs = [
-            '%s: %s' % (key, str(val)) for key, val in self.properties().items()
+            "%s: %s" % (key, str(val)) for key, val in self.properties().items()
         ]
         return "(%s)-[:%s@%d{%s}]->(%s)" % (
             str(self.start_vertex_id()),
             self.edge_name(),
             self.ranking(),
-            ', '.join(prop_strs),
+            ", ".join(prop_strs),
             str(self.end_vertex_id()),
         )
 
@@ -1709,16 +1711,16 @@ class PathWrapper(BaseObject):
                 .set_timezone_offset(self.get_timezone_offset())
             )
 
-            edge_str = ''
+            edge_str = ""
             prop_strs = [
-                '%s: %s' % (key, str(val))
+                "%s: %s" % (key, str(val))
                 for key, val in relationship.properties().items()
             ]
             if step.type > 0:
-                edge_str = '-[:%s@%d{%s}]->%s' % (
+                edge_str = "-[:%s@%d{%s}]->%s" % (
                     relationship.edge_name(),
                     relationship.ranking(),
-                    ', '.join(prop_strs),
+                    ", ".join(prop_strs),
                     Node(step.dst)
                     .set_decode_type(self.get_decode_type())
                     .set_timezone_offset(self.get_timezone_offset()),
@@ -1727,18 +1729,18 @@ class PathWrapper(BaseObject):
                 edge_str = "<-[:%s@%d{%s}]-%s" % (
                     relationship.edge_name(),
                     relationship.ranking(),
-                    ', '.join(prop_strs),
+                    ", ".join(prop_strs),
                     Node(step.dst)
                     .set_decode_type(self.get_decode_type())
                     .set_timezone_offset(self.get_timezone_offset()),
                 )
 
             edge_strs.append(edge_str)
-        return '{}{}'.format(
+        return "{}{}".format(
             Node(self._path.src)
             .set_decode_type(self.get_decode_type())
             .set_timezone_offset(self.get_timezone_offset()),
-            ''.join(edge_strs),
+            "".join(edge_strs),
         )
 
     def __eq__(self, other):
