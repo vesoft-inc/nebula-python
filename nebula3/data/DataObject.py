@@ -681,9 +681,9 @@ class ValueWrapper(object):
 
     def cast(self) -> Any:
         """
-        automatically convert value wrapper in concrete type by calling casting method.
+        automatically convert value wrapper to concrete type by calling casting method.
 
-        : return: Any type (e.g. List[Dict[str, int]], Set[List[float]])
+        : return: Any type (e.g. int, float, List[Dict[str, int]], Set[List[float]])
         """
         _type = self._value.getType()
         if _type in {
