@@ -5,8 +5,6 @@
 #
 # This source code is licensed under Apache 2.0 License.
 
-from __future__ import annotations
-
 from typing import Dict, List, Set
 import pytz
 from datetime import datetime, timezone, timedelta
@@ -308,487 +306,6 @@ class Null(object):
 
     def __eq__(self, other):
         return self._type == other._type
-
-
-class ValueWrapper(object):
-    def __init__(self, value, decode_type="utf-8", timezone_offset: int = 0):
-        self._value: Value = value
-        self._decode_type = decode_type
-        self._timezone_offset = timezone_offset
-
-    def get_value(self) -> Value:
-        """get raw data
-
-        :return: Value
-        """
-        return self._value
-
-    def is_null(self) -> bool:
-        """check if the value is Null type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.NVAL
-
-    def is_empty(self) -> bool:
-        """check if the value is Empty type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.__EMPTY__
-
-    def is_bool(self) -> bool:
-        """check if the value is Bool type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.BVAL
-
-    def is_int(self) -> bool:
-        """check if the value is Int type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.IVAL
-
-    def is_double(self) -> bool:
-        """check if the value is Double type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.FVAL
-
-    def is_string(self) -> bool:
-        """check if the value is String type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.SVAL
-
-    def is_list(self) -> bool:
-        """check if the value is List type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.LVAL
-
-    def is_set(self) -> bool:
-        """check if the value is Set type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.UVAL
-
-    def is_map(self) -> bool:
-        """check if the value is Map type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.MVAL
-
-    def is_time(self) -> bool:
-        """check if the value is Time type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.TVAL
-
-    def is_date(self) -> bool:
-        """check if the value is Date type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.DVAL
-
-    def is_datetime(self) -> bool:
-        """check if the value is Datetime type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.DTVAL
-
-    def is_vertex(self) -> bool:
-        """check if the value is Vertex type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.VVAL
-
-    def is_edge(self) -> bool:
-        """check if the value is Edge type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.EVAL
-
-    def is_path(self) -> bool:
-        """check if the value is Path type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.PVAL
-
-    def is_geography(self) -> bool:
-        """check if the value is Geography type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.GGVAL
-
-    def is_duration(self) -> bool:
-        """check if the value is Duration type
-
-        :return: true or false
-        """
-        return self._value.getType() == Value.DUVAL
-
-    def as_null(self):
-        """converts the original data type to Null type
-
-        :return: Null value
-        """
-        if self._value.getType() == Value.NVAL:
-            return Null(self._value.get_nVal())
-        raise InvalidValueTypeException(
-            "expect NULL type, but is " + self._get_type_name()
-        )
-
-    def as_bool(self) -> bool:
-        """converts the original data type to Bool type
-
-        :return: Bool value
-        """
-        if self._value.getType() == Value.BVAL:
-            return self._value.get_bVal()
-        raise InvalidValueTypeException(
-            "expect bool type, but is " + self._get_type_name()
-        )
-
-    def as_int(self) -> int:
-        """converts the original data type to Int type
-
-        :return: Int value
-        """
-        if self._value.getType() == Value.IVAL:
-            return self._value.get_iVal()
-        raise InvalidValueTypeException(
-            "expect bool type, but is " + self._get_type_name()
-        )
-
-    def as_double(self) -> float:
-        """converts the original data type to Double type
-
-        :return: Double value
-        """
-        if self._value.getType() == Value.FVAL:
-            return self._value.get_fVal()
-        raise InvalidValueTypeException(
-            "expect int type, but is " + self._get_type_name()
-        )
-
-    def as_string(self) -> str:
-        """converts the original data type to String type
-
-        :return: String value
-        """
-        if self._value.getType() == Value.SVAL:
-            return self._value.get_sVal().decode(self._decode_type)
-        raise InvalidValueTypeException(
-            "expect string type, but is " + self._get_type_name()
-        )
-
-    def as_time(self) -> TimeWrapper:
-        """converts the original data type to Time type
-
-        :return: Time value
-        """
-        if self._value.getType() == Value.TVAL:
-            return TimeWrapper(self._value.get_tVal()).set_timezone_offset(
-                self._timezone_offset
-            )
-        raise InvalidValueTypeException(
-            "expect time type, but is " + self._get_type_name()
-        )
-
-    def as_date(self) -> DateWrapper:
-        """converts the original data type to Date type
-
-        :return: Date value
-        """
-        if self._value.getType() == Value.DVAL:
-            return DateWrapper(self._value.get_dVal())
-        raise InvalidValueTypeException(
-            "expect date type, but is " + self._get_type_name()
-        )
-
-    def as_datetime(self) -> DateTimeWrapper:
-        """converts the original data type to Datetime type
-
-        :return: Datetime value
-        """
-        if self._value.getType() == Value.DTVAL:
-            return DateTimeWrapper(self._value.get_dtVal()).set_timezone_offset(
-                self._timezone_offset
-            )
-        raise InvalidValueTypeException(
-            "expect datetime type, but is " + self._get_type_name()
-        )
-
-    def as_list(self) -> List[ValueWrapper]:
-        """converts the original data type to list of ValueWrapper
-
-        :return: list<ValueWrapper>
-        """
-        if self._value.getType() == Value.LVAL:
-            result = []
-            for val in self._value.get_lVal().values:
-                result.append(
-                    ValueWrapper(
-                        val,
-                        decode_type=self._decode_type,
-                        timezone_offset=self._timezone_offset,
-                    )
-                )
-            return result
-        raise InvalidValueTypeException(
-            "expect list type, but is " + self._get_type_name()
-        )
-
-    def as_set(self) -> Set[ValueWrapper]:
-        """converts the original data type to set of ValueWrapper
-
-        :return: set<ValueWrapper>
-        """
-        if self._value.getType() == Value.UVAL:
-            result = set()
-            for val in self._value.get_uVal().values:
-                result.add(
-                    ValueWrapper(
-                        val,
-                        decode_type=self._decode_type,
-                        timezone_offset=self._timezone_offset,
-                    )
-                )
-            return result
-        raise InvalidValueTypeException(
-            "expect set type, but is " + self._get_type_name()
-        )
-
-    def as_map(self) -> Dict[str, ValueWrapper]:
-        """converts the original data type to map type
-
-        :return: map<String, ValueWrapper>
-        """
-        if self._value.getType() == Value.MVAL:
-            result = {}
-            kvs = self._value.get_mVal().kvs
-            for key in kvs.keys():
-                result[key.decode(self._decode_type)] = ValueWrapper(
-                    kvs[key],
-                    decode_type=self._decode_type,
-                    timezone_offset=self._timezone_offset,
-                )
-            return result
-        raise InvalidValueTypeException(
-            "expect map type, but is " + self._get_type_name()
-        )
-
-    def as_node(self) -> Node:
-        """converts the original data type to Node type
-
-        :return: Node type
-        """
-        if self._value.getType() == Value.VVAL:
-            return (
-                Node(self._value.get_vVal())
-                .set_decode_type(self._decode_type)
-                .set_timezone_offset(self._timezone_offset)
-            )
-        raise InvalidValueTypeException(
-            "expect vertex type, but is " + self._get_type_name()
-        )
-
-    def as_relationship(self) -> Relationship:
-        """converts the original data type to Relationship type
-
-        :return: Relationship type
-        """
-        if self._value.getType() == Value.EVAL:
-            return (
-                Relationship(self._value.get_eVal())
-                .set_decode_type(self._decode_type)
-                .set_timezone_offset(self._timezone_offset)
-            )
-        raise InvalidValueTypeException(
-            "expect edge type, but is " + self._get_type_name()
-        )
-
-    def as_path(self) -> PathWrapper:
-        """converts the original data type to PathWrapper type
-
-        :return: PathWrapper type
-        """
-        if self._value.getType() == Value.PVAL:
-            return (
-                PathWrapper(self._value.get_pVal())
-                .set_decode_type(self._decode_type)
-                .set_timezone_offset(self._timezone_offset)
-            )
-        raise InvalidValueTypeException(
-            "expect path type, but is " + self._get_type_name()
-        )
-
-    def as_geography(self) -> GeographyWrapper:
-        """converts the original data type to GeographyWrapper type
-
-        :return: GeographyWrapper type
-        """
-        if self._value.getType() == Value.GGVAL:
-            return (
-                GeographyWrapper(self._value.get_ggVal())
-                .set_decode_type(self._decode_type)
-                .set_timezone_offset(self._timezone_offset)
-            )
-        raise InvalidValueTypeException(
-            "expect geography type, but is " + self._get_type_name()
-        )
-
-    def as_duration(self) -> DurationWrapper:
-        """converts the original data type to Duration type
-
-        :return: DurationWrapper type
-        """
-        if self._value.getType() == Value.DUVAL:
-            return DurationWrapper(self._value.get_duVal())
-        raise InvalidValueTypeException(
-            "expect duration type, but is " + self._get_type_name()
-        )
-
-    def _get_type_name(self):
-        if self.is_empty():
-            return "empty"
-        if self.is_null():
-            return "null"
-        if self.is_bool():
-            return "bool"
-        if self.is_int():
-            return "int"
-        if self.is_double():
-            return "double"
-        if self.is_string():
-            return "string"
-        if self.is_list():
-            return "list"
-        if self.is_set():
-            return "set"
-        if self.is_map():
-            return "map"
-        if self.is_time():
-            return "time"
-        if self.is_date():
-            return "date"
-        if self.is_datetime():
-            return "datetime"
-        if self.is_vertex():
-            return "vertex"
-        if self.is_edge():
-            return "edge"
-        if self.is_path():
-            return "path"
-        if self.is_geography():
-            return "geography"
-        if self.is_duration():
-            return "duration"
-        return "unknown"
-
-    def __eq__(self, o: object) -> bool:
-        if not isinstance(o, self.__class__):
-            return False
-        if self.get_value().getType() != o.get_value().getType():
-            return False
-        if self.is_empty():
-            return o.is_empty()
-        elif self.is_null():
-            return self.as_null() == o.as_null()
-        elif self.is_bool():
-            return self.as_bool() == o.as_bool()
-        elif self.is_int():
-            return self.as_int() == o.as_int()
-        elif self.is_double():
-            return self.as_double() == o.as_double()
-        elif self.is_string():
-            return self.as_string() == o.as_string()
-        elif self.is_list():
-            return self.as_list() == o.as_list()
-        elif self.is_set():
-            return self.as_set() == o.as_set()
-        elif self.is_map():
-            return self.as_map() == o.as_map()
-        elif self.is_vertex():
-            return self.as_node() == o.as_node()
-        elif self.is_edge():
-            return self.as_relationship() == o.as_relationship()
-        elif self.is_path():
-            return self.as_path() == o.as_path()
-        elif self.is_time():
-            return self.as_time() == o.as_time()
-        elif self.is_date():
-            return self.as_date() == o.as_date()
-        elif self.is_datetime():
-            return self.as_datetime() == o.as_datetime()
-        elif self.is_geography():
-            return self.as_geography() == o.as_geography()
-        elif self.is_duration():
-            return self.as_duration() == o.as_duration()
-        else:
-            raise RuntimeError(
-                "Unsupported type:{} to compare".format(self._get_type_name())
-            )
-        return False
-
-    def __repr__(self):
-        if self.is_empty():
-            return "__EMPTY__"
-        elif self.is_null():
-            return str(self.as_null())
-        elif self.is_bool():
-            return "True" if self.as_bool() else "False"
-        elif self.is_int():
-            return str(self.as_int())
-        elif self.is_double():
-            return str(self.as_double())
-        elif self.is_string():
-            return '"{}"'.format(self.as_string())
-        elif self.is_list():
-            return str(self.as_list())
-        elif self.is_set():
-            return str(self.as_set())
-        elif self.is_map():
-            return str(self.as_map())
-        elif self.is_vertex():
-            return str(self.as_node())
-        elif self.is_edge():
-            return str(self.as_relationship())
-        elif self.is_path():
-            return str(self.as_path())
-        elif self.is_time():
-            return str(self.as_time())
-        elif self.is_date():
-            return str(self.as_date())
-        elif self.is_datetime():
-            return str(self.as_datetime())
-        elif self.is_geography():
-            return str(self.as_geography())
-        elif self.is_duration():
-            return str(self.as_duration())
-        else:
-            raise RuntimeError(
-                "Unsupported type:{} to compare".format(self._get_type_name())
-            )
-        return False
-
-    def __hash__(self):
-        return self._value.__hash__()
 
 
 class TimeWrapper(BaseObject):
@@ -1747,3 +1264,482 @@ class PathWrapper(BaseObject):
             return False
 
         return self._segments == other.segments()
+
+
+class ValueWrapper(object):
+    def __init__(self, value, decode_type="utf-8", timezone_offset: int = 0):
+        self._value: Value = value
+        self._decode_type = decode_type
+        self._timezone_offset = timezone_offset
+
+    def get_value(self) -> Value:
+        """get raw data
+
+        :return: Value
+        """
+        return self._value
+
+    def is_null(self) -> bool:
+        """check if the value is Null type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.NVAL
+
+    def is_empty(self) -> bool:
+        """check if the value is Empty type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.__EMPTY__
+
+    def is_bool(self) -> bool:
+        """check if the value is Bool type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.BVAL
+
+    def is_int(self) -> bool:
+        """check if the value is Int type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.IVAL
+
+    def is_double(self) -> bool:
+        """check if the value is Double type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.FVAL
+
+    def is_string(self) -> bool:
+        """check if the value is String type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.SVAL
+
+    def is_list(self) -> bool:
+        """check if the value is List type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.LVAL
+
+    def is_set(self) -> bool:
+        """check if the value is Set type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.UVAL
+
+    def is_map(self) -> bool:
+        """check if the value is Map type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.MVAL
+
+    def is_time(self) -> bool:
+        """check if the value is Time type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.TVAL
+
+    def is_date(self) -> bool:
+        """check if the value is Date type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.DVAL
+
+    def is_datetime(self) -> bool:
+        """check if the value is Datetime type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.DTVAL
+
+    def is_vertex(self) -> bool:
+        """check if the value is Vertex type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.VVAL
+
+    def is_edge(self) -> bool:
+        """check if the value is Edge type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.EVAL
+
+    def is_path(self) -> bool:
+        """check if the value is Path type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.PVAL
+
+    def is_geography(self) -> bool:
+        """check if the value is Geography type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.GGVAL
+
+    def is_duration(self) -> bool:
+        """check if the value is Duration type
+
+        :return: true or false
+        """
+        return self._value.getType() == Value.DUVAL
+
+    def as_null(self):
+        """converts the original data type to Null type
+
+        :return: Null value
+        """
+        if self._value.getType() == Value.NVAL:
+            return Null(self._value.get_nVal())
+        raise InvalidValueTypeException(
+            "expect NULL type, but is " + self._get_type_name()
+        )
+
+    def as_bool(self) -> bool:
+        """converts the original data type to Bool type
+
+        :return: Bool value
+        """
+        if self._value.getType() == Value.BVAL:
+            return self._value.get_bVal()
+        raise InvalidValueTypeException(
+            "expect bool type, but is " + self._get_type_name()
+        )
+
+    def as_int(self) -> int:
+        """converts the original data type to Int type
+
+        :return: Int value
+        """
+        if self._value.getType() == Value.IVAL:
+            return self._value.get_iVal()
+        raise InvalidValueTypeException(
+            "expect bool type, but is " + self._get_type_name()
+        )
+
+    def as_double(self) -> float:
+        """converts the original data type to Double type
+
+        :return: Double value
+        """
+        if self._value.getType() == Value.FVAL:
+            return self._value.get_fVal()
+        raise InvalidValueTypeException(
+            "expect int type, but is " + self._get_type_name()
+        )
+
+    def as_string(self) -> str:
+        """converts the original data type to String type
+
+        :return: String value
+        """
+        if self._value.getType() == Value.SVAL:
+            return self._value.get_sVal().decode(self._decode_type)
+        raise InvalidValueTypeException(
+            "expect string type, but is " + self._get_type_name()
+        )
+
+    def as_time(self) -> TimeWrapper:
+        """converts the original data type to Time type
+
+        :return: Time value
+        """
+        if self._value.getType() == Value.TVAL:
+            return TimeWrapper(self._value.get_tVal()).set_timezone_offset(
+                self._timezone_offset
+            )
+        raise InvalidValueTypeException(
+            "expect time type, but is " + self._get_type_name()
+        )
+
+    def as_date(self) -> DateWrapper:
+        """converts the original data type to Date type
+
+        :return: Date value
+        """
+        if self._value.getType() == Value.DVAL:
+            return DateWrapper(self._value.get_dVal())
+        raise InvalidValueTypeException(
+            "expect date type, but is " + self._get_type_name()
+        )
+
+    def as_datetime(self) -> DateTimeWrapper:
+        """converts the original data type to Datetime type
+
+        :return: Datetime value
+        """
+        if self._value.getType() == Value.DTVAL:
+            return DateTimeWrapper(self._value.get_dtVal()).set_timezone_offset(
+                self._timezone_offset
+            )
+        raise InvalidValueTypeException(
+            "expect datetime type, but is " + self._get_type_name()
+        )
+
+    def as_list(self) -> List['ValueWrapper']:
+        """converts the original data type to list of ValueWrapper
+
+        :return: list<ValueWrapper>
+        """
+        if self._value.getType() == Value.LVAL:
+            result = []
+            for val in self._value.get_lVal().values:
+                result.append(
+                    ValueWrapper(
+                        val,
+                        decode_type=self._decode_type,
+                        timezone_offset=self._timezone_offset,
+                    )
+                )
+            return result
+        raise InvalidValueTypeException(
+            "expect list type, but is " + self._get_type_name()
+        )
+
+    def as_set(self) -> Set['ValueWrapper']:
+        """converts the original data type to set of ValueWrapper
+
+        :return: set<ValueWrapper>
+        """
+        if self._value.getType() == Value.UVAL:
+            result = set()
+            for val in self._value.get_uVal().values:
+                result.add(
+                    ValueWrapper(
+                        val,
+                        decode_type=self._decode_type,
+                        timezone_offset=self._timezone_offset,
+                    )
+                )
+            return result
+        raise InvalidValueTypeException(
+            "expect set type, but is " + self._get_type_name()
+        )
+
+    def as_map(self) -> Dict[str, 'ValueWrapper']:
+        """converts the original data type to map type
+
+        :return: map<String, ValueWrapper>
+        """
+        if self._value.getType() == Value.MVAL:
+            result = {}
+            kvs = self._value.get_mVal().kvs
+            for key in kvs.keys():
+                result[key.decode(self._decode_type)] = ValueWrapper(
+                    kvs[key],
+                    decode_type=self._decode_type,
+                    timezone_offset=self._timezone_offset,
+                )
+            return result
+        raise InvalidValueTypeException(
+            "expect map type, but is " + self._get_type_name()
+        )
+
+    def as_node(self) -> Node:
+        """converts the original data type to Node type
+
+        :return: Node type
+        """
+        if self._value.getType() == Value.VVAL:
+            return (
+                Node(self._value.get_vVal())
+                .set_decode_type(self._decode_type)
+                .set_timezone_offset(self._timezone_offset)
+            )
+        raise InvalidValueTypeException(
+            "expect vertex type, but is " + self._get_type_name()
+        )
+
+    def as_relationship(self) -> Relationship:
+        """converts the original data type to Relationship type
+
+        :return: Relationship type
+        """
+        if self._value.getType() == Value.EVAL:
+            return (
+                Relationship(self._value.get_eVal())
+                .set_decode_type(self._decode_type)
+                .set_timezone_offset(self._timezone_offset)
+            )
+        raise InvalidValueTypeException(
+            "expect edge type, but is " + self._get_type_name()
+        )
+
+    def as_path(self) -> PathWrapper:
+        """converts the original data type to PathWrapper type
+
+        :return: PathWrapper type
+        """
+        if self._value.getType() == Value.PVAL:
+            return (
+                PathWrapper(self._value.get_pVal())
+                .set_decode_type(self._decode_type)
+                .set_timezone_offset(self._timezone_offset)
+            )
+        raise InvalidValueTypeException(
+            "expect path type, but is " + self._get_type_name()
+        )
+
+    def as_geography(self) -> GeographyWrapper:
+        """converts the original data type to GeographyWrapper type
+
+        :return: GeographyWrapper type
+        """
+        if self._value.getType() == Value.GGVAL:
+            return (
+                GeographyWrapper(self._value.get_ggVal())
+                .set_decode_type(self._decode_type)
+                .set_timezone_offset(self._timezone_offset)
+            )
+        raise InvalidValueTypeException(
+            "expect geography type, but is " + self._get_type_name()
+        )
+
+    def as_duration(self) -> DurationWrapper:
+        """converts the original data type to Duration type
+
+        :return: DurationWrapper type
+        """
+        if self._value.getType() == Value.DUVAL:
+            return DurationWrapper(self._value.get_duVal())
+        raise InvalidValueTypeException(
+            "expect duration type, but is " + self._get_type_name()
+        )
+
+    def _get_type_name(self):
+        if self.is_empty():
+            return "empty"
+        if self.is_null():
+            return "null"
+        if self.is_bool():
+            return "bool"
+        if self.is_int():
+            return "int"
+        if self.is_double():
+            return "double"
+        if self.is_string():
+            return "string"
+        if self.is_list():
+            return "list"
+        if self.is_set():
+            return "set"
+        if self.is_map():
+            return "map"
+        if self.is_time():
+            return "time"
+        if self.is_date():
+            return "date"
+        if self.is_datetime():
+            return "datetime"
+        if self.is_vertex():
+            return "vertex"
+        if self.is_edge():
+            return "edge"
+        if self.is_path():
+            return "path"
+        if self.is_geography():
+            return "geography"
+        if self.is_duration():
+            return "duration"
+        return "unknown"
+
+    def __eq__(self, o: object) -> bool:
+        if not isinstance(o, self.__class__):
+            return False
+        if self.get_value().getType() != o.get_value().getType():
+            return False
+        if self.is_empty():
+            return o.is_empty()
+        elif self.is_null():
+            return self.as_null() == o.as_null()
+        elif self.is_bool():
+            return self.as_bool() == o.as_bool()
+        elif self.is_int():
+            return self.as_int() == o.as_int()
+        elif self.is_double():
+            return self.as_double() == o.as_double()
+        elif self.is_string():
+            return self.as_string() == o.as_string()
+        elif self.is_list():
+            return self.as_list() == o.as_list()
+        elif self.is_set():
+            return self.as_set() == o.as_set()
+        elif self.is_map():
+            return self.as_map() == o.as_map()
+        elif self.is_vertex():
+            return self.as_node() == o.as_node()
+        elif self.is_edge():
+            return self.as_relationship() == o.as_relationship()
+        elif self.is_path():
+            return self.as_path() == o.as_path()
+        elif self.is_time():
+            return self.as_time() == o.as_time()
+        elif self.is_date():
+            return self.as_date() == o.as_date()
+        elif self.is_datetime():
+            return self.as_datetime() == o.as_datetime()
+        elif self.is_geography():
+            return self.as_geography() == o.as_geography()
+        elif self.is_duration():
+            return self.as_duration() == o.as_duration()
+        else:
+            raise RuntimeError(
+                "Unsupported type:{} to compare".format(self._get_type_name())
+            )
+
+    def __repr__(self):
+        if self.is_empty():
+            return "__EMPTY__"
+        elif self.is_null():
+            return str(self.as_null())
+        elif self.is_bool():
+            return "True" if self.as_bool() else "False"
+        elif self.is_int():
+            return str(self.as_int())
+        elif self.is_double():
+            return str(self.as_double())
+        elif self.is_string():
+            return '"{}"'.format(self.as_string())
+        elif self.is_list():
+            return str(self.as_list())
+        elif self.is_set():
+            return str(self.as_set())
+        elif self.is_map():
+            return str(self.as_map())
+        elif self.is_vertex():
+            return str(self.as_node())
+        elif self.is_edge():
+            return str(self.as_relationship())
+        elif self.is_path():
+            return str(self.as_path())
+        elif self.is_time():
+            return str(self.as_time())
+        elif self.is_date():
+            return str(self.as_date())
+        elif self.is_datetime():
+            return str(self.as_datetime())
+        elif self.is_geography():
+            return str(self.as_geography())
+        elif self.is_duration():
+            return str(self.as_duration())
+        else:
+            raise RuntimeError(
+                "Unsupported type:{} to compare".format(self._get_type_name())
+            )
+
+    def __hash__(self):
+        return self._value.__hash__()
