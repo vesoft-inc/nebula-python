@@ -27,7 +27,6 @@ from nebula3.common.ttypes import (
 )
 
 
-
 def date_time_convert_with_timezone(date_time: DateTime, timezone_offset: int):
     """the function to convert utc date_time to local date_time
 
