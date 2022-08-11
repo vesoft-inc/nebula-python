@@ -686,22 +686,7 @@ class ValueWrapper(object):
         : return: Any type (e.g. int, float, List[Dict[str, int]], Set[List[float]])
         """
         _type = self._value.getType()
-        if _type in {
-            Value.NVAL,
-            Value.__EMPTY__,
-            Value.BVAL,
-            Value.IVAL,
-            Value.FVAL,
-            Value.SVAL,
-            Value.TVAL,
-            Value.DVAL,
-            Value.DTVAL,
-            Value.VVAL,
-            Value.EVAL,
-            Value.PVAL,
-            Value.GGVAL,
-            Value.DUVAL,
-        }:
+        if _type in __AS_MAP__:
             # Considering the most efficient way, we should call `cast` in every iterable method over their items,
             # such as `as_list`, `as_set`, and `as_map`. However, the returned type will change and cause incompatibility.
             # So I put the common types set (time complexity O(1)) at first, and call their method via dict ( O(1) )
