@@ -99,6 +99,49 @@ with connection_pool.session_context('root', 'nebula') as session:
 connection_pool.close()
 ```
 
+## Quick example to fetch result to dataframe
+
+```python
+from nebula3.gclient.net import ConnectionPool
+from nebula3.Config import Config
+import pandas as pd
+from typing import Dict
+from nebula3.data.ResultSet import ResultSet
+
+def result_to_df(result: ResultSet) -> pd.DataFrame:
+    """
+    build list for each column, and transform to dataframe
+    """
+    assert result.is_succeeded()
+    columns = result.keys()
+    d: Dict[str, list] = {}
+    for col_num in range(result.col_size()):
+        col_name = columns[col_num]
+        col_list = result.column_values(col_name)
+        d[col_name] = [x.cast() for x in col_list]
+    return pd.DataFrame.from_dict(d, columns=columns)
+
+# define a config
+config = Config()
+
+# init connection pool
+connection_pool = ConnectionPool()
+
+# if the given servers are ok, return true, else return false
+ok = connection_pool.init([('127.0.0.1', 9669)], config)
+
+# option 2 with session_context, session will be released automatically
+with connection_pool.session_context('root', 'nebula') as session:
+    session.execute('USE <your graph space>')
+    result = session.execute('<your query>')
+    df = result_to_df(result)
+    print(df)
+
+# close the pool
+connection_pool.close()
+
+```
+
 ## Quick example to use storage-client to scan vertex and edge
 
 You should make sure the scan client can connect to the address of storage which see from `SHOW HOSTS` 
