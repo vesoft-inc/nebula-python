@@ -58,7 +58,7 @@ cast_as = {
 def customized_cast_with_dict(val: ValueWrapper):
     _type = val._value.getType()
     method = cast_as.get(_type)
-    if method != None:
+    if method is not None:
         return getattr(val, method, lambda *args, **kwargs: None)()
     raise KeyError("No such key: {}".format(_type))
 
