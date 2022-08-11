@@ -57,7 +57,10 @@ cast_as = {
 
 def customized_cast_with_dict(val: ValueWrapper):
     _type = val._value.getType()
-    return getattr(_type, cast_as(_type))()
+    method = cast_as.get(_type)
+    if method != None:
+        return getattr(val, method, lambda *args, **kwargs: None)()
+    raise KeyError("No such key: {}".format(_type))
 
 
 def print_resp(resp: ResultSet):
