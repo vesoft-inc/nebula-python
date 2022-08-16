@@ -22,6 +22,7 @@ from nebula3.Exception import IOErrorException
 AddrIp = ['127.0.0.1', '::1']
 port = 29562
 
+
 class TestConnection(TestCase):
     def test_create(self):
         for ip in AddrIp:
