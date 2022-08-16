@@ -19,43 +19,48 @@ from nebula3.gclient.net import Connection
 from nebula3.common import ttypes
 from nebula3.Exception import IOErrorException
 
+AddrIp = ['127.0.0.1', '::1']
+port = 29562
 
 class TestConnection(TestCase):
     def test_create(self):
-        try:
+        for ip in AddrIp:
+            try:
+                conn = Connection()
+                conn.open(ip, port, 1000)
+                auth_result = conn.authenticate('root', 'nebula')
+                assert auth_result.get_session_id() != 0
+                conn.close()
+            except Exception as ex:
+                assert False, ex
+
+    def test_release(self):
+        for ip in AddrIp:
+            try:
+                conn = Connection()
+                conn.open(ip, port, 1000)
+                auth_result = conn.authenticate('root', 'nebula')
+                session_id = auth_result.get_session_id()
+                assert session_id != 0
+                resp = conn.execute(session_id, 'SHOW SPACES')
+                assert resp.error_code == ttypes.ErrorCode.SUCCEEDED, resp.error_msg
+                conn.signout(session_id)
+                # the session delete later
+                time.sleep(12)
+                resp = conn.execute(session_id, 'SHOW SPACES')
+                assert resp.error_code != ttypes.ErrorCode.SUCCEEDED
+                conn.close()
+            except Exception as ex:
+                assert False, ex
+
+    def test_close(self):
+        for ip in AddrIp:
             conn = Connection()
-            conn.open('127.0.0.1', 9669, 1000)
+            conn.open(ip, port, 1000)
             auth_result = conn.authenticate('root', 'nebula')
             assert auth_result.get_session_id() != 0
             conn.close()
-        except Exception as ex:
-            assert False, ex
-
-    def test_release(self):
-        try:
-            conn = Connection()
-            conn.open('127.0.0.1', 9669, 1000)
-            auth_result = conn.authenticate('root', 'nebula')
-            session_id = auth_result.get_session_id()
-            assert session_id != 0
-            resp = conn.execute(session_id, 'SHOW SPACES')
-            assert resp.error_code == ttypes.ErrorCode.SUCCEEDED, resp.error_msg
-            conn.signout(session_id)
-            # the session delete later
-            time.sleep(12)
-            resp = conn.execute(session_id, 'SHOW SPACES')
-            assert resp.error_code != ttypes.ErrorCode.SUCCEEDED
-            conn.close()
-        except Exception as ex:
-            assert False, ex
-
-    def test_close(self):
-        conn = Connection()
-        conn.open('127.0.0.1', 9669, 1000)
-        auth_result = conn.authenticate('root', 'nebula')
-        assert auth_result.get_session_id() != 0
-        conn.close()
-        try:
-            conn.authenticate('root', 'nebula')
-        except IOErrorException:
-            assert True
+            try:
+                conn.authenticate('root', 'nebula')
+            except IOErrorException:
+                assert True
