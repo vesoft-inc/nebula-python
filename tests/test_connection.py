@@ -20,7 +20,7 @@ from nebula3.common import ttypes
 from nebula3.Exception import IOErrorException
 
 AddrIp = ['127.0.0.1', '::1']
-port = 29562
+port = 9669
 
 
 class TestConnection(TestCase):
