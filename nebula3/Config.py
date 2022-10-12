@@ -73,3 +73,25 @@ class SSL_config(object):
     keyfile = None
     certfile = None
     allow_weak_ssl_versions = False
+
+
+class SessionConfig(object):
+    """The configs for the session pool
+    @ username(str): the username of the user
+    @ password(str): the password of the user
+    @ space_name(str): the space name to connect
+    @ timeout(int): the timeout of the session
+    @ idle_time(int): the idle time of the session
+    @ max_size(int): the max size of the session
+    @ min_size(int): the min size of the session
+    @ interval_check(int): the interval to check the idle time of the session
+    """
+
+    username = ""
+    password = ""
+    space_name = ""
+    timeout = 0
+    idle_time = 0
+    max_size = 30
+    min_size = 0
+    interval_check = -1

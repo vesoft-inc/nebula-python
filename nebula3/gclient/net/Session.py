@@ -234,13 +234,22 @@ class Session(object):
         self._connection = None
 
     def ping(self):
-        """check the connection is ok
+        """ping at connection level check the connection is valid
 
         :return: True or False
         """
         if self._connection is None:
             return False
         return self._connection.ping()
+
+    def ping_session(self):
+        """ping at session level, check whether the session is usable"""
+        resp = self.execute(r'RETURN "SESSION PING"')
+        if resp.is_succeeded():
+            return True
+        else:
+            logger.error('failed to ping the session: error code:{}, error message:{}'.format(resp.error_code, resp.error_msg))
+            return False
 
     def _reconnect(self):
         try:

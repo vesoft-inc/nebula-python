@@ -60,6 +60,12 @@ class NotValidConnectionException(Exception):
         self.message = 'No extra connection'
 
 
+class NoValidSessionException(Exception):
+    def __init__(self):
+        Exception.__init__(self)
+        self.message = 'No extra connection'
+
+
 class InValidHostname(Exception):
     def __init__(self, message):
         Exception.__init__(self, message)
