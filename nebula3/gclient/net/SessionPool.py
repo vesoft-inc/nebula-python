@@ -9,21 +9,28 @@ import socket
 
 from threading import RLock, Timer
 
-from nebula3.Exception import NotValidConnectionException, InValidHostname
+from nebula3.Exception import NoValidSessionException, InValidHostname
 
 from nebula3.gclient.net.Session import Session
 from nebula3.gclient.net.Connection import Connection
 from nebula3.logger import logger
-from nebula3.Config import SessionConfig
+from nebula3.Config import SessionPoolConfig
 
 
 class SessionPool(object):
     S_OK = 0
     S_BAD = 1
 
-    def __init__(self):
+    def __init__(self, username, password, space_name, addresses):
+        # user name and password of the session
+        self._username = username
+        self._password = password
+
+        # space name bonded to the session
+        self._space_name = space_name
+
         # all addresses of servers
-        self._addresses = list()
+        self._addresses = addresses
 
         # server's status
         self._addresses_status = dict()
@@ -33,7 +40,7 @@ class SessionPool(object):
         # sessions that are currently available
         self._idle_sessions = list()
 
-        self._configs = SessionConfig()
+        self._configs = SessionPoolConfig()
         self._ssl_configs = None
         self._lock = RLock()
         self._pos = -1
@@ -42,10 +49,15 @@ class SessionPool(object):
     def __del__(self):
         self.close()
 
-    def init(self, addresses, configs):
+    def init(self, configs):
         """init the session pool
 
+        :param username: the username of the session
+        :param password: the password of the session
+        :param space_name: the space name of the session
+        :param addresses: the addresses of the servers
         :param configs: the config of the pool
+
         :return: if all addresses are valid, return True else return False.
         """
         # check configs
@@ -60,7 +72,7 @@ class SessionPool(object):
             raise RuntimeError('The pool has init or closed.')
         self._configs = configs
 
-        for address in addresses:
+        for address in self._addresses:
             if address not in self._addresses:
                 try:
                     ip = socket.gethostbyname(address[0])
@@ -91,36 +103,6 @@ class SessionPool(object):
 
         return True
 
-    def _new_session(self):
-        """get a valid session with the username and password in the pool.
-            also, the session is bound to the space specified in the configs.
-
-        :return: Session
-        """
-        self._pos = (self._pos + 1) % len(self._addresses)
-        addr = self._addresses[self._pos]
-        if self._addresses_status[addr] == self.S_OK:
-            if self._ssl_configs is None:
-                connection = Connection()
-                try:
-                    connection.open(addr[0], addr[1], self._configs.timeout)
-                    auth_result = connection.authenticate(
-                        self._configs.username, self._configs.password
-                    )
-                    session = Session(connection, auth_result, self, False)
-                    resp = session.execute('USE {}'.format(self._configs.space_name))
-                    if resp.error_code != 0:
-                        raise RuntimeError(
-                            'Failed to get session, cannot set the session space to {}'.format(
-                                self._configs.space_name
-                            )
-                        )
-                    return session
-                except Exception:
-                    raise
-        else:
-            raise RuntimeError('SSL is not supported yet')
-
     def ping(self, address):
         """check the server is ok
 
@@ -141,6 +123,44 @@ class SessionPool(object):
             )
             return False
 
+    def execute(self, stmt):
+        """execute the given query
+        Notice there are some limitations:
+        1. The query should not be a plain space switch statement, e.g. "USE test_space",
+        but queries like "use space xxx; match (v) return v" are accepted.
+        2. If the query contains statements like "USE <space name>", the space will be set to the
+        one in the pool config after the execution of the query.
+
+        :param stmt: the ngql
+        :return: ResultSet
+        """
+        return self.execute_parameter(stmt, None)
+
+    def execute_parameter(self, stmt, params):
+        """execute statement
+
+        :param stmt: the ngql
+        :param params: parameter map
+        :return: ResultSet
+        """
+        session = self._get_idle_session()
+        if session is None:
+            raise RuntimeError('Get session failed')
+        try:
+            resp = session.execute_parameter(stmt, params)
+
+            # reset the space name to the pool config
+            if resp.space_name() != self._space_name:
+                self._set_space_to_default(session)
+
+            # move the session back to the idle list
+            self._return_session(session)
+
+            return resp
+        except Exception as e:
+            logger.error('Execute failed: {}'.format(e))
+            raise e
+
     def close(self):
         """log out all sessions and close all connections
 
@@ -148,24 +168,13 @@ class SessionPool(object):
         """
         with self._lock:
             for session in self._idle_sessions:
-                session.release()
-                session.connection.close()
+                session._sign_out()
+                session._connection.close()
             for session in self._active_sessions:
-                session.release()
-                session.connection.close()
+                session._sign_out()
+                session._connection.close()
             self._idle_sessions.clear()
             self._close = True
-
-    def connects(self):
-        """get the number of existing connections
-
-        :return: the number of connections
-        """
-        with self._lock:
-            count = 0
-            for addr in self._sessions.keys():
-                count = count + len(self._sessions[addr])
-            return count
 
     def get_ok_servers_num(self):
         """get the number of the ok servers
@@ -201,32 +210,95 @@ class SessionPool(object):
             for session in self._idle_sessions:
                 session.execute(r'RETURN "SESSION PING"')
 
+    def _get_idle_session(self):
+        """get a valid session from the pool idle list.
+
+        :return: Session
+        """
+        with self._lock:
+            if len(self._idle_sessions) > 0:
+                return self._idle_sessions.pop(0)
+            elif len(self._active_sessions) < self._configs.max_size:
+                return self._new_session()
+            else:
+                raise NoValidSessionException(
+                    'The total number of sessions reaches the pool max size {}'.format(
+                        self._configs.max_size
+                    )
+                )
+
+    def _new_session(self):
+        """construct a new session with the username and password in the pool.
+            also, the session is bound to the space specified in the configs.
+
+        :return: Session
+        """
+        self._pos = (self._pos + 1) % len(self._addresses)
+        addr = self._addresses[self._pos]
+        if self._addresses_status[addr] == self.S_OK:
+            if self._ssl_configs is None:
+                connection = Connection()
+                try:
+                    connection.open(addr[0], addr[1], self._configs.timeout)
+                    auth_result = connection.authenticate(
+                        self._username, self._password
+                    )
+                    session = Session(connection, auth_result, self, False)
+
+                    # switch to the space specified in the configs
+                    resp = session.execute('USE {}'.format(self._space_name))
+                    if not resp.is_succeeded():
+                        raise RuntimeError(
+                            'Failed to get session, cannot set the session space to {} error: {} {}'.format(
+                                self._space_name, resp.error_code(), resp.error_msg()
+                            )
+                        )
+                    return session
+                except Exception:
+                    raise
+        else:
+            raise RuntimeError('SSL is not supported yet')
+
+    def _return_session(self, session):
+        """return the session to the pool idle list when query finished.
+
+        :param session: the session to return
+        :return: void
+        """
+        with self._lock:
+            self._idle_sessions.append(session)
+
+    def _set_space_to_default(self, session):
+        """set the space to the default space in the pool
+
+        :param session: the session to set
+        :return: void
+        """
+        try:
+            resp = session.execute('USE {}'.format(self._space_name))
+            if not resp.is_succeeded():
+                raise RuntimeError(
+                    'Failed to set the session space to {}'.format(self._space_name)
+                )
+        except Exception:
+            logger.warning(
+                'Failed to set the session space to {}, the current session has been dropped'.format(
+                    self._space_name
+                )
+            )
+            session._connection.close()
+            with self._lock:
+                self._active_sessions.remove(session)
+
     def _remove_idle_unusable_session(self):
         if self._configs.idle_time == 0:
             return
         with self._lock:
-            for addr in self._sessions.keys():
-                conns = self._sessions[addr]
-                for connection in list(conns):
-                    if not connection.is_used:
-                        if not connection.ping():
-                            logger.debug(
-                                'Remove the not unusable connection to {}'.format(
-                                    connection.get_address()
-                                )
-                            )
-                            conns.remove(connection)
-                            continue
-                        if (
-                            self._configs.idle_time != 0
-                            and connection.idle_time() > self._configs.idle_time
-                        ):
-                            logger.debug(
-                                'Remove the idle connection to {}'.format(
-                                    connection.get_address()
-                                )
-                            )
-                            conns.remove(connection)
+            for session in self._idle_sessions:
+                if session.is_idle(self._configs.idle_time):
+                    session.release()
+                    session._connection.close()
+                    self._idle_sessions.remove(session)
 
     def _period_detect(self):
         """periodically detect the services status"""
@@ -250,7 +322,14 @@ class SessionPool(object):
             )
         if self._configs.idle_time < 0:
             raise RuntimeError('The idle_time must be greater or equal to 0')
-        if self._configs.space_name == "":
-            raise RuntimeError('The space_name must be set')
         if self._configs.timeout < 0:
             raise RuntimeError('The timeout must be greater or equal to 0')
+
+        if self._space_name == "":
+            raise RuntimeError('The space_name must be set')
+        if self._username == "":
+            raise RuntimeError('The username must be set')
+        if self._password == "":
+            raise RuntimeError('The password must be set')
+        if self._addresses is None or len(self._addresses) == 0:
+            raise RuntimeError('The addresses must be set')

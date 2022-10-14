@@ -33,7 +33,7 @@ class Session(object):
         :return: ResultSet
         """
         if self._connection is None:
-            raise RuntimeError('The session has released')
+            raise RuntimeError('The session has been released')
         try:
             start_time = time.time()
             resp = self._connection.execute_parameter(self._session_id, stmt, params)
@@ -199,7 +199,7 @@ class Session(object):
         :return: JSON string
         """
         if self._connection is None:
-            raise RuntimeError('The session has released')
+            raise RuntimeError('The session has been released')
         try:
             resp_json = self._connection.execute_json_with_parameter(
                 self._session_id, stmt, params
@@ -244,11 +244,15 @@ class Session(object):
 
     def ping_session(self):
         """ping at session level, check whether the session is usable"""
-        resp = self.execute(r'RETURN "SESSION PING"')
+        resp = self.execute(r'RETURN "NEBULA PYTHON SESSION PING"')
         if resp.is_succeeded():
             return True
         else:
-            logger.error('failed to ping the session: error code:{}, error message:{}'.format(resp.error_code, resp.error_msg))
+            logger.error(
+                'failed to ping the session: error code:{}, error message:{}'.format(
+                    resp.error_code, resp.error_msg
+                )
+            )
             return False
 
     def _reconnect(self):
@@ -264,3 +268,18 @@ class Session(object):
 
     def __del__(self):
         self.release()
+
+    def _idle_time(self):
+        """get idletime of connection
+
+        :return: idletime
+        """
+        if self.is_used:
+            return 0
+        return (time.time() - self.start_use_time) * 1000
+
+    def _sign_out(self):
+        """sign out the session"""
+        if self._connection is None:
+            raise RuntimeError('The session has been released')
+        self._connection.signout(self._session_id)
