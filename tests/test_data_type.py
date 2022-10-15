@@ -348,6 +348,14 @@ class TesValueWrapper(TestBaseCase):
         tmp_map_val.kvs = {b"a": str_val1, b"b": str_val2}
         map_val.set_mVal(tmp_map_val)
 
+        node_val = ttypes.Value()
+        node_val.set_vVal(self.get_vertex_value(b'Tom'))
+
+        relationship_val = ttypes.Value(eVal=self.get_edge_value(b'Tom', b'Lily'))
+
+        path_val = ttypes.Value()
+        path_val.set_pVal(self.get_path_value(b'Tom'))
+
         tmp_list_val = NList()
         tmp_list_val.values = [
             bool_val,
@@ -357,6 +365,9 @@ class TesValueWrapper(TestBaseCase):
             str_val2,
             set_val,
             map_val,
+            node_val,
+            relationship_val,
+            path_val,
         ]
         value.set_lVal(tmp_list_val)
 
@@ -373,6 +384,9 @@ class TesValueWrapper(TestBaseCase):
             "car",
             {"word", "car"},
             {"a": "word", "b": "car"},
+            ValueWrapper(node_val).as_node(),
+            ValueWrapper(relationship_val).as_relationship(),
+            ValueWrapper(path_val).as_path(),
         ]
         assert list_val == expect_result
 
