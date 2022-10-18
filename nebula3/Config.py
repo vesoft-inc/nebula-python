@@ -83,6 +83,7 @@ class SessionPoolConfig(object):
     @ min_size(int): the min size of the session
     @ interval_check(int): the interval to check the idle time of the session
     """
+
     timeout = 0
     idle_time = 0
     max_size = 30

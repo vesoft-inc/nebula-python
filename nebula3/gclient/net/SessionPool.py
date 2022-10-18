@@ -5,9 +5,11 @@
 # This source code is licensed under Apache 2.0 License.
 
 
+import json
 import socket
 
 from threading import RLock, Timer
+import time
 
 from nebula3.Exception import NoValidSessionException, InValidHostname
 
@@ -30,10 +32,20 @@ class SessionPool(object):
         self._space_name = space_name
 
         # all addresses of servers
-        self._addresses = addresses
+        self._addresses = list()
 
         # server's status
         self._addresses_status = dict()
+
+        # validate the addresses
+        for address in addresses:
+            try:
+                ip = socket.gethostbyname(address[0])
+            except Exception:
+                raise InValidHostname(str(address[0]))
+            ip_port = (ip, address[1])
+            self._addresses.append(ip_port)
+            self._addresses_status[ip_port] = self.S_BAD
 
         # sessions that are currently in use
         self._active_sessions = list()
@@ -43,7 +55,11 @@ class SessionPool(object):
         self._configs = SessionPoolConfig()
         self._ssl_configs = None
         self._lock = RLock()
+
+        # the index of the next address to connect
         self._pos = -1
+
+        # the flag of whether the pool is closed
         self._close = False
 
     def __del__(self):
@@ -72,16 +88,6 @@ class SessionPool(object):
             raise RuntimeError('The pool has init or closed.')
         self._configs = configs
 
-        for address in self._addresses:
-            if address not in self._addresses:
-                try:
-                    ip = socket.gethostbyname(address[0])
-                except Exception:
-                    raise InValidHostname(str(address[0]))
-                ip_port = (ip, address[1])
-                self._addresses.append(ip_port)
-                self._addresses_status[ip_port] = self.S_BAD
-
         # ping all servers
         self.update_servers_status()
 
@@ -99,7 +105,7 @@ class SessionPool(object):
             session = self._new_session()
             if session is None:
                 raise RuntimeError('Get session failed')
-            self._idle_sessions.append(session)
+            self._add_session_to_idle(session)
 
         return True
 
@@ -130,8 +136,9 @@ class SessionPool(object):
         but queries like "use space xxx; match (v) return v" are accepted.
         2. If the query contains statements like "USE <space name>", the space will be set to the
         one in the pool config after the execution of the query.
+        3. The query should not change the user password nor drop a user.
 
-        :param stmt: the ngql
+        :param stmt: the query string
         :return: ResultSet
         """
         return self.execute_parameter(stmt, None)
@@ -139,13 +146,15 @@ class SessionPool(object):
     def execute_parameter(self, stmt, params):
         """execute statement
 
-        :param stmt: the ngql
+        :param stmt: the query string
         :param params: parameter map
         :return: ResultSet
         """
         session = self._get_idle_session()
         if session is None:
             raise RuntimeError('Get session failed')
+        self._add_session_to_active(session)
+
         try:
             resp = session.execute_parameter(stmt, params)
 
@@ -159,6 +168,95 @@ class SessionPool(object):
             return resp
         except Exception as e:
             logger.error('Execute failed: {}'.format(e))
+            # remove the session from the pool if it is invalid
+            self._active_sessions.remove(session)
+            raise e
+
+    def execute_json(self, stmt):
+        """execute statement and return the result as a JSON string
+            Date and Datetime will be returned in UTC
+            JSON struct:
+            {
+                "results": [
+                {
+                    "columns": [],
+                    "data": [
+                    {
+                        "row": [
+                        "row-data"
+                        ],
+                        "meta": [
+                        "metadata"
+                        ]
+                    }
+                    ],
+                    "latencyInUs": 0,
+                    "spaceName": "",
+                    "planDesc ": {
+                    "planNodeDescs": [
+                        {
+                        "name": "",
+                        "id": 0,
+                        "outputVar": "",
+                        "description": {
+                            "key": ""
+                        },
+                        "profiles": [
+                            {
+                            "rows": 1,
+                            "execDurationInUs": 0,
+                            "totalDurationInUs": 0,
+                            "otherStats": {}
+                            }
+                        ],
+                        "branchInfo": {
+                            "isDoBranch": false,
+                            "conditionNodeId": -1
+                        },
+                        "dependencies": []
+                        }
+                    ],
+                    "nodeIndexMap": {},
+                    "format": "",
+                    "optimize_time_in_us": 0
+                    },
+                    "comment ": ""
+                }
+                ],
+                "errors": [
+                {
+                    "code": 0,
+                    "message": ""
+                }
+                ]
+            }
+        :param stmt: the ngql
+        :return: JSON string
+        """
+        return self.execute_json_with_parameter(stmt, None)
+
+    def execute_json_with_parameter(self, stmt, params):
+        session = self._get_idle_session()
+        if session is None:
+            raise RuntimeError('Get session failed')
+        self._add_session_to_active(session)
+
+        try:
+            resp = session.execute_json_with_parameter(stmt, params)
+
+            # reset the space name to the pool config
+            json_obj = json.loads(resp)
+            if json_obj["results"][0]["spaceName"] != self._space_name:
+                self._set_space_to_default(session)
+
+            # move the session back to the idle list
+            self._return_session(session)
+
+            return resp
+        except Exception as e:
+            logger.error('Execute failed: {}'.format(e))
+            # remove the session from the pool if it is invalid
+            self._active_sessions.remove(session)
             raise e
 
     def close(self):
@@ -266,7 +364,30 @@ class SessionPool(object):
         :return: void
         """
         with self._lock:
+            self._active_sessions.remove(session)
             self._idle_sessions.append(session)
+            session.idle_time_start = time.time()
+
+    def _add_session_to_idle(self, session):
+        """add the session to the pool idle list
+
+        :param session: the session to add
+        :return: void
+        """
+        with self._lock:
+            self._idle_sessions.append(session)
+            session.idle_time_start = time.time()
+
+    def _add_session_to_active(self, session):
+        """add the session to the pool active list
+
+        :param session: the session to add
+        :return: void
+        """
+        with self._lock:
+            self._active_sessions.append(session)
+            # reset the idle time start
+            session.idle_time_start = 0
 
     def _set_space_to_default(self, session):
         """set the space to the default space in the pool
@@ -294,14 +415,21 @@ class SessionPool(object):
         if self._configs.idle_time == 0:
             return
         with self._lock:
+            total_sessions = len(self._idle_sessions) + len(self._active_sessions)
+            if total_sessions <= self._configs.min_size:
+                return
             for session in self._idle_sessions:
-                if session.is_idle(self._configs.idle_time):
+                # calc session idle time
+                idle_time = time.time() - session._idle_time_start
+
+                # release idle session and remove from the pool
+                if idle_time > self._configs.idle_time:
                     session.release()
                     session._connection.close()
                     self._idle_sessions.remove(session)
 
     def _period_detect(self):
-        """periodically detect the services status"""
+        """periodically detect the services status and remove the sessions from the idle list if they expire"""
         if self._close or self._configs.interval_check < 0:
             return
         self.update_servers_status()

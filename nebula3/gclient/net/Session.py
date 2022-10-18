@@ -23,8 +23,11 @@ class Session(object):
         self._timezone_offset = auth_result.get_timezone_offset()
         self._connection = connection
         self._timezone = 0
+        # connection the where the session was created, if session pool was used
         self._pool = pool
         self._retry_connect = retry_connect
+        # the time stamp when the session was added to the idle list of the session pool
+        self._idle_time_start = 0
 
     def execute_parameter(self, stmt, params):
         """execute statement

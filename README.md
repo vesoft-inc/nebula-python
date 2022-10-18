@@ -99,6 +99,16 @@ with connection_pool.session_context('root', 'nebula') as session:
 connection_pool.close()
 ```
 
+## Example of using session pool
+```
+There are some limitations while using the session pool:
+
+1. There MUST be an existing space in the DB before initializing the session pool.
+2. Each session pool is corresponding to a single USER and a single Space. This is to ensure that the user's access control is consistent. i.g. The same user may have different access privileges in different spaces. If you need to run queries in different spaces, you may have multiple session pools.
+3. Every time when sessinPool.execute() is called, the session will execute the query in the space set in the session pool config.
+4. Commands that alter passwords or drop users should NOT be executed via session pool.
+```
+see /example/SessinPoolExample.py
 ## Quick example to fetch result to dataframe
 
 ```python

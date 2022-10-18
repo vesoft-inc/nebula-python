@@ -6,11 +6,12 @@
 # This source code is licensed under Apache 2.0 License.
 
 
+from distutils.command.config import config
+import json
 import sys
 import os
 import threading
 import time
-import pytest
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
@@ -28,13 +29,47 @@ from nebula3.Exception import (
     IOErrorException,
 )
 
+# ports for test
+test_port = 9669
+test_port2 = 9670
 
-class TestSessionPool(TestCase):
+
+def prepare_space(space_name='session_pool_test'):
+    # prepare space
+    conn = Connection()
+    conn.open('127.0.0.1', test_port, 1000)
+    auth_result = conn.authenticate('root', 'nebula')
+    assert auth_result.get_session_id() != 0
+    resp = conn.execute(
+        auth_result._session_id,
+        'CREATE SPACE IF NOT EXISTS {}(partition_num=32, replica_factor=1, vid_type = FIXED_STRING(30))'.format(
+            space_name
+        ),
+    )
+    assert resp.error_code == ErrorCode.SUCCEEDED
+
+
+def drop_space(space_name='session_pool_test'):
+    # drop space
+    conn = Connection()
+    conn.open('127.0.0.1', test_port, 1000)
+    auth_result = conn.authenticate('root', 'nebula')
+    assert auth_result.get_session_id() != 0
+
+    # drop space
+    resp = conn.execute(
+        auth_result._session_id,
+        'DROP SPACE IF EXISTS {}'.format(space_name),
+    )
+    assert resp.error_code == ErrorCode.SUCCEEDED
+
+
+class TestSessionPoolBasic(TestCase):
     @classmethod
     def setup_class(self):
         self.addresses = list()
-        self.addresses.append(('127.0.0.1', 9669))
-        self.addresses.append(('127.0.0.1', 9670))
+        self.addresses.append(('127.0.0.1', test_port))
+        self.addresses.append(('127.0.0.1', test_port2))
         self.configs = SessionPoolConfig()
         self.configs.min_size = 2
         self.configs.max_size = 4
@@ -42,15 +77,9 @@ class TestSessionPool(TestCase):
         self.configs.interval_check = 2
 
         # prepare space
-        conn = Connection()
-        conn.open('127.0.0.1', 9669, 1000)
-        auth_result = conn.authenticate('root', 'nebula')
-        assert auth_result.get_session_id() != 0
-        resp = conn.execute(
-            auth_result._session_id,
-            'CREATE SPACE IF NOT EXISTS session_pool_test(vid_type=FIXED_STRING(30))',
-        )
-        assert resp.error_code == ErrorCode.SUCCEEDED
+        prepare_space('session_pool_test')
+        prepare_space('session_pool_test_2')
+
         # insert data need to sleep after create schema
         time.sleep(10)
 
@@ -59,94 +88,105 @@ class TestSessionPool(TestCase):
         )
         assert self.session_pool.init(self.configs)
 
-    def test_right_hostname(self):
+    def tearDown_Class(self):
+        drop_space('session_pool_test')
+        drop_space('session_pool_test_2')
+
+    def test_pool_init(self):
+        # basic
         session_pool = SessionPool(
             'root', 'nebula', 'session_pool_test', self.addresses
         )
         assert session_pool.init(self.configs)
 
-    def test_wrong_hostname(self):
-        session_pool = SessionPool(
-            'root', 'nebula', 'session_pool_test', ('wrong_host', 9669)
-        )
+        # handle wrong service port
+        pool = SessionPool(
+            'root', 'nebula', 'session_pool_test', [('127.0.0.1', 3800)]
+        )  # wrong port
         try:
-            session_pool.init(self.configs)
-            assert False
-        except InValidHostname:
-            assert True
-
-    def test_ping(self):
-        assert self.pool.ping(('127.0.0.1', 9669))
-        assert self.pool.ping(('127.0.0.1', 5000)) is False
-
-    def test_init_failed(self):
-        # init succeeded
-        pool1 = SessionPool()
-        addresses = list()
-        addresses.append(('127.0.0.1', 9669))
-        addresses.append(('127.0.0.1', 9670))
-        assert pool1.init(addresses, Config())
-
-        # init failed, connected failed
-        pool2 = SessionPool()
-        addresses = list()
-        addresses.append(('127.0.0.1', 3800))
-        try:
-            pool2.init(addresses, Config())
+            pool.init(self.configs)
             assert False
         except Exception:
             assert True
 
-        # init failed, hostname not existed
+        # handle invalid hostname
         try:
-            pool3 = SessionPool()
-            addresses = list()
-            addresses.append(('not_exist_hostname', 3800))
-            assert not pool3.init(addresses, Config())
+            session_pool = SessionPool(
+                'root', 'nebula', 'session_pool_test', [('wrong_host', test_port)]
+            )
+            session_pool.init(self.configs)
+            assert False
         except InValidHostname:
             assert True, "We expected get the exception"
 
+    def test_ping(self):
+        assert self.session_pool.ping(self.addresses[0])
+        assert self.session_pool.ping(('127.0.0.1', 5000)) is False
 
-def test_multi_thread():
+    def test_execute(self):
+        resp = self.session_pool.execute('SHOW HOSTS')
+        assert resp.is_succeeded()
+
+    def test_execute_json(self):
+        resp = self.session_pool.execute_json('SHOW HOSTS')
+        json_obj = json.loads(resp)
+        # Get errorcode
+        resp_error_code = json_obj["errors"][0]["code"]
+        assert 0 == resp_error_code
+
+    def test_switch_space(self):
+        # This test is used to test if the space bond to session is the same as the space in the session pool config after executing
+        # a query contains `USE <space_name>` statement.
+        session_pool = SessionPool(
+            'root', 'nebula', 'session_pool_test', self.addresses
+        )
+        configs = SessionPoolConfig()
+        configs.min_size = 1
+        configs.max_size = 1
+        assert session_pool.init(configs)
+
+        resp = session_pool.execute('USE session_pool_test_2; SHOW HOSTS;')
+        assert resp.is_succeeded()
+
+        # The space in the session pool config should be the same as the space in the session.
+        resp = session_pool.execute('SHOW HOSTS;')
+        assert resp.is_succeeded()
+        assert resp.space_name() == 'session_pool_test'
+
+
+def test_session_pool_multi_thread():
+    # prepare space
+    prepare_space()
+
     # Test multi thread
-    addresses = [('127.0.0.1', 9669), ('127.0.0.1', 9670)]
-    configs = Config()
-    configs.max_connection_pool_size = 4
-    pool = SessionPool()
-    assert pool.init(addresses, configs)
+    addresses = [('127.0.0.1', test_port), ('127.0.0.1', test_port2)]
+    configs = SessionPoolConfig()
+    configs.min_size = 2
+    configs.max_size = 4
+    configs.idle_time = 2000
+    configs.interval_check = 2
+
+    session_pool = SessionPool('root', 'nebula', 'session_pool_test', addresses)
+    assert session_pool.init(configs)
 
     global success_flag
     success_flag = True
 
     def main_test():
-        session = None
         global success_flag
         try:
-            session = pool.get_session('root', 'nebula')
-            if session is None:
-                success_flag = False
-                return
-            space_name = 'space_' + threading.current_thread().getName()
-
-            session.execute('DROP SPACE %s' % space_name)
-            resp = session.execute(
-                'CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))' % space_name
-            )
+            resp = session_pool.execute('SHOW HOSTS')
             if not resp.is_succeeded():
-                raise RuntimeError('CREATE SPACE failed: {}'.format(resp.error_msg()))
-
-            time.sleep(3)
-            resp = session.execute('USE %s' % space_name)
-            if not resp.is_succeeded():
-                raise RuntimeError('USE SPACE failed:{}'.format(resp.error_msg()))
+                raise RuntimeError(
+                    'Failed to execute the query in thread {} : {}'.format(
+                        threading.current_thread().getName(), resp.error_msg()
+                    )
+                )
 
         except Exception as x:
             print(x)
             success_flag = False
             return
-        finally:
-            if session is not None:
-                session.release()
 
     thread1 = threading.Thread(target=main_test, name='thread1')
     thread2 = threading.Thread(target=main_test, name='thread2')
@@ -162,6 +202,5 @@ def test_multi_thread():
     thread2.join()
     thread3.join()
     thread4.join()
-
-    pool.close()
+    assert len(session_pool._active_sessions) == 0
     assert success_flag

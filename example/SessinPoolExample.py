@@ -17,7 +17,7 @@ from FormatResp import print_resp
 
 if __name__ == '__main__':
     ip = '127.0.0.1'
-    port = 29562
+    port = 3699
 
     try:
         config = SessionPoolConfig()
@@ -64,15 +64,16 @@ if __name__ == '__main__':
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
 
-        # # drop space
-        # conn.execute(
-        #     auth_result._session_id,
-        #     'DROP SPACE session_pool_test',
-        # )
+        # drop space
+        conn.execute(
+            auth_result._session_id,
+            'DROP SPACE session_pool_test',
+        )
 
         print("Example finished")
 
     except Exception as x:
         import traceback
+
         print(traceback.format_exc())
         exit(1)
