@@ -346,35 +346,44 @@ class SessionPool(object):
 
         while retries > 0:
             addr = self._addresses[next_addr_index]
-            if self._addresses_status[addr] == self.S_OK:
-                connection = Connection()
-                try:
-                    connection.open(addr[0], addr[1], self._configs.timeout)
-                    auth_result = connection.authenticate(
-                        self._username, self._password
-                    )
-                    session = Session(connection, auth_result, self, False)
 
-                    # switch to the space specified in the configs
-                    resp = session.execute('USE {}'.format(self._space_name))
-                    if not resp.is_succeeded():
-                        raise RuntimeError(
-                            'Failed to get session, cannot set the session space to {} error: {} {}'.format(
-                                self._space_name, resp.error_code(), resp.error_msg()
-                            )
-                        )
-                    return session
-                except AuthFailedException as e:
-                    # if auth failed, close the pool
-                    logger.error('Authentication failed, close the pool {}'.format(e))
-                    self.close()
-                    raise e
-                except Exception:
-                    raise
-            else:
+            # if the address is bad, skip it
+            if self._addresses_status[addr] == self.S_BAD:
                 logger.warning('The graph service {} is not available'.format(addr))
                 retries = retries - 1
                 next_addr_index = (next_addr_index + 1) % len(self._addresses)
+                continue
+
+            # connect to the valid service
+            connection = Connection()
+            try:
+                connection.open(addr[0], addr[1], self._configs.timeout)
+                auth_result = connection.authenticate(self._username, self._password)
+                session = Session(connection, auth_result, self, False)
+
+                # switch to the space specified in the configs
+                resp = session.execute('USE {}'.format(self._space_name))
+                if not resp.is_succeeded():
+                    raise RuntimeError(
+                        'Failed to get session, cannot set the session space to {} error: {} {}'.format(
+                            self._space_name, resp.error_code(), resp.error_msg()
+                        )
+                    )
+                return session
+            except AuthFailedException as e:
+                # if auth failed because of credentials, close the pool
+                if e.message.find("Invalid password") or e.message.find(
+                    "User not exist"
+                ):
+                    logger.error(
+                        'Authentication failed, because of bad credentials, close the pool {}'.format(
+                            e
+                        )
+                    )
+                    self.close()
+                raise e
+            except Exception:
+                raise
 
         raise RuntimeError(
             'Failed to get a valid session, no graph service is available'
