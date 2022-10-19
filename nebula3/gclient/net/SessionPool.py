@@ -11,7 +11,11 @@ import socket
 from threading import RLock, Timer
 import time
 
-from nebula3.Exception import AuthFailedException, NoValidSessionException, InValidHostname
+from nebula3.Exception import (
+    AuthFailedException,
+    NoValidSessionException,
+    InValidHostname,
+)
 
 from nebula3.gclient.net.Session import Session
 from nebula3.gclient.net.Connection import Connection
@@ -331,10 +335,18 @@ class SessionPool(object):
 
         :return: Session
         """
+        if self._ssl_configs is not None:
+            raise RuntimeError('SSL is not supported yet')
+
         self._pos = (self._pos + 1) % len(self._addresses)
-        addr = self._addresses[self._pos]
-        if self._addresses_status[addr] == self.S_OK:
-            if self._ssl_configs is None:
+        next_addr_index = self._pos
+
+        # try to connect with a valid service address, the worst case it to iterate all addresses
+        retries = len(self._addresses)
+
+        while retries > 0:
+            addr = self._addresses[next_addr_index]
+            if self._addresses_status[addr] == self.S_OK:
                 connection = Connection()
                 try:
                     connection.open(addr[0], addr[1], self._configs.timeout)
@@ -356,10 +368,17 @@ class SessionPool(object):
                     # if auth failed, close the pool
                     logger.error('Authentication failed, close the pool {}'.format(e))
                     self.close()
+                    raise e
                 except Exception:
                     raise
-        else:
-            raise RuntimeError('SSL is not supported yet')
+            else:
+                logger.warning('The graph service {} is not available'.format(addr))
+                retries = retries - 1
+                next_addr_index = (next_addr_index + 1) % len(self._addresses)
+
+        raise RuntimeError(
+            'Failed to get a valid session, no graph service is available'
+        )
 
     def _return_session(self, session):
         """return the session to the pool idle list when query finished.
