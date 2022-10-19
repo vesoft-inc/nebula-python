@@ -11,7 +11,7 @@ import socket
 from threading import RLock, Timer
 import time
 
-from nebula3.Exception import NoValidSessionException, InValidHostname
+from nebula3.Exception import AuthFailedException, NoValidSessionException, InValidHostname
 
 from nebula3.gclient.net.Session import Session
 from nebula3.gclient.net.Connection import Connection
@@ -352,6 +352,10 @@ class SessionPool(object):
                             )
                         )
                     return session
+                except AuthFailedException as e:
+                    # if auth failed, close the pool
+                    logger.error('Authentication failed, close the pool {}'.format(e))
+                    self.close()
                 except Exception:
                     raise
         else:
