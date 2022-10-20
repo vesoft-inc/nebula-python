@@ -60,6 +60,12 @@ class NotValidConnectionException(Exception):
         self.message = 'No extra connection'
 
 
+class NoValidSessionException(Exception):
+    def __init__(self, message):
+        Exception.__init__(self, message)
+        self.message = 'Failed to get a valid session from the pool: {}'.format(message)
+
+
 class InValidHostname(Exception):
     def __init__(self, message):
         Exception.__init__(self, message)
