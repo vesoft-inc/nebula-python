@@ -14,11 +14,11 @@ long_description = (base_dir / 'README.md').read_text()
 
 setup(
     name='nebula3-python',
-    version='3.0.0',
+    version='3.3.0',
     license='Apache 2.0',
     author='vesoft-inc',
     author_email='info@vesoft.com',
-    description='Python client for Nebula Graph V3.0',
+    description='Python client for NebulaGraph v3.3',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/vesoft-inc/nebula-python',
