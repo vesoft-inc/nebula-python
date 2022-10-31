@@ -4,7 +4,7 @@ This repository holds the official Python API for Nebula Graph.
 
 ## Before you start
 
-Before you start, please read this section to choose the right branch for you. The compatibility between the API and Nebula Graph service can be found in [How to choose nebula-python](##How-to-choose-nebula-python). The current master branch is compatible with Nebula Graph 3.1.
+Before you start, please read this section to choose the right branch for you. The compatibility between the API and Nebula Graph service can be found in [How to choose nebula-python](##How-to-choose-nebula-python). The current master branch is compatible with Nebula Graph 3.3.
 
 ## The directory structure
 
@@ -202,6 +202,7 @@ while resp.has_next():
 | 2.6.0  | 2.6.0/2.6.1 |
 | 3.0.0  | 3.0.0 |
 | 3.1.0  | 3.1.0 |
+| 3.3.0  | 3.1.0 |
 | master  | master |
 
 ## How to contribute to nebula-python
