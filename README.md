@@ -202,7 +202,7 @@ while resp.has_next():
 | 2.6.0  | 2.6.0/2.6.1 |
 | 3.0.0  | 3.0.0 |
 | 3.1.0  | 3.1.0 |
-| 3.3.0  | 3.1.0 |
+| 3.3.0  | 3.3.0 |
 | master  | master |
 
 ## How to contribute to nebula-python
