@@ -28,19 +28,20 @@ from nebula3.meta.ttypes import (
 )
 from nebula3.meta import ttypes, MetaService
 
-from nebula3.fbthrift.transport import TSocket, TTransport
+from nebula3.fbthrift.transport import TSocket, TTransport, TSSLSocket
 from nebula3.fbthrift.protocol import TBinaryProtocol
 from nebula3.logger import logger
 
 
 class MetaClient(object):
-    def __init__(self, addresses, timeout):
+    def __init__(self, addresses, timeout, ssl_config=None):
         if len(addresses) == 0:
             raise RuntimeError('Input empty addresses')
         self._timeout = timeout
         self._connection = None
         self._retry_count = 3
         self._addresses = addresses
+        self._ssl_config = ssl_config
         for address in addresses:
             try:
                 socket.gethostbyname(address[0])
@@ -50,13 +51,27 @@ class MetaClient(object):
         self._lock = RLock()
 
     def open(self):
-        """open the connection to connect meta service
-
+        """open the SSL connection to connect meta service
+        :ssl_config: configs for SSL
         :eturn: void
         """
         try:
             self.close()
-            s = TSocket.TSocket(self._leader[0], self._leader[1])
+            if self._ssl_config is not None:
+                s = TSSLSocket.TSSLSocket(
+                    self._leader[0],
+                    self._leader[1],
+                    self._ssl_config.unix_socket,
+                    self._ssl_config.ssl_version,
+                    self._ssl_config.cert_reqs,
+                    self._ssl_config.ca_certs,
+                    self._ssl_config.verify_name,
+                    self._ssl_config.keyfile,
+                    self._ssl_config.certfile,
+                    self._ssl_config.allow_weak_ssl_versions,
+                )
+            else:
+                s = TSocket.TSocket(self._leader[0], self._leader[1])
             if self._timeout > 0:
                 s.setTimeout(self._timeout)
             transport = TTransport.TBufferedTransport(s)
@@ -267,7 +282,7 @@ class MetaCache(object):
                 self.parts_alloc,
             )
 
-    def __init__(self, meta_addrs, timeout=2000, load_period=10, decode_type='utf-8'):
+    def __init__(self, meta_addrs, timeout=2000, load_period=10, decode_type='utf-8', ssl_config=None):
         self._decode_type = decode_type
         self._load_period = load_period
         self._lock = RLock()
@@ -276,7 +291,7 @@ class MetaCache(object):
         self._storage_addrs = []
         self._storage_leader = {}
         self._close = False
-        self._meta_client = MetaClient(meta_addrs, timeout)
+        self._meta_client = MetaClient(meta_addrs, timeout, ssl_config=ssl_config)
         self._meta_client.open()
 
         # load meta data
