@@ -11,7 +11,7 @@ import socket
 from nebula3.Exception import InValidHostname
 from nebula3.storage import GraphStorageService
 from nebula3.storage.ttypes import ScanVertexRequest, ScanEdgeRequest
-from nebula3.fbthrift.transport import TSocket, TTransport
+from nebula3.fbthrift.transport import TSocket, TTransport, TSSLSocket
 from nebula3.fbthrift.protocol import TBinaryProtocol
 
 
@@ -22,6 +22,7 @@ class GraphStorageConnection(object):
         self._meta_cache = meta_cache
         self._connection = None
         self._ip = ''
+        self._ssl_conf = None
         try:
             self._ip = socket.gethostbyname(address.host)
             if not isinstance(address.port, int):
@@ -30,9 +31,31 @@ class GraphStorageConnection(object):
             raise InValidHostname(str(address.host))
 
     def open(self):
+        self.open_SSL(ssl_config=None)
+
+    def open_SSL(self, ssl_config=None):
+        """open the SSL connection
+        :ssl_config: configs for SSL
+        :return: void
+        """
+        self._ssl_conf = ssl_config
         try:
             self.close()
-            s = TSocket.TSocket(self._address.host, self._address.port)
+            if self._ssl_conf is not None:
+                s = TSSLSocket.TSSLSocket(
+                    self._address.host,
+                    self._address.port,
+                    ssl_config.unix_socket,
+                    ssl_config.ssl_version,
+                    ssl_config.cert_reqs,
+                    ssl_config.ca_certs,
+                    ssl_config.verify_name,
+                    ssl_config.keyfile,
+                    ssl_config.certfile,
+                    ssl_config.allow_weak_ssl_versions,
+                )
+            else:
+                s = TSocket.TSocket(self._address.host, self._address.port)
             if self._timeout > 0:
                 s.setTimeout(self._timeout)
             transport = TTransport.TBufferedTransport(s)

@@ -35,10 +35,11 @@ class GraphStorageClient(object):
     DEFAULT_END_TIME = sys.maxsize
     DEFAULT_LIMIT = 1000
 
-    def __init__(self, meta_cache, storage_addrs=None, time_out=60000):
+    def __init__(self, meta_cache, storage_addrs=None, time_out=60000, ssl_config=None):
         self._meta_cache = meta_cache
         self._storage_addrs = storage_addrs
         self._time_out = time_out
+        self._ssl_config = ssl_config
         self._connections = []
         self._create_connection()
 
@@ -76,7 +77,10 @@ class GraphStorageClient(object):
         try:
             for addr in self._storage_addrs:
                 conn = GraphStorageConnection(addr, self._time_out, self._meta_cache)
-                conn.open()
+                if self._ssl_config is None:
+                    conn.open()
+                else:
+                    conn.open_SSL(ssl_config=self._ssl_config)
                 self._connections.append(conn)
         except Exception as e:
             logger.error('Create storage connection failed: {}'.format(e))
