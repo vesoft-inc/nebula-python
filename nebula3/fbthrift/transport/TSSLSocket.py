@@ -120,7 +120,7 @@ else:
 
     def _get_ssl_socket(socket, ssl_version, cert_reqs=ssl.CERT_NONE,
                         ca_certs=None, keyfile=None, certfile=None,
-                        disable_weaker_versions=True):
+                        disable_weaker_versions=True, server_hostname=None):
         ctx = ssl.SSLContext(ssl_version)
         ctx.verify_mode = cert_reqs
         if certfile is not None:
@@ -144,7 +144,7 @@ else:
             if hasattr(ssl, 'OP_NO_TLSv1_1'):
                 ctx.options |= ssl.OP_NO_TLSv1_1
 
-        return ctx.wrap_socket(socket)
+        return ctx.wrap_socket(socket, server_hostname=server_hostname)
 
 
 class TSSLSocket(TSocket):
@@ -222,6 +222,7 @@ class TSSLSocket(TSocket):
                 keyfile=self.client_keyfile,
                 certfile=self.client_certfile,
                 disable_weaker_versions=not self.allow_weak_ssl_versions,
+                server_hostname=self.host,
             )
 
             if self.verify_name:
