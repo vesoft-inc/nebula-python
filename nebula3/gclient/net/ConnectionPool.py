@@ -148,6 +148,7 @@ class ConnectionPool(object):
             try:
                 ok_num = self.get_ok_servers_num()
                 if ok_num == 0:
+                    logging.error('No available server')
                     return None
                 max_con_per_address = int(
                     self._configs.max_connection_pool_size / ok_num
@@ -163,18 +164,17 @@ class ConnectionPool(object):
                                     connection.is_used = True
                                     logger.info('Get connection to {}'.format(addr))
                                     return connection
+                                # remove unusable connection
+                                self._connections[addr].remove(connection)
 
                         if len(self._connections[addr]) < max_con_per_address:
                             connection = Connection()
-                            if self._ssl_configs is None:
-                                connection.open(addr[0], addr[1], self._configs.timeout)
-                            else:
-                                connection.open_SSL(
-                                    addr[0],
-                                    addr[1],
-                                    self._configs.timeout,
-                                    self._ssl_configs,
-                                )
+                            connection.open_SSL(
+                                addr[0],
+                                addr[1],
+                                self._configs.timeout,
+                                self._ssl_configs,
+                            )
                             connection.is_used = True
                             self._connections[addr].append(connection)
                             logger.info('Get connection to {}'.format(addr))
