@@ -31,7 +31,7 @@ class TestSession(TestCase):
                                ('127.0.0.1', 9670),
                                ('127.0.0.1', 9671)],
                               self.configs)
-        assert self.pool.connnects() == 0
+        assert self.pool.connects() == 0
         assert self.pool.in_used_connects() == 0
 
     def test_1_release_by_del(self):
