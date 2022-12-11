@@ -457,7 +457,6 @@ class SessionPool(object):
                 # release idle session and remove from the pool
                 if idle_time > self._configs.idle_time:
                     session.release()
-                    session._connection.close()
                     self._idle_sessions.remove(session)
 
     def _period_detect(self):
