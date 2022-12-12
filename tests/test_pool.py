@@ -18,7 +18,7 @@ sys.path.insert(0, root_dir)
 
 from unittest import TestCase
 
-from nebula2.gclient.net import ConnectionPool
+from nebula2.gclient.net import ConnectionPool, Connection
 
 from nebula2.Config import Config
 
@@ -170,7 +170,7 @@ def test_multi_thread():
     # Test multi thread
     addresses = [('127.0.0.1', 9669), ('127.0.0.1', 9670)]
     configs = Config()
-    thread_num = 200
+    thread_num = 50
     configs.max_connection_pool_size = thread_num
     pool = ConnectionPool()
     assert pool.init(addresses, configs)
@@ -208,6 +208,33 @@ def test_multi_thread():
             if session is not None:
                 session.release()
 
+    threads = []
+    for num in range(0, thread_num):
+        thread = threading.Thread(
+            target=pool_multi_thread_test, name='test_pool_thread' + str(num)
+        )
+        thread.start()
+        threads.append(thread)
+
+    for t in threads:
+        t.join()
+    assert success_flag
+
+    pool.close()
+
+
+def test_session_context_multi_thread():
+    # Test multi thread
+    addresses = [('127.0.0.1', 9669), ('127.0.0.1', 9670)]
+    configs = Config()
+    thread_num = 50
+    configs.max_connection_pool_size = thread_num
+    pool = ConnectionPool()
+    assert pool.init(addresses, configs)
+
+    global success_flag
+    success_flag = True
+
     def pool_session_context_multi_thread_test():
         session = None
         global success_flag
@@ -241,7 +268,8 @@ def test_multi_thread():
     threads = []
     for num in range(0, thread_num):
         thread = threading.Thread(
-            target=pool_multi_thread_test, name='test_pool_thread' + str(num)
+            target=pool_session_context_multi_thread_test,
+            name='test_session_context_thread' + str(num),
         )
         thread.start()
         threads.append(thread)
@@ -250,19 +278,38 @@ def test_multi_thread():
         t.join()
     assert success_flag
 
-    # threads2 = []
-    # for num in range(0, thread_num):
-    #     thread = threading.Thread(
-    #         target=pool_session_context_multi_thread_test,
-    #         name='test_session_context_thread' + str(num),
-    #     )
-    #     thread.start()
-    #     threads.append(thread)
-
-    # # join all threads
-
-    # for t in threads2:
-    #     t.join()
-
     pool.close()
-    assert success_flag
+
+
+def test_remove_invalid_connection():
+    addresses = [('127.0.0.1', 9669), ('127.0.0.1', 9670), ('127.0.0.1', 9671)]
+    configs = Config()
+    configs.min_connection_pool_size = 30
+    configs.max_connection_pool_size = 45
+    pool = ConnectionPool()
+
+    try:
+        assert pool.init(addresses, configs)
+
+        # turn down one server('127.0.0.1', 9669) so the connection to it is invalid
+        os.system('docker stop tests_graphd0_1')
+        time.sleep(3)
+
+        # get connection from the pool, we should be able to still get 30 connections even though one server is down
+        for i in range(0, 30):
+            conn = pool.get_connection()
+            assert conn is not None
+
+        # total connection should still be 30
+        assert pool.connects() == 30
+
+        # the number of connections to the down server should be 0
+        assert len(pool._connections[addresses[0]]) == 0
+
+        # the number of connections to the 2nd('127.0.0.1', 9670) and 3rd server('127.0.0.1', 9671) should be 15
+        assert len(pool._connections[addresses[1]]) == 15
+        assert len(pool._connections[addresses[2]]) == 15
+
+    finally:
+        os.system('docker start tests_graphd0_1')
+        time.sleep(3)

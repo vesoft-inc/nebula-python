@@ -14,7 +14,7 @@ services:
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
-      - --heartbeat_interval_secs=2
+      - --heartbeat_interval_secs=1
       # ssl
       - --ca_path=${ca_path}
       - --cert_path=${cert_path}
@@ -55,7 +55,7 @@ services:
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
-      - --heartbeat_interval_secs=2
+      - --heartbeat_interval_secs=1
       # ssl
       - --ca_path=${ca_path}
       - --cert_path=${cert_path}
@@ -96,7 +96,7 @@ services:
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
-      - --heartbeat_interval_secs=2
+      - --heartbeat_interval_secs=1
       # ssl
       - --ca_path=${ca_path}
       - --cert_path=${cert_path}
@@ -137,7 +137,7 @@ services:
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
-      - --heartbeat_interval_secs=2
+      - --heartbeat_interval_secs=1
       - --timezone_name=+08:00
       # ssl
       - --ca_path=${ca_path}
@@ -183,7 +183,7 @@ services:
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
-      - --heartbeat_interval_secs=2
+      - --heartbeat_interval_secs=1
       - --timezone_name=+08:00
       # ssl
       - --ca_path=${ca_path}
@@ -229,7 +229,7 @@ services:
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
-      - --heartbeat_interval_secs=2
+      - --heartbeat_interval_secs=1
       - --timezone_name=+08:00
       # ssl
       - --ca_path=${ca_path}
@@ -273,7 +273,7 @@ services:
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
-      - --heartbeat_interval_secs=2
+      - --heartbeat_interval_secs=1
       - --timezone_name=+08:00
       # ssl
       - --ca_path=${ca_path}
@@ -316,7 +316,7 @@ services:
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
-      - --heartbeat_interval_secs=2
+      - --heartbeat_interval_secs=1
       - --timezone_name=+08:00
       # ssl
       - --ca_path=${ca_path}
@@ -359,7 +359,7 @@ services:
       - --log_dir=/logs
       - --v=0
       - --minloglevel=0
-      - --heartbeat_interval_secs=2
+      - --heartbeat_interval_secs=1
       - --timezone_name=+08:00
       # ssl
       - --ca_path=${ca_path}
