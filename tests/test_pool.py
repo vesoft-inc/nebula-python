@@ -25,7 +25,7 @@ from nebula2.Config import Config
 from nebula2.Exception import (
     NotValidConnectionException,
     InValidHostname,
-    IOErrorException
+    IOErrorException,
 )
 
 
@@ -152,7 +152,9 @@ class TestConnectionPool(TestCase):
         assert pool.init([('127.0.0.1', 9669)], config)
         session = pool.get_session('root', 'nebula')
         try:
-            resp = session.execute('USE nba;GO 1000 STEPS FROM \"Tim Duncan\" OVER like')
+            resp = session.execute(
+                'USE nba;GO 1000 STEPS FROM \"Tim Duncan\" OVER like'
+            )
             assert False
         except IOErrorException as e:
             assert True
@@ -168,14 +170,15 @@ def test_multi_thread():
     # Test multi thread
     addresses = [('127.0.0.1', 9669), ('127.0.0.1', 9670)]
     configs = Config()
-    configs.max_connection_pool_size = 4
+    thread_num = 200
+    configs.max_connection_pool_size = thread_num
     pool = ConnectionPool()
     assert pool.init(addresses, configs)
 
     global success_flag
     success_flag = True
 
-    def main_test():
+    def pool_multi_thread_test():
         session = None
         global success_flag
         try:
@@ -185,8 +188,10 @@ def test_multi_thread():
                 return
             space_name = 'space_' + threading.current_thread().getName()
 
-            session.execute('DROP SPACE %s' % space_name)
-            resp = session.execute('CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))' % space_name)
+            session.execute('DROP SPACE IF EXISTS %s' % space_name)
+            resp = session.execute(
+                'CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))' % space_name
+            )
             if not resp.is_succeeded():
                 raise RuntimeError('CREATE SPACE failed: {}'.format(resp.error_msg()))
 
@@ -203,21 +208,61 @@ def test_multi_thread():
             if session is not None:
                 session.release()
 
-    thread1 = threading.Thread(target=main_test, name='thread1')
-    thread2 = threading.Thread(target=main_test, name='thread2')
-    thread3 = threading.Thread(target=main_test, name='thread3')
-    thread4 = threading.Thread(target=main_test, name='thread4')
+    def pool_session_context_multi_thread_test():
+        session = None
+        global success_flag
+        try:
+            with pool.session_context('root', 'nebula') as session:
+                if session is None:
+                    success_flag = False
+                    return
+                space_name = 'space_' + threading.current_thread().getName()
 
-    thread1.start()
-    thread2.start()
-    thread3.start()
-    thread4.start()
+                session.execute('DROP SPACE IF EXISTS %s' % space_name)
+                resp = session.execute(
+                    'CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))'
+                    % space_name
+                )
+                if not resp.is_succeeded():
+                    raise RuntimeError(
+                        'CREATE SPACE failed: {}'.format(resp.error_msg())
+                    )
 
-    thread1.join()
-    thread2.join()
-    thread3.join()
-    thread4.join()
+                time.sleep(3)
+                resp = session.execute('USE %s' % space_name)
+                if not resp.is_succeeded():
+                    raise RuntimeError('USE SPACE failed:{}'.format(resp.error_msg()))
+
+        except Exception as x:
+            print(x)
+            success_flag = False
+            return
+
+    threads = []
+    for num in range(0, thread_num):
+        thread = threading.Thread(
+            target=pool_multi_thread_test, name='test_pool_thread' + str(num)
+        )
+        thread.start()
+        threads.append(thread)
+
+    for t in threads:
+        t.join()
+    assert success_flag
+
+    # threads2 = []
+    # for num in range(0, thread_num):
+    #     thread = threading.Thread(
+    #         target=pool_session_context_multi_thread_test,
+    #         name='test_session_context_thread' + str(num),
+    #     )
+    #     thread.start()
+    #     threads.append(thread)
+
+    # # join all threads
+
+    # for t in threads2:
+    #     t.join()
 
     pool.close()
     assert success_flag
-
