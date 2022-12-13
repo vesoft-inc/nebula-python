@@ -170,14 +170,15 @@ def test_multi_thread():
     # Test multi thread
     addresses = [('127.0.0.1', 9669), ('127.0.0.1', 9670)]
     configs = Config()
-    configs.max_connection_pool_size = 4
+    thread_num = 50
+    configs.max_connection_pool_size = thread_num
     pool = ConnectionPool()
     assert pool.init(addresses, configs)
 
     global success_flag
     success_flag = True
 
-    def main_test():
+    def pool_multi_thread_test():
         session = None
         global success_flag
         try:
@@ -187,7 +188,7 @@ def test_multi_thread():
                 return
             space_name = 'space_' + threading.current_thread().getName()
 
-            session.execute('DROP SPACE %s' % space_name)
+            session.execute('DROP SPACE IF EXISTS %s' % space_name)
             resp = session.execute(
                 'CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))' % space_name
             )
@@ -207,20 +208,108 @@ def test_multi_thread():
             if session is not None:
                 session.release()
 
-    thread1 = threading.Thread(target=main_test, name='thread1')
-    thread2 = threading.Thread(target=main_test, name='thread2')
-    thread3 = threading.Thread(target=main_test, name='thread3')
-    thread4 = threading.Thread(target=main_test, name='thread4')
+    threads = []
+    for num in range(0, thread_num):
+        thread = threading.Thread(
+            target=pool_multi_thread_test, name='test_pool_thread' + str(num)
+        )
+        thread.start()
+        threads.append(thread)
 
-    thread1.start()
-    thread2.start()
-    thread3.start()
-    thread4.start()
-
-    thread1.join()
-    thread2.join()
-    thread3.join()
-    thread4.join()
+    for t in threads:
+        t.join()
+    assert success_flag
 
     pool.close()
+
+
+def test_session_context_multi_thread():
+    # Test multi thread
+    addresses = [('127.0.0.1', 9669), ('127.0.0.1', 9670)]
+    configs = Config()
+    thread_num = 50
+    configs.max_connection_pool_size = thread_num
+    pool = ConnectionPool()
+    assert pool.init(addresses, configs)
+
+    global success_flag
+    success_flag = True
+
+    def pool_session_context_multi_thread_test():
+        session = None
+        global success_flag
+        try:
+            with pool.session_context('root', 'nebula') as session:
+                if session is None:
+                    success_flag = False
+                    return
+                space_name = 'space_' + threading.current_thread().getName()
+
+                session.execute('DROP SPACE IF EXISTS %s' % space_name)
+                resp = session.execute(
+                    'CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))'
+                    % space_name
+                )
+                if not resp.is_succeeded():
+                    raise RuntimeError(
+                        'CREATE SPACE failed: {}'.format(resp.error_msg())
+                    )
+
+                time.sleep(3)
+                resp = session.execute('USE %s' % space_name)
+                if not resp.is_succeeded():
+                    raise RuntimeError('USE SPACE failed:{}'.format(resp.error_msg()))
+
+        except Exception as x:
+            print(x)
+            success_flag = False
+            return
+
+    threads = []
+    for num in range(0, thread_num):
+        thread = threading.Thread(
+            target=pool_session_context_multi_thread_test,
+            name='test_session_context_thread' + str(num),
+        )
+        thread.start()
+        threads.append(thread)
+
+    for t in threads:
+        t.join()
     assert success_flag
+
+    pool.close()
+
+
+def test_remove_invalid_connection():
+    addresses = [('127.0.0.1', 9669), ('127.0.0.1', 9670), ('127.0.0.1', 9671)]
+    configs = Config()
+    configs.min_connection_pool_size = 30
+    configs.max_connection_pool_size = 45
+    pool = ConnectionPool()
+
+    try:
+        assert pool.init(addresses, configs)
+
+        # turn down one server('127.0.0.1', 9669) so the connection to it is invalid
+        os.system('docker stop tests_graphd0_1')
+        time.sleep(3)
+
+        # get connection from the pool, we should be able to still get 30 connections even though one server is down
+        for i in range(0, 30):
+            conn = pool.get_connection()
+            assert conn is not None
+
+        # total connection should still be 30
+        assert pool.connects() == 30
+
+        # the number of connections to the down server should be 0
+        assert len(pool._connections[addresses[0]]) == 0
+
+        # the number of connections to the 2nd('127.0.0.1', 9670) and 3rd server('127.0.0.1', 9671) should be 15
+        assert len(pool._connections[addresses[1]]) == 15
+        assert len(pool._connections[addresses[2]]) == 15
+
+    finally:
+        os.system('docker start tests_graphd0_1')
+        time.sleep(3)
