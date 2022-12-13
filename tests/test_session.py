@@ -48,8 +48,8 @@ class TestSession(TestCase):
             session.execute('CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;')
             for i in range(0, 5):
                 if i == 3:
-                    os.system('docker stop nebula-docker-compose_graphd0_1')
-                    os.system('docker stop nebula-docker-compose_graphd1_1')
+                    os.system('docker stop tests_graphd0_1')
+                    os.system('docker stop tests_graphd1_1')
                     time.sleep(3)
                 # the session update later, the expect test
                 # resp = session.execute('SHOW TAGS')
@@ -63,8 +63,8 @@ class TestSession(TestCase):
         except Exception as e:
             assert False, e
         finally:
-            os.system('docker start nebula-docker-compose_graphd0_1')
-            os.system('docker start nebula-docker-compose_graphd1_1')
+            os.system('docker start tests_graphd0_1')
+            os.system('docker start tests_graphd1_1')
             time.sleep(5)
 
     def test_3_session_context(self):
