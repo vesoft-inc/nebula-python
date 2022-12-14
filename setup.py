@@ -15,8 +15,8 @@ long_description = (base_dir / 'README.md').read_text()
 
 setup(
     name='nebula2-python',
-    version='2.6.1.dev1',
-    license='Apache 2.0 + Common Clause 1.0',
+    version='2.6.1',
+    license='Apache 2.0',
     author='vesoft-inc',
     author_email='info@vesoft.com',
     description='Python client for Nebula Graph V2.6',
