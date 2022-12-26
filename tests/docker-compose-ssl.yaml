@@ -1,0 +1,420 @@
+version: '3.4'
+services:
+  metad0:
+    image: vesoft/nebula-metad:nightly
+    environment:
+      USER: root
+      TZ:   "${TZ}"
+    command:
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --local_ip=172.28.1.1
+      - --ws_ip=172.28.1.1
+      - --port=9559
+      - --data_path=/data/meta
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+      - --heartbeat_interval_secs=1
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://172.28.1.1:11000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9559:9559"
+      - 11000
+      - 11002
+    volumes:
+      - ./secrets:/secrets
+      - ./data/meta0:/data/meta:Z
+      - ./logs/meta0:/logs:Z
+    networks:
+      nebula-net:
+        ipv4_address: 172.28.1.1
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  metad1:
+    image: vesoft/nebula-metad:nightly
+    environment:
+      USER: root
+      TZ:   "${TZ}"
+    command:
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --local_ip=172.28.1.2
+      - --ws_ip=172.28.1.2
+      - --port=9559
+      - --data_path=/data/meta
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+      - --heartbeat_interval_secs=1
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://172.28.1.2:11000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9560:9559"
+      - 11000
+      - 11002
+    volumes:
+      - ./secrets:/secrets
+      - ./data/meta1:/data/meta:Z
+      - ./logs/meta1:/logs:Z
+    networks:
+      nebula-net:
+        ipv4_address: 172.28.1.2
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  metad2:
+    image: vesoft/nebula-metad:nightly
+    environment:
+      USER: root
+      TZ:   "${TZ}"
+    command:
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --local_ip=172.28.1.3
+      - --ws_ip=172.28.1.3
+      - --port=9559
+      - --data_path=/data/meta
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+      - --heartbeat_interval_secs=1
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://172.28.1.3:11000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9561:9559"
+      - 11000
+      - 11002
+    volumes:
+      - ./secrets:/secrets
+      - ./data/meta2:/data/meta:Z
+      - ./logs/meta2:/logs:Z
+    networks:
+      nebula-net:
+        ipv4_address: 172.28.1.3
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  storaged0:
+    image: vesoft/nebula-storaged:nightly
+    environment:
+      USER: root
+      TZ:   "${TZ}"
+    command:
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --local_ip=172.28.2.1
+      - --ws_ip=172.28.2.1
+      - --port=9779
+      - --data_path=/data/storage
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+      - --heartbeat_interval_secs=1
+      - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
+    depends_on:
+      - metad0
+      - metad1
+      - metad2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://172.28.2.1:12000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9779:9779"
+      - 12000
+      - 12002
+    volumes:
+      - ./secrets:/secrets
+      - ./data/storage0:/data/storage:Z
+      - ./logs/storage0:/logs:Z
+    networks:
+      nebula-net:
+        ipv4_address: 172.28.2.1
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  storaged1:
+    image: vesoft/nebula-storaged:nightly
+    environment:
+      USER: root
+      TZ:   "${TZ}"
+    command:
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --local_ip=172.28.2.2
+      - --ws_ip=172.28.2.2
+      - --port=9779
+      - --data_path=/data/storage
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+      - --heartbeat_interval_secs=1
+      - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
+    depends_on:
+      - metad0
+      - metad1
+      - metad2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://172.28.2.2:12000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9780:9779"
+      - 12000
+      - 12002
+    volumes:
+      - ./secrets:/secrets
+      - ./data/storage1:/data/storage:Z
+      - ./logs/storage1:/logs:Z
+    networks:
+      nebula-net:
+        ipv4_address: 172.28.2.2
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  storaged2:
+    image: vesoft/nebula-storaged:nightly
+    environment:
+      USER: root
+      TZ:   "${TZ}"
+    command:
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --local_ip=172.28.2.3
+      - --ws_ip=172.28.2.3
+      - --port=9779
+      - --data_path=/data/storage
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+      - --heartbeat_interval_secs=1
+      - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
+    depends_on:
+      - metad0
+      - metad1
+      - metad2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://172.28.2.3:12000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9781:9779"
+      - 12000
+      - 12002
+    volumes:
+      - ./secrets:/secrets
+      - ./data/storage2:/data/storage:Z
+      - ./logs/storage2:/logs:Z
+    networks:
+      nebula-net:
+        ipv4_address: 172.28.2.3
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  graphd0:
+    image: vesoft/nebula-graphd:nightly
+    environment:
+      USER: root
+      TZ:   "${TZ}"
+    command:
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --port=9669
+      - --ws_ip=172.28.3.1
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+      - --heartbeat_interval_secs=1
+      - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
+    depends_on:
+      - metad0
+      - metad1
+      - metad2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://172.28.3.1:13000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9669:9669"
+      - 13000
+      - 13002
+    volumes:
+      - ./secrets:/secrets
+      - ./logs/graph0:/logs:Z
+    networks:
+      nebula-net:
+        ipv4_address: 172.28.3.1
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  graphd1:
+    image: vesoft/nebula-graphd:nightly
+    environment:
+      USER: root
+      TZ:   "${TZ}"
+    command:
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --port=9669
+      - --ws_ip=172.28.3.2
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+      - --heartbeat_interval_secs=1
+      - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
+    depends_on:
+      - metad0
+      - metad1
+      - metad2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://172.28.3.2:13000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9670:9669"
+      - 13000
+      - 13002
+    volumes:
+      - ./secrets:/secrets
+      - ./logs/graph1:/logs:Z
+    networks:
+      nebula-net:
+        ipv4_address: 172.28.3.2
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  graphd2:
+    image: vesoft/nebula-graphd:nightly
+    environment:
+      USER: root
+      TZ:   "${TZ}"
+    command:
+      - --meta_server_addrs=172.28.1.1:9559,172.28.1.2:9559,172.28.1.3:9559
+      - --port=9669
+      - --ws_ip=172.28.3.3
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+      - --heartbeat_interval_secs=1
+      - --timezone_name=+08:00
+      # ssl
+      - --ca_path=${ca_path}
+      - --cert_path=${cert_path}
+      - --key_path=${key_path}
+      - --enable_ssl=${enable_ssl}
+    depends_on:
+      - metad0
+      - metad1
+      - metad2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://172.28.3.3:13000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9671:9669"
+      - 13000
+      - 13002
+    volumes:
+      - ./secrets:/secrets
+      - ./logs/graph2:/logs:Z
+    networks:
+      nebula-net:
+        ipv4_address: 172.28.3.3
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  console:
+    image: vesoft/nebula-console:nightly
+    entrypoint: ""
+    command:
+      - sh
+      - -c
+      - |
+        for i in `seq 1 60`;do
+          var=`nebula-console -addr graphd0 -port 9669 -u root -p nebula -enable_ssl=true -ssl_root_ca_path /secrets/test.ca.pem -ssl_cert_path /secrets/test.client.crt -ssl_private_key_path /secrets/test.client.key --ssl_insecure_skip_verify=true -e 'ADD HOSTS "172.28.2.1":9779,"172.28.2.2":9779,"172.28.2.3":9779;'`;
+          if [[ $$? == 0 ]];then
+            break;
+          fi;
+          sleep 1;
+          echo "retry to add hosts.";
+        done && tail -f /dev/null;
+    volumes:
+      - ./secrets:/secrets
+    depends_on:
+      - graphd0
+    networks:
+      - nebula-net
+
+networks:
+  nebula-net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16

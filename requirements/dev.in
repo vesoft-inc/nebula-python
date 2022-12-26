@@ -1,4 +1,3 @@
--r base.in
-prettytable
-pytest
+-r test.in
+-r example.in
 pip-tools

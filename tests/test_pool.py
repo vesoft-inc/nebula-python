@@ -18,14 +18,14 @@ sys.path.insert(0, root_dir)
 
 from unittest import TestCase
 
-from nebula2.gclient.net import ConnectionPool
+from nebula3.gclient.net import ConnectionPool
 
-from nebula2.Config import Config
+from nebula3.Config import Config
 
-from nebula2.Exception import (
+from nebula3.Exception import (
     NotValidConnectionException,
     InValidHostname,
-    IOErrorException
+    IOErrorException,
 )
 
 
@@ -42,7 +42,7 @@ class TestConnectionPool(TestCase):
         self.configs.interval_check = 2
         self.pool = ConnectionPool()
         assert self.pool.init(self.addresses, self.configs)
-        assert self.pool.connnects() == 2
+        assert self.pool.connects() == 2
 
     def test_right_hostname(self):
         pool = ConnectionPool()
@@ -108,7 +108,7 @@ class TestConnectionPool(TestCase):
             session.release()
 
         assert self.pool.in_used_connects() == 0
-        assert self.pool.connnects() == 4
+        assert self.pool.connects() == 4
 
         # test get session after release
         for num in range(0, self.configs.max_connection_pool_size - 1):
@@ -118,10 +118,10 @@ class TestConnectionPool(TestCase):
             sessions.append(session)
 
         assert self.pool.in_used_connects() == 3
-        assert self.pool.connnects() == 4
+        assert self.pool.connects() == 4
         # test the idle connection delete
         time.sleep(5)
-        assert self.pool.connnects() == 3
+        assert self.pool.connects() == 3
 
     def test_stop_close(self):
         session = self.pool.get_session('root', 'nebula')
@@ -152,7 +152,9 @@ class TestConnectionPool(TestCase):
         assert pool.init([('127.0.0.1', 9669)], config)
         session = pool.get_session('root', 'nebula')
         try:
-            resp = session.execute('USE nba;GO 1000 STEPS FROM \"Tim Duncan\" OVER like')
+            resp = session.execute(
+                'USE nba;GO 1000 STEPS FROM \"Tim Duncan\" OVER like'
+            )
             assert False
         except IOErrorException as e:
             assert True
@@ -186,7 +188,9 @@ def test_multi_thread():
             space_name = 'space_' + threading.current_thread().getName()
 
             session.execute('DROP SPACE %s' % space_name)
-            resp = session.execute('CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))' % space_name)
+            resp = session.execute(
+                'CREATE SPACE IF NOT EXISTS %s(vid_type=FIXED_STRING(8))' % space_name
+            )
             if not resp.is_succeeded():
                 raise RuntimeError('CREATE SPACE failed: {}'.format(resp.error_msg()))
 
@@ -220,4 +224,3 @@ def test_multi_thread():
 
     pool.close()
     assert success_flag
-

@@ -9,16 +9,17 @@ import sys
 import os
 import time
 import ssl
+import pytest
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
 from unittest import TestCase
-from nebula2.Exception import IOErrorException
-from nebula2.common import ttypes
-from nebula2.gclient.net import Connection
-from nebula2.Config import SSL_config
+from nebula3.Exception import IOErrorException
+from nebula3.common import ttypes
+from nebula3.gclient.net import Connection
+from nebula3.Config import SSL_config
 
 # set SSL config
 ssl_config = SSL_config()
@@ -31,13 +32,21 @@ ssl_config.certfile = os.path.join(current_dir, 'secrets/test.client.crt')
 ssl_selfs_signed_config = SSL_config()
 ssl_selfs_signed_config.cert_reqs = ssl.CERT_OPTIONAL
 ssl_selfs_signed_config.cert_reqs = ssl.CERT_OPTIONAL
-ssl_selfs_signed_config.ca_certs = os.path.join(current_dir, 'secrets/test.self-signed.pem')
-ssl_selfs_signed_config.keyfile = os.path.join(current_dir, 'secrets/test.self-signed.key')
-ssl_selfs_signed_config.certfile = os.path.join(current_dir, 'secrets/test.self-signed.pem')
+ssl_selfs_signed_config.ca_certs = os.path.join(
+    current_dir, 'secrets/test.self-signed.pem'
+)
+ssl_selfs_signed_config.keyfile = os.path.join(
+    current_dir, 'secrets/test.self-signed.key'
+)
+ssl_selfs_signed_config.certfile = os.path.join(
+    current_dir, 'secrets/test.self-signed.pem'
+)
 
 host = '127.0.0.1'
 port = 9669
 
+
+@pytest.mark.SSL
 class TestSSLConnection(TestCase):
     def test_create(self):
         try:
@@ -78,6 +87,8 @@ class TestSSLConnection(TestCase):
         except IOErrorException:
             assert True
 
+
+@pytest.mark.SSL
 class TestSSLConnectionSelfSigned(TestCase):
     def test_create_self_signed(self):
         try:

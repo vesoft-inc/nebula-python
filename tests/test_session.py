@@ -15,8 +15,8 @@ root_dir = os.path.join(current_dir, '..')
 sys.path.insert(0, root_dir)
 
 from unittest import TestCase
-from nebula2.gclient.net import ConnectionPool
-from nebula2.Config import Config
+from nebula3.gclient.net import ConnectionPool
+from nebula3.Config import Config
 
 
 class TestSession(TestCase):
@@ -27,11 +27,11 @@ class TestSession(TestCase):
         self.configs = Config()
         self.configs.max_connection_pool_size = 6
         self.pool = ConnectionPool()
-        assert self.pool.init([('127.0.0.1', 9669),
-                               ('127.0.0.1', 9670),
-                               ('127.0.0.1', 9671)],
-                              self.configs)
-        assert self.pool.connnects() == 0
+        assert self.pool.init(
+            [('127.0.0.1', 9669), ('127.0.0.1', 9670), ('127.0.0.1', 9671)],
+            self.configs,
+        )
+        assert self.pool.connects() == 0
         assert self.pool.in_used_connects() == 0
 
     def test_1_release_by_del(self):
@@ -45,11 +45,14 @@ class TestSession(TestCase):
     def test_2_reconnect(self):
         try:
             session = self.pool.get_session('root', 'nebula')
-            session.execute('CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;')
+            session.execute(
+                'CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;'
+            )
+            time.sleep(3)
             for i in range(0, 5):
                 if i == 3:
-                    os.system('docker stop nebula-docker-compose_graphd0_1')
-                    os.system('docker stop nebula-docker-compose_graphd1_1')
+                    os.system('docker stop tests_graphd0_1')
+                    os.system('docker stop tests_graphd1_1')
                     time.sleep(3)
                 # the session update later, the expect test
                 # resp = session.execute('SHOW TAGS')
@@ -63,8 +66,8 @@ class TestSession(TestCase):
         except Exception as e:
             assert False, e
         finally:
-            os.system('docker start nebula-docker-compose_graphd0_1')
-            os.system('docker start nebula-docker-compose_graphd1_1')
+            os.system('docker start tests_graphd0_1')
+            os.system('docker start tests_graphd1_1')
             time.sleep(5)
 
     def test_3_session_context(self):

@@ -5,11 +5,11 @@ Compatible with the v2.5.0 version of nebula-graph
 	- add TimeWrapper/DateTimeWrapper type to get timezone obtained from the server to calculate the local time
 	- Session supports reconnecting to different graph services
 - bugfix
-	- fix the interface valuesof Relationship and modify the interface propertysto propertieshttps://github.com/vesoft-inc/nebula-python/pull/113
+	- fix the interface values of Relationship and modify the interface propertys to properties https://github.com/vesoft-inc/nebula-python/pull/113
 	- fix get offline host info from list_hosts https://github.com/vesoft-inc/nebula-python/pull/104
 	- fix fbthrift timeout bug https://github.com/vesoft-inc/nebula-python/pull/126
 - incompatible
-	- the ErrorCode define is changed, all ErrorCode is defined in nebula2.common.ttypes.ErrorCode
+	- the ErrorCode define is changed, all ErrorCode is defined in nebula3.common.ttypes.ErrorCode
 	
 ## v2.0.0(2021-03-23)
 Compatible with the v2.0.0 version of nebula-graph

@@ -12,10 +12,10 @@ import time
 
 sys.path.insert(0, '../')
 
-from nebula2.Config import Config
-from nebula2.gclient.net import ConnectionPool
-from nebula2.mclient import MetaCache
-from nebula2.sclient.GraphStorageClient import GraphStorageClient
+from nebula3.Config import Config
+from nebula3.gclient.net import ConnectionPool
+from nebula3.mclient import MetaCache
+from nebula3.sclient.GraphStorageClient import GraphStorageClient
 
 
 def prepare_data():
@@ -26,26 +26,30 @@ def prepare_data():
     # the graphd server's address
     assert connection_pool.init([('127.0.0.1', 9671)], config)
     client = connection_pool.get_session('root', 'nebula')
-    client.execute('CREATE SPACE IF NOT EXISTS ScanSpace('
-                   'PARTITION_NUM=10,'
-                   'vid_type=FIXED_STRING(20));'
-                   'USE ScanSpace;'
-                   'CREATE TAG IF NOT EXISTS person(name string, age int);'
-                   'CREATE EDGE IF NOT EXISTS friend(start int, end int);')
+    client.execute(
+        'CREATE SPACE IF NOT EXISTS ScanSpace('
+        'PARTITION_NUM=10,'
+        'vid_type=FIXED_STRING(20));'
+        'USE ScanSpace;'
+        'CREATE TAG IF NOT EXISTS person(name string, age int);'
+        'CREATE EDGE IF NOT EXISTS friend(start int, end int);'
+    )
     time.sleep(5)
 
     for id in range(20):
         vid = 'person' + str(id)
-        cmd = 'INSERT VERTEX person(name, age) ' \
-              'VALUES \"{}\":(\"{}\", {})'.format(vid, vid, id)
+        cmd = 'INSERT VERTEX person(name, age) ' 'VALUES \"{}\":(\"{}\", {})'.format(
+            vid, vid, id
+        )
         client.execute(cmd)
     for id in range(20):
         src_id = 'person' + str(id)
         dst_id = 'person' + str(20 - id)
         start = random.randint(2000, 2010)
         end = random.randint(2010, 2020)
-        cmd = 'INSERT EDGE friend(start, end) ' \
-              'VALUES \"{}\"->\"{}\":({}, {})'.format(src_id, dst_id, start, end)
+        cmd = 'INSERT EDGE friend(start, end) ' 'VALUES \"{}\"->\"{}\":({}, {})'.format(
+            src_id, dst_id, start, end
+        )
         client.execute(cmd)
     client.release()
     connection_pool.close()
@@ -53,9 +57,8 @@ def prepare_data():
 
 def scan_person_vertex(graph_storage_client):
     resp = graph_storage_client.scan_vertex(
-        space_name='ScanSpace',
-        tag_name='person',
-        limit=100)
+        space_name='ScanSpace', tag_name='person', limit=1
+    )
     print('======== Scan vertexes in ScanSpace ======')
     while resp.has_next():
         result = resp.next()
@@ -65,9 +68,8 @@ def scan_person_vertex(graph_storage_client):
 
 def scan_person_edge(graph_storage_client):
     resp = graph_storage_client.scan_edge(
-        space_name='ScanSpace',
-        edge_name='friend',
-        limit=100)
+        space_name='ScanSpace', edge_name='friend', limit=100
+    )
     print('======== Scan edges in ScanSpace ======')
     while resp.has_next():
         result = resp.next()
@@ -126,10 +128,9 @@ if __name__ == '__main__':
     graph_storage_client = None
     try:
         # the metad servers's address
-        meta_cache = MetaCache([('172.28.1.1', 9559),
-                                ('172.28.1.2', 9559),
-                                ('172.28.1.3', 9559)],
-                               50000)
+        meta_cache = MetaCache(
+            [('172.28.1.1', 9559), ('172.28.1.2', 9559), ('172.28.1.3', 9559)], 50000
+        )
         graph_storage_client = GraphStorageClient(meta_cache)
         prepare_data()
         scan_person_vertex(graph_storage_client)
@@ -137,6 +138,7 @@ if __name__ == '__main__':
 
     except Exception as x:
         import traceback
+
         print(traceback.format_exc())
         if graph_storage_client is not None:
             graph_storage_client.close()
