@@ -22,46 +22,16 @@ if __name__ == '__main__':
         config.max_connection_pool_size = 2
         # init connection pool
         connection_pool = ConnectionPool()
-        assert connection_pool.init([('127.0.0.1', 9669)], config)
+        assert connection_pool.init([('192.168.15.8', 9669)], config)
 
         # get session from the pool
         client = connection_pool.get_session('root', 'nebula')
         assert client is not None
 
-        # get the result in json format
-        resp_json = client.execute_json("yield 1")
-        json_obj = json.loads(resp_json)
-        print(json.dumps(json_obj, indent=2, sort_keys=True))
-
-        client.execute(
-            'CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30)); USE test;'
-            'CREATE TAG IF NOT EXISTS person(name string, age int);'
-            'CREATE EDGE like (likeness double);'
-        )
-
-        # insert data need to sleep after create schema
-        time.sleep(6)
-
         # insert vertex
         resp = client.execute(
-            'INSERT VERTEX person(name, age) VALUES "Bob":("Bob", 10), "Lily":("Lily", 9)'
+            'use sf100;lookup on Person yield id(vertex) as vid | limit 500000 | go from $-.vid over LIKES  yield distinct LIKES._src as src, LIKES._dst as dst'
         )
-        assert resp.is_succeeded(), resp.error_msg()
-
-        # insert edges
-        resp = client.execute('INSERT EDGE like(likeness) VALUES "Bob"->"Lily":(80.0);')
-        assert resp.is_succeeded(), resp.error_msg()
-
-        resp = client.execute('FETCH PROP ON person "Bob" YIELD vertex as node')
-        assert resp.is_succeeded(), resp.error_msg()
-        print_resp(resp)
-
-        resp = client.execute('FETCH PROP ON like "Bob"->"Lily" YIELD edge as e')
-        assert resp.is_succeeded(), resp.error_msg()
-        print_resp(resp)
-
-        # drop space
-        resp = client.execute('DROP SPACE test')
         assert resp.is_succeeded(), resp.error_msg()
 
         print("Example finished")

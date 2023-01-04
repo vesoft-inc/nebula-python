@@ -7,9 +7,9 @@
 
 import time
 
-from nebula3.fbthrift.transport import TSocket, TTransport, TSSLSocket
+from nebula3.fbthrift.transport import TSocket, TSSLSocket, THeaderTransport
 from nebula3.fbthrift.transport.TTransport import TTransportException
-from nebula3.fbthrift.protocol import TBinaryProtocol
+from nebula3.fbthrift.protocol import THeaderProtocol
 
 from nebula3.common.ttypes import ErrorCode
 from nebula3.graph import GraphService
@@ -77,8 +77,10 @@ class Connection(object):
                 s = TSocket.TSocket(self._ip, self._port)
             if timeout > 0:
                 s.setTimeout(timeout)
-            transport = TTransport.TBufferedTransport(s)
-            protocol = TBinaryProtocol.TBinaryProtocol(transport)
+            transport = THeaderTransport.THeaderTransport(s)
+            protocol = THeaderProtocol.THeaderProtocol(transport)
+            # protocol = TCompactProtocol.TCompactProtocol(transport) # using compact protocol still cause nebula3.Exception.IOErrorException: Header transport frame was too large
+
             transport.open()
             self._connection = GraphService.Client(protocol)
             resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
