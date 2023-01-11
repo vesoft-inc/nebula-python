@@ -63,7 +63,7 @@ class ConnectionPool(object):
                 self._addresses.append(ip_port)
                 self._addresses_status[ip_port] = self.S_BAD
                 self._connections[ip_port] = deque()
-
+        self._ssl_configs = ssl_conf
         self.update_servers_status()
 
         # detect the services
@@ -78,20 +78,13 @@ class ConnectionPool(object):
 
         conns_per_address = int(self._configs.min_connection_pool_size / ok_num)
 
-        if self._ssl_configs is None:
-            for addr in self._addresses:
-                for i in range(0, conns_per_address):
-                    connection = Connection()
-                    connection.open(addr[0], addr[1], self._configs.timeout)
-                    self._connections[addr].append(connection)
-        else:
-            for addr in self._addresses:
-                for i in range(0, conns_per_address):
-                    connection = Connection()
-                    connection.open_SSL(
-                        addr[0], addr[1], self._configs.timeout, self._ssl_configs
-                    )
-                    self._connections[addr].append(connection)
+        for addr in self._addresses:
+            for i in range(0, conns_per_address):
+                connection = Connection()
+                connection.open_SSL(
+                    addr[0], addr[1], self._configs.timeout, self._ssl_configs
+                )
+                self._connections[addr].append(connection)
         return True
 
     def get_session(self, user_name, password, retry_connect=True):
@@ -148,6 +141,7 @@ class ConnectionPool(object):
             try:
                 ok_num = self.get_ok_servers_num()
                 if ok_num == 0:
+                    logging.error('No available server')
                     return None
                 max_con_per_address = int(
                     self._configs.max_connection_pool_size / ok_num
@@ -157,24 +151,37 @@ class ConnectionPool(object):
                     self._pos = (self._pos + 1) % len(self._addresses)
                     addr = self._addresses[self._pos]
                     if self._addresses_status[addr] == self.S_OK:
+                        invalid_connections = list()
+
+                        # iterate all connections to find an available connection
                         for connection in self._connections[addr]:
                             if not connection.is_used:
+                                # ping to check the connection is valid
                                 if connection.ping():
                                     connection.is_used = True
                                     logger.info('Get connection to {}'.format(addr))
                                     return connection
+                                else:
+                                    invalid_connections.append(connection)
 
+                        # remove invalid connections
+                        for connection in invalid_connections:
+                            self._connections[addr].remove(connection)
+
+                        # check if the server is still alive
+                        if not self.ping(addr):
+                            self._addresses_status[addr] = self.S_BAD
+                            continue
+
+                        # create new connection if the number of connections is less than max_con_per_address
                         if len(self._connections[addr]) < max_con_per_address:
                             connection = Connection()
-                            if self._ssl_configs is None:
-                                connection.open(addr[0], addr[1], self._configs.timeout)
-                            else:
-                                connection.open_SSL(
-                                    addr[0],
-                                    addr[1],
-                                    self._configs.timeout,
-                                    self._ssl_configs,
-                                )
+                            connection.open_SSL(
+                                addr[0],
+                                addr[1],
+                                self._configs.timeout,
+                                self._ssl_configs,
+                            )
                             connection.is_used = True
                             self._connections[addr].append(connection)
                             logger.info('Get connection to {}'.format(addr))
@@ -184,6 +191,8 @@ class ConnectionPool(object):
                             if not connection.is_used:
                                 self._connections[addr].remove(connection)
                     try_count = try_count + 1
+
+                logging.error('No available connection')
                 return None
             except Exception as ex:
                 logger.error('Get connection failed: {}'.format(ex))
@@ -197,10 +206,7 @@ class ConnectionPool(object):
         """
         try:
             conn = Connection()
-            if self._ssl_configs is None:
-                conn.open(address[0], address[1], 1000)
-            else:
-                conn.open_SSL(address[0], address[1], 1000, self._ssl_configs)
+            conn.open_SSL(address[0], address[1], 1000, self._ssl_configs)
             conn.close()
             return True
         except Exception as ex:
@@ -218,9 +224,7 @@ class ConnectionPool(object):
             for addr in self._connections.keys():
                 for connection in self._connections[addr]:
                     if connection.is_used:
-                        logger.error(
-                            'The connection using by someone, but now want to close it'
-                        )
+                        logger.warning('Closing a connection that is in use')
                     connection.close()
             self._close = True
 
@@ -286,7 +290,7 @@ class ConnectionPool(object):
                     if not connection.is_used:
                         if not connection.ping():
                             logger.debug(
-                                'Remove the not unusable connection to {}'.format(
+                                'Remove the unusable connection to {}'.format(
                                     connection.get_address()
                                 )
                             )
