@@ -79,7 +79,6 @@ class Connection(object):
                 s.setTimeout(timeout)
             transport = THeaderTransport.THeaderTransport(s)
             protocol = THeaderProtocol.THeaderProtocol(transport)
-            # protocol = TCompactProtocol.TCompactProtocol(transport) # using compact protocol still cause nebula3.Exception.IOErrorException: Header transport frame was too large
 
             transport.open()
             self._connection = GraphService.Client(protocol)
