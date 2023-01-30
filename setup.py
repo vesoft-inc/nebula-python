@@ -18,7 +18,7 @@ setup(
     license='Apache 2.0',
     author='vesoft-inc',
     author_email='info@vesoft.com',
-    description='Python client for Nebula Graph V3.0',
+    description='Python client for NebulaGraph V3.0',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/vesoft-inc/nebula-python',
