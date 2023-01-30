@@ -45,10 +45,12 @@ class TestSession(TestCase):
     def test_2_reconnect(self):
         try:
             session = self.pool.get_session('root', 'nebula')
+            # wait for the session update
+            time.sleep(2)
             session.execute(
                 'CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;'
             )
-            time.sleep(3)
+            time.sleep(10)
             for i in range(0, 5):
                 if i == 3:
                     os.system('docker stop tests_graphd0_1')
@@ -56,7 +58,7 @@ class TestSession(TestCase):
                     time.sleep(3)
                 # the session update later, the expect test
                 # resp = session.execute('SHOW TAGS')
-                resp = session.execute('SHOW HOSTS')
+                resp = session.execute('SHOW SESSIONS')
                 assert resp.is_succeeded(), resp.error_msg()
                 assert resp.space_name() == 'test_session'
                 time.sleep(2)

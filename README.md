@@ -1,10 +1,10 @@
 # nebula-python
 
-This repository holds the official Python API for Nebula Graph.
+This repository holds the official Python API for NebulaGraph.
 
 ## Before you start
 
-Before you start, please read this section to choose the right branch for you. The compatibility between the API and Nebula Graph service can be found in [How to choose nebula-python](##How-to-choose-nebula-python). The current master branch is compatible with Nebula Graph 3.3.
+Before you start, please read this section to choose the right branch for you. The compatibility between the API and NebulaGraph service can be found in [How to choose nebula-python](##How-to-choose-nebula-python). The current master branch is compatible with NebulaGraph 3.3.
 
 ## The directory structure
 
