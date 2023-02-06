@@ -280,7 +280,7 @@ services:
       - --cert_path=${cert_path}
       - --key_path=${key_path}
       - --enable_ssl=${enable_ssl}
-      - --session_reclaim_interval_secs=3
+      - --session_reclaim_interval_secs=2
     depends_on:
       - metad0
       - metad1
@@ -324,7 +324,7 @@ services:
       - --cert_path=${cert_path}
       - --key_path=${key_path}
       - --enable_ssl=${enable_ssl}
-      - --session_reclaim_interval_secs=3
+      - --session_reclaim_interval_secs=2
     depends_on:
       - metad0
       - metad1
@@ -368,7 +368,7 @@ services:
       - --cert_path=${cert_path}
       - --key_path=${key_path}
       - --enable_ssl=${enable_ssl}
-      - --session_reclaim_interval_secs=3
+      - --session_reclaim_interval_secs=2
     depends_on:
       - metad0
       - metad1
