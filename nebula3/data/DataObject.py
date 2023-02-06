@@ -1728,7 +1728,6 @@ class PathWrapper(BaseObject):
     def __repr__(self):
         edge_strs = []
         for step in self._path.steps:
-
             relationship = (
                 Relationship(
                     GenValue.gen_edge(

@@ -35,7 +35,8 @@ wcwidth==0.2.5
 wheel==0.37.0
     # via pip-tools
 pytest-cov==4.0.0
-
+    # via -r requirements/test.in
+black==22.8.0
 # The following packages are considered to be unsafe in a requirements file:
 # pip
 # setuptools
