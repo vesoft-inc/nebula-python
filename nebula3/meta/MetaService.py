@@ -12,7 +12,7 @@ from nebula3.fbthrift.Thrift import TType, TMessageType, TPriority, TRequestCont
 from nebula3.fbthrift.protocol.TProtocol import TProtocolException
 
 
-from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, IsolationLevel, HostStatus, SnapshotStatus, AlterSpaceOp, JobOp, JobType, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, ExternalServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexParams, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AlterSpaceReq, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ClearSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, AddHostsReq, DropHostsReq, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, GetWorkerIdReq, GetWorkerIdResp, GetSegmentIdReq, GetSegmentIdResp, HBResp, LeaderInfo, PartitionList, HBReq, ServiceInfo, AgentHBReq, AgentHBResp, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceTask, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, MergeZoneReq, DropZoneReq, DivideZoneReq, RenameZoneReq, AddHostsIntoZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, HostBackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, ServiceClient, SignInServiceReq, SignOutServiceReq, ListServiceClientsReq, ListServiceClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SaveGraphVersionResp, SaveGraphVersionReq, SchemaVer, ClusterID
+from .ttypes import UTF8STRINGS, AlterSchemaOp, RoleType, GeoShape, IsolationLevel, HostStatus, SnapshotStatus, AlterSpaceOp, JobOp, JobType, JobStatus, ListHostType, HostRole, TaskResult, ConfigModule, ConfigMode, ListenerType, ExternalServiceType, QueryStatus, ID, ColumnTypeDef, ColumnDef, SchemaProp, Schema, IdName, SpaceDesc, SpaceItem, TagItem, AlterSchemaItem, EdgeItem, IndexParams, IndexItem, HostItem, UserItem, RoleItem, ExecResp, AlterSpaceReq, AdminJobReq, JobDesc, TaskDesc, AdminJobResult, AdminJobResp, Correlativity, StatsItem, CreateSpaceReq, CreateSpaceAsReq, DropSpaceReq, ClearSpaceReq, ListSpacesReq, ListSpacesResp, GetSpaceReq, GetSpaceResp, CreateTagReq, AlterTagReq, DropTagReq, ListTagsReq, ListTagsResp, GetTagReq, GetTagResp, CreateEdgeReq, AlterEdgeReq, GetEdgeReq, GetEdgeResp, DropEdgeReq, ListEdgesReq, ListEdgesResp, AddHostsReq, DropHostsReq, ListHostsReq, ListHostsResp, PartItem, ListPartsReq, ListPartsResp, GetPartsAllocReq, GetPartsAllocResp, GetWorkerIdReq, GetWorkerIdResp, GetSegmentIdReq, GetSegmentIdResp, HBResp, LeaderInfo, PartitionList, HBReq, ServiceInfo, AgentHBReq, AgentHBResp, IndexFieldDef, CreateTagIndexReq, DropTagIndexReq, GetTagIndexReq, GetTagIndexResp, ListTagIndexesReq, ListTagIndexesResp, CreateEdgeIndexReq, DropEdgeIndexReq, GetEdgeIndexReq, GetEdgeIndexResp, ListEdgeIndexesReq, ListEdgeIndexesResp, RebuildIndexReq, CreateUserReq, DropUserReq, AlterUserReq, GrantRoleReq, RevokeRoleReq, ListUsersReq, ListUsersResp, ListRolesReq, ListRolesResp, GetUserRolesReq, ChangePasswordReq, BalanceTask, ConfigItem, RegConfigReq, GetConfigReq, GetConfigResp, SetConfigReq, ListConfigsReq, ListConfigsResp, CreateSnapshotReq, DropSnapshotReq, ListSnapshotsReq, Snapshot, ListSnapshotsResp, ListIndexStatusReq, IndexStatus, ListIndexStatusResp, MergeZoneReq, DropZoneReq, DivideZoneReq, RenameZoneReq, AddHostsIntoZoneReq, GetZoneReq, GetZoneResp, ListZonesReq, Zone, ListZonesResp, AddListenerReq, RemoveListenerReq, ListListenerReq, ListenerInfo, ListListenerResp, GetStatsReq, GetStatsResp, HostBackupInfo, SpaceBackupInfo, BackupMeta, CreateBackupReq, CreateBackupResp, HostPair, RestoreMetaReq, PartInfo, RestoreMetaResp, ServiceClient, SignInServiceReq, SignOutServiceReq, ListServiceClientsReq, ListServiceClientsResp, FTIndex, CreateFTIndexReq, DropFTIndexReq, ListFTIndexesReq, ListFTIndexesResp, QueryDesc, Session, CreateSessionReq, CreateSessionResp, UpdateSessionsReq, UpdateSessionsResp, ListSessionsReq, ListSessionsResp, GetSessionReq, GetSessionResp, RemoveSessionReq, RemoveSessionResp, KillQueryReq, ReportTaskReq, ListClusterInfoResp, ListClusterInfoReq, GetMetaDirInfoResp, GetMetaDirInfoReq, VerifyClientVersionResp, VerifyClientVersionReq, SaveGraphVersionResp, SaveGraphVersionReq, SchemaVer, ClusterID
 import nebula3.common.ttypes
 
 from nebula3.fbthrift.Thrift import TProcessor
@@ -15686,7 +15686,7 @@ class removeSession_result:
         break
       if fid == 0:
         if ftype == TType.STRUCT:
-          self.success = ExecResp()
+          self.success = RemoveSessionResp()
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
@@ -15733,7 +15733,7 @@ class removeSession_result:
 
 all_structs.append(removeSession_result)
 removeSession_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+  (0, TType.STRUCT, 'success', [RemoveSessionResp, RemoveSessionResp.thrift_spec, False], None, 2, ), # 0
 )
 
 removeSession_result.thrift_struct_annotations = {
@@ -16450,7 +16450,7 @@ class restoreMeta_result:
         break
       if fid == 0:
         if ftype == TType.STRUCT:
-          self.success = ExecResp()
+          self.success = RestoreMetaResp()
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
@@ -16497,7 +16497,7 @@ class restoreMeta_result:
 
 all_structs.append(restoreMeta_result)
 restoreMeta_result.thrift_spec = (
-  (0, TType.STRUCT, 'success', [ExecResp, ExecResp.thrift_spec, False], None, 2, ), # 0
+  (0, TType.STRUCT, 'success', [RestoreMetaResp, RestoreMetaResp.thrift_spec, False], None, 2, ), # 0
 )
 
 restoreMeta_result.thrift_struct_annotations = {
