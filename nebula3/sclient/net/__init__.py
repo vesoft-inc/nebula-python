@@ -10,7 +10,7 @@ import socket
 
 from nebula3.Exception import InValidHostname
 from nebula3.storage import GraphStorageService
-from nebula3.fbthrift.transport import TSocket, THeaderTransport
+from nebula3.fbthrift.transport import TSocket, THeaderTransport, TTransport
 from nebula3.fbthrift.protocol import THeaderProtocol
 
 
@@ -34,9 +34,12 @@ class GraphStorageConnection(object):
             s = TSocket.TSocket(self._address.host, self._address.port)
             if self._timeout > 0:
                 s.setTimeout(self._timeout)
-            transport = THeaderTransport.THeaderTransport(s)
-            protocol = THeaderProtocol.THeaderProtocol(transport)
-            transport.open()
+
+            buffered_transport = TTransport.TBufferedTransport(s)
+            header_transport = THeaderTransport.THeaderTransport(buffered_transport)
+            protocol = THeaderProtocol.THeaderProtocol(header_transport)
+            header_transport.open()
+
             self._connection = GraphStorageService.Client(protocol)
         except Exception:
             raise
