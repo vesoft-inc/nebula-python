@@ -1461,7 +1461,8 @@ class Node(BaseObject):
         tag_str_list = list()
         for tag in self._tag_indexes.keys():
             prop_strs = [
-                "%s: %s" % (key, str(val)) for key, val in self.properties(tag).items()
+                "%s: %s" % (key, str(val))
+                for key, val in sorted(self.properties(tag).items())
             ]
             tag_str_list.append(":%s{%s}" % (tag, ", ".join(prop_strs)))
         return "({} {})".format(str(self.get_id()), " ".join(tag_str_list))
@@ -1557,7 +1558,7 @@ class Relationship(BaseObject):
 
     def __repr__(self):
         prop_strs = [
-            "%s: %s" % (key, str(val)) for key, val in self.properties().items()
+            "%s: %s" % (key, str(val)) for key, val in sorted(self.properties().items())
         ]
         return "(%s)-[:%s@%d{%s}]->(%s)" % (
             str(self.start_vertex_id()),
