@@ -10,33 +10,41 @@ click==8.0.3
     # via pip-tools
 iniconfig==1.1.1
     # via pytest
+numpy==1.24.2
+    # via pandas
 packaging==21.2
     # via pytest
+pandas==1.5.3
+    # via -r example.in
 pep517==0.12.0
     # via pip-tools
 pip-tools==6.4.0
-    # via -r requirements/dev.in
+    # via -r dev.in
 pluggy==1.0.0
     # via pytest
 prettytable==2.4.0
-    # via -r requirements/example.in
+    # via -r example.in
 py==1.11.0
     # via pytest
 pyparsing==2.4.7
     # via packaging
 pytest==6.2.5
-    # via -r requirements/test.in
+    # via -r test.in
+python-dateutil==2.8.2
+    # via pandas
+pytz==2022.7.1
+    # via pandas
+six==1.16.0
+    # via python-dateutil
 toml==0.10.2
     # via pytest
 tomli==1.2.2
     # via pep517
 wcwidth==0.2.5
     # via prettytable
-wheel==0.37.0
+wheel==0.38.1
     # via pip-tools
-pytest-cov==4.0.0
-    # via -r requirements/test.in
-black==22.8.0
+
 # The following packages are considered to be unsafe in a requirements file:
 # pip
 # setuptools
