@@ -32,13 +32,13 @@ jobs:
       - name: Test with pytest
         run: |
           docker-compose -f docker-compose.yaml up -d
-          sleep 45
+          sleep 20
           pytest -s -v -k "not SSL" --cov=../nebula3 --cov-report=xml --cov-append
         working-directory: tests
       - name: Test SSL connection with pytest
         run: |
           enable_ssl=true docker-compose -f docker-compose-ssl.yaml up -d
-          sleep 45
+          sleep 20
           pytest -s -v -k "SSL" --cov=../nebula3 --cov-report=xml --cov-append
         working-directory: tests
       - name: Upload Coverage to Codecov

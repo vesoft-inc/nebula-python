@@ -9,7 +9,7 @@ MAC_BLACK = black
 FMT_EXCLUDE = --extend-exclude nebula3/common/\|nebula3/storage/\|nebula3/graph/\|nebula3/meta\|nebula3/common\|nebula3/fbthrift/
 
 fmt:
-	pip install --user black
+	pip install --user black==22.8.0
 	@if [ -x $(LINUX_BLACK) ];then \
 		$(LINUX_BLACK) -S $(FMT_EXCLUDE) .; \
 	else \
@@ -17,7 +17,7 @@ fmt:
 	fi
 
 fmt-check:
-	pip install --user black
+	pip install --user black==22.8.0
 	@if [ -x $(LINUX_BLACK) ];then \
 		$(LINUX_BLACK) -S --check $(FMT_EXCLUDE) .; \
 	else \

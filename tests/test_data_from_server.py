@@ -236,21 +236,19 @@ class TestBaseCase(TestCase):
         assert resp.row_values(0)[0].is_path()
         path = resp.row_values(0)[0].as_path()
         expected_str = (
-            '("Bob" :student{interval: P1MT100.000020000S, name: "Bob"} '
-            ':person{hobby: __NULL__, expend: 100.0, book_num: 100, '
-            'property: 1000.0, grade: 3, child_name: "Hello Worl", '
-            'start_school: 2017-09-10, friends: 10, '
-            'morning: utc time: 23:10:00.000000, timezone_offset: 28800, first_out_city: 1111, '
-            'name: "Bob", age: 10, '
-            'birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800, is_girl: False})'
-            '-[:friend@0{end_year: 2020, start_year: 2018}]->'
-            '("Lily" :student{interval: P12MT0.000000000S, name: "Lily"} '
-            ':person{is_girl: False, '
-            'birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800, age: 9, '
-            'book_num: 100, grade: 3, property: 1000.0, hobby: __NULL__, expend: 100.0, '
-            'start_school: 2017-09-10, child_name: "Hello Worl", '
-            'morning: utc time: 23:10:00.000000, timezone_offset: 28800, '
-            'friends: 10, first_out_city: 1111, name: "Lily"})'
+            '("Bob" :student{interval: P1MT100.000020000S, name: "Bob"} :person{age:'
+            ' 10, birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset:'
+            ' 28800, book_num: 100, child_name: "Hello Worl", expend: 100.0,'
+            ' first_out_city: 1111, friends: 10, grade: 3, hobby: __NULL__, is_girl:'
+            ' False, morning: utc time: 23:10:00.000000, timezone_offset: 28800, name:'
+            ' "Bob", property: 1000.0, start_school:'
+            ' 2017-09-10})-[:friend@0{start_year: 2018, end_year: 2020}]->("Lily"'
+            ' :student{interval: P12MT0.000000000S, name: "Lily"} :person{age: 9,'
+            ' birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset:'
+            ' 28800, book_num: 100, child_name: "Hello Worl", expend: 100.0,'
+            ' first_out_city: 1111, friends: 10, grade: 3, hobby: __NULL__, is_girl:'
+            ' False, morning: utc time: 23:10:00.000000, timezone_offset: 28800, name:'
+            ' "Lily", property: 1000.0, start_school: 2017-09-10})'
         )
         assert expected_str == str(path)
 

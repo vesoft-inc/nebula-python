@@ -43,6 +43,7 @@ from nebula3.fbthrift.remote import Remote
 
 FUNCTIONS = {
     'getNeighbors': Function('getNeighbors', 'GraphStorageService', 'GetNeighborsResponse', [('GetNeighborsRequest', 'req', 'GetNeighborsRequest')]),
+    'getDstBySrc': Function('getDstBySrc', 'GraphStorageService', 'GetDstBySrcResponse', [('GetDstBySrcRequest', 'req', 'GetDstBySrcRequest')]),
     'getProps': Function('getProps', 'GraphStorageService', 'GetPropResponse', [('GetPropRequest', 'req', 'GetPropRequest')]),
     'addVertices': Function('addVertices', 'GraphStorageService', 'ExecResponse', [('AddVerticesRequest', 'req', 'AddVerticesRequest')]),
     'addEdges': Function('addEdges', 'GraphStorageService', 'ExecResponse', [('AddEdgesRequest', 'req', 'AddEdgesRequest')]),

@@ -45,8 +45,9 @@ class TestSession(TestCase):
     def test_2_reconnect(self):
         try:
             session = self.pool.get_session('root', 'nebula')
-            # wait for the session update
             time.sleep(2)
+
+            # wait for the session space info to be updated to meta service
             session.execute(
                 'CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;'
             )
@@ -56,8 +57,6 @@ class TestSession(TestCase):
                     os.system('docker stop tests_graphd0_1')
                     os.system('docker stop tests_graphd1_1')
                     time.sleep(3)
-                # the session update later, the expect test
-                # resp = session.execute('SHOW TAGS')
                 resp = session.execute('SHOW SESSIONS')
                 assert resp.is_succeeded(), resp.error_msg()
                 assert resp.space_name() == 'test_session'
@@ -70,7 +69,7 @@ class TestSession(TestCase):
         finally:
             os.system('docker start tests_graphd0_1')
             os.system('docker start tests_graphd1_1')
-            time.sleep(5)
+            time.sleep(2)
 
     def test_3_session_context(self):
         in_used_connects = self.pool.in_used_connects()
