@@ -7,7 +7,12 @@
 
 import time
 
-from nebula3.fbthrift.transport import TSocket, TSSLSocket, THeaderTransport
+from nebula3.fbthrift.transport import (
+    TSocket,
+    TSSLSocket,
+    TTransport,
+    THeaderTransport,
+)
 from nebula3.fbthrift.transport.TTransport import TTransportException
 from nebula3.fbthrift.protocol import THeaderProtocol
 
@@ -77,10 +82,12 @@ class Connection(object):
                 s = TSocket.TSocket(self._ip, self._port)
             if timeout > 0:
                 s.setTimeout(timeout)
-            transport = THeaderTransport.THeaderTransport(s)
-            protocol = THeaderProtocol.THeaderProtocol(transport)
 
-            transport.open()
+            buffered_transport = TTransport.TBufferedTransport(s)
+            header_transport = THeaderTransport.THeaderTransport(buffered_transport)
+            protocol = THeaderProtocol.THeaderProtocol(header_transport)
+            header_transport.open()
+
             self._connection = GraphService.Client(protocol)
             resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
             if resp.error_code != ErrorCode.SUCCEEDED:

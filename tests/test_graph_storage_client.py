@@ -37,7 +37,6 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s]:%(message)s')
 class TestGraphStorageClient(object):
     @staticmethod
     def execute_with_retry(conn, session_id, stmt, retry=3):
-
         count = retry
         while count > 0:
             count -= 1

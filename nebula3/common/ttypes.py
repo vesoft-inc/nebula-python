@@ -143,6 +143,9 @@ class ErrorCode:
   E_USER_NOT_FOUND = -18
   E_STATS_NOT_FOUND = -19
   E_SERVICE_NOT_FOUND = -20
+  E_DRAINER_NOT_FOUND = -21
+  E_DRAINER_CLIENT_NOT_FOUND = -22
+  E_PART_STOPPED = -23
   E_BACKUP_FAILED = -24
   E_BACKUP_EMPTY_TABLE = -25
   E_BACKUP_TABLE_FAILED = -26
@@ -150,6 +153,12 @@ class ErrorCode:
   E_REBUILD_INDEX_FAILED = -28
   E_INVALID_PASSWORD = -29
   E_FAILED_GET_ABS_PATH = -30
+  E_LISTENER_PROGRESS_FAILED = -31
+  E_SYNC_LISTENER_NOT_FOUND = -32
+  E_DRAINER_PROGRESS_FAILED = -33
+  E_PART_DISABLED = -34
+  E_PART_ALREADY_STARTED = -35
+  E_PART_ALREADY_STOPPED = -36
   E_BAD_USERNAME_PASSWORD = -1001
   E_SESSION_INVALID = -1002
   E_SESSION_TIMEOUT = -1003
@@ -172,6 +181,12 @@ class ErrorCode:
   E_WRONGCLUSTER = -2010
   E_ZONE_NOT_ENOUGH = -2011
   E_ZONE_IS_EMPTY = -2012
+  E_LISTENER_CONFLICT = -2013
+  E_SCHEMA_NAME_EXISTS = -2014
+  E_RELATED_INDEX_EXISTS = -2015
+  E_RELATED_SPACE_EXISTS = -2016
+  E_RELATED_FULLTEXT_INDEX_EXISTS = -2017
+  E_HISTORY_CONFLICT = -2018
   E_STORE_FAILURE = -2021
   E_STORE_SEGMENT_ILLEGAL = -2022
   E_BAD_BALANCE_PLAN = -2023
@@ -180,13 +195,20 @@ class ErrorCode:
   E_NO_VALID_HOST = -2026
   E_CORRUPTED_BALANCE_PLAN = -2027
   E_NO_INVALID_BALANCE_PLAN = -2028
+  E_NO_VALID_DRAINER = -2029
   E_IMPROPER_ROLE = -2030
   E_INVALID_PARTITION_NUM = -2031
   E_INVALID_REPLICA_FACTOR = -2032
   E_INVALID_CHARSET = -2033
   E_INVALID_COLLATE = -2034
   E_CHARSET_COLLATE_NOT_MATCH = -2035
+  E_PRIVILEGE_ALL_TAG_EDGE_SETTLED = -2036
+  E_PRIVILEGE_NOT_EXIST = -2037
+  E_PRIVILEGE_NEED_BASIC_ROLE = -2038
+  E_PRIVILEGE_ACTION_INVALID = -2039
   E_SNAPSHOT_FAILURE = -2040
+  E_SNAPSHOT_RUNNING_JOBS = -2056
+  E_SNAPSHOT_NOT_FOUND = -2057
   E_BLOCK_WRITE_FAILURE = -2041
   E_REBUILD_INDEX_FAILURE = -2042
   E_INDEX_WITH_TTL = -2043
@@ -198,8 +220,12 @@ class ErrorCode:
   E_TASK_REPORT_OUT_DATE = -2049
   E_JOB_NOT_IN_SPACE = -2050
   E_JOB_NEED_RECOVER = -2051
+  E_JOB_ALREADY_FINISH = -2052
+  E_JOB_SUBMITTED = -2053
+  E_JOB_NOT_STOPPABLE = -2054
+  E_JOB_HAS_NO_TARGET_STORAGE = -2055
   E_INVALID_JOB = -2065
-  E_BACKUP_BUILDING_INDEX = -2066
+  E_BACKUP_RUNNING_JOBS = -2066
   E_BACKUP_SPACE_NOT_FOUND = -2067
   E_RESTORE_FAILURE = -2068
   E_SESSION_NOT_FOUND = -2069
@@ -208,6 +234,11 @@ class ErrorCode:
   E_LIST_CLUSTER_NO_AGENT_FAILURE = -2072
   E_QUERY_NOT_FOUND = -2073
   E_AGENT_HB_FAILUE = -2074
+  E_INVALID_VARIABLE = -2080
+  E_VARIABLE_TYPE_VALUE_MISMATCH = -2081
+  E_HOST_CAN_NOT_BE_ADDED = -2082
+  E_ACCESS_ES_FAILURE = -2090
+  E_GRAPH_MEMORY_EXCEEDED = -2600
   E_CONSENSUS_ERROR = -3001
   E_KEY_HAS_EXISTS = -3002
   E_DATA_TYPE_MISMATCH = -3003
@@ -269,6 +300,23 @@ class ErrorCode:
   E_RAFT_BUFFER_OVERFLOW = -3529
   E_RAFT_ATOMIC_OP_FAILED = -3530
   E_LEADER_LEASE_FAILED = -3531
+  E_RAFT_CAUGHT_UP = -3532
+  E_LOG_GAP = -4001
+  E_LOG_STALE = -4002
+  E_INVALID_DRAINER_STORE = -4003
+  E_SPACE_MISMATCH = -4004
+  E_PART_MISMATCH = -4005
+  E_DATA_CONFLICT = -4006
+  E_REQ_CONFLICT = -4007
+  E_DATA_ILLEGAL = -4008
+  E_CACHE_CONFIG_ERROR = -5001
+  E_NOT_ENOUGH_SPACE = -5002
+  E_CACHE_MISS = -5003
+  E_POOL_NOT_FOUND = -5004
+  E_CACHE_WRITE_FAILURE = -5005
+  E_NODE_NUMBER_EXCEED_LIMIT = -7001
+  E_PARSING_LICENSE_FAILURE = -7002
+  E_STORAGE_MEMORY_EXCEEDED = -3600
   E_UNKNOWN = -8000
 
   _VALUES_TO_NAMES = {
@@ -293,6 +341,9 @@ class ErrorCode:
     -18: "E_USER_NOT_FOUND",
     -19: "E_STATS_NOT_FOUND",
     -20: "E_SERVICE_NOT_FOUND",
+    -21: "E_DRAINER_NOT_FOUND",
+    -22: "E_DRAINER_CLIENT_NOT_FOUND",
+    -23: "E_PART_STOPPED",
     -24: "E_BACKUP_FAILED",
     -25: "E_BACKUP_EMPTY_TABLE",
     -26: "E_BACKUP_TABLE_FAILED",
@@ -300,6 +351,12 @@ class ErrorCode:
     -28: "E_REBUILD_INDEX_FAILED",
     -29: "E_INVALID_PASSWORD",
     -30: "E_FAILED_GET_ABS_PATH",
+    -31: "E_LISTENER_PROGRESS_FAILED",
+    -32: "E_SYNC_LISTENER_NOT_FOUND",
+    -33: "E_DRAINER_PROGRESS_FAILED",
+    -34: "E_PART_DISABLED",
+    -35: "E_PART_ALREADY_STARTED",
+    -36: "E_PART_ALREADY_STOPPED",
     -1001: "E_BAD_USERNAME_PASSWORD",
     -1002: "E_SESSION_INVALID",
     -1003: "E_SESSION_TIMEOUT",
@@ -322,6 +379,12 @@ class ErrorCode:
     -2010: "E_WRONGCLUSTER",
     -2011: "E_ZONE_NOT_ENOUGH",
     -2012: "E_ZONE_IS_EMPTY",
+    -2013: "E_LISTENER_CONFLICT",
+    -2014: "E_SCHEMA_NAME_EXISTS",
+    -2015: "E_RELATED_INDEX_EXISTS",
+    -2016: "E_RELATED_SPACE_EXISTS",
+    -2017: "E_RELATED_FULLTEXT_INDEX_EXISTS",
+    -2018: "E_HISTORY_CONFLICT",
     -2021: "E_STORE_FAILURE",
     -2022: "E_STORE_SEGMENT_ILLEGAL",
     -2023: "E_BAD_BALANCE_PLAN",
@@ -330,13 +393,20 @@ class ErrorCode:
     -2026: "E_NO_VALID_HOST",
     -2027: "E_CORRUPTED_BALANCE_PLAN",
     -2028: "E_NO_INVALID_BALANCE_PLAN",
+    -2029: "E_NO_VALID_DRAINER",
     -2030: "E_IMPROPER_ROLE",
     -2031: "E_INVALID_PARTITION_NUM",
     -2032: "E_INVALID_REPLICA_FACTOR",
     -2033: "E_INVALID_CHARSET",
     -2034: "E_INVALID_COLLATE",
     -2035: "E_CHARSET_COLLATE_NOT_MATCH",
+    -2036: "E_PRIVILEGE_ALL_TAG_EDGE_SETTLED",
+    -2037: "E_PRIVILEGE_NOT_EXIST",
+    -2038: "E_PRIVILEGE_NEED_BASIC_ROLE",
+    -2039: "E_PRIVILEGE_ACTION_INVALID",
     -2040: "E_SNAPSHOT_FAILURE",
+    -2056: "E_SNAPSHOT_RUNNING_JOBS",
+    -2057: "E_SNAPSHOT_NOT_FOUND",
     -2041: "E_BLOCK_WRITE_FAILURE",
     -2042: "E_REBUILD_INDEX_FAILURE",
     -2043: "E_INDEX_WITH_TTL",
@@ -348,8 +418,12 @@ class ErrorCode:
     -2049: "E_TASK_REPORT_OUT_DATE",
     -2050: "E_JOB_NOT_IN_SPACE",
     -2051: "E_JOB_NEED_RECOVER",
+    -2052: "E_JOB_ALREADY_FINISH",
+    -2053: "E_JOB_SUBMITTED",
+    -2054: "E_JOB_NOT_STOPPABLE",
+    -2055: "E_JOB_HAS_NO_TARGET_STORAGE",
     -2065: "E_INVALID_JOB",
-    -2066: "E_BACKUP_BUILDING_INDEX",
+    -2066: "E_BACKUP_RUNNING_JOBS",
     -2067: "E_BACKUP_SPACE_NOT_FOUND",
     -2068: "E_RESTORE_FAILURE",
     -2069: "E_SESSION_NOT_FOUND",
@@ -358,6 +432,11 @@ class ErrorCode:
     -2072: "E_LIST_CLUSTER_NO_AGENT_FAILURE",
     -2073: "E_QUERY_NOT_FOUND",
     -2074: "E_AGENT_HB_FAILUE",
+    -2080: "E_INVALID_VARIABLE",
+    -2081: "E_VARIABLE_TYPE_VALUE_MISMATCH",
+    -2082: "E_HOST_CAN_NOT_BE_ADDED",
+    -2090: "E_ACCESS_ES_FAILURE",
+    -2600: "E_GRAPH_MEMORY_EXCEEDED",
     -3001: "E_CONSENSUS_ERROR",
     -3002: "E_KEY_HAS_EXISTS",
     -3003: "E_DATA_TYPE_MISMATCH",
@@ -419,6 +498,23 @@ class ErrorCode:
     -3529: "E_RAFT_BUFFER_OVERFLOW",
     -3530: "E_RAFT_ATOMIC_OP_FAILED",
     -3531: "E_LEADER_LEASE_FAILED",
+    -3532: "E_RAFT_CAUGHT_UP",
+    -4001: "E_LOG_GAP",
+    -4002: "E_LOG_STALE",
+    -4003: "E_INVALID_DRAINER_STORE",
+    -4004: "E_SPACE_MISMATCH",
+    -4005: "E_PART_MISMATCH",
+    -4006: "E_DATA_CONFLICT",
+    -4007: "E_REQ_CONFLICT",
+    -4008: "E_DATA_ILLEGAL",
+    -5001: "E_CACHE_CONFIG_ERROR",
+    -5002: "E_NOT_ENOUGH_SPACE",
+    -5003: "E_CACHE_MISS",
+    -5004: "E_POOL_NOT_FOUND",
+    -5005: "E_CACHE_WRITE_FAILURE",
+    -7001: "E_NODE_NUMBER_EXCEED_LIMIT",
+    -7002: "E_PARSING_LICENSE_FAILURE",
+    -3600: "E_STORAGE_MEMORY_EXCEEDED",
     -8000: "E_UNKNOWN",
   }
 
@@ -444,6 +540,9 @@ class ErrorCode:
     "E_USER_NOT_FOUND": -18,
     "E_STATS_NOT_FOUND": -19,
     "E_SERVICE_NOT_FOUND": -20,
+    "E_DRAINER_NOT_FOUND": -21,
+    "E_DRAINER_CLIENT_NOT_FOUND": -22,
+    "E_PART_STOPPED": -23,
     "E_BACKUP_FAILED": -24,
     "E_BACKUP_EMPTY_TABLE": -25,
     "E_BACKUP_TABLE_FAILED": -26,
@@ -451,6 +550,12 @@ class ErrorCode:
     "E_REBUILD_INDEX_FAILED": -28,
     "E_INVALID_PASSWORD": -29,
     "E_FAILED_GET_ABS_PATH": -30,
+    "E_LISTENER_PROGRESS_FAILED": -31,
+    "E_SYNC_LISTENER_NOT_FOUND": -32,
+    "E_DRAINER_PROGRESS_FAILED": -33,
+    "E_PART_DISABLED": -34,
+    "E_PART_ALREADY_STARTED": -35,
+    "E_PART_ALREADY_STOPPED": -36,
     "E_BAD_USERNAME_PASSWORD": -1001,
     "E_SESSION_INVALID": -1002,
     "E_SESSION_TIMEOUT": -1003,
@@ -473,6 +578,12 @@ class ErrorCode:
     "E_WRONGCLUSTER": -2010,
     "E_ZONE_NOT_ENOUGH": -2011,
     "E_ZONE_IS_EMPTY": -2012,
+    "E_LISTENER_CONFLICT": -2013,
+    "E_SCHEMA_NAME_EXISTS": -2014,
+    "E_RELATED_INDEX_EXISTS": -2015,
+    "E_RELATED_SPACE_EXISTS": -2016,
+    "E_RELATED_FULLTEXT_INDEX_EXISTS": -2017,
+    "E_HISTORY_CONFLICT": -2018,
     "E_STORE_FAILURE": -2021,
     "E_STORE_SEGMENT_ILLEGAL": -2022,
     "E_BAD_BALANCE_PLAN": -2023,
@@ -481,13 +592,20 @@ class ErrorCode:
     "E_NO_VALID_HOST": -2026,
     "E_CORRUPTED_BALANCE_PLAN": -2027,
     "E_NO_INVALID_BALANCE_PLAN": -2028,
+    "E_NO_VALID_DRAINER": -2029,
     "E_IMPROPER_ROLE": -2030,
     "E_INVALID_PARTITION_NUM": -2031,
     "E_INVALID_REPLICA_FACTOR": -2032,
     "E_INVALID_CHARSET": -2033,
     "E_INVALID_COLLATE": -2034,
     "E_CHARSET_COLLATE_NOT_MATCH": -2035,
+    "E_PRIVILEGE_ALL_TAG_EDGE_SETTLED": -2036,
+    "E_PRIVILEGE_NOT_EXIST": -2037,
+    "E_PRIVILEGE_NEED_BASIC_ROLE": -2038,
+    "E_PRIVILEGE_ACTION_INVALID": -2039,
     "E_SNAPSHOT_FAILURE": -2040,
+    "E_SNAPSHOT_RUNNING_JOBS": -2056,
+    "E_SNAPSHOT_NOT_FOUND": -2057,
     "E_BLOCK_WRITE_FAILURE": -2041,
     "E_REBUILD_INDEX_FAILURE": -2042,
     "E_INDEX_WITH_TTL": -2043,
@@ -499,8 +617,12 @@ class ErrorCode:
     "E_TASK_REPORT_OUT_DATE": -2049,
     "E_JOB_NOT_IN_SPACE": -2050,
     "E_JOB_NEED_RECOVER": -2051,
+    "E_JOB_ALREADY_FINISH": -2052,
+    "E_JOB_SUBMITTED": -2053,
+    "E_JOB_NOT_STOPPABLE": -2054,
+    "E_JOB_HAS_NO_TARGET_STORAGE": -2055,
     "E_INVALID_JOB": -2065,
-    "E_BACKUP_BUILDING_INDEX": -2066,
+    "E_BACKUP_RUNNING_JOBS": -2066,
     "E_BACKUP_SPACE_NOT_FOUND": -2067,
     "E_RESTORE_FAILURE": -2068,
     "E_SESSION_NOT_FOUND": -2069,
@@ -509,6 +631,11 @@ class ErrorCode:
     "E_LIST_CLUSTER_NO_AGENT_FAILURE": -2072,
     "E_QUERY_NOT_FOUND": -2073,
     "E_AGENT_HB_FAILUE": -2074,
+    "E_INVALID_VARIABLE": -2080,
+    "E_VARIABLE_TYPE_VALUE_MISMATCH": -2081,
+    "E_HOST_CAN_NOT_BE_ADDED": -2082,
+    "E_ACCESS_ES_FAILURE": -2090,
+    "E_GRAPH_MEMORY_EXCEEDED": -2600,
     "E_CONSENSUS_ERROR": -3001,
     "E_KEY_HAS_EXISTS": -3002,
     "E_DATA_TYPE_MISMATCH": -3003,
@@ -570,6 +697,23 @@ class ErrorCode:
     "E_RAFT_BUFFER_OVERFLOW": -3529,
     "E_RAFT_ATOMIC_OP_FAILED": -3530,
     "E_LEADER_LEASE_FAILED": -3531,
+    "E_RAFT_CAUGHT_UP": -3532,
+    "E_LOG_GAP": -4001,
+    "E_LOG_STALE": -4002,
+    "E_INVALID_DRAINER_STORE": -4003,
+    "E_SPACE_MISMATCH": -4004,
+    "E_PART_MISMATCH": -4005,
+    "E_DATA_CONFLICT": -4006,
+    "E_REQ_CONFLICT": -4007,
+    "E_DATA_ILLEGAL": -4008,
+    "E_CACHE_CONFIG_ERROR": -5001,
+    "E_NOT_ENOUGH_SPACE": -5002,
+    "E_CACHE_MISS": -5003,
+    "E_POOL_NOT_FOUND": -5004,
+    "E_CACHE_WRITE_FAILURE": -5005,
+    "E_NODE_NUMBER_EXCEED_LIMIT": -7001,
+    "E_PARSING_LICENSE_FAILURE": -7002,
+    "E_STORAGE_MEMORY_EXCEEDED": -3600,
     "E_UNKNOWN": -8000,
   }
 
@@ -3433,6 +3577,8 @@ class LogInfo:
   Attributes:
    - log_id
    - term_id
+   - commit_log_id
+   - checkpoint_path
   """
 
   thrift_spec = None
@@ -3465,6 +3611,16 @@ class LogInfo:
           self.term_id = iprot.readI64()
         else:
           iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.I64:
+          self.commit_log_id = iprot.readI64()
+        else:
+          iprot.skip(ftype)
+      elif fid == 4:
+        if ftype == TType.STRING:
+          self.checkpoint_path = iprot.readString()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -3486,6 +3642,14 @@ class LogInfo:
       oprot.writeFieldBegin('term_id', TType.I64, 2)
       oprot.writeI64(self.term_id)
       oprot.writeFieldEnd()
+    if self.commit_log_id != None:
+      oprot.writeFieldBegin('commit_log_id', TType.I64, 3)
+      oprot.writeI64(self.commit_log_id)
+      oprot.writeFieldEnd()
+    if self.checkpoint_path != None:
+      oprot.writeFieldBegin('checkpoint_path', TType.STRING, 4)
+      oprot.writeString(self.checkpoint_path)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -3500,6 +3664,14 @@ class LogInfo:
       value = pprint.pformat(self.term_id, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    term_id=%s' % (value))
+    if self.commit_log_id is not None:
+      value = pprint.pformat(self.commit_log_id, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    commit_log_id=%s' % (value))
+    if self.checkpoint_path is not None:
+      value = pprint.pformat(self.checkpoint_path, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    checkpoint_path=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -3618,7 +3790,7 @@ class CheckpointInfo:
   Attributes:
    - space_id
    - parts
-   - path
+   - data_path
   """
 
   thrift_spec = None
@@ -3667,7 +3839,7 @@ class CheckpointInfo:
           iprot.skip(ftype)
       elif fid == 3:
         if ftype == TType.STRING:
-          self.path = iprot.readString()
+          self.data_path = iprot.readString()
         else:
           iprot.skip(ftype)
       else:
@@ -3695,9 +3867,9 @@ class CheckpointInfo:
         viter149.write(oprot)
       oprot.writeMapEnd()
       oprot.writeFieldEnd()
-    if self.path != None:
-      oprot.writeFieldBegin('path', TType.STRING, 3)
-      oprot.writeString(self.path)
+    if self.data_path != None:
+      oprot.writeFieldBegin('data_path', TType.STRING, 3)
+      oprot.writeString(self.data_path)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -3713,10 +3885,10 @@ class CheckpointInfo:
       value = pprint.pformat(self.parts, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    parts=%s' % (value))
-    if self.path is not None:
-      value = pprint.pformat(self.path, indent=0)
+    if self.data_path is not None:
+      value = pprint.pformat(self.data_path, indent=0)
       value = padding.join(value.splitlines(True))
-      L.append('    path=%s' % (value))
+      L.append('    data_path=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -4598,6 +4770,8 @@ LogInfo.thrift_spec = (
   None, # 0
   (1, TType.I64, 'log_id', None, None, 2, ), # 1
   (2, TType.I64, 'term_id', None, None, 2, ), # 2
+  (3, TType.I64, 'commit_log_id', None, None, 2, ), # 3
+  (4, TType.STRING, 'checkpoint_path', False, None, 2, ), # 4
 )
 
 LogInfo.thrift_struct_annotations = {
@@ -4605,15 +4779,19 @@ LogInfo.thrift_struct_annotations = {
 LogInfo.thrift_field_annotations = {
 }
 
-def LogInfo__init__(self, log_id=None, term_id=None,):
+def LogInfo__init__(self, log_id=None, term_id=None, commit_log_id=None, checkpoint_path=None,):
   self.log_id = log_id
   self.term_id = term_id
+  self.commit_log_id = commit_log_id
+  self.checkpoint_path = checkpoint_path
 
 LogInfo.__init__ = LogInfo__init__
 
 def LogInfo__setstate__(self, state):
   state.setdefault('log_id', None)
   state.setdefault('term_id', None)
+  state.setdefault('commit_log_id', None)
+  state.setdefault('checkpoint_path', None)
   self.__dict__ = state
 
 LogInfo.__getstate__ = lambda self: self.__dict__.copy()
@@ -4650,7 +4828,7 @@ CheckpointInfo.thrift_spec = (
   None, # 0
   (1, TType.I32, 'space_id', None, None, 2, ), # 1
   (2, TType.MAP, 'parts', (TType.I32,None,TType.STRUCT,[LogInfo, LogInfo.thrift_spec, False]), None, 2, ), # 2
-  (3, TType.STRING, 'path', False, None, 2, ), # 3
+  (3, TType.STRING, 'data_path', False, None, 2, ), # 3
 )
 
 CheckpointInfo.thrift_struct_annotations = {
@@ -4658,17 +4836,17 @@ CheckpointInfo.thrift_struct_annotations = {
 CheckpointInfo.thrift_field_annotations = {
 }
 
-def CheckpointInfo__init__(self, space_id=None, parts=None, path=None,):
+def CheckpointInfo__init__(self, space_id=None, parts=None, data_path=None,):
   self.space_id = space_id
   self.parts = parts
-  self.path = path
+  self.data_path = data_path
 
 CheckpointInfo.__init__ = CheckpointInfo__init__
 
 def CheckpointInfo__setstate__(self, state):
   state.setdefault('space_id', None)
   state.setdefault('parts', None)
-  state.setdefault('path', None)
+  state.setdefault('data_path', None)
   self.__dict__ = state
 
 CheckpointInfo.__getstate__ = lambda self: self.__dict__.copy()
