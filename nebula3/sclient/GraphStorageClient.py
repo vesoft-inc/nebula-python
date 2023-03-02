@@ -88,7 +88,7 @@ class GraphStorageClient(object):
         :param space_name: the specified space name
         :return: list<(ip, port)>
         """
-        return self.meta_cache.get_space_addrs(space_name)
+        return self._meta_cache.get_space_addrs(space_name)
 
     def scan_vertex(
         self,
