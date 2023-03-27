@@ -26,7 +26,6 @@ from nebula3.common.ttypes import (
 
 __AS_MAP__ = {
     Value.NVAL: "as_null",
-    Value.__EMPTY__: "as_empty",
     Value.BVAL: "as_bool",
     Value.IVAL: "as_int",
     Value.FVAL: "as_double",
@@ -686,6 +685,8 @@ class ValueWrapper(object):
         : return: Any type (e.g. int, float, List[Dict[str, int]], Set[List[float]])
         """
         _type = self._value.getType()
+        if _type == Value.__EMPTY__:
+            return None
         if _type in __AS_MAP__:
             # Considering the most efficient way, we should call `cast` in every iterable method over their items,
             # such as `as_list`, `as_set`, and `as_map`. However, the returned type will change and cause incompatibility.

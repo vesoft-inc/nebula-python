@@ -36,7 +36,6 @@ def result_to_df(result: ResultSet) -> pd.DataFrame:
 ################################
 cast_as = {
     Value.NVAL: "as_null",
-    Value.__EMPTY__: "as_empty",
     Value.BVAL: "as_bool",
     Value.IVAL: "as_int",
     Value.FVAL: "as_double",
@@ -55,12 +54,18 @@ cast_as = {
 }
 
 
-def customized_cast_with_dict(val: ValueWrapper):
+def cast(val: ValueWrapper):
     _type = val._value.getType()
-    method = cast_as.get(_type)
-    if method is not None:
-        return getattr(val, method, lambda *args, **kwargs: None)()
-    raise KeyError("No such key: {}".format(_type))
+    if _type == Value.__EMPTY__:
+        return None
+    if _type in cast_as:
+        return getattr(val, cast_as[_type])()
+    if _type == Value.LVAL:
+        return [x.cast() for x in val.as_list()]
+    if _type == Value.UVAL:
+        return {x.cast() for x in val.as_set()}
+    if _type == Value.MVAL:
+        return {k: v.cast() for k, v in val.as_map().items()}
 
 
 def print_resp(resp: ResultSet):
@@ -70,7 +75,7 @@ def print_resp(resp: ResultSet):
     for recode in resp:
         value_list = []
         for col in recode:
-            val = customized_cast_with_dict(col)
+            val = cast(col)
             value_list.append(val)
         output_table.add_row(value_list)
     print(output_table)
