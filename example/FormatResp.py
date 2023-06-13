@@ -30,6 +30,7 @@ def result_to_df(result: ResultSet) -> pd.DataFrame:
         d[col_name] = [x.cast() for x in col_list]
     return pd.DataFrame(d)
 
+
 ################################
 #     Method 2   (Customize)   #
 ################################
