@@ -28,8 +28,7 @@ def result_to_df(result: ResultSet) -> pd.DataFrame:
         col_name = columns[col_num]
         col_list = result.column_values(col_name)
         d[col_name] = [x.cast() for x in col_list]
-    return pd.DataFrame.from_dict(d, columns=columns)
-
+    return pd.DataFrame(d)
 
 ################################
 #     Method 2   (Customize)   #
