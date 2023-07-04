@@ -141,7 +141,7 @@ class ConnectionPool(object):
             try:
                 ok_num = self.get_ok_servers_num()
                 if ok_num == 0:
-                    logging.error('No available server')
+                    logger.error('No available server')
                     return None
                 max_con_per_address = int(
                     self._configs.max_connection_pool_size / ok_num
@@ -192,7 +192,7 @@ class ConnectionPool(object):
                                 self._connections[addr].remove(connection)
                     try_count = try_count + 1
 
-                logging.error('No available connection')
+                logger.error('No available connection')
                 return None
             except Exception as ex:
                 logger.error('Get connection failed: {}'.format(ex))
