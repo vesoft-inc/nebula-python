@@ -203,7 +203,7 @@ while resp.has_next():
 | 3.0.0  | 3.0.0 |
 | 3.1.0  | 3.1.0 |
 | 3.3.0  | 3.3.0 |
-| 3.4.0  | 3.4.0 |
+| 3.4.0  | 3.4.0～ |
 | master  | master |
 
 ## How to contribute to nebula-python
