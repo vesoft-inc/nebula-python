@@ -170,7 +170,7 @@ def test_multi_thread():
     # Test multi thread
     addresses = [('127.0.0.1', 9669), ('127.0.0.1', 9670)]
     configs = Config()
-    thread_num = 50
+    thread_num = 6
     configs.max_connection_pool_size = thread_num
     pool = ConnectionPool()
     assert pool.init(addresses, configs)

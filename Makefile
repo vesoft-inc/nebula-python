@@ -6,7 +6,7 @@
 
 LINUX_BLACK = ~/.local/bin/black
 MAC_BLACK = black
-FMT_EXCLUDE = --extend-exclude nebula3/common/\|nebula3/storage/\|nebula3/graph/\|nebula3/meta\|nebula3/common\|nebula3/fbthrift/
+FMT_EXCLUDE = --extend-exclude nebula3/common/\|nebula3/storage/\|nebula3/graph/\|nebula3/meta\|nebula3/common\|nebula3/fbthrift/\|docs/source/
 
 fmt:
 	pip install --user black==22.8.0
