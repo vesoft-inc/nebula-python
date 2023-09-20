@@ -48,9 +48,10 @@ class TestSession(TestCase):
             time.sleep(2)
 
             # wait for the session space info to be updated to meta service
-            session.execute(
+            resp = session.execute(
                 'CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;'
             )
+            assert resp.is_succeeded(), resp.error_msg()
             time.sleep(10)
             for i in range(0, 5):
                 if i == 3:
