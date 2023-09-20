@@ -51,7 +51,7 @@ class TestSession(TestCase):
             resp = session.execute(
                 'CREATE SPACE IF NOT EXISTS test_session(vid_type=FIXED_STRING(8)); USE test_session;'
             )
-            assert resp.is_succeeded(), resp.error_msg() 
+            assert resp.is_succeeded(), resp.error_msg()
             time.sleep(10)
             for i in range(0, 5):
                 if i == 3:
