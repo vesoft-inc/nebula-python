@@ -51,7 +51,7 @@ jobs:
         working-directory: tests
       - name: Test Example
         run: |
-          docker-compose -f docker-compose.yaml up -d
+          docker-compose -f ../tests/docker-compose.yaml up -d
           sleep 20
           for f in *.py; do python "$f"; done
         working-directory: example
