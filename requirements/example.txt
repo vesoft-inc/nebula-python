@@ -4,7 +4,6 @@
 #
 #    pip-compile requirements/example.in
 #
---index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
 importlib-metadata==6.7.0
     # via prettytable
