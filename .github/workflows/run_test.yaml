@@ -49,6 +49,12 @@ jobs:
           sleep 20
           pytest -s -v -k "SSL" --cov=../nebula3 --cov-report=xml --cov-append
         working-directory: tests
+      - name: Test Example
+        run: |
+          docker-compose -f docker-compose.yaml up -d
+          sleep 20
+          for f in *.py; do python "$f"; done
+        working-directory: example
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
