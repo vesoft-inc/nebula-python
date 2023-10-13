@@ -22,10 +22,10 @@ from FormatResp import print_resp
 def main_test():
     client = None
     try:
-        space_name = 'space_' + threading.current_thread().getName()
+        space_name = 'space_' + threading.current_thread().name
         print(
             'thread name: %s, space_name : %s'
-            % (threading.current_thread().getName(), space_name)
+            % (threading.current_thread().name, space_name)
         )
         # Get one gclient
         client = connection_pool.get_session('root', 'nebula')

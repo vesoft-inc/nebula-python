@@ -12,7 +12,6 @@ from nebula3.common.ttypes import ErrorCode
 from nebula3.gclient.net import Connection
 from nebula3.gclient.net.SessionPool import SessionPool
 from nebula3.Config import SessionPoolConfig
-from nebula3.common import *
 from FormatResp import print_resp
 
 if __name__ == '__main__':

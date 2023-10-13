@@ -12,7 +12,6 @@ import json
 from nebula3.gclient.net import ConnectionPool
 
 from nebula3.Config import Config
-from nebula3.common import *
 from FormatResp import print_resp
 
 if __name__ == '__main__':
