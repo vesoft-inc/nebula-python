@@ -33,7 +33,7 @@ def main_test():
 
         # Create space mySpace and schema
         resp = client.execute(
-            'CREATE SPACE IF NOT EXISTS {}; USE {};'
+            'CREATE SPACE IF NOT EXISTS {} (vid_type=FIXED_STRING(30)); USE {};'
             'CREATE TAG IF NOT EXISTS person(name string, age int);'
             'CREATE EDGE IF NOT EXISTS like(likeness double);'.format(
                 space_name, space_name
