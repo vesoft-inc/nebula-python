@@ -4,7 +4,6 @@
 #
 #    pip-compile requirements/dev.in
 #
---index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
 build==1.0.3
     # via pip-tools
@@ -37,7 +36,7 @@ prettytable==3.7.0
     # via -r requirements/example.in
 pyproject-hooks==1.0.0
     # via build
-pytest==7.4.2
+pytest==6.2.5
     # via -r requirements/test.in
 python-dateutil==2.8.2
     # via pandas
