@@ -14,7 +14,7 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        python-version: [3.7]
+        python-version: [3.7, 3.8]
 
     steps:
       - name: Maximize runner space
@@ -49,7 +49,7 @@ jobs:
           sleep 20
           pytest -s -v -k "SSL" --cov=../nebula3 --cov-report=xml --cov-append
         working-directory: tests
-      - name: Test Example
+      - name: Test example
         run: |
           docker-compose -f ../tests/docker-compose.yaml up -d
           sleep 20
