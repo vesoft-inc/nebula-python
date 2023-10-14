@@ -77,7 +77,7 @@ def main_test():
         # Print the result of query
         print(
             ' \n====== The query result of thread[%s]======\n '
-            % threading.current_thread().getName()
+            % threading.current_thread().name
         )
         print_resp(query_resp)
 
