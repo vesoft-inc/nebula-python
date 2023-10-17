@@ -14,7 +14,7 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        python-version: [3.6, 3.7]
+        python-version: [3.7, 3.8, 3.9]
 
     steps:
       - name: Maximize runner space
@@ -49,6 +49,12 @@ jobs:
           sleep 20
           pytest -s -v -k "SSL" --cov=../nebula3 --cov-report=xml --cov-append
         working-directory: tests
+      - name: Test example
+        run: |
+          docker-compose -f ../tests/docker-compose.yaml up -d
+          sleep 20
+          for f in *.py; do python "$f"; done
+        working-directory: example
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
         with:

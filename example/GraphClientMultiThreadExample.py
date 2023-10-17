@@ -22,10 +22,10 @@ from FormatResp import print_resp
 def main_test():
     client = None
     try:
-        space_name = 'space_' + threading.current_thread().getName()
+        space_name = 'space_' + threading.current_thread().name
         print(
             'thread name: %s, space_name : %s'
-            % (threading.current_thread().getName(), space_name)
+            % (threading.current_thread().name, space_name)
         )
         # Get one gclient
         client = connection_pool.get_session('root', 'nebula')
@@ -33,7 +33,7 @@ def main_test():
 
         # Create space mySpace and schema
         resp = client.execute(
-            'CREATE SPACE IF NOT EXISTS {}; USE {};'
+            'CREATE SPACE IF NOT EXISTS {} (vid_type=FIXED_STRING(30)); USE {};'
             'CREATE TAG IF NOT EXISTS person(name string, age int);'
             'CREATE EDGE IF NOT EXISTS like(likeness double);'.format(
                 space_name, space_name
@@ -77,7 +77,7 @@ def main_test():
         # Print the result of query
         print(
             ' \n====== The query result of thread[%s]======\n '
-            % threading.current_thread().getName()
+            % threading.current_thread().name
         )
         print_resp(query_resp)
 
