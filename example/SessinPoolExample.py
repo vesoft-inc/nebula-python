@@ -12,7 +12,6 @@ from nebula3.common.ttypes import ErrorCode
 from nebula3.gclient.net import Connection
 from nebula3.gclient.net.SessionPool import SessionPool
 from nebula3.Config import SessionPoolConfig
-from nebula3.common import *
 from FormatResp import print_resp
 
 if __name__ == '__main__':
@@ -44,6 +43,9 @@ if __name__ == '__main__':
             'CREATE TAG IF NOT EXISTS person(name string, age int);'
             'CREATE EDGE like (likeness double);'
         )
+
+        time.sleep(6)
+
         # insert vertex
         resp = session_pool.execute(
             'INSERT VERTEX person(name, age) VALUES "Bob":("Bob", 10), "Lily":("Lily", 9)'
