@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'nebula-python-doc'
+project = 'NebulaGraph Python'
 copyright = '2023, Nicole'
 author = 'Nicole'
 release = 'v3'
