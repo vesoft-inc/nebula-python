@@ -401,7 +401,7 @@ services:
       - -c
       - |
         for i in `seq 1 60`;do
-          var=`nebula-console -addr graphd0 -port 9669 -u root -p nebula -enable_ssl=true -ssl_root_ca_path /secrets/test.ca.pem -ssl_cert_path /secrets/test.client.crt -ssl_private_key_path /secrets/test.client.key --ssl_insecure_skip_verify=true -e 'ADD HOSTS "172.28.2.1":9779,"172.28.2.2":9779,"172.28.2.3":9779;'`;
+          var=`nebula-console -addr graphd0 -port 9669 -u root -p nebula -enable_ssl=true -ssl_root_ca_path /secrets/root.crt -ssl_cert_path /secrets/client.crt -ssl_private_key_path /secrets/client.key -e 'ADD HOSTS "172.28.2.1":9779,"172.28.2.2":9779,"172.28.2.3":9779;'`;
           if [[ $$? == 0 ]];then
             break;
           fi;

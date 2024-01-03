@@ -35,20 +35,20 @@ class TestConnectionPool(TestCase):
         # set SSL config
         self.ssl_config = SSL_config()
         self.ssl_config.cert_reqs = ssl.CERT_OPTIONAL
-        self.ssl_config.ca_certs = os.path.join(current_dir, 'secrets/test.ca.pem')
-        self.ssl_config.keyfile = os.path.join(current_dir, 'secrets/test.client.key')
-        self.ssl_config.certfile = os.path.join(current_dir, 'secrets/test.client.crt')
+        self.ssl_config.ca_certs = os.path.join(current_dir, 'secrets/root.crt')
+        self.ssl_config.keyfile = os.path.join(current_dir, 'secrets/client.key')
+        self.ssl_config.certfile = os.path.join(current_dir, 'secrets/client.crt')
         # self signed SSL config
         self.ssl_selfs_signed_config = SSL_config()
         self.ssl_selfs_signed_config.cert_reqs = ssl.CERT_OPTIONAL
         self.ssl_selfs_signed_config.ca_certs = os.path.join(
-            current_dir, 'secrets/test.self-signed.pem'
+            current_dir, 'secrets/root.crt'
         )
         self.ssl_selfs_signed_config.keyfile = os.path.join(
-            current_dir, 'secrets/test.self-signed.key'
+            current_dir, 'secrets/client.key'
         )
         self.ssl_selfs_signed_config.certfile = os.path.join(
-            current_dir, 'secrets/test.self-signed.pem'
+            current_dir, 'secrets/client.crt'
         )
 
     def test_ssl_with_ca(self):
