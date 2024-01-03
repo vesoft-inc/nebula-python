@@ -32,15 +32,9 @@ ssl_config.certfile = os.path.join(current_dir, 'secrets/client.crt')
 ssl_selfs_signed_config = SSL_config()
 ssl_selfs_signed_config.cert_reqs = ssl.CERT_OPTIONAL
 ssl_selfs_signed_config.cert_reqs = ssl.CERT_OPTIONAL
-ssl_selfs_signed_config.ca_certs = os.path.join(
-    current_dir, 'secrets/root.crt'
-)
-ssl_selfs_signed_config.keyfile = os.path.join(
-    current_dir, 'secrets/client.key'
-)
-ssl_selfs_signed_config.certfile = os.path.join(
-    current_dir, 'secrets/client.crt'
-)
+ssl_selfs_signed_config.ca_certs = os.path.join(current_dir, 'secrets/root.crt')
+ssl_selfs_signed_config.keyfile = os.path.join(current_dir, 'secrets/client.key')
+ssl_selfs_signed_config.certfile = os.path.join(current_dir, 'secrets/client.crt')
 
 host = '127.0.0.1'
 port = 9669
