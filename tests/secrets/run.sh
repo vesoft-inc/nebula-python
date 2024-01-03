@@ -76,7 +76,7 @@ EOF
 			start=$(($start+1))
 		done
 	fi
-	openssl genrsa -out ${cert_type}.key 1024
+	openssl genrsa -out ${cert_type}.key 2048
 	openssl req -new -config ${cert_type}.cnf -out ${cert_type}.csr -key ${cert_type}.key
 	if [ ${cert_type} == "root" ]; then
 		openssl x509 -req -in ${cert_type}.csr -out ${cert_type}.crt -extfile ${cert_type}.cnf -extensions v3_ca -signkey ${cert_type}.key -CAcreateserial -days 3650
