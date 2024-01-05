@@ -1399,12 +1399,18 @@ class Node(BaseObject):
         """
         return True if tag in self._tag_indexes.keys() else False
 
-    def properties(self, tag):
+    def properties(self, tag = None):
         """get all properties of the specified tag
 
         :param tag: the tag name
         :return: the properties
         """
+        if tag is None:
+            if len(self.tags) == 1:
+                tag = self.tags[0]
+            else:
+                raise InvalidKeyException("tag name is required")
+
         if tag not in self._tag_indexes.keys():
             raise InvalidKeyException(tag)
 
