@@ -1,0 +1,19 @@
+<map id="get_connection" name="get_connection">
+<area shape="rect" id="node1" title=" " alt="" coords="5,177,127,204"/>
+<area shape="rect" id="node2" href="$d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#a1020dd76d2a01507fdf35779a6a94e1e" title=" " alt="" coords="210,5,367,32"/>
+<area shape="rect" id="node3" href="$d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a1020dd76d2a01507fdf35779a6a94e1e" title=" " alt="" coords="188,56,389,112"/>
+<area shape="rect" id="node4" href="$df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#af361f4a56eaad760ee3a64d334ad0832" title=" " alt="" coords="175,137,403,178"/>
+<area shape="rect" id="node15" href="$d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#af361f4a56eaad760ee3a64d334ad0832" title=" " alt="" coords="186,202,391,243"/>
+<area shape="rect" id="node16" href="$d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#ab7f2d41fb52800892ea84f03b7d0a029" title=" " alt="" coords="263,268,314,295"/>
+<area shape="rect" id="node17" href="$d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#ab7f2d41fb52800892ea84f03b7d0a029" title=" " alt="" coords="188,319,389,361"/>
+<area shape="rect" id="node5" href="$df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a85bca091b7a152eb0db421d3220306f6" title=" " alt="" coords="451,137,679,178"/>
+<area shape="rect" id="node6" href="$df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a9b3ef4774918efa566dd8a6936831383" title=" " alt="" coords="727,71,955,113"/>
+<area shape="rect" id="node8" href="$d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#aea1363b3a0c165c33e136b0b7df5d587" title=" " alt="" coords="738,137,943,178"/>
+<area shape="rect" id="node10" href="$d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#aea1363b3a0c165c33e136b0b7df5d587" title=" " alt="" coords="740,283,941,339"/>
+<area shape="rect" id="node7" href="$df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a41dfe528cb6e93f18e8ba44fa8d0f43c" title=" " alt="" coords="1003,71,1231,113"/>
+<area shape="rect" id="node9" href="$d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#aa3b0a5533a258674ec3c555b9d288b62" title=" " alt="" coords="1014,137,1219,178"/>
+<area shape="rect" id="node11" href="$d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#afeaa9b70455bafe8c2755c1d3d70078c" title=" " alt="" coords="1005,203,1228,259"/>
+<area shape="rect" id="node12" href="$d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a4e256500106285439482a5730df1034f" title=" " alt="" coords="1016,283,1217,339"/>
+<area shape="rect" id="node13" href="$d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a1be87da6516c31d267b0e7d262d28986" title=" " alt="" coords="1016,363,1217,419"/>
+<area shape="rect" id="node14" href="$d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a228b911409bd2769ed9d6b005eeb2ed6" title=" " alt="" coords="1013,443,1221,499"/>
+</map>
