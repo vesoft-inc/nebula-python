@@ -50,7 +50,7 @@ jobs:
         run: |
           docker-compose -f tests/docker-compose.yaml up -d
           sleep 20
-          for f in example/*.py; do python "$f"; done
+          for f in example/*.py; do pdm run python "$f"; done
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
