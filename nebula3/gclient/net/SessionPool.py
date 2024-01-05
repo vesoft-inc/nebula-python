@@ -124,7 +124,7 @@ class SessionPool(object):
             if self._ssl_configs is None:
                 conn.open(address[0], address[1], 1000)
             else:
-                conn.open_SSL(address[0], address[1], 1000, self._ssl_configs)
+                conn.open_SSL(address[0], address[1], 1000, None, self._ssl_configs)
             conn.close()
             return True
         except Exception as ex:

@@ -82,7 +82,7 @@ class ConnectionPool(object):
             for i in range(0, conns_per_address):
                 connection = Connection()
                 connection.open_SSL(
-                    addr[0], addr[1], self._configs.timeout, self._ssl_configs
+                    addr[0], addr[1], self._configs.timeout, configs.version,self._ssl_configs
                 )
                 self._connections[addr].append(connection)
         return True
@@ -180,6 +180,7 @@ class ConnectionPool(object):
                                 addr[0],
                                 addr[1],
                                 self._configs.timeout,
+                                self._configs.version,
                                 self._ssl_configs,
                             )
                             connection.is_used = True
@@ -206,7 +207,7 @@ class ConnectionPool(object):
         """
         try:
             conn = Connection()
-            conn.open_SSL(address[0], address[1], 1000, self._ssl_configs)
+            conn.open_SSL(address[0], address[1], 1000, self._configs.version,self._ssl_configs)
             conn.close()
             return True
         except Exception as ex:

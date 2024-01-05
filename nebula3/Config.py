@@ -25,6 +25,8 @@ class Config(object):
     # the interval to check idle time connection, unit second, -1 means no check
     interval_check = -1
 
+    handshakeKey = None
+
 
 class SSL_config(object):
     """configs used to Initialize a TSSLSocket.

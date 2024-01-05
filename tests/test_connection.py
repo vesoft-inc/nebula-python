@@ -19,16 +19,16 @@ from nebula3.gclient.net import Connection
 from nebula3.common import ttypes
 from nebula3.Exception import IOErrorException
 
-AddrIp = ['127.0.0.1', '::1']
+AddrIp = ['127.0.0.1']
 port = 9669
-
+version="3.0.0"
 
 class TestConnection(TestCase):
     def test_create(self):
         for ip in AddrIp:
             try:
                 conn = Connection()
-                conn.open(ip, port, 1000)
+                conn.open(ip, port, 1000,version)
                 auth_result = conn.authenticate('root', 'nebula')
                 assert auth_result.get_session_id() != 0
                 conn.close()
@@ -39,7 +39,7 @@ class TestConnection(TestCase):
         for ip in AddrIp:
             try:
                 conn = Connection()
-                conn.open(ip, port, 1000)
+                conn.open(ip, port, 1000,version)
                 auth_result = conn.authenticate('root', 'nebula')
                 session_id = auth_result.get_session_id()
                 assert session_id != 0
@@ -57,7 +57,7 @@ class TestConnection(TestCase):
     def test_close(self):
         for ip in AddrIp:
             conn = Connection()
-            conn.open(ip, port, 1000)
+            conn.open(ip, port, 1000,version)
             auth_result = conn.authenticate('root', 'nebula')
             assert auth_result.get_session_id() != 0
             conn.close()

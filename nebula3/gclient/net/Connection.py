@@ -40,23 +40,26 @@ class Connection(object):
         self._port = None
         self._timeout = 0
         self._ssl_conf = None
+        self.version = None
 
-    def open(self, ip, port, timeout):
+    def open(self, ip, port, timeout, version=None):
         """open the connection
 
         :param ip: the server ip
         :param port: the server port
         :param timeout: the timeout for connect and execute
+        :param version: the server version
         :return: void
         """
-        self.open_SSL(ip, port, timeout, None)
+        self.open_SSL(ip, port, timeout, version, None)
 
-    def open_SSL(self, ip, port, timeout, ssl_config=None):
+    def open_SSL(self, ip, port, timeout, version=None, ssl_config=None):
         """open the SSL connection
 
         :param ip: the server ip
         :param port: the server port
         :param timeout: the timeout for connect and execute
+        :param version: the server version
         :ssl_config: configs for SSL
         :return: void
         """
@@ -64,6 +67,7 @@ class Connection(object):
         self._port = port
         self._timeout = timeout
         self._ssl_conf = ssl_config
+        self.version = version
         try:
             if ssl_config is not None:
                 s = TSSLSocket.TSSLSocket(
@@ -89,7 +93,9 @@ class Connection(object):
             header_transport.open()
 
             self._connection = GraphService.Client(protocol)
-            resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
+            verifyClientVersionReq = VerifyClientVersionReq()
+            verifyClientVersionReq.version = version
+            resp = self._connection.verifyClientVersion(verifyClientVersionReq)
             if resp.error_code != ErrorCode.SUCCEEDED:
                 self._connection._iprot.trans.close()
                 raise ClientServerIncompatibleException(resp.error_msg)
@@ -103,9 +109,9 @@ class Connection(object):
         """
         self.close()
         if self._ssl_conf is not None:
-            self.open_SSL(self._ip, self._port, self._timeout, self._ssl_conf)
+            self.open_SSL(self._ip, self._port, self._timeout, self.version,self._ssl_conf)
         else:
-            self.open(self._ip, self._port, self._timeout)
+            self.open(self._ip, self._port, self._timeout,self.version)
 
     def authenticate(self, user_name, password):
         """authenticate to graphd
