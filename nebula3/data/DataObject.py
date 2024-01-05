@@ -1399,7 +1399,7 @@ class Node(BaseObject):
         """
         return True if tag in self._tag_indexes.keys() else False
 
-    def properties(self, tag = None):
+    def properties(self, tag=None):
         """get all properties of the specified tag
 
         :param tag: the tag name
