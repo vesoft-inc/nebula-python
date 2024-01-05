@@ -1,5 +1,4 @@
-
 /* Custom Favicon */
 link[rel="icon"] {
-    href: url('https://docs-cdn.nebula-graph.com.cn/figures/favicon.ico');
+    href: url('../pics/favicon.ico');
 }
