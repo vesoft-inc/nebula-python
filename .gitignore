@@ -114,3 +114,5 @@ nebula/graph.thrift
 # CI data
 tests/data
 tests/logs
+
+.DS_Store
