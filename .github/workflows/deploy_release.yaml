@@ -10,31 +10,26 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v4
+    - uses: actions/checkout@v3
+    - uses: pdm-project/setup-pdm@v3
+      with:
+        python-version: '3.x'
+        cache: true
     - name: Install dependencies
-      run: |
-        python3 -m pip install --upgrade pip
-        pip3 install setuptools wheel twine
-        pip install .
-        pip install -r requirements/dev.txt
+      run: pdm install
     - name: Test with pytest
       run: |
-        docker-compose -f docker-compose.yaml up -d
+        docker-compose -f tests/docker-compose.yaml up -d
         sleep 20
-        pytest -s -v -k "not SSL"
-      working-directory: tests
+        pdm test
     - name: Test SSL connection with pytest
       run: |
-        enable_ssl=true docker-compose -f docker-compose-ssl.yaml up -d
+        enable_ssl=true docker-compose -f tests/docker-compose-ssl.yaml up -d
         sleep 20
-        pytest -s -v -k "SSL"
-      working-directory: tests
+        pdm test-ssl
 
     - name: Build and publish
       env:
-        TWINE_USERNAME: ${{ secrets.PYPI_NAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      run: |
-        python3 setup.py sdist bdist_wheel
-        twine upload dist/*
+        PDM_PUBLISH_USERNAME: ${{ secrets.PYPI_NAME }}
+        PDM_PUBLISH_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: pdm publish
