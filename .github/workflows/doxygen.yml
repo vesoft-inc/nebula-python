@@ -1,0 +1,74 @@
+name: Generate API reference via Doxygen and push to GitHub Pages
+env:
+  # Specify the doc version to which the API reference belongs
+  doc_version: 3.6.0
+on:
+  push:
+    branches:
+        # Remember to update the branch name when you create a new branch
+      - release-3.4
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # fetch all commits/branches for gitversion
+
+    - name: Extract branch name
+      run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+       
+    - name: Install Doxygen
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y doxygen graphviz
+
+    # Generate HTML files   
+    - name: Generate Documentation
+      run: |
+        echo "OUTPUT_DIRECTORY=$BRANCH_NAME" >> doxygen-config
+        doxygen doxygen-config
+
+    # Deploy the generated HTML files to the gh-pages branch
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ${{ env.BRANCH_NAME }}/html
+        destination_dir: ${{ env.BRANCH_NAME }}
+
+    # - name: show gh-pages branch
+    #   run: |
+    #     git branch
+    #     git checkout .
+    #     git checkout gh-pages
+   
+    # # Compresses HTML files into a tar.gz file
+    # - name: compress api reference
+    #   run: |
+    #     tar -zcvf $BRANCH_NAME.tar.gz $BRANCH_NAME
+        
+    # - name: transfer api reference
+    #   uses: appleboy/scp-action@master
+    #   with:
+    #     host: 20.163.77.63
+    #     username: azureuser
+    #     password: ${{ secrets.ENSITE_PASSWORD }}
+    #     port: 404
+    #     source: $BRANCH_NAME.tar.gz
+    #     # Return error if the target doc version does not already exist
+    #     target: /var/www/ent-docs/${{ env.doc_version }}/
+
+    # - name: uncompress ap reference
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: 20.163.77.63
+    #     username: azureuser
+    #     password: ${{ secrets.ENSITE_PASSWORD }}
+    #     port: 404
+    #     script: |
+    #       mkdir -p /var/www/ent-docs/${{ env.doc_version}}/api/python/
+    #       tar -zxf /var/www/ent-docs/${{ env.doc_version}}/$BRANCH_NAME.tar.gz -C /var/www/ent-docs/${{ env.doc_version}}/api/python/
