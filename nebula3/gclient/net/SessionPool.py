@@ -373,7 +373,7 @@ class SessionPool(object):
             except AuthFailedException as e:
                 # if auth failed because of credentials, close the pool
                 if e.message.find("Invalid password") or e.message.find(
-                    "User not exist"
+                        "User not exist"
                 ):
                     logger.error(
                         'Authentication failed, because of bad credentials, close the pool {}'.format(

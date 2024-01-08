@@ -40,12 +40,13 @@ host = '127.0.0.1'
 port = 9669
 handshakeKey = "3.0.0"
 
+
 @pytest.mark.SSL
 class TestSSLConnection(TestCase):
     def test_create(self):
         try:
             conn = Connection()
-            conn.open_SSL(host, port, 1000, handshakeKey,ssl_config)
+            conn.open_SSL(host, port, 1000, handshakeKey, ssl_config)
             auth_result = conn.authenticate('root', 'nebula')
             assert auth_result.get_session_id() != 0
             conn.close()
@@ -54,7 +55,7 @@ class TestSSLConnection(TestCase):
 
         try:
             conn = Connection()
-            conn.open_SSL(host, port, 1000,handshakeKey, ssl_config)
+            conn.open_SSL(host, port, 1000, handshakeKey, ssl_config)
             auth_result = conn.authenticate('root', 'nebula')
             session_id = auth_result.get_session_id()
             assert session_id != 0
