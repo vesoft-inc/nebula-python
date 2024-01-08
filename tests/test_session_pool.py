@@ -15,6 +15,7 @@ from nebula3.common.ttypes import ErrorCode
 from nebula3.Config import SessionPoolConfig
 from nebula3.Exception import (
     InValidHostname,
+    SessionException,
 )
 from nebula3.gclient.net import Connection
 from nebula3.gclient.net.SessionPool import SessionPool
@@ -142,6 +143,33 @@ class TestSessionPoolBasic(TestCase):
         resp = session_pool.execute("SHOW HOSTS;")
         assert resp.is_succeeded()
         assert resp.space_name() == "session_pool_test"
+
+    def test_session_renew_when_invalid(self):
+        # This test is used to test if the session will be renewed when the session is invalid.
+        session_pool = SessionPool(
+            "root", "nebula", "session_pool_test", self.addresses
+        )
+        configs = SessionPoolConfig()
+        configs.min_size = 1
+        configs.max_size = 1
+        assert session_pool.init(configs)
+
+        # kill all sessions of the pool, size 1 here though
+        for session in session_pool._idle_sessions:
+            session_id = session.session_id
+            session.execute(f"KILL SESSION {session_id}")
+        try:
+            session_pool.execute("SHOW HOSTS;")
+        except Exception as ex:
+            assert isinstance(ex, SessionException), "expect to get SessionException"
+        # The only session(size=1) should be renewed and usable
+        # - session_id is not in the pool
+        # - session_pool is usable
+        assert (
+            session_id not in session_pool._idle_sessions
+        ), "session should be renewed"
+        resp = session_pool.execute("SHOW HOSTS;")
+        assert resp.is_succeeded(), "session_pool should be usable after renewing"
 
 
 def test_session_pool_multi_thread():

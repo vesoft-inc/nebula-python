@@ -10,6 +10,7 @@ import time
 from nebula3.Exception import (
     IOErrorException,
     NotValidConnectionException,
+    ExecutionErrorException,
 )
 
 from nebula3.data.ResultSet import ResultSet
@@ -18,7 +19,7 @@ from nebula3.logger import logger
 
 
 class Session(object):
-    def __init__(self, connection, auth_result: AuthResult, pool, retry_connect=True):
+    def __init__(self, connection, auth_result: AuthResult, pool, retry_connect=True, retry_times=3):
         self._session_id = auth_result.get_session_id()
         self._timezone_offset = auth_result.get_timezone_offset()
         self._connection = connection
@@ -26,6 +27,7 @@ class Session(object):
         # connection the where the session was created, if session pool was used
         self._pool = pool
         self._retry_connect = retry_connect
+        self._retry_times = retry_times
         # the time stamp when the session was added to the idle list of the session pool
         self._idle_time_start = 0
 
@@ -65,6 +67,23 @@ class Session(object):
                         timezone_offset=self._timezone_offset,
                     )
             raise
+        except ExecutionErrorException as eee:
+            retry_count = 0
+            while retry_count < self._retry_times:
+                try:
+                    resp = self._connection.execute_parameter(self._session_id, stmt, params)
+                    end_time = time.time()
+                    return ResultSet(
+                        resp,
+                        all_latency=int((end_time - start_time) * 1000000),
+                        timezone_offset=self._timezone_offset,
+                    )
+                except ExecutionErrorException:
+                    if retry_count >= self._retry_times - 1:
+                        raise eee
+                    else:
+                        retry_count += 1
+                        continue
         except Exception:
             raise
 
@@ -222,6 +241,18 @@ class Session(object):
                     )
                     return resp_json
             raise
+        except ExecutionErrorException as eee:
+            retry_count = 0
+            while retry_count < self._retry_times:
+                try:
+                    resp = self._connection.execute_json_with_parameter(self._session_id, stmt, params)
+                    return resp
+                except ExecutionErrorException:
+                    if retry_count >= self._retry_times - 1:
+                        raise eee
+                    else:
+                        retry_count += 1
+                        continue
         except Exception:
             raise
 
