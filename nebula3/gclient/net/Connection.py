@@ -40,26 +40,26 @@ class Connection(object):
         self._port = None
         self._timeout = 0
         self._ssl_conf = None
-        self.version = None
+        self.handshakeKey = None
 
-    def open(self, ip, port, timeout, version=None):
+    def open(self, ip, port, timeout, handshakeKey=None):
         """open the connection
 
         :param ip: the server ip
         :param port: the server port
         :param timeout: the timeout for connect and execute
-        :param version: the server version
+        :param handshakeKey: the server version
         :return: void
         """
-        self.open_SSL(ip, port, timeout, version, None)
+        self.open_SSL(ip, port, timeout, handshakeKey, None)
 
-    def open_SSL(self, ip, port, timeout, version=None, ssl_config=None):
+    def open_SSL(self, ip, port, timeout, handshakeKey=None, ssl_config=None):
         """open the SSL connection
 
         :param ip: the server ip
         :param port: the server port
         :param timeout: the timeout for connect and execute
-        :param version: the server version
+        :param handshakeKey: the server version
         :ssl_config: configs for SSL
         :return: void
         """
@@ -67,7 +67,7 @@ class Connection(object):
         self._port = port
         self._timeout = timeout
         self._ssl_conf = ssl_config
-        self.version = version
+        self.handshakeKey = handshakeKey
         try:
             if ssl_config is not None:
                 s = TSSLSocket.TSSLSocket(
@@ -94,7 +94,7 @@ class Connection(object):
 
             self._connection = GraphService.Client(protocol)
             verifyClientVersionReq = VerifyClientVersionReq()
-            verifyClientVersionReq.version = version
+            verifyClientVersionReq.version = handshakeKey
             resp = self._connection.verifyClientVersion(verifyClientVersionReq)
             if resp.error_code != ErrorCode.SUCCEEDED:
                 self._connection._iprot.trans.close()
@@ -109,9 +109,9 @@ class Connection(object):
         """
         self.close()
         if self._ssl_conf is not None:
-            self.open_SSL(self._ip, self._port, self._timeout, self.version,self._ssl_conf)
+            self.open_SSL(self._ip, self._port, self._timeout, self.handshakeKey, self._ssl_conf)
         else:
-            self.open(self._ip, self._port, self._timeout,self.version)
+            self.open(self._ip, self._port, self._timeout, self.handshakeKey)
 
     def authenticate(self, user_name, password):
         """authenticate to graphd
