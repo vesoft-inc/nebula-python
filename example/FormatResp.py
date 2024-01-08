@@ -10,6 +10,7 @@ from typing import Dict
 
 import pandas as pd
 import prettytable
+
 from nebula3.data.DataObject import Value, ValueWrapper
 from nebula3.data.ResultSet import ResultSet
 

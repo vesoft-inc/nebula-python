@@ -7,15 +7,16 @@
 
 
 import time
-from nebula3.common.ttypes import ErrorCode
 
-from nebula3.gclient.net import Connection
-from nebula3.gclient.net.SessionPool import SessionPool
-from nebula3.Config import SessionPoolConfig
 from FormatResp import print_resp
 
-if __name__ == '__main__':
-    ip = '127.0.0.1'
+from nebula3.common.ttypes import ErrorCode
+from nebula3.Config import SessionPoolConfig
+from nebula3.gclient.net import Connection
+from nebula3.gclient.net.SessionPool import SessionPool
+
+if __name__ == "__main__":
+    ip = "127.0.0.1"
     port = 9669
 
     try:
@@ -24,24 +25,24 @@ if __name__ == '__main__':
         # prepare space
         conn = Connection()
         conn.open(ip, port, 1000)
-        auth_result = conn.authenticate('root', 'nebula')
+        auth_result = conn.authenticate("root", "nebula")
         assert auth_result.get_session_id() != 0
         resp = conn.execute(
             auth_result._session_id,
-            'CREATE SPACE IF NOT EXISTS session_pool_test(vid_type=FIXED_STRING(30))',
+            "CREATE SPACE IF NOT EXISTS session_pool_test(vid_type=FIXED_STRING(30))",
         )
         assert resp.error_code == ErrorCode.SUCCEEDED
         # insert data need to sleep after create schema
         time.sleep(10)
 
         # init session pool
-        session_pool = SessionPool('root', 'nebula', 'session_pool_test', [(ip, port)])
+        session_pool = SessionPool("root", "nebula", "session_pool_test", [(ip, port)])
         assert session_pool.init(config)
 
         # add schema
         resp = session_pool.execute(
-            'CREATE TAG IF NOT EXISTS person(name string, age int);'
-            'CREATE EDGE like (likeness double);'
+            "CREATE TAG IF NOT EXISTS person(name string, age int);"
+            "CREATE EDGE like (likeness double);"
         )
 
         time.sleep(6)
@@ -69,12 +70,12 @@ if __name__ == '__main__':
         # drop space
         conn.execute(
             auth_result._session_id,
-            'DROP SPACE session_pool_test',
+            "DROP SPACE session_pool_test",
         )
 
         print("Example finished")
 
-    except Exception as x:
+    except Exception:
         import traceback
 
         print(traceback.format_exc())

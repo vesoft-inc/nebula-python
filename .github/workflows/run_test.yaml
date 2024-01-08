@@ -10,11 +10,11 @@ on:
 
 jobs:
   ci:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       max-parallel: 2
       matrix:
-        python-version: [3.9, '3.10', 3.11, 3.12]
+        python-version: [3.7, 3.8, 3.9, '3.10', 3.11, 3.12]
 
     steps:
       - name: Maximize runner space
@@ -27,35 +27,48 @@ jobs:
 
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: pdm-project/setup-pdm@v3
         with:
           python-version: ${{ matrix.python-version }}
-      - name: lint
-        run: make fmt-check
+          cache: true
+
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install .
-          pip install -r requirements/dev.txt
+        run: pdm install
+      - name: lint
+        run: pdm fmt-check
       - name: Test with pytest
         run: |
-          docker-compose -f docker-compose.yaml up -d
+          docker-compose -f tests/docker-compose.yaml up -d
           sleep 20
-          pytest -s -v -k "not SSL" --cov=../nebula3 --cov-report=xml --cov-append
-        working-directory: tests
+          pdm test
       - name: Test SSL connection with pytest
         run: |
-          enable_ssl=true docker-compose -f docker-compose-ssl.yaml up -d
+          enable_ssl=true docker-compose -f tests/docker-compose-ssl.yaml up -d
           sleep 20
-          pytest -s -v -k "SSL" --cov=../nebula3 --cov-report=xml --cov-append
-        working-directory: tests
-      - name: Test example
-        run: |
-          docker-compose -f ../tests/docker-compose.yaml up -d
-          sleep 20
-          for f in *.py; do python "$f"; done
-        working-directory: example
+          pdm test-ssl
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: ./tests/coverage.xml
+          files: coverage.xml
+
+  example:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11, 3.12]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: pdm-project/setup-pdm@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: true
+      - name: Install dependencies
+        run: pdm install -G example
+      - name: Setup containers
+        run: |
+          docker-compose -f tests/docker-compose.yaml up -d
+          sleep 20
+      - name: Test example
+        run: |
+          for f in example/*.py; do pdm run python "$f"; done
