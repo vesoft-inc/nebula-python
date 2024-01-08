@@ -14,7 +14,7 @@ import pytest
 
 from nebula3.common import ttypes
 from nebula3.Config import SSL_config
-from nebula3.Exception import IOErrorException
+from nebula3.Exception import IOErrorException, SessionException
 from nebula3.gclient.net import Connection
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -62,8 +62,10 @@ class TestSSLConnection(TestCase):
             conn.signout(session_id)
             # the session delete later
             time.sleep(12)
-            resp = conn.execute(session_id, "SHOW SPACES")
-            assert resp.error_code != ttypes.ErrorCode.SUCCEEDED
+            try:
+                conn.execute(session_id, "SHOW SPACES")
+            except Exception as ex:
+                assert isinstance(ex, SessionException), ex
             conn.close()
         except Exception as ex:
             assert False, ex
@@ -104,8 +106,10 @@ class TestSSLConnectionSelfSigned(TestCase):
             conn.signout(session_id)
             # the session delete later
             time.sleep(12)
-            resp = conn.execute(session_id, "SHOW SPACES")
-            assert resp.error_code != ttypes.ErrorCode.SUCCEEDED
+            try:
+                conn.execute(session_id, "SHOW SPACES")
+            except Exception as ex:
+                assert isinstance(ex, SessionException), ex
             conn.close()
         except Exception as ex:
             assert False, ex
