@@ -156,7 +156,7 @@ class TestSessionPoolBasic(TestCase):
 
         # kill all sessions of the pool, size 1 here though
         for session in session_pool._idle_sessions:
-            session_id = session.session_id
+            session_id = session._session_id
             session.execute(f"KILL SESSION {session_id}")
         try:
             session_pool.execute("SHOW HOSTS;")
@@ -170,6 +170,7 @@ class TestSessionPoolBasic(TestCase):
         ), "session should be renewed"
         resp = session_pool.execute("SHOW HOSTS;")
         assert resp.is_succeeded(), "session_pool should be usable after renewing"
+        session_pool.close()
 
 
 def test_session_pool_multi_thread():

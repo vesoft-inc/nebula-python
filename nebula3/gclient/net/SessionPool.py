@@ -180,7 +180,7 @@ class SessionPool(object):
                 session = self._get_idle_session()
                 if session is None:
                     raise RuntimeError('Get session failed')
-                self._add_session_to_active(session)
+                self._add_session_to_idle(session)
             raise se
 
         except Exception as e:
@@ -279,7 +279,7 @@ class SessionPool(object):
                 session = self._get_idle_session()
                 if session is None:
                     raise RuntimeError('Get session failed')
-                self._add_session_to_active(session)
+                self._add_session_to_idle(session)
             raise se
         except Exception as e:
             logger.error('Execute failed: {}'.format(e))

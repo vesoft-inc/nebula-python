@@ -187,12 +187,6 @@ class Connection(object):
         """
         try:
             resp = self._connection.executeJsonWithParameter(session_id, stmt, params)
-            if resp.error_code == ErrorCode.E_SESSION_INVALID:
-                raise SessionException(resp.error_code, resp.error_msg)
-            if resp.error_code == ErrorCode.E_SESSION_TIMEOUT:
-                raise SessionException(resp.error_code, resp.error_msg)
-            if resp.error_code == ErrorCode.E_EXECUTION_ERROR:
-                raise ExecutionErrorException(resp.error_msg)
             return resp
         except Exception as te:
             if isinstance(te, TTransportException):

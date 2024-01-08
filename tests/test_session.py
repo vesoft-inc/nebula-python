@@ -99,7 +99,7 @@ class TestSession(TestCase):
         try:
             session = self.pool.get_session(self.user_name, self.password)
             another_session = self.pool.get_session(self.user_name, self.password)
-            session_id = session.session_id
+            session_id = session._session_id
             another_session.execute(f"KILL SESSION {session_id}")
             session.execute("SHOW HOSTS")
         except Exception as ex:
@@ -107,25 +107,24 @@ class TestSession(TestCase):
 
     def test_6_execute_exception(self):
         # test ExecutionErrorException will be raised when execute error
-        # we need to mock a query's response code to -1005
-        import unittest
-        from unittest.mock import call
+        # we need to mock a query's response code to trigger ExecutionErrorException
+        from unittest.mock import Mock, patch
 
         try:
             session = self.pool.get_session(self.user_name, self.password)
-            # Mocking a remote call that will trigger an ExecutionErrorException
-            with unittest.mock.patch(
-                "nebula3.gclient.net.Connection._connection.executeWithParameter"
+            # Mocking the Connection.execute_parameter method
+            with patch(
+                'nebula3.graph.GraphService.Client.executeWithParameter'
             ) as mock_execute:
-                mock_execute.return_value.error_code = (
-                    ExecutionErrorException.E_EXECUTION_ERROR
-                )
+                mock_response = Mock()
+                mock_response.error_code = ExecutionErrorException.E_EXECUTION_ERROR
+                mock_execute.return_value = mock_response
                 session.execute("SHOW HOSTS")
-                # Assert that executeWithParameter was called 3 times (retry mechanism)
+                # Assert that execute_parameter was called 3 times (retry mechanism)
                 assert (
                     mock_execute.call_count == 3
-                ), "executeWithParameter was not retried 3 times"
+                ), "execute_parameter was not retried 3 times"
         except ExecutionErrorException as ex:
             assert True, "ExecutionErrorException triggered as expected"
         except Exception as ex:
-            assert False, "Unexpected exception: " + str(ex)
+            assert False, f"Unexpected exception: {str(ex)}"
