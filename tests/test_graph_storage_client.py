@@ -66,9 +66,8 @@ class TestGraphStorageClient(object):
             for id in range(1000):
                 vid = "person" + str(id)
                 cmd = (
-                    "INSERT VERTEX person(name, age) " 'VALUES "{}":("{}", {})'.format(
-                        vid, vid, id
-                    )
+                    "INSERT VERTEX person(name, age) "
+                    'VALUES "{}":("{}", {})'.format(vid, vid, id)
                 )
                 cls.execute_with_retry(conn, session_id, cmd)
             for id in range(1000):
