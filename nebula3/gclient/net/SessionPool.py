@@ -172,7 +172,10 @@ class SessionPool(object):
 
             return resp
         except SessionException as se:
-            if se.type in [SessionException.E_SESSION_INVALID, SessionException.E_SESSION_TIMEOUT]:
+            if se.type in [
+                SessionException.E_SESSION_INVALID,
+                SessionException.E_SESSION_TIMEOUT,
+            ]:
                 self._active_sessions.remove(session)
                 session = self._get_idle_session()
                 if session is None:
@@ -268,7 +271,10 @@ class SessionPool(object):
 
             return resp
         except SessionException as se:
-            if se.type in [SessionException.E_SESSION_INVALID, SessionException.E_SESSION_TIMEOUT]:
+            if se.type in [
+                SessionException.E_SESSION_INVALID,
+                SessionException.E_SESSION_TIMEOUT,
+            ]:
                 self._active_sessions.remove(session)
                 session = self._get_idle_session()
                 if session is None:

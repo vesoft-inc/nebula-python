@@ -19,7 +19,14 @@ from nebula3.logger import logger
 
 
 class Session(object):
-    def __init__(self, connection, auth_result: AuthResult, pool, retry_connect=True, retry_times=3):
+    def __init__(
+        self,
+        connection,
+        auth_result: AuthResult,
+        pool,
+        retry_connect=True,
+        retry_times=3,
+    ):
         self._session_id = auth_result.get_session_id()
         self._timezone_offset = auth_result.get_timezone_offset()
         self._connection = connection
@@ -71,7 +78,9 @@ class Session(object):
             retry_count = 0
             while retry_count < self._retry_times:
                 try:
-                    resp = self._connection.execute_parameter(self._session_id, stmt, params)
+                    resp = self._connection.execute_parameter(
+                        self._session_id, stmt, params
+                    )
                     end_time = time.time()
                     return ResultSet(
                         resp,
@@ -245,7 +254,9 @@ class Session(object):
             retry_count = 0
             while retry_count < self._retry_times:
                 try:
-                    resp = self._connection.execute_json_with_parameter(self._session_id, stmt, params)
+                    resp = self._connection.execute_json_with_parameter(
+                        self._session_id, stmt, params
+                    )
                     return resp
                 except ExecutionErrorException:
                     if retry_count >= self._retry_times - 1:

@@ -71,6 +71,7 @@ class InValidHostname(Exception):
         Exception.__init__(self, message)
         self.message = 'Invalid hostname: {}'.format(message)
 
+
 class SessionException(Exception):
     E_SESSION_INVALID = -1002
     E_SESSION_TIMEOUT = -1003
@@ -79,6 +80,7 @@ class SessionException(Exception):
         Exception.__init__(self, message)
         self.type = code
         self.message = message
+
 
 class ExecutionErrorException(Exception):
     E_EXECUTION_ERROR = -1005
