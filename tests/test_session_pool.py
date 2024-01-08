@@ -14,7 +14,7 @@ import threading
 import time
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-root_dir = os.path.join(current_dir, '..')
+root_dir = os.path.join(current_dir, "..")
 sys.path.insert(0, root_dir)
 
 from unittest import TestCase
@@ -32,34 +32,35 @@ from nebula3.Exception import (
 # ports for test
 test_port = 9669
 test_port2 = 9670
+handshakeKey = "3.0.0"
 
 
-def prepare_space(space_name='session_pool_test'):
+def prepare_space(space_name="session_pool_test"):
     # prepare space
     conn = Connection()
-    conn.open('127.0.0.1', test_port, 1000)
-    auth_result = conn.authenticate('root', 'nebula')
+    conn.open("127.0.0.1", test_port, 1000)
+    auth_result = conn.authenticate("root", "nebula")
     assert auth_result.get_session_id() != 0
     resp = conn.execute(
         auth_result._session_id,
-        'CREATE SPACE IF NOT EXISTS {}(partition_num=32, replica_factor=1, vid_type = FIXED_STRING(30))'.format(
+        "CREATE SPACE IF NOT EXISTS {}(partition_num=32, replica_factor=1, vid_type = FIXED_STRING(30))".format(
             space_name
         ),
     )
     assert resp.error_code == ErrorCode.SUCCEEDED
 
 
-def drop_space(space_name='session_pool_test'):
+def drop_space(space_name="session_pool_test"):
     # drop space
     conn = Connection()
-    conn.open('127.0.0.1', test_port, 1000)
-    auth_result = conn.authenticate('root', 'nebula')
+    conn.open("127.0.0.1", test_port, 1000)
+    auth_result = conn.authenticate("root", "nebula")
     assert auth_result.get_session_id() != 0
 
     # drop space
     resp = conn.execute(
         auth_result._session_id,
-        'DROP SPACE IF EXISTS {}'.format(space_name),
+        "DROP SPACE IF EXISTS {}".format(space_name),
     )
     assert resp.error_code == ErrorCode.SUCCEEDED
 
@@ -68,40 +69,53 @@ class TestSessionPoolBasic(TestCase):
     @classmethod
     def setup_class(self):
         self.addresses = list()
-        self.addresses.append(('127.0.0.1', test_port))
-        self.addresses.append(('127.0.0.1', test_port2))
+        self.addresses.append(("127.0.0.1", test_port))
+        self.addresses.append(("127.0.0.1", test_port2))
         self.configs = SessionPoolConfig()
         self.configs.min_size = 2
         self.configs.max_size = 4
         self.configs.idle_time = 2000
         self.configs.interval_check = 2
+        self.configs.handshakeKey = "3.0.0"
 
         # prepare space
-        prepare_space('session_pool_test')
-        prepare_space('session_pool_test_2')
+        prepare_space("session_pool_test")
+        prepare_space("session_pool_test_2")
 
         # insert data need to sleep after create schema
         time.sleep(10)
 
         self.session_pool = SessionPool(
-            'root', 'nebula', 'session_pool_test', self.addresses
+            "root",
+            "nebula",
+            "session_pool_test",
+            self.addresses,
+            self.configs.handshakeKey,
         )
         assert self.session_pool.init(self.configs)
 
     def tearDown_Class(self):
-        drop_space('session_pool_test')
-        drop_space('session_pool_test_2')
+        drop_space("session_pool_test")
+        drop_space("session_pool_test_2")
 
     def test_pool_init(self):
         # basic
         session_pool = SessionPool(
-            'root', 'nebula', 'session_pool_test', self.addresses
+            "root",
+            "nebula",
+            "session_pool_test",
+            self.addresses,
+            self.configs.handshakeKey,
         )
         assert session_pool.init(self.configs)
 
         # handle wrong service port
         pool = SessionPool(
-            'root', 'nebula', 'session_pool_test', [('127.0.0.1', 3800)]
+            "root",
+            "nebula",
+            "session_pool_test",
+            [("127.0.0.1", 3800)],
+            self.configs.handshakeKey,
         )  # wrong port
         try:
             pool.init(self.configs)
@@ -112,7 +126,11 @@ class TestSessionPoolBasic(TestCase):
         # handle invalid hostname
         try:
             session_pool = SessionPool(
-                'root', 'nebula', 'session_pool_test', [('wrong_host', test_port)]
+                "root",
+                "nebula",
+                "session_pool_test",
+                [("wrong_host", test_port)],
+                self.configs.handshakeKey,
             )
             session_pool.init(self.configs)
             assert False
@@ -121,14 +139,14 @@ class TestSessionPoolBasic(TestCase):
 
     def test_ping(self):
         assert self.session_pool.ping(self.addresses[0])
-        assert self.session_pool.ping(('127.0.0.1', 5000)) is False
+        assert self.session_pool.ping(("127.0.0.1", 5000)) is False
 
     def test_execute(self):
-        resp = self.session_pool.execute('SHOW HOSTS')
+        resp = self.session_pool.execute("SHOW HOSTS")
         assert resp.is_succeeded()
 
     def test_execute_json(self):
-        resp = self.session_pool.execute_json('SHOW HOSTS')
+        resp = self.session_pool.execute_json("SHOW HOSTS")
         json_obj = json.loads(resp)
         # Get errorcode
         resp_error_code = json_obj["errors"][0]["code"]
@@ -138,20 +156,24 @@ class TestSessionPoolBasic(TestCase):
         # This test is used to test if the space bond to session is the same as the space in the session pool config after executing
         # a query contains `USE <space_name>` statement.
         session_pool = SessionPool(
-            'root', 'nebula', 'session_pool_test', self.addresses
+            "root",
+            "nebula",
+            "session_pool_test",
+            self.addresses,
+            self.configs.handshakeKey,
         )
         configs = SessionPoolConfig()
         configs.min_size = 1
         configs.max_size = 1
         assert session_pool.init(configs)
 
-        resp = session_pool.execute('USE session_pool_test_2; SHOW HOSTS;')
+        resp = session_pool.execute("USE session_pool_test_2; SHOW HOSTS;")
         assert resp.is_succeeded()
 
         # The space in the session pool config should be the same as the space in the session.
-        resp = session_pool.execute('SHOW HOSTS;')
+        resp = session_pool.execute("SHOW HOSTS;")
         assert resp.is_succeeded()
-        assert resp.space_name() == 'session_pool_test'
+        assert resp.space_name() == "session_pool_test"
 
 
 def test_session_pool_multi_thread():
@@ -159,14 +181,17 @@ def test_session_pool_multi_thread():
     prepare_space()
 
     # Test multi thread
-    addresses = [('127.0.0.1', test_port), ('127.0.0.1', test_port2)]
+    addresses = [("127.0.0.1", test_port), ("127.0.0.1", test_port2)]
     configs = SessionPoolConfig()
     configs.min_size = 2
     configs.max_size = 4
     configs.idle_time = 2000
     configs.interval_check = 2
+    configs.handshakeKey = "3.0.0"
 
-    session_pool = SessionPool('root', 'nebula', 'session_pool_test', addresses)
+    session_pool = SessionPool(
+        "root", "nebula", "session_pool_test", addresses, "3.0.0"
+    )
     assert session_pool.init(configs)
 
     global success_flag
@@ -175,10 +200,10 @@ def test_session_pool_multi_thread():
     def main_test():
         global success_flag
         try:
-            resp = session_pool.execute('SHOW HOSTS')
+            resp = session_pool.execute("SHOW HOSTS")
             if not resp.is_succeeded():
                 raise RuntimeError(
-                    'Failed to execute the query in thread {} : {}'.format(
+                    "Failed to execute the query in thread {} : {}".format(
                         threading.current_thread().getName(), resp.error_msg()
                     )
                 )
@@ -188,10 +213,10 @@ def test_session_pool_multi_thread():
             success_flag = False
             return
 
-    thread1 = threading.Thread(target=main_test, name='thread1')
-    thread2 = threading.Thread(target=main_test, name='thread2')
-    thread3 = threading.Thread(target=main_test, name='thread3')
-    thread4 = threading.Thread(target=main_test, name='thread4')
+    thread1 = threading.Thread(target=main_test, name="thread1")
+    thread2 = threading.Thread(target=main_test, name="thread2")
+    thread3 = threading.Thread(target=main_test, name="thread3")
+    thread4 = threading.Thread(target=main_test, name="thread4")
 
     thread1.start()
     thread2.start()

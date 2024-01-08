@@ -91,3 +91,4 @@ class SessionPoolConfig(object):
     max_size = 30
     min_size = 1
     interval_check = -1
+    handshakeKey = None

@@ -27,7 +27,7 @@ class SessionPool(object):
     S_OK = 0
     S_BAD = 1
 
-    def __init__(self, username, password, space_name, addresses):
+    def __init__(self, username, password, space_name, addresses, handshakeKey):
         # user name and password of the session
         self._username = username
         self._password = password
@@ -40,6 +40,8 @@ class SessionPool(object):
 
         # server's status
         self._addresses_status = dict()
+
+        self.handshakeKey = handshakeKey
 
         # validate the addresses
         for address in addresses:
@@ -122,9 +124,15 @@ class SessionPool(object):
         try:
             conn = Connection()
             if self._ssl_configs is None:
-                conn.open(address[0], address[1], 1000)
+                conn.open(address[0], address[1], 1000, self._configs.handshakeKey)
             else:
-                conn.open_SSL(address[0], address[1], 1000, None, self._ssl_configs)
+                conn.open_SSL(
+                    address[0],
+                    address[1],
+                    1000,
+                    self._configs.handshakeKey,
+                    self._ssl_configs,
+                )
             conn.close()
             return True
         except Exception as ex:
