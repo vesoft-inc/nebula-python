@@ -30,7 +30,7 @@ includes = ["nebula3"]
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "black==22.8.0; python_version >= \"3.7\"",
+    "black==22.8.0",
 ]
 test = [
     "pytest; python_full_version >= \"3.7.1\"",
