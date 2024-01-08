@@ -109,7 +109,9 @@ class Connection(object):
         """
         self.close()
         if self._ssl_conf is not None:
-            self.open_SSL(self._ip, self._port, self._timeout, self.handshakeKey, self._ssl_conf)
+            self.open_SSL(
+                self._ip, self._port, self._timeout, self.handshakeKey, self._ssl_conf
+            )
         else:
             self.open(self._ip, self._port, self._timeout, self.handshakeKey)
 
@@ -222,7 +224,7 @@ class Connection(object):
             self._connection._iprot.trans.close()
         except Exception as e:
             logger.error(
-                'Close connection to {}:{} failed:{}'.format(self._ip, self._port, e)
+                "Close connection to {}:{} failed:{}".format(self._ip, self._port, e)
             )
 
     def ping(self):
@@ -230,7 +232,7 @@ class Connection(object):
         :return: True or False
         """
         try:
-            resp = self._connection.execute(0, 'YIELD 1;')
+            resp = self._connection.execute(0, "YIELD 1;")
             return True
         except Exception:
             return False
