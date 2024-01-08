@@ -4,20 +4,17 @@
 # Copyright (c) 2021 vesoft inc. All rights reserved.
 #
 # This source code is licensed under Apache 2.0 License.
-import sys
+import copy
 import os
 import ssl
-import copy
-import pytest
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-root_dir = os.path.join(current_dir, '..')
-sys.path.insert(0, root_dir)
-
 from unittest import TestCase
 
-from nebula3.gclient.net import ConnectionPool
+import pytest
+
 from nebula3.Config import Config, SSL_config
+from nebula3.gclient.net import ConnectionPool
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 @pytest.mark.SSL
@@ -25,7 +22,7 @@ class TestConnectionPool(TestCase):
     @classmethod
     def setup_class(self):
         self.addresses = list()
-        self.addresses.append(('127.0.0.1', 9669))
+        self.addresses.append(("127.0.0.1", 9669))
         self.configs = Config()
         self.configs.min_connection_pool_size = 2
         self.configs.max_connection_pool_size = 4
@@ -35,20 +32,20 @@ class TestConnectionPool(TestCase):
         # set SSL config
         self.ssl_config = SSL_config()
         self.ssl_config.cert_reqs = ssl.CERT_OPTIONAL
-        self.ssl_config.ca_certs = os.path.join(current_dir, 'secrets/root.crt')
-        self.ssl_config.keyfile = os.path.join(current_dir, 'secrets/client.key')
-        self.ssl_config.certfile = os.path.join(current_dir, 'secrets/client.crt')
+        self.ssl_config.ca_certs = os.path.join(current_dir, "secrets/root.crt")
+        self.ssl_config.keyfile = os.path.join(current_dir, "secrets/client.key")
+        self.ssl_config.certfile = os.path.join(current_dir, "secrets/client.crt")
         # self signed SSL config
         self.ssl_selfs_signed_config = SSL_config()
         self.ssl_selfs_signed_config.cert_reqs = ssl.CERT_OPTIONAL
         self.ssl_selfs_signed_config.ca_certs = os.path.join(
-            current_dir, 'secrets/root.crt'
+            current_dir, "secrets/root.crt"
         )
         self.ssl_selfs_signed_config.keyfile = os.path.join(
-            current_dir, 'secrets/client.key'
+            current_dir, "secrets/client.key"
         )
         self.ssl_selfs_signed_config.certfile = os.path.join(
-            current_dir, 'secrets/client.crt'
+            current_dir, "secrets/client.crt"
         )
 
     def test_ssl_with_ca(self):

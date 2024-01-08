@@ -37,8 +37,8 @@ test = [
     "pytest-cov; python_full_version >= \"3.7.1\"",
 ]
 example = [
-    "prettytable; python_full_version >= \"3.7.1\"",
-    "pandas; python_full_version >= \"3.7.1\"",
+    "prettytable; python_version >= \"3.10\"",
+    "pandas; python_version >= \"3.10\"",
 ]
 
 [tool.pdm.scripts]

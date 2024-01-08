@@ -10,7 +10,7 @@ on:
 
 jobs:
   ci:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       max-parallel: 2
       matrix:
@@ -46,12 +46,29 @@ jobs:
           enable_ssl=true docker-compose -f tests/docker-compose-ssl.yaml up -d
           sleep 20
           pdm test-ssl
-      - name: Test example
-        run: |
-          docker-compose -f tests/docker-compose.yaml up -d
-          sleep 20
-          for f in example/*.py; do pdm run python "$f"; done
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           files: coverage.xml
+
+  example:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11, 3.12]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: pdm-project/setup-pdm@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: true
+      - name: Install dependencies
+        run: pdm install -G example
+      - name: Setup containers
+        run: |
+          docker-compose -f tests/docker-compose.yaml up -d
+          sleep 20
+      - name: Test example
+        run: |
+          for f in example/*.py; do pdm run python "$f"; done

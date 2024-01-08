@@ -6,47 +6,38 @@
 # This source code is licensed under Apache 2.0 License.
 
 import copy
-import sys
-import os
 from datetime import date
+from unittest import TestCase
 
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-root_dir = os.path.join(current_dir, '..')
-sys.path.insert(0, root_dir)
-
-from nebula3.Exception import InvalidKeyException
+from nebula3.common import ttypes
 from nebula3.common.ttypes import (
-    Value,
-    NullType,
-    Time,
-    DateTime,
-    NSet,
     Date,
-    NList,
-    NMap,
-    Geography,
+    DateTime,
     Duration,
     ErrorCode,
+    NList,
+    NMap,
+    NSet,
+    NullType,
+    Time,
+    Value,
 )
-from nebula3.common import ttypes
-from nebula3.graph import ttypes as graphTtype
-from unittest import TestCase
-from nebula3.data.ResultSet import ResultSet
 from nebula3.data.DataObject import (
-    ValueWrapper,
-    Node,
-    Relationship,
-    PathWrapper,
-    TimeWrapper,
+    DataSetWrapper,
     DateTimeWrapper,
     DateWrapper,
-    Null,
-    Segment,
-    DataSetWrapper,
-    GeographyWrapper,
     DurationWrapper,
+    GeographyWrapper,
+    Node,
+    Null,
+    PathWrapper,
+    Relationship,
+    TimeWrapper,
+    ValueWrapper,
 )
+from nebula3.data.ResultSet import ResultSet
+from nebula3.Exception import InvalidKeyException
+from nebula3.graph import ttypes as graphTtype
 
 
 class TestBaseCase(TestCase):
@@ -57,13 +48,13 @@ class TestBaseCase(TestCase):
         vertex.tags = list()
         for i in range(0, 3):
             tag = ttypes.Tag()
-            tag.name = ('tag{}'.format(i)).encode('utf-8')
+            tag.name = ("tag{}".format(i)).encode("utf-8")
             if not empty_props:
                 tag.props = dict()
                 for j in range(0, 5):
                     value = ttypes.Value()
                     value.set_iVal(j)
-                    tag.props[('prop{}'.format(j)).encode('utf-8')] = value
+                    tag.props[("prop{}".format(j)).encode("utf-8")] = value
             vertex.tags.append(tag)
         return vertex
 
@@ -77,14 +68,14 @@ class TestBaseCase(TestCase):
             edge.src = ttypes.Value(sVal=dst_id)
             edge.dst = ttypes.Value(sVal=src_id)
         edge.type = 1
-        edge.name = b'classmate'
+        edge.name = b"classmate"
         edge.ranking = 100
         if not empty_props:
             edge.props = dict()
             for i in range(0, 5):
                 value = ttypes.Value()
                 value.set_iVal(i)
-                edge.props[('prop{}'.format(i)).encode('utf-8')] = value
+                edge.props[("prop{}".format(i)).encode("utf-8")] = value
         return edge
 
     @classmethod
@@ -94,15 +85,15 @@ class TestBaseCase(TestCase):
         path.steps = list()
         for i in range(0, steps):
             step = ttypes.Step()
-            step.dst = cls.get_vertex_value(('vertex{}'.format(i)).encode('utf-8'))
+            step.dst = cls.get_vertex_value(("vertex{}".format(i)).encode("utf-8"))
             step.type = 1 if i % 2 == 0 else -1
-            step.name = b'classmate'
+            step.name = b"classmate"
             step.ranking = 100
             step.props = dict()
             for i in range(0, 5):
                 value = ttypes.Value()
                 value.set_iVal(i)
-                step.props[('prop{}'.format(i)).encode('utf-8')] = value
+                step.props[("prop{}".format(i)).encode("utf-8")] = value
             path.steps.append(step)
         return path
 
@@ -251,7 +242,7 @@ class TesValueWrapper(TestBaseCase):
 
     def test_as_string(self):
         value = ttypes.Value()
-        value.set_sVal(b'Tom')
+        value.set_sVal(b"Tom")
         value_wrapper = ValueWrapper(value)
         assert value_wrapper.is_string()
 
@@ -349,12 +340,12 @@ class TesValueWrapper(TestBaseCase):
         map_val.set_mVal(tmp_map_val)
 
         node_val = ttypes.Value()
-        node_val.set_vVal(self.get_vertex_value(b'Tom'))
+        node_val.set_vVal(self.get_vertex_value(b"Tom"))
 
-        relationship_val = ttypes.Value(eVal=self.get_edge_value(b'Tom', b'Lily'))
+        relationship_val = ttypes.Value(eVal=self.get_edge_value(b"Tom", b"Lily"))
 
         path_val = ttypes.Value()
-        path_val.set_pVal(self.get_path_value(b'Tom'))
+        path_val.set_pVal(self.get_path_value(b"Tom"))
 
         tmp_list_val = NList()
         tmp_list_val.values = [
@@ -407,8 +398,8 @@ class TesValueWrapper(TestBaseCase):
         assert time_val.get_minute() == 20
         assert time_val.get_sec() == 10
         assert time_val.get_microsec() == 100
-        assert 'utc time: 10:20:10.000100, timezone_offset: 28800' == str(time_val)
-        assert '18:20:10.000100' == time_val.get_local_time_str()
+        assert "utc time: 10:20:10.000100, timezone_offset: 28800" == str(time_val)
+        assert "18:20:10.000100" == time_val.get_local_time_str()
         new_time = copy.deepcopy(time)
         new_time.hour = 18
         assert new_time == time_val.get_local_time()
@@ -431,7 +422,7 @@ class TesValueWrapper(TestBaseCase):
         assert date_val.get_year() == 220
         assert date_val.get_month() == 2
         assert date_val.get_day() == 10
-        assert '220-02-10' == str(date_val)
+        assert "220-02-10" == str(date_val)
 
     def test_as_datetime(self):
         datetime = DateTime()
@@ -453,10 +444,10 @@ class TesValueWrapper(TestBaseCase):
         assert datetime_val.get_minute() == 20
         assert datetime_val.get_sec() == 10
         assert datetime_val.get_microsec() == 100
-        assert 'utc datetime: 123-02-01T10:20:10.000100, timezone_offset: 28800' == str(
+        assert "utc datetime: 123-02-01T10:20:10.000100, timezone_offset: 28800" == str(
             datetime_val
         )
-        assert '123-02-01T18:20:10.000100' == datetime_val.get_local_datetime_str()
+        assert "123-02-01T18:20:10.000100" == datetime_val.get_local_datetime_str()
         new_datetime = copy.deepcopy(datetime)
         new_datetime.hour = 18
         assert new_datetime == datetime_val.get_local_datetime()
@@ -469,30 +460,30 @@ class TesValueWrapper(TestBaseCase):
 
     def test_as_node(self):
         value = ttypes.Value()
-        value.set_vVal(self.get_vertex_value(b'Tom'))
+        value.set_vVal(self.get_vertex_value(b"Tom"))
         value_wrapper = ValueWrapper(value)
         assert value_wrapper.is_vertex()
 
         node = value_wrapper.as_node()
         assert isinstance(node, Node)
-        assert node.get_id().as_string() == 'Tom'
-        assert node.has_tag('tag1')
+        assert node.get_id().as_string() == "Tom"
+        assert node.has_tag("tag1")
         assert (
-            node.prop_names('tag1').sort()
-            == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+            node.prop_names("tag1").sort()
+            == ["prop0", "prop1", "prop2", "prop3", "prop4"].sort()
         )
-        expect_values = [(v.as_int()) for v in node.prop_values('tag1')]
+        expect_values = [(v.as_int()) for v in node.prop_values("tag1")]
         assert expect_values == [0, 1, 2, 3, 4]
-        assert node.tags() == ['tag0', 'tag1', 'tag2']
+        assert node.tags() == ["tag0", "tag1", "tag2"]
         assert (
-            list(node.properties('tag1').keys()).sort()
-            == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+            list(node.properties("tag1").keys()).sort()
+            == ["prop0", "prop1", "prop2", "prop3", "prop4"].sort()
         )
-        expect_values = [(v.as_int()) for v in node.properties('tag1').values()]
+        expect_values = [(v.as_int()) for v in node.properties("tag1").values()]
         assert expect_values == [0, 1, 2, 3, 4]
 
     def test_as_relationship(self):
-        value = ttypes.Value(eVal=self.get_edge_value(b'Tom', b'Lily'))
+        value = ttypes.Value(eVal=self.get_edge_value(b"Tom", b"Lily"))
         value_wrapper = ValueWrapper(value)
         assert value_wrapper.is_edge()
 
@@ -500,36 +491,36 @@ class TesValueWrapper(TestBaseCase):
         assert isinstance(relationship, Relationship)
 
         # test with reversely
-        reversely_value = ttypes.Value(eVal=self.get_edge_value(b'Lily', b'Tom', True))
+        reversely_value = ttypes.Value(eVal=self.get_edge_value(b"Lily", b"Tom", True))
         reversely_value_wrapper = ValueWrapper(reversely_value)
         reversely_relationship = reversely_value_wrapper.as_relationship()
         assert isinstance(reversely_relationship, Relationship)
         assert reversely_relationship == relationship
 
         # test with reversely no equal
-        reversely_value = ttypes.Value(eVal=self.get_edge_value(b'Tom', b'Lily', True))
+        reversely_value = ttypes.Value(eVal=self.get_edge_value(b"Tom", b"Lily", True))
         reversely_value_wrapper = ValueWrapper(reversely_value)
         reversely_relationship = reversely_value_wrapper.as_relationship()
         assert isinstance(reversely_relationship, Relationship)
         assert reversely_relationship != relationship
 
         relationship.ranking() == 100
-        relationship.edge_name() == 'classmate'
-        relationship.start_vertex_id().as_string() == 'Lily'
-        relationship.start_vertex_id().as_string() == 'Tom'
-        assert relationship.keys() == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4']
+        relationship.edge_name() == "classmate"
+        relationship.start_vertex_id().as_string() == "Lily"
+        relationship.start_vertex_id().as_string() == "Tom"
+        assert relationship.keys() == ["prop0", "prop1", "prop2", "prop3", "prop4"]
         expect_values = [(v.as_int()) for v in relationship.values()]
         assert expect_values == [0, 1, 2, 3, 4]
         assert (
             list(relationship.properties().keys()).sort()
-            == ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'].sort()
+            == ["prop0", "prop1", "prop2", "prop3", "prop4"].sort()
         )
         expect_values = [(v.as_int()) for v in relationship.properties().values()]
         assert expect_values == [0, 1, 2, 3, 4]
 
         # test empty props
         value = ttypes.Value(
-            eVal=self.get_edge_value(b'Tom', b'Lily', empty_props=True)
+            eVal=self.get_edge_value(b"Tom", b"Lily", empty_props=True)
         )
         relationship = ValueWrapper(value).as_relationship()
         assert relationship.keys() == []
@@ -538,7 +529,7 @@ class TesValueWrapper(TestBaseCase):
 
     def test_as_path(self):
         value = ttypes.Value()
-        value.set_pVal(self.get_path_value(b'Tom'))
+        value.set_pVal(self.get_path_value(b"Tom"))
         value_wrapper = ValueWrapper(value)
         assert value_wrapper.is_path()
 
@@ -562,95 +553,95 @@ class TesValueWrapper(TestBaseCase):
 
         duration = value_wrapper.as_duration()
         assert isinstance(duration, DurationWrapper)
-        assert str(duration) == 'P12MT86400.003000000S'
+        assert str(duration) == "P12MT86400.003000000S"
 
 
 class TestNode(TestBaseCase):
     def test_node_api(self):
         test_set = set()
         test_set.add(Value())
-        node = Node(self.get_vertex_value(b'Tom'))
-        assert 'Tom' == node.get_id().as_string()
+        node = Node(self.get_vertex_value(b"Tom"))
+        assert "Tom" == node.get_id().as_string()
 
-        assert node.has_tag('tag2')
+        assert node.has_tag("tag2")
 
-        assert ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'] == node.prop_names('tag2')
+        assert ["prop0", "prop1", "prop2", "prop3", "prop4"] == node.prop_names("tag2")
 
         assert [0, 1, 2, 3, 4] == [
-            (value.as_int()) for value in node.prop_values('tag2')
+            (value.as_int()) for value in node.prop_values("tag2")
         ]
 
-        assert ['tag0', 'tag1', 'tag2'] == node.tags()
+        assert ["tag0", "tag1", "tag2"] == node.tags()
 
         expect_properties = {}
-        for key in node.properties('tag2').keys():
-            expect_properties[key] = node.properties('tag2')[key].as_int()
+        for key in node.properties("tag2").keys():
+            expect_properties[key] = node.properties("tag2")[key].as_int()
         assert {
-            'prop0': 0,
-            'prop1': 1,
-            'prop2': 2,
-            'prop3': 3,
-            'prop4': 4,
+            "prop0": 0,
+            "prop1": 1,
+            "prop2": 2,
+            "prop3": 3,
+            "prop4": 4,
         } == expect_properties
 
 
 class TestRelationship(TestBaseCase):
     def test_relationship_api(self):
-        relationship = Relationship(self.get_edge_value(b'Tom', b'Lily'))
+        relationship = Relationship(self.get_edge_value(b"Tom", b"Lily"))
 
-        assert 'Tom' == relationship.start_vertex_id().as_string()
+        assert "Tom" == relationship.start_vertex_id().as_string()
 
-        assert 'Lily' == relationship.end_vertex_id().as_string()
-
-        assert 100 == relationship.ranking()
+        assert "Lily" == relationship.end_vertex_id().as_string()
 
         assert 100 == relationship.ranking()
 
-        assert 'classmate' == relationship.edge_name()
+        assert 100 == relationship.ranking()
 
-        assert ['prop0', 'prop1', 'prop2', 'prop3', 'prop4'] == relationship.keys()
+        assert "classmate" == relationship.edge_name()
+
+        assert ["prop0", "prop1", "prop2", "prop3", "prop4"] == relationship.keys()
 
         expect_properties = {}
         for key in relationship.properties().keys():
             expect_properties[key] = relationship.properties()[key].as_int()
         assert {
-            'prop0': 0,
-            'prop1': 1,
-            'prop2': 2,
-            'prop3': 3,
-            'prop4': 4,
+            "prop0": 0,
+            "prop1": 1,
+            "prop2": 2,
+            "prop3": 3,
+            "prop4": 4,
         } == expect_properties
 
 
 class TestPath(TestBaseCase):
     def test_path_api(self):
-        path = PathWrapper(self.get_path_value(b'Tom'))
-        assert Node(self.get_vertex_value(b'Tom')) == path.start_node()
+        path = PathWrapper(self.get_path_value(b"Tom"))
+        assert Node(self.get_vertex_value(b"Tom")) == path.start_node()
 
         assert 5 == path.length()
 
-        assert path.contain_node(Node(self.get_vertex_value(b'vertex3')))
+        assert path.contain_node(Node(self.get_vertex_value(b"vertex3")))
 
         assert path.contain_relationship(
-            Relationship(self.get_edge_value(b'vertex3', b'vertex2'))
+            Relationship(self.get_edge_value(b"vertex3", b"vertex2"))
         )
 
         nodes = list()
         nodes.append(path.start_node())
         for i in range(0, 5):
             nodes.append(
-                Node(self.get_vertex_value(('vertex'.format(i)).encode('utf-8')))
+                Node(self.get_vertex_value(("vertex".format()).encode("utf-8")))
             )
 
         relationships = list()
-        relationships.append(Relationship(self.get_edge_value(b'Tom', b'vertex0')))
+        relationships.append(Relationship(self.get_edge_value(b"Tom", b"vertex0")))
         for i in range(0, 4):
             if i % 2 == 0:
                 relationships.append(
                     Relationship(
                         self.get_edge_value(
-                            ('vertex{}'.format(i + 1)).encode('utf-8'),
-                            ('vertex{}'.format(i)).encode('utf-8'),
+                            ("vertex{}".format(i + 1)).encode("utf-8"),
+                            ("vertex{}".format(i)).encode("utf-8"),
                         )
                     )
                 )
@@ -658,8 +649,8 @@ class TestPath(TestBaseCase):
                 relationships.append(
                     Relationship(
                         self.get_edge_value(
-                            ('vertex{}'.format(i)).encode('utf-8'),
-                            ('vertex{}'.format(i + 1)).encode('utf-8'),
+                            ("vertex{}".format(i)).encode("utf-8"),
+                            ("vertex{}".format(i + 1)).encode("utf-8"),
                         )
                     )
                 )
@@ -744,17 +735,17 @@ class TestDatesetWrapper(TestBaseCase):
         assert data_set_wrapper1.column_values("col6_string")[0].is_string()
         assert (
             data_set_wrapper1.column_values("col6_string")[0].as_string()
-            == 'hello world'
+            == "hello world"
         )
         assert (
             data_set_wrapper1.column_values("col6_string")[1].as_string()
-            == 'hello world'
+            == "hello world"
         )
 
         assert data_set_wrapper1.row_values(0)[5].is_string()
         assert data_set_wrapper1.row_values(1)[5].is_string()
-        assert data_set_wrapper1.row_values(0)[5].as_string() == 'hello world'
-        assert data_set_wrapper1.row_values(1)[5].as_string() == 'hello world'
+        assert data_set_wrapper1.row_values(0)[5].as_string() == "hello world"
+        assert data_set_wrapper1.row_values(1)[5].as_string() == "hello world"
 
 
 class TestResultset(TestBaseCase):
@@ -850,17 +841,17 @@ class TestResultset(TestBaseCase):
             assert record.get_value(1).as_null() == Null(Null.BAD_DATA)
             null_value = Value(nVal=Null.BAD_DATA)
             assert record.get_value(1) == ValueWrapper(null_value)
-            assert str(record.get_value(1).as_null()) == 'BAD_DATA'
+            assert str(record.get_value(1).as_null()) == "BAD_DATA"
 
             # test get_value_by_key()
-            assert record.get_value_by_key('col2_null').is_null()
-            assert record.get_value_by_key('col3_bool').is_bool()
-            assert not record.get_value_by_key('col3_bool').as_bool()
+            assert record.get_value_by_key("col2_null").is_null()
+            assert record.get_value_by_key("col3_bool").is_bool()
+            assert not record.get_value_by_key("col3_bool").as_bool()
 
             # get_value_by_key with not exited key
             try:
-                record.get_value_by_key('not existed')
-                assert False, 'Not expect here'
+                record.get_value_by_key("not existed")
+                assert False, "Not expect here"
             except InvalidKeyException as e:
                 assert True
                 assert e.message == "KeyError: `not existed'"
