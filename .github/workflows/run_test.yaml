@@ -10,7 +10,7 @@ on:
 
 jobs:
   ci-pip-install:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
       matrix:
