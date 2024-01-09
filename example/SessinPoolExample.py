@@ -39,9 +39,7 @@ if __name__ == "__main__":
 
         # init session pool
 
-        session_pool = SessionPool(
-            "root", "nebula", "session_pool_test", [(ip, port)], handshakeKey
-        )
+        session_pool = SessionPool("root", "nebula", "session_pool_test", [(ip, port)])
         assert session_pool.init(config)
 
         # add schema

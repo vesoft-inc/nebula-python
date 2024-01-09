@@ -36,7 +36,7 @@ handshakeKey = "3.0.0"
 def prepare_space(space_name="session_pool_test"):
     # prepare space
     conn = Connection()
-    conn.open("127.0.0.1", test_port, 1000)
+    conn.open("127.0.0.1", test_port, 1000,handshakeKey)
     auth_result = conn.authenticate("root", "nebula")
     assert auth_result.get_session_id() != 0
     resp = conn.execute(
@@ -88,7 +88,6 @@ class TestSessionPoolBasic(TestCase):
             "nebula",
             "session_pool_test",
             self.addresses,
-            self.configs.handshakeKey,
         )
         assert self.session_pool.init(self.configs)
 
@@ -103,7 +102,6 @@ class TestSessionPoolBasic(TestCase):
             "nebula",
             "session_pool_test",
             self.addresses,
-            self.configs.handshakeKey,
         )
         assert session_pool.init(self.configs)
 
@@ -113,7 +111,6 @@ class TestSessionPoolBasic(TestCase):
             "nebula",
             "session_pool_test",
             [("127.0.0.1", 3800)],
-            self.configs.handshakeKey,
         )  # wrong port
         try:
             pool.init(self.configs)
@@ -128,7 +125,6 @@ class TestSessionPoolBasic(TestCase):
                 "nebula",
                 "session_pool_test",
                 [("wrong_host", test_port)],
-                self.configs.handshakeKey,
             )
             session_pool.init(self.configs)
             assert False
@@ -158,7 +154,6 @@ class TestSessionPoolBasic(TestCase):
             "nebula",
             "session_pool_test",
             self.addresses,
-            self.configs.handshakeKey,
         )
         configs = SessionPoolConfig()
         configs.min_size = 1
@@ -188,7 +183,7 @@ def test_session_pool_multi_thread():
     configs.handshakeKey = "3.0.0"
 
     session_pool = SessionPool(
-        "root", "nebula", "session_pool_test", addresses, "3.0.0"
+        "root", "nebula", "session_pool_test", addresses
     )
     assert session_pool.init(configs)
 
