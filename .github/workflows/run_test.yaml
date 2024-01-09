@@ -23,7 +23,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python3.6 setup.py install
+          python setup.py install
           pip install pip-tools pytest
       - name: Test with pytest==6.2.5
         run: |
