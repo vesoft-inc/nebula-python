@@ -2,6 +2,8 @@
 
 This repository holds the official Python API for NebulaGraph.
 
+[![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
+
 ## Before you start
 
 Before you start, please read this section to choose the right branch for you. The compatibility between the API and NebulaGraph service can be found in [How to choose nebula-python](#How-to-choose-nebula-python). The current master branch is compatible with NebulaGraph 3.x.
@@ -13,24 +15,24 @@ Before you start, please read this section to choose the right branch for you. T
     |
     |-- nebula3                               // client code
     |   |-- fbthrift                          // the fbthrift lib code
-    |   |-- common           
-    |   |-- data           
-    |   |-- graph           
-    |   |-- meta           
+    |   |-- common
+    |   |-- data
+    |   |-- graph
+    |   |-- meta
     |   |-- net                               // the net code for graph client
-    |   |-- storage           
+    |   |-- storage
     |   |-- Config.py                         // the pool config
     |   |__ Exception.py                      // the define exception
-    |           
+    |
     |-- examples
     |   |-- GraphClientMultiThreadExample.py  // the multi thread example
     |   |-- GraphClientSimpleExample.py       // the simple example
-    |   |__ ScanVertexEdgeExample.py                   
+    |   |__ ScanVertexEdgeExample.py
     |
     |-- tests                                 // the test code
-    |                      
+    |
     |-- setup.py                              // used to install or package
-    |                      
+    |
     |__ README.md                             // the introduction of nebula3-python
 
 ```
@@ -154,7 +156,7 @@ connection_pool.close()
 
 ## Quick example to use storage-client to scan vertex and edge
 
-You should make sure the scan client can connect to the address of storage which see from `SHOW HOSTS` 
+You should make sure the scan client can connect to the address of storage which see from `SHOW HOSTS`
 
 ```python
 from nebula3.mclient import MetaCache, HostAddr
@@ -182,7 +184,7 @@ while resp.has_next():
     result = resp.next()
     for vertex_data in result:
         print(vertex_data)
-        
+
 resp = graph_storage_client.scan_edge(
     space_name='ScanSpace',
     edge_name='friend')
@@ -195,16 +197,16 @@ while resp.has_next():
 ## How to choose nebula-python
 
 | Nebula-Python Version | NebulaGraph Version |
-|---|---|
-| 1.0  | 1.x |
-| 2.0.0  | 2.0.0/2.0.1 |
-| 2.5.0  | 2.5.0 |
-| 2.6.0  | 2.6.0/2.6.1 |
-| 3.0.0  | 3.0.0 |
-| 3.1.0  | 3.1.0 |
-| 3.3.0  | 3.3.0 |
-| 3.4.0  | >=3.4.0 |
-| master  | master |
+| --------------------- | ------------------- |
+| 1.0                   | 1.x                 |
+| 2.0.0                 | 2.0.0/2.0.1         |
+| 2.5.0                 | 2.5.0               |
+| 2.6.0                 | 2.6.0/2.6.1         |
+| 3.0.0                 | 3.0.0               |
+| 3.1.0                 | 3.1.0               |
+| 3.3.0                 | 3.3.0               |
+| 3.4.0                 | >=3.4.0             |
+| master                | master              |
 
 ## How to contribute to nebula-python
 
@@ -215,18 +217,25 @@ git clone https://github.com/{username}/nebula-python.git
 cd nebula-python
 ```
 
-Install the package in the editable mode, then install all the dev dependencies:
+We use [PMD](https://github.com/pdm-project/pdm) to manage the package, install it first:
+
 ```
-pip install -e .
-pip install -r requirements/dev.txt
+pipx install pdm
+```
+
+Visit the [PDM documentation](https://pdm-project.org) for alternative installation methods.
+
+Install the package and all dev dependencies:
+```
+pdm install
 ```
 
 Make sure the Nebula server in running, then run the tests with pytest:
 ```
-pytest
+pdm test
 ```
 Using the default formatter with [black](https://github.com/psf/black).
 
-Please run `make fmt` to format python code before submitting.
+Please run `pdm fmt` to format python code before submitting.
 
 See [How to contribute](https://github.com/vesoft-inc/nebula-community/blob/master/Contributors/how-to-contribute.md) for the general process of contributing to Nebula projects.

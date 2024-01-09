@@ -6,28 +6,25 @@
 # This source code is licensed under Apache 2.0 License.
 
 
-from distutils.command.config import config
 import json
-import sys
-import os
 import threading
 import time
+
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, "..")
 sys.path.insert(0, root_dir)
 
-from unittest import TestCase
-from nebula3.common.ttypes import ErrorCode
-from nebula3.gclient.net.SessionPool import SessionPool
-from nebula3.gclient.net import Connection
-from nebula3.Config import SessionPoolConfig
 
+from unittest import TestCase
+
+from nebula3.common.ttypes import ErrorCode
+from nebula3.Config import SessionPoolConfig
 from nebula3.Exception import (
-    NoValidSessionException,
     InValidHostname,
-    IOErrorException,
 )
+from nebula3.gclient.net import Connection
+from nebula3.gclient.net.SessionPool import SessionPool
 
 # ports for test
 test_port = 9669

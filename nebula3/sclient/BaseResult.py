@@ -81,6 +81,13 @@ class VertexData(object):
 
         return Node(vertex).set_decode_type(self._decode_type)
 
+    def get_prop_names(self):
+        """get all prop names from the vertex data
+
+        :return: list<string>
+        """
+        return self._col_names[self.PROP_START_INDEX :]
+
     def get_prop_values(self):
         """get all prop values from the vertex data
 
@@ -196,6 +203,13 @@ class EdgeData(object):
             index = index + 1
 
         return Relationship(edge).set_decode_type(self._decode_type)
+
+    def get_prop_names(self):
+        """get all prop names from the edge data
+
+        :return: list<string>
+        """
+        return self._col_names[self.PROP_START_INDEX :]
 
     def get_prop_values(self):
         """get all prop values from the edge data

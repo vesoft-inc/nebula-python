@@ -6,25 +6,25 @@
 # This source code is licensed under Apache 2.0 License.
 
 
-import time
 import json
+import time
 
-from nebula3.gclient.net import ConnectionPool
-
-from nebula3.Config import Config
 from FormatResp import print_resp
 
-if __name__ == '__main__':
+from nebula3.Config import Config
+from nebula3.gclient.net import ConnectionPool
+
+if __name__ == "__main__":
     client = None
     try:
         config = Config()
         config.max_connection_pool_size = 2
         # init connection pool
         connection_pool = ConnectionPool()
-        assert connection_pool.init([('127.0.0.1', 9669)], config)
+        assert connection_pool.init([("127.0.0.1", 9669)], config)
 
         # get session from the pool
-        client = connection_pool.get_session('root', 'nebula')
+        client = connection_pool.get_session("root", "nebula")
         assert client is not None
 
         # get the result in json format
@@ -33,9 +33,9 @@ if __name__ == '__main__':
         print(json.dumps(json_obj, indent=2, sort_keys=True))
 
         client.execute(
-            'CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30)); USE test;'
-            'CREATE TAG IF NOT EXISTS person(name string, age int);'
-            'CREATE EDGE like (likeness double);'
+            "CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30)); USE test;"
+            "CREATE TAG IF NOT EXISTS person(name string, age int);"
+            "CREATE EDGE like (likeness double);"
         )
 
         # insert data need to sleep after create schema
@@ -60,12 +60,12 @@ if __name__ == '__main__':
         print_resp(resp)
 
         # drop space
-        resp = client.execute('DROP SPACE test')
+        resp = client.execute("DROP SPACE test")
         assert resp.is_succeeded(), resp.error_msg()
 
         print("Example finished")
 
-    except Exception as x:
+    except Exception:
         import traceback
 
         print(traceback.format_exc())

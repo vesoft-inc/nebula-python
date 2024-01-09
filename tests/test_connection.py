@@ -6,18 +6,20 @@
 # This source code is licensed under Apache 2.0 License.
 
 
+import time
 import sys
 import os
-import time
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.join(current_dir, "..")
 sys.path.insert(0, root_dir)
 
+
 from unittest import TestCase
-from nebula3.gclient.net import Connection
+
 from nebula3.common import ttypes
 from nebula3.Exception import IOErrorException
+from nebula3.gclient.net import Connection
 
 AddrIp = ["127.0.0.1", "::1"]
 port = 9669

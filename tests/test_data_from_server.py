@@ -6,19 +6,14 @@
 # This source code is licensed under Apache 2.0 License.
 
 
-from unittest import TestCase
-from nebula3.gclient.net import ConnectionPool
-from nebula3.data.DataObject import DateTimeWrapper, DateWrapper, TimeWrapper, Null
-from nebula3.common.ttypes import DateTime, Date, Time, ErrorCode
-from nebula3.Config import Config
-import sys
-import os
-import time
 import json
+import time
+from unittest import TestCase
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-root_dir = os.path.join(current_dir, '..')
-sys.path.insert(0, root_dir)
+from nebula3.common.ttypes import Date, DateTime, ErrorCode, Time
+from nebula3.Config import Config
+from nebula3.data.DataObject import DateTimeWrapper, DateWrapper, Null, TimeWrapper
+from nebula3.gclient.net import ConnectionPool
 
 
 class TestBaseCase(TestCase):
@@ -31,22 +26,22 @@ class TestBaseCase(TestCase):
         configs = Config()
         configs.max_connection_pool_size = 1
         cls.pool = ConnectionPool()
-        cls.pool.init([('127.0.0.1', 9671)], configs)
-        cls.session = cls.pool.get_session('root', 'nebula')
+        cls.pool.init([("127.0.0.1", 9671)], configs)
+        cls.session = cls.pool.get_session("root", "nebula")
         resp = cls.session.execute(
-            '''
+            """
             CREATE SPACE IF NOT EXISTS test_data(vid_type=FIXED_STRING(8));
             USE test_data;
-            CREATE TAG IF NOT EXISTS person(name string, age int8, grade int16, 
-            friends int32, book_num int64, birthday datetime, 
-            start_school date, morning time, property double, 
-            is_girl bool, child_name fixed_string(10), expend float, 
+            CREATE TAG IF NOT EXISTS person(name string, age int8, grade int16,
+            friends int32, book_num int64, birthday datetime,
+            start_school date, morning time, property double,
+            is_girl bool, child_name fixed_string(10), expend float,
             first_out_city timestamp, hobby string);
             CREATE TAG IF NOT EXISTS student(name string, interval duration);
             CREATE EDGE IF NOT EXISTS like(likeness double);
             CREATE EDGE IF NOT EXISTS friend(start_year int, end_year int);
             CREATE TAG INDEX IF NOT EXISTS person_name_index ON person(name(8));
-            '''
+            """
         )
         assert resp.is_succeeded(), resp.error_msg()
 
@@ -111,38 +106,38 @@ class TestBaseCase(TestCase):
     def test_base_type(self):
         resp = self.session.execute(
             'FETCH PROP ON person "Bob" YIELD person.name, person.age, person.grade,'
-            'person.friends, person.book_num, person.birthday, '
-            'person.start_school, person.morning, '
-            'person.property, person.is_girl, person.child_name, '
-            'person.expend, person.first_out_city, person.hobby'
+            "person.friends, person.book_num, person.birthday, "
+            "person.start_school, person.morning, "
+            "person.property, person.is_girl, person.child_name, "
+            "person.expend, person.first_out_city, person.hobby"
         )
         assert resp.is_succeeded(), resp.error_msg()
-        assert '' == resp.error_msg()
+        assert "" == resp.error_msg()
         assert resp.latency() > 0
-        assert '' == resp.comment()
+        assert "" == resp.comment()
         assert ErrorCode.SUCCEEDED == resp.error_code()
-        assert 'test_data' == resp.space_name()
+        assert "test_data" == resp.space_name()
         assert not resp.is_empty()
         assert 1 == resp.row_size()
         names = [
-            'person.name',
-            'person.age',
-            'person.grade',
-            'person.friends',
-            'person.book_num',
-            'person.birthday',
-            'person.start_school',
-            'person.morning',
-            'person.property',
-            'person.is_girl',
-            'person.child_name',
-            'person.expend',
-            'person.first_out_city',
-            'person.hobby',
+            "person.name",
+            "person.age",
+            "person.grade",
+            "person.friends",
+            "person.book_num",
+            "person.birthday",
+            "person.start_school",
+            "person.morning",
+            "person.property",
+            "person.is_girl",
+            "person.child_name",
+            "person.expend",
+            "person.first_out_city",
+            "person.hobby",
         ]
         assert names == resp.keys()
 
-        assert 'Bob' == resp.row_values(0)[0].as_string()
+        assert "Bob" == resp.row_values(0)[0].as_string()
         assert 10 == resp.row_values(0)[1].as_int()
         assert 3 == resp.row_values(0)[2].as_int()
         assert 10 == resp.row_values(0)[3].as_int()
@@ -152,11 +147,11 @@ class TestBaseCase(TestCase):
             DateTime(2010, 9, 10, 2, 8, 2, 0)
         )
         assert (
-            '2010-09-10T10:08:02.000000'
+            "2010-09-10T10:08:02.000000"
             == return_data_time_val.get_local_datetime_str()
         )
         assert (
-            'utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800'
+            "utc datetime: 2010-09-10T02:08:02.000000, timezone_offset: 28800"
             == str(return_data_time_val)
         )
 
@@ -165,14 +160,14 @@ class TestBaseCase(TestCase):
         expected_time_val = TimeWrapper(Time(23, 10, 0, 0))
         return_time_val = resp.row_values(0)[7].as_time()
         assert expected_time_val == return_time_val
-        assert '07:10:00.000000' == return_time_val.get_local_time_str()
-        assert 'utc time: 23:10:00.000000, timezone_offset: 28800' == str(
+        assert "07:10:00.000000" == return_time_val.get_local_time_str()
+        assert "utc time: 23:10:00.000000, timezone_offset: 28800" == str(
             return_time_val
         )
 
         assert 1000.0 == resp.row_values(0)[8].as_double()
         assert False == resp.row_values(0)[9].as_bool()
-        assert 'Hello Worl' == resp.row_values(0)[10].as_string()
+        assert "Hello Worl" == resp.row_values(0)[10].as_string()
         assert 100.0 == resp.row_values(0)[11].as_double()
         assert 1111 == resp.row_values(0)[12].as_int()
         assert Null(Null.__NULL__) == resp.row_values(0)[13].as_null()
@@ -201,12 +196,12 @@ class TestBaseCase(TestCase):
         assert resp.row_values(0)[0].is_map()
         val = resp.row_values(0)[0].as_map()
         assert len(val.keys()) == 3
-        assert 'name' in val.keys()
-        assert val['name'].as_string() == 'Tom'
-        assert 'age' in val.keys()
-        assert val['age'].as_int() == 18
-        assert 'birthday' in val.keys()
-        assert val['birthday'].as_string() == '2010-10-10'
+        assert "name" in val.keys()
+        assert val["name"].as_string() == "Tom"
+        assert "age" in val.keys()
+        assert val["age"].as_int() == 18
+        assert "birthday" in val.keys()
+        assert val["birthday"].as_string() == "2010-10-10"
 
     def test_node_type(self):
         resp = self.session.execute('MATCH (v:person {name: "Bob"}) RETURN v')
@@ -237,17 +232,17 @@ class TestBaseCase(TestCase):
         path = resp.row_values(0)[0].as_path()
         expected_str = (
             '("Bob" :student{interval: P1MT100.000020000S, name: "Bob"} :person{age:'
-            ' 10, birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset:'
+            " 10, birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset:"
             ' 28800, book_num: 100, child_name: "Hello Worl", expend: 100.0,'
-            ' first_out_city: 1111, friends: 10, grade: 3, hobby: __NULL__, is_girl:'
-            ' False, morning: utc time: 23:10:00.000000, timezone_offset: 28800, name:'
+            " first_out_city: 1111, friends: 10, grade: 3, hobby: __NULL__, is_girl:"
+            " False, morning: utc time: 23:10:00.000000, timezone_offset: 28800, name:"
             ' "Bob", property: 1000.0, start_school:'
             ' 2017-09-10})-[:friend@0{start_year: 2018, end_year: 2020}]->("Lily"'
             ' :student{interval: P12MT0.000000000S, name: "Lily"} :person{age: 9,'
-            ' birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset:'
+            " birthday: utc datetime: 2010-09-10T02:08:02.000000, timezone_offset:"
             ' 28800, book_num: 100, child_name: "Hello Worl", expend: 100.0,'
-            ' first_out_city: 1111, friends: 10, grade: 3, hobby: __NULL__, is_girl:'
-            ' False, morning: utc time: 23:10:00.000000, timezone_offset: 28800, name:'
+            " first_out_city: 1111, friends: 10, grade: 3, hobby: __NULL__, is_girl:"
+            " False, morning: utc time: 23:10:00.000000, timezone_offset: 28800, name:"
             ' "Lily", property: 1000.0, start_school: 2017-09-10})'
         )
         assert expected_str == str(path)
@@ -279,7 +274,7 @@ class TestExecuteJson(TestBaseCase):
         exp = [
             {
                 "person.age": 10,
-                "person.birthday": '2010-09-10T02:08:02.000000000Z',
+                "person.birthday": "2010-09-10T02:08:02.000000000Z",
                 "person.book_num": 100,
                 "person.child_name": "Hello Worl",
                 "person.expend": 100,
@@ -288,10 +283,10 @@ class TestExecuteJson(TestBaseCase):
                 "person.grade": 3,
                 "person.hobby": None,
                 "person.is_girl": False,
-                "person.morning": '23:10:00.000000000Z',
+                "person.morning": "23:10:00.000000000Z",
                 "person.name": "Bob",
                 "person.property": 1000,
-                "person.start_school": '2017-09-10',
+                "person.start_school": "2017-09-10",
                 "student.name": "Bob",
                 "student.interval": "P1MT100.000020000S",
             }
@@ -300,9 +295,7 @@ class TestExecuteJson(TestBaseCase):
         assert exp == json_obj["results"][0]["data"][0]["row"]
 
     def test_error(self):
-        resp = self.session.execute_json(
-            'MATCH (v:invalidTag {name: \"Bob\"}) RETURN v'
-        )
+        resp = self.session.execute_json('MATCH (v:invalidTag {name: "Bob"}) RETURN v')
 
         json_obj = json.loads(resp)
 
