@@ -29,7 +29,7 @@ jobs:
         run: |
           docker-compose -f docker-compose.yaml up -d
           sleep 20
-          pytest -s -v -k "not SSL" --cov=../nebula3 --cov-report=xml --cov-append
+          pytest -s -v -k "not SSL"
         working-directory: tests
 
 
