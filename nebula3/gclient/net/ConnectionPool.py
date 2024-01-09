@@ -307,7 +307,10 @@ class ConnectionPool(object):
                             )
                             conns.remove(connection)
                             continue
-                        if self._configs.idle_time != 0:
+                        if (
+                            self._configs.idle_time != 0
+                            and connection.idle_time() > self._configs.idle_time
+                        ):
                             logger.debug(
                                 "Remove the idle connection to {}".format(
                                     connection.get_address()
