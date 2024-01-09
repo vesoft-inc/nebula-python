@@ -9,12 +9,39 @@ on:
     - cron: "0 6 * * *"
 
 jobs:
+  ci-pip-install:
+    runs-on: ubuntu-22.04
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [3.6, 3.7]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: lint
+        run: make fmt-check
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+          pip install -r requirements/dev.txt
+      - name: Test with pytest
+        run: |
+          docker-compose -f docker-compose.yaml up -d
+          sleep 20
+          pytest -s -v -k "not SSL" --cov=../nebula3 --cov-report=xml --cov-append
+        working-directory: tests
+
+
   ci:
     runs-on: ubuntu-22.04
     strategy:
       max-parallel: 2
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, '3.10', 3.11, 3.12]
+        python-version: [3.7, 3.8, 3.9, '3.10', 3.11, 3.12]
 
     steps:
       - name: Maximize runner space
