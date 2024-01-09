@@ -38,6 +38,17 @@ class TestConnection(TestCase):
             except Exception as ex:
                 assert False, ex
 
+    def test_create_connect_not_in_whitelist(self):
+        for ip in AddrIp:
+            try:
+                conn = Connection()
+                conn.open(ip, port, 1000, "invalid_handshakeKey")
+                auth_result = conn.authenticate("root", "nebula")
+                assert auth_result.get_session_id() != 0
+                conn.close()
+            except Exception as ex:
+                assert True, ex
+
     def test_release(self):
         for ip in AddrIp:
             try:

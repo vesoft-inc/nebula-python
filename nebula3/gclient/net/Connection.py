@@ -48,7 +48,7 @@ class Connection(object):
         :param ip: the server ip
         :param port: the server port
         :param timeout: the timeout for connect and execute
-        :param handshakeKey: the server version
+        :param handshakeKey: the client version
         :return: void
         """
         self.open_SSL(ip, port, timeout, handshakeKey, None)
@@ -59,7 +59,7 @@ class Connection(object):
         :param ip: the server ip
         :param port: the server port
         :param timeout: the timeout for connect and execute
-        :param handshakeKey: the server version
+        :param handshakeKey: the client version
         :ssl_config: configs for SSL
         :return: void
         """
@@ -94,7 +94,8 @@ class Connection(object):
 
             self._connection = GraphService.Client(protocol)
             verifyClientVersionReq = VerifyClientVersionReq()
-            verifyClientVersionReq.version = handshakeKey
+            if handshakeKey is not None:
+                verifyClientVersionReq.version = handshakeKey
             resp = self._connection.verifyClientVersion(verifyClientVersionReq)
             if resp.error_code != ErrorCode.SUCCEEDED:
                 self._connection._iprot.trans.close()

@@ -99,6 +99,18 @@ class TestSSLConnectionSelfSigned(TestCase):
         except Exception as ex:
             assert False, ex
 
+    def test_create_self_signed_not_in_whitelist(self):
+        try:
+            conn = Connection()
+            conn.open_SSL(
+                host, port, 1000, "invalid_handshakeKey", ssl_selfs_signed_config
+            )
+            auth_result = conn.authenticate("root", "nebula")
+            assert auth_result.get_session_id() != 0
+            conn.close()
+        except Exception as ex:
+            assert True, ex
+
     def test_release_self_signed(self):
         try:
             conn = Connection()

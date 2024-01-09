@@ -20,7 +20,6 @@ from nebula3.gclient.net.SessionPool import SessionPool
 if __name__ == "__main__":
     ip = "127.0.0.1"
     port = 9669
-    handshakeKey = "3.0.0"
     try:
         config = SessionPoolConfig()
 
