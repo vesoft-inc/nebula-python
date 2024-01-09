@@ -36,7 +36,7 @@ handshakeKey = "3.0.0"
 def prepare_space(space_name="session_pool_test"):
     # prepare space
     conn = Connection()
-    conn.open("127.0.0.1", test_port, 1000,handshakeKey)
+    conn.open("127.0.0.1", test_port, 1000, handshakeKey)
     auth_result = conn.authenticate("root", "nebula")
     assert auth_result.get_session_id() != 0
     resp = conn.execute(
@@ -182,9 +182,7 @@ def test_session_pool_multi_thread():
     configs.interval_check = 2
     configs.handshakeKey = "3.0.0"
 
-    session_pool = SessionPool(
-        "root", "nebula", "session_pool_test", addresses
-    )
+    session_pool = SessionPool("root", "nebula", "session_pool_test", addresses)
     assert session_pool.init(configs)
 
     global success_flag
