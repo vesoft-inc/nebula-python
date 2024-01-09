@@ -27,7 +27,7 @@ class SessionPool(object):
     S_OK = 0
     S_BAD = 1
 
-    def __init__(self, username, password, space_name, addresses, handshakeKey):
+    def __init__(self, username, password, space_name, addresses):
         # user name and password of the session
         self._username = username
         self._password = password
@@ -40,8 +40,6 @@ class SessionPool(object):
 
         # server's status
         self._addresses_status = dict()
-
-        self.handshakeKey = handshakeKey
 
         # validate the addresses
         for address in addresses:
