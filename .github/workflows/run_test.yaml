@@ -24,7 +24,6 @@ jobs:
       - name: Install dependencies
         run: |
           python3.6 setup.py install
-          pip install .
           pip install pip-tools pytest
       - name: Test with pytest==6.2.5
         run: |
