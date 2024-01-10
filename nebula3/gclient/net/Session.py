@@ -26,7 +26,18 @@ class Session(object):
         pool,
         retry_connect=True,
         retry_times=3,
+        retry_interval_sec=1,
     ):
+        """
+        Initialize the Session object.
+
+        :param connection: The connection object associated with the session.
+        :param auth_result: The result of the authentication process.
+        :param pool: The pool object where the session was created.
+        :param retry_connect: A boolean indicating whether to retry the connection if it fails.
+        :param retry_times: The number of times to retry the connection.
+        :param retry_interval_sec: The interval between connection retries in seconds.
+        """
         self._session_id = auth_result.get_session_id()
         self._timezone_offset = auth_result.get_timezone_offset()
         self._connection = connection
@@ -35,6 +46,7 @@ class Session(object):
         self._pool = pool
         self._retry_connect = retry_connect
         self._retry_times = retry_times
+        self._retry_interval_sec = retry_interval_sec
         # the time stamp when the session was added to the idle list of the session pool
         self._idle_time_start = 0
 
@@ -78,6 +90,8 @@ class Session(object):
             retry_count = 0
             while retry_count < self._retry_times:
                 try:
+                    # TODO: add exponential backoff
+                    time.sleep(self._retry_interval_sec)
                     resp = self._connection.execute_parameter(
                         self._session_id, stmt, params
                     )
