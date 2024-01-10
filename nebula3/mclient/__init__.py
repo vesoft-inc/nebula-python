@@ -15,8 +15,10 @@ from nebula3.Exception import (
     SpaceNotFoundException,
     TagNotFoundException,
     EdgeNotFoundException,
+    ClientServerIncompatibleException,
 )
 from nebula3.common.ttypes import HostAddr, ErrorCode
+from nebula3.graph.ttypes import VerifyClientVersionReq
 from nebula3.meta.ttypes import (
     HostStatus,
     ListTagsReq,
@@ -34,13 +36,14 @@ from nebula3.logger import logger
 
 
 class MetaClient(object):
-    def __init__(self, addresses, timeout):
+    def __init__(self, addresses, timeout, handshakeKey):
         if len(addresses) == 0:
-            raise RuntimeError('Input empty addresses')
+            raise RuntimeError("Input empty addresses")
         self._timeout = timeout
         self._connection = None
         self._retry_count = 3
         self._addresses = addresses
+        self.handshakeKey = handshakeKey
         for address in addresses:
             try:
                 socket.gethostbyname(address[0])
@@ -52,7 +55,7 @@ class MetaClient(object):
     def open(self):
         """open the connection to connect meta service
 
-        :eturn: void
+        :return: void
         """
         try:
             self.close()
@@ -63,6 +66,13 @@ class MetaClient(object):
             protocol = TBinaryProtocol.TBinaryProtocol(transport)
             transport.open()
             self._connection = MetaService.Client(protocol)
+            verifyClientVersionReq = VerifyClientVersionReq()
+            if self.handshakeKey is not None:
+                verifyClientVersionReq.version = self.handshakeKey
+            resp = self._connection.verifyClientVersion(verifyClientVersionReq)
+            if resp.error_code != ErrorCode.SUCCEEDED:
+                self._connection._iprot.trans.close()
+                raise ClientServerIncompatibleException(resp.error_msg)
         except Exception:
             raise
 
@@ -70,11 +80,11 @@ class MetaClient(object):
         """get all version tags
 
         :param space_id: the specified space id
-        :eturn: list<TagItem>
+        :return: list<TagItem>
         """
         with self._lock:
             if self._connection is None:
-                raise RuntimeError('The connection is no open')
+                raise RuntimeError("The connection is no open")
             req = ListTagsReq()
             req.space_id = space_id
             count = 0
@@ -105,7 +115,7 @@ class MetaClient(object):
         """
         with self._lock:
             if self._connection is None:
-                raise RuntimeError('The connection is no open')
+                raise RuntimeError("The connection is no open")
             req = ListEdgesReq()
             req.space_id = space_id
             count = 0
@@ -135,7 +145,7 @@ class MetaClient(object):
         """
         with self._lock:
             if self._connection is None:
-                raise RuntimeError('The connection is no open')
+                raise RuntimeError("The connection is no open")
             req = ListSpacesReq()
             count = 0
             while count < self._retry_count:
@@ -164,7 +174,7 @@ class MetaClient(object):
         """
         with self._lock:
             if self._connection is None:
-                raise RuntimeError('The connection is no open')
+                raise RuntimeError("The connection is no open")
             req = ListHostsReq()
             req.role = HostRole.STORAGE
             count = 0
@@ -199,7 +209,7 @@ class MetaClient(object):
         """
         with self._lock:
             if self._connection is None:
-                raise RuntimeError('The connection is no open')
+                raise RuntimeError("The connection is no open")
             req = GetPartsAllocReq()
             req.space_id = space_id
             count = 0
@@ -253,13 +263,13 @@ class MetaCache(object):
     class SpaceCache:
         def __init__(self):
             self.space_id = 0
-            self.space_name = ''
+            self.space_name = ""
             self.tag_items = {}
             self.edge_items = {}
             self.parts_alloc = {}
 
         def __repr__(self):
-            return 'space_id: {}, space_name: {}, tag_items: {}, edge_items: {}, parts_alloc: {}'.format(
+            return "space_id: {}, space_name: {}, tag_items: {}, edge_items: {}, parts_alloc: {}".format(
                 self.space_id,
                 self.space_name,
                 self.tag_items,
@@ -267,7 +277,14 @@ class MetaCache(object):
                 self.parts_alloc,
             )
 
-    def __init__(self, meta_addrs, timeout=2000, load_period=10, decode_type='utf-8'):
+    def __init__(
+        self,
+        meta_addrs,
+        timeout=2000,
+        load_period=10,
+        decode_type="utf-8",
+        handshakeKey=None,
+    ):
         self._decode_type = decode_type
         self._load_period = load_period
         self._lock = RLock()
@@ -276,7 +293,7 @@ class MetaCache(object):
         self._storage_addrs = []
         self._storage_leader = {}
         self._close = False
-        self._meta_client = MetaClient(meta_addrs, timeout)
+        self._meta_client = MetaClient(meta_addrs, timeout, handshakeKey)
         self._meta_client.open()
 
         # load meta data
@@ -309,7 +326,7 @@ class MetaCache(object):
                 space_id = space.id.get_space_id()
                 space_cache = MetaCache.SpaceCache()
                 space_cache.space_id = space_id
-                space_cache.space_name = space.name.decode('utf-8')
+                space_cache.space_name = space.name.decode("utf-8")
                 space_id_names[space_id] = space_cache.space_name
                 tags = self._meta_client.list_tags(space_id)
                 edges = self._meta_client.list_edges(space_id)
@@ -353,7 +370,7 @@ class MetaCache(object):
                             part_id
                         ][0]
         except Exception as x:
-            logger.error('Update meta data failed: {}'.format(x))
+            logger.error("Update meta data failed: {}".format(x))
             import traceback
 
             logger.error(traceback.format_exc())
