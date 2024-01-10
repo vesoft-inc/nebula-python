@@ -3,6 +3,9 @@
 This repository holds the official Python API for NebulaGraph.
 
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
+[![pypi-version](https://img.shields.io/pypi/v/nebula3-python)](https://pypi.org/project/nebula3-python/)
+[![python-version](https://img.shields.io/badge/python-3.6.2%20|%203.7%20|%203.8%20|%203.9%20|%203.10%20|%203.11%20|%203.12-blue)](https://www.python.org/)
+
 
 ## Before you start
 
@@ -57,10 +60,18 @@ git clone https://github.com/vesoft-inc/nebula-python.git
 cd nebula-python
 ```
 
-- Install
+- Install from source
 
-```python
+> For python version >= 3.7.0
+
+```bash
 pip install .
+```
+
+> For python version >= 3.6.2, < 3.7.0
+
+```bash
+python3 setup.py install
 ```
 
 ## Quick example to use graph-client to connect graphd
