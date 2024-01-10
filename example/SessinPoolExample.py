@@ -10,15 +10,16 @@ import time
 
 from FormatResp import print_resp
 
+
 from nebula3.common.ttypes import ErrorCode
 from nebula3.Config import SessionPoolConfig
 from nebula3.gclient.net import Connection
 from nebula3.gclient.net.SessionPool import SessionPool
 
+
 if __name__ == "__main__":
     ip = "127.0.0.1"
     port = 9669
-
     try:
         config = SessionPoolConfig()
 
@@ -36,6 +37,7 @@ if __name__ == "__main__":
         time.sleep(10)
 
         # init session pool
+
         session_pool = SessionPool("root", "nebula", "session_pool_test", [(ip, port)])
         assert session_pool.init(config)
 

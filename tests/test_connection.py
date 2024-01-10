@@ -7,6 +7,14 @@
 
 
 import time
+import sys
+import os
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.join(current_dir, "..")
+sys.path.insert(0, root_dir)
+
+
 from unittest import TestCase
 
 from nebula3.common import ttypes
@@ -15,6 +23,7 @@ from nebula3.gclient.net import Connection
 
 AddrIp = ["127.0.0.1", "::1"]
 port = 9669
+handshakeKey = "3.0.0"
 
 
 class TestConnection(TestCase):
@@ -22,18 +31,29 @@ class TestConnection(TestCase):
         for ip in AddrIp:
             try:
                 conn = Connection()
-                conn.open(ip, port, 1000)
+                conn.open(ip, port, 1000, handshakeKey)
                 auth_result = conn.authenticate("root", "nebula")
                 assert auth_result.get_session_id() != 0
                 conn.close()
             except Exception as ex:
                 assert False, ex
 
+    def test_create_connect_not_in_whitelist(self):
+        for ip in AddrIp:
+            try:
+                conn = Connection()
+                conn.open(ip, port, 1000, "invalid_handshakeKey")
+                auth_result = conn.authenticate("root", "nebula")
+                assert auth_result.get_session_id() != 0
+                conn.close()
+            except Exception as ex:
+                assert True, ex
+
     def test_release(self):
         for ip in AddrIp:
             try:
                 conn = Connection()
-                conn.open(ip, port, 1000)
+                conn.open(ip, port, 1000, handshakeKey)
                 auth_result = conn.authenticate("root", "nebula")
                 session_id = auth_result.get_session_id()
                 assert session_id != 0
@@ -51,7 +71,7 @@ class TestConnection(TestCase):
     def test_close(self):
         for ip in AddrIp:
             conn = Connection()
-            conn.open(ip, port, 1000)
+            conn.open(ip, port, 1000, handshakeKey)
             auth_result = conn.authenticate("root", "nebula")
             assert auth_result.get_session_id() != 0
             conn.close()

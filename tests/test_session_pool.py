@@ -9,6 +9,14 @@
 import json
 import threading
 import time
+import os
+import sys
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.join(current_dir, "..")
+sys.path.insert(0, root_dir)
+
+
 from unittest import TestCase
 
 from nebula3.common.ttypes import ErrorCode
@@ -22,12 +30,13 @@ from nebula3.gclient.net.SessionPool import SessionPool
 # ports for test
 test_port = 9669
 test_port2 = 9670
+handshakeKey = "3.0.0"
 
 
 def prepare_space(space_name="session_pool_test"):
     # prepare space
     conn = Connection()
-    conn.open("127.0.0.1", test_port, 1000)
+    conn.open("127.0.0.1", test_port, 1000, handshakeKey)
     auth_result = conn.authenticate("root", "nebula")
     assert auth_result.get_session_id() != 0
     resp = conn.execute(
@@ -65,6 +74,7 @@ class TestSessionPoolBasic(TestCase):
         self.configs.max_size = 4
         self.configs.idle_time = 2000
         self.configs.interval_check = 2
+        self.configs.handshakeKey = "3.0.0"
 
         # prepare space
         prepare_space("session_pool_test")
@@ -74,7 +84,10 @@ class TestSessionPoolBasic(TestCase):
         time.sleep(10)
 
         self.session_pool = SessionPool(
-            "root", "nebula", "session_pool_test", self.addresses
+            "root",
+            "nebula",
+            "session_pool_test",
+            self.addresses,
         )
         assert self.session_pool.init(self.configs)
 
@@ -85,13 +98,19 @@ class TestSessionPoolBasic(TestCase):
     def test_pool_init(self):
         # basic
         session_pool = SessionPool(
-            "root", "nebula", "session_pool_test", self.addresses
+            "root",
+            "nebula",
+            "session_pool_test",
+            self.addresses,
         )
         assert session_pool.init(self.configs)
 
         # handle wrong service port
         pool = SessionPool(
-            "root", "nebula", "session_pool_test", [("127.0.0.1", 3800)]
+            "root",
+            "nebula",
+            "session_pool_test",
+            [("127.0.0.1", 3800)],
         )  # wrong port
         try:
             pool.init(self.configs)
@@ -102,7 +121,10 @@ class TestSessionPoolBasic(TestCase):
         # handle invalid hostname
         try:
             session_pool = SessionPool(
-                "root", "nebula", "session_pool_test", [("wrong_host", test_port)]
+                "root",
+                "nebula",
+                "session_pool_test",
+                [("wrong_host", test_port)],
             )
             session_pool.init(self.configs)
             assert False
@@ -128,7 +150,10 @@ class TestSessionPoolBasic(TestCase):
         # This test is used to test if the space bond to session is the same as the space in the session pool config after executing
         # a query contains `USE <space_name>` statement.
         session_pool = SessionPool(
-            "root", "nebula", "session_pool_test", self.addresses
+            "root",
+            "nebula",
+            "session_pool_test",
+            self.addresses,
         )
         configs = SessionPoolConfig()
         configs.min_size = 1
@@ -155,6 +180,7 @@ def test_session_pool_multi_thread():
     configs.max_size = 4
     configs.idle_time = 2000
     configs.interval_check = 2
+    configs.handshakeKey = "3.0.0"
 
     session_pool = SessionPool("root", "nebula", "session_pool_test", addresses)
     assert session_pool.init(configs)
