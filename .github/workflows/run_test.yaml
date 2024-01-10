@@ -9,10 +9,11 @@ on:
     - cron: "0 6 * * *"
 
 jobs:
-  ci-pip-install:
+  ci-pip-install-from-source:
+    # This is to verify the setup.py as a mitigation for remain python 3.6.2+ capability
     runs-on: ubuntu-20.04
     strategy:
-      max-parallel: 1
+      max-parallel: 2
       matrix:
         python-version: [3.6, 3.7]
     steps:
@@ -21,11 +22,11 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+      - name: Install nebulagraph-python from source and test dependencies
         run: |
           python setup.py install
           pip install pip-tools pytest
-      - name: Test with pytest==6.2.5
+      - name: Test with pytest
         run: |
           docker-compose -f docker-compose.yaml up -d
           sleep 20
@@ -33,7 +34,7 @@ jobs:
         working-directory: tests
 
 
-  ci:
+  build-lint-test:
     runs-on: ubuntu-22.04
     strategy:
       max-parallel: 2
@@ -75,7 +76,7 @@ jobs:
         with:
           files: coverage.xml
 
-  example:
+  example-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
