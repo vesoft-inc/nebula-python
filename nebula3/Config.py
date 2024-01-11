@@ -25,8 +25,6 @@ class Config(object):
     # the interval to check idle time connection, unit second, -1 means no check
     interval_check = -1
 
-    handshakeKey = None
-
 
 class SSL_config(object):
     """configs used to Initialize a TSSLSocket.
@@ -91,4 +89,3 @@ class SessionPoolConfig(object):
     max_size = 30
     min_size = 1
     interval_check = -1
-    handshakeKey = None

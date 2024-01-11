@@ -11,14 +11,7 @@ import time
 from unittest import TestCase
 
 import pytest
-import sys
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-root_dir = os.path.join(current_dir, "..")
-sys.path.insert(0, root_dir)
-
-from unittest import TestCase
-from nebula3.Exception import IOErrorException
 from nebula3.common import ttypes
 from nebula3.Config import SSL_config
 from nebula3.Exception import IOErrorException
@@ -43,7 +36,6 @@ ssl_selfs_signed_config.certfile = os.path.join(current_dir, "secrets/client.crt
 
 host = "127.0.0.1"
 port = 9669
-handshakeKey = "3.0.0"
 
 
 @pytest.mark.SSL
@@ -51,16 +43,17 @@ class TestSSLConnection(TestCase):
     def test_create(self):
         try:
             conn = Connection()
-            conn.open_SSL(host, port, 1000, handshakeKey, ssl_config)
+            conn.open_SSL(host, port, 1000, ssl_config)
             auth_result = conn.authenticate("root", "nebula")
             assert auth_result.get_session_id() != 0
             conn.close()
         except Exception as ex:
             assert False, ex
 
+    def test_release(self):
         try:
             conn = Connection()
-            conn.open_SSL(host, port, 1000, handshakeKey, ssl_config)
+            conn.open_SSL(host, port, 1000, ssl_config)
             auth_result = conn.authenticate("root", "nebula")
             session_id = auth_result.get_session_id()
             assert session_id != 0
@@ -77,7 +70,7 @@ class TestSSLConnection(TestCase):
 
     def test_close(self):
         conn = Connection()
-        conn.open_SSL(host, port, 1000, handshakeKey, ssl_config)
+        conn.open_SSL(host, port, 1000, ssl_config)
         auth_result = conn.authenticate("root", "nebula")
         assert auth_result.get_session_id() != 0
         conn.close()
@@ -92,29 +85,17 @@ class TestSSLConnectionSelfSigned(TestCase):
     def test_create_self_signed(self):
         try:
             conn = Connection()
-            conn.open_SSL(host, port, 1000, handshakeKey, ssl_selfs_signed_config)
+            conn.open_SSL(host, port, 1000, ssl_selfs_signed_config)
             auth_result = conn.authenticate("root", "nebula")
             assert auth_result.get_session_id() != 0
             conn.close()
         except Exception as ex:
             assert False, ex
 
-    def test_create_self_signed_not_in_whitelist(self):
-        try:
-            conn = Connection()
-            conn.open_SSL(
-                host, port, 1000, "invalid_handshakeKey", ssl_selfs_signed_config
-            )
-            auth_result = conn.authenticate("root", "nebula")
-            assert auth_result.get_session_id() != 0
-            conn.close()
-        except Exception as ex:
-            assert True, ex
-
     def test_release_self_signed(self):
         try:
             conn = Connection()
-            conn.open_SSL(host, port, 1000, handshakeKey, ssl_selfs_signed_config)
+            conn.open_SSL(host, port, 1000, ssl_selfs_signed_config)
             auth_result = conn.authenticate("root", "nebula")
             session_id = auth_result.get_session_id()
             assert session_id != 0
@@ -131,7 +112,7 @@ class TestSSLConnectionSelfSigned(TestCase):
 
     def test_close_self_signed(self):
         conn = Connection()
-        conn.open_SSL(host, port, 1000, handshakeKey, ssl_selfs_signed_config)
+        conn.open_SSL(host, port, 1000, ssl_selfs_signed_config)
         auth_result = conn.authenticate("root", "nebula")
         assert auth_result.get_session_id() != 0
         conn.close()

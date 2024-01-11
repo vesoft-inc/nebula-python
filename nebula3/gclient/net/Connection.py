@@ -40,26 +40,23 @@ class Connection(object):
         self._port = None
         self._timeout = 0
         self._ssl_conf = None
-        self.handshakeKey = None
 
-    def open(self, ip, port, timeout, handshakeKey=None):
+    def open(self, ip, port, timeout):
         """open the connection
 
         :param ip: the server ip
         :param port: the server port
         :param timeout: the timeout for connect and execute
-        :param handshakeKey: the client version
         :return: void
         """
-        self.open_SSL(ip, port, timeout, handshakeKey, None)
+        self.open_SSL(ip, port, timeout, None)
 
-    def open_SSL(self, ip, port, timeout, handshakeKey=None, ssl_config=None):
+    def open_SSL(self, ip, port, timeout, ssl_config=None):
         """open the SSL connection
 
         :param ip: the server ip
         :param port: the server port
         :param timeout: the timeout for connect and execute
-        :param handshakeKey: the client version
         :ssl_config: configs for SSL
         :return: void
         """
@@ -67,7 +64,6 @@ class Connection(object):
         self._port = port
         self._timeout = timeout
         self._ssl_conf = ssl_config
-        self.handshakeKey = handshakeKey
         try:
             if ssl_config is not None:
                 s = TSSLSocket.TSSLSocket(
@@ -93,10 +89,7 @@ class Connection(object):
             header_transport.open()
 
             self._connection = GraphService.Client(protocol)
-            verifyClientVersionReq = VerifyClientVersionReq()
-            if handshakeKey is not None:
-                verifyClientVersionReq.version = handshakeKey
-            resp = self._connection.verifyClientVersion(verifyClientVersionReq)
+            resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
             if resp.error_code != ErrorCode.SUCCEEDED:
                 self._connection._iprot.trans.close()
                 raise ClientServerIncompatibleException(resp.error_msg)
@@ -110,11 +103,9 @@ class Connection(object):
         """
         self.close()
         if self._ssl_conf is not None:
-            self.open_SSL(
-                self._ip, self._port, self._timeout, self.handshakeKey, self._ssl_conf
-            )
+            self.open_SSL(self._ip, self._port, self._timeout, self._ssl_conf)
         else:
-            self.open(self._ip, self._port, self._timeout, self.handshakeKey)
+            self.open(self._ip, self._port, self._timeout)
 
     def authenticate(self, user_name, password):
         """authenticate to graphd
@@ -225,7 +216,7 @@ class Connection(object):
             self._connection._iprot.trans.close()
         except Exception as e:
             logger.error(
-                "Close connection to {}:{} failed:{}".format(self._ip, self._port, e)
+                'Close connection to {}:{} failed:{}'.format(self._ip, self._port, e)
             )
 
     def ping(self):
@@ -233,7 +224,7 @@ class Connection(object):
         :return: True or False
         """
         try:
-            resp = self._connection.execute(0, "YIELD 1;")
+            resp = self._connection.execute(0, 'YIELD 1;')
             return True
         except Exception:
             return False
