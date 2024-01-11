@@ -36,6 +36,8 @@ from nebula3.logger import logger
 
 
 class MetaClient(object):
+    handshakeKey = None
+
     def __init__(self, addresses, timeout):
         if len(addresses) == 0:
             raise RuntimeError("Input empty addresses")
@@ -51,7 +53,7 @@ class MetaClient(object):
         self._leader = self._addresses[0]
         self._lock = RLock()
 
-    def open(self,handshakeKey):
+    def open(self):
         """open the connection to connect meta service
 
         :return: void
@@ -66,14 +68,21 @@ class MetaClient(object):
             transport.open()
             self._connection = MetaService.Client(protocol)
             verifyClientVersionReq = VerifyClientVersionReq()
-            if handshakeKey is not None:
-                verifyClientVersionReq.version = handshakeKey
+            if self.handshakeKey is not None:
+                verifyClientVersionReq.version = self.handshakeKey
             resp = self._connection.verifyClientVersion(verifyClientVersionReq)
             if resp.error_code != ErrorCode.SUCCEEDED:
                 self._connection._iprot.trans.close()
                 raise ClientServerIncompatibleException(resp.error_msg)
         except Exception:
             raise
+
+    def set_handshakeKey(self, handshakeKey):
+        """set handshakeKey for meta service
+
+        :return: void
+        """
+        self.handshakeKey = handshakeKey
 
     def list_tags(self, space_id):
         """get all version tags
@@ -282,7 +291,6 @@ class MetaCache(object):
         timeout=2000,
         load_period=10,
         decode_type="utf-8",
-        handshakeKey=None,
     ):
         self._decode_type = decode_type
         self._load_period = load_period
@@ -293,7 +301,7 @@ class MetaCache(object):
         self._storage_leader = {}
         self._close = False
         self._meta_client = MetaClient(meta_addrs, timeout)
-        self._meta_client.open(handshakeKey)
+        self._meta_client.open()
 
         # load meta data
         self._load_all()
