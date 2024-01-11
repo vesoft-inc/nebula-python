@@ -71,7 +71,7 @@ class MetaClient(object):
             if self.handshakeKey is not None:
                 verifyClientVersionReq.version = self.handshakeKey
             resp = self._connection.verifyClientVersion(verifyClientVersionReq)
-            if resp.error_code != ErrorCode.SUCCEEDED:
+            if resp.code != ErrorCode.SUCCEEDED:
                 self._connection._iprot.trans.close()
                 raise ClientServerIncompatibleException(resp.error_msg)
         except Exception:
