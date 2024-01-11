@@ -36,14 +36,13 @@ from nebula3.logger import logger
 
 
 class MetaClient(object):
-    def __init__(self, addresses, timeout, handshakeKey):
+    def __init__(self, addresses, timeout):
         if len(addresses) == 0:
             raise RuntimeError("Input empty addresses")
         self._timeout = timeout
         self._connection = None
         self._retry_count = 3
         self._addresses = addresses
-        self.handshakeKey = handshakeKey
         for address in addresses:
             try:
                 socket.gethostbyname(address[0])
@@ -52,7 +51,7 @@ class MetaClient(object):
         self._leader = self._addresses[0]
         self._lock = RLock()
 
-    def open(self):
+    def open(self,handshakeKey):
         """open the connection to connect meta service
 
         :return: void
@@ -67,8 +66,8 @@ class MetaClient(object):
             transport.open()
             self._connection = MetaService.Client(protocol)
             verifyClientVersionReq = VerifyClientVersionReq()
-            if self.handshakeKey is not None:
-                verifyClientVersionReq.version = self.handshakeKey
+            if handshakeKey is not None:
+                verifyClientVersionReq.version = handshakeKey
             resp = self._connection.verifyClientVersion(verifyClientVersionReq)
             if resp.error_code != ErrorCode.SUCCEEDED:
                 self._connection._iprot.trans.close()
@@ -293,8 +292,8 @@ class MetaCache(object):
         self._storage_addrs = []
         self._storage_leader = {}
         self._close = False
-        self._meta_client = MetaClient(meta_addrs, timeout, handshakeKey)
-        self._meta_client.open()
+        self._meta_client = MetaClient(meta_addrs, timeout)
+        self._meta_client.open(handshakeKey)
 
         # load meta data
         self._load_all()
