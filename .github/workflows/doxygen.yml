@@ -36,7 +36,6 @@ jobs:
     - name: Deploy to gh-pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
         folder: ${{ env.BRANCH_NAME }}/html
         target-folder: ${{ env.BRANCH_NAME }}
 
