@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0 # fetch all commits/branches for gitversion
 
@@ -34,11 +34,10 @@ jobs:
 
     # Deploy the generated HTML files to the gh-pages branch
     - name: Deploy to gh-pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${{ env.BRANCH_NAME }}/html
-        destination_dir: ${{ env.BRANCH_NAME }}
+        folder: ${{ env.BRANCH_NAME }}/html
+        target-folder: ${{ env.BRANCH_NAME }}
 
     # - name: show gh-pages branch
     #   run: |
