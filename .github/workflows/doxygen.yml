@@ -6,7 +6,7 @@ on:
   push:
     branches:
         # Remember to update the branch name when you create a new branch
-      - master
+      - release-3.5
 
 jobs:
   build:
