@@ -34,11 +34,11 @@ jobs:
 
     # Deploy the generated HTML files to the gh-pages branch
     - name: Deploy to gh-pages
-      uses: peaceiris/actions-gh-pages@v3.9.3
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${{ env.BRANCH_NAME }}/html
-        destination_dir: ${{ env.BRANCH_NAME }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        folder: ${{ env.BRANCH_NAME }}/html
+        target-folder: ${{ env.BRANCH_NAME }}
 
     # - name: show gh-pages branch
     #   run: |
