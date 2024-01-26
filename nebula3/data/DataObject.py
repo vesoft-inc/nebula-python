@@ -1406,8 +1406,8 @@ class Node(BaseObject):
         :return: the properties
         """
         if tag is None:
-            if len(self.tags) == 1:
-                tag = self.tags[0]
+            if len(self.tags()) == 1:
+                tag = self.tags()[0]
             else:
                 raise InvalidKeyException("tag name is required")
 
