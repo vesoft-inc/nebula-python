@@ -5316,6 +5316,9 @@ class ScanVertexRequest:
    - only_latest_version
    - enable_read_from_follower
    - common
+   - username
+   - password
+   - need_authenticate
   """
 
   thrift_spec = None
@@ -5413,6 +5416,14 @@ class ScanVertexRequest:
         if ftype == TType.STRUCT:
           self.common = RequestCommon()
           self.common.read(iprot)
+      elif fid == 12:
+        if ftype == TType.STRING:
+          self.password = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 13:
+        if ftype == TType.BOOL:
+          self.need_authenticate = iprot.readBool()
         else:
           iprot.skip(ftype)
       else:
@@ -5475,6 +5486,18 @@ class ScanVertexRequest:
       oprot.writeFieldBegin('common', TType.STRUCT, 10)
       self.common.write(oprot)
       oprot.writeFieldEnd()
+    if self.username != None:
+      oprot.writeFieldBegin('username', TType.STRING, 11)
+      oprot.writeString(self.username)
+      oprot.writeFieldEnd()
+    if self.password != None:
+      oprot.writeFieldBegin('password', TType.STRING, 12)
+      oprot.writeString(self.password)
+      oprot.writeFieldEnd()
+    if self.need_authenticate != None:
+      oprot.writeFieldBegin('need_authenticate', TType.BOOL, 13)
+      oprot.writeBool(self.need_authenticate)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -5521,6 +5544,18 @@ class ScanVertexRequest:
       value = pprint.pformat(self.common, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    common=%s' % (value))
+    if self.username is not None:
+      value = pprint.pformat(self.username, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    username=%s' % (value))
+    if self.password is not None:
+      value = pprint.pformat(self.password, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    password=%s' % (value))
+    if self.need_authenticate is not None:
+      value = pprint.pformat(self.need_authenticate, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    need_authenticate=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
@@ -5548,6 +5583,9 @@ class ScanEdgeRequest:
    - only_latest_version
    - enable_read_from_follower
    - common
+   - username
+   - password
+   - need_authenticate
   """
 
   thrift_spec = None
@@ -5647,6 +5685,21 @@ class ScanEdgeRequest:
           self.common.read(iprot)
         else:
           iprot.skip(ftype)
+      elif fid == 11:
+        if ftype == TType.STRING:
+          self.username = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 12:
+        if ftype == TType.STRING:
+          self.password = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 13:
+        if ftype == TType.BOOL:
+          self.need_authenticate = iprot.readBool()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -5707,6 +5760,18 @@ class ScanEdgeRequest:
       oprot.writeFieldBegin('common', TType.STRUCT, 10)
       self.common.write(oprot)
       oprot.writeFieldEnd()
+    if self.username != None:
+      oprot.writeFieldBegin('username', TType.STRING, 11)
+      oprot.writeString(self.username)
+      oprot.writeFieldEnd()
+    if self.password != None:
+      oprot.writeFieldBegin('password', TType.STRING, 12)
+      oprot.writeString(self.password)
+      oprot.writeFieldEnd()
+    if self.need_authenticate != None:
+      oprot.writeFieldBegin('need_authenticate', TType.BOOL, 13)
+      oprot.writeBool(self.need_authenticate)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -5753,6 +5818,18 @@ class ScanEdgeRequest:
       value = pprint.pformat(self.common, indent=0)
       value = padding.join(value.splitlines(True))
       L.append('    common=%s' % (value))
+    if self.username is not None:
+      value = pprint.pformat(self.username, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    username=%s' % (value))
+    if self.password is not None:
+      value = pprint.pformat(self.password, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    password=%s' % (value))
+    if self.need_authenticate is not None:
+      value = pprint.pformat(self.need_authenticate, indent=0)
+      value = padding.join(value.splitlines(True))
+      L.append('    need_authenticate=%s' % (value))
     return "%s(%s)" % (self.__class__.__name__, "\n" + ",\n".join(L) if L else '')
 
   def __eq__(self, other):
