@@ -59,7 +59,7 @@ def scan_person_vertex(graph_storage_client):
     print("======== Scan vertexes in ScanSpace ======")
     while resp.has_next():
         result = resp.next()
-        if (result is not None):
+        if result is not None:
             for vertex_data in result:
                 print(vertex_data)
 
@@ -71,7 +71,7 @@ def scan_person_edge(graph_storage_client):
     print("======== Scan edges in ScanSpace ======")
     while resp.has_next():
         result = resp.next()
-        if (result is not None):
+        if result is not None:
             for edge_data in result:
                 print(edge_data)
 
