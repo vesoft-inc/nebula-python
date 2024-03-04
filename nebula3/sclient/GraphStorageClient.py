@@ -44,7 +44,7 @@ class GraphStorageClient(object):
         self._connections = []
         self._create_connection()
 
-    def set_userPasswd(self, user, passwd):
+    def set_user_passwd(self, user, passwd):
         """set user and password for scan. only useful for enterprise
         :return:
         """

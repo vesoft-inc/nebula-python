@@ -131,6 +131,7 @@ if __name__ == "__main__":
             [("172.28.1.1", 9559), ("172.28.1.2", 9559), ("172.28.1.3", 9559)], 50000
         )
         graph_storage_client = GraphStorageClient(meta_cache)
+        graph_storage_client.set_user_passwd("root", "nebula")
         prepare_data()
         scan_person_vertex(graph_storage_client)
         scan_person_edge(graph_storage_client)
