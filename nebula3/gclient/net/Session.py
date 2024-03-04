@@ -268,6 +268,8 @@ class Session(object):
             retry_count = 0
             while retry_count < self._retry_times:
                 try:
+                    # TODO: add exponential backoff
+                    time.sleep(self._retry_interval_sec)
                     resp = self._connection.execute_json_with_parameter(
                         self._session_id, stmt, params
                     )
