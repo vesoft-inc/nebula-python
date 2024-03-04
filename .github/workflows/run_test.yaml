@@ -102,4 +102,4 @@ jobs:
           sleep 20
       - name: Test example
         run: |
-          for f in example/*.py; do pdm run python "$f"; done
+          for f in example/*.py; do python3 "$f"; done
