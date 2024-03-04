@@ -58,7 +58,11 @@ jobs:
           cache: true
 
       - name: Install dependencies
-        run: pdm install
+        run: |
+          # due to https://peps.python.org/pep-0632/
+          # we need to install setuptools first, or future installation will fail
+          pip install setuptools
+          pdm install
       - name: lint
         run: pdm fmt-check
       - name: Test with pytest
@@ -89,7 +93,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: true
       - name: Install dependencies
-        run: pdm install -G example
+        run: |
+          pip install setuptools
+          pdm install -G example
       - name: Setup containers
         run: |
           docker-compose -f tests/docker-compose.yaml up -d
