@@ -34,6 +34,8 @@ class GraphStorageClient(object):
     DEFAULT_START_TIME = 0
     DEFAULT_END_TIME = sys.maxsize
     DEFAULT_LIMIT = 1000
+    user = ""
+    passwd = ""
 
     def __init__(self, meta_cache, storage_addrs=None, time_out=60000):
         self._meta_cache = meta_cache
@@ -41,6 +43,13 @@ class GraphStorageClient(object):
         self._time_out = time_out
         self._connections = []
         self._create_connection()
+
+    def set_userPasswd(self, user, passwd):
+        """set user and password for scan. only useful for enterprise
+        :return:
+        """
+        self.user = user
+        self.passwd = passwd
 
     def get_conns(self):
         """get all connections which connect to storaged, the ScanResult use it
@@ -225,6 +234,9 @@ class GraphStorageClient(object):
         req.filter = where
         req.only_latest_version = only_latest_version
         req.enable_read_from_follower = enable_read_from_follower
+        req.username = self.user.encode('utf-8')
+        req.password = self.passwd.encode('utf-8')
+        req.need_authenticate = True
         return ScanResult(
             self,
             req=req,
@@ -368,6 +380,9 @@ class GraphStorageClient(object):
         req.filter = where
         req.only_latest_version = only_latest_version
         req.enable_read_from_follower = enable_read_from_follower
+        req.username = self.user.encode('utf-8')
+        req.password = self.passwd.encode('utf-8')
+        req.need_authenticate = True
         return ScanResult(
             self,
             req=req,
