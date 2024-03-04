@@ -12,6 +12,10 @@ from unittest import TestCase
 
 from nebula3.Config import Config
 from nebula3.gclient.net import ConnectionPool
+from nebula3.Exception import (
+    SessionException,
+    ExecutionErrorException,
+)
 
 
 class TestSession(TestCase):
@@ -89,3 +93,38 @@ class TestSession(TestCase):
         except Exception as ex:
             assert str(ex).find("timed out") > 0
             assert True, ex
+
+    def test_5_session_exception(self):
+        # test SessionException will be raised when session is invalid
+        try:
+            session = self.pool.get_session(self.user_name, self.password)
+            another_session = self.pool.get_session(self.user_name, self.password)
+            session_id = session._session_id
+            another_session.execute(f"KILL SESSION {session_id}")
+            session.execute("SHOW HOSTS")
+        except Exception as ex:
+            assert isinstance(ex, SessionException), "expect to get SessionException"
+
+    def test_6_execute_exception(self):
+        # test ExecutionErrorException will be raised when execute error
+        # we need to mock a query's response code to trigger ExecutionErrorException
+        from unittest.mock import Mock, patch
+
+        try:
+            session = self.pool.get_session(self.user_name, self.password)
+            # Mocking the Connection.execute_parameter method
+            with patch(
+                'nebula3.graph.GraphService.Client.executeWithParameter'
+            ) as mock_execute:
+                mock_response = Mock()
+                mock_response.error_code = ExecutionErrorException.E_EXECUTION_ERROR
+                mock_execute.return_value = mock_response
+                session.execute("SHOW HOSTS")
+                # Assert that execute_parameter was called 3 times (retry mechanism)
+                assert (
+                    mock_execute.call_count == 3
+                ), "execute_parameter was not retried 3 times"
+        except ExecutionErrorException as ex:
+            assert True, "ExecutionErrorException triggered as expected"
+        except Exception as ex:
+            assert False, f"Unexpected exception: {str(ex)}"

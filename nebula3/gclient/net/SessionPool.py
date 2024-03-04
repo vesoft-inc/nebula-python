@@ -15,6 +15,7 @@ from nebula3.Exception import (
     AuthFailedException,
     NoValidSessionException,
     InValidHostname,
+    SessionException,
 )
 
 from nebula3.gclient.net.Session import Session
@@ -170,6 +171,18 @@ class SessionPool(object):
             self._return_session(session)
 
             return resp
+        except SessionException as se:
+            if se.type in [
+                SessionException.E_SESSION_INVALID,
+                SessionException.E_SESSION_TIMEOUT,
+            ]:
+                self._active_sessions.remove(session)
+                session = self._get_idle_session()
+                if session is None:
+                    raise RuntimeError('Get session failed')
+                self._add_session_to_idle(session)
+            raise se
+
         except Exception as e:
             logger.error('Execute failed: {}'.format(e))
             # remove the session from the pool if it is invalid
@@ -257,6 +270,17 @@ class SessionPool(object):
             self._return_session(session)
 
             return resp
+        except SessionException as se:
+            if se.type in [
+                SessionException.E_SESSION_INVALID,
+                SessionException.E_SESSION_TIMEOUT,
+            ]:
+                self._active_sessions.remove(session)
+                session = self._get_idle_session()
+                if session is None:
+                    raise RuntimeError('Get session failed')
+                self._add_session_to_idle(session)
+            raise se
         except Exception as e:
             logger.error('Execute failed: {}'.format(e))
             # remove the session from the pool if it is invalid

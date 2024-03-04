@@ -25,6 +25,8 @@ from nebula3.Exception import (
     AuthFailedException,
     IOErrorException,
     ClientServerIncompatibleException,
+    SessionException,
+    ExecutionErrorException,
 )
 
 from nebula3.gclient.net.AuthResult import AuthResult
@@ -146,6 +148,12 @@ class Connection(object):
         """
         try:
             resp = self._connection.executeWithParameter(session_id, stmt, params)
+            if resp.error_code == ErrorCode.E_SESSION_INVALID:
+                raise SessionException(resp.error_code, resp.error_msg)
+            if resp.error_code == ErrorCode.E_SESSION_TIMEOUT:
+                raise SessionException(resp.error_code, resp.error_msg)
+            if resp.error_code == ErrorCode.E_EXECUTION_ERROR:
+                raise ExecutionErrorException(resp.error_msg)
             return resp
         except Exception as te:
             if isinstance(te, TTransportException):
