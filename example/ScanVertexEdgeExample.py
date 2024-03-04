@@ -71,7 +71,7 @@ def scan_person_edge(graph_storage_client):
     print("======== Scan edges in ScanSpace ======")
     while resp.has_next():
         result = resp.next()
-        if(result is not None):
+        if (result is not None):
             for edge_data in result:
                 print(edge_data)
 
