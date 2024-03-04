@@ -39,7 +39,7 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        python-version: [3.7, 3.8, 3.9, '3.10', 3.11, 3.12]
+        python-version: [3.7, 3.8, 3.9, '3.10', 3.11]
 
     steps:
       - name: Maximize runner space
@@ -94,8 +94,8 @@ jobs:
           cache: true
       - name: Install dependencies
         run: |
-          pip install setuptools
-          pdm install -G example
+          pip install .
+          pip install prettytable pandas
       - name: Setup containers
         run: |
           docker-compose -f tests/docker-compose.yaml up -d
