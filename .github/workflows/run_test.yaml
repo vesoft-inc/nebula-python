@@ -25,8 +25,10 @@ jobs:
           architecture: 'x64'
       - name: Install nebulagraph-python from source and test dependencies
         run: |
-          python setup.py install
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
+          # remove pyproject.toml to avoid pdm install
+          rm pyproject.toml
+          pip install .
           pip install pip-tools pytest
       - name: Test with pytest
         run: |
