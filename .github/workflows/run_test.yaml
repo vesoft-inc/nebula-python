@@ -25,6 +25,7 @@ jobs:
       - name: Install nebulagraph-python from source and test dependencies
         run: |
           python setup.py install
+          pip install --upgrade pip
           pip install pip-tools pytest
       - name: Test with pytest
         run: |
