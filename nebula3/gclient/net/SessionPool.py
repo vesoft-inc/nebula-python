@@ -123,9 +123,22 @@ class SessionPool(object):
         try:
             conn = Connection()
             if self._ssl_configs is None:
-                conn.open(address[0], address[1], 1000)
+                conn.open(
+                    address[0],
+                    address[1],
+                    1000,
+                    self._configs.use_http2,
+                    self._configs.http_headers,
+                )
             else:
-                conn.open_SSL(address[0], address[1], 1000, self._ssl_configs)
+                conn.open_SSL(
+                    address[0],
+                    address[1],
+                    1000,
+                    self._ssl_configs,
+                    self._configs.use_http2,
+                    self._configs.http_headers,
+                )
             conn.close()
             return True
         except Exception as ex:
@@ -381,7 +394,13 @@ class SessionPool(object):
             # connect to the valid service
             connection = Connection()
             try:
-                connection.open(addr[0], addr[1], self._configs.timeout)
+                connection.open(
+                    addr[0],
+                    addr[1],
+                    self._configs.timeout,
+                    self._configs.use_http2,
+                    self._configs.http_headers,
+                )
                 auth_result = connection.authenticate(self._username, self._password)
                 session = Session(connection, auth_result, self, False)
 
