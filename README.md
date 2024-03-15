@@ -16,15 +16,15 @@ Before proceeding, it's crucial to choose the correct branch that suits your req
 └──nebula-python
     │
     ├── nebula3                               // client source code
-    │   ├── fbthrift                          // the fbthrift lib code
+    │   ├── fbthrift                          // the RPC code generated from thrift protocol
     │   ├── common
     │   ├── data
     │   ├── graph
     │   ├── meta
     │   ├── net                               // the net code for graph client
-    │   ├── storage
+    │   ├── storage                           // the storage client code
     │   ├── Config.py                         // the pool config
-    │   └── Exception.py                      // the define exception
+    │   └── Exception.py                      // the exceptions
     │
     ├── examples
     │   ├── FormatResp.py                     // the format response example
@@ -340,7 +340,11 @@ See [ScanVertexEdgeExample.py](example/ScanVertexEdgeExample.py) for more detail
 | 3.4.0                 | >=3.4.0             |
 | 3.5.0                 | >=3.4.0             |
 | master                | master              |
+
 ## How to Contribute to Nebula-Python
+
+<details>
+<summary>Click to expand</summary>
 
 To contribute, start by [forking](https://github.com/vesoft-inc/nebula-python/fork) the repository. Next, clone your forked repository to your local machine. Remember to substitute `{username}` with your actual GitHub username in the URL below:
 
@@ -373,4 +377,6 @@ Using the default formatter with [black](https://github.com/psf/black).
 Please run `pdm fmt` to format python code before submitting.
 
 See [How to contribute](https://github.com/vesoft-inc/nebula-community/blob/master/Contributors/how-to-contribute.md) for the general process of contributing to Nebula projects.
+
+</details>
 
