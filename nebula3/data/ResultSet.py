@@ -191,7 +191,7 @@ class ResultSet(object):
         if self._data_set_wrapper is None:
             return []
         return self._data_set_wrapper.get_rows()
-    
+
     def dict_for_vis(self):
         """Convert result set to a dictionary format suitable for visualization.
 
@@ -202,8 +202,8 @@ class ResultSet(object):
                     'id': 'player100',
                     'labels': ['player'],
                     'props': {
-                        'name': 'Tim Duncan', 
-                        'age': '42', 
+                        'name': 'Tim Duncan',
+                        'age': '42',
                         'id': 'player100'
                     }
                 },
@@ -211,8 +211,8 @@ class ResultSet(object):
                     'id': 'player101',
                     'labels': ['player'],
                     'props': {
-                        'age': '36', 
-                        'name': 'Tony Parker', 
+                        'age': '36',
+                        'name': 'Tony Parker',
                         'id': 'player101'
                     }
                 }
@@ -232,8 +232,8 @@ class ResultSet(object):
                     'id': 'player100',
                     'labels': ['player'],
                     'props': {
-                        'name': 'Tim Duncan', 
-                        'age': '42', 
+                        'name': 'Tim Duncan',
+                        'age': '42',
                         'id': 'player100'
                     }
                 },
@@ -241,8 +241,8 @@ class ResultSet(object):
                     'id': 'player101',
                     'labels': ['player'],
                     'props': {
-                        'age': '36', 
-                        'name': 'Tony Parker', 
+                        'age': '36',
+                        'name': 'Tony Parker',
                         'id': 'player101'
                     }
                 }
@@ -264,13 +264,14 @@ class ResultSet(object):
         :return: dict with keys:
             nodes, edges, nodes_dict, edges_dict, nodes_count, edges_count
         """
+
         def add_to_nodes_or_edges(nodes_dict, edges_dict, item):
             if isinstance(item, Node):
                 node_id = str(item.get_id().cast())
                 tags = item.tags()  # list of strings
                 props_raw = dict()
                 for tag in tags:
-                    # TODO: handle duplicate keys
+                    # TODO: handle duplicate keys among tags
                     props_raw.update(item.properties(tag))
                 props = {
                     k: str(v.cast()) if hasattr(v, "cast") else str(v)
@@ -279,7 +280,7 @@ class ResultSet(object):
 
                 if "id" not in props:
                     props["id"] = node_id
-                
+
                 if node_id not in nodes_dict:
                     nodes_dict[node_id] = {
                         "id": node_id,
@@ -287,7 +288,9 @@ class ResultSet(object):
                         "props": props,
                     }
                 else:
-                    nodes_dict[node_id]["labels"] = list(set(nodes_dict[node_id]["labels"] + tags))
+                    nodes_dict[node_id]["labels"] = list(
+                        set(nodes_dict[node_id]["labels"] + tags)
+                    )
                     nodes_dict[node_id]["props"].update(props)
 
             elif isinstance(item, Relationship):
@@ -310,7 +313,7 @@ class ResultSet(object):
                     }
                 else:
                     edges_dict[(src_id, dst_id, rank, edge_name)]["props"].update(props)
-                
+
             elif isinstance(item, PathWrapper):
                 for node in item.nodes():
                     add_to_nodes_or_edges(nodes_dict, edges_dict, node)
@@ -328,9 +331,7 @@ class ResultSet(object):
         for col_num in range(self.col_size()):
             col_name = columns[col_num]
             col_list = self.column_values(col_name)
-            add_to_nodes_or_edges(
-                nodes_dict, edges_dict, [x.cast() for x in col_list]
-            )
+            add_to_nodes_or_edges(nodes_dict, edges_dict, [x.cast() for x in col_list])
         nodes = list(nodes_dict.values())
         edges = list(edges_dict.values())
         # move rank to props, omit rank 0
@@ -348,6 +349,29 @@ class ResultSet(object):
             "nodes_count": len(nodes),
             "edges_count": len(edges),
         }
+
+    def as_pandas(self, primitive: bool = True):
+        """Convert result set to a pandas DataFrame.
+
+        :param primitive: if True, convert all values to primitive types
+        :return: pandas DataFrame
+        """
+        try:
+            import pandas as pd
+        except ImportError:
+            raise ImportError("pandas is not installed")
+
+        if self.is_empty():
+            return pd.DataFrame()
+
+        data = dict()
+        for col in self.keys():
+            if primitive:
+                data[col] = [x.cast_primitive() for x in self.column_values(col)]
+            else:
+                data[col] = [x.cast() for x in self.column_values(col)]
+
+        return pd.DataFrame(data)
 
     def __iter__(self):
         """the iterator for per row
