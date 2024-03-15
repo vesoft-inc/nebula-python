@@ -340,35 +340,37 @@ See [ScanVertexEdgeExample.py](example/ScanVertexEdgeExample.py) for more detail
 | 3.4.0                 | >=3.4.0             |
 | 3.5.0                 | >=3.4.0             |
 | master                | master              |
+## How to Contribute to Nebula-Python
 
-## How to contribute to nebula-python
+To contribute, start by [forking](https://github.com/vesoft-inc/nebula-python/fork) the repository. Next, clone your forked repository to your local machine. Remember to substitute `{username}` with your actual GitHub username in the URL below:
 
-[Fork](https://github.com/vesoft-inc/nebula-python/fork) this repo, then clone it locally
-(be sure to replace the `{username}` in the repo URL below with your GitHub username):
-```
+```bash
 git clone https://github.com/{username}/nebula-python.git
 cd nebula-python
 ```
+For package management, we utilize [PDM](https://github.com/pdm-project/pdm). Please begin by installing it:
 
-We use [PMD](https://github.com/pdm-project/pdm) to manage the package, install it first:
-
-```
+```bash
 pipx install pdm
 ```
 
 Visit the [PDM documentation](https://pdm-project.org) for alternative installation methods.
 
 Install the package and all dev dependencies:
-```
+
+```bash
 pdm install
 ```
 
 Make sure the Nebula server in running, then run the tests with pytest:
-```
+
+```bash
 pdm test
 ```
+
 Using the default formatter with [black](https://github.com/psf/black).
 
 Please run `pdm fmt` to format python code before submitting.
 
 See [How to contribute](https://github.com/vesoft-inc/nebula-community/blob/master/Contributors/how-to-contribute.md) for the general process of contributing to Nebula projects.
+
