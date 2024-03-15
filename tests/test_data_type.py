@@ -11,24 +11,24 @@ from unittest import TestCase
 
 from nebula3.common import ttypes
 from nebula3.common.ttypes import (
-    Date,
     DateTime,
     Duration,
+    Edge,
     ErrorCode,
     NList,
     NMap,
     NSet,
     NullType,
     Time,
-    Value,
+    Vertex,
 )
+
 from nebula3.data.DataObject import (
     DataSetWrapper,
     DateTimeWrapper,
     DateWrapper,
     DurationWrapper,
     GeographyWrapper,
-    Node,
     Null,
     PathWrapper,
     Relationship,
@@ -380,6 +380,133 @@ class TesValueWrapper(TestBaseCase):
             ValueWrapper(path_val).as_path(),
         ]
         assert list_val == expect_result
+
+    def test_cast_primitive(self):
+        # Test casting for primitive types
+        def _cast_node(node: Vertex):
+            return {
+                "vid": node.get_id().cast(),
+                "tags": node.tags(),
+                "props": node.properties(),
+            }
+
+        def _cast_relationship(edge: Edge):
+            return {
+                "src": edge.start_vertex_id().cast(),
+                "dst": edge.end_vertex_id().cast(),
+                "type": edge.edge_name(),
+                "rank": edge.ranking(),
+                "props": edge.properties(),
+            }
+
+        # Test boolean
+        bool_val = ttypes.Value(bVal=True)
+        assert ValueWrapper(bool_val).cast_primitive() is True
+
+        # Test integer
+        int_val = ttypes.Value(iVal=42)
+        assert ValueWrapper(int_val).cast_primitive() == 42
+
+        # Test double
+        double_val = ttypes.Value(fVal=3.14)
+        assert ValueWrapper(double_val).cast_primitive() == 3.14
+
+        # Test string
+        string_val = ttypes.Value(sVal=b"hello")
+        assert ValueWrapper(string_val).cast_primitive() == "hello"
+
+        # Test null
+        null_val = ttypes.Value(nVal=ttypes.NullType.__NULL__)
+        assert ValueWrapper(null_val).cast_primitive() is None
+
+        # Test node
+        node_val = ttypes.Value(vVal=self.get_vertex_value(b"Tom"))
+        node = ValueWrapper(node_val)
+        assert ValueWrapper(node_val).cast_primitive() == {
+            "vid": node.get_id().cast(),
+            "tags": node.tags(),
+            "props": node.properties(),
+        }
+
+        # Test relationship
+        relationship_val = ttypes.Value(eVal=self.get_edge_value(b"Tom", b"Lily"))
+        edge = ValueWrapper(relationship_val)
+        assert ValueWrapper(relationship_val).cast_primitive() == {
+            "src": edge.start_vertex_id().cast(),
+            "dst": edge.end_vertex_id().cast(),
+            "type": edge.edge_name(),
+            "rank": edge.ranking(),
+            "props": edge.properties(),
+        }
+
+        # Test path
+        path_val = ttypes.Value(pVal=self.get_path_value(b"Tom"))
+        path = ValueWrapper(path_val)
+        path_primitive = path.cast_primitive()
+        assert path_primitive == {
+            "path_str": path.__repr__(),
+            "start_node": _cast_node(path.start_node().cast()),
+            "nodes": [_cast_node(node) for node in path.nodes()],
+            "relationships": [
+                _cast_relationship(relationship)
+                for relationship in path.relationships()
+            ],
+        }
+
+        # Test geography
+        geography_val = ttypes.Value(ggVal=self.get_geography_value(3.0, 5.2))
+        geography = ValueWrapper(geography_val)
+        assert geography.cast_primitive() == geography.__repr__()
+
+        # Test duration
+        duration_val = ttypes.Value(duVal=Duration(86400, 3000, 12))
+        duration = ValueWrapper(duration_val)
+        assert duration.cast_primitive() == duration.__repr__()
+
+        # Test list
+        list_val = ttypes.Value()
+        str_val1 = ttypes.Value()
+        str_val1.set_sVal(b"word")
+        str_val2 = ttypes.Value()
+        str_val2.set_sVal(b"car")
+        val_list = NList()
+        val_list.values = [str_val1, str_val2]
+        list_val.set_lVal(val_list)
+        list = ValueWrapper(list_val)
+        assert list.cast_primitive() == [
+            ValueWrapper(str_val1).cast_primitive(),
+            ValueWrapper(str_val2).cast_primitive(),
+        ]
+
+        # Test set
+        set_val = ttypes.Value()
+        tmp_set_val = NSet()
+        tmp_set_val.values = set()
+        tmp_set_val.values.add(str_val1)
+        tmp_set_val.values.add(str_val2)
+        set_val.set_uVal(tmp_set_val)
+        set = ValueWrapper(set_val)
+        assert set.cast_primitive() == {
+            ValueWrapper(str_val1).cast_primitive(),
+            ValueWrapper(str_val2).cast_primitive(),
+        }
+
+        # Test map
+        map_val = ttypes.Value()
+        tmp_map_val = NMap()
+        tmp_map_val.kvs = {b"a": str_val1, b"b": str_val2}
+        map_val.set_mVal(tmp_map_val)
+        map = ValueWrapper(map_val)
+        assert map.cast_primitive() == {
+            "a": ValueWrapper(str_val1).cast_primitive(),
+            "b": ValueWrapper(str_val2).cast_primitive(),
+        }
+
+        # Test time
+        time_val = ttypes.Value()
+        time_val.set_tVal(Time(10, 10, 10, 10000))
+        time = ValueWrapper(time_val)
+        assert time.cast_primitive() == time.__repr__()
 
     def test_as_time(self):
         time = Time()

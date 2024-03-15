@@ -1,48 +1,49 @@
 # nebula-python
 
-This repository holds the official Python API for NebulaGraph.
+This repository contains the official Python API for NebulaGraph.
 
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
 [![pypi-version](https://img.shields.io/pypi/v/nebula3-python)](https://pypi.org/project/nebula3-python/)
 [![python-version](https://img.shields.io/badge/python-3.6.2+%20|%203.7%20|%203.8%20|%203.9%20|%203.10%20|%203.11%20|%203.12-blue)](https://www.python.org/)
 
+## Getting Started
 
-## Before you start
+Before proceeding, it's crucial to choose the correct branch that suits your requirements. To ascertain the compatibility between the API and NebulaGraph Database, refer to the [Capability Matrix](#Capability-Matrix) section. It's worth noting that the master branch is currently tailored for NebulaGraph 3.x.
 
-Before you start, please read this section to choose the right branch for you. The compatibility between the API and NebulaGraph service can be found in [How to choose nebula-python](#How-to-choose-nebula-python). The current master branch is compatible with NebulaGraph 3.x.
-
-## The directory structure
+## Directory Structure Overview
 
 ```text
-|--nebula-python
-    |
-    |-- nebula3                               // client code
-    |   |-- fbthrift                          // the fbthrift lib code
-    |   |-- common
-    |   |-- data
-    |   |-- graph
-    |   |-- meta
-    |   |-- net                               // the net code for graph client
-    |   |-- storage
-    |   |-- Config.py                         // the pool config
-    |   |__ Exception.py                      // the define exception
-    |
-    |-- examples
-    |   |-- GraphClientMultiThreadExample.py  // the multi thread example
-    |   |-- GraphClientSimpleExample.py       // the simple example
-    |   |__ ScanVertexEdgeExample.py
-    |
-    |-- tests                                 // the test code
-    |
-    |-- setup.py                              // used to install or package
-    |
-    |__ README.md                             // the introduction of nebula3-python
+└──nebula-python
+    │
+    ├── nebula3                               // client source code
+    │   ├── fbthrift                          // the fbthrift lib code
+    │   ├── common
+    │   ├── data
+    │   ├── graph
+    │   ├── meta
+    │   ├── net                               // the net code for graph client
+    │   ├── storage
+    │   ├── Config.py                         // the pool config
+    │   └── Exception.py                      // the define exception
+    │
+    ├── examples
+    │   ├── FormatResp.py                     // the format response example
+    │   ├── SessionPoolExample.py             // the session pool example
+    │   ├── GraphClientMultiThreadExample.py  // the multi thread example
+    │   ├── GraphClientSimpleExample.py       // the simple example
+    │   └── ScanVertexEdgeExample.py          // the scan vertex and edge example(storage client)
+    │
+    ├── tests                                 // the test code
+    │
+    ├── setup.py                              // used to install or package
+    │
+    └── README.md                             // the introduction of nebula3-python
 
 ```
 
-## How to get nebula3-python
+## Obtaining nebula3-python
 
-### Option one: install with pip
+### Method 1: Installation via pip
 
 ```python
 # for v3.x
@@ -51,7 +52,10 @@ pip install nebula3-python==$version
 pip install nebula2-python==$version
 ```
 
-### Option two: install from the source code
+### Method 2: Installation via source
+
+<details>
+<summary>Click to expand</summary>
 
 - Clone from GitHub
 
@@ -74,7 +78,9 @@ pip install .
 python3 setup.py install
 ```
 
-## Quick example to use graph-client to connect graphd
+</details>
+
+## Quick Example: Connecting to GraphD Using Graph Client
 
 ```python
 from nebula3.gclient.net import ConnectionPool
@@ -93,7 +99,7 @@ ok = connection_pool.init([('127.0.0.1', 9669)], config)
 session = connection_pool.get_session('root', 'nebula')
 
 # select space
-session.execute('USE nba')
+session.execute('USE basketballplayer')
 
 # show tags
 result = session.execute('SHOW TAGS')
@@ -104,7 +110,7 @@ session.release()
 
 # option 2 with session_context, session will be released automatically
 with connection_pool.session_context('root', 'nebula') as session:
-    session.execute('USE nba')
+    session.execute('USE basketballplayer')
     result = session.execute('SHOW TAGS')
     print(result)
 
@@ -112,17 +118,121 @@ with connection_pool.session_context('root', 'nebula') as session:
 connection_pool.close()
 ```
 
-## Example of using session pool
-```
-There are some limitations while using the session pool:
+## Using the Session Pool: A Guide
 
-1. There MUST be an existing space in the DB before initializing the session pool.
-2. Each session pool is corresponding to a single USER and a single Space. This is to ensure that the user's access control is consistent. i.g. The same user may have different access privileges in different spaces. If you need to run queries in different spaces, you may have multiple session pools.
-3. Every time when sessinPool.execute() is called, the session will execute the query in the space set in the session pool config.
-4. Commands that alter passwords or drop users should NOT be executed via session pool.
+The session pool is a collection of sessions that are managed by the pool. It is designed to improve the efficiency of session management and to reduce the overhead of session creation and destruction.
+
+Session Pool comes with the following assumptions:
+
+1. A space must already exist in the database prior to the initialization of the session pool.
+2. Each session pool is associated with a single user and a single space to ensure consistent access control for the user. For instance, a user may possess different access permissions across various spaces. To execute queries in multiple spaces, consider utilizing several session pools.
+3. Whenever `sessionPool.execute()` is invoked, the session executes the query within the space specified in the session pool configuration.
+4. It is imperative to avoid executing commands through the session pool that would alter passwords or remove users.
+
+For more details, see [SessionPoolExample.py](example/SessionPoolExample.py).
+
+## Example: Extracting Edge and Vertex Lists from Query Results
+
+For graph visualization purposes, the following code snippet demonstrates how to effortlessly extract lists of edges and vertices from any query result by utilizing the `ResultSet.dict_for_vis()` method.
+
+```python
+result = session.execute(
+    'GET SUBGRAPH WITH PROP 2 STEPS FROM "player101" YIELD VERTICES AS nodes, EDGES AS relationships;')
+
+data_for_vis = result.dict_for_vis()
 ```
-see /example/SessinPoolExample.py
-## Quick example to fetch result to dataframe
+
+And it looks like this:
+
+<details>
+  <summary>Click to expand</summary>
+
+```json
+{
+    'nodes': [
+        {
+            'id': 'player100',
+            'labels': ['player'],
+            'props': {
+                'name': 'Tim Duncan',
+                'age': '42',
+                'id': 'player100'
+            }
+        },
+        {
+            'id': 'player101',
+            'labels': ['player'],
+            'props': {
+                'age': '36',
+                'name': 'Tony Parker',
+                'id': 'player101'
+            }
+        }
+    ],
+    'edges': [
+        {
+            'src': 'player100',
+            'dst': 'player101',
+            'name': 'follow',
+            'props': {
+                'degree': '95'
+            }
+        }
+    ],
+    'nodes_dict': {
+        'player100': {
+            'id': 'player100',
+            'labels': ['player'],
+            'props': {
+                'name': 'Tim Duncan',
+                'age': '42',
+                'id': 'player100'
+            }
+        },
+        'player101': {
+            'id': 'player101',
+            'labels': ['player'],
+            'props': {
+                'age': '36',
+                'name': 'Tony Parker',
+                'id': 'player101'
+            }
+        }
+    },
+    'edges_dict': {
+        ('player100', 'player101', 0, 'follow'): {
+            'src': 'player100',
+            'dst': 'player101',
+            'name': 'follow',
+            'props': {
+                'degree': '95'
+            }
+        }
+    },
+    'nodes_count': 2,
+    'edges_count': 1
+}
+```
+
+</details>
+
+## Example: Fetching Query Results into a Pandas DataFrame
+
+> For `nebula3-python>=3.6.0`:
+
+Assuming you have pandas installed, you can use the following code to fetch query results into a pandas DataFrame:
+
+```bash
+pip3 install pandas
+```
+
+```python
+result = session.execute('<your query>')
+df = result.to_pandas()
+```
+
+<details>
+  <summary>For `nebula3-python<3.6.0`:</summary>
 
 ```python
 from nebula3.gclient.net import ConnectionPool
@@ -165,7 +275,14 @@ connection_pool.close()
 
 ```
 
-## Quick example to use storage-client to scan vertex and edge
+</details>
+
+## Quick Example: Using Storage Client to Scan Vertices and Edges
+
+Storage Client enables you to scan vertices and edges from the storage service instead of the graph service w/ nGQL/Cypher. This is useful when you need to scan a large amount of data.
+
+<details>
+  <summary>Click to expand</summary>
 
 You should make sure the scan client can connect to the address of storage which see from `SHOW HOSTS`
 
@@ -205,7 +322,11 @@ while resp.has_next():
         print(edge_data)
 ```
 
-## How to choose nebula-python
+</details>
+
+See [ScanVertexEdgeExample.py](example/ScanVertexEdgeExample.py) for more details.
+
+## Capability Matrix
 
 | Nebula-Python Version | NebulaGraph Version |
 | --------------------- | ------------------- |
