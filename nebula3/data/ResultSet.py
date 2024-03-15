@@ -197,81 +197,68 @@ class ResultSet(object):
 
         Example:
         {
-        "nodes":[
-            {
-                "id":"player100",
-                "labels":[
-                    "player"
-                ],
-                "props":{
-                    "name":"Tim Duncan",
-                    "age":"42",
-                    "id":"player100"
+            'nodes': [
+                {
+                    'id': 'player100',
+                    'labels': ['player'],
+                    'props': {
+                        'name': 'Tim Duncan', 
+                        'age': '42', 
+                        'id': 'player100'
+                    }
+                },
+                {
+                    'id': 'player101',
+                    'labels': ['player'],
+                    'props': {
+                        'age': '36', 
+                        'name': 'Tony Parker', 
+                        'id': 'player101'
+                    }
+                }
+            ],
+            'edges': [
+                {
+                    'src': 'player100',
+                    'dst': 'player101',
+                    'name': 'follow',
+                    'props': {
+                        'degree': '95'
+                    }
+                }
+            ],
+            'nodes_dict': {
+                'player100': {
+                    'id': 'player100',
+                    'labels': ['player'],
+                    'props': {
+                        'name': 'Tim Duncan', 
+                        'age': '42', 
+                        'id': 'player100'
+                    }
+                },
+                'player101': {
+                    'id': 'player101',
+                    'labels': ['player'],
+                    'props': {
+                        'age': '36', 
+                        'name': 'Tony Parker', 
+                        'id': 'player101'
+                    }
                 }
             },
-            {
-                "id":"player101",
-                "labels":[
-                    "player"
-                ],
-                "props":{
-                    "age":"36",
-                    "name":"Tony Parker",
-                    "id":"player101"
-                }
-            }
-        ],
-        "edges":[
-            {
-                "src":"player100",
-                "dst":"player101",
-                "name":"follow",
-                "rank":0,
-                "props":{
-                    "degree":"95"
-                }
-            }
-        ],
-        "nodes_dict":{
-            "player100":{
-                "id":"player100",
-                "labels":[
-                    "player"
-                ],
-                "props":{
-                    "name":"Tim Duncan",
-                    "age":"42",
-                    "id":"player100"
+            'edges_dict': {
+                ('player100', 'player101', 0, 'follow'): {
+                    'src': 'player100',
+                    'dst': 'player101',
+                    'name': 'follow',
+                    'props': {
+                        'degree': '95'
+                    }
                 }
             },
-            "player101":{
-                "id":"player101",
-                "labels":[
-                    "player"
-                ],
-                "props":{
-                    "age":"36",
-                    "name":"Tony Parker",
-                    "id":"player101"
-                }
-            }
-        },
-        "edges_dict":{
-            "(""player100",
-            "player101",
-            0,
-            "follow"")":{
-                "src":"player100",
-                "dst":"player101",
-                "name":"follow",
-                "rank":0,
-                "props":{
-                    "degree":"95"
-                }
-            }
-        },
-        "nodes_count":2,
-        "edges_count":1
+            'nodes_count': 2,
+            'edges_count': 1
         }
 
         :return: dict with keys:
@@ -346,6 +333,12 @@ class ResultSet(object):
             )
         nodes = list(nodes_dict.values())
         edges = list(edges_dict.values())
+        # move rank to props, omit rank 0
+        for edge in edges:
+            if "rank" in edge:
+                rank = edge.pop("rank")
+                if rank != 0:
+                    edge["props"]["rank"] = rank
 
         return {
             "nodes": nodes,
