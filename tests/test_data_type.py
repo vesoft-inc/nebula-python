@@ -11,6 +11,7 @@ from unittest import TestCase
 
 from nebula3.common import ttypes
 from nebula3.common.ttypes import (
+    Date,
     DateTime,
     Duration,
     Edge,
@@ -20,6 +21,7 @@ from nebula3.common.ttypes import (
     NSet,
     NullType,
     Time,
+    Value,
     Vertex,
 )
 
@@ -29,6 +31,7 @@ from nebula3.data.DataObject import (
     DateWrapper,
     DurationWrapper,
     GeographyWrapper,
+    Node,
     Null,
     PathWrapper,
     Relationship,
