@@ -389,8 +389,9 @@ class TesValueWrapper(TestBaseCase):
         def _cast_node(node: Vertex):
             return {
                 "vid": node.get_id().cast(),
-                "tags": node.tags(),
-                "props": node.properties(),
+                "tags": {
+                    tag_name: node.properties(tag_name) for tag_name in node.tags()
+                },
             }
 
         def _cast_relationship(edge: Edge):
@@ -507,8 +508,9 @@ class TesValueWrapper(TestBaseCase):
         # Test time
         time_val = ttypes.Value()
         time_val.set_tVal(Time(10, 10, 10, 10000))
-        time = ValueWrapper(time_val).as_time()
-        assert time.cast_primitive() == time.__repr__()
+        time_raw = ValueWrapper(time_val)
+        time = time_raw.as_time()
+        assert time_raw.cast_primitive() == time.__repr__()
 
     def test_as_time(self):
         time = Time()

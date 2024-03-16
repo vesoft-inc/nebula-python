@@ -9,7 +9,8 @@
 import json
 import time
 
-from FormatResp import print_resp
+from FormatResp import print_resp, result_to_df_buildin, result_to_df
+import pandas as pd
 
 from nebula3.Config import Config
 from nebula3.gclient.net import ConnectionPool
@@ -35,7 +36,7 @@ if __name__ == "__main__":
         client.execute(
             "CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30)); USE test;"
             "CREATE TAG IF NOT EXISTS person(name string, age int);"
-            "CREATE EDGE like (likeness double);"
+            "CREATE EDGE IF NOT EXISTS like (likeness double);"
         )
 
         # insert data need to sleep after create schema
@@ -58,6 +59,28 @@ if __name__ == "__main__":
         resp = client.execute('FETCH PROP ON like "Bob"->"Lily" YIELD edge as e')
         assert resp.is_succeeded(), resp.error_msg()
         print_resp(resp)
+
+        # query data
+        resp = client.execute(
+            'GET SUBGRAPH WITH PROP 2 STEPS FROM "Bob" YIELD VERTICES AS nodes, EDGES AS relationships;'
+        )
+        df = result_to_df_buildin(resp)
+        df_1 = result_to_df(resp)
+
+        print("Testing pandas dataframe operations")
+        print(df_1)
+
+        # Convert the dataframe 'df' into a CSV file
+        df.to_csv('subgraph_data.csv', index=False)
+        print("Dataframe 'df' has been exported to 'subgraph_data.csv'.")
+
+        # Read the CSV file back into a dataframe
+        df_csv = pd.read_csv('subgraph_data.csv')
+        print("CSV file 'subgraph_data.csv' has been read into dataframe 'df_csv'.")
+
+        # Display the first 5 rows of the dataframe
+        print("Displaying the first 5 rows of dataframe 'df_csv':")
+        print(df_csv.head())
 
         # drop space
         resp = client.execute("DROP SPACE test")
