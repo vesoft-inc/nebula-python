@@ -7,47 +7,37 @@
 
 
 import json
-import time
 
 
 from nebula3.gclient.net import ConnectionPool
 
-if __name__ == "__main__":
-    client = None
-    try:
-        # init connection pool
-        connection_pool = ConnectionPool()
-        assert connection_pool.init([("127.0.0.1", 9669)])
 
-        # get session from the pool
-        client = connection_pool.get_session("root", "nebula")
-        assert client is not None
+def get_node_list_and_edge_list_json(result):
+    # init connection pool
+    connection_pool = ConnectionPool()
+    assert connection_pool.init([("127.0.0.1", 9669)])
 
-        client.execute("USE nba")
+    # get session from the pool
+    client = connection_pool.get_session("root", "nebula")
+    assert client is not None
 
-        result = client.execute(
-            'GET SUBGRAPH WITH PROP 2 STEPS FROM "player101" YIELD VERTICES AS nodes, EDGES AS relationships;'
-        )
+    client.execute("USE nba")
 
-        assert result.is_succeeded(), result.error_msg()
+    result = client.execute(
+        'GET SUBGRAPH WITH PROP 2 STEPS FROM "player101" YIELD VERTICES AS nodes, EDGES AS relationships;'
+    )
 
-        data = result.dict_for_vis()
+    assert result.is_succeeded(), result.error_msg()
 
-        json_data = json.dumps(data, indent=2, sort_keys=True)
+    data = result.dict_for_vis()
 
-        # save the json data to a file
-        with open('data.json', 'w') as f:
-            f.write(json_data)
+    json_data = json.dumps(data, indent=2, sort_keys=True)
 
-        # Check the data.json file to see the result
+    # save the json data to a file
+    with open('data.json', 'w') as f:
+        f.write(json_data)
 
-        # See example/apache_echarts.html to see a reference implementation of the visualization
-        # using Apache ECharts
+    # Check the data.json file to see the result
 
-    except Exception:
-        import traceback
-
-        print(traceback.format_exc())
-        if client is not None:
-            client.release()
-        exit(1)
+    # See example/apache_echarts.html to see a reference implementation of the visualization
+    # using Apache ECharts
