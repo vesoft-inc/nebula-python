@@ -130,7 +130,9 @@ result = session.execute(
 data_for_vis = result.dict_for_vis()
 ```
 
-And it looks like this:
+Then, we could pass the `data_for_vis` to a front-end visualization library such as `vis.js`, `d3.js` or Apache ECharts. There is an example of Apache ECharts in [exapmple/apache_echarts.html](example/apache_echarts.html).
+
+The dict/JSON structure with `dict_for_vis()` is as follows:
 
 <details>
   <summary>Click to expand</summary>

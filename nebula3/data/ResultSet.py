@@ -248,7 +248,7 @@ class ResultSet(object):
                 }
             },
             'edges_dict': {
-                ('player100', 'player101', 0, 'follow'): {
+                "('player100', 'player101', 0, 'follow')": {
                     'src': 'player100',
                     'dst': 'player101',
                     'name': 'follow',
@@ -303,8 +303,8 @@ class ResultSet(object):
                     k: str(v.cast()) if hasattr(v, "cast") else str(v)
                     for k, v in props_raw.items()
                 }
-                if (src_id, dst_id, rank, edge_name) not in edges_dict:
-                    edges_dict[(src_id, dst_id, rank, edge_name)] = {
+                if str((src_id, dst_id, rank, edge_name)) not in edges_dict:
+                    edges_dict[str((src_id, dst_id, rank, edge_name))] = {
                         "src": src_id,
                         "dst": dst_id,
                         "name": edge_name,
