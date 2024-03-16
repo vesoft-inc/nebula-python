@@ -70,7 +70,7 @@ class SessionPool(object):
     def __del__(self):
         self.close()
 
-    def init(self, configs):
+    def init(self, configs=None):
         """init the session pool
 
         :param username: the username of the session
@@ -81,6 +81,11 @@ class SessionPool(object):
 
         :return: if all addresses are valid, return True else return False.
         """
+        if configs is not None:
+            assert isinstance(
+                configs, SessionPoolConfig
+            ), 'wrong type of SessionPoolConfig, try this: `from nebula3.Config import SessionPoolConfig`'
+            self._configs = configs
         # check configs
         try:
             self._check_configs()
@@ -91,7 +96,6 @@ class SessionPool(object):
         if self._close:
             logger.error('The pool has init or closed.')
             raise RuntimeError('The pool has init or closed.')
-        self._configs = configs
 
         # ping all servers
         self.update_servers_status()

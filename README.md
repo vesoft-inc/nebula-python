@@ -29,38 +29,6 @@
 
 If you are about to access NebulaGraph within Jupyter Notebook, you may want to use the [NebulaGraph Jupyter Extension](https://pypi.org/project/ipython-ngql/), which provides a more interactive way to access NebulaGraph. See also this on Google Colab: [NebulaGraph on Google Colab](https://colab.research.google.com/github/wey-gu/ipython-ngql/blob/main/examples/get_started.ipynb).
 
-## Directory Structure Overview
-
-```text
-.
-└──nebula-python
-    │
-    ├── nebula3                               // client source code
-    │   ├── fbthrift                          // the RPC code generated from thrift protocol
-    │   ├── common
-    │   ├── data
-    │   ├── graph
-    │   ├── meta
-    │   ├── net                               // the net code for graph client
-    │   ├── storage                           // the storage client code
-    │   ├── Config.py                         // the pool config
-    │   └── Exception.py                      // the exceptions
-    │
-    ├── examples
-    │   ├── FormatResp.py                     // the format response example
-    │   ├── SessionPoolExample.py             // the session pool example
-    │   ├── GraphClientMultiThreadExample.py  // the multi thread example
-    │   ├── GraphClientSimpleExample.py       // the simple example
-    │   └── ScanVertexEdgeExample.py          // the scan vertex and edge example(storage client)
-    │
-    ├── tests                                 // the test code
-    │
-    ├── setup.py                              // used to install or package
-    │
-    └── README.md                             // the introduction of nebula3-python
-
-```
-
 ## Obtaining nebula3-python
 
 ### Method 1: Installation via pip
@@ -361,7 +329,41 @@ See [ScanVertexEdgeExample.py](example/ScanVertexEdgeExample.py) for more detail
 | 3.5.0                 | >=3.4.0             |
 | master                | master              |
 
-## How to Contribute to Nebula-Python
+
+## Directory Structure Overview
+
+```text
+.
+└──nebula-python
+    │
+    ├── nebula3                               // client source code
+    │   ├── fbthrift                          // the RPC code generated from thrift protocol
+    │   ├── common
+    │   ├── data
+    │   ├── graph
+    │   ├── meta
+    │   ├── net                               // the net code for graph client
+    │   ├── storage                           // the storage client code
+    │   ├── Config.py                         // the pool config
+    │   └── Exception.py                      // the exceptions
+    │
+    ├── examples
+    │   ├── FormatResp.py                     // the format response example
+    │   ├── SessionPoolExample.py             // the session pool example
+    │   ├── GraphClientMultiThreadExample.py  // the multi thread example
+    │   ├── GraphClientSimpleExample.py       // the simple example
+    │   └── ScanVertexEdgeExample.py          // the scan vertex and edge example(storage client)
+    │
+    ├── tests                                 // the test code
+    │
+    ├── setup.py                              // used to install or package
+    │
+    └── README.md                             // the introduction of nebula3-python
+
+```
+
+
+## Contribute to Nebula-Python
 
 <details>
 <summary>Click to expand</summary>
