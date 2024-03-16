@@ -510,7 +510,7 @@ class TesValueWrapper(TestBaseCase):
         time_val.set_tVal(Time(10, 10, 10, 10000))
         time_raw = ValueWrapper(time_val)
         time = time_raw.as_time()
-        assert time_raw.cast_primitive() == time.__repr__()
+        assert time_raw.cast_primitive() == time.get_local_time_str()
 
     def test_as_time(self):
         time = Time()
