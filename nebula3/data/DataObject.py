@@ -709,8 +709,9 @@ class ValueWrapper(object):
         def _cast_node(node: Vertex):
             return {
                 "vid": node.get_id().cast(),
-                "tags": node.tags(),
-                "props": node.properties(),
+                "tags": {
+                    tag_name: node.properties(tag_name) for tag_name in node.tags()
+                },
             }
 
         def _cast_relationship(edge: Edge):
