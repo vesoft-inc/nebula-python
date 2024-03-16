@@ -448,12 +448,9 @@ class TesValueWrapper(TestBaseCase):
         path_primitive = path_raw.cast_primitive()
         assert path_primitive == {
             "path_str": path.__repr__(),
-            "start_node": _cast_node(path.start_node().cast()),
-            "nodes": [_cast_node(node) for node in path.nodes()],
-            "relationships": [
-                _cast_relationship(relationship)
-                for relationship in path.relationships()
-            ],
+            "start_node": _cast_node(path.start_node()),
+            "edges": [_cast_relationship(x) for x in path.relationships()],
+            "nodes": [_cast_node(x) for x in path.nodes()],
         }
 
         # Test geography
