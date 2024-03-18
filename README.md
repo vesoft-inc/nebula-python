@@ -218,7 +218,7 @@ pip3 install pandas
 
 ```python
 result = session.execute('<your query>')
-df = result.to_pandas()
+df = result.as_data_frame()
 ```
 
 <details>

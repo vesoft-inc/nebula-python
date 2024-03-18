@@ -350,12 +350,13 @@ class ResultSet(object):
             "edges_count": len(edges),
         }
 
-    def as_pandas(self, primitive: bool = True):
-        """Convert result set to a pandas DataFrame.
+    def as_data_frame(self, primitive: bool = True):
+        """Convert result set to a DataFrame.
 
         :param primitive: if True, convert all values to primitive types
-        :return: pandas DataFrame
+        :return: DataFrame
         """
+        # TODO: support polars df
         try:
             import pandas as pd
         except ImportError:

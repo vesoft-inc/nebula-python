@@ -24,7 +24,7 @@ def result_to_df_buildin(result: ResultSet) -> pd.DataFrame:
     build list for each column, and transform to dataframe
     """
     assert result.is_succeeded()
-    return result.as_pandas()
+    return result.as_data_frame()
 
 
 ################################
