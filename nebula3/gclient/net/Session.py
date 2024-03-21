@@ -5,6 +5,7 @@
 # This source code is licensed under Apache 2.0 License.
 
 
+import json
 import time
 
 from nebula3.Exception import (
@@ -24,6 +25,7 @@ class Session(object):
         auth_result: AuthResult,
         pool,
         retry_connect=True,
+        retry_execute=False,
         retry_times=3,
         retry_interval_sec=1,
     ):
@@ -34,7 +36,8 @@ class Session(object):
         :param auth_result: The result of the authentication process.
         :param pool: The pool object where the session was created.
         :param retry_connect: A boolean indicating whether to retry the connection if it fails.
-        :param retry_times: The number of times to retry the connection.
+        :param retry_execute: A boolean indicating whether to retry the execution if got execution error(-1005), by default False.
+        :param retry_times: The number of times to retry the connection/execution.
         :param retry_interval_sec: The interval between connection retries in seconds.
         """
         self._session_id = auth_result.get_session_id()
@@ -44,6 +47,7 @@ class Session(object):
         # connection the where the session was created, if session pool was used
         self._pool = pool
         self._retry_connect = retry_connect
+        self._retry_execute = retry_execute
         self._retry_times = retry_times
         self._retry_interval_sec = retry_interval_sec
         # the time stamp when the session was added to the idle list of the session pool
@@ -62,7 +66,7 @@ class Session(object):
             resp = self._connection.execute_parameter(self._session_id, stmt, params)
             end_time = time.time()
 
-            if resp.error_code == ErrorCode.E_EXECUTION_ERROR:
+            if self._retry_execute and resp.error_code == ErrorCode.E_EXECUTION_ERROR:
                 retry_count = 0
                 while retry_count < self._retry_times:
                     time.sleep(self._retry_interval_sec)
@@ -239,17 +243,22 @@ class Session(object):
             resp_json = self._connection.execute_json_with_parameter(
                 self._session_id, stmt, params
             )
-            retry_count = 0
-            while (
-                retry_count < self._retry_times
-                and resp_json.get("errors", [{}])[0].get("code")
-                == ErrorCode.E_EXECUTION_ERROR
-            ):
-                time.sleep(self._retry_interval_sec)
-                resp_json = self._connection.execute_json_with_parameter(
-                    self._session_id, stmt, params
-                )
-                retry_count += 1
+            if self._retry_execute:
+                for retry_count in range(self._retry_times):
+                    if (
+                        json.loads(resp_json).get("errors", [{}])[0].get("code")
+                        != ErrorCode.E_EXECUTION_ERROR
+                    ):
+                        break
+                    logger.warning(
+                        "Execute failed, retry count:{}/{} in {} seconds".format(
+                            retry_count + 1, self._retry_times, self._retry_interval_sec
+                        )
+                    )
+                    time.sleep(self._retry_interval_sec)
+                    resp_json = self._connection.execute_json_with_parameter(
+                        self._session_id, stmt, params
+                    )
             return resp_json
 
         except IOErrorException as ie:
