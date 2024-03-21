@@ -188,7 +188,6 @@ class SessionPool(object):
                         "Get session failed again after session invalid or timeout"
                     )
                 logger.warning("Session invalid or timeout, session has been recycled")
-                self._set_space_to_default(session)
                 self._add_session_to_idle(session)
 
             else:
@@ -289,7 +288,6 @@ class SessionPool(object):
                     logger.warning(
                         "Get session failed again after session invalid or timeout"
                     )
-                self._set_space_to_default(session)
                 self._add_session_to_idle(session)
                 logger.warning("Session invalid or timeout, session has been recycled")
 
