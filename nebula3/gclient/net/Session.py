@@ -5,14 +5,14 @@
 # This source code is licensed under Apache 2.0 License.
 
 
+import json
 import time
 
 from nebula3.Exception import (
     IOErrorException,
     NotValidConnectionException,
-    ExecutionErrorException,
 )
-
+from nebula3.common.ttypes import ErrorCode
 from nebula3.data.ResultSet import ResultSet
 from nebula3.gclient.net.AuthResult import AuthResult
 from nebula3.logger import logger
@@ -25,8 +25,8 @@ class Session(object):
         auth_result: AuthResult,
         pool,
         retry_connect=True,
-        retry_times=3,
-        retry_interval_sec=1,
+        execution_retry_count=0,
+        retry_interval_seconds=1,
     ):
         """
         Initialize the Session object.
@@ -35,8 +35,8 @@ class Session(object):
         :param auth_result: The result of the authentication process.
         :param pool: The pool object where the session was created.
         :param retry_connect: A boolean indicating whether to retry the connection if it fails.
-        :param retry_times: The number of times to retry the connection.
-        :param retry_interval_sec: The interval between connection retries in seconds.
+        :param execution_retry_count: The number of attempts to retry the execution upon encountering an execution error(-1005), with the default being 0 (no retries).
+        :param retry_interval_seconds: The interval between connection retries in seconds.
         """
         self._session_id = auth_result.get_session_id()
         self._timezone_offset = auth_result.get_timezone_offset()
@@ -45,8 +45,8 @@ class Session(object):
         # connection the where the session was created, if session pool was used
         self._pool = pool
         self._retry_connect = retry_connect
-        self._retry_times = retry_times
-        self._retry_interval_sec = retry_interval_sec
+        self._execution_retry_count = execution_retry_count
+        self._retry_interval_seconds = retry_interval_seconds
         # the time stamp when the session was added to the idle list of the session pool
         self._idle_time_start = 0
 
@@ -57,11 +57,27 @@ class Session(object):
         :return: ResultSet
         """
         if self._connection is None:
-            raise RuntimeError('The session has been released')
+            raise RuntimeError("The session has been released")
         try:
             start_time = time.time()
             resp = self._connection.execute_parameter(self._session_id, stmt, params)
             end_time = time.time()
+
+            if (
+                self._execution_retry_count > 0
+                and resp.error_code == ErrorCode.E_EXECUTION_ERROR
+            ):
+                for retry_count in range(1, self._execution_retry_count + 1):
+                    logger.warning(
+                        f"Execution error, retrying {retry_count}/{self._execution_retry_count} after {self._retry_interval_seconds}s"
+                    )
+                    time.sleep(self._retry_interval_seconds)
+                    resp = self._connection.execute_parameter(
+                        self._session_id, stmt, params
+                    )
+                    if resp.error_code != ErrorCode.E_EXECUTION_ERROR:
+                        break
+
             return ResultSet(
                 resp,
                 all_latency=int((end_time - start_time) * 1000000),
@@ -72,7 +88,7 @@ class Session(object):
                 self._pool.update_servers_status()
                 if self._retry_connect:
                     if not self._reconnect():
-                        logger.warning('Retry connect failed')
+                        logger.warning("Retry connect failed")
                         raise IOErrorException(
                             IOErrorException.E_ALL_BROKEN, ie.message
                         )
@@ -86,27 +102,6 @@ class Session(object):
                         timezone_offset=self._timezone_offset,
                     )
             raise
-        except ExecutionErrorException as eee:
-            retry_count = 0
-            while retry_count < self._retry_times:
-                try:
-                    # TODO: add exponential backoff
-                    time.sleep(self._retry_interval_sec)
-                    resp = self._connection.execute_parameter(
-                        self._session_id, stmt, params
-                    )
-                    end_time = time.time()
-                    return ResultSet(
-                        resp,
-                        all_latency=int((end_time - start_time) * 1000000),
-                        timezone_offset=self._timezone_offset,
-                    )
-                except ExecutionErrorException:
-                    if retry_count >= self._retry_times - 1:
-                        raise eee
-                    else:
-                        retry_count += 1
-                        continue
         except Exception:
             raise
 
@@ -244,18 +239,37 @@ class Session(object):
         :return: JSON string
         """
         if self._connection is None:
-            raise RuntimeError('The session has been released')
+            raise RuntimeError("The session has been released")
         try:
             resp_json = self._connection.execute_json_with_parameter(
                 self._session_id, stmt, params
             )
+            if self._execution_retry_count > 0:
+                for retry_count in range(self._execution_retry_count):
+                    if (
+                        json.loads(resp_json).get("errors", [{}])[0].get("code")
+                        != ErrorCode.E_EXECUTION_ERROR
+                    ):
+                        break
+                    logger.warning(
+                        "Execute failed, retry count:{}/{} in {} seconds".format(
+                            retry_count + 1,
+                            self._execution_retry_count,
+                            self._retry_interval_seconds,
+                        )
+                    )
+                    time.sleep(self._retry_interval_seconds)
+                    resp_json = self._connection.execute_json_with_parameter(
+                        self._session_id, stmt, params
+                    )
             return resp_json
+
         except IOErrorException as ie:
             if ie.type == IOErrorException.E_CONNECT_BROKEN:
                 self._pool.update_servers_status()
                 if self._retry_connect:
                     if not self._reconnect():
-                        logger.warning('Retry connect failed')
+                        logger.warning("Retry connect failed")
                         raise IOErrorException(
                             IOErrorException.E_ALL_BROKEN, ie.message
                         )
@@ -264,22 +278,6 @@ class Session(object):
                     )
                     return resp_json
             raise
-        except ExecutionErrorException as eee:
-            retry_count = 0
-            while retry_count < self._retry_times:
-                try:
-                    # TODO: add exponential backoff
-                    time.sleep(self._retry_interval_sec)
-                    resp = self._connection.execute_json_with_parameter(
-                        self._session_id, stmt, params
-                    )
-                    return resp
-                except ExecutionErrorException:
-                    if retry_count >= self._retry_times - 1:
-                        raise eee
-                    else:
-                        retry_count += 1
-                        continue
         except Exception:
             raise
 
@@ -310,7 +308,7 @@ class Session(object):
             return True
         else:
             logger.error(
-                'failed to ping the session: error code:{}, error message:{}'.format(
+                "failed to ping the session: error code:{}, error message:{}".format(
                     resp.error_code, resp.error_msg
                 )
             )
@@ -342,5 +340,5 @@ class Session(object):
     def _sign_out(self):
         """sign out the session"""
         if self._connection is None:
-            raise RuntimeError('The session has been released')
+            raise RuntimeError("The session has been released")
         self._connection.signout(self._session_id)

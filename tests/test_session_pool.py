@@ -15,7 +15,6 @@ from nebula3.common.ttypes import ErrorCode
 from nebula3.Config import SessionPoolConfig
 from nebula3.Exception import (
     InValidHostname,
-    SessionException,
 )
 from nebula3.gclient.net import Connection
 from nebula3.gclient.net.SessionPool import SessionPool
@@ -160,11 +159,10 @@ class TestSessionPoolBasic(TestCase):
             session.execute(f"KILL SESSION {session_id}")
         try:
             session_pool.execute("SHOW HOSTS;")
-        except Exception as ex:
-            assert isinstance(ex, SessionException), "expect to get SessionException"
-        # The only session(size=1) should be renewed and usable
+        except Exception:
+            pass
         # - session_id is not in the pool
-        # - session_pool is usable
+        # - session_pool is still usable after renewing
         assert (
             session_id not in session_pool._idle_sessions
         ), "session should be renewed"

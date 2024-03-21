@@ -27,8 +27,6 @@ from nebula3.Exception import (
     AuthFailedException,
     IOErrorException,
     ClientServerIncompatibleException,
-    SessionException,
-    ExecutionErrorException,
 )
 
 from nebula3.gclient.net.AuthResult import AuthResult
@@ -198,12 +196,6 @@ class Connection(object):
         """
         try:
             resp = self._connection.executeWithParameter(session_id, stmt, params)
-            if resp.error_code == ErrorCode.E_SESSION_INVALID:
-                raise SessionException(resp.error_code, resp.error_msg)
-            if resp.error_code == ErrorCode.E_SESSION_TIMEOUT:
-                raise SessionException(resp.error_code, resp.error_msg)
-            if resp.error_code == ErrorCode.E_EXECUTION_ERROR:
-                raise ExecutionErrorException(resp.error_msg)
             return resp
         except Exception as te:
             if isinstance(te, TTransportException):
@@ -274,7 +266,7 @@ class Connection(object):
             self._connection._iprot.trans.close()
         except Exception as e:
             logger.error(
-                'Close connection to {}:{} failed:{}'.format(self._ip, self._port, e)
+                "Close connection to {}:{} failed:{}".format(self._ip, self._port, e)
             )
 
     def ping(self):
@@ -282,7 +274,7 @@ class Connection(object):
         :return: True or False
         """
         try:
-            resp = self._connection.execute(0, 'YIELD 1;')
+            resp = self._connection.execute(0, "YIELD 1;")
             return True
         except Exception:
             return False
