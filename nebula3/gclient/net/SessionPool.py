@@ -185,8 +185,9 @@ class SessionPool(object):
                 session = self._get_idle_session()
                 if session is None:
                     logger.warning(
-                        "Get session failed again after session invalid or timeout"
+                        "Session invalid or timeout, removed from the pool, but failed to get a new session."
                     )
+                    return resp
                 logger.warning("Session invalid or timeout, session has been recycled")
                 self._add_session_to_idle(session)
 
@@ -286,8 +287,9 @@ class SessionPool(object):
                 session = self._get_idle_session()
                 if session is None:
                     logger.warning(
-                        "Get session failed again after session invalid or timeout"
+                        "Session invalid or timeout, removed from the pool, but failed to get a new session."
                     )
+                    return resp
                 self._add_session_to_idle(session)
                 logger.warning("Session invalid or timeout, session has been recycled")
 
