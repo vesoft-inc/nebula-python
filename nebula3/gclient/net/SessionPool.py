@@ -187,15 +187,17 @@ class SessionPool(object):
                     logger.warning(
                         "Get session failed again after session invalid or timeout"
                     )
-                self._add_session_to_idle(session)
                 logger.warning("Session invalid or timeout, session has been recycled")
-
-            # reset the space name to the pool config
-            if resp.space_name() != self._space_name:
                 self._set_space_to_default(session)
+                self._add_session_to_idle(session)
 
-            # move the session back to the idle list
-            self._return_session(session)
+            else:
+                # reset the space name to the pool config
+                if resp.space_name() != self._space_name:
+                    self._set_space_to_default(session)
+
+                # move the session back to the idle list
+                self._return_session(session)
 
             return resp
         except Exception as e:
@@ -275,9 +277,9 @@ class SessionPool(object):
 
         try:
             resp = session.execute_json_with_parameter(stmt, params)
-
+            json_obj = json.loads(resp)
             # Check for session validity based on error code
-            if resp.get("errors", [{}])[0].get("code") in [
+            if json_obj.get("errors", [{}])[0].get("code") in [
                 ErrorCode.E_SESSION_INVALID,
                 ErrorCode.E_SESSION_TIMEOUT,
             ]:
@@ -287,16 +289,17 @@ class SessionPool(object):
                     logger.warning(
                         "Get session failed again after session invalid or timeout"
                     )
+                self._set_space_to_default(session)
                 self._add_session_to_idle(session)
                 logger.warning("Session invalid or timeout, session has been recycled")
 
-            # reset the space name to the pool config
-            json_obj = json.loads(resp)
-            if json_obj["results"][0]["spaceName"] != self._space_name:
-                self._set_space_to_default(session)
+            else:
+                # reset the space name to the pool config
+                if json_obj["results"][0]["spaceName"] != self._space_name:
+                    self._set_space_to_default(session)
 
-            # move the session back to the idle list
-            self._return_session(session)
+                # move the session back to the idle list
+                self._return_session(session)
 
             return resp
         except Exception as e:

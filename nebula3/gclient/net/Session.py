@@ -25,9 +25,8 @@ class Session(object):
         auth_result: AuthResult,
         pool,
         retry_connect=True,
-        retry_execute=False,
-        retry_times=3,
-        retry_interval_sec=1,
+        execution_retry_count=0,
+        retry_interval_seconds=1,
     ):
         """
         Initialize the Session object.
@@ -36,9 +35,8 @@ class Session(object):
         :param auth_result: The result of the authentication process.
         :param pool: The pool object where the session was created.
         :param retry_connect: A boolean indicating whether to retry the connection if it fails.
-        :param retry_execute: A boolean indicating whether to retry the execution if got execution error(-1005), by default False.
-        :param retry_times: The number of times to retry the connection/execution.
-        :param retry_interval_sec: The interval between connection retries in seconds.
+        :param execution_retry_count: The number of attempts to retry the execution upon encountering an execution error(-1005), with the default being 0 (no retries).
+        :param retry_interval_seconds: The interval between connection retries in seconds.
         """
         self._session_id = auth_result.get_session_id()
         self._timezone_offset = auth_result.get_timezone_offset()
@@ -47,9 +45,8 @@ class Session(object):
         # connection the where the session was created, if session pool was used
         self._pool = pool
         self._retry_connect = retry_connect
-        self._retry_execute = retry_execute
-        self._retry_times = retry_times
-        self._retry_interval_sec = retry_interval_sec
+        self._execution_retry_count = execution_retry_count
+        self._retry_interval_seconds = retry_interval_seconds
         # the time stamp when the session was added to the idle list of the session pool
         self._idle_time_start = 0
 
@@ -66,12 +63,15 @@ class Session(object):
             resp = self._connection.execute_parameter(self._session_id, stmt, params)
             end_time = time.time()
 
-            if self._retry_execute and resp.error_code == ErrorCode.E_EXECUTION_ERROR:
-                for retry_count in range(1, self._retry_times + 1):
+            if (
+                self._execution_retry_count > 0
+                and resp.error_code == ErrorCode.E_EXECUTION_ERROR
+            ):
+                for retry_count in range(1, self._execution_retry_count + 1):
                     logger.warning(
-                        f"Execution error, retrying {retry_count}/{self._retry_times} after {self._retry_interval_sec}s"
+                        f"Execution error, retrying {retry_count}/{self._execution_retry_count} after {self._retry_interval_seconds}s"
                     )
-                    time.sleep(self._retry_interval_sec)
+                    time.sleep(self._retry_interval_seconds)
                     resp = self._connection.execute_parameter(
                         self._session_id, stmt, params
                     )
@@ -244,8 +244,8 @@ class Session(object):
             resp_json = self._connection.execute_json_with_parameter(
                 self._session_id, stmt, params
             )
-            if self._retry_execute:
-                for retry_count in range(self._retry_times):
+            if self._execution_retry_count > 0:
+                for retry_count in range(self._execution_retry_count):
                     if (
                         json.loads(resp_json).get("errors", [{}])[0].get("code")
                         != ErrorCode.E_EXECUTION_ERROR
@@ -253,10 +253,12 @@ class Session(object):
                         break
                     logger.warning(
                         "Execute failed, retry count:{}/{} in {} seconds".format(
-                            retry_count + 1, self._retry_times, self._retry_interval_sec
+                            retry_count + 1,
+                            self._execution_retry_count,
+                            self._retry_interval_seconds,
                         )
                     )
-                    time.sleep(self._retry_interval_sec)
+                    time.sleep(self._retry_interval_seconds)
                     resp_json = self._connection.execute_json_with_parameter(
                         self._session_id, stmt, params
                     )
