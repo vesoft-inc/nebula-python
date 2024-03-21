@@ -114,8 +114,8 @@ $(document).ready(function(){initNavTree('d6/d27/classnebula3_1_1gclient_1_1net_
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac68bac7976e962c1e931baa7b45bf870"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#ac68bac7976e962c1e931baa7b45bf870">__init__</a> (self, connection, <a class="el" href="../../db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult.html">AuthResult</a> auth_result, pool, retry_connect=True, retry_times=3, retry_interval_sec=1)</td></tr>
-<tr class="separator:ac68bac7976e962c1e931baa7b45bf870"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0b0ec880a742507e8f2a40f40dee3ec"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#ac0b0ec880a742507e8f2a40f40dee3ec">__init__</a> (self, connection, <a class="el" href="../../db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult.html">AuthResult</a> auth_result, pool, retry_connect=True, execution_retry_count=0, retry_interval_seconds=1)</td></tr>
+<tr class="separator:ac0b0ec880a742507e8f2a40f40dee3ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea1363b3a0c165c33e136b0b7df5d587"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#aea1363b3a0c165c33e136b0b7df5d587">execute_parameter</a> (self, stmt, params)</td></tr>
 <tr class="separator:aea1363b3a0c165c33e136b0b7df5d587"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a821f0fec9767a679468c90854db8ca08"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a821f0fec9767a679468c90854db8ca08">execute</a> (self, stmt)</td></tr>
@@ -138,8 +138,8 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 <div class="textblock">
 <p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00021">21</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac68bac7976e962c1e931baa7b45bf870"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac68bac7976e962c1e931baa7b45bf870">&#9670;&nbsp;</a></span>__init__()</h2>
+<a id="ac0b0ec880a742507e8f2a40f40dee3ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0b0ec880a742507e8f2a40f40dee3ec">&#9670;&nbsp;</a></span>__init__()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -178,13 +178,13 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>retry_times</em> = <code>3</code>, </td>
+          <td class="paramname"><em>execution_retry_count</em> = <code>0</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>retry_interval_sec</em> = <code>1</code>&#160;</td>
+          <td class="paramname"><em>retry_interval_seconds</em> = <code>1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -199,8 +199,8 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 :param auth_result: The result of the authentication process.
 :param pool: The pool object where the session was created.
 :param retry_connect: A boolean indicating whether to retry the connection if it fails.
-:param retry_times: The number of times to retry the connection.
-:param retry_interval_sec: The interval between connection retries in seconds.
+:param execution_retry_count: The number of attempts to retry the execution upon encountering an execution error(-1005), with the default being 0 (no retries).
+:param retry_interval_seconds: The interval between connection retries in seconds.
 </pre> 
 <p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00022">22</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 
@@ -237,7 +237,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 :param stmt: the ngql
 :return: ResultSet
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00113">113</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00108">108</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
@@ -357,7 +357,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 :param stmt: the ngql
 :return: JSON string
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00121">121</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00116">116</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-4-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-4-summary" class="dynsummary" style="display:block;">
@@ -468,7 +468,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 :param params: parameter map
 :return: JSON string
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00184">184</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00179">179</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-5-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-5-summary" class="dynsummary" style="display:block;">
@@ -589,7 +589,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 
 :return: True or False
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00297">297</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00295">295</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-9-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-9-summary" class="dynsummary" style="display:block;">
@@ -627,7 +627,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
       </table>
 </div><div class="memdoc">
 <pre class="fragment">ping at session level, check whether the session is usable</pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00306">306</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00304">304</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-10-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-10-summary" class="dynsummary" style="display:block;">
@@ -674,7 +674,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 
 :return:
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00286">286</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00284">284</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-11-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-11-summary" class="dynsummary" style="display:block;">

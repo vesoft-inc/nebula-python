@@ -1,6 +1,6 @@
 var classnebula3_1_1gclient_1_1net_1_1Session_1_1Session =
 [
-    [ "__init__", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#ac68bac7976e962c1e931baa7b45bf870", null ],
+    [ "__init__", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#ac0b0ec880a742507e8f2a40f40dee3ec", null ],
     [ "__del__", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a41a65d7030dd1006b177d0bc24e1a12b", null ],
     [ "execute", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a821f0fec9767a679468c90854db8ca08", null ],
     [ "execute_json", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a85a6d7312bb8e6cf98c7d6ca06a72425", null ],
