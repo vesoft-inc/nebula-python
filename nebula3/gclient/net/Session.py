@@ -67,15 +67,16 @@ class Session(object):
             end_time = time.time()
 
             if self._retry_execute and resp.error_code == ErrorCode.E_EXECUTION_ERROR:
-                retry_count = 0
-                while retry_count < self._retry_times:
+                for retry_count in range(1, self._retry_times + 1):
+                    logger.warning(
+                        f"Execution error, retrying {retry_count}/{self._retry_times} after {self._retry_interval_sec}s"
+                    )
                     time.sleep(self._retry_interval_sec)
                     resp = self._connection.execute_parameter(
                         self._session_id, stmt, params
                     )
                     if resp.error_code != ErrorCode.E_EXECUTION_ERROR:
                         break
-                    retry_count += 1
 
             return ResultSet(
                 resp,
