@@ -41,7 +41,7 @@ class ConnectionPool(object):
     def __del__(self):
         self.close()
 
-    def init(self, addresses, configs, ssl_conf=None):
+    def init(self, addresses, configs=None, ssl_conf=None):
         """init the connection pool
 
         :param addresses: the graphd servers' addresses
@@ -52,8 +52,13 @@ class ConnectionPool(object):
         if self._close:
             logger.error('The pool has init or closed.')
             raise RuntimeError('The pool has init or closed.')
-        assert isinstance(configs, Config)
-        self._configs = configs
+        if configs is None:
+            self._configs = Config()
+        else:
+            assert isinstance(
+                configs, Config
+            ), 'wrong type of Config, try this: `from nebula3.Config import Config`'
+            self._configs = configs
         self._ssl_configs = ssl_conf
         for address in addresses:
             if address not in self._addresses:
