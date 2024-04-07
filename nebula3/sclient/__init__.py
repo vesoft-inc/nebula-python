@@ -173,7 +173,7 @@ def do_scan_job(
                         )
                         storage_connection.update_leader_info(
                             req.space_id,
-                            req.part_id,
+                            resp.result.failed_parts[0].part_id,
                             resp.result.failed_parts[0].leader,
                         )
                         continue
