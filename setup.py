@@ -14,7 +14,7 @@ long_description = (base_dir / 'README.md').read_text()
 
 setup(
     name='nebula3-python',
-    version='3.4.0',
+    version='3.5.1',
     license='Apache 2.0',
     author='vesoft-inc',
     author_email='info@vesoft.com',
