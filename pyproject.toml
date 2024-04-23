@@ -1,6 +1,6 @@
 [project]
 name = "nebula3-python"
-version = "3.5.1"
+version = "3.8.0"
 description = "Python client for NebulaGraph V3.4"
 authors = [
     {name = "vesoft-inc", email = "info@vesoft.com"},
