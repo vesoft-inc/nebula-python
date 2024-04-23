@@ -8,5 +8,8 @@ var classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient =
     [ "scan_edge", "d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#a58a9781ee7868da84312173edd82bbf6", null ],
     [ "scan_edge_with_part", "d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#ab6d94d21a7ae92c22530432f4adba187", null ],
     [ "scan_vertex", "d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#a3cd2aa1c7870465c2607dbb1c0926669", null ],
-    [ "scan_vertex_with_part", "d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#acf187f790ccfdb9bd65dd453c912af8d", null ]
+    [ "scan_vertex_with_part", "d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#acf187f790ccfdb9bd65dd453c912af8d", null ],
+    [ "set_user_passwd", "d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#a4da4cce5f7b3cb4f720a83e015213c19", null ],
+    [ "passwd", "d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#a31d47492f87afd6268b6aeed2656ee3a", null ],
+    [ "user", "d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#a5cc32e366c87c4cb49e4309b75f57d64", null ]
 ];

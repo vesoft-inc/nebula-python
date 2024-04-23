@@ -114,9 +114,8 @@ $(document).ready(function(){initNavTree('d6/d27/classnebula3_1_1gclient_1_1net_
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af12ca292f7b2b231a90016480b804731"><td class="memItemLeft" align="right" valign="top"><a id="af12ca292f7b2b231a90016480b804731"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>__init__</b> (self, connection, <a class="el" href="../../db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult.html">AuthResult</a> auth_result, pool, retry_connect=True)</td></tr>
-<tr class="separator:af12ca292f7b2b231a90016480b804731"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0b0ec880a742507e8f2a40f40dee3ec"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#ac0b0ec880a742507e8f2a40f40dee3ec">__init__</a> (self, connection, <a class="el" href="../../db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult.html">AuthResult</a> auth_result, pool, retry_connect=True, execution_retry_count=0, retry_interval_seconds=1)</td></tr>
+<tr class="separator:ac0b0ec880a742507e8f2a40f40dee3ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea1363b3a0c165c33e136b0b7df5d587"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#aea1363b3a0c165c33e136b0b7df5d587">execute_parameter</a> (self, stmt, params)</td></tr>
 <tr class="separator:aea1363b3a0c165c33e136b0b7df5d587"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a821f0fec9767a679468c90854db8ca08"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a821f0fec9767a679468c90854db8ca08">execute</a> (self, stmt)</td></tr>
@@ -137,8 +136,77 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00020">20</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00021">21</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac0b0ec880a742507e8f2a40f40dee3ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0b0ec880a742507e8f2a40f40dee3ec">&#9670;&nbsp;</a></span>__init__()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def __init__ </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>connection</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult.html">AuthResult</a>&#160;</td>
+          <td class="paramname"><em>auth_result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>pool</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>retry_connect</em> = <code>True</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>execution_retry_count</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>retry_interval_seconds</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<pre class="fragment">Initialize the Session object.
+
+:param connection: The connection object associated with the session.
+:param auth_result: The result of the authentication process.
+:param pool: The pool object where the session was created.
+:param retry_connect: A boolean indicating whether to retry the connection if it fails.
+:param execution_retry_count: The number of attempts to retry the execution upon encountering an execution error(-1005), with the default being 0 (no retries).
+:param retry_interval_seconds: The interval between connection retries in seconds.
+</pre> 
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00022">22</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a821f0fec9767a679468c90854db8ca08"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a821f0fec9767a679468c90854db8ca08">&#9670;&nbsp;</a></span>execute()</h2>
 
@@ -169,7 +237,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 :param stmt: the ngql
 :return: ResultSet
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00071">71</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00108">108</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
@@ -180,13 +248,14 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 <area shape="rect" title=" " alt="" coords="5,71,79,98"/>
 <area shape="rect" href="../../df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a9b3ef4774918efa566dd8a6936831383" title=" " alt="" coords="127,5,355,47"/>
 <area shape="rect" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#aea1363b3a0c165c33e136b0b7df5d587" title=" " alt="" coords="167,71,315,98"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#aea1363b3a0c165c33e136b0b7df5d587" title=" " alt="" coords="140,202,341,258"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#aea1363b3a0c165c33e136b0b7df5d587" title=" " alt="" coords="140,242,341,298"/>
 <area shape="rect" href="../../df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a41dfe528cb6e93f18e8ba44fa8d0f43c" title=" " alt="" coords="403,5,631,47"/>
 <area shape="rect" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#aa3b0a5533a258674ec3c555b9d288b62" title=" " alt="" coords="470,71,563,98"/>
 <area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#afeaa9b70455bafe8c2755c1d3d70078c" title=" " alt="" coords="405,122,628,178"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a4e256500106285439482a5730df1034f" title=" " alt="" coords="416,202,617,258"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a1be87da6516c31d267b0e7d262d28986" title=" " alt="" coords="416,282,617,338"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a228b911409bd2769ed9d6b005eeb2ed6" title=" " alt="" coords="413,362,621,418"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a25277d0e2817ce37da811f7fd4a5ed3f" title=" " alt="" coords="405,202,628,258"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a4e256500106285439482a5730df1034f" title=" " alt="" coords="416,282,617,338"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a1be87da6516c31d267b0e7d262d28986" title=" " alt="" coords="416,362,617,418"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a228b911409bd2769ed9d6b005eeb2ed6" title=" " alt="" coords="413,442,621,498"/>
 </map>
 </div>
 <div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -288,7 +357,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 :param stmt: the ngql
 :return: JSON string
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00079">79</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00116">116</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-4-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-4-summary" class="dynsummary" style="display:block;">
@@ -399,7 +468,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 :param params: parameter map
 :return: JSON string
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00142">142</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00179">179</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-5-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-5-summary" class="dynsummary" style="display:block;">
@@ -463,7 +532,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 :param params: parameter map
 :return: ResultSet
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00032">32</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00053">53</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-7-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-7-summary" class="dynsummary" style="display:block;">
@@ -493,8 +562,8 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 <area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a96f88821a677fd6f722ba199f1ecb8b8" title=" " alt="" coords="593,121,794,177"/>
 <area shape="rect" href="../../d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#ab54ec8537163c7242c370eb8366fe94c" title=" " alt="" coords="280,13,516,54"/>
 <area shape="rect" href="../../d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#a9c153bf752f71d28dbd7e3acbae9a074" title=" " alt="" coords="7,5,231,61"/>
-<area shape="rect" href="../../d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#a64095c722de1cdf986ad023a1a745342" title=" " alt="" coords="7,174,231,215"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a462989343005e5aa8addb00986d09e36" title=" " alt="" coords="18,269,219,310"/>
+<area shape="rect" href="../../d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#a1a9a46b7331b15644bdcb344f9cb82ff" title=" " alt="" coords="7,174,231,215"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#ad94fa70361210a010c20d46444a5bc49" title=" " alt="" coords="18,269,219,310"/>
 <area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a629afd68ecd83634027d7f31756ec860" title=" " alt="" coords="5,94,232,135"/>
 </map>
 </div>
@@ -520,7 +589,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 
 :return: True or False
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00239">239</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00295">295</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-9-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-9-summary" class="dynsummary" style="display:block;">
@@ -534,8 +603,8 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 <area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a96f88821a677fd6f722ba199f1ecb8b8" title=" " alt="" coords="593,121,794,177"/>
 <area shape="rect" href="../../d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#ab54ec8537163c7242c370eb8366fe94c" title=" " alt="" coords="280,13,516,54"/>
 <area shape="rect" href="../../d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#a9c153bf752f71d28dbd7e3acbae9a074" title=" " alt="" coords="7,5,231,61"/>
-<area shape="rect" href="../../d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#a64095c722de1cdf986ad023a1a745342" title=" " alt="" coords="7,174,231,215"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a462989343005e5aa8addb00986d09e36" title=" " alt="" coords="18,269,219,310"/>
+<area shape="rect" href="../../d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#a1a9a46b7331b15644bdcb344f9cb82ff" title=" " alt="" coords="7,174,231,215"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#ad94fa70361210a010c20d46444a5bc49" title=" " alt="" coords="18,269,219,310"/>
 <area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a629afd68ecd83634027d7f31756ec860" title=" " alt="" coords="5,94,232,135"/>
 </map>
 </div>
@@ -558,7 +627,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
       </table>
 </div><div class="memdoc">
 <pre class="fragment">ping at session level, check whether the session is usable</pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00248">248</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00304">304</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-10-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-10-summary" class="dynsummary" style="display:block;">
@@ -566,20 +635,21 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 <div id="dynsection-10-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session_ab246949afafa6c21dab1bfd8d56db2e2_cgraph.png" border="0" usemap="#ad6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session_ab246949afafa6c21dab1bfd8d56db2e2_cgraph" alt=""/></div>
 <map name="ad6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session_ab246949afafa6c21dab1bfd8d56db2e2_cgraph" id="ad6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session_ab246949afafa6c21dab1bfd8d56db2e2_cgraph">
-<area shape="rect" title=" " alt="" coords="5,141,112,167"/>
-<area shape="rect" href="../../df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a85bca091b7a152eb0db421d3220306f6" title=" " alt="" coords="160,45,388,87"/>
-<area shape="rect" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a821f0fec9767a679468c90854db8ca08" title=" " alt="" coords="237,111,311,138"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a821f0fec9767a679468c90854db8ca08" title=" " alt="" coords="173,163,375,204"/>
-<area shape="rect" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a4cd51e19135e5ad4a19eae3ea9c60537" title=" " alt="" coords="239,229,309,255"/>
-<area shape="rect" href="../../df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a9b3ef4774918efa566dd8a6936831383" title=" " alt="" coords="436,45,664,87"/>
-<area shape="rect" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#aea1363b3a0c165c33e136b0b7df5d587" title=" " alt="" coords="476,111,624,138"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#aea1363b3a0c165c33e136b0b7df5d587" title=" " alt="" coords="449,162,651,218"/>
+<area shape="rect" title=" " alt="" coords="5,181,112,207"/>
+<area shape="rect" href="../../df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a85bca091b7a152eb0db421d3220306f6" title=" " alt="" coords="160,85,388,127"/>
+<area shape="rect" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a821f0fec9767a679468c90854db8ca08" title=" " alt="" coords="237,151,311,178"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a821f0fec9767a679468c90854db8ca08" title=" " alt="" coords="173,203,375,244"/>
+<area shape="rect" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a4cd51e19135e5ad4a19eae3ea9c60537" title=" " alt="" coords="239,269,309,295"/>
+<area shape="rect" href="../../df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a9b3ef4774918efa566dd8a6936831383" title=" " alt="" coords="436,85,664,127"/>
+<area shape="rect" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#aea1363b3a0c165c33e136b0b7df5d587" title=" " alt="" coords="476,151,624,178"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#aea1363b3a0c165c33e136b0b7df5d587" title=" " alt="" coords="449,202,651,258"/>
 <area shape="rect" href="../../df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a41dfe528cb6e93f18e8ba44fa8d0f43c" title=" " alt="" coords="712,5,940,47"/>
 <area shape="rect" href="../../d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#aa3b0a5533a258674ec3c555b9d288b62" title=" " alt="" coords="779,71,873,98"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#afeaa9b70455bafe8c2755c1d3d70078c" title=" " alt="" coords="715,282,937,338"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#afeaa9b70455bafe8c2755c1d3d70078c" title=" " alt="" coords="715,202,937,258"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a25277d0e2817ce37da811f7fd4a5ed3f" title=" " alt="" coords="715,282,937,338"/>
 <area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a4e256500106285439482a5730df1034f" title=" " alt="" coords="725,362,927,418"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a1be87da6516c31d267b0e7d262d28986" title=" " alt="" coords="725,122,927,178"/>
-<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a228b911409bd2769ed9d6b005eeb2ed6" title=" " alt="" coords="722,202,930,258"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a1be87da6516c31d267b0e7d262d28986" title=" " alt="" coords="725,442,927,498"/>
+<area shape="rect" href="../../d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a228b911409bd2769ed9d6b005eeb2ed6" title=" " alt="" coords="722,122,930,178"/>
 </map>
 </div>
 
@@ -604,7 +674,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>__del__</b> (self)</td
 
 :return:
 </pre> 
-<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00228">228</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d28/Session_8py_source.html#l00284">284</a> of file <a class="el" href="../../d9/d28/Session_8py_source.html">Session.py</a>.</p>
 <div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-11-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-11-summary" class="dynsummary" style="display:block;">
