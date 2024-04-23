@@ -6,7 +6,7 @@
 
 ## Getting Started
 
-**Note**: Ensure you are using the correct version, refer to the [Capability Matrix](#Capability-Matrix) for how the Python client version corresponds to the NebulaGraph Database version.
+**Note**: Ensure you are using the correct version, refer to the [Capability Matrix](#Compatibility-Matrix) for how the Python client version corresponds to the NebulaGraph Database version.
 
 ### Accessing NebulaGraph
 
@@ -316,21 +316,17 @@ while resp.has_next():
 
 See [ScanVertexEdgeExample.py](example/ScanVertexEdgeExample.py) for more details.
 
-## Capability Matrix
+## Compatibility Matrix
 
-| Nebula-Python Version | NebulaGraph Version |
-| --------------------- | ------------------- |
-| 1.0                   | 1.x                 |
-| 2.0.0                 | 2.0.0/2.0.1         |
-| 2.5.0                 | 2.5.0               |
-| 2.6.0                 | 2.6.0/2.6.1         |
-| 3.0.0                 | 3.0.0               |
-| 3.1.0                 | 3.1.0               |
-| 3.3.0                 | 3.3.0               |
-| 3.4.0                 | >=3.4.0             |
-| 3.5.1                 | >=3.4.0             |
-| master                | master              |
-
+| Nebula-Python Version | Compatible NebulaGraph Versions | Notes                                                      |
+| --------------------- | ------------------------------- | ---------------------------------------------------------- |
+| 3.5.1                 | 3.x                             | Highly recommended. Latest release for NebulaGraph 3.x series. |
+| master                | master                          | Includes recent changes. Not yet released.                 |
+| 3.0.0 ~ 3.5.0         | 3.x                             | Compatible with any released version within the NebulaGraph 3.x series. |
+| 2.6.0                 | 2.6.0, 2.6.1                    |                                                            |
+| 2.5.0                 | 2.5.0                           |                                                            |
+| 2.0.0                 | 2.0.0, 2.0.1                    |                                                            |
+| 1.0                   | 1.x                             |                                                            |
 
 ## Directory Structure Overview
 
