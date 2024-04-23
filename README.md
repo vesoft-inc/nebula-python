@@ -24,10 +24,10 @@
 
 ### Jupyter Notebook Integration
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wey-gu/ipython-ngql/blob/main/examples/get_started.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wey-gu/jupyter_nebulagraph/blob/main/docs/get_started.ipynb)
 
 
-If you are about to access NebulaGraph within Jupyter Notebook, you may want to use the [NebulaGraph Jupyter Extension](https://pypi.org/project/ipython-ngql/), which provides a more interactive way to access NebulaGraph. See also this on Google Colab: [NebulaGraph on Google Colab](https://colab.research.google.com/github/wey-gu/ipython-ngql/blob/main/examples/get_started.ipynb).
+If you are about to access NebulaGraph within Jupyter Notebook, you may want to use the [NebulaGraph Jupyter Extension](https://pypi.org/project/jupyter-nebulagraph/), which provides a more interactive way to access NebulaGraph. See also this on Google Colab: [NebulaGraph on Google Colab](https://colab.research.google.com/github/wey-gu/jupyter_nebulagraph/blob/main/docs/get_started.ipynb).
 
 ## Obtaining nebula3-python
 
@@ -328,7 +328,7 @@ See [ScanVertexEdgeExample.py](example/ScanVertexEdgeExample.py) for more detail
 | 3.1.0                 | 3.1.0               |
 | 3.3.0                 | 3.3.0               |
 | 3.4.0                 | >=3.4.0             |
-| 3.5.0                 | >=3.4.0             |
+| 3.5.1                 | >=3.4.0             |
 | master                | master              |
 
 
