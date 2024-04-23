@@ -1,0 +1,2401 @@
+<!--
+	THIS EXAMPLE WAS DOWNLOADED FROM https://echarts.apache.org/examples/en/editor.html?c=graph-force
+    See the original example at https://echarts.apache.org/examples/en/index.html#chart-type-graph
+-->
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+  <div id="container" style="height: 100%"></div>
+
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  
+  <!-- Uncomment this line if you want to dataTool extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/extension/dataTool.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to use gl extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to echarts-stat extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to use map
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/china.js"></script>
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+  -->
+
+
+  <script type="text/javascript">
+
+var dom = document.getElementById('container');
+var myChart = echarts.init(dom, null, {
+    renderer: 'canvas',
+    useDirtyRect: false
+});
+var option;
+
+myChart.showLoading();
+
+// This data comes from Python Code with `ResultSet.dict_for_vis()` method
+
+// connection_pool = ConnectionPool()
+// connection_pool.init([("127.0.0.1", 9669)])
+// client = connection_pool.get_session("root", "nebula")
+// client.execute(
+//     "USE basketballplayer"
+// )
+// result = client.execute('GET SUBGRAPH WITH PROP 2 STEPS FROM "player101" YIELD VERTICES AS nodes, EDGES AS relationships;')
+// assert result.is_succeeded(), result.error_msg()
+// data = result.dict_for_vis()
+// json_data = json.dumps(data, indent=2, sort_keys=True)
+// # save the json data to a file
+// with open('data.json', 'w') as f:
+//     f.write(json_data)
+
+var data = {
+  "edges": [
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "1999"
+      },
+      "src": "player101"
+    },
+    {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2018"
+      },
+      "src": "player101"
+    },
+    {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "95"
+      },
+      "src": "player101"
+    },
+    {
+      "dst": "player102",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player101"
+    },
+    {
+      "dst": "player125",
+      "name": "follow",
+      "props": {
+        "degree": "95"
+      },
+      "src": "player101"
+    },
+    {
+      "dst": "player101",
+      "name": "follow",
+      "props": {
+        "degree": "95"
+      },
+      "src": "player100"
+    },
+    {
+      "dst": "player101",
+      "name": "follow",
+      "props": {
+        "degree": "75"
+      },
+      "src": "player102"
+    },
+    {
+      "dst": "player101",
+      "name": "follow",
+      "props": {
+        "degree": "50"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "player101",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player108"
+    },
+    {
+      "dst": "player101",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2011",
+        "start_year": "2003"
+      },
+      "src": "player111"
+    },
+    {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2011",
+        "start_year": "2005"
+      },
+      "src": "player121"
+    },
+    {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2017"
+      },
+      "src": "player146"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2016"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "player104",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "player105",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "player106",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "player116",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "player118",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "player119",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "player120",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "player121",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "player125",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2016",
+        "start_year": "1997"
+      },
+      "src": "player100"
+    },
+    {
+      "dst": "player125",
+      "name": "follow",
+      "props": {
+        "degree": "95"
+      },
+      "src": "player100"
+    },
+    {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "70"
+      },
+      "src": "player105"
+    },
+    {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player107"
+    },
+    {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player109"
+    },
+    {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player144"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2016",
+        "start_year": "2012"
+      },
+      "src": "player108"
+    },
+    {
+      "dst": "team206",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2016"
+      },
+      "src": "player108"
+    },
+    {
+      "dst": "team214",
+      "name": "serve",
+      "props": {
+        "end_year": "2008",
+        "start_year": "2005"
+      },
+      "src": "player108"
+    },
+    {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2012",
+        "start_year": "2008"
+      },
+      "src": "player108"
+    },
+    {
+      "dst": "team222",
+      "name": "serve",
+      "props": {
+        "end_year": "2005",
+        "start_year": "2003"
+      },
+      "src": "player108"
+    },
+    {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player108"
+    },
+    {
+      "dst": "team203",
+      "name": "serve",
+      "props": {
+        "end_year": "2015",
+        "start_year": "2006"
+      },
+      "src": "player102"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2015"
+      },
+      "src": "player102"
+    },
+    {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "75"
+      },
+      "src": "player102"
+    },
+    {
+      "dst": "player102",
+      "name": "follow",
+      "props": {
+        "degree": "70"
+      },
+      "src": "player103"
+    },
+    {
+      "dst": "player102",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player135"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2017"
+      },
+      "src": "player103"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2010"
+      },
+      "src": "player105"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2014"
+      },
+      "src": "player106"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2015",
+        "start_year": "2013"
+      },
+      "src": "player107"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2015",
+        "start_year": "2010"
+      },
+      "src": "player109"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2015",
+        "start_year": "2011"
+      },
+      "src": "player110"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2016",
+        "start_year": "2015"
+      },
+      "src": "player111"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2015"
+      },
+      "src": "player112"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2013",
+        "start_year": "2013"
+      },
+      "src": "player114"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2016"
+      },
+      "src": "player138"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2002"
+      },
+      "src": "player125"
+    },
+    {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player125"
+    },
+    {
+      "dst": "player125",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player109"
+    },
+    {
+      "dst": "team200",
+      "name": "serve",
+      "props": {
+        "end_year": "2009",
+        "start_year": "2007"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "team208",
+      "name": "serve",
+      "props": {
+        "end_year": "2016",
+        "start_year": "2015"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "team218",
+      "name": "serve",
+      "props": {
+        "end_year": "2010",
+        "start_year": "2009"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "team219",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2018"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "team221",
+      "name": "serve",
+      "props": {
+        "end_year": "2013",
+        "start_year": "2012"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "team222",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2017"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2012",
+        "rank": 20102012,
+        "start_year": "2010"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2015",
+        "rank": 20132015,
+        "start_year": "2013"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "rank": 20162017,
+        "start_year": "2016"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "rank": 20182019,
+        "start_year": "2018"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "55"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "player105",
+      "name": "follow",
+      "props": {
+        "degree": "60"
+      },
+      "src": "player104"
+    },
+    {
+      "dst": "player104",
+      "name": "follow",
+      "props": {
+        "degree": "83"
+      },
+      "src": "player105"
+    },
+    {
+      "dst": "team222",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2016"
+      },
+      "src": "player146"
+    },
+    {
+      "dst": "team203",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2012"
+      },
+      "src": "player135"
+    },
+    {
+      "dst": "player116",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player121"
+    },
+    {
+      "dst": "team208",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2013"
+      },
+      "src": "player103"
+    },
+    {
+      "dst": "team218",
+      "name": "serve",
+      "props": {
+        "end_year": "2013",
+        "start_year": "2013"
+      },
+      "src": "player103"
+    },
+    {
+      "dst": "player118",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player120"
+    },
+    {
+      "dst": "team221",
+      "name": "serve",
+      "props": {
+        "end_year": "2016",
+        "start_year": "2014"
+      },
+      "src": "player138"
+    },
+    {
+      "dst": "team218",
+      "name": "serve",
+      "props": {
+        "end_year": "2000",
+        "start_year": "1997"
+      },
+      "src": "player114"
+    },
+    {
+      "dst": "player103",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player114"
+    },
+    {
+      "dst": "team200",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2016"
+      },
+      "src": "player119"
+    },
+    {
+      "dst": "team214",
+      "name": "serve",
+      "props": {
+        "end_year": "2009",
+        "start_year": "2008"
+      },
+      "src": "player144"
+    },
+    {
+      "dst": "team219",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2019"
+      },
+      "src": "player112"
+    },
+    {
+      "dst": "team200",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2016"
+      },
+      "src": "player111"
+    },
+    {
+      "dst": "team218",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2018"
+      },
+      "src": "player105"
+    },
+    {
+      "dst": "player116",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player105"
+    },
+    {
+      "dst": "player120",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player118"
+    },
+    {
+      "dst": "team219",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2017"
+      },
+      "src": "player109"
+    },
+    {
+      "dst": "team222",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2015"
+      },
+      "src": "player109"
+    },
+    {
+      "dst": "team218",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2015"
+      },
+      "src": "player110"
+    }
+  ],
+  "edges_count": 86,
+  "edges_dict": {
+    "('player100', 'player101', 0, 'follow')": {
+      "dst": "player101",
+      "name": "follow",
+      "props": {
+        "degree": "95"
+      },
+      "src": "player100"
+    },
+    "('player100', 'player125', 0, 'follow')": {
+      "dst": "player125",
+      "name": "follow",
+      "props": {
+        "degree": "95"
+      },
+      "src": "player100"
+    },
+    "('player100', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2016",
+        "start_year": "1997"
+      },
+      "src": "player100"
+    },
+    "('player101', 'player100', 0, 'follow')": {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "95"
+      },
+      "src": "player101"
+    },
+    "('player101', 'player102', 0, 'follow')": {
+      "dst": "player102",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player101"
+    },
+    "('player101', 'player125', 0, 'follow')": {
+      "dst": "player125",
+      "name": "follow",
+      "props": {
+        "degree": "95"
+      },
+      "src": "player101"
+    },
+    "('player101', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "1999"
+      },
+      "src": "player101"
+    },
+    "('player101', 'team215', 0, 'serve')": {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2018"
+      },
+      "src": "player101"
+    },
+    "('player102', 'player100', 0, 'follow')": {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "75"
+      },
+      "src": "player102"
+    },
+    "('player102', 'player101', 0, 'follow')": {
+      "dst": "player101",
+      "name": "follow",
+      "props": {
+        "degree": "75"
+      },
+      "src": "player102"
+    },
+    "('player102', 'team203', 0, 'serve')": {
+      "dst": "team203",
+      "name": "serve",
+      "props": {
+        "end_year": "2015",
+        "start_year": "2006"
+      },
+      "src": "player102"
+    },
+    "('player102', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2015"
+      },
+      "src": "player102"
+    },
+    "('player103', 'player102', 0, 'follow')": {
+      "dst": "player102",
+      "name": "follow",
+      "props": {
+        "degree": "70"
+      },
+      "src": "player103"
+    },
+    "('player103', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2017"
+      },
+      "src": "player103"
+    },
+    "('player103', 'team208', 0, 'serve')": {
+      "dst": "team208",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2013"
+      },
+      "src": "player103"
+    },
+    "('player103', 'team218', 0, 'serve')": {
+      "dst": "team218",
+      "name": "serve",
+      "props": {
+        "end_year": "2013",
+        "start_year": "2013"
+      },
+      "src": "player103"
+    },
+    "('player104', 'player100', 0, 'follow')": {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "55"
+      },
+      "src": "player104"
+    },
+    "('player104', 'player101', 0, 'follow')": {
+      "dst": "player101",
+      "name": "follow",
+      "props": {
+        "degree": "50"
+      },
+      "src": "player104"
+    },
+    "('player104', 'player105', 0, 'follow')": {
+      "dst": "player105",
+      "name": "follow",
+      "props": {
+        "degree": "60"
+      },
+      "src": "player104"
+    },
+    "('player104', 'team200', 0, 'serve')": {
+      "dst": "team200",
+      "name": "serve",
+      "props": {
+        "end_year": "2009",
+        "start_year": "2007"
+      },
+      "src": "player104"
+    },
+    "('player104', 'team204', 20132015, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2015",
+        "rank": 20132015,
+        "start_year": "2013"
+      },
+      "src": "player104"
+    },
+    "('player104', 'team204', 20182019, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "rank": 20182019,
+        "start_year": "2018"
+      },
+      "src": "player104"
+    },
+    "('player104', 'team208', 0, 'serve')": {
+      "dst": "team208",
+      "name": "serve",
+      "props": {
+        "end_year": "2016",
+        "start_year": "2015"
+      },
+      "src": "player104"
+    },
+    "('player104', 'team215', 20102012, 'serve')": {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2012",
+        "rank": 20102012,
+        "start_year": "2010"
+      },
+      "src": "player104"
+    },
+    "('player104', 'team215', 20162017, 'serve')": {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "rank": 20162017,
+        "start_year": "2016"
+      },
+      "src": "player104"
+    },
+    "('player104', 'team218', 0, 'serve')": {
+      "dst": "team218",
+      "name": "serve",
+      "props": {
+        "end_year": "2010",
+        "start_year": "2009"
+      },
+      "src": "player104"
+    },
+    "('player104', 'team219', 0, 'serve')": {
+      "dst": "team219",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2018"
+      },
+      "src": "player104"
+    },
+    "('player104', 'team221', 0, 'serve')": {
+      "dst": "team221",
+      "name": "serve",
+      "props": {
+        "end_year": "2013",
+        "start_year": "2012"
+      },
+      "src": "player104"
+    },
+    "('player104', 'team222', 0, 'serve')": {
+      "dst": "team222",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2017"
+      },
+      "src": "player104"
+    },
+    "('player105', 'player100', 0, 'follow')": {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "70"
+      },
+      "src": "player105"
+    },
+    "('player105', 'player104', 0, 'follow')": {
+      "dst": "player104",
+      "name": "follow",
+      "props": {
+        "degree": "83"
+      },
+      "src": "player105"
+    },
+    "('player105', 'player116', 0, 'follow')": {
+      "dst": "player116",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player105"
+    },
+    "('player105', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2010"
+      },
+      "src": "player105"
+    },
+    "('player105', 'team218', 0, 'serve')": {
+      "dst": "team218",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2018"
+      },
+      "src": "player105"
+    },
+    "('player106', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2014"
+      },
+      "src": "player106"
+    },
+    "('player107', 'player100', 0, 'follow')": {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player107"
+    },
+    "('player107', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2015",
+        "start_year": "2013"
+      },
+      "src": "player107"
+    },
+    "('player108', 'player100', 0, 'follow')": {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player108"
+    },
+    "('player108', 'player101', 0, 'follow')": {
+      "dst": "player101",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player108"
+    },
+    "('player108', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2016",
+        "start_year": "2012"
+      },
+      "src": "player108"
+    },
+    "('player108', 'team206', 0, 'serve')": {
+      "dst": "team206",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2016"
+      },
+      "src": "player108"
+    },
+    "('player108', 'team214', 0, 'serve')": {
+      "dst": "team214",
+      "name": "serve",
+      "props": {
+        "end_year": "2008",
+        "start_year": "2005"
+      },
+      "src": "player108"
+    },
+    "('player108', 'team215', 0, 'serve')": {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2012",
+        "start_year": "2008"
+      },
+      "src": "player108"
+    },
+    "('player108', 'team222', 0, 'serve')": {
+      "dst": "team222",
+      "name": "serve",
+      "props": {
+        "end_year": "2005",
+        "start_year": "2003"
+      },
+      "src": "player108"
+    },
+    "('player109', 'player100', 0, 'follow')": {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player109"
+    },
+    "('player109', 'player125', 0, 'follow')": {
+      "dst": "player125",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player109"
+    },
+    "('player109', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2015",
+        "start_year": "2010"
+      },
+      "src": "player109"
+    },
+    "('player109', 'team219', 0, 'serve')": {
+      "dst": "team219",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2017"
+      },
+      "src": "player109"
+    },
+    "('player109', 'team222', 0, 'serve')": {
+      "dst": "team222",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2015"
+      },
+      "src": "player109"
+    },
+    "('player110', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2015",
+        "start_year": "2011"
+      },
+      "src": "player110"
+    },
+    "('player110', 'team218', 0, 'serve')": {
+      "dst": "team218",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2015"
+      },
+      "src": "player110"
+    },
+    "('player111', 'team200', 0, 'serve')": {
+      "dst": "team200",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2016"
+      },
+      "src": "player111"
+    },
+    "('player111', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2016",
+        "start_year": "2015"
+      },
+      "src": "player111"
+    },
+    "('player111', 'team215', 0, 'serve')": {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2011",
+        "start_year": "2003"
+      },
+      "src": "player111"
+    },
+    "('player112', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2015"
+      },
+      "src": "player112"
+    },
+    "('player112', 'team219', 0, 'serve')": {
+      "dst": "team219",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2019"
+      },
+      "src": "player112"
+    },
+    "('player113', 'player100', 0, 'follow')": {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'player101', 0, 'follow')": {
+      "dst": "player101",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'player104', 0, 'follow')": {
+      "dst": "player104",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'player105', 0, 'follow')": {
+      "dst": "player105",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'player106', 0, 'follow')": {
+      "dst": "player106",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'player116', 0, 'follow')": {
+      "dst": "player116",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'player118', 0, 'follow')": {
+      "dst": "player118",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'player119', 0, 'follow')": {
+      "dst": "player119",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'player120', 0, 'follow')": {
+      "dst": "player120",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'player121', 0, 'follow')": {
+      "dst": "player121",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'player125', 0, 'follow')": {
+      "dst": "player125",
+      "name": "follow",
+      "props": {
+        "degree": "99"
+      },
+      "src": "player113"
+    },
+    "('player113', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2016"
+      },
+      "src": "player113"
+    },
+    "('player114', 'player103', 0, 'follow')": {
+      "dst": "player103",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player114"
+    },
+    "('player114', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2013",
+        "start_year": "2013"
+      },
+      "src": "player114"
+    },
+    "('player114', 'team218', 0, 'serve')": {
+      "dst": "team218",
+      "name": "serve",
+      "props": {
+        "end_year": "2000",
+        "start_year": "1997"
+      },
+      "src": "player114"
+    },
+    "('player118', 'player120', 0, 'follow')": {
+      "dst": "player120",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player118"
+    },
+    "('player119', 'team200', 0, 'serve')": {
+      "dst": "team200",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2016"
+      },
+      "src": "player119"
+    },
+    "('player120', 'player118', 0, 'follow')": {
+      "dst": "player118",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player120"
+    },
+    "('player121', 'player116', 0, 'follow')": {
+      "dst": "player116",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player121"
+    },
+    "('player121', 'team215', 0, 'serve')": {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2011",
+        "start_year": "2005"
+      },
+      "src": "player121"
+    },
+    "('player125', 'player100', 0, 'follow')": {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "90"
+      },
+      "src": "player125"
+    },
+    "('player125', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2002"
+      },
+      "src": "player125"
+    },
+    "('player135', 'player102', 0, 'follow')": {
+      "dst": "player102",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player135"
+    },
+    "('player135', 'team203', 0, 'serve')": {
+      "dst": "team203",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2012"
+      },
+      "src": "player135"
+    },
+    "('player138', 'team204', 0, 'serve')": {
+      "dst": "team204",
+      "name": "serve",
+      "props": {
+        "end_year": "2019",
+        "start_year": "2016"
+      },
+      "src": "player138"
+    },
+    "('player138', 'team221', 0, 'serve')": {
+      "dst": "team221",
+      "name": "serve",
+      "props": {
+        "end_year": "2016",
+        "start_year": "2014"
+      },
+      "src": "player138"
+    },
+    "('player144', 'player100', 0, 'follow')": {
+      "dst": "player100",
+      "name": "follow",
+      "props": {
+        "degree": "80"
+      },
+      "src": "player144"
+    },
+    "('player144', 'team214', 0, 'serve')": {
+      "dst": "team214",
+      "name": "serve",
+      "props": {
+        "end_year": "2009",
+        "start_year": "2008"
+      },
+      "src": "player144"
+    },
+    "('player146', 'team215', 0, 'serve')": {
+      "dst": "team215",
+      "name": "serve",
+      "props": {
+        "end_year": "2018",
+        "start_year": "2017"
+      },
+      "src": "player146"
+    },
+    "('player146', 'team222', 0, 'serve')": {
+      "dst": "team222",
+      "name": "serve",
+      "props": {
+        "end_year": "2017",
+        "start_year": "2016"
+      },
+      "src": "player146"
+    }
+  },
+  "nodes": [
+    {
+      "id": "player101",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "36",
+        "id": "player101",
+        "name": "Tony Parker"
+      }
+    },
+    {
+      "id": "team215",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team215",
+        "name": "Hornets"
+      }
+    },
+    {
+      "id": "player113",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "29",
+        "id": "player113",
+        "name": "Dejounte Murray"
+      }
+    },
+    {
+      "id": "player100",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "42",
+        "id": "player100",
+        "name": "Tim Duncan"
+      }
+    },
+    {
+      "id": "player108",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "36",
+        "id": "player108",
+        "name": "Boris Diaw"
+      }
+    },
+    {
+      "id": "player102",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "33",
+        "id": "player102",
+        "name": "LaMarcus Aldridge"
+      }
+    },
+    {
+      "id": "team204",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team204",
+        "name": "Spurs"
+      }
+    },
+    {
+      "id": "player125",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "41",
+        "id": "player125",
+        "name": "Manu Ginobili"
+      }
+    },
+    {
+      "id": "player104",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "32",
+        "id": "player104",
+        "name": "Marco Belinelli"
+      }
+    },
+    {
+      "id": "player146",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "33",
+        "id": "player146",
+        "name": "Dwight Howard"
+      }
+    },
+    {
+      "id": "team206",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team206",
+        "name": "Jazz"
+      }
+    },
+    {
+      "id": "player135",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "28",
+        "id": "player135",
+        "name": "Damian Lillard"
+      }
+    },
+    {
+      "id": "team219",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team219",
+        "name": "76ers"
+      }
+    },
+    {
+      "id": "player121",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "33",
+        "id": "player121",
+        "name": "Chris Paul"
+      }
+    },
+    {
+      "id": "player103",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "32",
+        "id": "player103",
+        "name": "Rudy Gay"
+      }
+    },
+    {
+      "id": "team214",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team214",
+        "name": "Suns"
+      }
+    },
+    {
+      "id": "player116",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "34",
+        "id": "player116",
+        "name": "LeBron James"
+      }
+    },
+    {
+      "id": "player120",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "29",
+        "id": "player120",
+        "name": "James Harden"
+      }
+    },
+    {
+      "id": "player107",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "32",
+        "id": "player107",
+        "name": "Aron Baynes"
+      }
+    },
+    {
+      "id": "team203",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team203",
+        "name": "Trail Blazers"
+      }
+    },
+    {
+      "id": "team200",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team200",
+        "name": "Warriors"
+      }
+    },
+    {
+      "id": "player106",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "25",
+        "id": "player106",
+        "name": "Kyle Anderson"
+      }
+    },
+    {
+      "id": "player138",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "38",
+        "id": "player138",
+        "name": "Paul Gasol"
+      }
+    },
+    {
+      "id": "player114",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "39",
+        "id": "player114",
+        "name": "Tracy McGrady"
+      }
+    },
+    {
+      "id": "team218",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team218",
+        "name": "Raptors"
+      }
+    },
+    {
+      "id": "player119",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "30",
+        "id": "player119",
+        "name": "Kevin Durant"
+      }
+    },
+    {
+      "id": "player144",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "47",
+        "id": "player144",
+        "name": "Shaquille O'Neal"
+      }
+    },
+    {
+      "id": "player112",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "29",
+        "id": "player112",
+        "name": "Jonathon Simmons"
+      }
+    },
+    {
+      "id": "player111",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "38",
+        "id": "player111",
+        "name": "David West"
+      }
+    },
+    {
+      "id": "player105",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "31",
+        "id": "player105",
+        "name": "Danny Green"
+      }
+    },
+    {
+      "id": "player118",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "30",
+        "id": "player118",
+        "name": "Russell Westbrook"
+      }
+    },
+    {
+      "id": "player109",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "34",
+        "id": "player109",
+        "name": "Tiago Splitter"
+      }
+    },
+    {
+      "id": "team222",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team222",
+        "name": "Hawks"
+      }
+    },
+    {
+      "id": "team221",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team221",
+        "name": "Bulls"
+      }
+    },
+    {
+      "id": "player110",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "27",
+        "id": "player110",
+        "name": "Cory Joseph"
+      }
+    },
+    {
+      "id": "team208",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team208",
+        "name": "Kings"
+      }
+    }
+  ],
+  "nodes_count": 36,
+  "nodes_dict": {
+    "player100": {
+      "id": "player100",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "42",
+        "id": "player100",
+        "name": "Tim Duncan"
+      }
+    },
+    "player101": {
+      "id": "player101",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "36",
+        "id": "player101",
+        "name": "Tony Parker"
+      }
+    },
+    "player102": {
+      "id": "player102",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "33",
+        "id": "player102",
+        "name": "LaMarcus Aldridge"
+      }
+    },
+    "player103": {
+      "id": "player103",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "32",
+        "id": "player103",
+        "name": "Rudy Gay"
+      }
+    },
+    "player104": {
+      "id": "player104",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "32",
+        "id": "player104",
+        "name": "Marco Belinelli"
+      }
+    },
+    "player105": {
+      "id": "player105",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "31",
+        "id": "player105",
+        "name": "Danny Green"
+      }
+    },
+    "player106": {
+      "id": "player106",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "25",
+        "id": "player106",
+        "name": "Kyle Anderson"
+      }
+    },
+    "player107": {
+      "id": "player107",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "32",
+        "id": "player107",
+        "name": "Aron Baynes"
+      }
+    },
+    "player108": {
+      "id": "player108",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "36",
+        "id": "player108",
+        "name": "Boris Diaw"
+      }
+    },
+    "player109": {
+      "id": "player109",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "34",
+        "id": "player109",
+        "name": "Tiago Splitter"
+      }
+    },
+    "player110": {
+      "id": "player110",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "27",
+        "id": "player110",
+        "name": "Cory Joseph"
+      }
+    },
+    "player111": {
+      "id": "player111",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "38",
+        "id": "player111",
+        "name": "David West"
+      }
+    },
+    "player112": {
+      "id": "player112",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "29",
+        "id": "player112",
+        "name": "Jonathon Simmons"
+      }
+    },
+    "player113": {
+      "id": "player113",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "29",
+        "id": "player113",
+        "name": "Dejounte Murray"
+      }
+    },
+    "player114": {
+      "id": "player114",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "39",
+        "id": "player114",
+        "name": "Tracy McGrady"
+      }
+    },
+    "player116": {
+      "id": "player116",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "34",
+        "id": "player116",
+        "name": "LeBron James"
+      }
+    },
+    "player118": {
+      "id": "player118",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "30",
+        "id": "player118",
+        "name": "Russell Westbrook"
+      }
+    },
+    "player119": {
+      "id": "player119",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "30",
+        "id": "player119",
+        "name": "Kevin Durant"
+      }
+    },
+    "player120": {
+      "id": "player120",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "29",
+        "id": "player120",
+        "name": "James Harden"
+      }
+    },
+    "player121": {
+      "id": "player121",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "33",
+        "id": "player121",
+        "name": "Chris Paul"
+      }
+    },
+    "player125": {
+      "id": "player125",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "41",
+        "id": "player125",
+        "name": "Manu Ginobili"
+      }
+    },
+    "player135": {
+      "id": "player135",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "28",
+        "id": "player135",
+        "name": "Damian Lillard"
+      }
+    },
+    "player138": {
+      "id": "player138",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "38",
+        "id": "player138",
+        "name": "Paul Gasol"
+      }
+    },
+    "player144": {
+      "id": "player144",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "47",
+        "id": "player144",
+        "name": "Shaquille O'Neal"
+      }
+    },
+    "player146": {
+      "id": "player146",
+      "labels": [
+        "player"
+      ],
+      "props": {
+        "age": "33",
+        "id": "player146",
+        "name": "Dwight Howard"
+      }
+    },
+    "team200": {
+      "id": "team200",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team200",
+        "name": "Warriors"
+      }
+    },
+    "team203": {
+      "id": "team203",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team203",
+        "name": "Trail Blazers"
+      }
+    },
+    "team204": {
+      "id": "team204",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team204",
+        "name": "Spurs"
+      }
+    },
+    "team206": {
+      "id": "team206",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team206",
+        "name": "Jazz"
+      }
+    },
+    "team208": {
+      "id": "team208",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team208",
+        "name": "Kings"
+      }
+    },
+    "team214": {
+      "id": "team214",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team214",
+        "name": "Suns"
+      }
+    },
+    "team215": {
+      "id": "team215",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team215",
+        "name": "Hornets"
+      }
+    },
+    "team218": {
+      "id": "team218",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team218",
+        "name": "Raptors"
+      }
+    },
+    "team219": {
+      "id": "team219",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team219",
+        "name": "76ers"
+      }
+    },
+    "team221": {
+      "id": "team221",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team221",
+        "name": "Bulls"
+      }
+    },
+    "team222": {
+      "id": "team222",
+      "labels": [
+        "team"
+      ],
+      "props": {
+        "id": "team222",
+        "name": "Hawks"
+      }
+    }
+  }
+}
+
+myChart.hideLoading();
+
+// Directly using the provided data to build the graph
+let graph = {
+  nodes: data.nodes.map(node => ({
+    ...node,
+    symbolSize: 5,
+    name: node.props.name ? node.props.name : node.id,
+    value: node.props,
+    category: node.tags && node.tags.length > 0 ? node.tags[0] : undefined
+  })),
+  links: data.edges.map(edge => ({
+    source: edge.src,
+    target: edge.dst,
+    name: edge.name,
+    value: edge.props
+  }))
+};
+
+// handle categories(node label)
+let categories = [];
+graph.nodes.forEach(function (node) {
+  if (node.tags && node.tags.length > 0) {
+    node.tags.forEach(function (tag) {
+      if (categories.indexOf(tag) === -1) {
+        categories.push(tag);
+      }
+    });
+  }
+});
+graph.categories = categories.map(function (category) {
+  return {name: category};
+});
+
+option = {
+  title: {
+    text: 'Basketball Player Relationship',
+    subtext: 'Default layout',
+    top: 'bottom',
+    left: 'right'
+  },
+  tooltip: {},
+  legend: [
+    {
+      data: graph.categories.map(function (a) {
+        return a.name;
+      })
+    }
+  ],
+  series: [
+    {
+      name: 'Basketball Player Relationship',
+      type: 'graph',
+      layout: 'force',
+      data: graph.nodes,
+      links: graph.links,
+      categories: graph.categories,
+      roam: true,
+      label: {
+        position: 'right'
+      },
+      force: {
+        repulsion: 100
+      }
+    }
+  ]
+};
+myChart.setOption(option);
+
+if (option && typeof option === 'object') {
+    myChart.setOption(option);
+}
+
+window.addEventListener('resize', myChart.resize);
+
+
+  </script>
+</body>
+</html>

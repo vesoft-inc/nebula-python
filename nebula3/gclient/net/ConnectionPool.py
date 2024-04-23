@@ -15,6 +15,7 @@ from nebula3.Exception import NotValidConnectionException, InValidHostname
 
 from nebula3.gclient.net.Session import Session
 from nebula3.gclient.net.Connection import Connection
+from nebula3.Config import Config
 from nebula3.logger import logger
 
 
@@ -40,7 +41,7 @@ class ConnectionPool(object):
     def __del__(self):
         self.close()
 
-    def init(self, addresses, configs, ssl_conf=None):
+    def init(self, addresses, configs=None, ssl_conf=None):
         """init the connection pool
 
         :param addresses: the graphd servers' addresses
@@ -51,7 +52,13 @@ class ConnectionPool(object):
         if self._close:
             logger.error('The pool has init or closed.')
             raise RuntimeError('The pool has init or closed.')
-        self._configs = configs
+        if configs is None:
+            self._configs = Config()
+        else:
+            assert isinstance(
+                configs, Config
+            ), 'wrong type of Config, try this: `from nebula3.Config import Config`'
+            self._configs = configs
         self._ssl_configs = ssl_conf
         for address in addresses:
             if address not in self._addresses:
@@ -82,7 +89,12 @@ class ConnectionPool(object):
             for i in range(0, conns_per_address):
                 connection = Connection()
                 connection.open_SSL(
-                    addr[0], addr[1], self._configs.timeout, self._ssl_configs
+                    addr[0],
+                    addr[1],
+                    self._configs.timeout,
+                    self._ssl_configs,
+                    self._configs.use_http2,
+                    self._configs.http_headers,
                 )
                 self._connections[addr].append(connection)
         return True
@@ -181,6 +193,8 @@ class ConnectionPool(object):
                                 addr[1],
                                 self._configs.timeout,
                                 self._ssl_configs,
+                                self._configs.use_http2,
+                                self._configs.http_headers,
                             )
                             connection.is_used = True
                             self._connections[addr].append(connection)
@@ -206,7 +220,14 @@ class ConnectionPool(object):
         """
         try:
             conn = Connection()
-            conn.open_SSL(address[0], address[1], 1000, self._ssl_configs)
+            conn.open_SSL(
+                address[0],
+                address[1],
+                1000,
+                self._ssl_configs,
+                self._configs.use_http2,
+                self._configs.http_headers,
+            )
             conn.close()
             return True
         except Exception as ex:

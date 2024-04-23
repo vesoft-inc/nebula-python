@@ -12,18 +12,18 @@ import ssl
 class Config(object):
     # the min connection always in pool
     min_connection_pool_size = 0
-
     # the max connection in pool
     max_connection_pool_size = 10
-
     # connection or execute timeout, unit ms, 0 means no timeout
     timeout = 0
-
     # 0 means will never close the idle connection, unit ms,
     idle_time = 0
-
     # the interval to check idle time connection, unit second, -1 means no check
     interval_check = -1
+    # use http2 or not
+    use_http2 = False
+    # headers for http2, dict type
+    http_headers = None
 
 
 class SSL_config(object):
@@ -89,3 +89,7 @@ class SessionPoolConfig(object):
     max_size = 30
     min_size = 1
     interval_check = -1
+    # use http2 or not
+    use_http2 = False
+    # headers for http2, dict type
+    http_headers = None

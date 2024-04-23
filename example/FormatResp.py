@@ -16,7 +16,20 @@ from nebula3.data.ResultSet import ResultSet
 
 
 ################################
+#     Method 0 (Recommended)   #
+#        nebula3-python>=3.6.0 #
+################################
+def result_to_df_buildin(result: ResultSet) -> pd.DataFrame:
+    """
+    build list for each column, and transform to dataframe
+    """
+    assert result.is_succeeded()
+    return result.as_data_frame()
+
+
+################################
 #     Method 1 (Recommended)   #
+#        nebula3-python<=3.5.0 #
 ################################
 def result_to_df(result: ResultSet) -> pd.DataFrame:
     """
@@ -29,7 +42,7 @@ def result_to_df(result: ResultSet) -> pd.DataFrame:
         col_name = columns[col_num]
         col_list = result.column_values(col_name)
         d[col_name] = [x.cast() for x in col_list]
-    return pd.DataFrame.from_dict(d, columns=columns)
+    return pd.DataFrame(d)
 
 
 ################################

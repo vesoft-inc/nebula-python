@@ -1,6 +1,6 @@
 [project]
 name = "nebula3-python"
-version = "3.5.0"
+version = "3.5.1"
 description = "Python client for NebulaGraph V3.4"
 authors = [
     {name = "vesoft-inc", email = "info@vesoft.com"},
@@ -10,6 +10,7 @@ dependencies = [
     "httplib2 >= 0.20.0",
     "pytz >= 2021.1",
     "six >= 1.16.0",
+    "httpx[http2] >= 0.22.0",
 ]
 requires-python = ">=3.6.2"
 readme = "README.md"
@@ -22,9 +23,21 @@ Homepage = "https://github.com/vesoft-inc/nebula-python"
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
-[tool.pdm]
-package-type = "library"
+[tool.black]
+extend-exclude = '''
+/(
+    nebula3/common
+  | nebula3/storage
+  | nebula3/graph
+  | nebula3/meta
+  | nebula3/common
+  | nebula3/fbthrift
+  | docs/source
+)/
+'''
 
+[tool.pdm]
+distribution = true
 [tool.pdm.build]
 includes = ["nebula3"]
 
@@ -47,15 +60,3 @@ fmt-check = "black -S --check ."
 test = 'pytest -s -v -k "not SSL" --cov=nebula3/ --cov-report=xml --cov-append'
 test-ssl = 'pytest -s -v -k "SSL" --cov=nebula3/ --cov-report=xml --cov-append'
 
-[tool.black]
-extend-exclude = '''
-/(
-    nebula3/common
-  | nebula3/storage
-  | nebula3/graph
-  | nebula3/meta
-  | nebula3/common
-  | nebula3/fbthrift
-  | docs/source
-)/
-'''

@@ -72,6 +72,25 @@ class InValidHostname(Exception):
         self.message = 'Invalid hostname: {}'.format(message)
 
 
+class SessionException(Exception):
+    E_SESSION_INVALID = -1002
+    E_SESSION_TIMEOUT = -1003
+
+    def __init__(self, code=E_SESSION_INVALID, message=None):
+        Exception.__init__(self, message)
+        self.type = code
+        self.message = message
+
+
+class ExecutionErrorException(Exception):
+    E_EXECUTION_ERROR = -1005
+
+    def __init__(self, message=None):
+        Exception.__init__(self, message)
+        self.type = self.E_EXECUTION_ERROR
+        self.message = message
+
+
 class IOErrorException(Exception):
     E_UNKNOWN = 0
     E_ALL_BROKEN = 1
