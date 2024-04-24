@@ -8,6 +8,8 @@
 import json
 import time
 
+from typing import TYPE_CHECKING
+
 from nebula3.Exception import (
     IOErrorException,
     NotValidConnectionException,
@@ -15,15 +17,20 @@ from nebula3.Exception import (
 from nebula3.common.ttypes import ErrorCode
 from nebula3.data.ResultSet import ResultSet
 from nebula3.gclient.net.AuthResult import AuthResult
+from nebula3.gclient.net.base import BaseExecutor
 from nebula3.logger import logger
 
+if TYPE_CHECKING:
+    from nebula3.gclient.net.ConnectionPool import ConnectionPool
+    from nebula3.gclient.net.Connection import Connection
 
-class Session(object):
+
+class Session(BaseExecutor, object):
     def __init__(
         self,
-        connection,
+        connection: "Connection",
         auth_result: AuthResult,
-        pool,
+        pool: "ConnectionPool",
         retry_connect=True,
         execution_retry_count=0,
         retry_interval_seconds=1,
@@ -49,6 +56,14 @@ class Session(object):
         self._retry_interval_seconds = retry_interval_seconds
         # the time stamp when the session was added to the idle list of the session pool
         self._idle_time_start = 0
+
+    def execute(self, stmt):
+        """execute statement
+
+        :param stmt: the ngql
+        :return: ResultSet
+        """
+        return super().execute(stmt)
 
     def execute_parameter(self, stmt, params):
         """execute statement
@@ -104,14 +119,6 @@ class Session(object):
             raise
         except Exception:
             raise
-
-    def execute(self, stmt):
-        """execute statement
-
-        :param stmt: the ngql
-        :return: ResultSet
-        """
-        return self.execute_parameter(stmt, None)
 
     def execute_json(self, stmt):
         """execute statement and return the result as a JSON string
@@ -174,7 +181,7 @@ class Session(object):
         :param stmt: the ngql
         :return: JSON string
         """
-        return self.execute_json_with_parameter(stmt, None)
+        return super().execute_json(stmt)
 
     def execute_json_with_parameter(self, stmt, params):
         """execute statement and return the result as a JSON string

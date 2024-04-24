@@ -229,7 +229,7 @@ class Connection(object):
         """
         try:
             resp = self._connection.executeJsonWithParameter(session_id, stmt, params)
-            return resp
+            return str(resp)
         except Exception as te:
             if isinstance(te, TTransportException):
                 if te.message.find("timed out") > 0:
