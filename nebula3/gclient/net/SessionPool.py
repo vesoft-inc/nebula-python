@@ -9,6 +9,7 @@ import json
 import socket
 
 from threading import RLock, Timer
+from typing import List
 import time
 
 from nebula3.common.ttypes import ErrorCode
