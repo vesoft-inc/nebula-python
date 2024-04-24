@@ -220,7 +220,7 @@ class Connection(object):
         """
         return self.execute_json_with_parameter(session_id, stmt, None)
 
-    def execute_json_with_parameter(self, session_id, stmt, params) -> str:
+    def execute_json_with_parameter(self, session_id, stmt, params):
         """execute_json interface with session_id and ngql with parameter
         :param session_id: the session id get from result of authenticate interface
         :param stmt: the ngql
@@ -229,7 +229,10 @@ class Connection(object):
         """
         try:
             resp = self._connection.executeJsonWithParameter(session_id, stmt, params)
-            return resp
+            if isinstance(resp, bytes):
+                return resp.decode()
+            else:
+                raise TypeError("response is not bytes")
         except Exception as te:
             if isinstance(te, TTransportException):
                 if te.message.find("timed out") > 0:
