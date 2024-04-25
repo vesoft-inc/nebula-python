@@ -86,6 +86,8 @@ class SessionPool(object):
                 configs, SessionPoolConfig
             ), 'wrong type of SessionPoolConfig, try this: `from nebula3.Config import SessionPoolConfig`'
             self._configs = configs
+        else:
+            self._configs = SessionPoolConfig()
         # check configs
         try:
             self._check_configs()
