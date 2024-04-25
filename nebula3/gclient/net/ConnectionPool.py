@@ -220,6 +220,9 @@ class ConnectionPool(object):
         """
         try:
             conn = Connection()
+            # support ping before self.init()
+            if self._configs is None:
+                self._configs = Config()
             conn.open_SSL(
                 address[0],
                 address[1],
