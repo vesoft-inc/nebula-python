@@ -20,8 +20,11 @@ license = {text = "Apache 2.0"}
 Homepage = "https://github.com/vesoft-inc/nebula-python"
 
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["flit-core<3.9,>=3.4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.module]
+name = "nebula3"
 
 [tool.black]
 extend-exclude = '''
@@ -44,6 +47,7 @@ includes = ["nebula3"]
 [tool.pdm.dev-dependencies]
 dev = [
     "black==22.8.0",
+    "flit-core<3.9,>=3.4",
 ]
 test = [
     "pytest; python_full_version >= \"3.7.1\"",

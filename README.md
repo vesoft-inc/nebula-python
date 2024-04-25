@@ -54,16 +54,8 @@ cd nebula-python
 
 - Install from source
 
-> For python version >= 3.7.0
-
 ```bash
 pip install .
-```
-
-> For python version >= 3.6.2, < 3.7.0
-
-```bash
-python3 setup.py install
 ```
 
 </details>
