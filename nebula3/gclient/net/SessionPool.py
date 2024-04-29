@@ -215,7 +215,7 @@ class SessionPool(BaseExecutor, object):
             raise e
 
     def execute_json(self, stmt):
-        """execute statement and return the result as a JSON string
+        """execute statement and return the result as a JSON bytes
             Date and Datetime will be returned in UTC
             JSON struct:
             {
@@ -273,7 +273,7 @@ class SessionPool(BaseExecutor, object):
                 ]
             }
         :param stmt: the ngql
-        :return: JSON string
+        :return: JSON bytes
         """
         return super().execute_json(stmt)
 

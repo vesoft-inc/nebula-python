@@ -121,7 +121,7 @@ class Session(BaseExecutor, object):
             raise
 
     def execute_json(self, stmt):
-        """execute statement and return the result as a JSON string
+        """execute statement and return the result as a JSON bytes
             Date and Datetime will be returned in UTC
             JSON struct:
             {
@@ -179,12 +179,12 @@ class Session(BaseExecutor, object):
                 ]
             }
         :param stmt: the ngql
-        :return: JSON string
+        :return: JSON bytes
         """
         return super().execute_json(stmt)
 
     def execute_json_with_parameter(self, stmt, params):
-        """execute statement and return the result as a JSON string
+        """execute statement and return the result as a JSON bytes
             Date and Datetime will be returned in UTC
             JSON struct:
             {
@@ -243,7 +243,7 @@ class Session(BaseExecutor, object):
             }
         :param stmt: the ngql
         :param params: parameter map
-        :return: JSON string
+        :return: JSON bytes
         """
         if self._connection is None:
             raise RuntimeError("The session has been released")

@@ -225,14 +225,14 @@ class Connection(object):
         :param session_id: the session id get from result of authenticate interface
         :param stmt: the ngql
         :param params: parameter map
-        :return: string json representing the execution result
+        :return: json bytes representing the execution result
         """
         try:
             resp = self._connection.executeJsonWithParameter(session_id, stmt, params)
-            if isinstance(resp, bytes):
-                return resp.decode()
-            else:
+            if not isinstance(resp, bytes):
                 raise TypeError("response is not bytes")
+            else:
+                return resp
         except Exception as te:
             if isinstance(te, TTransportException):
                 if te.message.find("timed out") > 0:
