@@ -6,6 +6,9 @@ var annotated_dup =
           [ "AuthResult", null, [
             [ "AuthResult", "db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult.html", "db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult" ]
           ] ],
+          [ "base", null, [
+            [ "BaseExecutor", "de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html", "de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor" ]
+          ] ],
           [ "Connection", null, [
             [ "Connection", "df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html", "df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection" ]
           ] ],
