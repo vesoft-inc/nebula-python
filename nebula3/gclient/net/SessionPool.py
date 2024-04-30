@@ -9,6 +9,7 @@ import json
 import socket
 
 from threading import RLock, Timer
+from typing import List
 import time
 
 from nebula3.common.ttypes import ErrorCode
@@ -20,11 +21,12 @@ from nebula3.Exception import (
 
 from nebula3.gclient.net.Session import Session
 from nebula3.gclient.net.Connection import Connection
+from nebula3.gclient.net.base import BaseExecutor
 from nebula3.logger import logger
 from nebula3.Config import SessionPoolConfig
 
 
-class SessionPool(object):
+class SessionPool(BaseExecutor, object):
     S_OK = 0
     S_BAD = 1
 
@@ -53,9 +55,9 @@ class SessionPool(object):
             self._addresses_status[ip_port] = self.S_BAD
 
         # sessions that are currently in use
-        self._active_sessions = list()
+        self._active_sessions: List[Session] = list()
         # sessions that are currently available
-        self._idle_sessions = list()
+        self._idle_sessions: List[Session] = list()
 
         self._configs = SessionPoolConfig()
         self._ssl_configs = None
@@ -84,7 +86,7 @@ class SessionPool(object):
         if configs is not None:
             assert isinstance(
                 configs, SessionPoolConfig
-            ), 'wrong type of SessionPoolConfig, try this: `from nebula3.Config import SessionPoolConfig`'
+            ), "wrong type of SessionPoolConfig, try this: `from nebula3.Config import SessionPoolConfig`"
             self._configs = configs
         else:
             self._configs = SessionPoolConfig()
@@ -165,7 +167,7 @@ class SessionPool(object):
         :param stmt: the query string
         :return: ResultSet
         """
-        return self.execute_parameter(stmt, None)
+        return super().execute(stmt)
 
     def execute_parameter(self, stmt, params):
         """execute statement
@@ -213,7 +215,7 @@ class SessionPool(object):
             raise e
 
     def execute_json(self, stmt):
-        """execute statement and return the result as a JSON string
+        """execute statement and return the result as a JSON bytes
             Date and Datetime will be returned in UTC
             JSON struct:
             {
@@ -271,9 +273,9 @@ class SessionPool(object):
                 ]
             }
         :param stmt: the ngql
-        :return: JSON string
+        :return: JSON bytes
         """
-        return self.execute_json_with_parameter(stmt, None)
+        return super().execute_json(stmt)
 
     def execute_json_with_parameter(self, stmt, params):
         session = self._get_idle_session()
