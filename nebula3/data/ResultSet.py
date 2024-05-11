@@ -312,7 +312,9 @@ class ResultSet(object):
                         "props": props,
                     }
                 else:
-                    edges_dict[(src_id, dst_id, rank, edge_name)]["props"].update(props)
+                    edges_dict[str((src_id, dst_id, rank, edge_name))]["props"].update(
+                        props
+                    )
 
             elif isinstance(item, PathWrapper):
                 for node in item.nodes():
