@@ -425,9 +425,11 @@ class SessionPool(BaseExecutor, object):
                     resp = session.execute("USE {}".format(self._space_name))
                 except Exception:
                     session.release()
+                    connection.close()
                     raise
                 if not resp.is_succeeded():
                     session.release()
+                    connection.close()
                     raise RuntimeError(
                         "Failed to get session, cannot set the session space to {} error: {} {}".format(
                             self._space_name, resp.error_code(), resp.error_msg()

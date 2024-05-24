@@ -297,7 +297,6 @@ class Session(BaseExecutor, object):
             return
         self._connection.signout(self._session_id)
         self._connection.is_used = False
-        self._connection.close()
         self._connection = None
 
     def ping(self):
