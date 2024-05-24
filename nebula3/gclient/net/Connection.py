@@ -44,7 +44,7 @@ class Connection(object):
         self._ssl_conf = None
         self.use_http2 = False
         self.http_headers = None
-        self._closed = False
+        self._closed = True
 
     def open(self, ip, port, timeout, use_http2=False, http_headers=None):
         """open the connection
