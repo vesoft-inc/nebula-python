@@ -87,6 +87,7 @@ class Connection(object):
                 self._connection._iprot.trans.close()
                 raise ClientServerIncompatibleException(resp.error_msg)
         except Exception as e:
+            self.close()
             raise
 
     def __get_protocol(self, timeout, ssl_config):

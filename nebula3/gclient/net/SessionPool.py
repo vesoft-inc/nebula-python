@@ -421,8 +421,13 @@ class SessionPool(BaseExecutor, object):
                 session = Session(connection, auth_result, self, False)
 
                 # switch to the space specified in the configs
-                resp = session.execute("USE {}".format(self._space_name))
+                try:
+                    resp = session.execute("USE {}".format(self._space_name))
+                except Exception:
+                    session.release()
+                    raise
                 if not resp.is_succeeded():
+                    session.release()
                     raise RuntimeError(
                         "Failed to get session, cannot set the session space to {} error: {} {}".format(
                             self._space_name, resp.error_code(), resp.error_msg()
@@ -442,6 +447,7 @@ class SessionPool(BaseExecutor, object):
                     self.close()
                 raise e
             except Exception:
+                self.close()
                 raise
 
         raise RuntimeError(
