@@ -161,7 +161,6 @@ class Connection(object):
                 self._ip, self._port, self._timeout, self.use_http2, self.http_headers
             )
 
-
     def authenticate(self, user_name, password):
         """authenticate to graphd
 
