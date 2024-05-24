@@ -426,7 +426,7 @@ class SessionPool(BaseExecutor, object):
                 except Exception:
                     session.release()
                     connection.close()
-                    raise
+                    raise RuntimeError("Failed to get session, execute `use {}` failed.".format(self._space_name))
                 if not resp.is_succeeded():
                     session.release()
                     connection.close()
@@ -439,7 +439,7 @@ class SessionPool(BaseExecutor, object):
             except AuthFailedException as e:
                 # if auth failed because of credentials, close the pool
                 if e.message.find("Invalid password") or e.message.find(
-                    "User not exist"
+                        "User not exist"
                 ):
                     logger.error(
                         "Authentication failed, because of bad credentials, close the pool {}".format(
@@ -447,9 +447,11 @@ class SessionPool(BaseExecutor, object):
                         )
                     )
                     self.close()
+                else:
+                    connection.close()
                 raise e
             except Exception:
-                self.close()
+                connection.close()
                 raise
 
         raise RuntimeError(
