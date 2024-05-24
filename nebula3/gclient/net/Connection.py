@@ -44,6 +44,7 @@ class Connection(object):
         self._ssl_conf = None
         self.use_http2 = False
         self.http_headers = None
+        self._closed = True
 
     def open(self, ip, port, timeout, use_http2=False, http_headers=None):
         """open the connection
@@ -87,7 +88,9 @@ class Connection(object):
                 self._connection._iprot.trans.close()
                 raise ClientServerIncompatibleException(resp.error_msg)
         except Exception as e:
+            self.close()
             raise
+        self._closed = False
 
     def __get_protocol(self, timeout, ssl_config):
         try:
@@ -152,6 +155,7 @@ class Connection(object):
                 self.use_http2,
                 self.http_headers,
             )
+            self._closed = False
         else:
             self.open(
                 self._ip, self._port, self._timeout, self.use_http2, self.http_headers
@@ -266,7 +270,9 @@ class Connection(object):
         :return: void
         """
         try:
-            self._connection._iprot.trans.close()
+            if not self._closed:
+                self._connection._iprot.trans.close()
+                self._closed = True
         except Exception as e:
             logger.error(
                 "Close connection to {}:{} failed:{}".format(self._ip, self._port, e)
