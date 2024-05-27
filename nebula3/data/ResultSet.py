@@ -192,6 +192,19 @@ class ResultSet(object):
             return []
         return self._data_set_wrapper.get_rows()
 
+    def as_primitive(self):
+        """Convert result set to list of dict with primitive values per row
+
+        :return: list<dict>
+        """
+        return [
+            {
+                col_key: self.row_values(row_index)[col_index].cast_primitive()
+                for col_index, col_key in enumerate(self.keys())
+            }
+            for row_index in range(self.row_size())
+        ]
+
     def dict_for_vis(self):
         """Convert result set to a dictionary format suitable for visualization.
 
