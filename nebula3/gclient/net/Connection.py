@@ -271,9 +271,10 @@ class Connection(object):
         :param params: parameter map
         :return: ExecutionResponse
         """
-        byte_params = Connection._build_byte_param(params)
+        if params is not None:
+            params = Connection._build_byte_param(params)
         try:
-            resp = self._connection.executeWithParameter(session_id, stmt, byte_params)
+            resp = self._connection.executeWithParameter(session_id, stmt, params)
             return resp
         except Exception as te:
             if isinstance(te, TTransportException):
