@@ -192,7 +192,7 @@ class Connection(object):
         :return: ExecutionResponse
         """
         return self.execute_parameter(session_id, stmt, None)
-    
+
     @staticmethod
     def _cast_value(value: Any) -> Value:
         """
@@ -213,18 +213,14 @@ class Connection(object):
         elif isinstance(value, float):
             casted_value.set_fVal(value)
         elif isinstance(value, datetime.date):
-            date_value = Date(
-                year=value.year,
-                month=value.month,
-                day=value.day
-            )
+            date_value = Date(year=value.year, month=value.month, day=value.day)
             casted_value.set_dVal(date_value)
         elif isinstance(value, datetime.time):
             time_value = Time(
                 hour=value.hour,
                 minute=value.minute,
                 sec=value.second,
-                microsec=value.microsecond
+                microsec=value.microsecond,
             )
             casted_value.set_tVal(time_value)
         elif isinstance(value, datetime.datetime):
@@ -235,7 +231,7 @@ class Connection(object):
                 hour=value.hour,
                 minute=value.minute,
                 sec=value.second,
-                microsec=value.microsecond
+                microsec=value.microsecond,
             )
             casted_value.set_dtVal(datetime_value)
         # TODO: add support for GeoSpatial
