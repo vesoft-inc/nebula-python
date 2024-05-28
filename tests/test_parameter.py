@@ -62,6 +62,12 @@ class TestParameter(TestCase):
         sval = ttypes.Value()
         sval.set_sVal("Bob")
         self.params = {"p1": ival, "p2": bval, "p3": sval}
+        self.params_premitive = {
+            "p1": 3,
+            "p2": True,
+            "p3": "Bob",
+            "p4": ["Bob", "Lily"],
+        }
 
         assert self.pool.connects() == 1
         assert self.pool.in_used_connects() == 1
@@ -80,6 +86,19 @@ class TestParameter(TestCase):
             resp = client.execute_parameter(
                 'RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3',
                 self.params,
+            )
+            assert resp.is_succeeded(), resp.error_msg()
+            assert 1 == resp.row_size()
+            names = ['col1', 'col2', 'col3']
+            assert names == resp.keys()
+            assert 6 == resp.row_values(0)[0].as_int()
+            assert False == resp.row_values(0)[1].as_bool()
+            assert 'bob1' == resp.row_values(0)[2].as_string()
+
+            # same test with premitive params
+            resp = client.execute_parameter(
+                'RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3',
+                self.params_premitive,
             )
             assert resp.is_succeeded(), resp.error_msg()
             assert 1 == resp.row_size()
@@ -109,8 +128,18 @@ class TestParameter(TestCase):
             )
             assert not resp.is_succeeded()
             resp = client.execute_parameter(
+                '$p1=go from "Bob" over like yield like._dst;',
+                self.params_premitive,
+            )
+            assert not resp.is_succeeded()
+            resp = client.execute_parameter(
                 'go from $p3 over like yield like._dst;',
                 self.params,
+            )
+            assert not resp.is_succeeded()
+            resp = client.execute_parameter(
+                'go from $p3 over like yield like._dst;',
+                self.params_premitive,
             )
             assert not resp.is_succeeded()
             resp = client.execute_parameter(
@@ -133,6 +162,13 @@ class TestParameter(TestCase):
                 self.params,
             )
             assert not resp.is_succeeded()
+
+            resp = client.execute_parameter(
+                "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
+                self.params_premitive,
+            )
+            assert resp.is_succeeded(), resp.error_msg()
+            assert 2 == resp.row_size()
 
         except Exception as e:
             assert False, e

@@ -119,6 +119,32 @@ Session Pool comes with the following assumptions:
 
 For more details, see [SessionPoolExample.py](example/SessionPoolExample.py).
 
+## Example: Server-Side evaluated parameters
+
+To enable parameterize the query, see this example:
+
+> Note not all tokes of a query could be paramterized, you could verify it with iPython quickly.
+
+```python
+params = {
+    "p1": 3,
+    "p2": True,
+    "p3": "Bob",
+    "ids": ["player100", "player101"], # second query
+}
+
+# both session_pool and session support `.execute_parameter()`
+resp = client.execute_parameter(
+    "RETURN abs($p1)+3 AS col1, (toBoolean($p2) AND false) AS col2, toLower($p3)+1 AS col3",
+    params,
+)
+
+resp = client.execute_parameter(
+    "MATCH (v) WHERE id(v) in $ids RETURN id(v) AS vertex_id",
+    params,
+)
+```
+
 ## Example: Extracting Edge and Vertex Lists from Query Results
 
 For graph visualization purposes, the following code snippet demonstrates how to effortlessly extract lists of edges and vertices from any query result by utilizing the `ResultSet.dict_for_vis()` method.
