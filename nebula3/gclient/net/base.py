@@ -38,15 +38,6 @@ def _build_byte_param(params: dict) -> dict:
             byte_params[k] = v
         elif str(type(v)).startswith("nebula3.common.ttypes"):
             byte_params[k] = v
-        elif isinstance(v, list):
-            byte_list = []
-            for item in v:
-                byte_list.append(_cast_value(item))
-            nlist = NList(values=byte_list)
-            byte_params[k] = nlist
-        elif isinstance(v, dict):
-            # TODO: add support for NMap
-            raise TypeError("Unsupported type: dict")
         else:
             byte_params[k] = _cast_value(v)
     return byte_params
@@ -91,6 +82,14 @@ def _cast_value(value: Any) -> Value:
         )
         casted_value.set_dtVal(datetime_value)
     # TODO: add support for GeoSpatial
+    elif isinstance(value, list):
+        byte_list = []
+        for item in value:
+            byte_list.append(_cast_value(item))
+        casted_value = NList(values=byte_list)
+    elif isinstance(value, dict):
+        # TODO: add support for NMap
+        raise TypeError("Unsupported type: dict")
     else:
         raise TypeError(f"Unsupported type: {type(value)}")
     return casted_value

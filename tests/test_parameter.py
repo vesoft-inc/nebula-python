@@ -73,105 +73,101 @@ class TestParameter(TestCase):
         assert self.pool.in_used_connects() == 1
 
     def test_parameter(self):
-        try:
-            # get session from the pool
-            client = self.pool.get_session('root', 'nebula')
-            assert client is not None
-            resp = client.execute_parameter(
-                'USE parameter_test',
-                self.params,
-            )
-            assert resp.is_succeeded()
-            # test basic parameter
-            resp = client.execute_parameter(
-                'RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3',
-                self.params,
-            )
-            assert resp.is_succeeded(), resp.error_msg()
-            assert 1 == resp.row_size()
-            names = ['col1', 'col2', 'col3']
-            assert names == resp.keys()
-            assert 6 == resp.row_values(0)[0].as_int()
-            assert False == resp.row_values(0)[1].as_bool()
-            assert 'bob1' == resp.row_values(0)[2].as_string()
+        # get session from the pool
+        client = self.pool.get_session('root', 'nebula')
+        assert client is not None
+        resp = client.execute_parameter(
+            'USE parameter_test',
+            self.params,
+        )
+        assert resp.is_succeeded()
+        # test basic parameter
+        resp = client.execute_parameter(
+            'RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3',
+            self.params,
+        )
+        assert resp.is_succeeded(), resp.error_msg()
+        assert 1 == resp.row_size()
+        names = ['col1', 'col2', 'col3']
+        assert names == resp.keys()
+        assert 6 == resp.row_values(0)[0].as_int()
+        assert False == resp.row_values(0)[1].as_bool()
+        assert 'bob1' == resp.row_values(0)[2].as_string()
 
-            # same test with premitive params
-            resp = client.execute_py_params(
-                'RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3',
-                self.params_premitive,
-            )
-            assert resp.is_succeeded(), resp.error_msg()
-            assert 1 == resp.row_size()
-            names = ['col1', 'col2', 'col3']
-            assert names == resp.keys()
-            assert 6 == resp.row_values(0)[0].as_int()
-            assert False == resp.row_values(0)[1].as_bool()
-            assert 'bob1' == resp.row_values(0)[2].as_string()
-            # test cypher parameter
-            resp = client.execute_parameter(
-                f'''MATCH (v:person)--() WHERE v.person.age>abs($p1)+3
-                RETURN v.person.name AS vname,v.person.age AS vage ORDER BY vage, $p3 LIMIT $p1+1''',
-                self.params,
-            )
-            assert resp.is_succeeded(), resp.error_msg()
-            assert 2 == resp.row_size()
-            names = ['vname', 'vage']
-            assert names == resp.keys()
-            assert 'Lily' == resp.row_values(0)[0].as_string()
-            assert 9 == resp.row_values(0)[1].as_int()
-            assert 'Bob' == resp.row_values(1)[0].as_string()
-            assert 10 == resp.row_values(1)[1].as_int()
-            # test ngql parameter
-            resp = client.execute_parameter(
-                '$p1=go from "Bob" over like yield like._dst;',
-                self.params,
-            )
-            assert not resp.is_succeeded()
-            resp = client.execute_py_params(
-                '$p1=go from "Bob" over like yield like._dst;',
-                self.params_premitive,
-            )
-            assert not resp.is_succeeded()
-            resp = client.execute_parameter(
-                'go from $p3 over like yield like._dst;',
-                self.params,
-            )
-            assert not resp.is_succeeded()
-            resp = client.execute_py_params(
-                'go from $p3 over like yield like._dst;',
-                self.params_premitive,
-            )
-            assert not resp.is_succeeded()
-            resp = client.execute_parameter(
-                'fetch prop on person $p3 yield vertex as v',
-                self.params,
-            )
-            assert not resp.is_succeeded()
-            resp = client.execute_parameter(
-                'find all path from $p3 to "Yao Ming" over like yield path as p',
-                self.params,
-            )
-            assert not resp.is_succeeded()
-            resp = client.execute_parameter(
-                'get subgraph from $p3 both like yield vertices as v',
-                self.params,
-            )
-            assert not resp.is_succeeded()
-            resp = client.execute_parameter(
-                'go 3 steps from \"Bob\" over like yield like._dst limit [1,$p1,3]',
-                self.params,
-            )
-            assert not resp.is_succeeded()
+        # same test with premitive params
+        resp = client.execute_py_params(
+            'RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3',
+            self.params_premitive,
+        )
+        assert resp.is_succeeded(), resp.error_msg()
+        assert 1 == resp.row_size()
+        names = ['col1', 'col2', 'col3']
+        assert names == resp.keys()
+        assert 6 == resp.row_values(0)[0].as_int()
+        assert False == resp.row_values(0)[1].as_bool()
+        assert 'bob1' == resp.row_values(0)[2].as_string()
+        # test cypher parameter
+        resp = client.execute_parameter(
+            f'''MATCH (v:person)--() WHERE v.person.age>abs($p1)+3
+            RETURN v.person.name AS vname,v.person.age AS vage ORDER BY vage, $p3 LIMIT $p1+1''',
+            self.params,
+        )
+        assert resp.is_succeeded(), resp.error_msg()
+        assert 2 == resp.row_size()
+        names = ['vname', 'vage']
+        assert names == resp.keys()
+        assert 'Lily' == resp.row_values(0)[0].as_string()
+        assert 9 == resp.row_values(0)[1].as_int()
+        assert 'Bob' == resp.row_values(1)[0].as_string()
+        assert 10 == resp.row_values(1)[1].as_int()
+        # test ngql parameter
+        resp = client.execute_parameter(
+            '$p1=go from "Bob" over like yield like._dst;',
+            self.params,
+        )
+        assert not resp.is_succeeded()
+        resp = client.execute_py_params(
+            '$p1=go from "Bob" over like yield like._dst;',
+            self.params_premitive,
+        )
+        assert not resp.is_succeeded()
+        resp = client.execute_parameter(
+            'go from $p3 over like yield like._dst;',
+            self.params,
+        )
+        assert not resp.is_succeeded()
+        resp = client.execute_py_params(
+            'go from $p3 over like yield like._dst;',
+            self.params_premitive,
+        )
+        assert not resp.is_succeeded()
+        resp = client.execute_parameter(
+            'fetch prop on person $p3 yield vertex as v',
+            self.params,
+        )
+        assert not resp.is_succeeded()
+        resp = client.execute_parameter(
+            'find all path from $p3 to "Yao Ming" over like yield path as p',
+            self.params,
+        )
+        assert not resp.is_succeeded()
+        resp = client.execute_parameter(
+            'get subgraph from $p3 both like yield vertices as v',
+            self.params,
+        )
+        assert not resp.is_succeeded()
+        resp = client.execute_parameter(
+            'go 3 steps from \"Bob\" over like yield like._dst limit [1,$p1,3]',
+            self.params,
+        )
+        assert not resp.is_succeeded()
 
-            resp = client.execute_py_params(
-                "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
-                self.params_premitive,
-            )
-            assert resp.is_succeeded(), resp.error_msg()
-            assert 2 == resp.row_size()
-
-        except Exception as e:
-            assert False, e
+        resp = client.execute_py_params(
+            "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
+            self.params_premitive,
+        )
+        assert resp.is_succeeded(), resp.error_msg()
+        assert 2 == resp.row_size()
 
     def tearDown(self) -> None:
         client = self.pool.get_session('root', 'nebula')
