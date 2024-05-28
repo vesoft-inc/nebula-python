@@ -119,12 +119,11 @@ Session Pool comes with the following assumptions:
 
 For more details, see [SessionPoolExample.py](example/SessionPoolExample.py).
 
-## Example: Server-Side evaluated parameters
+## Example: Server-Side Evaluated Parameters
 
-To enable parameterize the query, see this example:
+To enable parameterization of the query, refer to the following example:
 
-> Note not all tokes of a query could be paramterized, you could verify it with iPython quickly.
-
+> Note: Not all tokens of a query can be parameterized. You can quickly verify which ones can be with iPython.
 ```python
 params = {
     "p1": 3,
@@ -144,6 +143,9 @@ resp = client.execute_parameter(
     params,
 )
 ```
+
+For further information, consult [Params.py](example/Params.py).
+
 
 ## Example: Extracting Edge and Vertex Lists from Query Results
 
@@ -231,6 +233,23 @@ The dict/JSON structure with `dict_for_vis()` is as follows:
 ```
 
 </details>
+
+## Example: Retrieve Primitive Typed Results
+
+The executed result is typed as `ResultSet`, and you can inspect its structure using `dir()`.
+
+For each data cell in the `ResultSet`, you can use `.cast()` to retrieve raw wrapped data (with sugar) such as a Vertex (Node), Edge (Relationship), Path, Value (Int, Float, etc.). Alternatively, you can use `.cast_primitive()` to obtain values in primitive types like dict, int, or float, depending on your needs.
+
+For more details, refer to [FromResp.py](example/FromResp.py).
+
+Additionally, `ResultSet.as_primitive()` provides a convenient method to convert the result set into a list of dictionaries (similar to JSONL format) containing primitive values for each row.
+
+```python
+result = session.execute('<your query>')
+
+result_dict = result.as_primitive()
+print(result_dict)
+```
 
 ## Example: Fetching Query Results into a Pandas DataFrame
 

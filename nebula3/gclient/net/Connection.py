@@ -245,7 +245,7 @@ class Connection(object):
         for k, v in params.items():
             if isinstance(v, Value):
                 byte_params[k] = v
-            elif type(v).startswith("nebula3.common.ttypes"):
+            elif str(type(v)).startswith("nebula3.common.ttypes"):
                 byte_params[k] = v
             elif isinstance(v, list):
                 byte_list = []
