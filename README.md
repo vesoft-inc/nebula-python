@@ -132,13 +132,12 @@ params = {
     "ids": ["player100", "player101"], # second query
 }
 
-# both session_pool and session support `.execute_parameter()`
-resp = client.execute_parameter(
+resp = client.execute_py_params(
     "RETURN abs($p1)+3 AS col1, (toBoolean($p2) AND false) AS col2, toLower($p3)+1 AS col3",
     params,
 )
 
-resp = client.execute_parameter(
+resp = client.execute_py_params(
     "MATCH (v) WHERE id(v) in $ids RETURN id(v) AS vertex_id",
     params,
 )
