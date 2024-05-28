@@ -16,11 +16,15 @@
 
 - If you're building Graph Analysis Tools(Scan instead of Query), you may want to use the **Storage Client** to scan vertices and edges, see [Quick Example: Using Storage Client to Scan Vertices and Edges](#Quick-Example:-Using-Storage-Client-to-Scan-Vertices-and-Edges).
 
+- For parameterized query, see [Example: Server-Side Evaluated Parameters](#Example:-Server-Side-Evaluated-Parameters).
+
 ### Handling Query Results
 
 - On how to form a query result into a **Pandas DataFrame**, see [Example: Fetching Query Results into a Pandas DataFrame](#Example:-Fetching-Query-Results-into-a-Pandas-DataFrame).
 
 - On how to render/visualize the query result, see [Example: Extracting Edge and Vertex Lists from Query Results](#Example:-Extracting-Edge-and-Vertex-Lists-from-Query-Results), it demonstrates how to extract lists of edges and vertices from any query result by utilizing the `ResultSet.dict_for_vis()` method.
+
+- On how to get rows of dict/JSON structure with primitive types, see [Example: Retrieve Primitive Typed Results](#Example:-Retrieve-Primitive-Typed-Results).
 
 ### Jupyter Notebook Integration
 
@@ -123,7 +127,8 @@ For more details, see [SessionPoolExample.py](example/SessionPoolExample.py).
 
 To enable parameterization of the query, refer to the following example:
 
-> Note: Not all tokens of a query can be parameterized. You can quickly verify which ones can be with iPython.
+> Note: Not all tokens of a query can be parameterized. You can quickly verify it via iPython or Nebula-Console in an interactive way.
+
 ```python
 params = {
     "p1": 3,
@@ -132,12 +137,12 @@ params = {
     "ids": ["player100", "player101"], # second query
 }
 
-resp = client.execute_py_params(
+result = client.execute_py_params(
     "RETURN abs($p1)+3 AS col1, (toBoolean($p2) AND false) AS col2, toLower($p3)+1 AS col3",
     params,
 )
 
-resp = client.execute_py_params(
+result = client.execute_py_params(
     "MATCH (v) WHERE id(v) in $ids RETURN id(v) AS vertex_id",
     params,
 )
