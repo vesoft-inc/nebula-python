@@ -190,7 +190,6 @@ class Connection(object):
         """
         return self.execute_parameter(session_id, stmt, None)
 
-
     def execute_parameter(self, session_id, stmt, params):
         """execute interface with session_id and ngql
         :param session_id: the session id get from result of authenticate interface

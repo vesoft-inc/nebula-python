@@ -23,8 +23,10 @@ class BaseExecutor:
 
     def execute_json(self, stmt: str) -> bytes:
         return self.execute_json_with_parameter(stmt, None)
-    
-    def execute_py_params(self, stmt: str, params: Optional[Dict[str, Any]]) -> ResultSet:
+
+    def execute_py_params(
+        self, stmt: str, params: Optional[Dict[str, Any]]
+    ) -> ResultSet:
         """**Recommended** Execute a statement with parameters in Python type instead of thrift type."""
         return self.execute_parameter(stmt, _build_byte_param(params))
 
@@ -48,6 +50,7 @@ def _build_byte_param(params: dict) -> dict:
         else:
             byte_params[k] = _cast_value(v)
     return byte_params
+
 
 def _cast_value(value: Any) -> Value:
     """
