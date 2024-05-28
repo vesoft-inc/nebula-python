@@ -48,8 +48,7 @@ params_premitive = {
     "p1": 3,
     "p2": True,
     "p3": "Bob",
-    # List and Dict are not supported yet
-    # "p4": ["Bob", "Lily"],
+    "p4": ["Bob", "Lily"],
 }
 
 resp = client.execute_py_params(
@@ -57,7 +56,7 @@ resp = client.execute_py_params(
     params_premitive,
 )
 
-# resp = client.execute_py_params(
-#     "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
-#     params_premitive,
-# )
+resp = client.execute_py_params(
+    "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
+    params_premitive,
+)

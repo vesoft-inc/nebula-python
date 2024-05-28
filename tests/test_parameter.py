@@ -23,7 +23,8 @@ class TestParameter(TestCase):
         self.configs = Config()
         self.configs.max_connection_pool_size = 6
         self.pool = ConnectionPool()
-        self.pool.init([("127.0.0.1", 9671)], self.configs)
+        # self.pool.init([("127.0.0.1", 9671)], self.configs)
+        self.pool.init([("127.0.0.1", 9669)], self.configs)
 
         # get session from the pool
         client = self.pool.get_session("root", "nebula")
@@ -66,7 +67,7 @@ class TestParameter(TestCase):
             "p1": 3,
             "p2": True,
             "p3": "Bob",
-            # "p4": ["Bob", "Lily"],
+            "p4": ["Bob", "Lily"],
         }
 
         assert self.pool.connects() == 1
@@ -162,12 +163,12 @@ class TestParameter(TestCase):
         )
         assert not resp.is_succeeded()
 
-        # resp = client.execute_py_params(
-        #     "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
-        #     self.params_premitive,
-        # )
-        # assert resp.is_succeeded(), resp.error_msg()
-        # assert 2 == resp.row_size()
+        resp = client.execute_py_params(
+            "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
+            self.params_premitive,
+        )
+        assert resp.is_succeeded(), resp.error_msg()
+        assert 2 == resp.row_size()
 
     def tearDown(self) -> None:
         client = self.pool.get_session("root", "nebula")
