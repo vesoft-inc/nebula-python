@@ -51,7 +51,7 @@ params_premitive = {
     "p4": ["Bob", "Lily"],
 }
 
-resp = client.execute_parameter(
+resp = client.execute_py_params(
     "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
     params_premitive,
 )

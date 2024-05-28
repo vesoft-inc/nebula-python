@@ -96,7 +96,7 @@ class TestParameter(TestCase):
             assert 'bob1' == resp.row_values(0)[2].as_string()
 
             # same test with premitive params
-            resp = client.execute_parameter(
+            resp = client.execute_py_params(
                 'RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3',
                 self.params_premitive,
             )
@@ -127,7 +127,7 @@ class TestParameter(TestCase):
                 self.params,
             )
             assert not resp.is_succeeded()
-            resp = client.execute_parameter(
+            resp = client.execute_py_params(
                 '$p1=go from "Bob" over like yield like._dst;',
                 self.params_premitive,
             )
@@ -137,7 +137,7 @@ class TestParameter(TestCase):
                 self.params,
             )
             assert not resp.is_succeeded()
-            resp = client.execute_parameter(
+            resp = client.execute_py_params(
                 'go from $p3 over like yield like._dst;',
                 self.params_premitive,
             )
@@ -163,7 +163,7 @@ class TestParameter(TestCase):
             )
             assert not resp.is_succeeded()
 
-            resp = client.execute_parameter(
+            resp = client.execute_py_params(
                 "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
                 self.params_premitive,
             )
