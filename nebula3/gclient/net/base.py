@@ -83,10 +83,11 @@ def _cast_value(value: Any) -> Value:
         casted_value.set_dtVal(datetime_value)
     # TODO: add support for GeoSpatial
     elif isinstance(value, list):
-        byte_list = []
-        for item in value:
-            byte_list.append(_cast_value(item))
-        casted_value = NList(values=byte_list)
+        # byte_list = []
+        # for item in value:
+        #     byte_list.append(_cast_value(item))
+        # casted_value = NList(values=byte_list)
+        raise TypeError("Unsupported type: dict")
     elif isinstance(value, dict):
         # TODO: add support for NMap
         raise TypeError("Unsupported type: dict")

@@ -7,10 +7,10 @@ from nebula3.common import ttypes
 # define a config
 config = Config()
 connection_pool = ConnectionPool()
-connection_pool.init([('127.0.0.1', 9669)], config)
+connection_pool.init([("127.0.0.1", 9669)], config)
 
 # get session from the connection pool
-client = connection_pool.get_session('root', 'nebula')
+client = connection_pool.get_session("root", "nebula")
 client.execute("CREATE SPACE IF NOT EXISTS test(vid_type=FIXED_STRING(30));")
 
 
@@ -48,10 +48,16 @@ params_premitive = {
     "p1": 3,
     "p2": True,
     "p3": "Bob",
-    "p4": ["Bob", "Lily"],
+    # List and Dict are not supported yet
+    # "p4": ["Bob", "Lily"],
 }
 
 resp = client.execute_py_params(
-    "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
+    "RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3",
     params_premitive,
 )
+
+# resp = client.execute_py_params(
+#     "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
+#     params_premitive,
+# )
