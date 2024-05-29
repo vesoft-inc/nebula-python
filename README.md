@@ -16,11 +16,15 @@
 
 - If you're building Graph Analysis Tools(Scan instead of Query), you may want to use the **Storage Client** to scan vertices and edges, see [Quick Example: Using Storage Client to Scan Vertices and Edges](#Quick-Example:-Using-Storage-Client-to-Scan-Vertices-and-Edges).
 
+- For parameterized query, see [Example: Server-Side Evaluated Parameters](#Example:-Server-Side-Evaluated-Parameters).
+
 ### Handling Query Results
 
 - On how to form a query result into a **Pandas DataFrame**, see [Example: Fetching Query Results into a Pandas DataFrame](#Example:-Fetching-Query-Results-into-a-Pandas-DataFrame).
 
 - On how to render/visualize the query result, see [Example: Extracting Edge and Vertex Lists from Query Results](#Example:-Extracting-Edge-and-Vertex-Lists-from-Query-Results), it demonstrates how to extract lists of edges and vertices from any query result by utilizing the `ResultSet.dict_for_vis()` method.
+
+- On how to get rows of dict/JSON structure with primitive types, see [Example: Retrieve Primitive Typed Results](#Example:-Retrieve-Primitive-Typed-Results).
 
 ### Jupyter Notebook Integration
 
@@ -119,6 +123,34 @@ Session Pool comes with the following assumptions:
 
 For more details, see [SessionPoolExample.py](example/SessionPoolExample.py).
 
+## Example: Server-Side Evaluated Parameters
+
+To enable parameterization of the query, refer to the following example:
+
+> Note: Not all tokens of a query can be parameterized. You can quickly verify it via iPython or Nebula-Console in an interactive way.
+
+```python
+params = {
+    "p1": 3,
+    "p2": True,
+    "p3": "Bob",
+    "ids": ["player100", "player101"], # second query
+}
+
+result = client.execute_py_params(
+    "RETURN abs($p1)+3 AS col1, (toBoolean($p2) AND false) AS col2, toLower($p3)+1 AS col3",
+    params,
+)
+
+result = client.execute_py_params(
+    "MATCH (v) WHERE id(v) in $ids RETURN id(v) AS vertex_id",
+    params,
+)
+```
+
+For further information, consult [Params.py](example/Params.py).
+
+
 ## Example: Extracting Edge and Vertex Lists from Query Results
 
 For graph visualization purposes, the following code snippet demonstrates how to effortlessly extract lists of edges and vertices from any query result by utilizing the `ResultSet.dict_for_vis()` method.
@@ -205,6 +237,23 @@ The dict/JSON structure with `dict_for_vis()` is as follows:
 ```
 
 </details>
+
+## Example: Retrieve Primitive Typed Results
+
+The executed result is typed as `ResultSet`, and you can inspect its structure using `dir()`.
+
+For each data cell in the `ResultSet`, you can use `.cast()` to retrieve raw wrapped data (with sugar) such as a Vertex (Node), Edge (Relationship), Path, Value (Int, Float, etc.). Alternatively, you can use `.cast_primitive()` to obtain values in primitive types like dict, int, or float, depending on your needs.
+
+For more details, refer to [FromResp.py](example/FromResp.py).
+
+Additionally, `ResultSet.as_primitive()` provides a convenient method to convert the result set into a list of dictionaries (similar to JSONL format) containing primitive values for each row.
+
+```python
+result = session.execute('<your query>')
+
+result_dict = result.as_primitive()
+print(result_dict)
+```
 
 ## Example: Fetching Query Results into a Pandas DataFrame
 
