@@ -51,12 +51,12 @@ params_premitive = {
     "p4": ["Bob", "Lily"],
 }
 
-resp = client.execute_py_params(
+resp = client.execute_py(
     "RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3",
     params_premitive,
 )
 
-resp = client.execute_py_params(
+resp = client.execute_py(
     "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
     params_premitive,
 )
