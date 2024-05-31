@@ -8,7 +8,7 @@
 import time
 import json
 
-from nebula3.gclient.net import ConnectionPool
+from nebula3.gclient.net import ConnectionPool, ExecuteError
 from nebula3.Config import Config
 from nebula3.common import *
 from unittest import TestCase
@@ -95,16 +95,6 @@ class TestParameter(TestCase):
         assert False == resp.row_values(0)[1].as_bool()
         assert "bob1" == resp.row_values(0)[2].as_string()
 
-        # same test with premitive params
-        resp = client.execute_py(
-            "RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3",
-            self.params_premitive,
-        )
-        assert 1 == len(resp)
-        assert ["col1", "col2", "col3"] == list(resp[0].keys())
-        assert resp[0]["col1"] == 6
-        assert resp[0]["col2"] == False
-        assert resp[0]["col3"] == "bob1"
         # test cypher parameter
         resp = client.execute_parameter(
             f"""MATCH (v:person)--() WHERE v.person.age>abs($p1)+3
@@ -125,27 +115,11 @@ class TestParameter(TestCase):
             self.params,
         )
         assert not resp.is_succeeded()
-        try:
-            resp = client.execute_py(
-                '$p1=go from "Bob" over like yield like._dst;',
-                self.params_premitive,
-            )
-            raise AssertionError("should raise exception")
-        except:
-            pass
         resp = client.execute_parameter(
             "go from $p3 over like yield like._dst;",
             self.params,
         )
         assert not resp.is_succeeded()
-        try:
-            resp = client.execute_py(
-                "go from $p3 over like yield like._dst;",
-                self.params_premitive,
-            )
-            raise AssertionError("should raise exception")
-        except:
-            pass
         resp = client.execute_parameter(
             "fetch prop on person $p3 yield vertex as v",
             self.params,
@@ -167,6 +141,34 @@ class TestParameter(TestCase):
         )
         assert not resp.is_succeeded()
 
+        # same test with premitive params
+        resp = client.execute_py(
+            "RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3",
+            self.params_premitive,
+        )
+        assert 1 == len(resp)
+        assert ["col1", "col2", "col3"] == list(resp[0].keys())
+        assert resp[0]["col1"] == 6
+        assert resp[0]["col2"] == False
+        assert resp[0]["col3"] == "bob1"
+        try:
+            resp = client.execute_py(
+                '$p1=go from "Bob" over like yield like._dst;',
+                self.params_premitive,
+            )
+        except ExecuteError:
+            pass
+        else:
+            raise AssertionError("should raise exception")
+        try:
+            resp = client.execute_py(
+                "go from $p3 over like yield like._dst;",
+                self.params_premitive,
+            )
+        except ExecuteError:
+            pass
+        else:
+            raise AssertionError("should raise exception")
         resp = client.execute_py(
             "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
             self.params_premitive,

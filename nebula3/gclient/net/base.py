@@ -1,8 +1,23 @@
 import datetime
 from abc import abstractmethod
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, overload, Literal, List
 from nebula3.data.ResultSet import ResultSet
 from nebula3.common.ttypes import ErrorCode, Value, NList, Date, Time, DateTime
+
+
+class ExecuteError(Exception):
+    def __init__(self, stmt: str, param: Any, code: ErrorCode, msg: str):
+        self.stmt = stmt
+        self.param = param
+        self.code = code
+        self.msg = msg
+
+    def __str__(self):
+        return (
+            f"ExecuteError. err_code: {self.code}, err_msg: {self.msg}.\n"
+            + f"Statement: \n{self.stmt}\n"
+            + f"Parameter: \n{self.param}"
+        )
 
 
 class BaseExecutor:
@@ -24,7 +39,28 @@ class BaseExecutor:
     def execute_json(self, stmt: str) -> bytes:
         return self.execute_json_with_parameter(stmt, None)
 
-    def execute_py(self, stmt: str, params: Optional[Dict[str, Any]]):
+    @overload
+    def execute_py(
+        self,
+        stmt: str,
+        params: Optional[Dict[str, Any]] = None,
+        primitive_res: Literal[True] = True,
+    ) -> List[Dict[str, Any]]: ...
+
+    @overload
+    def execute_py(
+        self,
+        stmt: str,
+        params: Optional[Dict[str, Any]] = None,
+        primitive_res: Literal[False] = False,
+    ) -> ResultSet: ...
+
+    def execute_py(
+        self,
+        stmt: str,
+        params: Optional[Dict[str, Any]] = None,
+        primitive_res: bool = True,
+    ):
         """**Recommended** Execute a statement with parameters in Python type instead of thrift type."""
         if params is None:
             result = self.execute_parameter(stmt, None)
@@ -32,14 +68,10 @@ class BaseExecutor:
             result = self.execute_parameter(stmt, _build_byte_param(params))
 
         if not result.is_succeeded():
-            raise Exception(
-                "NebulaGraph query failed:",
-                result.error_msg(),
-                "Statement:",
-                stmt,
-                "Params:",
-                params,
-            )
+            raise ExecuteError(stmt, params, result.error_code(), result.error_msg())
+        if not primitive_res:
+            return result
+
         full_result = [
             {
                 str(key): result.row_values(row_index)[i].cast_primitive()
