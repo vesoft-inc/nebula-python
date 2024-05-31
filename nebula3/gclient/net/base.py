@@ -53,7 +53,7 @@ class BaseExecutor:
         if not result.is_succeeded():
             raise ExecuteError(stmt, params, result.error_code(), result.error_msg())
 
-        return result.as_primitive()
+        return result
 
 
 def _build_byte_param(params: dict) -> dict:

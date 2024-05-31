@@ -144,7 +144,7 @@ class TestParameter(TestCase):
         resp = client.execute_py(
             "RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3",
             self.params_premitive,
-        )
+        ).as_primitive()
         assert 1 == len(resp)
         assert ["col1", "col2", "col3"] == list(resp[0].keys())
         assert resp[0]["col1"] == 6
@@ -171,7 +171,7 @@ class TestParameter(TestCase):
         resp = client.execute_py(
             "MATCH (v) WHERE id(v) in $p4 RETURN id(v) AS vertex_id",
             self.params_premitive,
-        )
+        ).as_primitive()
         assert 2 == len(resp)
 
     def tearDown(self) -> None:
