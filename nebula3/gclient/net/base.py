@@ -45,7 +45,8 @@ class BaseExecutor:
         stmt: str,
         params: Optional[Dict[str, Any]] = None,
         primitive_res: Literal[True] = True,
-    ) -> List[Dict[str, Any]]: ...
+    ) -> List[Dict[str, Any]]:
+        ...
 
     @overload
     def execute_py(
@@ -53,7 +54,8 @@ class BaseExecutor:
         stmt: str,
         params: Optional[Dict[str, Any]] = None,
         primitive_res: Literal[False] = False,
-    ) -> ResultSet: ...
+    ) -> ResultSet:
+        ...
 
     def execute_py(
         self,
