@@ -39,29 +39,10 @@ class BaseExecutor:
     def execute_json(self, stmt: str) -> bytes:
         return self.execute_json_with_parameter(stmt, None)
 
-    @overload
     def execute_py(
         self,
         stmt: str,
         params: Optional[Dict[str, Any]] = None,
-        primitive_res: Literal[True] = True,
-    ) -> List[Dict[str, Any]]:
-        ...
-
-    @overload
-    def execute_py(
-        self,
-        stmt: str,
-        params: Optional[Dict[str, Any]] = None,
-        primitive_res: Literal[False] = False,
-    ) -> ResultSet:
-        ...
-
-    def execute_py(
-        self,
-        stmt: str,
-        params: Optional[Dict[str, Any]] = None,
-        primitive_res: bool = True,
     ):
         """**Recommended** Execute a statement with parameters in Python type instead of thrift type."""
         if params is None:
@@ -72,8 +53,6 @@ class BaseExecutor:
         if not result.is_succeeded():
             raise ExecuteError(stmt, params, result.error_code(), result.error_msg())
 
-        if not primitive_res:
-            return result
         return result.as_primitive()
 
 
