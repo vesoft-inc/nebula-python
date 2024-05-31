@@ -69,17 +69,10 @@ class BaseExecutor:
 
         if not result.is_succeeded():
             raise ExecuteError(stmt, params, result.error_code(), result.error_msg())
+
         if not primitive_res:
             return result
-
-        full_result = [
-            {
-                str(key): result.row_values(row_index)[i].cast_primitive()
-                for i, key in enumerate(result.keys())
-            }
-            for row_index in range(result.row_size())
-        ]
-        return full_result
+        return result.as_primitive()
 
 
 def _build_byte_param(params: dict) -> dict:

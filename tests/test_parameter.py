@@ -23,8 +23,7 @@ class TestParameter(TestCase):
         self.configs = Config()
         self.configs.max_connection_pool_size = 6
         self.pool = ConnectionPool()
-        # self.pool.init([("127.0.0.1", 9671)], self.configs)
-        self.pool.init([("127.0.0.1", 9669)], self.configs)
+        self.pool.init([("127.0.0.1", 9671)], self.configs)
 
         # get session from the pool
         client = self.pool.get_session("root", "nebula")
