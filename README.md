@@ -10,6 +10,8 @@
 
 ### Accessing NebulaGraph
 
+- [Get Started Notebook](example/get_started.ipynb) - A Jupyter Notebook to get started with NebulaGraph Python client, with latest features and examples.
+
 - For **first-time** trying out Python client, go through [Quick Example: Connecting to GraphD Using Graph Client](#Quick-Example:-Connecting-to-GraphD-Using-Graph-Client).
 
 - If your Graph Application is a **Web Service** dedicated to one Graph Space, go with Singleton of **Session Pool**, check [Using the Session Pool: A Guide](#Using-the-Session-Pool:-A-Guide).
