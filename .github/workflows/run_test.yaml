@@ -70,12 +70,12 @@ jobs:
         run: pdm fmt-check
       - name: Test with pytest
         run: |
-          docker-compose -f tests/docker-compose.yaml up -d
+          docker compose -f tests/docker-compose.yaml up -d
           sleep 20
           pdm test
       - name: Test SSL connection with pytest
         run: |
-          enable_ssl=true docker-compose -f tests/docker-compose-ssl.yaml up -d
+          enable_ssl=true docker compose -f tests/docker-compose-ssl.yaml up -d
           sleep 20
           pdm test-ssl
       - name: Upload Coverage to Codecov
@@ -101,7 +101,7 @@ jobs:
           pip install prettytable pandas
       - name: Setup containers
         run: |
-          docker-compose -f tests/docker-compose.yaml up -d
+          docker compose -f tests/docker-compose.yaml up -d
           sleep 20
       - name: Test example
         run: |
