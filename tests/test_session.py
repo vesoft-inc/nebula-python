@@ -50,8 +50,8 @@ class TestSession(TestCase):
             time.sleep(10)
             for i in range(0, 5):
                 if i == 3:
-                    os.system("docker stop tests_graphd0_1")
-                    os.system("docker stop tests_graphd1_1")
+                    os.system("docker stop tests_graphd0_1 || docker stop tests-graphd0-1")
+                    os.system("docker stop tests_graphd1_1 || docker stop tests-graphd1-1")
                     time.sleep(3)
                 resp = session.execute("SHOW SESSIONS")
                 assert resp.is_succeeded(), resp.error_msg()
@@ -63,8 +63,8 @@ class TestSession(TestCase):
         except Exception as e:
             assert False, e
         finally:
-            os.system("docker start tests_graphd0_1")
-            os.system("docker start tests_graphd1_1")
+            os.system("docker start tests_graphd0_1 || docker start tests-graphd0-1")
+            os.system("docker start tests_graphd1_1 || docker start tests-graphd1-1")
             time.sleep(2)
 
     def test_3_session_context(self):
