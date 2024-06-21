@@ -20,3 +20,4 @@ from nebula3.gclient.net.AuthResult import AuthResult
 from nebula3.gclient.net.Session import Session
 from nebula3.gclient.net.Connection import Connection
 from nebula3.gclient.net.ConnectionPool import ConnectionPool
+from nebula3.gclient.net.base import BaseExecutor, ExecuteError

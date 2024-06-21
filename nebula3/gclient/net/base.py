@@ -5,6 +5,21 @@ from nebula3.data.ResultSet import ResultSet
 from nebula3.common.ttypes import ErrorCode, Value, NList, Date, Time, DateTime
 
 
+class ExecuteError(Exception):
+    def __init__(self, stmt: str, param: Any, code: ErrorCode, msg: str):
+        self.stmt = stmt
+        self.param = param
+        self.code = code
+        self.msg = msg
+
+    def __str__(self):
+        return (
+            f"ExecuteError. err_code: {self.code}, err_msg: {self.msg}.\n"
+            + f"Statement: \n{self.stmt}\n"
+            + f"Parameter: \n{self.param}"
+        )
+
+
 class BaseExecutor:
     @abstractmethod
     def execute_parameter(
@@ -24,11 +39,21 @@ class BaseExecutor:
     def execute_json(self, stmt: str) -> bytes:
         return self.execute_json_with_parameter(stmt, None)
 
-    def execute_py_params(
-        self, stmt: str, params: Optional[Dict[str, Any]]
-    ) -> ResultSet:
+    def execute_py(
+        self,
+        stmt: str,
+        params: Optional[Dict[str, Any]] = None,
+    ):
         """**Recommended** Execute a statement with parameters in Python type instead of thrift type."""
-        return self.execute_parameter(stmt, _build_byte_param(params))
+        if params is None:
+            result = self.execute_parameter(stmt, None)
+        else:
+            result = self.execute_parameter(stmt, _build_byte_param(params))
+
+        if not result.is_succeeded():
+            raise ExecuteError(stmt, params, result.error_code(), result.error_msg())
+
+        return result
 
 
 def _build_byte_param(params: dict) -> dict:
