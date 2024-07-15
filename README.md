@@ -10,21 +10,23 @@
 
 ### Accessing NebulaGraph
 
-- For **first-time** trying out Python client, go through [Quick Example: Connecting to GraphD Using Graph Client](#Quick-Example:-Connecting-to-GraphD-Using-Graph-Client).
+- [Get Started Notebook](example/get_started.ipynb) - A Jupyter Notebook to get started with NebulaGraph Python client, with latest features and examples.
 
-- If your Graph Application is a **Web Service** dedicated to one Graph Space, go with Singleton of **Session Pool**, check [Using the Session Pool: A Guide](#Using-the-Session-Pool:-A-Guide).
+- For **first-time** trying out Python client, go through [Quick Example: Connecting to GraphD Using Graph Client](#quick-example-connecting-to-graphd-using-graph-client).
 
-- If you're building Graph Analysis Tools(Scan instead of Query), you may want to use the **Storage Client** to scan vertices and edges, see [Quick Example: Using Storage Client to Scan Vertices and Edges](#Quick-Example:-Using-Storage-Client-to-Scan-Vertices-and-Edges).
+- If your Graph Application is a **Web Service** dedicated to one Graph Space, go with Singleton of **Session Pool**, check [Using the Session Pool: A Guide](#using-the-session-pool-a-guide).
 
-- For parameterized query, see [Example: Server-Side Evaluated Parameters](#Example:-Server-Side-Evaluated-Parameters).
+- If you're building Graph Analysis Tools(Scan instead of Query), you may want to use the **Storage Client** to scan vertices and edges, see [Quick Example: Using Storage Client to Scan Vertices and Edges](#quick-example-using-storage-client-to-scan-vertices-and-edges).
+
+- For parameterized query, see [Example: Server-Side Evaluated Parameters](#example-server-side-evaluated-parameters).
 
 ### Handling Query Results
 
-- On how to form a query result into a **Pandas DataFrame**, see [Example: Fetching Query Results into a Pandas DataFrame](#Example:-Fetching-Query-Results-into-a-Pandas-DataFrame).
+- On how to form a query result into a **Pandas DataFrame**, see [Example: Fetching Query Results into a Pandas DataFrame](#example-fetching-query-results-into-a-pandas-dataframe).
 
-- On how to render/visualize the query result, see [Example: Extracting Edge and Vertex Lists from Query Results](#Example:-Extracting-Edge-and-Vertex-Lists-from-Query-Results), it demonstrates how to extract lists of edges and vertices from any query result by utilizing the `ResultSet.dict_for_vis()` method.
+- On how to render/visualize the query result, see [Example: Extracting Edge and Vertex Lists from Query Results](#example-extracting-edge-and-vertex-lists-from-query-results), it demonstrates how to extract lists of edges and vertices from any query result by utilizing the `ResultSet.dict_for_vis()` method.
 
-- On how to get rows of dict/JSON structure with primitive types, see [Example: Retrieve Primitive Typed Results](#Example:-Retrieve-Primitive-Typed-Results).
+- On how to get rows of dict/JSON structure with primitive types, see [Example: Retrieve Primitive Typed Results](#example-retrieve-primitive-typed-results).
 
 ### Jupyter Notebook Integration
 
