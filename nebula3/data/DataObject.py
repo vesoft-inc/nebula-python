@@ -745,7 +745,7 @@ class ValueWrapper(object):
                 return {k: _cast_primitive(v) for k, v in raw_value.as_map().items()}
             elif _type == Value.TVAL:
                 return raw_value.as_time().get_local_time_str()
-            elif _type == Value.DTVAL:
+            elif _type == Value.DVAL:
                 return raw_value.as_date().__repr__()
             elif _type == Value.DTVAL:
                 return raw_value.as_datetime().get_local_datetime_str()
