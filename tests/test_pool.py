@@ -283,7 +283,7 @@ def test_remove_invalid_connection():
         assert pool.init(addresses, configs)
 
         # turn down one server('127.0.0.1', 9669) so the connection to it is invalid
-        os.system("docker stop tests_graphd0_1")
+        os.system("docker stop tests_graphd0_1 || docker stop tests-graphd0-1")
         time.sleep(3)
 
         # get connection from the pool, we should be able to still get 30 connections even though one server is down
@@ -302,5 +302,5 @@ def test_remove_invalid_connection():
         assert len(pool._connections[addresses[2]]) == 15
 
     finally:
-        os.system("docker start tests_graphd0_1")
+        os.system("docker start tests_graphd0_1 || docker start tests-graphd0-1")
         time.sleep(3)
