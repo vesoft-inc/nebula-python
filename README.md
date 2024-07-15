@@ -10,17 +10,23 @@
 
 ### Accessing NebulaGraph
 
-- For **first-time** trying out Python client, go through [Quick Example: Connecting to GraphD Using Graph Client](#Quick-Example:-Connecting-to-GraphD-Using-Graph-Client).
+- [Get Started Notebook](example/get_started.ipynb) - A Jupyter Notebook to get started with NebulaGraph Python client, with latest features and examples.
 
-- If your Graph Application is a **Web Service** dedicated to one Graph Space, go with Singleton of **Session Pool**, check [Using the Session Pool: A Guide](#Using-the-Session-Pool:-A-Guide).
+- For **first-time** trying out Python client, go through [Quick Example: Connecting to GraphD Using Graph Client](#quick-example-connecting-to-graphd-using-graph-client).
 
-- If you're building Graph Analysis Tools(Scan instead of Query), you may want to use the **Storage Client** to scan vertices and edges, see [Quick Example: Using Storage Client to Scan Vertices and Edges](#Quick-Example:-Using-Storage-Client-to-Scan-Vertices-and-Edges).
+- If your Graph Application is a **Web Service** dedicated to one Graph Space, go with Singleton of **Session Pool**, check [Using the Session Pool: A Guide](#using-the-session-pool-a-guide).
+
+- If you're building Graph Analysis Tools(Scan instead of Query), you may want to use the **Storage Client** to scan vertices and edges, see [Quick Example: Using Storage Client to Scan Vertices and Edges](#quick-example-using-storage-client-to-scan-vertices-and-edges).
+
+- For parameterized query, see [Example: Server-Side Evaluated Parameters](#example-server-side-evaluated-parameters).
 
 ### Handling Query Results
 
-- On how to form a query result into a **Pandas DataFrame**, see [Example: Fetching Query Results into a Pandas DataFrame](#Example:-Fetching-Query-Results-into-a-Pandas-DataFrame).
+- On how to form a query result into a **Pandas DataFrame**, see [Example: Fetching Query Results into a Pandas DataFrame](#example-fetching-query-results-into-a-pandas-dataframe).
 
-- On how to render/visualize the query result, see [Example: Extracting Edge and Vertex Lists from Query Results](#Example:-Extracting-Edge-and-Vertex-Lists-from-Query-Results), it demonstrates how to extract lists of edges and vertices from any query result by utilizing the `ResultSet.dict_for_vis()` method.
+- On how to render/visualize the query result, see [Example: Extracting Edge and Vertex Lists from Query Results](#example-extracting-edge-and-vertex-lists-from-query-results), it demonstrates how to extract lists of edges and vertices from any query result by utilizing the `ResultSet.dict_for_vis()` method.
+
+- On how to get rows of dict/JSON structure with primitive types, see [Example: Retrieve Primitive Typed Results](#example-retrieve-primitive-typed-results).
 
 ### Jupyter Notebook Integration
 
@@ -111,6 +117,33 @@ Session Pool comes with the following assumptions:
 
 For more details, see [SessionPoolExample.py](example/SessionPoolExample.py).
 
+## Example: Server-Side Evaluated Parameters
+
+To enable parameterization of the query, refer to the following example:
+
+> Note: Not all tokens of a query can be parameterized. You can quickly verify it via iPython or Nebula-Console in an interactive way.
+
+```python
+params = {
+    "p1": 3,
+    "p2": True,
+    "p3": "Bob",
+    "ids": ["player100", "player101"], # second query
+}
+
+resp = client.execute_py(
+    "RETURN abs($p1)+3 AS col1, (toBoolean($p2) and false) AS col2, toLower($p3)+1 AS col3",
+    params,
+)
+resp = client.execute_py(
+    "MATCH (v) WHERE id(v) in $ids RETURN id(v) AS vertex_id",
+    params,
+)
+```
+
+For further information, consult [Params.py](example/Params.py).
+
+
 ## Example: Extracting Edge and Vertex Lists from Query Results
 
 For graph visualization purposes, the following code snippet demonstrates how to effortlessly extract lists of edges and vertices from any query result by utilizing the `ResultSet.dict_for_vis()` method.
@@ -197,6 +230,23 @@ The dict/JSON structure with `dict_for_vis()` is as follows:
 ```
 
 </details>
+
+## Example: Retrieve Primitive Typed Results
+
+The executed result is typed as `ResultSet`, and you can inspect its structure using `dir()`.
+
+For each data cell in the `ResultSet`, you can use `.cast()` to retrieve raw wrapped data (with sugar) such as a Vertex (Node), Edge (Relationship), Path, Value (Int, Float, etc.). Alternatively, you can use `.cast_primitive()` to obtain values in primitive types like dict, int, or float, depending on your needs.
+
+For more details, refer to [FromResp.py](example/FromResp.py).
+
+Additionally, `ResultSet.as_primitive()` provides a convenient method to convert the result set into a list of dictionaries (similar to JSONL format) containing primitive values for each row.
+
+```python
+result = session.execute('<your query>')
+
+result_dict = result.as_primitive()
+print(result_dict)
+```
 
 ## Example: Fetching Query Results into a Pandas DataFrame
 
@@ -312,9 +362,9 @@ See [ScanVertexEdgeExample.py](example/ScanVertexEdgeExample.py) for more detail
 
 | Nebula-Python Version | Compatible NebulaGraph Versions | Notes                                                      |
 | --------------------- | ------------------------------- | ---------------------------------------------------------- |
-| 3.5.1                 | 3.x                             | Highly recommended. Latest release for NebulaGraph 3.x series. |
+| 3.8.0                 | 3.x                             | Highly recommended. Latest release for NebulaGraph 3.x series. |
 | master                | master                          | Includes recent changes. Not yet released.                 |
-| 3.0.0 ~ 3.5.0         | 3.x                             | Compatible with any released version within the NebulaGraph 3.x series. |
+| 3.0.0 ~ 3.5.1         | 3.x                             | Compatible with any released version within the NebulaGraph 3.x series. |
 | 2.6.0                 | 2.6.0, 2.6.1                    |                                                            |
 | 2.5.0                 | 2.5.0                           |                                                            |
 | 2.0.0                 | 2.0.0, 2.0.1                    |                                                            |
