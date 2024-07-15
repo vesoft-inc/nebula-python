@@ -1,7 +1,7 @@
 [project]
 name = "nebula3-python"
 version = "3.8.0"
-description = "Python client for NebulaGraph V3.4"
+description = "Python client for NebulaGraph v3"
 authors = [
     {name = "vesoft-inc", email = "info@vesoft.com"},
 ]
@@ -20,8 +20,11 @@ license = {text = "Apache 2.0"}
 Homepage = "https://github.com/vesoft-inc/nebula-python"
 
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["flit-core<3.9,>=3.4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.module]
+name = "nebula3"
 
 [tool.black]
 extend-exclude = '''
