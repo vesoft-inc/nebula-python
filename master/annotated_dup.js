@@ -7,6 +7,7 @@ var annotated_dup =
             [ "AuthResult", "db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult.html", "db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult" ]
           ] ],
           [ "base", null, [
+            [ "ExecuteError", "db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html", "db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError" ],
             [ "BaseExecutor", "de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html", "de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor" ]
           ] ],
           [ "Connection", null, [
