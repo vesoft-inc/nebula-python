@@ -26,11 +26,11 @@ if sys.version_info < (3, 7):
 
 setup(
     name="nebula3-python",
-    version="3.8.0",
+    version="3.8.1",
     license="Apache 2.0",
     author="vesoft-inc",
     author_email="info@vesoft.com",
-    description="Python client for NebulaGraph V3.4",
+    description="Python client for NebulaGraph v3",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/vesoft-inc/nebula-python",
