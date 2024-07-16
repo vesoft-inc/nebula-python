@@ -370,7 +370,7 @@ See [ScanVertexEdgeExample.py](example/ScanVertexEdgeExample.py) for more detail
 
 | Nebula-Python Version | Compatible NebulaGraph Versions | Notes                                                      |
 | --------------------- | ------------------------------- | ---------------------------------------------------------- |
-| 3.8.0                 | 3.x                             | Highly recommended. Latest release for NebulaGraph 3.x series. |
+| 3.8.1                 | 3.x                             | Highly recommended. Latest release for NebulaGraph 3.x series. |
 | master                | master                          | Includes recent changes. Not yet released.                 |
 | 3.0.0 ~ 3.5.1         | 3.x                             | Compatible with any released version within the NebulaGraph 3.x series. |
 | 2.6.0                 | 2.6.0, 2.6.1                    |                                                            |
