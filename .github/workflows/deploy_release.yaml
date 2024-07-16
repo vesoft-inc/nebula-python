@@ -7,7 +7,7 @@ on:
 
 jobs:
   ci:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
@@ -19,12 +19,12 @@ jobs:
       run: pdm install
     - name: Test with pytest
       run: |
-        docker-compose -f tests/docker-compose.yaml up -d
+        docker compose -f tests/docker-compose.yaml up -d
         sleep 20
         pdm test
     - name: Test SSL connection with pytest
       run: |
-        enable_ssl=true docker-compose -f tests/docker-compose-ssl.yaml up -d
+        enable_ssl=true docker compose -f tests/docker-compose-ssl.yaml up -d
         sleep 20
         pdm test-ssl
 
