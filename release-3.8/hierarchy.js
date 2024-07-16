@@ -4,6 +4,9 @@ var hierarchy =
       [ "Session", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html", null ],
       [ "SessionPool", "d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html", null ]
     ] ],
+    [ "Exception", null, [
+      [ "ExecuteError", "db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html", null ]
+    ] ],
     [ "object", null, [
       [ "AuthResult", "db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult.html", null ],
       [ "Connection", "df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html", null ],

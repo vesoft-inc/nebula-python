@@ -86,32 +86,135 @@ $(document).ready(function(){initNavTree('d5/de2/base_8py_source.html','../../')
 <div class="title">base.py</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="keyword">from</span> abc <span class="keyword">import</span> abstractmethod</div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="keyword">from</span> typing <span class="keyword">import</span> Dict, Any, Optional</div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">from</span> nebula3.data.ResultSet <span class="keyword">import</span> ResultSet</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html">    6</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html">BaseExecutor</a>:</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="preprocessor">@abstractmethod</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">def </span>execute_parameter(</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        self, stmt: str, params: Optional[Dict[str, Any]]</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    ) -&gt; ResultSet:</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keywordflow">pass</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="preprocessor">@abstractmethod</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">def </span>execute_json_with_parameter(</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        self, stmt: str, params: Optional[Dict[str, Any]]</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    ) -&gt; bytes:</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordflow">pass</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">def </span>execute(self, stmt: str) -&gt; ResultSet:</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordflow">return</span> self.<a class="code" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#ac5c414f74de552b08b555a9aab753603">execute_parameter</a>execute_parameter(stmt, <span class="keywordtype">None</span>)</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="keyword">import</span> datetime</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="keyword">from</span> abc <span class="keyword">import</span> abstractmethod</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">from</span> typing <span class="keyword">import</span> Dict, Any, Optional</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">from</span> nebula3.data.ResultSet <span class="keyword">import</span> ResultSet</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">from</span> nebula3.common.ttypes <span class="keyword">import</span> ErrorCode, Value, NList, Date, Time, DateTime</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html">    8</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html">ExecuteError</a>(Exception):</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">def </span>__init__(self, stmt: str, param: Any, code: ErrorCode, msg: str):</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        self.<a class="code" href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html#af842bd2c85ff0f252ec83277dbba67a4">stmt</a>stmt = stmt</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        self.<a class="code" href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html#a51f20d6b1b54a2eee3be0e8adc96a0ae">param</a>param = param</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        self.<a class="code" href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html#afb9ed1b8a27eb20854efe6e23e297683">code</a>code = code</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        self.<a class="code" href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html#a10a0f35066079abd150539d0d13dbf3e">msg</a>msg = msg</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">def </span>__str__(self):</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordflow">return</span> (</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            f<span class="stringliteral">&quot;ExecuteError. err_code: {self.code}, err_msg: {self.msg}.\n&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            + f<span class="stringliteral">&quot;Statement: \n{self.stmt}\n&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            + f<span class="stringliteral">&quot;Parameter: \n{self.param}&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        )</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">def </span>execute_json(self, stmt: str) -&gt; bytes:</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keywordflow">return</span> self.<a class="code" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#a20d440a86207026bcefb78b7474be4bd">execute_json_with_parameter</a>execute_json_with_parameter(stmt, <span class="keywordtype">None</span>)</div>
-<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor_html"><div class="ttname"><a href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html">nebula3.gclient.net.base.BaseExecutor</a></div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00006">base.py:6</a></div></div>
-<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor_html_a20d440a86207026bcefb78b7474be4bd"><div class="ttname"><a href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#a20d440a86207026bcefb78b7474be4bd">nebula3.gclient.net.base.BaseExecutor.execute_json_with_parameter</a></div><div class="ttdeci">bytes execute_json_with_parameter(self, str stmt, Optional[Dict[str, Any]] params)</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00014">base.py:16</a></div></div>
-<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor_html_ac5c414f74de552b08b555a9aab753603"><div class="ttname"><a href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#ac5c414f74de552b08b555a9aab753603">nebula3.gclient.net.base.BaseExecutor.execute_parameter</a></div><div class="ttdeci">ResultSet execute_parameter(self, str stmt, Optional[Dict[str, Any]] params)</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00008">base.py:10</a></div></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html">   23</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html">BaseExecutor</a>:</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="preprocessor">@abstractmethod</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">def </span>execute_parameter(</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        self, stmt: str, params: Optional[Dict[str, Any]]</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    ) -&gt; ResultSet:</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordflow">pass</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="preprocessor">@abstractmethod</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">def </span>execute_json_with_parameter(</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        self, stmt: str, params: Optional[Dict[str, Any]]</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    ) -&gt; bytes:</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">pass</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">def </span>execute(self, stmt: str) -&gt; ResultSet:</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">return</span> self.<a class="code" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#ac5c414f74de552b08b555a9aab753603">execute_parameter</a>execute_parameter(stmt, <span class="keywordtype">None</span>)</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">def </span>execute_json(self, stmt: str) -&gt; bytes:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> self.<a class="code" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#a20d440a86207026bcefb78b7474be4bd">execute_json_with_parameter</a>execute_json_with_parameter(stmt, <span class="keywordtype">None</span>)</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#a84b32c75c01ef8b6d7df5b9daa0c409c">   42</a></span>&#160;    <span class="keyword">def </span><a class="code" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#a84b32c75c01ef8b6d7df5b9daa0c409c">execute_py</a>(</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        self,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        stmt: str,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        params: Optional[Dict[str, Any]] = <span class="keywordtype">None</span>,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    ):</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;**Recommended** Execute a statement with parameters in Python type instead of thrift type.&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">if</span> params <span class="keywordflow">is</span> <span class="keywordtype">None</span>:</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            result = self.<a class="code" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#ac5c414f74de552b08b555a9aab753603">execute_parameter</a>execute_parameter(stmt, <span class="keywordtype">None</span>)</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordflow">else</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            result = self.<a class="code" href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#ac5c414f74de552b08b555a9aab753603">execute_parameter</a>execute_parameter(stmt, _build_byte_param(params))</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">if</span> <span class="keywordflow">not</span> result.is_succeeded():</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">raise</span> <a class="code" href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html">ExecuteError</a>(stmt, params, result.error_code(), result.error_msg())</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">return</span> result</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keyword">def </span>_build_byte_param(params: dict) -&gt; dict:</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    byte_params = {}</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">for</span> k, v <span class="keywordflow">in</span> params.items():</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">if</span> isinstance(v, Value):</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            byte_params[k] = v</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">elif</span> str(type(v)).startswith(<span class="stringliteral">&quot;nebula3.common.ttypes&quot;</span>):</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            byte_params[k] = v</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">else</span>:</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            byte_params[k] = _cast_value(v)</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">return</span> byte_params</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keyword">def </span>_cast_value(value: Any) -&gt; Value:</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">    Cast the value to nebula Value type</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">    ref: https://github.com/vesoft-inc/nebula/blob/master/src/common/datatypes/Value.cpp</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">    :param value: the value to be casted</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">    :return: the casted value</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">    &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    casted_value = Value()</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">if</span> isinstance(value, bool):</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        casted_value.set_bVal(value)</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordflow">elif</span> isinstance(value, int):</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        casted_value.set_iVal(value)</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">elif</span> isinstance(value, str):</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        casted_value.set_sVal(value)</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordflow">elif</span> isinstance(value, float):</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        casted_value.set_fVal(value)</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordflow">elif</span> isinstance(value, datetime.date):</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        date_value = Date(year=value.year, month=value.month, day=value.day)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        casted_value.set_dVal(date_value)</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">elif</span> isinstance(value, datetime.time):</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        time_value = Time(</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            hour=value.hour,</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            minute=value.minute,</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            sec=value.second,</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            microsec=value.microsecond,</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        )</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        casted_value.set_tVal(time_value)</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordflow">elif</span> isinstance(value, datetime.datetime):</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        datetime_value = DateTime(</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            year=value.year,</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            month=value.month,</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            day=value.day,</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            hour=value.hour,</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            minute=value.minute,</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            sec=value.second,</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            microsec=value.microsecond,</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        )</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        casted_value.set_dtVal(datetime_value)</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="comment"># TODO: add support for GeoSpatial</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordflow">elif</span> isinstance(value, list):</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        byte_list = []</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">for</span> item <span class="keywordflow">in</span> value:</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            byte_list.append(_cast_value(item))</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        casted_value.set_lVal(NList(values=byte_list))</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordflow">elif</span> isinstance(value, dict):</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="comment"># TODO: add support for NMap</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordflow">raise</span> TypeError(<span class="stringliteral">&quot;Unsupported type: dict&quot;</span>)</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordflow">else</span>:</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordflow">raise</span> TypeError(f<span class="stringliteral">&quot;Unsupported type: {type(value)}&quot;</span>)</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordflow">return</span> casted_value</div>
+<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor_html"><div class="ttname"><a href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html">nebula3.gclient.net.base.BaseExecutor</a></div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00023">base.py:23</a></div></div>
+<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor_html_a20d440a86207026bcefb78b7474be4bd"><div class="ttname"><a href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#a20d440a86207026bcefb78b7474be4bd">nebula3.gclient.net.base.BaseExecutor.execute_json_with_parameter</a></div><div class="ttdeci">bytes execute_json_with_parameter(self, str stmt, Optional[Dict[str, Any]] params)</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00031">base.py:33</a></div></div>
+<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor_html_a84b32c75c01ef8b6d7df5b9daa0c409c"><div class="ttname"><a href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#a84b32c75c01ef8b6d7df5b9daa0c409c">nebula3.gclient.net.base.BaseExecutor.execute_py</a></div><div class="ttdeci">def execute_py(self, str stmt, Optional[Dict[str, Any]] params=None)</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00042">base.py:46</a></div></div>
+<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor_html_ac5c414f74de552b08b555a9aab753603"><div class="ttname"><a href="../../de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html#ac5c414f74de552b08b555a9aab753603">nebula3.gclient.net.base.BaseExecutor.execute_parameter</a></div><div class="ttdeci">ResultSet execute_parameter(self, str stmt, Optional[Dict[str, Any]] params)</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00025">base.py:27</a></div></div>
+<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError_html"><div class="ttname"><a href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html">nebula3.gclient.net.base.ExecuteError</a></div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00008">base.py:8</a></div></div>
+<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError_html_a10a0f35066079abd150539d0d13dbf3e"><div class="ttname"><a href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html#a10a0f35066079abd150539d0d13dbf3e">nebula3.gclient.net.base.ExecuteError.msg</a></div><div class="ttdeci">msg</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00013">base.py:13</a></div></div>
+<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError_html_a51f20d6b1b54a2eee3be0e8adc96a0ae"><div class="ttname"><a href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html#a51f20d6b1b54a2eee3be0e8adc96a0ae">nebula3.gclient.net.base.ExecuteError.param</a></div><div class="ttdeci">param</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00011">base.py:11</a></div></div>
+<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError_html_af842bd2c85ff0f252ec83277dbba67a4"><div class="ttname"><a href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html#af842bd2c85ff0f252ec83277dbba67a4">nebula3.gclient.net.base.ExecuteError.stmt</a></div><div class="ttdeci">stmt</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00010">base.py:10</a></div></div>
+<div class="ttc" id="aclassnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError_html_afb9ed1b8a27eb20854efe6e23e297683"><div class="ttname"><a href="../../db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html#afb9ed1b8a27eb20854efe6e23e297683">nebula3.gclient.net.base.ExecuteError.code</a></div><div class="ttdeci">code</div><div class="ttdef"><b>Definition:</b> <a href="../../d5/de2/base_8py_source.html#l00012">base.py:12</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
