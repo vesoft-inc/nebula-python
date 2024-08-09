@@ -172,7 +172,6 @@ class Connection(object):
             resp = self._connection.authenticate(user_name, password)
             if resp.error_code != ErrorCode.SUCCEEDED:
                 self._connection.is_used = False
-                self._connection = None
                 raise AuthFailedException(resp.error_msg)
             return AuthResult(
                 resp.session_id, resp.time_zone_offset_seconds, resp.time_zone_name
