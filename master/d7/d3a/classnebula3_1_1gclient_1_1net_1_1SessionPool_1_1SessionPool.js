@@ -8,7 +8,7 @@ var classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool =
     [ "execute_json_with_parameter", "d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a825cbd533bf9aa3a768bc70af0b04ede", null ],
     [ "execute_parameter", "d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#aea1363b3a0c165c33e136b0b7df5d587", null ],
     [ "get_ok_servers_num", "d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a1020dd76d2a01507fdf35779a6a94e1e", null ],
-    [ "init", "d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#ad94fa70361210a010c20d46444a5bc49", null ],
+    [ "init", "d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a3f34f9c3df1e12f0f127a9219af7ff1f", null ],
     [ "ping", "d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#ab7f2d41fb52800892ea84f03b7d0a029", null ],
     [ "ping_sessions", "d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a629afd68ecd83634027d7f31756ec860", null ],
     [ "update_servers_status", "d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a96f88821a677fd6f722ba199f1ecb8b8", null ]
