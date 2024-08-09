@@ -31,7 +31,7 @@ jobs:
           pip install pip-tools pytest
       - name: Test with pytest
         run: |
-          docker-compose -f docker-compose.yaml up -d
+          docker compose -f docker-compose.yaml up -d
           sleep 20
           pytest -s -v -k "not SSL"
         working-directory: tests
