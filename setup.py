@@ -26,7 +26,7 @@ if sys.version_info < (3, 7):
 
 setup(
     name="nebula3-python",
-    version="3.8.1",
+    version="3.8.2",
     license="Apache 2.0",
     author="vesoft-inc",
     author_email="info@vesoft.com",

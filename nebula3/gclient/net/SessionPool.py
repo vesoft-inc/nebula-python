@@ -9,7 +9,7 @@ import json
 import socket
 
 from threading import RLock, Timer
-from typing import List
+from typing import List, Optional
 import time
 
 from nebula3.common.ttypes import ErrorCode
@@ -23,7 +23,7 @@ from nebula3.gclient.net.Session import Session
 from nebula3.gclient.net.Connection import Connection
 from nebula3.gclient.net.base import BaseExecutor
 from nebula3.logger import logger
-from nebula3.Config import SessionPoolConfig
+from nebula3.Config import SessionPoolConfig, SSL_config
 
 
 class SessionPool(BaseExecutor, object):
@@ -72,7 +72,11 @@ class SessionPool(BaseExecutor, object):
     def __del__(self):
         self.close()
 
-    def init(self, configs=None):
+    def init(
+        self,
+        configs: Optional[SessionPoolConfig] = None,
+        ssl_configs: Optional[SSL_config] = None,
+    ):
         """init the session pool
 
         :param username: the username of the session
@@ -90,6 +94,7 @@ class SessionPool(BaseExecutor, object):
             self._configs = configs
         else:
             self._configs = SessionPoolConfig()
+        self._ssl_configs = ssl_configs
         # check configs
         try:
             self._check_configs()
@@ -388,9 +393,6 @@ class SessionPool(BaseExecutor, object):
 
         :return: Session
         """
-        if self._ssl_configs is not None:
-            raise RuntimeError("SSL is not supported yet")
-
         self._pos = (self._pos + 1) % len(self._addresses)
         next_addr_index = self._pos
 
@@ -410,13 +412,23 @@ class SessionPool(BaseExecutor, object):
             # connect to the valid service
             connection = Connection()
             try:
-                connection.open(
-                    addr[0],
-                    addr[1],
-                    self._configs.timeout,
-                    self._configs.use_http2,
-                    self._configs.http_headers,
-                )
+                if self._ssl_configs is None:
+                    connection.open(
+                        addr[0],
+                        addr[1],
+                        self._configs.timeout,
+                        self._configs.use_http2,
+                        self._configs.http_headers,
+                    )
+                else:
+                    connection.open_SSL(
+                        addr[0],
+                        addr[1],
+                        self._configs.timeout,
+                        self._ssl_configs,
+                        self._configs.use_http2,
+                        self._configs.http_headers,
+                    )
                 auth_result = connection.authenticate(self._username, self._password)
                 session = Session(connection, auth_result, self, False)
 
