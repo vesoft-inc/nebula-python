@@ -3,8 +3,18 @@ name: Test ci
 on:
   push:
     branches: [master,'release-**']
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE'
   pull_request:
     branches: [master,'release-**']
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE'
   schedule:
     - cron: "0 6 * * *"
 
