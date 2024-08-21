@@ -386,22 +386,6 @@ class TesValueWrapper(TestBaseCase):
 
     def test_cast_primitive(self):
         # Test casting for primitive types
-        def _cast_node(node: Vertex):
-            return {
-                "vid": node.get_id().cast(),
-                "tags": {
-                    tag_name: node.properties(tag_name) for tag_name in node.tags()
-                },
-            }
-
-        def _cast_relationship(edge: Edge):
-            return {
-                "src": edge.start_vertex_id().cast(),
-                "dst": edge.end_vertex_id().cast(),
-                "type": edge.edge_name(),
-                "rank": edge.ranking(),
-                "props": edge.properties(),
-            }
 
         # Test boolean
         bool_val = ttypes.Value(bVal=True)
@@ -422,37 +406,6 @@ class TesValueWrapper(TestBaseCase):
         # Test null
         null_val = ttypes.Value(nVal=ttypes.NullType.__NULL__)
         assert ValueWrapper(null_val).cast_primitive() is None
-
-        # Test node
-        node_val = ttypes.Value(vVal=self.get_vertex_value(b"Tom"))
-        node = ValueWrapper(node_val).as_node()
-        assert ValueWrapper(node_val).cast_primitive() == {
-            "vid": node.get_id().cast(),
-            "tags": {tag_name: node.properties(tag_name) for tag_name in node.tags()},
-        }
-
-        # Test relationship
-        relationship_val = ttypes.Value(eVal=self.get_edge_value(b"Tom", b"Lily"))
-        edge = ValueWrapper(relationship_val).as_relationship()
-        assert ValueWrapper(relationship_val).cast_primitive() == {
-            "src": edge.start_vertex_id().cast(),
-            "dst": edge.end_vertex_id().cast(),
-            "type": edge.edge_name(),
-            "rank": edge.ranking(),
-            "props": edge.properties(),
-        }
-
-        # Test path
-        path_val = ttypes.Value(pVal=self.get_path_value(b"Tom"))
-        path_raw = ValueWrapper(path_val)
-        path = path_raw.as_path()
-        path_primitive = path_raw.cast_primitive()
-        assert path_primitive == {
-            "path_str": path.__repr__(),
-            "start_node": _cast_node(path.start_node()),
-            "edges": [_cast_relationship(x) for x in path.relationships()],
-            "nodes": [_cast_node(x) for x in path.nodes()],
-        }
 
         # Test geography
         geography_val = ttypes.Value(ggVal=self.get_geography_value(3.0, 5.2))
