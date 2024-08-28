@@ -711,7 +711,8 @@ class ValueWrapper(object):
                 "vid": node.get_id().cast(),
                 "tags": {
                     tag_name: {
-                        k: v.cast() for k, v in node.properties(tag_name).items()
+                        k: v.cast_primitive()
+                        for k, v in node.properties(tag_name).items()
                     }
                     for tag_name in node.tags()
                 },
@@ -723,7 +724,7 @@ class ValueWrapper(object):
                 "dst": edge.end_vertex_id().cast(),
                 "type": edge.edge_name(),
                 "rank": edge.ranking(),
-                "props": {k: v.cast() for k, v in edge.properties().items()},
+                "props": {k: v.cast_primitive() for k, v in edge.properties().items()},
             }
 
         def _cast_primitive(raw_value):
