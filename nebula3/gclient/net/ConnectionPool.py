@@ -338,5 +338,5 @@ class ConnectionPool(object):
         self.update_servers_status()
         self._remove_idle_unusable_connection()
         timer = Timer(self._configs.interval_check, self._period_detect)
-        timer.setDaemon(True)
+        timer.daemon = True
         timer.start()
