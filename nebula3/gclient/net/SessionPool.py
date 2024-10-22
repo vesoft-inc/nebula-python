@@ -70,7 +70,8 @@ class SessionPool(BaseExecutor, object):
         self._close = False
 
     def __del__(self):
-        self.close()
+        if hasattr(self, '_lock'):
+            self.close()
 
     def init(
         self,
