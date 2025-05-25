@@ -1,0 +1,2 @@
+from .hash import hash
+
