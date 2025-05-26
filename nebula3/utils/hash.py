@@ -7,7 +7,7 @@ _MASK64: int = (1 << 64) - 1
 
 
 def _read_u64_le(buf: bytes) -> int:
-    """ Convert little-endian bytes of up to 8 bytes to an unsigned integer. """
+    """Convert little-endian bytes of up to 8 bytes to an unsigned integer."""
     return int.from_bytes(buf, byteorder="little", signed=False)
 
 
@@ -27,9 +27,9 @@ def hash(data: bytes | str, seed: int = 0xC70F6907) -> int:
     h = (seed ^ (_M * len(data_as_bytes) & _MASK64)) & _MASK64
     off = len(data_as_bytes) // 8 * 8
     for i in range(0, off, 8):
-        k = _read_u64_le(data_as_bytes[i: i + 8])
+        k = _read_u64_le(data_as_bytes[i : i + 8])
         k = (k * _M) & _MASK64
-        k ^= (k >> _R)
+        k ^= k >> _R
         k = (k * _M) & _MASK64
         h ^= k
         h = (h * _M) & _MASK64
@@ -40,9 +40,9 @@ def hash(data: bytes | str, seed: int = 0xC70F6907) -> int:
         h ^= t
         h = (h * _M) & _MASK64
 
-    h ^= (h >> _R)
+    h ^= h >> _R
     h = (h * _M) & _MASK64
-    h ^= (h >> _R)
+    h ^= h >> _R
 
     if h & (1 << 63):
         h -= 1 << 64

@@ -1,2 +1,1 @@
 from .hash import hash
-
