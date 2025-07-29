@@ -193,6 +193,7 @@ class GraphStorageClient(object):
             enable_read_from_follower,
             partial_success,
         )
+
     # TODO: 1.Native async or PyO3
     #       2.Error Handling
     #       3.Statistical indicators
@@ -201,7 +202,6 @@ class GraphStorageClient(object):
         space_name,
         tag_name,
         prop_names=[],
-        # limit=DEFAULT_LIMIT, batch_size or limit
         start_time=DEFAULT_START_TIME,
         end_time=DEFAULT_END_TIME,
         where=None,
@@ -209,7 +209,7 @@ class GraphStorageClient(object):
         enable_read_from_follower=True,
         partial_success=False,
         batch_size=1000,
-        max_workers=8
+        max_workers=8,
     ):
         """
         scan_vertex_async：Multi-partition concurrency and streaming batch yield
@@ -242,7 +242,7 @@ class GraphStorageClient(object):
                     part,
                     tag_name,
                     prop_names,
-                    batch_size,         # The limit passed to scan_vertex_with_part
+                    batch_size,  # The limit passed to scan_vertex_with_part
                     start_time,
                     end_time,
                     where,
@@ -252,7 +252,6 @@ class GraphStorageClient(object):
                 )
                 future_to_part[future] = part
 
-            # as_completed implements partition concurrency, whichever returns first will be processed first
             for future in concurrent.futures.as_completed(future_to_part):
                 part = future_to_part[future]
                 scan_result = future.result()  # ScanResult
@@ -410,7 +409,6 @@ class GraphStorageClient(object):
         space_name,
         edge_name,
         prop_names=[],
-        # limit=1000, batch_size or limit
         start_time=DEFAULT_START_TIME,
         end_time=DEFAULT_END_TIME,
         where=None,
@@ -418,7 +416,7 @@ class GraphStorageClient(object):
         enable_read_from_follower=True,
         partial_success=False,
         batch_size=1000,
-        max_workers=8
+        max_workers=8,
     ):
         """
         scan_edge_async：Multi-partition concurrency and streaming batch yield
@@ -442,14 +440,13 @@ class GraphStorageClient(object):
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             future_to_part = {}
             for part, leader in part_leaders.items():
-                # 每个分区独立 scan
                 future = executor.submit(
                     self.scan_edge_with_part,
                     space_name,
                     part,
                     edge_name,
                     prop_names,
-                    batch_size,        # The limit passed to scan_edge_with_part
+                    batch_size,
                     start_time,
                     end_time,
                     where,
