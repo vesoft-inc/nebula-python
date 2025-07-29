@@ -193,6 +193,9 @@ class GraphStorageClient(object):
             enable_read_from_follower,
             partial_success,
         )
+    # TODO: 1.Native async or PyO3
+    #       2.Error Handling
+    #       3.Statistical indicators
     def scan_vertex_async(
         self,
         space_name,
