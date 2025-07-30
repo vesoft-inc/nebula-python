@@ -229,8 +229,6 @@ class GraphStorageClient(object):
         :param max_workers: Number of concurrent threads
         :yield: part_id, VertexResult  # Each batch of data
 
-        Args:
-            space_name:
         """
         part_leaders = self._meta_cache.get_part_leaders(space_name)
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -422,7 +420,7 @@ class GraphStorageClient(object):
         scan_edge_async：Multi-partition concurrency and streaming batch yield
 
         :param space_name: the space name
-        :type prop_names: if given empty, return all property
+        :param prop_names: if given empty, return all property
         :param edge_name: the edge name
         :param start_time: the min version of edge
         :param end_time: the max version of edge
