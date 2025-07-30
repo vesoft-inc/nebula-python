@@ -253,7 +253,7 @@ class GraphStorageClient(object):
             for future in concurrent.futures.as_completed(future_to_part):
                 part = future_to_part[future]
                 scan_result = future.result()  # ScanResult
-                while scan_result and scan_result.has_next():
+                while scan_result is not None and scan_result.has_next():
                     batch = scan_result.next()
                     yield part, batch
 
@@ -457,7 +457,7 @@ class GraphStorageClient(object):
             for future in concurrent.futures.as_completed(future_to_part):
                 part = future_to_part[future]
                 scan_result = future.result()
-                while scan_result and scan_result.has_next():
+                while scan_result is not None and scan_result.has_next():
                     batch = scan_result.next()
                     yield part, batch
 
