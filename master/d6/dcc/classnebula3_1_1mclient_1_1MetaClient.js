@@ -1,13 +1,11 @@
 var classnebula3_1_1mclient_1_1MetaClient =
 [
-    [ "__init__", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a42dd916b34d44541aabf5b53384f50ee", null ],
-    [ "__del__", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a41a65d7030dd1006b177d0bc24e1a12b", null ],
-    [ "close", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a8639372c33e15084a7f7c4d9d87b7bfe", null ],
-    [ "get_parts_alloc", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a916bb21b6afb9ac0204cd37f5e258625", null ],
-    [ "list_edges", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a83c45c9154b7d503b3101e17ea9eccf0", null ],
-    [ "list_hosts", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a007172c7cf12e8873ddc107ecfea9dc6", null ],
-    [ "list_spaces", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a0fb9d48ab21591856b86cc9181034592", null ],
-    [ "list_tags", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#af3e3c632b5d5345bf8dbed69ed14d561", null ],
-    [ "open", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a6a7ca114eeea12e38e719a070358ae14", null ],
-    [ "update_leader", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a2f5249d2d458bb61aed8ad0b30df1c8f", null ]
+    [ "close", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a8ab79e14e24aa440dcd1d9e822eb1f1c", null ],
+    [ "get_parts_alloc", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a5a9655e732395973941fbc42bf9c8c38", null ],
+    [ "list_edges", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a4ae61ce1a398f6cc274f205ed562d588", null ],
+    [ "list_hosts", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a71d4b8d4b81896348fc1f64f6e1238f4", null ],
+    [ "list_spaces", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a96eb214832212ae23c364559326f3662", null ],
+    [ "list_tags", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a5a29c6a5612cb1edf6f8519c6c946d16", null ],
+    [ "open", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a1b1cd51dff32421e012514f2b0123abd", null ],
+    [ "update_leader", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#acce2e6fced67da719e6a8e55caed952c", null ]
 ];

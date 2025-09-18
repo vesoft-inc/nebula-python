@@ -1,12 +1,11 @@
 var classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData =
 [
-    [ "__init__", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a55e7375f149b7907ab004dc8faaaf676", null ],
-    [ "__repr__", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a9a47563093dfc5ba12274b66e368920c", null ],
-    [ "as_relationship", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a7b49bc9883f1c8b0fa18ea509fc911a0", null ],
-    [ "get_dst_id", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a73afa2779f27bfebe6f39c79875e8722", null ],
-    [ "get_edge_name", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a0f058f721caafe4f16612f37b8054bf3", null ],
-    [ "get_prop_names", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#aea51dac085a24e315fd193e75832c280", null ],
-    [ "get_prop_values", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#ad860d4d8d356c29ec9040cead6a88c48", null ],
-    [ "get_ranking", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#afe8c32713bdb4a514d4dd83bdd116e24", null ],
-    [ "get_src_id", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a977427e69b31ae11ac060dbeff50f06f", null ]
+    [ "__init__", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a3cd1671b20a720f342139aeb068e60cc", null ],
+    [ "as_relationship", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a07a140c431a3f96c6e4f3a7b821ea41c", null ],
+    [ "get_dst_id", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#acc8adf900bc5092390fb86c9a2ddb92a", null ],
+    [ "get_edge_name", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a53deb30274894fabe798ef1553fcb6ec", null ],
+    [ "get_prop_names", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#acfe5e2042222d4ec599d63aff510f599", null ],
+    [ "get_prop_values", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a1132414f78a93e91f488d785e7550d22", null ],
+    [ "get_ranking", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#a7eca334e80b83f2e988cfe5f25d4eb56", null ],
+    [ "get_src_id", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html#ac211bbffdd5f50d7f86c90ffbb79f2ae", null ]
 ];

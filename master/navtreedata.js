@@ -25,6 +25,9 @@
 var NAVTREE =
 [
   [ "NebulaGraph Python Client", "index.html", [
+    [ "Packages", "namespaces.html", [
+      [ "Package List", "namespaces.html", null ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],

@@ -1,0 +1,14 @@
+<map id="update_servers_status" name="update_servers_status">
+<area shape="rect" id="Node000001" title=" " alt="" coords="535,64,704,89"/>
+<area shape="poly" id="edge8_Node000001_Node000001" title=" " alt="" coords="664,54,661,50,653,46,619,42,593,44,579,49,576,55,583,62,579,65,570,55,575,45,592,39,619,37,654,41,664,46,668,52"/>
+<area shape="rect" id="Node000002" href="$d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a7f385953af97a6fab0af0bcf09d7beb1" title=" " alt="" coords="255,56,487,96"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="521,88,487,88,487,83,521,83"/>
+<area shape="rect" id="Node000003" href="$d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#adca0753543b26d83afb8e89dbf8afec5" title=" " alt="" coords="85,9,127,34"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="582,60,537,39,486,23,435,15,382,10,278,9,189,15,128,21,127,16,188,9,278,4,382,5,435,9,487,18,539,34,585,55"/>
+<area shape="rect" id="Node000004" href="$d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a2cf24b6ce9226182d0c3865439f19f4e" title=" " alt="" coords="5,86,207,126"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="564,95,487,111,414,117,340,119,207,116,207,111,340,114,414,112,486,106,563,90"/>
+<area shape="poly" id="edge5_Node000002_Node000001" title=" " alt="" coords="500,65,534,65,534,70,500,70"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="413,45,398,38,371,35,347,37,332,42,327,48,330,55,325,57,322,47,329,37,346,32,371,30,399,33,415,40"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="259,56,127,29,128,23,261,51"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="241,93,207,97,207,92,241,88"/>
+</map>

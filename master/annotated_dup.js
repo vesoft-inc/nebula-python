@@ -4,11 +4,11 @@ var annotated_dup =
       [ "gclient", null, [
         [ "net", null, [
           [ "AuthResult", null, [
-            [ "AuthResult", "db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult.html", "db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult" ]
+            [ "AuthResult", "db/d5c/classnebula3_1_1gclient_1_1net_1_1AuthResult_1_1AuthResult.html", null ]
           ] ],
           [ "base", null, [
-            [ "ExecuteError", "db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html", "db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError" ],
-            [ "BaseExecutor", "de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html", "de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor" ]
+            [ "BaseExecutor", "de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor.html", "de/dbf/classnebula3_1_1gclient_1_1net_1_1base_1_1BaseExecutor" ],
+            [ "ExecuteError", "db/d82/classnebula3_1_1gclient_1_1net_1_1base_1_1ExecuteError.html", null ]
           ] ],
           [ "Connection", null, [
             [ "Connection", "df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html", "df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection" ]
@@ -25,28 +25,28 @@ var annotated_dup =
         ] ]
       ] ],
       [ "mclient", null, [
-        [ "MetaClient", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient" ],
-        [ "MetaCache", "dc/d8c/classnebula3_1_1mclient_1_1MetaCache.html", "dc/d8c/classnebula3_1_1mclient_1_1MetaCache" ]
+        [ "MetaCache", "dc/d8c/classnebula3_1_1mclient_1_1MetaCache.html", "dc/d8c/classnebula3_1_1mclient_1_1MetaCache" ],
+        [ "MetaClient", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html", "d6/dcc/classnebula3_1_1mclient_1_1MetaClient" ]
       ] ],
       [ "sclient", null, [
         [ "BaseResult", null, [
-          [ "VertexData", "de/d54/classnebula3_1_1sclient_1_1BaseResult_1_1VertexData.html", "de/d54/classnebula3_1_1sclient_1_1BaseResult_1_1VertexData" ],
+          [ "BaseResult", "d4/d73/classnebula3_1_1sclient_1_1BaseResult_1_1BaseResult.html", "d4/d73/classnebula3_1_1sclient_1_1BaseResult_1_1BaseResult" ],
           [ "EdgeData", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData.html", "dc/d70/classnebula3_1_1sclient_1_1BaseResult_1_1EdgeData" ],
-          [ "BaseResult", "d4/d73/classnebula3_1_1sclient_1_1BaseResult_1_1BaseResult.html", "d4/d73/classnebula3_1_1sclient_1_1BaseResult_1_1BaseResult" ]
+          [ "VertexData", "de/d54/classnebula3_1_1sclient_1_1BaseResult_1_1VertexData.html", "de/d54/classnebula3_1_1sclient_1_1BaseResult_1_1VertexData" ]
         ] ],
-        [ "GraphStorageClient", null, [
+        [ "GraphStorageClient", "d8/d85/namespacenebula3_1_1sclient_1_1GraphStorageClient.html", [
           [ "GraphStorageClient", "d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html", "d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient" ]
         ] ],
         [ "net", null, [
-          [ "GraphStorageConnection", "d1/d52/classnebula3_1_1sclient_1_1net_1_1GraphStorageConnection.html", "d1/d52/classnebula3_1_1sclient_1_1net_1_1GraphStorageConnection" ]
+          [ "GraphStorageConnection", "d1/d52/classnebula3_1_1sclient_1_1net_1_1GraphStorageConnection.html", null ]
         ] ],
         [ "ScanResult", null, [
-          [ "VertexResult", "dd/da4/classnebula3_1_1sclient_1_1ScanResult_1_1VertexResult.html", "dd/da4/classnebula3_1_1sclient_1_1ScanResult_1_1VertexResult" ],
           [ "EdgeResult", "d9/d7e/classnebula3_1_1sclient_1_1ScanResult_1_1EdgeResult.html", "d9/d7e/classnebula3_1_1sclient_1_1ScanResult_1_1EdgeResult" ],
-          [ "ScanResult", "d0/ddf/classnebula3_1_1sclient_1_1ScanResult_1_1ScanResult.html", "d0/ddf/classnebula3_1_1sclient_1_1ScanResult_1_1ScanResult" ]
+          [ "ScanResult", "d0/ddf/classnebula3_1_1sclient_1_1ScanResult_1_1ScanResult.html", "d0/ddf/classnebula3_1_1sclient_1_1ScanResult_1_1ScanResult" ],
+          [ "VertexResult", "dd/da4/classnebula3_1_1sclient_1_1ScanResult_1_1VertexResult.html", "dd/da4/classnebula3_1_1sclient_1_1ScanResult_1_1VertexResult" ]
         ] ],
-        [ "PartInfo", "d6/df9/classnebula3_1_1sclient_1_1PartInfo.html", "d6/df9/classnebula3_1_1sclient_1_1PartInfo" ],
-        [ "PartManager", "dd/daa/classnebula3_1_1sclient_1_1PartManager.html", "dd/daa/classnebula3_1_1sclient_1_1PartManager" ]
+        [ "PartInfo", "d6/df9/classnebula3_1_1sclient_1_1PartInfo.html", null ],
+        [ "PartManager", "dd/daa/classnebula3_1_1sclient_1_1PartManager.html", null ]
       ] ]
     ] ]
 ];

@@ -1,0 +1,24 @@
+<map id="get_conns" name="get_conns">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,187,93,213"/>
+<area shape="rect" id="Node000002" href="$df/d91/classnebula3_1_1gclient_1_1net_1_1Connection_1_1Connection.html#a8ab79e14e24aa440dcd1d9e822eb1f1c" title=" " alt="" coords="438,5,666,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="54,186,85,133,110,104,140,80,209,49,282,30,356,20,424,16,424,22,356,25,283,35,211,54,143,85,113,108,89,136,59,188"/>
+<area shape="rect" id="Node000003" href="$d8/d98/classnebula3_1_1gclient_1_1net_1_1ConnectionPool_1_1ConnectionPool.html#a8ab79e14e24aa440dcd1d9e822eb1f1c" title=" " alt="" coords="440,69,664,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="59,185,93,151,115,134,140,120,212,97,286,84,359,78,426,77,426,83,359,83,287,89,213,103,142,125,118,138,96,155,63,189"/>
+<area shape="rect" id="Node000004" href="$d7/d3a/classnebula3_1_1gclient_1_1net_1_1SessionPool_1_1SessionPool.html#a8ab79e14e24aa440dcd1d9e822eb1f1c" title=" " alt="" coords="451,135,653,175"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="67,185,100,165,141,148,217,134,295,129,370,130,438,136,437,141,370,136,295,135,217,140,142,153,102,169,69,189"/>
+<area shape="rect" id="Node000005" href="$d6/dcc/classnebula3_1_1mclient_1_1MetaClient.html#a8ab79e14e24aa440dcd1d9e822eb1f1c" title=" " alt="" coords="432,202,672,227"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="91,210,142,221,212,228,284,230,418,225,418,230,284,235,212,233,141,227,89,215"/>
+<area shape="rect" id="Node000006" href="$dc/d8c/classnebula3_1_1mclient_1_1MetaCache.html#a8ab79e14e24aa440dcd1d9e822eb1f1c" title=" " alt="" coords="141,187,384,213"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="94,197,128,197,128,203,94,203"/>
+<area shape="rect" id="Node000007" href="$d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#a8ab79e14e24aa440dcd1d9e822eb1f1c" title=" " alt="" coords="524,255,580,281"/>
+<area shape="poly" id="edge13_Node000001_Node000007" title=" " alt="" coords="76,210,107,224,142,236,245,255,348,264,440,267,510,267,510,272,440,273,347,269,244,260,141,241,105,229,73,215"/>
+<area shape="rect" id="Node000008" href="$d1/d52/classnebula3_1_1sclient_1_1net_1_1GraphStorageConnection.html#a8ab79e14e24aa440dcd1d9e822eb1f1c" title=" " alt="" coords="457,315,647,355"/>
+<area shape="poly" id="edge14_Node000001_Node000008" title=" " alt="" coords="64,211,97,243,119,259,142,272,218,299,297,317,375,327,444,332,444,337,374,332,296,322,217,304,140,277,116,264,94,247,60,215"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="273,185,336,123,381,86,431,55,446,48,448,53,433,60,384,91,340,127,277,189"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="287,185,352,154,431,120,458,111,460,116,433,125,354,158,290,190"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="344,185,437,170,438,175,345,190"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="384,203,418,205,418,211,384,209"/>
+<area shape="poly" id="edge10_Node000006_Node000006" title=" " alt="" coords="228,189,220,179,224,169,239,163,263,161,292,164,304,173,301,178,290,169,263,166,240,168,228,173,225,178,232,186"/>
+<area shape="poly" id="edge11_Node000006_Node000007" title=" " alt="" coords="318,210,511,256,510,261,317,215"/>
+<area shape="poly" id="edge12_Node000006_Node000008" title=" " alt="" coords="286,210,351,248,433,290,477,307,475,312,431,294,348,252,283,215"/>
+</map>

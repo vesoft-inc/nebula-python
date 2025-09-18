@@ -1,5 +1,7 @@
 <map id="VertexResult" name="VertexResult">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,111,181"/>
-<area shape="rect" id="node2" href="$d4/d73/classnebula3_1_1sclient_1_1BaseResult_1_1BaseResult.html" title=" " alt="" coords="11,80,105,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="27,5,89,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,152,111,177"/>
+<area shape="rect" id="Node000002" href="$d4/d73/classnebula3_1_1sclient_1_1BaseResult_1_1BaseResult.html" title=" " alt="" coords="11,79,105,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,118,61,152,55,152,55,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="27,5,89,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="61,44,61,79,55,79,55,44"/>
 </map>

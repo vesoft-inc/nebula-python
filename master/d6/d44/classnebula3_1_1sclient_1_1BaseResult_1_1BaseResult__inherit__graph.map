@@ -1,6 +1,9 @@
 <map id="BaseResult" name="BaseResult">
-<area shape="rect" id="node1" title=" " alt="" coords="67,80,161,107"/>
-<area shape="rect" id="node3" href="$d9/d7e/classnebula3_1_1sclient_1_1ScanResult_1_1EdgeResult.html" title=" " alt="" coords="5,155,100,181"/>
-<area shape="rect" id="node4" href="$dd/da4/classnebula3_1_1sclient_1_1ScanResult_1_1VertexResult.html" title=" " alt="" coords="124,155,229,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="83,5,145,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="67,79,161,104"/>
+<area shape="rect" id="Node000003" href="$d9/d7e/classnebula3_1_1sclient_1_1ScanResult_1_1EdgeResult.html" title=" " alt="" coords="5,152,100,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="97,116,65,154,61,150,93,113"/>
+<area shape="rect" id="Node000004" href="$dd/da4/classnebula3_1_1sclient_1_1ScanResult_1_1VertexResult.html" title=" " alt="" coords="124,152,229,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="135,113,169,150,165,154,131,116"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="83,5,145,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,44,117,79,111,79,111,44"/>
 </map>

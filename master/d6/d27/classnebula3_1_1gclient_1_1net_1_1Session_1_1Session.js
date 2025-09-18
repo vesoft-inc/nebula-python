@@ -1,12 +1,13 @@
 var classnebula3_1_1gclient_1_1net_1_1Session_1_1Session =
 [
-    [ "__init__", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a65ba808df6e8699ccb06b6df5f54f26b", null ],
-    [ "__del__", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a41a65d7030dd1006b177d0bc24e1a12b", null ],
-    [ "execute", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a821f0fec9767a679468c90854db8ca08", null ],
-    [ "execute_json", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a85a6d7312bb8e6cf98c7d6ca06a72425", null ],
-    [ "execute_json_with_parameter", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a825cbd533bf9aa3a768bc70af0b04ede", null ],
-    [ "execute_parameter", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#aea1363b3a0c165c33e136b0b7df5d587", null ],
-    [ "ping", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#af361f4a56eaad760ee3a64d334ad0832", null ],
-    [ "ping_session", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#ab246949afafa6c21dab1bfd8d56db2e2", null ],
-    [ "release", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a4cd51e19135e5ad4a19eae3ea9c60537", null ]
+    [ "__init__", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a393d0dd926b538be47fd82048cba5f4f", null ],
+    [ "_idle_time", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#af2efdbd600630327da3ed0faaaf3829d", null ],
+    [ "_sign_out", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a1cb395693babcb8b42e7c5053b3a13c5", null ],
+    [ "execute", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#abcfca3c069ce55b18ccaf4d6b661d3d2", null ],
+    [ "execute_json", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a0ebf9809b3f82c977c84d5c183a16a29", null ],
+    [ "execute_json_with_parameter", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a1b0f32ad7b2db175a9302cc14b9911e4", null ],
+    [ "execute_parameter", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a1efe25876569b921934673118b6f128f", null ],
+    [ "ping", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a04d7e57ecd43531f0e109bb5936926ea", null ],
+    [ "ping_session", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#a01c94bd8462ba2528d74150c0c2dfe02", null ],
+    [ "release", "d6/d27/classnebula3_1_1gclient_1_1net_1_1Session_1_1Session.html#ad84beff830aa733888627c497cb702c5", null ]
 ];
