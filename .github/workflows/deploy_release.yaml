@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: pdm-project/setup-pdm@v3
+    - uses: actions/checkout@v4
+    - uses: pdm-project/setup-pdm@v4
       with:
         python-version: '3.x'
         cache: true
