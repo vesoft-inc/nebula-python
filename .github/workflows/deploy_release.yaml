@@ -7,13 +7,12 @@ on:
 
 jobs:
   ci:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: pdm-project/setup-pdm@v3
+    - uses: actions/checkout@v5
+    - uses: pdm-project/setup-pdm@v4
       with:
-        python-version: '3.x'
         cache: true
     - name: Install dependencies
       run: pdm install
