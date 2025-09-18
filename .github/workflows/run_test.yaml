@@ -21,7 +21,7 @@ on:
 jobs:
   ci-pip-install-from-source:
     # This is to verify the setup.py as a mitigation for remain python 3.6.2+ capability
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       max-parallel: 2
       matrix:
@@ -48,7 +48,7 @@ jobs:
 
 
   build-lint-test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       max-parallel: 2
       matrix:
