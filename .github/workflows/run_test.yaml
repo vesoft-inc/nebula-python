@@ -21,15 +21,15 @@ on:
 jobs:
   ci-pip-install-from-source:
     # This is to verify the setup.py as a mitigation for remain python 3.6.2+ capability
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       max-parallel: 2
       matrix:
-        python-version: [3.6, 3.10]
+        python-version: [3.6, '3.10']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install nebulagraph-python from source and test dependencies
@@ -48,7 +48,7 @@ jobs:
 
 
   build-lint-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       max-parallel: 2
       matrix:
@@ -63,7 +63,7 @@ jobs:
           remove-android: 'true'
           remove-haskell: 'true'
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
         uses: pdm-project/setup-pdm@v4
         with:
@@ -94,12 +94,12 @@ jobs:
           files: coverage.xml
 
   example-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         python-version: ['3.10', 3.11, 3.12, 3.13]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
         uses: pdm-project/setup-pdm@v4
         with:
