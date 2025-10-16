@@ -1,0 +1,7 @@
+<map id="scan_vertex_async" name="scan_vertex_async">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,152,31"/>
+<area shape="rect" id="Node000002" href="$d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#aec29f6111f8b27f5a6673eb9483a6685" title=" " alt="" coords="200,5,369,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,15,186,15,186,21,152,21"/>
+<area shape="rect" id="Node000003" href="$d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#a5bb5c9fc472970809bc2303d05386d27" title=" " alt="" coords="417,5,525,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="369,15,403,15,403,21,369,21"/>
+</map>

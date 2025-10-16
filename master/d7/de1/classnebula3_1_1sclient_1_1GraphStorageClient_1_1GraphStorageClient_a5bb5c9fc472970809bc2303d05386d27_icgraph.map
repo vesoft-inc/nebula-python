@@ -1,7 +1,9 @@
 <map id="_scan_vertex" name="_scan_vertex">
-<area shape="rect" id="Node000001" title=" " alt="" coords="223,31,331,56"/>
-<area shape="rect" id="Node000002" href="$d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#afc1267a8c3a7884c871996b1ee55c73a" title=" " alt="" coords="39,5,141,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,37,141,27,141,22,209,32"/>
-<area shape="rect" id="Node000003" href="$d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#aec29f6111f8b27f5a6673eb9483a6685" title=" " alt="" coords="5,55,175,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,55,175,59,175,54,209,49"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="417,31,525,56"/>
+<area shape="rect" id="Node000002" href="$d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#afc1267a8c3a7884c871996b1ee55c73a" title=" " alt="" coords="234,5,335,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="403,37,335,27,336,22,404,32"/>
+<area shape="rect" id="Node000003" href="$d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#aec29f6111f8b27f5a6673eb9483a6685" title=" " alt="" coords="200,55,369,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="404,55,370,59,369,54,404,49"/>
+<area shape="rect" id="Node000004" href="$d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#a57d0b72fd5fa59396c5d1a15b0f45862" title=" " alt="" coords="5,55,152,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="186,70,152,70,152,65,186,65"/>
 </map>

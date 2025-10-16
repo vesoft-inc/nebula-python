@@ -1,0 +1,7 @@
+<map id="scan_edge_async" name="scan_edge_async">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,141,31"/>
+<area shape="rect" id="Node000002" href="$d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#a1685d4b4e480a59b979921337943fb9f" title=" " alt="" coords="189,5,348,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,15,176,15,176,21,142,21"/>
+<area shape="rect" id="Node000003" href="$d7/de1/classnebula3_1_1sclient_1_1GraphStorageClient_1_1GraphStorageClient.html#a13eb52627eb99c827d582f80cdca19a2" title=" " alt="" coords="396,5,495,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="348,15,382,15,382,21,348,21"/>
+</map>
