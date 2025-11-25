@@ -14,4 +14,4 @@ pdm run proto_gen
 1. Rename common.proto to nebula_common.proto
 2. Rename common.proto in vector.proto and graph.proto to nebula_common.proto
 
-Which is implemented in `proto/scripts/update_proto.py`.
+Which is implemented in `scripts/update_proto.py`.

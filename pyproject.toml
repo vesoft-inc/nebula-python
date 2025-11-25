@@ -9,7 +9,10 @@ dependencies = [
     "minijinja>=2.12.0",
 ]
 requires-python = ">=3.10"
-license = {text = "Apache 2.0"}
+license = {text = "Apache-2.0"}
+
+[project.urls]
+Repository = "https://github.com/vesoft-inc/nebula-python"
 
 [project.scripts]
 ngcli = "ng_console:console"
@@ -59,7 +62,8 @@ addopts = "--log-cli-level=INFO"
 check = { shell = 'ruff check && ruff format --check' }
 fix = { shell = "ruff check --fix && ruff format" }
 test = { shell = "pytest ./tests -vv" }
-proto_gen = { shell = "python proto/scripts/update_proto.py && python proto/scripts/generate_proto.py" } 
+proto_gen = { shell = "python scripts/update_proto.py && python scripts/generate_proto.py" } 
+gen_license_header = { shell = "python scripts/add_apache_headers.py" }
 [dependency-groups]
 dev = [
     "pandas>=2.2.3",
