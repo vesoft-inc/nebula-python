@@ -1,0 +1,13 @@
+name: Placeholder (publish.yaml)
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish step
+        run: echo "Publish step"

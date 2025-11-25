@@ -1,0 +1,13 @@
+name: Placeholder (build.yaml)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build step
+        run: echo "Build step"
