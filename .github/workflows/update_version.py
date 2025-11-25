@@ -4,68 +4,55 @@ import datetime
 import re
 import sys
 from pathlib import Path
+from typing import Optional
 
 
-def update_version(version_type="dev", custom_suffix=None):
+def update_version(version_type: str = "dev", custom_suffix: Optional[str] = None) -> str:
     """
-    Update version in pyproject.toml based on version type.
-    
-    Args:
-        version_type: 'dev', 'release', 'rc', or 'custom'
-        custom_suffix: Custom suffix for version (used with 'custom' type)
+    Update the `version` field in `pyproject.toml` for supported manual build types.
+
+    - dev: sets suffix to `.devYYMMDD` based on today's date.
+    - custom: appends `custom_suffix` verbatim to the base X.Y.Z (e.g., rc1, .post2, -alpha).
+    - Other version types are no-ops and keep the current version unchanged.
+
+    Returns the new version string that was written.
     """
     # Read pyproject.toml
     pyproject_path = Path("pyproject.toml")
     if not pyproject_path.exists():
         raise FileNotFoundError("pyproject.toml not found")
 
-    content = pyproject_path.read_text()
+    content: str = pyproject_path.read_text()
 
     # Extract current version
-    version_match = re.search(r'^version\s*=\s*"([^"]+)"', content, re.MULTILINE)
+    version_match: Optional[re.Match[str]] = re.search(r'^version\s*=\s*"([^"]+)"', content, re.MULTILINE)
     if not version_match:
         raise ValueError("Could not find version in pyproject.toml")
 
-    current_version = version_match.group(1)
+    current_version: str = version_match.group(1)
     
     # Parse the base version (remove any existing suffixes)
-    base_version_match = re.match(r'^(\d+\.\d+\.\d+)', current_version)
+    base_version_match: Optional[re.Match[str]] = re.match(r'^(\d+\.\d+\.\d+)', current_version)
     if not base_version_match:
         raise ValueError(f"Invalid version format: {current_version}")
     
-    base_version = base_version_match.group(1)
+    base_version: str = base_version_match.group(1)
 
-    # Generate new version based on type
+    # Only dev/custom builds mutate the version; all others keep current version
     if version_type == "dev":
-        date_suffix = datetime.datetime.now().strftime("%y%m%d")
-        new_version = f"{base_version}.dev{date_suffix}"
-    elif version_type == "release":
-        # For release, we keep the current version as-is
-        new_version = current_version
-    elif version_type == "rc":
-        # For release candidate, extract rc number from custom_suffix or default to rc1
-        if custom_suffix and custom_suffix.startswith("rc"):
-            new_version = f"{base_version}{custom_suffix}"
-        else:
-            rc_num = custom_suffix if custom_suffix else "1"
-            new_version = f"{base_version}rc{rc_num}"
-    elif version_type == "post":
-        # For post-release, extract post number from custom_suffix or increment existing
-        if custom_suffix and custom_suffix.startswith(".post"):
-            new_version = f"{base_version}{custom_suffix}"
-        else:
-            post_num = custom_suffix if custom_suffix else "1"
-            new_version = f"{base_version}.post{post_num}"
+        # Generate a date-based dev suffix like .dev250101
+        date_suffix: str = datetime.datetime.now().strftime("%y%m%d")
+        new_version: str = f"{base_version}.dev{date_suffix}"
     elif version_type == "custom":
-        if custom_suffix:
-            new_version = f"{base_version}{custom_suffix}"
-        else:
-            raise ValueError("Custom suffix required for custom version type")
+        if not custom_suffix:
+            raise ValueError("custom_suffix is required when version_type is 'custom'")
+        new_version = f"{base_version}{custom_suffix}"
     else:
-        raise ValueError(f"Unknown version type: {version_type}")
+        print(f"No change: leaving version as {current_version}")
+        return current_version
 
     # Update version in content
-    updated_content = re.sub(
+    updated_content: str = re.sub(
         r'^version\s*=\s*"[^"]+"',
         f'version = "{new_version}"',
         content,
@@ -79,24 +66,11 @@ def update_version(version_type="dev", custom_suffix=None):
 
 
 if __name__ == "__main__":
-    # Parse command line arguments
-    if len(sys.argv) < 2:
-        # Default to dev version
-        update_version("dev")
-    elif len(sys.argv) == 2:
-        # First argument could be version_type or custom_suffix for backward compatibility
-        arg = sys.argv[1]
-        if arg in ["dev", "release", "rc", "post", "custom"]:
-            update_version(arg)
-        else:
-            # Treat as custom suffix for backward compatibility
-            update_version("custom", arg)
-    elif len(sys.argv) == 3:
-        # version_type and custom_suffix
-        version_type = sys.argv[1]
-        custom_suffix = sys.argv[2]
-        update_version(version_type, custom_suffix)
-    else:
-        print("Usage: update_version.py [version_type] [custom_suffix]")
-        print("Version types: dev, release, rc, post, custom")
-        sys.exit(1)
+    # Accept optional args for compatibility; act on 'dev' or 'custom'
+    version_type_arg: str = "dev"
+    if len(sys.argv) >= 2:
+        version_type_arg = sys.argv[1]
+    custom_suffix_arg: Optional[str] = None
+    if len(sys.argv) >= 3:
+        custom_suffix_arg = sys.argv[2]
+    update_version(version_type_arg, custom_suffix_arg)

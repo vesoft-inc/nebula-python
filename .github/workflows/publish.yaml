@@ -1,0 +1,53 @@
+## GitHub Actions Workflow: Publish to PyPI/TestPyPI
+## - Triggers:
+##   - Release published: publishes the project to the configured PyPI repository.
+##   - Manual (workflow_dispatch): publishes to the specified repository input (pypi or testpypi).
+## - Behavior:
+##   - Sets up Python and PDM, builds the distribution with PDM, then runs `pdm publish`.
+##   - Uses OIDC (id-token: write) for Trusted Publisher authentication (PEP 740).
+##     Ensure the repository is configured as a Trusted Publisher on PyPI/TestPyPI.
+## - Note:
+##   - This workflow rebuilds before publishing. If you prefer publishing the exact artifact
+##     built in the build workflow, adjust this to download and reuse that wheel instead.
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+  
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: 'PyPI repository to publish to (pypi or testpypi)'
+        required: true
+        default: 'pypi'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for private repositories and trusted publishers
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Setup PDM
+      uses: pdm-project/setup-pdm@v4
+
+    - name: Build Package
+      run: pdm build
+
+
+    - name: Set Repository
+      if: github.event_name == 'workflow_dispatch'
+      run: echo "PYPI_REPOSITORY=${{ github.event.inputs.repository }}" >> $GITHUB_ENV
+
+    - name: Publish Package
+      run: |
+        pdm publish --repository ${{ env.PYPI_REPOSITORY || 'pypi' }}
