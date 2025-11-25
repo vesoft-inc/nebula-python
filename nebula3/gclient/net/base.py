@@ -84,17 +84,6 @@ def _cast_value(value: Any) -> Value:
         casted_value.set_sVal(value)
     elif isinstance(value, float):
         casted_value.set_fVal(value)
-    elif isinstance(value, datetime.date):
-        date_value = Date(year=value.year, month=value.month, day=value.day)
-        casted_value.set_dVal(date_value)
-    elif isinstance(value, datetime.time):
-        time_value = Time(
-            hour=value.hour,
-            minute=value.minute,
-            sec=value.second,
-            microsec=value.microsecond,
-        )
-        casted_value.set_tVal(time_value)
     elif isinstance(value, datetime.datetime):
         datetime_value = DateTime(
             year=value.year,
@@ -106,6 +95,17 @@ def _cast_value(value: Any) -> Value:
             microsec=value.microsecond,
         )
         casted_value.set_dtVal(datetime_value)
+    elif isinstance(value, datetime.date):
+        date_value = Date(year=value.year, month=value.month, day=value.day)
+        casted_value.set_dVal(date_value)
+    elif isinstance(value, datetime.time):
+        time_value = Time(
+            hour=value.hour,
+            minute=value.minute,
+            sec=value.second,
+            microsec=value.microsecond,
+        )
+        casted_value.set_tVal(time_value)
     # TODO: add support for GeoSpatial
     elif isinstance(value, list):
         byte_list = []
