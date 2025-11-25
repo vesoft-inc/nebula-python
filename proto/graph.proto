@@ -1,0 +1,117 @@
+/**
+ * Copyright (c) 2024 vesoft inc. All rights reserved.
+ *
+ * This is the protocol file that defines the data exchanging contract
+ * between the client SDKs and the server of NebulaGraph
+ */
+
+/**
+ *             === Some Key Notes About Protobuf ===
+ * 1. Field Presence
+ *     - `required' is removed from proto3 while `optional' kept.
+ *     - Without `optional', the user cannot distinguish the situation.
+ *       that a field was not set from being set to its default value.
+ *     - With `optional' specified the field will have the NULL semantic(via
+ * `has_xxx')
+ * 2. Compatibility
+ *     - Never change a field number.
+ *     - Reserve the field number of deleted fields with `reserved'.
+ *     - Some field types can be changed without breaking the compatibility.
+ *       Please refer to the official documents for details.
+ */
+
+// gRPC requires the proto3 syntax
+syntax = "proto3";
+
+import "nebula_common.proto";
+import "vector.proto";
+
+/**
+ * Data structures defined in this file is mainly for data exchanging.
+ * On the server side, the compute engine has its own data representations,
+ * which is more performant and memory efficient.
+ * On the client side, for the sake of ease, we will provide wrappers over the
+ * data structures anyway.
+ * So we put the generated code into the a separate namespace or package, i.e.
+ * `proto'
+ */
+package nebula.proto.graph;
+
+option go_package          = "github.com/vesoft-inc/nebula-ng-tools/golang/internal/generated_code/v5.0.0/proto/graph";
+option java_package        = "com.vesoft.nebula.proto.graph";
+option java_multiple_files = true;
+option optimize_for        = SPEED;
+
+// Interface definition
+service GraphService {
+    rpc Authenticate(AuthRequest) returns (AuthResponse) {}
+    rpc Execute(ExecuteRequest) returns (ExecuteResponse) {}
+    rpc StreamingExecute(ExecuteRequest) returns (stream ExecuteResponse) {}
+}
+
+message QueryStats {
+    int64          num_affected_nodes = 1;
+    int64          num_affected_edges = 2;
+    repeated bytes exported_paths = 3;
+    int64          num_exported_records = 4;
+}
+
+message PlanInfo {
+    bytes             id               = 1;
+    bytes             name             = 2;
+    bytes             details          = 3;
+    repeated bytes    columns          = 4;
+    double            time_ms          = 5;
+    int64             rows             = 6;
+    double            memory_kib       = 7;
+    double            blocked_ms       = 8;
+    double            queued_ms        = 9;
+    double            consume_ms       = 10;
+    double            produce_ms       = 11;
+    double            finish_ms        = 12;
+    int64             batches          = 13;
+    int64             concurrency      = 14;
+    bytes             other_stats_json = 15;
+    repeated PlanInfo children         = 16;
+}
+
+message ElapsedTime {
+    int64 total_server_time_us = 1;
+    int64 build_time_us        = 2;
+    int64 optimize_time_us     = 3;
+    int64 serialize_time_us    = 4;
+    int64 parse_time_us        = 5;
+}
+
+message Summary {
+    ElapsedTime elapsed_time = 1;
+    bytes       explain_type = 2;
+    PlanInfo    plan_info    = 3;
+    QueryStats  query_stats  = 4;
+    bytes       log_stream   = 5;
+    int64       num_warnings = 6;
+}
+
+message ExecuteRequest {
+    int64 session_id = 1;
+    bytes stmt       = 2;
+}
+
+message ExecuteResponse {
+    nebula.proto.common.Status            status  = 1;
+    nebula.proto.vector.VectorResultTable result  = 2;
+    Summary                               summary = 3;
+    bytes                                 cursor  = 4;
+}
+
+message AuthRequest {
+    bytes                          username    = 1;
+    bytes                          auth_info   = 2;
+    nebula.proto.common.ClientInfo client_info = 3;
+}
+
+message AuthResponse {
+    nebula.proto.common.Status status     = 1;
+    int64                      session_id = 2;
+    bytes                      version    = 3;
+}

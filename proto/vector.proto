@@ -1,0 +1,93 @@
+/**
+ * Copyright (c) 2024 vesoft inc. All rights reserved.
+ *
+ * This is the protocol file that defines the data exchanging contract
+ * between the client SDKs and the server of NebulaGraph
+ */
+
+// gRPC requires the proto3 syntax
+syntax = "proto3";
+
+import "nebula_common.proto";
+
+package nebula.proto.vector;
+
+option go_package          = "github.com/vesoft-inc/nebula-ng-tools/golang/internal/generated_code/v5.0.0/proto/vector";
+option java_package = "com.vesoft.nebula.proto.graph";
+option java_multiple_files = true;
+option optimize_for        = SPEED;
+
+message Row {
+    repeated nebula.proto.common.Value values = 1;
+}
+
+message ValueType {
+    bytes value_type = 1;
+}
+
+message RowType {
+    uint32             num_columns  = 1;
+    repeated string    column_names = 2;
+    repeated ValueType column_types = 3;
+}
+
+message VectorCommonMetaData {
+    uint32 num_records         = 1;
+    uint32 vector_content_type = 2;
+}
+
+// Schema for a node type.
+// Properties are not stored here. they are stored in the row type, if any.
+message NodeType {
+    int32          node_type_id   = 1;  // use int32 for potential extensibility
+    bytes          node_type_name = 2;
+    repeated bytes label          = 3;
+}
+
+// for an edge type
+message EdgeType {
+    int32          edge_type_id   = 1;
+    bytes          edge_type_name = 2;
+    repeated bytes label          = 3;
+}
+
+message PropertyGraphSchema {
+    int32             graph_id   = 1;
+    bytes             graph_name = 2;
+    repeated NodeType node_type  = 3;
+    repeated EdgeType edge_type  = 4;
+}
+
+message VectorTableMetaData {
+    uint32                       table_type       = 1;
+    uint64                       num_records      = 2;
+    RowType                      row_type         = 3;
+    uint32                       num_batches      = 4;
+    uint32                       time_zone_offset = 5;  // unit: minutes
+    bool                         is_little_endian = 6;  // true: small endian, false: big endian
+    repeated PropertyGraphSchema graph_schema     = 7;
+}
+
+message NestedVector {
+    uint32                num_nested_vectors = 1;
+    VectorCommonMetaData  common_meta_data   = 2;
+    bytes                 special_meta_data  = 3;
+    bytes                 vector_data        = 4;
+    bytes                 null_bit_map       = 5;
+    repeated NestedVector nested_vectors     = 6;
+}
+
+message VectorBatch {
+    repeated NestedVector vectors = 1;
+}
+
+message VectorResultTable {
+    bytes                data_layout_version = 1;
+    VectorTableMetaData  meta                = 2;
+    repeated VectorBatch batch               = 3;
+}
+
+message ResultTable {
+    repeated bytes column_names = 1;
+    repeated Row   records      = 2;
+}

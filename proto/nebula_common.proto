@@ -1,0 +1,350 @@
+// Copyright (c) 2024 vesoft inc. All rights reserved.
+
+// gRPC requires the proto3 syntax
+syntax = "proto3";
+
+import "google/protobuf/descriptor.proto";
+
+package nebula.proto.common;
+
+option go_package          = "github.com/vesoft-inc/nebula-ng-tools/golang/internal/generated_code/v5.0.0/proto/common";
+option java_package = "com.vesoft.nebula.proto.common";
+option java_multiple_files = true;
+option optimize_for        = SPEED;
+
+//*********************** version ***********************
+
+extend google.protobuf.FileOptions {
+    bytes          protocol_version        = 9559;
+    repeated bytes supported_versions      = 9560;
+    bytes          meta_protocol_version   = 9561;
+    repeated bytes meta_supported_versions = 9562;
+}
+
+// reference: https://github.com/protocolbuffers/protobuf/issues/3520
+// Each client should use the following version to communicate with the
+// server:
+//   nebula.proto.common.DESCRIPTOR.GetOptions().Extensions[nebula.proto.common.protocol_version]
+option (protocol_version) = "5.0.0";
+// The supported_versions field is used to store the supported versions of the
+// protocol. multiple versions are defined in same option repeatedly, such as:
+//   option (supported_versions) = "5.0.0";
+//   option (supported_versions) = "5.1.0";
+option (supported_versions) = "5.0.0";
+
+option (meta_protocol_version) = "5.1.0";
+option (meta_supported_versions) = "5.1.0";
+
+//*********************** values ***********************
+
+/**
+ * Only 4 and 8 byte integers are supported by protobuf.
+ * These integers are encoded as varints on wire.
+ * If the memory footprint is a concern, we should implement our
+ * own codec scheme for some of messages like `Duration' and `Date'.
+ */
+message Duration {
+    bool  is_month_based = 1;
+    int32 year           = 2;
+    int32 month          = 3;
+    int32 day            = 4;
+    int32 hour           = 5;
+    int32 minute         = 6;
+    int32 sec            = 7;
+    int32 microsec       = 8;
+}
+
+message Date {
+    int32  year  = 1;
+    uint32 month = 2;
+    uint32 day   = 3;
+}
+
+message LocalTime {
+    uint32 hour     = 1;
+    uint32 minute   = 2;
+    uint32 sec      = 3;
+    uint32 microsec = 4;
+}
+
+message ZonedTime {
+    uint32 hour     = 1;
+    uint32 minute   = 2;
+    uint32 sec      = 3;
+    uint32 microsec = 4;
+    int32  offset   = 5;  // note: minutes
+}
+
+message LocalDatetime {
+    int32  year     = 1;
+    uint32 month    = 2;
+    uint32 day      = 3;
+    uint32 hour     = 4;
+    uint32 minute   = 5;
+    uint32 sec      = 6;
+    uint32 microsec = 7;
+}
+
+message ZonedDatetime {
+    int32  year     = 1;
+    uint32 month    = 2;
+    uint32 day      = 3;
+    uint32 hour     = 4;
+    uint32 minute   = 5;
+    uint32 sec      = 6;
+    uint32 microsec = 7;
+    int32  offset   = 8;
+}
+
+message List {
+    repeated Value values = 1;
+}
+
+message Set {
+    repeated Value values = 1;
+}
+
+message Map {
+    repeated Value keys = 1;
+    repeated Value values = 2;
+}
+
+message Vector {
+    repeated float values = 1;
+}
+
+message Record {
+    map<string, Value> values = 1;
+}
+
+message Node {
+    int64              node_id    = 1;
+    string             graph      = 2;
+    string             type       = 3;
+    repeated string    labels     = 4;
+    map<string, Value> properties = 5;
+}
+
+message Edge {
+    enum Direction {
+        DIRECTED   = 0;
+        UNDIRECTED = 1;
+    }
+
+    int64              src_id     = 1;
+    int64              dst_id     = 2;
+    Direction          direction  = 3;
+    string             graph      = 4;
+    string             type       = 5;
+    repeated string    labels     = 6;
+    int64              rank       = 7;
+    map<string, Value> properties = 8;
+}
+
+message Decimal {
+    // int16 ndigits;
+    // int32  weight = 1;
+    // int32  dscale = 2;
+    // int32  sign   = 3;
+    // bytes  digits = 4;
+    string sval = 5;
+}
+
+message Path {
+    repeated Value values = 1;
+}
+
+message Ref {
+    uint32 code   = 1;
+    uint32 offset = 2;
+}
+
+
+// including 2D/2DM/3D/3DM/4D
+message Coordinate {
+    repeated double coords = 1;
+}
+
+message Point {
+    Coordinate coord = 1;
+}
+
+message LineString {
+    repeated Coordinate coords = 1;
+}
+
+message Polygon {
+    repeated int32      rowIndexes  = 1;
+    repeated Coordinate coords      = 2;
+}
+
+message GeoBase {
+    enum GeoShape {
+        // point
+        Point           = 0;
+        PointM          = 1;
+        PointZ          = 2;
+        PointZM         = 3;
+        // line
+        LineString      = 4;
+        LineStringM     = 5;
+        LineStringZ     = 6;
+        LineStringZM    = 7;
+        // polygon
+        Polygon         = 8;
+        PolygonM        = 9;
+        PolygonZ        = 10;
+        PolygonZM       = 11;
+    }
+
+    GeoShape shape              = 1;
+    int32   srid                = 2;
+    oneof data {
+        Point       point       = 3;
+        LineString  line_string = 4;
+        Polygon     polygon     = 5;
+    }
+}
+
+message Geography {
+    GeoBase data = 1;
+}
+
+message Geometry {
+    GeoBase data = 1;
+}
+
+/**
+ * NOTE
+ *  - There is no (u)int8 or (u)int16 in protobuf, we use (u)int32 instead.
+ *  - We use `bytes' for the `string' type, because the latter is subject to
+ *    the UTF8 checking in the protobuf's encoding.
+ */
+message Value {
+    enum Type {
+        kNull          = 0;
+        kBool          = 1;
+        kInt8          = 2;
+        kUInt8         = 3;
+        kInt16         = 4;
+        kUInt16        = 5;
+        kInt32         = 6;
+        kUInt32        = 7;
+        kInt64         = 8;
+        kUInt64        = 9;
+        kFloat         = 10;
+        kDouble        = 11;
+        kString        = 12;
+        kList          = 13;
+        kRecord        = 14;
+        kNode          = 15;
+        kEdge          = 16;
+        kPath          = 17;
+        kDuration      = 18;
+        kLocalTime     = 19;
+        kZonedTime     = 20;
+        kDate          = 21;
+        kLocalDatetime = 22;
+        kZonedDatetime = 23;
+        kRef           = 24;
+        kDecimal       = 25;
+        kVector        = 26;
+        kPoint         = 27;
+        kLineString    = 28;
+        kPolygon       = 29;
+        kGeography     = 30;
+        kGeometry      = 31;
+        kSet           = 32;
+        kMap           = 33;
+    }
+
+    oneof data {
+        bool          bool_value           = 1;
+        int32         int8_value           = 2;
+        uint32        uint8_value          = 3;
+        int32         int16_value          = 4;
+        uint32        uint16_value         = 5;
+        int32         int32_value          = 6;
+        uint32        uint32_value         = 7;
+        int64         int64_value          = 8;
+        uint64        uint64_value         = 9;
+        float         float_value          = 10;
+        double        double_value         = 11;
+        bytes         string_value         = 12;
+        List          list_value           = 13;
+        Record        record_value         = 14;
+        Node          node_value           = 15;
+        Edge          edge_value           = 16;
+        Path          path_value           = 17;
+        Duration      duration_value       = 18;
+        LocalTime     local_time_value     = 19;
+        ZonedTime     zoned_time_value     = 20;
+        Date          date_value           = 21;
+        LocalDatetime local_datetime_value = 22;
+        ZonedDatetime zoned_datetime_value = 23;
+        Ref           ref_value            = 24;
+        Decimal       decimal_value        = 25;
+        Vector        vector_value         = 26;
+        Point         point_value          = 27;
+        LineString    line_string_value    = 28;
+        Polygon       polygon_value        = 29;
+        Geography     geography_value      = 30;
+        Geometry      geometry_value       = 31;
+        Set           set_value            = 32;
+        Map           map_value            = 33;
+    }
+}
+
+//*********************** commons ***********************
+
+message HostAddress {
+    bytes  host = 1;
+    uint32 port = 2;
+}
+
+enum ServiceType {
+    UNKNOWN  = 0;
+    STORAGE  = 1;
+    GRAPH    = 2;
+    META     = 3;
+    ANALYTIC = 4;
+    ALL      = 5;
+}
+
+enum RoutePolicy {
+    LEADER_ONLY   = 0;
+    LEADER_FIRST  = 1;
+    ZONE_AFFINITY = 2;
+    ZONE_STRICT   = 3;
+}
+
+message RoutePolicyInfo {
+    nebula.proto.common.RoutePolicy route_policy  = 1;
+}
+
+message Status {
+    bytes code    = 1;
+    bytes message = 2;
+}
+
+message DirInfo {
+    bytes          install_path = 1;
+    repeated bytes data_paths   = 2;
+}
+
+//*********************** client ***********************
+
+message ClientInfo {
+    enum Language {
+        UNKNOWN    = 0;
+        CPP        = 1;
+        GO         = 2;
+        JAVA       = 3;
+        PYTHON     = 4;
+        JAVASCRIPT = 5;
+    }
+
+    Language lang             = 1;
+    bytes    protocol_version = 2;
+    bytes    version          = 3;
+}

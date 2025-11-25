@@ -1,0 +1,173 @@
+name: Build Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version type to use'
+        required: true
+        type: choice
+        default: 'dev'
+        options:
+          - dev
+          - release
+          - rc
+          - post
+          - custom
+      custom_suffix:
+        description: 'Custom version suffix (only used when version_type is custom, rc, or post)'
+        required: false
+        type: string
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+rc[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+.post[0-9]+'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      version_type: ${{ steps.check-tag.outputs.version_type || steps.set-default.outputs.version_type }}
+      version_suffix: ${{ steps.check-tag.outputs.version_suffix || steps.set-default.outputs.version_suffix }}
+    steps:
+      - name: Check tag format
+        id: check-tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          if [[ $TAG =~ ^[0-9]+\.[0-9]+\.[0-9]+\.post[0-9]+$ ]]; then
+            echo "version_type=post" >> $GITHUB_OUTPUT
+            POST_SUFFIX=${TAG#*post}
+            echo "version_suffix=.post${POST_SUFFIX}" >> $GITHUB_OUTPUT
+          elif [[ $TAG =~ ^[0-9]+\.[0-9]+\.[0-9]+rc[0-9]+$ ]]; then
+            echo "version_type=rc" >> $GITHUB_OUTPUT
+            RC_SUFFIX=${TAG#*rc}
+            echo "version_suffix=rc${RC_SUFFIX}" >> $GITHUB_OUTPUT
+          elif [[ $TAG =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "version_type=release" >> $GITHUB_OUTPUT
+            echo "version_suffix=" >> $GITHUB_OUTPUT
+          else
+            echo "Invalid tag format. Must be 'X.Y.Z' for release, 'X.Y.ZrcN' for release candidate, or 'X.Y.Z.postN' for post-release"
+            exit 1
+          fi
+      - name: Set default outputs
+        id: set-default
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        run: |
+          VERSION_TYPE="${{ github.event.inputs.version_type || 'dev' }}"
+          echo "version_type=${VERSION_TYPE}" >> $GITHUB_OUTPUT
+          
+          case "${VERSION_TYPE}" in
+            "dev")
+              echo "version_suffix=.dev$(date +%y%m%d)" >> $GITHUB_OUTPUT
+              ;;
+            "release")
+              echo "version_suffix=" >> $GITHUB_OUTPUT
+              ;;
+            "rc")
+              SUFFIX="${{ github.event.inputs.custom_suffix }}"
+              if [[ -n "${SUFFIX}" ]]; then
+                if [[ "${SUFFIX}" =~ ^rc[0-9]+$ ]]; then
+                  echo "version_suffix=${SUFFIX}" >> $GITHUB_OUTPUT
+                else
+                  echo "version_suffix=rc${SUFFIX}" >> $GITHUB_OUTPUT
+                fi
+              else
+                echo "version_suffix=rc1" >> $GITHUB_OUTPUT
+              fi
+              ;;
+            "post")
+              SUFFIX="${{ github.event.inputs.custom_suffix }}"
+              if [[ -n "${SUFFIX}" ]]; then
+                if [[ "${SUFFIX}" =~ ^\.post[0-9]+$ ]]; then
+                  echo "version_suffix=${SUFFIX}" >> $GITHUB_OUTPUT
+                else
+                  echo "version_suffix=.post${SUFFIX}" >> $GITHUB_OUTPUT
+                fi
+              else
+                echo "version_suffix=.post1" >> $GITHUB_OUTPUT
+              fi
+              ;;
+            "custom")
+              echo "version_suffix=${{ github.event.inputs.custom_suffix }}" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "Unknown version type: ${VERSION_TYPE}"
+              exit 1
+              ;;
+          esac
+
+  build:
+    needs: validate
+    runs-on: ubuntu-latest
+    outputs:
+      wheel_name: ${{ steps.find-wheel.outputs.wheel_name }}
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        
+    - name: Install PDM
+      run: |
+        curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python3 -
+        
+    - name: Update version
+      run: |
+        VERSION_TYPE="${{ needs.validate.outputs.version_type }}"
+        VERSION_SUFFIX="${{ needs.validate.outputs.version_suffix }}"
+        
+        # Only update version for dev builds when there's no tag on this commit
+        if [ "${VERSION_TYPE}" = "dev" ] && [ ! "${{ startsWith(github.ref, 'refs/tags/') }}" = "true" ]; then
+          python .github/workflows/update_version.py "${VERSION_TYPE}" "${VERSION_SUFFIX}"
+        fi
+        # For tagged releases (rc, post, release), we use the version as-is from pyproject.toml
+        
+    - name: Build package
+      run: |
+        pdm build
+        
+    - name: Find wheel file
+      id: find-wheel
+      run: |
+        WHEEL_FILE=$(ls dist/*.whl)
+        WHEEL_NAME=$(basename $WHEEL_FILE .whl)
+        echo "Found wheel file: $WHEEL_FILE"
+        echo "wheel_file=$WHEEL_FILE" >> $GITHUB_OUTPUT
+        echo "wheel_name=$WHEEL_NAME" >> $GITHUB_OUTPUT
+
+    - name: Upload wheel artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.find-wheel.outputs.wheel_name }}
+        path: ${{ steps.find-wheel.outputs.wheel_file }}
+        retention-days: 7
+
+  release:
+    needs: [build, validate]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download wheel artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.wheel_name }}
+          path: dist
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*.whl
+          generate_release_notes: false
+          draft: true
+          prerelease: ${{ needs.validate.outputs.version_type != 'release' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

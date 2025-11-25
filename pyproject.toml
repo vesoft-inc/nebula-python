@@ -1,0 +1,74 @@
+[project]
+name = "nebula5-python"
+version = "5.2.0"
+dependencies = [
+    "grpcio>=1.59.0",
+    "protobuf>=4.25.1",
+    "rich>=13.9.3",
+    "anyio>=4.9.0",
+    "minijinja>=2.12.0",
+]
+requires-python = ">=3.10"
+license = {text = "Apache 2.0"}
+
+[project.scripts]
+ngcli = "ng_console:console"
+
+[project.optional-dependencies]
+full = [
+    "pydantic>=2.11.5",
+]
+console = [
+    "click>=8.1.7",
+    "prompt-toolkit>=3.0.48",
+]
+all = [
+    "nebula5-python[console,full]",
+]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
+
+[tool.ruff]
+target-version = "py310"
+exclude = ["src/nebulagraph_python/proto", "src/nebulagraph_python/_error_code.py", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "G", "B", "I", "SIM", "TID", "PL", "RUF"]
+ignore = [
+    "E501",    # Line too long
+    "E402",    # Module level import not at top of file
+    "PLR2004", # Magic value
+    "PLR0911", # Too many return statements
+    "PLR0912", # Too many branches
+    "PLR0913", # Too many arguments in function definition
+    "PLR0915", # Too many statements
+    "PLC0415", # `import` should be at the top-level of a file
+]
+[tool.ruff.lint.isort]
+known-first-party = ["nebulagraph_python"]
+
+[tool.pytest.ini_options]
+addopts = "--log-cli-level=INFO"
+
+[tool.pdm.scripts]
+check = { shell = 'ruff check && ruff format --check' }
+fix = { shell = "ruff check --fix && ruff format" }
+test = { shell = "pytest ./tests -vv" }
+proto_gen = { shell = "python proto/scripts/update_proto.py && python proto/scripts/generate_proto.py" } 
+[dependency-groups]
+dev = [
+    "pandas>=2.2.3",
+    "grpcio-tools==1.59.0",
+    "grpcio==1.59.0",
+    "protobuf==4.25.1",
+    "typing-extensions>=4.12.2",
+    "types-grpcio>=1.0.0.20250525",
+    "pytest>=8.4.0",
+    "pytest-asyncio>=1.0.0",
+    "ruff>=0.14.5",
+]
