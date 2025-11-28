@@ -9,8 +9,10 @@ import json
 import socket
 
 from threading import RLock, Timer
+from typing import List, Optional
 import time
 
+from nebula3.common.ttypes import ErrorCode
 from nebula3.Exception import (
     AuthFailedException,
     NoValidSessionException,
@@ -19,11 +21,12 @@ from nebula3.Exception import (
 
 from nebula3.gclient.net.Session import Session
 from nebula3.gclient.net.Connection import Connection
+from nebula3.gclient.net.base import BaseExecutor
 from nebula3.logger import logger
-from nebula3.Config import SessionPoolConfig
+from nebula3.Config import SessionPoolConfig, SSL_config
 
 
-class SessionPool(object):
+class SessionPool(BaseExecutor, object):
     S_OK = 0
     S_BAD = 1
 
@@ -52,9 +55,9 @@ class SessionPool(object):
             self._addresses_status[ip_port] = self.S_BAD
 
         # sessions that are currently in use
-        self._active_sessions = list()
+        self._active_sessions: List[Session] = list()
         # sessions that are currently available
-        self._idle_sessions = list()
+        self._idle_sessions: List[Session] = list()
 
         self._configs = SessionPoolConfig()
         self._ssl_configs = None
@@ -67,9 +70,14 @@ class SessionPool(object):
         self._close = False
 
     def __del__(self):
-        self.close()
+        if hasattr(self, '_lock'):
+            self.close()
 
-    def init(self, configs):
+    def init(
+        self,
+        configs: Optional[SessionPoolConfig] = None,
+        ssl_configs: Optional[SSL_config] = None,
+    ):
         """init the session pool
 
         :param username: the username of the session
@@ -80,17 +88,24 @@ class SessionPool(object):
 
         :return: if all addresses are valid, return True else return False.
         """
+        if configs is not None:
+            assert isinstance(
+                configs, SessionPoolConfig
+            ), "wrong type of SessionPoolConfig, try this: `from nebula3.Config import SessionPoolConfig`"
+            self._configs = configs
+        else:
+            self._configs = SessionPoolConfig()
+        self._ssl_configs = ssl_configs
         # check configs
         try:
             self._check_configs()
         except Exception as e:
-            logger.error('Invalid configs: {}'.format(e))
+            logger.error("Invalid configs: {}".format(e))
             return False
 
         if self._close:
-            logger.error('The pool has init or closed.')
-            raise RuntimeError('The pool has init or closed.')
-        self._configs = configs
+            logger.error("The pool has init or closed.")
+            raise RuntimeError("The pool has init or closed.")
 
         # ping all servers
         self.update_servers_status()
@@ -101,14 +116,14 @@ class SessionPool(object):
         ok_num = self.get_ok_servers_num()
         if ok_num < len(self._addresses):
             raise RuntimeError(
-                'The services status exception: {}'.format(self._get_services_status())
+                "The services status exception: {}".format(self._get_services_status())
             )
 
         # iterate all addresses and create sessions to fullfil the min_size
         for i in range(self._configs.min_size):
             session = self._new_session()
             if session is None:
-                raise RuntimeError('Get session failed')
+                raise RuntimeError("Get session failed")
             self._add_session_to_idle(session)
 
         return True
@@ -122,14 +137,27 @@ class SessionPool(object):
         try:
             conn = Connection()
             if self._ssl_configs is None:
-                conn.open(address[0], address[1], 1000)
+                conn.open(
+                    address[0],
+                    address[1],
+                    1000,
+                    self._configs.use_http2,
+                    self._configs.http_headers,
+                )
             else:
-                conn.open_SSL(address[0], address[1], 1000, self._ssl_configs)
+                conn.open_SSL(
+                    address[0],
+                    address[1],
+                    1000,
+                    self._ssl_configs,
+                    self._configs.use_http2,
+                    self._configs.http_headers,
+                )
             conn.close()
             return True
         except Exception as ex:
             logger.warning(
-                'Connect {}:{} failed: {}'.format(address[0], address[1], ex)
+                "Connect {}:{} failed: {}".format(address[0], address[1], ex)
             )
             return False
 
@@ -145,7 +173,7 @@ class SessionPool(object):
         :param stmt: the query string
         :return: ResultSet
         """
-        return self.execute_parameter(stmt, None)
+        return super().execute(stmt)
 
     def execute_parameter(self, stmt, params):
         """execute statement
@@ -156,28 +184,44 @@ class SessionPool(object):
         """
         session = self._get_idle_session()
         if session is None:
-            raise RuntimeError('Get session failed')
+            raise RuntimeError("Get session failed")
         self._add_session_to_active(session)
 
         try:
             resp = session.execute_parameter(stmt, params)
 
-            # reset the space name to the pool config
-            if resp.space_name() != self._space_name:
-                self._set_space_to_default(session)
+            # Check for session validity based on error code
+            if resp.error_code() in [
+                ErrorCode.E_SESSION_INVALID,
+                ErrorCode.E_SESSION_TIMEOUT,
+            ]:
+                self._active_sessions.remove(session)
+                session = self._get_idle_session()
+                if session is None:
+                    logger.warning(
+                        "Session invalid or timeout, removed from the pool, but failed to get a new session."
+                    )
+                    return resp
+                logger.warning("Session invalid or timeout, session has been recycled")
+                self._add_session_to_idle(session)
 
-            # move the session back to the idle list
-            self._return_session(session)
+            else:
+                # reset the space name to the pool config
+                if resp.space_name() != self._space_name:
+                    self._set_space_to_default(session)
+
+                # move the session back to the idle list
+                self._return_session(session)
 
             return resp
         except Exception as e:
-            logger.error('Execute failed: {}'.format(e))
+            logger.error("Execute failed: {}".format(e))
             # remove the session from the pool if it is invalid
             self._active_sessions.remove(session)
             raise e
 
     def execute_json(self, stmt):
-        """execute statement and return the result as a JSON string
+        """execute statement and return the result as a JSON bytes
             Date and Datetime will be returned in UTC
             JSON struct:
             {
@@ -235,30 +279,45 @@ class SessionPool(object):
                 ]
             }
         :param stmt: the ngql
-        :return: JSON string
+        :return: JSON bytes
         """
-        return self.execute_json_with_parameter(stmt, None)
+        return super().execute_json(stmt)
 
     def execute_json_with_parameter(self, stmt, params):
         session = self._get_idle_session()
         if session is None:
-            raise RuntimeError('Get session failed')
+            raise RuntimeError("Get session failed")
         self._add_session_to_active(session)
 
         try:
             resp = session.execute_json_with_parameter(stmt, params)
-
-            # reset the space name to the pool config
             json_obj = json.loads(resp)
-            if json_obj["results"][0]["spaceName"] != self._space_name:
-                self._set_space_to_default(session)
+            # Check for session validity based on error code
+            if json_obj.get("errors", [{}])[0].get("code") in [
+                ErrorCode.E_SESSION_INVALID,
+                ErrorCode.E_SESSION_TIMEOUT,
+            ]:
+                self._active_sessions.remove(session)
+                session = self._get_idle_session()
+                if session is None:
+                    logger.warning(
+                        "Session invalid or timeout, removed from the pool, but failed to get a new session."
+                    )
+                    return resp
+                self._add_session_to_idle(session)
+                logger.warning("Session invalid or timeout, session has been recycled")
 
-            # move the session back to the idle list
-            self._return_session(session)
+            else:
+                # reset the space name to the pool config
+                if json_obj["results"][0]["spaceName"] != self._space_name:
+                    self._set_space_to_default(session)
+
+                # move the session back to the idle list
+                self._return_session(session)
 
             return resp
         except Exception as e:
-            logger.error('Execute failed: {}'.format(e))
+            logger.error("Execute failed: {}".format(e))
             # remove the session from the pool if it is invalid
             self._active_sessions.remove(session)
             raise e
@@ -292,11 +351,11 @@ class SessionPool(object):
     def _get_services_status(self):
         msg_list = []
         for addr in self._addresses_status.keys():
-            status = 'OK'
+            status = "OK"
             if self._addresses_status[addr] != self.S_OK:
-                status = 'BAD'
-            msg_list.append('[services: {}, status: {}]'.format(addr, status))
-        return ', '.join(msg_list)
+                status = "BAD"
+            msg_list.append("[services: {}, status: {}]".format(addr, status))
+        return ", ".join(msg_list)
 
     def update_servers_status(self):
         """update the servers' status"""
@@ -324,7 +383,7 @@ class SessionPool(object):
                 return self._new_session()
             else:
                 raise NoValidSessionException(
-                    'The total number of sessions reaches the pool max size {}'.format(
+                    "The total number of sessions reaches the pool max size {}".format(
                         self._configs.max_size
                     )
                 )
@@ -335,9 +394,6 @@ class SessionPool(object):
 
         :return: Session
         """
-        if self._ssl_configs is not None:
-            raise RuntimeError('SSL is not supported yet')
-
         self._pos = (self._pos + 1) % len(self._addresses)
         next_addr_index = self._pos
 
@@ -349,7 +405,7 @@ class SessionPool(object):
 
             # if the address is bad, skip it
             if self._addresses_status[addr] == self.S_BAD:
-                logger.warning('The graph service {} is not available'.format(addr))
+                logger.warning("The graph service {} is not available".format(addr))
                 retries = retries - 1
                 next_addr_index = (next_addr_index + 1) % len(self._addresses)
                 continue
@@ -357,15 +413,42 @@ class SessionPool(object):
             # connect to the valid service
             connection = Connection()
             try:
-                connection.open(addr[0], addr[1], self._configs.timeout)
+                if self._ssl_configs is None:
+                    connection.open(
+                        addr[0],
+                        addr[1],
+                        self._configs.timeout,
+                        self._configs.use_http2,
+                        self._configs.http_headers,
+                    )
+                else:
+                    connection.open_SSL(
+                        addr[0],
+                        addr[1],
+                        self._configs.timeout,
+                        self._ssl_configs,
+                        self._configs.use_http2,
+                        self._configs.http_headers,
+                    )
                 auth_result = connection.authenticate(self._username, self._password)
                 session = Session(connection, auth_result, self, False)
 
                 # switch to the space specified in the configs
-                resp = session.execute('USE {}'.format(self._space_name))
-                if not resp.is_succeeded():
+                try:
+                    resp = session.execute("USE {}".format(self._space_name))
+                except Exception:
+                    session.release()
+                    connection.close()
                     raise RuntimeError(
-                        'Failed to get session, cannot set the session space to {} error: {} {}'.format(
+                        "Failed to get session, execute `use {}` failed.".format(
+                            self._space_name
+                        )
+                    )
+                if not resp.is_succeeded():
+                    session.release()
+                    connection.close()
+                    raise RuntimeError(
+                        "Failed to get session, cannot set the session space to {} error: {} {}".format(
                             self._space_name, resp.error_code(), resp.error_msg()
                         )
                     )
@@ -376,17 +459,20 @@ class SessionPool(object):
                     "User not exist"
                 ):
                     logger.error(
-                        'Authentication failed, because of bad credentials, close the pool {}'.format(
+                        "Authentication failed, because of bad credentials, close the pool {}".format(
                             e
                         )
                     )
                     self.close()
+                else:
+                    connection.close()
                 raise e
             except Exception:
+                connection.close()
                 raise
 
         raise RuntimeError(
-            'Failed to get a valid session, no graph service is available'
+            "Failed to get a valid session, no graph service is available"
         )
 
     def _return_session(self, session):
@@ -428,14 +514,14 @@ class SessionPool(object):
         :return: void
         """
         try:
-            resp = session.execute('USE {}'.format(self._space_name))
+            resp = session.execute("USE {}".format(self._space_name))
             if not resp.is_succeeded():
                 raise RuntimeError(
-                    'Failed to set the session space to {}'.format(self._space_name)
+                    "Failed to set the session space to {}".format(self._space_name)
                 )
         except Exception:
             logger.warning(
-                'Failed to set the session space to {}, the current session has been dropped'.format(
+                "Failed to set the session space to {}, the current session has been dropped".format(
                     self._space_name
                 )
             )
@@ -474,23 +560,23 @@ class SessionPool(object):
     def _check_configs(self):
         """validate the configs"""
         if self._configs.min_size < 0:
-            raise RuntimeError('The min_size must be greater than 0')
+            raise RuntimeError("The min_size must be greater than 0")
         if self._configs.max_size < 0:
-            raise RuntimeError('The max_size must be greater than 0')
+            raise RuntimeError("The max_size must be greater than 0")
         if self._configs.min_size > self._configs.max_size:
             raise RuntimeError(
-                'The min_size must be less than or equal to the max_size'
+                "The min_size must be less than or equal to the max_size"
             )
         if self._configs.idle_time < 0:
-            raise RuntimeError('The idle_time must be greater or equal to 0')
+            raise RuntimeError("The idle_time must be greater or equal to 0")
         if self._configs.timeout < 0:
-            raise RuntimeError('The timeout must be greater or equal to 0')
+            raise RuntimeError("The timeout must be greater or equal to 0")
 
         if self._space_name == "":
-            raise RuntimeError('The space_name must be set')
+            raise RuntimeError("The space_name must be set")
         if self._username == "":
-            raise RuntimeError('The username must be set')
+            raise RuntimeError("The username must be set")
         if self._password == "":
-            raise RuntimeError('The password must be set')
+            raise RuntimeError("The password must be set")
         if self._addresses is None or len(self._addresses) == 0:
-            raise RuntimeError('The addresses must be set')
+            raise RuntimeError("The addresses must be set")

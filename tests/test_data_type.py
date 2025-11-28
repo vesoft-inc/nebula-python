@@ -14,6 +14,7 @@ from nebula3.common.ttypes import (
     Date,
     DateTime,
     Duration,
+    Edge,
     ErrorCode,
     NList,
     NMap,
@@ -21,7 +22,9 @@ from nebula3.common.ttypes import (
     NullType,
     Time,
     Value,
+    Vertex,
 )
+
 from nebula3.data.DataObject import (
     DataSetWrapper,
     DateTimeWrapper,
@@ -380,6 +383,87 @@ class TesValueWrapper(TestBaseCase):
             ValueWrapper(path_val).as_path(),
         ]
         assert list_val == expect_result
+
+    def test_cast_primitive(self):
+        # Test casting for primitive types
+
+        # Test boolean
+        bool_val = ttypes.Value(bVal=True)
+        assert ValueWrapper(bool_val).cast_primitive() is True
+
+        # Test integer
+        int_val = ttypes.Value(iVal=42)
+        assert ValueWrapper(int_val).cast_primitive() == 42
+
+        # Test double
+        double_val = ttypes.Value(fVal=3.14)
+        assert ValueWrapper(double_val).cast_primitive() == 3.14
+
+        # Test string
+        string_val = ttypes.Value(sVal=b"hello")
+        assert ValueWrapper(string_val).cast_primitive() == "hello"
+
+        # Test null
+        null_val = ttypes.Value(nVal=ttypes.NullType.__NULL__)
+        assert ValueWrapper(null_val).cast_primitive() is None
+
+        # Test geography
+        geography_val = ttypes.Value(ggVal=self.get_geography_value(3.0, 5.2))
+        geography_raw = ValueWrapper(geography_val)
+        geography = geography_raw.as_geography()
+        assert geography_raw.cast_primitive() == geography.__repr__()
+
+        # Test duration
+        duration_val = ttypes.Value(duVal=Duration(86400, 3000, 12))
+        duration_raw = ValueWrapper(duration_val)
+        duration = duration_raw.as_duration()
+        assert duration_raw.cast_primitive() == duration.__repr__()
+
+        # Test list
+        list_val = ttypes.Value()
+        str_val1 = ttypes.Value()
+        str_val1.set_sVal(b"word")
+        str_val2 = ttypes.Value()
+        str_val2.set_sVal(b"car")
+        val_list = NList()
+        val_list.values = [str_val1, str_val2]
+        list_val.set_lVal(val_list)
+        list_raw = ValueWrapper(list_val)
+        assert list_raw.cast_primitive() == [
+            ValueWrapper(str_val1).cast_primitive(),
+            ValueWrapper(str_val2).cast_primitive(),
+        ]
+
+        # Test set
+        set_val = ttypes.Value()
+        tmp_set_val = NSet()
+        tmp_set_val.values = set()
+        tmp_set_val.values.add(str_val1)
+        tmp_set_val.values.add(str_val2)
+        set_val.set_uVal(tmp_set_val)
+        set_raw = ValueWrapper(set_val)
+        assert set_raw.cast_primitive() == {
+            ValueWrapper(str_val1).cast_primitive(),
+            ValueWrapper(str_val2).cast_primitive(),
+        }
+
+        # Test map
+        map_val = ttypes.Value()
+        tmp_map_val = NMap()
+        tmp_map_val.kvs = {b"a": str_val1, b"b": str_val2}
+        map_val.set_mVal(tmp_map_val)
+        map_raw = ValueWrapper(map_val)
+        assert map_raw.cast_primitive() == {
+            "a": ValueWrapper(str_val1).cast_primitive(),
+            "b": ValueWrapper(str_val2).cast_primitive(),
+        }
+
+        # Test time
+        time_val = ttypes.Value()
+        time_val.set_tVal(Time(10, 10, 10, 10000))
+        time_raw = ValueWrapper(time_val)
+        time = time_raw.as_time()
+        assert time_raw.cast_primitive() == time.get_local_time_str()
 
     def test_as_time(self):
         time = Time()

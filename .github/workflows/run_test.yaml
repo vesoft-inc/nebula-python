@@ -3,42 +3,56 @@ name: Test ci
 on:
   push:
     branches: [master,'release-**']
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE'
   pull_request:
     branches: [master,'release-**']
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE'
   schedule:
     - cron: "0 6 * * *"
 
 jobs:
-  ci-pip-install:
-    runs-on: ubuntu-20.04
+  ci-pip-install-from-source:
+    # This is to verify the setup.py as a mitigation for remain python 3.6.2+ capability
+    runs-on: ubuntu-22.04
     strategy:
-      max-parallel: 1
+      max-parallel: 2
       matrix:
-        python-version: [3.6, 3.7]
+        python-version: [3.8, 3.11]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+      - name: Install nebulagraph-python from source and test dependencies
         run: |
-          python setup.py install
+          python -m pip install --upgrade pip
+          # remove pyproject.toml to avoid pdm install
+          rm pyproject.toml
+          pip install .
           pip install pip-tools pytest
-      - name: Test with pytest==6.2.5
+      - name: Test with pytest
         run: |
-          docker-compose -f docker-compose.yaml up -d
+          docker compose -f docker-compose.yaml up -d
           sleep 20
           pytest -s -v -k "not SSL"
         working-directory: tests
 
 
-  ci:
+  build-lint-test:
     runs-on: ubuntu-22.04
     strategy:
       max-parallel: 2
       matrix:
-        python-version: [3.7, 3.8, 3.9, '3.10', 3.11, 3.12]
+        python-version: ['3.10', 3.11, 3.12, 3.13]
 
     steps:
       - name: Maximize runner space
@@ -49,25 +63,29 @@ jobs:
           remove-android: 'true'
           remove-haskell: 'true'
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
-        uses: pdm-project/setup-pdm@v3
+        uses: pdm-project/setup-pdm@v4
         with:
           python-version: ${{ matrix.python-version }}
           cache: true
 
       - name: Install dependencies
-        run: pdm install
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+          pdm install -G:dev
+          pdm install -G:test
       - name: lint
         run: pdm fmt-check
       - name: Test with pytest
         run: |
-          docker-compose -f tests/docker-compose.yaml up -d
+          docker compose -f tests/docker-compose.yaml up -d
           sleep 20
           pdm test
       - name: Test SSL connection with pytest
         run: |
-          enable_ssl=true docker-compose -f tests/docker-compose-ssl.yaml up -d
+          enable_ssl=true docker compose -f tests/docker-compose-ssl.yaml up -d
           sleep 20
           pdm test-ssl
       - name: Upload Coverage to Codecov
@@ -75,24 +93,26 @@ jobs:
         with:
           files: coverage.xml
 
-  example:
-    runs-on: ubuntu-latest
+  example-test:
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        python-version: [3.11, 3.12]
+        python-version: ['3.10', 3.11, 3.12, 3.13]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
-        uses: pdm-project/setup-pdm@v3
+        uses: pdm-project/setup-pdm@v4
         with:
           python-version: ${{ matrix.python-version }}
           cache: true
       - name: Install dependencies
-        run: pdm install -G example
+        run: |
+          pip install .
+          pip install prettytable pandas
       - name: Setup containers
         run: |
-          docker-compose -f tests/docker-compose.yaml up -d
+          docker compose -f tests/docker-compose.yaml up -d
           sleep 20
       - name: Test example
         run: |
-          for f in example/*.py; do pdm run python "$f"; done
+          for f in example/*.py; do python3 "$f"; done

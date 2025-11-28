@@ -6,15 +6,17 @@
 
 
 import time
+import ssl
 
 from nebula3.fbthrift.transport import (
     TSocket,
     TSSLSocket,
     TTransport,
     THeaderTransport,
+    THttp2Client,
 )
 from nebula3.fbthrift.transport.TTransport import TTransportException
-from nebula3.fbthrift.protocol import THeaderProtocol
+from nebula3.fbthrift.protocol import THeaderProtocol, TBinaryProtocol
 
 from nebula3.common.ttypes import ErrorCode
 from nebula3.graph import GraphService
@@ -40,30 +42,57 @@ class Connection(object):
         self._port = None
         self._timeout = 0
         self._ssl_conf = None
+        self.use_http2 = False
+        self.http_headers = None
+        self._closed = True
 
-    def open(self, ip, port, timeout):
+    def open(self, ip, port, timeout, use_http2=False, http_headers=None):
         """open the connection
 
         :param ip: the server ip
         :param port: the server port
         :param timeout: the timeout for connect and execute
+        :param use_http2: use http2 or not
+        :param http_headers: http headers
         :return: void
         """
-        self.open_SSL(ip, port, timeout, None)
+        self.open_SSL(ip, port, timeout, None, use_http2, http_headers)
 
-    def open_SSL(self, ip, port, timeout, ssl_config=None):
+    def open_SSL(
+        self, ip, port, timeout, ssl_config=None, use_http2=False, http_headers=None
+    ):
         """open the SSL connection
 
         :param ip: the server ip
         :param port: the server port
         :param timeout: the timeout for connect and execute
         :ssl_config: configs for SSL
+        :param use_http2: use http2 or not
+        :param http_headers: http headers
         :return: void
         """
         self._ip = ip
         self._port = port
         self._timeout = timeout
         self._ssl_conf = ssl_config
+        self.use_http2 = use_http2
+        self.http_headers = http_headers
+        try:
+            if use_http2 is False:
+                protocol = self.__get_protocol(timeout, ssl_config)
+            else:
+                protocol = self.__get_protocal_http2(timeout, ssl_config, http_headers)
+            self._connection = GraphService.Client(protocol)
+            resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
+            if resp.error_code != ErrorCode.SUCCEEDED:
+                self._connection._iprot.trans.close()
+                raise ClientServerIncompatibleException(resp.error_msg)
+        except Exception as e:
+            self.close()
+            raise
+        self._closed = False
+
+    def __get_protocol(self, timeout, ssl_config):
         try:
             if ssl_config is not None:
                 s = TSSLSocket.TSSLSocket(
@@ -87,14 +116,29 @@ class Connection(object):
             header_transport = THeaderTransport.THeaderTransport(buffered_transport)
             protocol = THeaderProtocol.THeaderProtocol(header_transport)
             header_transport.open()
-
-            self._connection = GraphService.Client(protocol)
-            resp = self._connection.verifyClientVersion(VerifyClientVersionReq())
-            if resp.error_code != ErrorCode.SUCCEEDED:
-                self._connection._iprot.trans.close()
-                raise ClientServerIncompatibleException(resp.error_msg)
-        except Exception:
+        except Exception as e:
             raise
+        return protocol
+
+    def __get_protocal_http2(self, timeout, ssl_config, http_headers):
+        verify, certfile, keyfile, password = None, None, None, None
+        if ssl_config is not None:
+            # verify could be a boolean or ssl.SSLContext in httpx.
+            verify = ssl.create_default_context(cafile=ssl_config.ca_certs)
+            certfile = ssl_config.certfile
+            keyfile = ssl_config.keyfile
+            url = "https://" + self._ip + ":" + str(self._port)
+        else:
+            url = "http://" + self._ip + ":" + str(self._port)
+        try:
+            transport = THttp2Client.THttp2Client(
+                url, timeout, verify, certfile, keyfile, password, http_headers
+            )
+            transport.open()
+            protocol = TBinaryProtocol.TBinaryProtocol(transport)
+        except Exception as e:
+            raise
+        return protocol
 
     def _reopen(self):
         """reopen the connection
@@ -103,9 +147,19 @@ class Connection(object):
         """
         self.close()
         if self._ssl_conf is not None:
-            self.open_SSL(self._ip, self._port, self._timeout, self._ssl_conf)
+            self.open_SSL(
+                self._ip,
+                self._port,
+                self._timeout,
+                self._ssl_conf,
+                self.use_http2,
+                self.http_headers,
+            )
+            self._closed = False
         else:
-            self.open(self._ip, self._port, self._timeout)
+            self.open(
+                self._ip, self._port, self._timeout, self.use_http2, self.http_headers
+            )
 
     def authenticate(self, user_name, password):
         """authenticate to graphd
@@ -117,6 +171,7 @@ class Connection(object):
         try:
             resp = self._connection.authenticate(user_name, password)
             if resp.error_code != ErrorCode.SUCCEEDED:
+                self._connection.is_used = False
                 raise AuthFailedException(resp.error_msg)
             return AuthResult(
                 resp.session_id, resp.time_zone_offset_seconds, resp.time_zone_name
@@ -175,11 +230,14 @@ class Connection(object):
         :param session_id: the session id get from result of authenticate interface
         :param stmt: the ngql
         :param params: parameter map
-        :return: string json representing the execution result
+        :return: json bytes representing the execution result
         """
         try:
             resp = self._connection.executeJsonWithParameter(session_id, stmt, params)
-            return resp
+            if not isinstance(resp, bytes):
+                raise TypeError("response is not bytes")
+            else:
+                return resp
         except Exception as te:
             if isinstance(te, TTransportException):
                 if te.message.find("timed out") > 0:
@@ -213,10 +271,12 @@ class Connection(object):
         :return: void
         """
         try:
-            self._connection._iprot.trans.close()
+            if not self._closed:
+                self._connection._iprot.trans.close()
+                self._closed = True
         except Exception as e:
             logger.error(
-                'Close connection to {}:{} failed:{}'.format(self._ip, self._port, e)
+                "Close connection to {}:{} failed:{}".format(self._ip, self._port, e)
             )
 
     def ping(self):
@@ -224,7 +284,7 @@ class Connection(object):
         :return: True or False
         """
         try:
-            resp = self._connection.execute(0, 'YIELD 1;')
+            resp = self._connection.execute(0, "YIELD 1;")
             return True
         except Exception:
             return False
