@@ -1,0 +1,13 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="21,5,76,31"/>
+<area shape="rect" id="Node000001" href="$dc/d71/classnebulagraph__python_1_1py__data__types_1_1PathPrimitive.html" title=" " alt="" coords="143,55,252,80"/>
+<area shape="poly" id="edge23_Node000000_Node000001" title=" " alt="" coords="90,29,159,52,157,57,88,34"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="23,55,75,80"/>
+<area shape="poly" id="edge24_Node000002_Node000001" title=" " alt="" coords="88,65,143,65,143,70,88,70"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,104,92,129"/>
+<area shape="poly" id="edge27_Node000003_Node000001" title=" " alt="" coords="99,97,157,78,159,83,101,102"/>
+<area shape="rect" id="Node000004" href="$dd/d0e/classnebulagraph__python_1_1py__data__types_1_1EdgePrimitive.html" title=" " alt="" coords="141,104,254,129"/>
+<area shape="poly" id="edge25_Node000003_Node000004" title=" " alt="" coords="106,114,140,114,140,119,106,119"/>
+<area shape="rect" id="Node000005" href="$d3/d18/classnebulagraph__python_1_1py__data__types_1_1NodePrimitive.html" title=" " alt="" coords="140,153,255,179"/>
+<area shape="poly" id="edge26_Node000003_Node000005" title=" " alt="" coords="101,131,159,151,157,156,99,136"/>
+</map>

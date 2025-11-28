@@ -1,0 +1,7 @@
+<map id="GraphType" name="GraphType">
+<area shape="rect" id="Node000001" title=" " alt="" coords="55,108,146,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,100,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="66,42,98,107,93,109,62,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="125,5,173,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="140,44,109,109,104,107,135,42"/>
+</map>

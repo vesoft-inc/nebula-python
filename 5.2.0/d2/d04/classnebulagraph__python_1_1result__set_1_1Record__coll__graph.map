@@ -1,0 +1,7 @@
+<map id="Record" name="Record">
+<area shape="rect" id="Node000001" title=" " alt="" coords="60,108,127,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,51,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="26,44,26,64,32,83,45,97,61,107,59,111,41,101,27,85,20,65,20,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="135,5,183,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,45,132,86,109,110,105,106,127,82,148,43"/>
+</map>

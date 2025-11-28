@@ -1,0 +1,15 @@
+<map id="CompositeDataObject" name="CompositeDataObject">
+<area shape="rect" id="Node000001" title=" " alt="" coords="86,79,251,104"/>
+<area shape="rect" id="Node000004" href="$d5/d00/classnebulagraph__python_1_1py__data__types_1_1Edge.html" title=" " alt="" coords="5,152,60,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="136,113,56,154,54,149,134,108"/>
+<area shape="rect" id="Node000005" href="$d7/d0a/classnebulagraph__python_1_1py__data__types_1_1NRecord.html" title=" " alt="" coords="85,152,162,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="156,117,133,153,128,150,152,114"/>
+<area shape="rect" id="Node000006" href="$d5/da1/classnebulagraph__python_1_1py__data__types_1_1Node.html" title=" " alt="" coords="186,152,242,177"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="186,114,209,150,204,153,181,117"/>
+<area shape="rect" id="Node000007" href="$d4/d87/classnebulagraph__python_1_1py__data__types_1_1Path.html" title=" " alt="" coords="266,152,317,177"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="201,108,273,149,270,154,199,113"/>
+<area shape="rect" id="Node000002" href="$d9/ddd/classnebulagraph__python_1_1py__data__types_1_1BaseDataObject.html" title=" " alt="" coords="49,5,176,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,40,162,77,158,80,128,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="200,5,249,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,43,180,80,176,77,205,40"/>
+</map>

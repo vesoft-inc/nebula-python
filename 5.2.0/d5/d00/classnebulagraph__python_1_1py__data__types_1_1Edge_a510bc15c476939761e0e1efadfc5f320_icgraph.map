@@ -1,0 +1,11 @@
+<map id="get_properties" name="get_properties">
+<area shape="rect" id="Node000001" title=" " alt="" coords="467,52,583,77"/>
+<area shape="rect" id="Node000002" href="$d5/da1/classnebulagraph__python_1_1py__data__types_1_1Node.html#a2c6d51276e77963e34bad925c9d42085" title=" " alt="" coords="244,5,419,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="453,56,418,50,419,44,454,50"/>
+<area shape="rect" id="Node000004" href="$d5/d00/classnebulagraph__python_1_1py__data__types_1_1Edge.html#ad57093b7912801ad0da109182bd439b2" title=" " alt="" coords="274,84,389,109"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="453,79,389,90,388,85,453,74"/>
+<area shape="rect" id="Node000003" href="$d7/d0a/classnebulagraph__python_1_1py__data__types_1_1NRecord.html#a2d5a29eb2edbedd567eb5f6363e15566" title=" " alt="" coords="5,37,196,92"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="231,49,197,54,196,49,230,44"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="139,26,125,19,101,16,80,18,67,23,61,29,61,37,56,37,56,27,64,18,79,13,101,11,127,14,141,22"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="260,89,196,81,197,75,260,84"/>
+</map>

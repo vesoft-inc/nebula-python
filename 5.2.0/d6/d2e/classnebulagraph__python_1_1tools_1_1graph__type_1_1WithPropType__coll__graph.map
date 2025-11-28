@@ -1,0 +1,9 @@
+<map id="WithPropType" name="WithPropType">
+<area shape="rect" id="Node000001" title=" " alt="" coords="93,93,204,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,100,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,38,137,91,134,95,74,42"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="125,5,173,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="151,45,151,93,146,93,146,45"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="227,5,273,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="242,45,223,71,203,85,183,96,180,91,201,81,219,67,238,42"/>
+</map>

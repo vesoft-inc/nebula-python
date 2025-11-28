@@ -1,0 +1,9 @@
+<map id="records" name="records">
+<area shape="rect" id="Node000001" title=" " alt="" coords="268,31,339,56"/>
+<area shape="rect" id="Node000002" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#afd8b9ce866b79c381d5d6743dcc7d8d9" title=" " alt="" coords="105,5,220,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="254,37,220,31,221,26,255,32"/>
+<area shape="rect" id="Node000004" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#ab179327127050d939849a40c23cc18db" title=" " alt="" coords="107,55,218,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="255,54,219,61,218,55,254,49"/>
+<area shape="rect" id="Node000003" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#aec1c1c55a120d2def72f6eb54b6660ac" title=" " alt="" coords="5,5,57,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="92,21,58,21,58,15,92,15"/>
+</map>

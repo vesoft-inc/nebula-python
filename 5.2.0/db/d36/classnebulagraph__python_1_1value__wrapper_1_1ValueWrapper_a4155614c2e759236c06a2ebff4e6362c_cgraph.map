@@ -1,0 +1,9 @@
+<map id="is_decimal" name="is_decimal">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,97,80"/>
+<area shape="rect" id="Node000002" href="$db/d36/classnebulagraph__python_1_1value__wrapper_1_1ValueWrapper.html#aef76afc237a91b4631e29a776c03a422" title=" " alt="" coords="145,5,195,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,52,131,31,133,36,84,57"/>
+<area shape="rect" id="Node000003" href="$db/d36/classnebulagraph__python_1_1value__wrapper_1_1ValueWrapper.html#a69a02793aeee206f04caf5fd664aada5" title=" " alt="" coords="145,55,195,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="98,65,131,65,131,70,98,70"/>
+<area shape="rect" id="Node000004" href="$db/d36/classnebulagraph__python_1_1value__wrapper_1_1ValueWrapper.html#a0a6077b51236c87dd4bf15201d957fd2" title=" " alt="" coords="145,104,195,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="84,78,133,99,131,104,81,82"/>
+</map>
