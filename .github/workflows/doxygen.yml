@@ -25,7 +25,10 @@ jobs:
       with:
         ref: ${{ github.event.inputs.branch_name }}
         fetch-depth: 0 # fetch all commits/branches for gitversion
-       
+
+    - name: Setup Git config
+      run: git config user.name ChrisChen2023 && git config user.email chris.chen@vesoft.com   
+        
     - name: Install Doxygen
       run: |
         sudo apt-get update
@@ -43,5 +46,5 @@ jobs:
     - name: Deploy to gh-pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        folder: ${PYTHON_VERSION}/html
-        target-folder: ${PYTHON_VERSION}
+        folder: ${{ env.PYTHON_VERSION }}/html
+        target-folder: ${{ env.PYTHON_VERSION }}
