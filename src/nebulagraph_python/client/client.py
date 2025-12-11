@@ -148,9 +148,9 @@ class NebulaAsyncClient(NebulaBaseAsyncExecutor):
             addr = conn.connected
             if addr is None:
                 raise ValueError("Connection not connected")
-        
+
         _session = self._sessions[addr]
-        
+
         if isinstance(_session, AsyncSessionPool):
             async with _session.borrow() as session:
                 yield session
