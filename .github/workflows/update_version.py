@@ -7,7 +7,9 @@ from pathlib import Path
 from typing import Optional
 
 
-def update_version(version_type: str = "dev", custom_suffix: Optional[str] = None) -> str:
+def update_version(
+    version_type: str = "dev", custom_suffix: Optional[str] = None
+) -> str:
     """
     Update the `version` field in `pyproject.toml` for supported manual build types.
 
@@ -25,17 +27,21 @@ def update_version(version_type: str = "dev", custom_suffix: Optional[str] = Non
     content: str = pyproject_path.read_text()
 
     # Extract current version
-    version_match: Optional[re.Match[str]] = re.search(r'^version\s*=\s*"([^"]+)"', content, re.MULTILINE)
+    version_match: Optional[re.Match[str]] = re.search(
+        r'^version\s*=\s*"([^"]+)"', content, re.MULTILINE
+    )
     if not version_match:
         raise ValueError("Could not find version in pyproject.toml")
 
     current_version: str = version_match.group(1)
-    
+
     # Parse the base version (remove any existing suffixes)
-    base_version_match: Optional[re.Match[str]] = re.match(r'^(\d+\.\d+\.\d+)', current_version)
+    base_version_match: Optional[re.Match[str]] = re.match(
+        r"^(\d+\.\d+\.\d+)", current_version
+    )
     if not base_version_match:
         raise ValueError(f"Invalid version format: {current_version}")
-    
+
     base_version: str = base_version_match.group(1)
 
     # Only dev/custom builds mutate the version; all others keep current version

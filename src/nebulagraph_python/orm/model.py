@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from collections.abc import Sequence as ABCSequence
 from dataclasses import dataclass
 from datetime import date
 from types import UnionType
 from typing import Iterable
-from collections.abc import Sequence as ABCSequence
 
 from pydantic import (
     AfterValidator,
