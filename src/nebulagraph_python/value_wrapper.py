@@ -357,6 +357,9 @@ class ValueWrapper:
             return False
         return self.value == other.value and self.data_type == other.data_type
 
+    def __hash__(self) -> int:
+        return hash((self.value, self.data_type))
+
 
 class Row:
     def __init__(self, values: Optional[List[ValueWrapper]] = None):

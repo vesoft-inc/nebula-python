@@ -902,7 +902,7 @@ class NVector(BaseDataObject):
             logger.warning("Expected Vector, got %s", type(other))
             return False
         return self.dimension == other.dimension and all(
-            abs(a - b) < 1e-7 for a, b in zip(self.values, other.values)
+            abs(a - b) < 1e-7 for a, b in zip(self.values, other.values, strict=True)
         )
 
     def __str__(self) -> str:
@@ -912,6 +912,9 @@ class NVector(BaseDataObject):
     def __repr__(self) -> str:
         """Return detailed string representation of the vector."""
         return f"NVector({self.values})"
+
+    def __hash__(self) -> int:
+        return hash(str(self))
 
 
 BasicTargetType = Union[
