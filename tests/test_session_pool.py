@@ -26,9 +26,9 @@ class TestSessionPool:
         """Test basic initialization"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=3)
         pool = SessionPool(copy(sessions), config)
@@ -42,8 +42,8 @@ class TestSessionPool:
         """Test initialization with custom config"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=2, wait_timeout=10.0)
         pool = SessionPool(copy(sessions), config)
@@ -55,9 +55,9 @@ class TestSessionPool:
         """Test initialization with all configuration parameters"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(
             size=3, 
@@ -73,9 +73,9 @@ class TestSessionPool:
         """Test borrowing a single session"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
         }
         pool = SessionPool(copy(sessions), SessionPoolConfig(size=3))
         
@@ -95,8 +95,8 @@ class TestSessionPool:
         """Test borrowing all available sessions"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
         }
         pool = SessionPool(copy(sessions), SessionPoolConfig(size=2))
         
@@ -110,7 +110,7 @@ class TestSessionPool:
         """Test borrowing when timeout is exceeded"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=1, wait_timeout=0.2)
         pool = SessionPool(copy(sessions), config)
@@ -125,7 +125,7 @@ class TestSessionPool:
         """Test borrowing with infinite wait that succeeds when session becomes available"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=1, wait_timeout=None)
         pool = SessionPool(copy(sessions), config)
@@ -158,7 +158,7 @@ class TestSessionPool:
         """Test concurrent borrowing from multiple threads"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username=f"user{i}", password=f"pass{i}", session_config=None, auth_options=None)
+            Session(_conn=mock_conn, username=f"user{i}", password=f"pass{i}", session_config=None, auth_options=None)
             for i in range(5)
         }
         config = SessionPoolConfig(size=5)
@@ -196,8 +196,8 @@ class TestSessionPool:
         """Test that semaphore behavior stays consistent with actual session availability"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=2)
         pool = SessionPool(copy(sessions), config)
@@ -225,49 +225,49 @@ class TestSessionPool:
         """Test closing pool with all sessions free"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=3)
         pool = SessionPool(copy(sessions), config)
         
         # Mock the close_session method for all sessions
         for session in sessions:
-            session.close = Mock()
+            session._close = Mock()
         
-        pool.close()
+        pool._close()
         
         # Should close all sessions
         for session in sessions:
-            session.close.assert_called_once()
+            session._close.assert_called_once()
 
     @patch('nebulagraph_python.client._session_pool.logger')
     def test_close_with_busy_sessions(self, mock_logger):
         """Test closing pool with some busy sessions"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=3)
         pool = SessionPool(copy(sessions), config)
         
         # Mock the close_session method for all sessions
         for session in sessions:
-            session.close = Mock()
+            session._close = Mock()
         
         # Manually move a session to busy state
         busy_session = list(sessions)[1]  # Get the second session
         pool.free_sessions_queue.remove(busy_session)
         pool.busy_sessions_queue.add(busy_session)
         
-        pool.close()
+        pool._close()
         
         # Should close all sessions
         for session in sessions:
-            session.close.assert_called_once()
+            session._close.assert_called_once()
         # Should log error about busy sessions
         mock_logger.error.assert_called_once()
         assert "Busy sessions remain" in mock_logger.error.call_args[0][0]
@@ -337,8 +337,8 @@ class TestSessionPool:
         """Test multiple borrow-release cycles work correctly"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=2)
         pool = SessionPool(copy(sessions), config)
@@ -370,9 +370,9 @@ class TestAsyncSessionPool:
         """Test basic initialization"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=3)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -389,8 +389,8 @@ class TestAsyncSessionPool:
         """Test initialization with custom config"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=2, wait_timeout=10.0)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -403,9 +403,9 @@ class TestAsyncSessionPool:
         """Test initialization with all configuration parameters"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(
             size=3, 
@@ -422,9 +422,9 @@ class TestAsyncSessionPool:
         """Test borrowing a single session"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=3)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -446,8 +446,8 @@ class TestAsyncSessionPool:
         """Test borrowing all available sessions"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=2)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -463,7 +463,7 @@ class TestAsyncSessionPool:
         """Test borrowing when timeout is exceeded"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=1, wait_timeout=0.2)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -479,7 +479,7 @@ class TestAsyncSessionPool:
         """Test borrowing with infinite wait that succeeds when session becomes available"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=1, wait_timeout=None)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -507,7 +507,7 @@ class TestAsyncSessionPool:
         """Test concurrent borrowing from multiple coroutines"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username=f"user{i}", password=f"pass{i}", session_config=None, auth_options=None)
+            AsyncSession(_conn=mock_conn, username=f"user{i}", password=f"pass{i}", session_config=None, auth_options=None)
             for i in range(5)
         }
         config = SessionPoolConfig(size=5)
@@ -539,8 +539,8 @@ class TestAsyncSessionPool:
         """Test that semaphore behavior stays consistent with actual session availability"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=2)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -581,22 +581,22 @@ class TestAsyncSessionPool:
         """Test closing pool with all sessions free"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=3)
         pool = AsyncSessionPool(copy(sessions), config)
         
         # Mock the close_session method for all sessions
         for session in sessions:
-            session.close = AsyncMock()
+            session._close = AsyncMock()
         
-        await pool.close()
+        await pool._close()
         
         # Should close all sessions
         for session in sessions:
-            session.close.assert_called_once()
+            session._close.assert_called_once()
 
     @pytest.mark.asyncio
     @patch('nebulagraph_python.client._session_pool.logger')
@@ -604,26 +604,26 @@ class TestAsyncSessionPool:
         """Test closing pool with some busy sessions"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user3", password="pass3", session_config=None, auth_options=None),
         }
         pool = AsyncSessionPool(copy(sessions), config=SessionPoolConfig(size=3))
         
         # Mock the close_session method for all sessions
         for session in sessions:
-            session.close = AsyncMock()
+            session._close = AsyncMock()
         
         # Manually move a session to busy state
         busy_session = list(sessions)[1]  # Get the second session
         pool.free_sessions_queue.remove(busy_session)
         pool.busy_sessions_queue.add(busy_session)
         
-        await pool.close()
+        await pool._close()
         
         # Should close all sessions
         for session in sessions:
-            session.close.assert_called_once()
+            session._close.assert_called_once()
         # Should log error about busy sessions
         mock_logger.error.assert_called_once()
         assert "Busy sessions remain" in mock_logger.error.call_args[0][0]
@@ -696,8 +696,8 @@ class TestAsyncSessionPool:
         """Test multiple borrow-release cycles work correctly"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=2)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -728,7 +728,7 @@ class TestSessionPoolEdgeCases:
         """Test that sessions are properly returned even when exceptions occur in sync pool"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=1)
         pool = SessionPool(copy(sessions), config)
@@ -747,7 +747,7 @@ class TestSessionPoolEdgeCases:
         """Test that sessions are properly returned even when exceptions occur in async pool"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=1)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -765,8 +765,8 @@ class TestSessionPoolEdgeCases:
         """Test multiple exceptions in sync pool context managers"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            Session(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=2)
         pool = SessionPool(copy(sessions), config)
@@ -786,8 +786,8 @@ class TestSessionPoolEdgeCases:
         """Test multiple exceptions in async pool context managers"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
-            AsyncSession(conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user2", password="pass2", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=2)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -821,7 +821,7 @@ class TestSessionPoolEdgeCases:
         
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
         }
         pool = SessionPool(copy(sessions), config)
         
@@ -838,7 +838,7 @@ class TestSessionPoolEdgeCases:
         
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
         }
         pool = AsyncSessionPool(copy(sessions), config)
         
@@ -888,7 +888,7 @@ class TestSessionPoolConfig:
         """Test sync pool behavior with custom retry interval"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            Session(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=1, wait_timeout=0.3)
         pool = SessionPool(copy(sessions), config)
@@ -907,7 +907,7 @@ class TestSessionPoolConfig:
         """Test async pool behavior with custom retry interval"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
+            AsyncSession(_conn=mock_conn, username="user1", password="pass1", session_config=None, auth_options=None),
         }
         config = SessionPoolConfig(size=1, wait_timeout=0.3)
         pool = AsyncSessionPool(copy(sessions), config)
@@ -929,7 +929,7 @@ class TestSessionPoolStressTests:
         """Test sync pool under high concurrency stress"""
         mock_conn = Mock()
         sessions = {
-            Session(conn=mock_conn, username=f"user{i}", password=f"pass{i}", session_config=None, auth_options=None)
+            Session(_conn=mock_conn, username=f"user{i}", password=f"pass{i}", session_config=None, auth_options=None)
             for i in range(10)
         }
         config = SessionPoolConfig(size=10)
@@ -969,7 +969,7 @@ class TestSessionPoolStressTests:
         """Test async pool under high concurrency stress"""
         mock_conn = AsyncMock()
         sessions = {
-            AsyncSession(conn=mock_conn, username=f"user{i}", password=f"pass{i}", session_config=None, auth_options=None)
+            AsyncSession(_conn=mock_conn, username=f"user{i}", password=f"pass{i}", session_config=None, auth_options=None)
             for i in range(10)
         }
         config = SessionPoolConfig(size=10)
