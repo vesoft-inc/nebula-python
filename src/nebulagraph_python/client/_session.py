@@ -25,7 +25,7 @@ from nebulagraph_python.client.logger import logger
 from nebulagraph_python.error import ExecutingError
 
 
-@dataclass
+@dataclass(kw_only=True, frozen=True)
 class SessionConfig:
     schema: Optional[str] = None
     graph: Optional[str] = None
@@ -47,31 +47,32 @@ class SessionBase:
 
 @dataclass
 class Session(SessionBase):
-    conn: "Connection"
+    _conn: "Connection"
 
     def execute(
         self, statement: str, *, timeout: Optional[float] = None, do_ping: bool = False
     ):
-        res = self.conn.execute(
+        res = self._conn.execute(
             self._session, statement, timeout=timeout, do_ping=do_ping
         )
         # Retry for only one time
         if res.status_code == ErrorCode.SESSION_NOT_FOUND.value:
-            self._session = self.conn.authenticate(
+            self._session = self._conn.authenticate(
                 self.username,
                 self.password,
                 session_config=self.session_config,
                 auth_options=self.auth_options,
             )
-            res = self.conn.execute(
+            res = self._conn.execute(
                 self._session, statement, timeout=timeout, do_ping=do_ping
             )
+        res.raise_on_error()
         return res
 
-    def close(self):
+    def _close(self):
         """Close session"""
         try:
-            self.conn.execute(self._session, "SESSION CLOSE")
+            self._conn.execute(self._session, "SESSION CLOSE")
         except Exception:
             logger.exception("Failed to close session")
 
@@ -84,30 +85,31 @@ class Session(SessionBase):
 
 @dataclass
 class AsyncSession(SessionBase):
-    conn: "AsyncConnection"
+    _conn: "AsyncConnection"
 
     async def execute(
         self, statement: str, *, timeout: Optional[float] = None, do_ping: bool = False
     ):
-        res = await self.conn.execute(
+        res = await self._conn.execute(
             self._session, statement, timeout=timeout, do_ping=do_ping
         )
         # Retry for only one time
         if res.status_code == ErrorCode.SESSION_NOT_FOUND.value:
-            self._session = await self.conn.authenticate(
+            self._session = await self._conn.authenticate(
                 self.username,
                 self.password,
                 session_config=self.session_config,
                 auth_options=self.auth_options,
             )
-            res = await self.conn.execute(
+            res = await self._conn.execute(
                 self._session, statement, timeout=timeout, do_ping=do_ping
             )
+        res.raise_on_error()
         return res
 
-    async def close(self):
+    async def _close(self):
         try:
-            await self.conn.execute(self._session, "SESSION CLOSE")
+            await self._conn.execute(self._session, "SESSION CLOSE")
         except Exception:
             logger.exception("Failed to close async session")
 
