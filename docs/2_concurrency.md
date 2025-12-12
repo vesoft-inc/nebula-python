@@ -62,6 +62,26 @@ async def concurrent_example():
 asyncio.run(concurrent_example())
 ```
 
+## Contextual Execution
+
+By default, statements run on a random session from the pool. When you need to run several queries on the same session, call `borrow` to obtain and reuse a specific session.
+
+```python
+async def contextual_example():
+    async with await NebulaAsyncClient.connect(
+        hosts=["127.0.0.1:9669"],
+        username="root",
+        password="NebulaGraph01",
+        session_pool_config=SessionPoolConfig(),
+    ) as client:
+        print("Connected to the server...")
+        async with client.borrow() as session:
+            await session.execute("SESSION SET GRAPH movie")
+            res = await session.execute("MATCH (v:Movie) RETURN count(v)")
+            res.print()
+```
+
+
 ## Understanding Timeout Values
 
 The client uses three different timeouts that apply at different stages:

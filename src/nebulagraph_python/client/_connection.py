@@ -96,6 +96,8 @@ class Connection:
 
     # Config
     config: ConnectionConfig
+    # Track which host was successfully connected for session routing
+    connected: HostAddress | None = field(default=None, init=False)
 
     # Owned Resources
     _stub: Optional[graph_pb2_grpc.GraphServiceStub] = field(default=None, init=False)
@@ -152,6 +154,8 @@ class Connection:
                 logger.info(
                     f"Successfully connected to {host_addr.host}:{host_addr.port}."
                 )
+                # Remember which host we actually connected to
+                self.connected = host_addr
                 return
             except Exception as e:
                 logger.warning(
@@ -174,6 +178,7 @@ class Connection:
                 self._channel.close()
                 self._channel = None
             self._stub = None
+            self.connected = None
         except Exception:
             logger.exception("Failed to close connection")
 
@@ -303,6 +308,7 @@ class AsyncConnection:
     """
 
     config: ConnectionConfig
+    connected: HostAddress | None = None
     _stub: Optional[graph_pb2_grpc.GraphServiceStub] = field(default=None, init=False)
     _channel: Optional[grpc.aio.Channel] = field(
         default=None, init=False
@@ -358,6 +364,7 @@ class AsyncConnection:
                 logger.info(
                     f"Successfully connected to {host_addr.host}:{host_addr.port} asynchronously."
                 )
+                self.connected = host_addr
                 return
             except Exception as e:
                 logger.warning(
@@ -380,6 +387,7 @@ class AsyncConnection:
                 await self._channel.close()
                 self._channel = None
             self._stub = None
+            self.connected = None
         except BaseException:
             logger.exception("Failed to close async connection")
 
