@@ -91,7 +91,7 @@ class NebulaAsyncClient(NebulaBaseAsyncExecutor):
             session_config: Session configuration.
         """
         self = super().__new__(cls)
-        conn_conf = conn_config or ConnectionConfig.from_defults(hosts, ssl_param)
+        conn_conf = conn_config or ConnectionConfig.from_defaults(hosts, ssl_param)
         hosts = conn_conf.hosts
         self._sessions = {}
         if len(hosts) == 1:
@@ -207,7 +207,7 @@ class NebulaClient(NebulaBaseExecutor):
             session_config: Session configuration.
             session_pool_config: Session pool configuration. If provided, a session pool will be created.
         """
-        conn_conf = conn_config or ConnectionConfig.from_defults(hosts, ssl_param)
+        conn_conf = conn_config or ConnectionConfig.from_defaults(hosts, ssl_param)
         hosts = conn_conf.hosts
         self._sessions = {}
         if len(hosts) == 1:
