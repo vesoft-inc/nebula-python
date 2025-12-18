@@ -66,7 +66,7 @@ class ConnectionConfig:
     ping_before_execute: bool = False
 
     @classmethod
-    def from_defults(
+    def from_defaults(
         cls,
         hosts: Union[str, List[str], List[HostAddress]],
         ssl_param: Union[SSLParam, Literal[True], None] = None,
