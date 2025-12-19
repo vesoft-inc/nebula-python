@@ -1,0 +1,44 @@
+## GitHub Actions Workflow: Build Package
+## Notes:
+## - Version mutation is performed only for manual dev builds; all tag builds keep the version from pyproject.toml.
+## - PDM is set up via pdm-project/setup-pdm for consistency and caching.
+name: pull-request
+
+on:
+  push:
+    branches: [ dev, "release-**" ]
+  pull_request:
+    branches: [ dev, "release-**" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Setup PDM
+      uses: pdm-project/setup-pdm@v4
+
+    - name: Install dependencies
+      run: |
+        pdm install
+
+    - name: Build package
+      run: |
+        pdm build
+        echo "Build successful!"
+
+    - name: Run tests (optional)
+      run: |
+        echo "Running tests..."
+        pdm run pytest tests/ -v
+
+    - name: Verify built package
+      run: |
+        echo "Verifying built packages:"
+        ls -la dist/
