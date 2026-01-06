@@ -28,7 +28,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pdm install -G dev
+        pdm install -d
 
     - name: Build package
       run: |

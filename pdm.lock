@@ -5,7 +5,7 @@
 groups = ["default", "all", "console", "full"]
 strategy = []
 lock_version = "4.4"
-content_hash = "sha256:be6aac9e20d313db3d094c13e13955cc262908ea53ecbca1c9ff486d1b240484"
+content_hash = "sha256:6e88a87dff0832dd3b3354870d8f1003d5edbe703a3f4f0b56d0105e9a70b9de"
 
 [[package]]
 name = "annotated-types"

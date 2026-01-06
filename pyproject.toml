@@ -64,7 +64,8 @@ fix = { shell = "ruff check --fix && ruff format" }
 test = { shell = "pytest ./tests -vv" }
 proto_gen = { shell = "python scripts/update_proto.py && python scripts/generate_proto.py" } 
 gen_license_header = { shell = "python scripts/add_apache_headers.py" }
-[dependency-groups]
+
+[tool.pdm.dev-dependencies]
 dev = [
     "pandas>=2.2.3",
     "grpcio-tools>=1.60.0",
