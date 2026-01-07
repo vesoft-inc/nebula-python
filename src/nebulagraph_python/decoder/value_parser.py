@@ -1003,7 +1003,7 @@ class ValueParser:
             values = []
             for i in range(list_size):
                 if (null_bit_bytes[i // 8] & (1 << (i % 8))) == 0:
-                    values.append(None)
+                    values.append(ValueWrapper(None, ColumnType.NULL))
                 else:
                     value = self._decode_composite_value(reader, ele_type)
                     values.append(ValueWrapper(value, ele_type))
