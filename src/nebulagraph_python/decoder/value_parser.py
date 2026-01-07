@@ -727,7 +727,7 @@ class ValueParser:
         )
 
         # Create base time and add timezone offset minutes
-        base_time = datetime.time(hour, minute, second, microsecond)
+        base_time = datetime.time(hour % 24, minute, second, microsecond)
         adjusted_time = (
             datetime.datetime.combine(datetime.date.today(), base_time)
             + datetime.timedelta(minutes=current_offset)
