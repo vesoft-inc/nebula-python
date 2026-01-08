@@ -1,15 +1,17 @@
 # NebulaGraph Python Client Getting Started
 
 ## Installation
+from pypi
 
 ```bash
-pip install ng-python # not yet published
+pip install nebula5_python==5.2.0
 ```
 
 from source
 
 ```bash
-cd python
+git clone -b https://github.com/vesoft-inc/nebula-python.git
+cd nebula-python
 pip install -e .
 ```
 
