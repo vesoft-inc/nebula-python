@@ -53,15 +53,15 @@ cli.close()
 ### NDuration
 
 `NDuration` represents a duration with support for both month-based and time-based forms.
-- If `months != 0`, the instance is month-based (`is_month_based = True`), and `years`/`months` are derived from the `months` argument.
-- If `months == 0`, the instance is time-based (days default to 0 in current implementation) and uses the `seconds` and `microseconds` arguments to derive `hour`, `minute`, `second`, `microsec`.
+- If `is_month_based = True`, the instance uses `year` and `month` fields for duration representation.
+- If `is_month_based = False`, the instance uses `day`, `hour`, `minute`, `second`, and `microsecond` fields for duration representation.
 
 The `__str__` produces an ISO-8601–like string:
 - Month-based examples: `P1Y2M`, `P0M`
 - Time-based examples: `PT0S`, `PT1H2M3S`, `PT3.5S`, `PT-0.000123S`
 
 API:
-- Constructor: `NDuration(seconds: int, microseconds: int, months: int)`
+- Constructor: `NDuration(is_month_based: bool, year: int, month: int, day: int, hour: int, minute: int, seconds: int, microseconds: int)`
 - Properties/Methods:
   - `is_month_based: bool`
   - `get_year() -> int`, `get_month() -> int`, `get_day() -> int`
