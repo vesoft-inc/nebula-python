@@ -907,6 +907,159 @@ class NVector(BaseDataObject):
         return hash(str(self))
 
 
+class GeoShape(Enum):
+    """Enum for geography shape types"""
+    GEO_SHAPE_POINT = 1
+    GEO_SHAPE_LINESTRING = 5
+    GEO_SHAPE_POLYGON = 9
+
+    @staticmethod
+    def get_geo_shape(shape: int) -> "GeoShape":
+        """Get GeoShape from integer value"""
+        for geo_shape in GeoShape:
+            if geo_shape.value == shape:
+                return geo_shape
+        raise RuntimeError(f"does not define the GeoShape type: {shape}")
+
+
+class Geography(BaseDataObject):
+    """Base class for geography types"""
+
+    def __init__(self, shape: GeoShape):
+        self.shape = shape
+        self._point: Optional["NPoint"] = None
+        self._line_string: Optional["NLineString"] = None
+        self._polygon: Optional["NPolygon"] = None
+
+    def get_shape(self) -> GeoShape:
+        """Get the shape type"""
+        return self.shape
+
+    def as_point(self) -> "NPoint":
+        """Convert to NPoint if shape is GeoShapePoint"""
+        if self.shape != GeoShape.GEO_SHAPE_POINT:
+            raise RuntimeError(f"geo shape is {self.shape.name}")
+        if self._point is None:
+            raise RuntimeError("point is not set")
+        return self._point
+
+    def as_line_string(self) -> "NLineString":
+        """Convert to NLineString if shape is GeoShapeLineString"""
+        if self.shape != GeoShape.GEO_SHAPE_LINESTRING:
+            raise RuntimeError(f"geo shape is {self.shape.name}")
+        if self._line_string is None:
+            raise RuntimeError("line_string is not set")
+        return self._line_string
+
+    def as_polygon(self) -> "NPolygon":
+        """Convert to NPolygon if shape is GeoShapePolygon"""
+        if self.shape != GeoShape.GEO_SHAPE_POLYGON:
+            raise RuntimeError(f"geo shape is {self.shape.name}")
+        if self._polygon is None:
+            raise RuntimeError("polygon is not set")
+        return self._polygon
+
+    def __str__(self) -> str:
+        """Return string representation based on shape type"""
+        if self.shape == GeoShape.GEO_SHAPE_POINT:
+            return str(self._point)
+        elif self.shape == GeoShape.GEO_SHAPE_LINESTRING:
+            return str(self._line_string)
+        elif self.shape == GeoShape.GEO_SHAPE_POLYGON:
+            return str(self._polygon)
+        else:
+            raise RuntimeError(f"do not support geo shape: {self.shape}")
+
+
+class NPoint(Geography):
+    """Represents a geographical point"""
+
+    def __init__(self, lng: float, lat: float):
+        super().__init__(GeoShape.GEO_SHAPE_POINT)
+        self.lng = lng
+        self.lat = lat
+        self._point = self
+
+    def get_lng(self) -> float:
+        """Get longitude"""
+        return self.lng
+
+    def get_lat(self) -> float:
+        """Get latitude"""
+        return self.lat
+
+    def __str__(self) -> str:
+        """Return WKT representation"""
+        return f"POINT({self.lng} {self.lat})"
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, NPoint):
+            return False
+        return self.lng == other.lng and self.lat == other.lat
+
+    def __hash__(self) -> int:
+        return hash((self.lng, self.lat))
+
+
+class NLineString(Geography):
+    """Represents a geographical line string"""
+
+    def __init__(self, points: List[NPoint]):
+        super().__init__(GeoShape.GEO_SHAPE_LINESTRING)
+        self.points = points
+        self._line_string = self
+
+    def get_points(self) -> List[NPoint]:
+        """Get list of points"""
+        return self.points
+
+    def __str__(self) -> str:
+        """Return WKT representation"""
+        points_str = ", ".join(f"{p.get_lng()} {p.get_lat()}" for p in self.points)
+        return f"LINESTRING({points_str})"
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, NLineString):
+            return False
+        return self.points == other.points
+
+    def __hash__(self) -> int:
+        return hash(tuple(self.points))
+
+
+class NPolygon(Geography):
+    """Represents a geographical polygon"""
+
+    def __init__(self, loops: List[List[NPoint]]):
+        super().__init__(GeoShape.GEO_SHAPE_POLYGON)
+        self.loops = loops
+        self._polygon = self
+
+    def get_loops(self) -> List[List[NPoint]]:
+        """Get list of loops (each loop is a list of points)"""
+        return self.loops
+
+    def get_loop_num(self) -> int:
+        """Get number of loops"""
+        return len(self.loops)
+
+    def __str__(self) -> str:
+        """Return WKT representation"""
+        loops_str = []
+        for loop in self.loops:
+            points_str = ", ".join(f"{p.get_lng()} {p.get_lat()}" for p in loop)
+            loops_str.append(f"({points_str})")
+        return f"POLYGON({', '.join(loops_str)})"
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, NPolygon):
+            return False
+        return self.loops == other.loops
+
+    def __hash__(self) -> int:
+        return hash(tuple(tuple(loop) for loop in self.loops))
+
+
 BasicTargetType = Union[
     None,
     bool,
@@ -920,6 +1073,7 @@ BasicTargetType = Union[
     Decimal,
     NDuration,
     NVector,
+    Geography,
 ]
 
 CompositeTargetType = Union[
@@ -964,4 +1118,7 @@ ColumnToPy: Dict[ColumnType, Type[TargetType]] = {
     ColumnType.EDGE: Edge,
     ColumnType.RECORD: NRecord,
     ColumnType.EMBEDDINGVECTOR: NVector,
+    ColumnType.GEOGRAPHY: Geography,
+    ColumnType.SET: set,
+    ColumnType.MAP: dict,
 }

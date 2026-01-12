@@ -290,6 +290,9 @@ class ColumnType(Enum):
     ZONEDDATETIME = 0x20
     REFERENCE = 0x21
     DECIMAL = 0x22
+    GEOGRAPHY = 0x24
+    SET = 0x25
+    MAP = 0x26
     ANY = 0xFE
     INVALID = 0xFF
 
@@ -313,6 +316,9 @@ class ColumnType(Enum):
             ColumnType.LOCALDATETIME,
             ColumnType.ZONEDTIME,
             ColumnType.ZONEDDATETIME,
+            ColumnType.GEOGRAPHY,
+            ColumnType.SET,
+            ColumnType.MAP,
         }
         return self in basic_types
 
@@ -505,3 +511,30 @@ class EmbeddingVectorType(DataType):
 
     def get_dimension(self) -> int:
         return self.dimension
+
+
+class SetType(DataType):
+    def __init__(self, value_type: DataType):
+        super().__init__(ColumnType.SET)
+        self.value_type = value_type
+
+    def get_value_type(self) -> DataType:
+        return self.value_type
+
+
+class MapType(DataType):
+    def __init__(self, key_type: DataType, value_type: DataType):
+        super().__init__(ColumnType.MAP)
+        self.key_type = key_type
+        self.value_type = value_type
+
+    def get_key_type(self) -> DataType:
+        return self.key_type
+
+    def get_value_type(self) -> DataType:
+        return self.value_type
+
+
+class GeographyType(DataType):
+    def __init__(self):
+        super().__init__(ColumnType.GEOGRAPHY)

@@ -26,8 +26,10 @@ from nebulagraph_python.decoder.data_types import (
     EdgeHeader,
     EdgeType,
     EmbeddingVectorType,
+    GeographyType,
     ListHeader,
     ListType,
+    MapType,
     NodeHeader,
     NodeType,
     PathAdjHeader,
@@ -35,6 +37,7 @@ from nebulagraph_python.decoder.data_types import (
     PathType,
     RecordType,
     ResultGraphSchemas,
+    SetType,
     charset,
 )
 from nebulagraph_python.decoder.decode import BytesReader, VectorType, VectorWrapper
@@ -98,13 +101,25 @@ from nebulagraph_python.decoder.size_constant import (
     YEAR_SIZE,
     ZONED_DATE_TIME_SIZE,
     ZONED_TIME_SIZE,
+    GEO_COORDINATE_NUMBER_SIZE,
+    GEO_HEADER_SIZE,
+    GEO_LINEAR_RING_INDEX_SIZE,
+    GEO_LINEAR_RING_NUMBER_SIZE,
+    GEO_POINT_COORDINATE_SIZE,
+    GEO_SHAPE_SIZE,
+    GEO_SRID_SIZE,
 )
 from nebulagraph_python.error import InternalError
 from nebulagraph_python.proto.vector_pb2 import NestedVector
 from nebulagraph_python.py_data_types import (
     Edge,
+    GeoShape,
+    Geography,
     NDuration,
+    NLineString,
     Node,
+    NPoint,
+    NPolygon,
     NRecord,
     NVector,
     Path,
@@ -607,6 +622,24 @@ class ValueParser:
             value_data = self._get_sub_bytes(vector_data, ANY_HEADER_SIZE, row_idx)
             return self.bytes_to_any(value_data, vector, row_idx)
 
+        if column_type == ColumnType.GEOGRAPHY:
+            header = self._get_sub_bytes(vector_data, GEO_HEADER_SIZE, row_idx)
+            chunk_index = bytes_to_int32(
+                header[0:CHUNK_INDEX_LENGTH_IN_STRING_HEADER],
+                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+            )
+            chunk_offset = bytes_to_int32(
+                header[
+                    CHUNK_INDEX_LENGTH_IN_STRING_HEADER : CHUNK_INDEX_LENGTH_IN_STRING_HEADER
+                    + CHUNK_OFFSET_LENGTH_IN_STRING_HEADER
+                ],
+                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+            )
+            data = vector.get_nested_vectors()[chunk_index].get_vector_data()[
+                chunk_offset :
+            ]
+            return self.bytes_to_geography(BytesReader(data))
+
         raise ValueError(f"Unsupported type for flat vector: {column_type}")
 
     def _decode_const_value(self, reader: BytesReader, column_type: ColumnType) -> Any:
@@ -809,6 +842,109 @@ class ValueParser:
             microseconds=micro_sec,
         )
 
+    def bytes_to_geography(self, reader: BytesReader) -> "Geography":
+        """Convert bytes to geography object"""
+        # Get the shape type of Geography (1 byte)
+        shape_type_bytes = reader.read(GEO_SHAPE_SIZE)
+        shape_type = bytes_to_int8(shape_type_bytes)
+
+        # Get SRID (4 bytes) of Geography
+        srid_bytes = reader.read(GEO_SRID_SIZE)
+        srid = bytes_to_int32(
+            srid_bytes,
+            byte_order=self.byte_order,
+        )
+
+        # Get the GeoShape enum
+        shape = GeoShape.get_geo_shape(shape_type)
+
+        if shape == GeoShape.GEO_SHAPE_POINT:
+            # Read x and y coordinates (each 8 bytes)
+            x_bytes = reader.read(GEO_POINT_COORDINATE_SIZE)
+            x = bytes_to_double(
+                x_bytes,
+                byte_order=self.byte_order,
+            )
+            y_bytes = reader.read(GEO_POINT_COORDINATE_SIZE)
+            y = bytes_to_double(
+                y_bytes,
+                byte_order=self.byte_order,
+            )
+            return NPoint(x, y)
+
+        elif shape == GeoShape.GEO_SHAPE_LINESTRING:
+            # Read number of coordinates (4 bytes)
+            num_coords_bytes = reader.read(GEO_COORDINATE_NUMBER_SIZE)
+            num_coords = bytes_to_int32(
+                num_coords_bytes,
+                byte_order=self.byte_order,
+            )
+
+            points = []
+            for _ in range(num_coords):
+                x_bytes = reader.read(GEO_POINT_COORDINATE_SIZE)
+                x = bytes_to_double(
+                    x_bytes,
+                    byte_order=self.byte_order,
+                )
+                y_bytes = reader.read(GEO_POINT_COORDINATE_SIZE)
+                y = bytes_to_double(
+                    y_bytes,
+                    byte_order=self.byte_order,
+                )
+                points.append(NPoint(x, y))
+
+            return NLineString(points)
+
+        elif shape == GeoShape.GEO_SHAPE_POLYGON:
+            # Read number of linear rings (4 bytes)
+            num_linear_ring_bytes = reader.read(GEO_LINEAR_RING_NUMBER_SIZE)
+            num_linear_ring = bytes_to_int32(
+                num_linear_ring_bytes,
+                byte_order=self.byte_order,
+            )
+
+            loops = []
+            # Row index stores the different linearRing points' start index and end index
+            num_row_indexes = num_linear_ring + 1
+            row_index = []
+            for _ in range(num_row_indexes):
+                index_bytes = reader.read(GEO_LINEAR_RING_INDEX_SIZE)
+                index = bytes_to_int32(
+                    index_bytes,
+                    byte_order=self.byte_order,
+                )
+                row_index.append(index)
+
+            num_points = row_index[num_row_indexes - 1]
+
+            # The binary stores flat points, and each linearRing is distinguished according
+            # to rowIndex. Each linearRing is a set of point.
+            points = []
+            for _ in range(num_points):
+                x_bytes = reader.read(GEO_POINT_COORDINATE_SIZE)
+                x = bytes_to_double(
+                    x_bytes,
+                    byte_order=self.byte_order,
+                )
+                y_bytes = reader.read(GEO_POINT_COORDINATE_SIZE)
+                y = bytes_to_double(
+                    y_bytes,
+                    byte_order=self.byte_order,
+                )
+                points.append(NPoint(x, y))
+
+            for i in range(num_linear_ring):
+                loop = []
+                for index in range(row_index[i], row_index[i + 1]):
+                    loop.append(points[index])
+                loops.append(loop)
+
+            return NPolygon(loops)
+
+        else:
+            raise RuntimeError(f"does not support geography shape: {shape_type}")
+
     def bytes_to_any(
         self,
         value: bytes,
@@ -925,6 +1061,9 @@ class ValueParser:
 
         elif column_type == ColumnType.DURATION:
             obj = self.bytes_to_duration(reader.read(DURATION_SIZE))
+
+        elif column_type == ColumnType.GEOGRAPHY:
+            obj = self.bytes_to_geography(reader)
 
         else:
             raise RuntimeError(f"type is not basic: {column_type}")
@@ -1206,6 +1345,9 @@ class ValueTypeParser:
             )
             value_type = ColumnType(bytes_to_uint8(reader.read(VALUE_TYPE_SIZE)))
             return EmbeddingVectorType(dimension, value_type)
+
+        if column_type == ColumnType.GEOGRAPHY:
+            return GeographyType()
 
         raise RuntimeError(f"unsupported type: {column_type}")
 
