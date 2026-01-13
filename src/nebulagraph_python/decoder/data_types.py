@@ -317,8 +317,6 @@ class ColumnType(Enum):
             ColumnType.ZONEDTIME,
             ColumnType.ZONEDDATETIME,
             ColumnType.GEOGRAPHY,
-            ColumnType.SET,
-            ColumnType.MAP,
         }
         return self in basic_types
 
@@ -331,6 +329,8 @@ class ColumnType(Enum):
             ColumnType.PATH,
             ColumnType.RECORD,
             ColumnType.EMBEDDINGVECTOR,
+            ColumnType.SET,
+            ColumnType.MAP,
         }
         return self in composite_types
 
