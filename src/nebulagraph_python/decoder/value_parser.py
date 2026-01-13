@@ -108,6 +108,10 @@ from nebulagraph_python.decoder.size_constant import (
     GEO_POINT_COORDINATE_SIZE,
     GEO_SHAPE_SIZE,
     GEO_SRID_SIZE,
+    ELEMENT_NUMBER_SIZE_FOR_SET,
+    ELEMENT_NUMBER_SIZE_FOR_MAP,
+    SET_HEADER_SIZE,
+    MAP_HEADER_SIZE,
 )
 from nebulagraph_python.error import InternalError
 from nebulagraph_python.proto.vector_pb2 import NestedVector
@@ -639,6 +643,65 @@ class ValueParser:
                 chunk_offset :
             ]
             return self.bytes_to_geography(BytesReader(data))
+
+        if column_type == ColumnType.SET:
+            set_type: SetType = data_type
+            result_set = set()
+            value_data = self._get_sub_bytes(vector_data, SET_HEADER_SIZE, row_idx)
+            set_offset = bytes_to_int32(
+                value_data[0:4],
+                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+            )
+            set_size = bytes_to_int32(
+                value_data[4:8],
+                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+            )
+
+            for i in range(set_size):
+                value = self.decode_value(
+                    vector.get_vector_wrapper(0),
+                    set_type.get_value_type(),
+                    set_offset + i,
+                )
+                result_set.add(
+                    ValueWrapper(value, set_type.get_value_type().get_type())
+                )
+
+            return result_set
+
+        if column_type == ColumnType.MAP:
+            map_type: MapType = data_type
+            result_map = {}
+            value_data = self._get_sub_bytes(vector_data, MAP_HEADER_SIZE, row_idx)
+            map_offset = bytes_to_int32(
+                value_data[0:4],
+                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+            )
+            map_size = bytes_to_int32(
+                value_data[4:8],
+                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+            )
+
+            for i in range(map_size):
+                key = ValueWrapper(
+                    self.decode_value(
+                        vector.get_vector_wrapper(0),
+                        map_type.get_key_type(),
+                        map_offset + i,
+                    ),
+                    map_type.get_key_type().get_type(),
+                )
+                value = ValueWrapper(
+                    self.decode_value(
+                        vector.get_vector_wrapper(1),
+                        map_type.get_value_type(),
+                        map_offset + i,
+                    ),
+                    map_type.get_value_type().get_type(),
+                )
+                result_map[key] = value
+
+            return result_map
 
         raise ValueError(f"Unsupported type for flat vector: {column_type}")
 
@@ -1251,6 +1314,62 @@ class ValueParser:
 
             return NVector(values=values)
 
+        if column_type == ColumnType.SET:
+            set_ele_type = ColumnType(bytes_to_int8(reader.read(VALUE_TYPE_SIZE)))
+            set_size = bytes_to_int32(
+                reader.read(ELEMENT_NUMBER_SIZE_FOR_SET),
+                self.byte_order,
+            )
+            set_null_bit_size = (set_size + 7) // 8
+            set_null_bit_bytes = reader.read(set_null_bit_size)
+
+            set_values = set()
+            for i in range(set_size):
+                if (set_null_bit_bytes[i // 8] & (1 << (i % 8))) == 0:
+                    set_values.add(ValueWrapper(None, ColumnType.NULL))
+                else:
+                    value = self._decode_composite_value(reader, set_ele_type)
+                    set_values.add(ValueWrapper(value, set_ele_type))
+            return set_values
+
+        if column_type == ColumnType.MAP:
+            map_key_type = ColumnType(bytes_to_int8(reader.read(VALUE_TYPE_SIZE)))
+            map_key_size = bytes_to_int32(
+                reader.read(ELEMENT_NUMBER_SIZE_FOR_MAP),
+                self.byte_order,
+            )
+            map_key_null_bit_size = (map_key_size + 7) // 8
+            map_key_null_bit_bytes = reader.read(map_key_null_bit_size)
+
+            keys = []
+            for i in range(map_key_size):
+                if (map_key_null_bit_bytes[i // 8] & (1 << (i % 8))) == 0:
+                    keys.append(ValueWrapper(None, ColumnType.NULL))
+                else:
+                    key = self._decode_composite_value(reader, map_key_type)
+                    keys.append(ValueWrapper(key, map_key_type))
+
+            map_value_type = ColumnType(bytes_to_int8(reader.read(VALUE_TYPE_SIZE)))
+            map_value_size = bytes_to_int32(
+                reader.read(ELEMENT_NUMBER_SIZE_FOR_MAP),
+                self.byte_order,
+            )
+            map_value_null_bit_size = (map_value_size + 7) // 8
+            map_value_null_bit_bytes = reader.read(map_value_null_bit_size)
+
+            map_values = []
+            for i in range(map_key_size):
+                if (map_value_null_bit_bytes[i // 8] & (1 << (i % 8))) == 0:
+                    map_values.append(ValueWrapper(None, ColumnType.NULL))
+                else:
+                    value = self._decode_composite_value(reader, map_value_type)
+                    map_values.append(ValueWrapper(value, map_value_type))
+
+            result_map = {}
+            for i in range(map_key_size):
+                result_map[keys[i]] = map_values[i]
+            return result_map
+
         raise RuntimeError(f"do not support type: {column_type}")
 
 
@@ -1348,6 +1467,15 @@ class ValueTypeParser:
 
         if column_type == ColumnType.GEOGRAPHY:
             return GeographyType()
+
+        if column_type == ColumnType.SET:
+            data_type = self.decode_value_type(reader)
+            return SetType(data_type)
+
+        if column_type == ColumnType.MAP:
+            key_type = self.decode_value_type(reader)
+            value_type = self.decode_value_type(reader)
+            return MapType(key_type, value_type)
 
         raise RuntimeError(f"unsupported type: {column_type}")
 
