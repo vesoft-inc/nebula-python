@@ -294,9 +294,11 @@ class NebulaPool(NebulaBaseExecutor):
         finally:
             self.return_client(client)
 
-    def execute(self, statement: str, *, timeout: Optional[float] = None):
+    def execute(
+        self, statement: str, *, timeout: Optional[float] = None, do_ping: bool = False
+    ):
         with self.borrow() as client:
-            return client.execute(statement, timeout=timeout)
+            return client.execute(statement, timeout=timeout, do_ping=do_ping)
 
     def close(self):
         """Close all clients in the pool. No Exception will be raised but errors will be logged."""
