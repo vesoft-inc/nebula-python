@@ -741,25 +741,15 @@ class NRecord(CompositeDataObject):
 
 
 class NDuration(BaseDataObject):
-    def __init__(self, seconds: int, microseconds: int, months: int):
-        self.is_month_based = months != 0
-
-        # Convert seconds and microseconds to time components
-        total_seconds = abs(seconds)
-        hours = total_seconds // 3600
-        minutes = (total_seconds % 3600) // 60
-        secs = total_seconds % 60
-
-        # Convert months to year/month
-        years = months // 12
-        remaining_months = months % 12
-
-        self.year = years
-        self.month = remaining_months
-        self.day = 0  # Not month based
-        self.hour = hours
-        self.minute = minutes
-        self.second = secs
+    def __init__(self, is_month_based: bool, year: int, month: int, day: int,
+                 hour: int, minute: int, seconds: int, microseconds: int):
+        self.is_month_based = is_month_based
+        self.year = year
+        self.month = month
+        self.day = day
+        self.hour = hour
+        self.minute = minute
+        self.second = seconds
         self.microsec = microseconds
 
     def get_year(self) -> int:
@@ -902,7 +892,7 @@ class NVector(BaseDataObject):
             logger.warning("Expected Vector, got %s", type(other))
             return False
         return self.dimension == other.dimension and all(
-            abs(a - b) < 1e-7 for a, b in zip(self.values, other.values)
+            abs(a - b) < 1e-7 for a, b in zip(self.values, other.values, strict=True)
         )
 
     def __str__(self) -> str:
@@ -912,6 +902,9 @@ class NVector(BaseDataObject):
     def __repr__(self) -> str:
         """Return detailed string representation of the vector."""
         return f"NVector({self.values})"
+
+    def __hash__(self) -> int:
+        return hash(str(self))
 
 
 BasicTargetType = Union[

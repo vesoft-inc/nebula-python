@@ -77,6 +77,8 @@ from nebulagraph_python.decoder.size_constant import (
     INT64_SIZE,
     LIST_HEADER_SIZE,
     LOCAL_TIME_SIZE,
+    MICRO_SECONDS_OF_DAY,
+    MICRO_SECONDS_OF_HOUR,
     MICRO_SECONDS_OF_MINUTE,
     MICRO_SECONDS_OF_SECOND,
     MONTH_SIZE,
@@ -727,7 +729,7 @@ class ValueParser:
         )
 
         # Create base time and add timezone offset minutes
-        base_time = datetime.time(hour, minute, second, microsecond)
+        base_time = datetime.time(hour % 24, minute, second, microsecond)
         adjusted_time = (
             datetime.datetime.combine(datetime.date.today(), base_time)
             + datetime.timedelta(minutes=current_offset)
@@ -783,21 +785,28 @@ class ValueParser:
         duration_value = qword >> 1
 
         # Initialize all fields
-        month, second, micro_sec = 0, 0, 0
+        year, month, day, hour, minute, second, micro_sec = 0, 0, 0, 0, 0, 0, 0
         if is_month_based:
             # For month-based duration
+            year = int(duration_value / 12)
             month = int(duration_value % 12)
         else:
             # For time-based duration
-            second = int(
-                (duration_value % MICRO_SECONDS_OF_MINUTE) // MICRO_SECONDS_OF_SECOND,
-            )
-            micro_sec = int(duration_value % MICRO_SECONDS_OF_SECOND)
+            day = int (duration_value / MICRO_SECONDS_OF_DAY)
+            hour = int (duration_value % MICRO_SECONDS_OF_DAY / MICRO_SECONDS_OF_HOUR)
+            minute = int (duration_value % MICRO_SECONDS_OF_HOUR / MICRO_SECONDS_OF_MINUTE)
+            second = int ((duration_value % MICRO_SECONDS_OF_MINUTE) / MICRO_SECONDS_OF_SECOND)
+            micro_sec = int (duration_value % MICRO_SECONDS_OF_SECOND)
 
         return NDuration(
+            is_month_based=is_month_based,
+            year=year,
+            month=month,
+            day=day,
+            hour=hour,
+            minute=minute,
             seconds=second,
             microseconds=micro_sec,
-            months=month,
         )
 
     def bytes_to_any(
@@ -1003,7 +1012,7 @@ class ValueParser:
             values = []
             for i in range(list_size):
                 if (null_bit_bytes[i // 8] & (1 << (i % 8))) == 0:
-                    values.append(None)
+                    values.append(ValueWrapper(None, ColumnType.NULL))
                 else:
                     value = self._decode_composite_value(reader, ele_type)
                     values.append(ValueWrapper(value, ele_type))

@@ -392,7 +392,7 @@ class ResultSet:
             row_num = 1
             for record in self.records():
                 console.print(f"\n[bold blue]Row {row_num}[/bold blue]")
-                for col, val in zip(self.column_names, record.values()):
+                for col, val in zip(self.column_names, record.values(), strict=True):
                     console.print(f"  [cyan]{col}:[/cyan] {val.cast_primitive()}")
                 row_num += 1
 

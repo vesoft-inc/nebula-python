@@ -91,7 +91,7 @@ class AsyncSessionPool:
         except Exception:
             # Clean up any sessions that were successfully created
             for session in sessions:
-                await session.close()
+                await session._close()
             raise
 
     def __init__(
@@ -157,20 +157,20 @@ class AsyncSessionPool:
                     self.busy_sessions_queue.remove(got_session)
             self.queue_count.release()
 
-    async def close(self):
+    async def _close(self):
         # Acquire all semaphore permits to prevent new borrows
         for _ in range(self.config.size):
             await self.queue_count.acquire()
         async with self.queue_lock:
             # Close all free sessions
             for session in self.free_sessions_queue:
-                await session.close()
+                await session._close()
             # Close all busy sessions (if any remain)
             for session in self.busy_sessions_queue:
                 logger.error(
                     "Busy sessions remain after acquire all semaphore permits, which indicates a bug in the AsyncSessionPool"
                 )
-                await session.close()
+                await session._close()
 
 
 class SessionPool:
@@ -209,7 +209,7 @@ class SessionPool:
         except Exception:
             # Clean up any sessions that were successfully created
             for session in sessions:
-                session.close()
+                session._close()
             raise
 
     def __init__(
@@ -273,17 +273,17 @@ class SessionPool:
                     self.busy_sessions_queue.remove(got_session)
             self.queue_count.release()
 
-    def close(self):
+    def _close(self):
         # Acquire all semaphore permits to prevent new borrows
         for _ in range(self.config.size):
             self.queue_count.acquire()
         with self.queue_lock:
             # Close all free sessions
             for session in self.free_sessions_queue:
-                session.close()
+                session._close()
             # Close all busy sessions (if any remain)
             for session in self.busy_sessions_queue:
                 logger.error(
                     "Busy sessions remain after acquire all semaphore permits, which indicates a bug in the SessionPool"
                 )
-                session.close()
+                session._close()

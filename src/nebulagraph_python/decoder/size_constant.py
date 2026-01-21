@@ -25,8 +25,8 @@ DOUBLE_SIZE = 8
 BOOL_SIZE = 1
 # Vector element size
 EMBEDDING_VECTOR_DIM_SIZE = 4  # Size of vector dimension in row type (int32)
-ELEMENT_NUMBER_SIZE_FOR_VECTOR_VALUE=2
-EMBEDDING_VECTOR_FLOAT_VALUE_SIZE=4
+ELEMENT_NUMBER_SIZE_FOR_VECTOR_VALUE = 2
+EMBEDDING_VECTOR_FLOAT_VALUE_SIZE = 4
 FLOAT32_SIZE = 4  # Size of each float32 element in vector
 
 # String size: 4 byte string value length + 4 byte prefix string

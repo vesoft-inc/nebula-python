@@ -1,15 +1,17 @@
 # NebulaGraph Python Client Getting Started
 
 ## Installation
+from pypi
 
 ```bash
-pip install ng-python # not yet published
+pip install nebula5_python==5.2.0
 ```
 
 from source
 
 ```bash
-cd python
+git clone -b dev https://github.com/vesoft-inc/nebula-python.git
+cd nebula-python
 pip install -e .
 ```
 
@@ -124,6 +126,23 @@ with NebulaClient(
 ## Manual Initialization and Closing
 
 If you prefer manual lifecycle control, you can explicitly open and close clients.
+
+- Sync version:
+
+```python
+from nebulagraph_python import NebulaClient
+
+client = NebulaClient(
+    hosts=["127.0.0.1:9669"],
+    username="root",
+    password="NebulaGraph01",
+)
+try:
+    result = client.execute("RETURN 1 AS a, 2 AS b")
+    result.print()
+finally:
+    client.close()
+```
 
 - Async version:
 

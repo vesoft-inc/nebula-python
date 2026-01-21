@@ -13,6 +13,8 @@
 # limitations under the License.
 
 import logging
+from collections.abc import AsyncGenerator, Generator
+from contextlib import asynccontextmanager, contextmanager
 from typing import Any, Dict, List, Literal, Optional, Union
 
 from nebulagraph_python.client._connection import (
@@ -89,7 +91,7 @@ class NebulaAsyncClient(NebulaBaseAsyncExecutor):
             session_config: Session configuration.
         """
         self = super().__new__(cls)
-        conn_conf = conn_config or ConnectionConfig.from_defults(hosts, ssl_param)
+        conn_conf = conn_config or ConnectionConfig.from_defaults(hosts, ssl_param)
         hosts = conn_conf.hosts
         self._sessions = {}
         if len(hosts) == 1:
@@ -120,7 +122,7 @@ class NebulaAsyncClient(NebulaBaseAsyncExecutor):
                     )
                 else:
                     self._sessions[host_addr] = AsyncSession(
-                        conn=conn,
+                        _conn=conn,
                         username=username,
                         password=password,
                         session_config=session_config or SessionConfig(),
@@ -134,40 +136,31 @@ class NebulaAsyncClient(NebulaBaseAsyncExecutor):
     async def execute(
         self, statement: str, *, timeout: Optional[float] = None, do_ping: bool = False
     ) -> ResultSet:
+        async with self.borrow() as session:
+            return await session.execute(statement, timeout=timeout, do_ping=do_ping)
+
+    @asynccontextmanager
+    async def borrow(self) -> AsyncGenerator[AsyncSession, None]:
         if isinstance(self._conn, AsyncConnectionPool):
-            addr, _conn = await self._conn.next_connection()
+            addr, conn = await self._conn.next_connection()
         else:
-            addr = self._conn.config.hosts[0]
+            conn = self._conn
+            addr = conn.connected
+            if addr is None:
+                raise ValueError("Connection not connected")
+
         _session = self._sessions[addr]
 
         if isinstance(_session, AsyncSessionPool):
             async with _session.borrow() as session:
-                return (
-                    await session.execute(statement, timeout=timeout, do_ping=do_ping)
-                ).raise_on_error()
+                yield session
         else:
-            return (
-                await _session.execute(statement, timeout=timeout, do_ping=do_ping)
-            ).raise_on_error()
-
-    async def ping(self, timeout: Optional[float] = None) -> bool:
-        try:
-            res = (
-                (await self.execute(statement="RETURN 1", timeout=timeout))
-                .one()
-                .as_primitive()
-            )
-            if not res == {"1": 1}:
-                raise ValueError(f"Unexpected result from ping: {res}")
-            return True
-        except Exception:
-            logger.exception("Failed to ping NebulaGraph")
-            return False
+            yield _session
 
     async def close(self):
         """Close the client connection and session. No Exception will be raised but an error will be logged."""
         for session in self._sessions.values():
-            await session.close()
+            await session._close()
         await self._conn.close()
 
     async def __aenter__(self):
@@ -214,7 +207,7 @@ class NebulaClient(NebulaBaseExecutor):
             session_config: Session configuration.
             session_pool_config: Session pool configuration. If provided, a session pool will be created.
         """
-        conn_conf = conn_config or ConnectionConfig.from_defults(hosts, ssl_param)
+        conn_conf = conn_config or ConnectionConfig.from_defaults(hosts, ssl_param)
         hosts = conn_conf.hosts
         self._sessions = {}
         if len(hosts) == 1:
@@ -245,7 +238,7 @@ class NebulaClient(NebulaBaseExecutor):
                     )
                 else:
                     self._sessions[host_addr] = Session(
-                        conn=conn,
+                        _conn=conn,
                         username=username,
                         password=password,
                         session_config=session_config or SessionConfig(),
@@ -258,21 +251,29 @@ class NebulaClient(NebulaBaseExecutor):
     def execute(
         self, statement: str, *, timeout: Optional[float] = None, do_ping: bool = False
     ) -> ResultSet:
+        """Execute a statement using a borrowed session, raising on errors."""
+        with self.borrow() as session:
+            return session.execute(statement, timeout=timeout, do_ping=do_ping)
+
+    @contextmanager
+    def borrow(self) -> Generator[Session, None, None]:
+        """Yield a session bound to the selected connection."""
         if isinstance(self._conn, ConnectionPool):
-            addr, _conn = self._conn.next_connection()
+            addr, conn = self._conn.next_connection()
         else:
-            addr = self._conn.config.hosts[0]
+            conn = self._conn
+            addr = conn.connected
+            if addr is None:
+                raise ValueError("Connection not connected")
+
+        # Route to the correct session (pool or single session)
         _session = self._sessions[addr]
 
         if isinstance(_session, SessionPool):
             with _session.borrow() as session:
-                return session.execute(
-                    statement, timeout=timeout, do_ping=do_ping
-                ).raise_on_error()
+                yield session
         else:
-            return _session.execute(
-                statement, timeout=timeout, do_ping=do_ping
-            ).raise_on_error()
+            yield _session
 
     def ping(self, timeout: Optional[float] = None) -> bool:
         try:
@@ -291,7 +292,7 @@ class NebulaClient(NebulaBaseExecutor):
     def close(self):
         """Close the client connection and session. No Exception will be raised but an error will be logged."""
         for session in self._sessions.values():
-            session.close()
+            session._close()
         self._conn.close()
 
     def __enter__(self):

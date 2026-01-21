@@ -187,6 +187,7 @@ def sync_session_pool_example():
 if __name__ == "__main__":
     import asyncio
     import logging
+
     logging.basicConfig(level=logging.DEBUG)
     logging.getLogger("nebulagraph_python").setLevel(logging.DEBUG)
 

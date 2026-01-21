@@ -117,7 +117,9 @@ print(graph_type.to_gql())
 
 if input("Execute the DDL? (y/N)") == "y":
     client.execute_py(graph_type.to_gql())
-    client.execute_py("CREATE GRAPH IF NOT EXISTS define_type_test define_type_test_type")
+    client.execute_py(
+        "CREATE GRAPH IF NOT EXISTS define_type_test define_type_test_type"
+    )
 
 
 q = upsert_gql(
