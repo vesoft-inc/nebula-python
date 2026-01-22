@@ -73,16 +73,16 @@ class NebulaPool(NebulaBaseExecutor):
     _in_use: Dict[NebulaClient, bool]  # Track if client is in use
 
     def __init__(
-        self,
-        hosts: Union[str, List[str], List[HostAddress]],
-        username: str,
-        password: str,
-        *,
-        ssl_param: Union[SSLParam, Literal[True], None] = None,
-        auth_options: Optional[Dict[str, Any]] = None,
-        pool_config: Optional[NebulaPoolConfig] = None,
-        session_config: Optional[SessionConfig] = None,
-        conn_config: Optional[ConnectionConfig] = None,
+            self,
+            hosts: Union[str, List[str], List[HostAddress]],
+            username: str,
+            password: str,
+            *,
+            ssl_param: Union[SSLParam, Literal[True], None] = None,
+            auth_options: Optional[Dict[str, Any]] = None,
+            pool_config: Optional[NebulaPoolConfig] = None,
+            session_config: Optional[SessionConfig] = None,
+            conn_config: Optional[ConnectionConfig] = None,
     ):
         """Initialize NebulaGraph connection pool
 
@@ -118,55 +118,85 @@ class NebulaPool(NebulaBaseExecutor):
         self._hosts_cycle = cycle(self.hosts)
 
         # Initialize the client pool
-        self.fulfill_pool()
+        self.minfill_pool()
 
-    def fulfill_pool(self, locked: bool = False):
+    def minfill_pool(self, locked: bool = False):
         """May raise exception with partial success"""
-        to_fill_num = max(self.pool_config.max_client_size - len(self._clients), 0)
+        to_fill_num = max(self.pool_config.min_client_size - len(self._clients), 0)
 
         def _inner_default() -> None:
-            for _ in range(to_fill_num):
-                client = NebulaClient(
-                    hosts=self.hosts,
-                    username=self.username,
-                    password=self.password,
-                    ssl_param=self.ssl_param,
-                    auth_options=self.auth_options,
-                    conn_config=self.conn_config,
-                    session_config=self.session_config,
-                )
-                self._clients.append(client)
-                self._in_use[client] = False
-            # Initialize the round-robin cycle
-            self._client_cycle = cycle(self._clients)
+            created_clients = []
+            try:
+                for _ in range(to_fill_num):
+                    client = NebulaClient(
+                        hosts=self.hosts,
+                        username=self.username,
+                        password=self.password,
+                        ssl_param=self.ssl_param,
+                        auth_options=self.auth_options,
+                        conn_config=self.conn_config,
+                        session_config=self.session_config,
+                    )
+                    self._clients.append(client)
+                    self._in_use[client] = False
+                    created_clients.append(client)
+                # Initialize the round-robin cycle
+                self._client_cycle = cycle(self._clients)
+            except Exception as e:
+                # Clean up any clients that were created in this attempt
+                for client in created_clients:
+                    try:
+                        client.close()
+                        self._clients.remove(client)
+                        self._in_use.pop(client, None)
+                    except Exception:
+                        pass
+                # Initialize the round-robin cycle with remaining clients
+                self._client_cycle = cycle(self._clients)
+                raise e
 
         def _inner_for_strictly_server_healthy() -> None:
             # When new pool is created and strictly_server_healthy is True,
             # we need to connect to all hosts
-            for _ in range(len(self.hosts)):
-                # Round-robin host address selection
-                host = next(self._hosts_cycle)
-                conn_config = None
-                if self.conn_config:
-                    conn_config = copy(self.conn_config)
-                    conn_config.hosts = [host]
+            created_clients = []
+            try:
+                for _ in range(len(self.hosts)):
+                    # Round-robin host address selection
+                    host = next(self._hosts_cycle)
+                    conn_config = None
+                    if self.conn_config:
+                        conn_config = copy(self.conn_config)
+                        conn_config.hosts = [host]
 
-                client = NebulaClient(
-                    hosts=[host],
-                    username=self.username,
-                    password=self.password,
-                    ssl_param=self.ssl_param,
-                    auth_options=self.auth_options,
-                    conn_config=self.conn_config,
-                    session_config=self.session_config,
-                )
-                if len(self._clients) < self.pool_config.max_client_size:
-                    self._clients.append(client)
-                    self._in_use[client] = False
-                else:
-                    client.close()
-            # Initialize the round-robin cycle
-            self._client_cycle = cycle(self._clients)
+                    client = NebulaClient(
+                        hosts=[host],
+                        username=self.username,
+                        password=self.password,
+                        ssl_param=self.ssl_param,
+                        auth_options=self.auth_options,
+                        conn_config=self.conn_config,
+                        session_config=self.session_config,
+                    )
+                    if len(self._clients) < self.pool_config.min_client_size:
+                        self._clients.append(client)
+                        self._in_use[client] = False
+                        created_clients.append(client)
+                    else:
+                        client.close()
+                # Initialize the round-robin cycle
+                self._client_cycle = cycle(self._clients)
+            except Exception as e:
+                # Clean up any clients that were created in this attempt
+                for client in created_clients:
+                    try:
+                        client.close()
+                        self._clients.remove(client)
+                        self._in_use.pop(client, None)
+                    except Exception:
+                        pass
+                # Initialize the round-robin cycle with remaining clients
+                self._client_cycle = cycle(self._clients)
+                raise e
 
         def _inner():
             try:
@@ -199,18 +229,22 @@ class NebulaPool(NebulaBaseExecutor):
             raise InternalError("Client does not belong to this pool")
 
         def _inner():
-            self._clients.remove(client)
-            self._in_use.pop(client)
-            # Close the client connection
-            client.close()
-            # Recreate the cycle with remaining clients
-            if len(self._clients) < self.pool_config.min_client_size:
-                try:
-                    self.fulfill_pool(locked=True)
-                except Exception:
-                    logger.exception("Failed or partial success when fulfilling pool")
-            else:
-                self._client_cycle = cycle(self._clients)
+            try:
+                self._clients.remove(client)
+                self._in_use.pop(client)
+                # Close the client connection
+                client.close()
+                # Recreate the cycle with remaining clients
+                if len(self._clients) < self.pool_config.min_client_size:
+                    try:
+                        self.minfill_pool(locked=True)
+                    except Exception:
+                        logger.exception("Failed or partial success when minfilling pool")
+                else:
+                    self._client_cycle = cycle(self._clients)
+            except Exception as e:
+                logger.exception(f"Error kicking client from pool: {e}")
+                raise
 
         if not locked:
             with self._lock:
@@ -243,6 +277,27 @@ class NebulaPool(NebulaBaseExecutor):
 
                 self._in_use[client] = True
                 return client
+
+            # All clients are in use, check if we can create a new one
+            if len(self._clients) < self.pool_config.max_client_size:
+                try:
+                    client = NebulaClient(
+                        hosts=self.hosts,
+                        username=self.username,
+                        password=self.password,
+                        ssl_param=self.ssl_param,
+                        auth_options=self.auth_options,
+                        conn_config=self.conn_config,
+                        session_config=self.session_config,
+                    )
+                    self._clients.append(client)
+                    self._in_use[client] = True
+                    self._client_cycle = cycle(self._clients)
+                    return client
+                except Exception as e:
+                    logger.exception(f"Failed to create new client: {e}")
+                    raise
+
             return None
 
         with self._lock:
@@ -295,12 +350,18 @@ class NebulaPool(NebulaBaseExecutor):
             self.return_client(client)
 
     def execute(
-        self, statement: str, *, timeout: Optional[float] = None, do_ping: bool = False
+            self, statement: str, *, timeout: Optional[float] = None, do_ping: bool = False
     ):
         with self.borrow() as client:
             return client.execute(statement, timeout=timeout, do_ping=do_ping)
 
     def close(self):
         """Close all clients in the pool. No Exception will be raised but errors will be logged."""
-        for client in self._clients:
-            client.close()
+        with self._lock:
+            for client in self._clients:
+                try:
+                    client.close()
+                except Exception as e:
+                    logger.exception(f"Failed to close client: {e}")
+            self._clients.clear()
+            self._in_use.clear()
