@@ -116,6 +116,7 @@ class NebulaPool(NebulaBaseExecutor):
         self._lock = Lock()
         self._in_use = {}  # Initialize tracking dict
         self._hosts_cycle = cycle(self.hosts)
+        self._host_index = 0  # Index for round-robin host selection
 
         # Initialize the client pool
         self.minfill_pool()
@@ -128,8 +129,12 @@ class NebulaPool(NebulaBaseExecutor):
             created_clients = []
             try:
                 for _ in range(to_fill_num):
+                    # Round-robin host address order
+                    rotated_hosts = self.hosts[self._host_index:] + self.hosts[:self._host_index]
+                    self._host_index = (self._host_index + 1) % len(self.hosts)
+
                     client = NebulaClient(
-                        hosts=self.hosts,
+                        hosts=rotated_hosts,
                         username=self.username,
                         password=self.password,
                         ssl_param=self.ssl_param,
@@ -281,8 +286,12 @@ class NebulaPool(NebulaBaseExecutor):
             # All clients are in use, check if we can create a new one
             if len(self._clients) < self.pool_config.max_client_size:
                 try:
+                    # Round-robin host address order
+                    rotated_hosts = self.hosts[self._host_index:] + self.hosts[:self._host_index]
+                    self._host_index = (self._host_index + 1) % len(self.hosts)
+
                     client = NebulaClient(
-                        hosts=self.hosts,
+                        hosts=rotated_hosts,
                         username=self.username,
                         password=self.password,
                         ssl_param=self.ssl_param,
