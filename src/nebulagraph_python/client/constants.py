@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Constants for NebulaGraph client, matching Java implementation"""
 
-# New constants matching Java implementation
 DEFAULT_MAX_CLIENT_SIZE: int = 10
 DEFAULT_MIN_CLIENT_SIZE: int = 1
 DEFAULT_CONNECT_TIMEOUT_MS: int = 3 * 1000  # 3 seconds
@@ -36,7 +34,7 @@ DEFAULT_ENABLE_TLS: bool = False
 DEFAULT_DISABLE_VERIFY_SERVER_CERT: bool = False
 DEFAULT_TLS_PEER_NAME_VERIFY: bool = True
 
-# Backward compatibility constants (old API)
+# old default config
 DEFAULT_SESSION_POOL_SIZE: int = 10
 DEFAULT_SESSION_POOL_WAIT_TIMEOUT: float = 0.0
 DEFAULT_MAX_CLIENT_SIZE_OLD: int = 10
