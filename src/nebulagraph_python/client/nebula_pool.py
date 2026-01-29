@@ -222,9 +222,6 @@ class NebulaPool:
                 if not self.config.block_when_exhausted:
                     raise RuntimeError("No available clients in pool")
 
-                # Wait a bit before retrying
-            time.sleep(0.01)
-
         raise RuntimeError(f"Timeout waiting for client after {self.config.max_wait_ms}ms")
 
     def return_client(self, client: NebulaClient) -> None:
