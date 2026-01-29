@@ -54,7 +54,7 @@ class NebulaPoolConfig:
 
     # Connection settings
     addresses: str
-    username: str
+    user_name: str
     password: Optional[str] = None
 
     # Pool settings
@@ -127,7 +127,7 @@ class NebulaPool:
             def __init__(self, pool_config: NebulaPoolConfig, addrs: List[HostAddress]):
                 self.address = addrs
                 self.strictly_server_healthy = pool_config.strictly_server_healthy
-                self.user_name = pool_config.username
+                self.user_name = pool_config.user_name
                 self.auth_options = pool_config.auth_options
                 self.connect_timeout_mills = pool_config.connect_timeout_ms
                 self.request_timeout_mills = pool_config.request_timeout_ms

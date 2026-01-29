@@ -26,7 +26,7 @@ from nebulagraph_python.client import NebulaClient
 def create_client(hosts: str, username: str, password: str) -> NebulaClient:
     """Create and verify NebulaGraph client connection"""
     try:
-        client = NebulaClient(hosts, username, password)
+        client = NebulaClient(hosts, user_name=username, password=password)
         # Test connection
         if not client.ping():
             raise RuntimeError("Failed to connect to NebulaGraph")

@@ -50,11 +50,11 @@ class TestNebulaPoolConfig:
         """Test NebulaPoolConfig with default values"""
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass"
         )
         assert config.addresses == "127.0.0.1:9669"
-        assert config.username == "test_user"
+        assert config.user_name == "test_user"
         assert config.password == "test_pass"
         assert config.max_client_size == DEFAULT_MAX_CLIENT_SIZE
         assert config.min_client_size == DEFAULT_MIN_CLIENT_SIZE
@@ -83,7 +83,7 @@ class TestNebulaPoolConfig:
         """Test NebulaPoolConfig with custom pool settings"""
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             max_client_size=20,
             min_client_size=5,
@@ -99,7 +99,7 @@ class TestNebulaPoolConfig:
         """Test NebulaPoolConfig with custom timeout settings"""
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             connect_timeout_ms=5000,
             request_timeout_ms=120000,
@@ -113,7 +113,7 @@ class TestNebulaPoolConfig:
         """Test NebulaPoolConfig with custom health check settings"""
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             health_check_time_ms=300000,
             test_on_borrow=False,
@@ -125,7 +125,7 @@ class TestNebulaPoolConfig:
         """Test NebulaPoolConfig with custom eviction settings"""
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             idle_evict_schedule_ms=60000,
             min_evictable_idle_time_ms=900000,
@@ -137,7 +137,7 @@ class TestNebulaPoolConfig:
         """Test NebulaPoolConfig with custom server settings"""
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             strictly_server_healthy=True,
             max_life_time_ms=3600000,
@@ -149,7 +149,7 @@ class TestNebulaPoolConfig:
         """Test NebulaPoolConfig with custom session settings"""
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             graph="test_graph",
             schema="test_schema",
@@ -170,7 +170,7 @@ class TestNebulaPoolConfig:
         ssl_param = SSLParam(ca_crt=b"ca", private_key=b"key", cert=b"cert")
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             scan_parallel=20,
             enable_tls=True,
@@ -184,7 +184,7 @@ class TestNebulaPoolConfig:
         """Test that auth_options is populated with password in __post_init__"""
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass"
         )
         assert config.auth_options == {"password": "test_pass"}
@@ -193,7 +193,7 @@ class TestNebulaPoolConfig:
         """Test auth_options without password"""
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password=None
         )
         assert config.auth_options == {}
@@ -202,7 +202,7 @@ class TestNebulaPoolConfig:
         """Test NebulaPoolConfig with multiple addresses"""
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669,127.0.0.2:9669,127.0.0.3:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass"
         )
         assert config.addresses == "127.0.0.1:9669,127.0.0.2:9669,127.0.0.3:9669"
@@ -212,7 +212,7 @@ class TestNebulaPoolConfig:
         ssl_param = SSLParam(ca_crt=b"ca", private_key=b"key", cert=b"cert")
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669,127.0.0.2:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             max_client_size=20,
             min_client_size=5,
@@ -238,7 +238,7 @@ class TestNebulaPoolConfig:
             ssl_param=ssl_param,
         )
         assert config.addresses == "127.0.0.1:9669,127.0.0.2:9669"
-        assert config.username == "test_user"
+        assert config.user_name == "test_user"
         assert config.password == "test_pass"
         assert config.max_client_size == 20
         assert config.min_client_size == 5
@@ -282,7 +282,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=2
         )
@@ -309,7 +309,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669,127.0.0.2:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             max_client_size=10,
             min_client_size=3,
@@ -337,7 +337,7 @@ class TestNebulaPool:
         ssl_param = SSLParam(ca_crt=b"ca", private_key=b"key", cert=b"cert")
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             enable_tls=True,
             ssl_param=ssl_param,
@@ -365,7 +365,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1,
             test_on_borrow=True
@@ -397,7 +397,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1,
             max_client_size=2
@@ -429,7 +429,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1,
             max_client_size=1,
@@ -461,7 +461,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1,
             max_client_size=1,
@@ -496,7 +496,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1,
             test_on_borrow=True
@@ -526,7 +526,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1
         )
@@ -554,7 +554,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1
         )
@@ -584,7 +584,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1,
             max_life_time_ms=3600000  # 1 hour
@@ -613,7 +613,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=2
         )
@@ -642,7 +642,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1
         )
@@ -668,7 +668,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=3
         )
@@ -707,7 +707,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=3
         )
@@ -748,7 +748,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1
         )
@@ -774,7 +774,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             max_client_size=3,
             min_client_size=3
@@ -821,7 +821,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669,127.0.0.2:9669,127.0.0.3:9669",
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1
         )
@@ -849,7 +849,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1",  # Missing port
-            username="test_user",
+            user_name="test_user",
             password="test_pass",
             min_client_size=1
         )
@@ -877,7 +877,7 @@ class TestNebulaPool:
 
         config = NebulaPoolConfig(
             addresses="127.0.0.1:9669",
-            username="test_user",
+            user_nameuser_name="test_user",
             password="test_pass",
             min_client_size=3
         )

@@ -124,7 +124,7 @@ from nebulagraph_python import NebulaClient
 
 with NebulaClient(
     hosts=["127.0.0.1:9669"],
-    username="root",
+    user_name="root",
     password="NebulaGraph01",
 ) as client:
     result = client.execute("RETURN 1 AS a, 2 AS b")
@@ -142,7 +142,7 @@ from nebulagraph_python import NebulaClient
 
 client = NebulaClient(
     hosts=["127.0.0.1:9669"],
-    username="root",
+    user_name="root",
     password="NebulaGraph01",
 )
 try:
@@ -161,7 +161,7 @@ from nebulagraph_python.client import NebulaAsyncClient
 async def main() -> None:
     client = await NebulaAsyncClient.connect(
         hosts=["127.0.0.1:9669"],
-        username="root",
+        user_name="root",
         password="NebulaGraph01",
     )
     try:

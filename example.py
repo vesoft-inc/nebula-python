@@ -126,7 +126,7 @@ def pool_example():
     # Create pool configuration
     config = NebulaPoolConfig(
         addresses="127.0.0.1:9669",
-        username="root",
+        user_name="root",
         password="nebula",
         max_client_size=10,
         min_client_size=2,
@@ -194,7 +194,7 @@ def multi_threaded_pool_example():
     # Create pool
     config = NebulaPoolConfig(
         addresses="127.0.0.1:9669",
-        username="root",
+        user_name="root",
         password="nebula",
         max_client_size=10,
         min_client_size=2,

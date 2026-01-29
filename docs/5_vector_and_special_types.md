@@ -31,7 +31,7 @@ from nebulagraph_python.client.nebula_client import NebulaClient
 from nebulagraph_python.py_data_types import NVector
 
 # Connect (adjust hosts/credentials to your environment)
-cli = NebulaClient(hosts=["127.0.0.1:9669"], username="root", password="NebulaGraph01")
+cli = NebulaClient(hosts=["127.0.0.1:9669"], user_name="root", password="NebulaGraph01")
 
 # RETURN a vector and read it from the result
 res = cli.execute_py("RETURN vector<3, float>([1, 2, 3]) AS vec")
@@ -73,7 +73,7 @@ Examples:
 from nebulagraph_python.client.nebula_client import NebulaClient
 from nebulagraph_python.py_data_types import NDuration
 
-cli = NebulaClient(hosts=["127.0.0.1:9669"], username="root", password="Nebula.123")
+cli = NebulaClient(hosts=["127.0.0.1:9669"], user_name="root", password="Nebula.123")
 
 # RETURN a duration literal from the server and read it
 # Adjust the literal to your NebulaGraph version if needed
