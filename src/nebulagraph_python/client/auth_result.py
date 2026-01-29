@@ -12,25 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .client import (
-    ConnectionConfig,
-    NebulaBaseAsyncExecutor,
-    NebulaBaseExecutor,
-    NebulaClient,
-    NebulaPool,
-    NebulaPoolConfig,
-    unwrap_value,
-)
-from .result_set import Record, ResultSet
+"""AuthResult class matching Java implementation"""
 
-__all__ = [
-    "ConnectionConfig",
-    "NebulaBaseAsyncExecutor",
-    "NebulaBaseExecutor",
-    "NebulaClient",
-    "NebulaPool",
-    "NebulaPoolConfig",
-    "Record",
-    "ResultSet",
-    "unwrap_value",
-]
+
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class AuthResult:
+    """Result of authentication, matching Java AuthResult class"""
+
+    session_id: int
+    version: str
+
+    def get_session_id(self) -> int:
+        """Get the session ID"""
+        return self.session_id
+
+    def get_version(self) -> str:
+        """Get the server version"""
+        return self.version

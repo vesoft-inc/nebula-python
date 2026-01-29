@@ -27,7 +27,7 @@ API:
 
 Examples:
 ```python
-from nebulagraph_python.client.client import NebulaClient
+from nebulagraph_python.client.nebula_client import NebulaClient
 from nebulagraph_python.py_data_types import NVector
 
 # Connect (adjust hosts/credentials to your environment)
@@ -70,7 +70,7 @@ API:
 
 Examples:
 ```python
-from nebulagraph_python.client.client import NebulaClient
+from nebulagraph_python.client.nebula_client import NebulaClient
 from nebulagraph_python.py_data_types import NDuration
 
 cli = NebulaClient(hosts=["127.0.0.1:9669"], username="root", password="Nebula.123")

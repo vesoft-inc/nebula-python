@@ -17,7 +17,7 @@ The relevant definitions live in the `nebulagraph_python.error` module.
 
 ```python
 import asyncio
-from nebulagraph_python.client.client import NebulaAsyncClient
+from nebulagraph_python.client.nebula_client import NebulaAsyncClient
 from nebulagraph_python.error import NebulaGraphRemoteError, ErrorCode
 
 async def main():

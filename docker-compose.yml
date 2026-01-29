@@ -1,0 +1,218 @@
+version: '3.8'
+
+services:
+  nebula-metad0:
+    image: vesoft/nebula-graph:v3.8.0
+    environment:
+      USER: root
+      TZ: UTC
+    command:
+      - --meta_server_addrs=nebula-metad0:9559,nebula-metad1:9559,nebula-metad2:9559
+      - --local_ip=nebula-metad0
+      - --ws_ip=nebula-metad0
+      - --port=9559
+      - --data_path=/data/meta
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://nebula-metad0:19559/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9559:9559"
+      - "19559:19559"
+    volumes:
+      - ./data/meta0:/data/meta
+      - ./logs/meta0:/logs
+    networks:
+      - nebula-net
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  nebula-metad1:
+    image: vesoft/nebula-graph:v3.8.0
+    environment:
+      USER: root
+      TZ: UTC
+    command:
+      - --meta_server_addrs=nebula-metad0:9559,nebula-metad1:9559,nebula-metad2:9559
+      - --local_ip=nebula-metad1
+      - --ws_ip=nebula-metad1
+      - --port=9559
+      - --data_path=/data/meta
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://nebula-metad1:19559/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9560:9559"
+      - "19560:19559"
+    volumes:
+      - ./data/meta1:/data/meta
+      - ./logs/meta1:/logs
+    networks:
+      - nebula-net
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  nebula-metad2:
+    image: vesoft/nebula-graph:v3.8.0
+    environment:
+      USER: root
+      TZ: UTC
+    command:
+      - --meta_server_addrs=nebula-metad0:9559,nebula-metad1:9559,nebula-metad2:9559
+      - --local_ip=nebula-metad2
+      - --ws_ip=nebula-metad2
+      - --port=9559
+      - --data_path=/data/meta
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://nebula-metad2:19559/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9561:9559"
+      - "19561:19559"
+    volumes:
+      - ./data/meta2:/data/meta
+      - ./logs/meta2:/logs
+    networks:
+      - nebula-net
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  nebula-storaged0:
+    image: vesoft/nebula-graph:v3.8.0
+    environment:
+      USER: root
+      TZ: UTC
+    command:
+      - --meta_server_addrs=nebula-metad0:9559,nebula-metad1:9559,nebula-metad2:9559
+      - --local_ip=nebula-storaged0
+      - --ws_ip=nebula-storaged0
+      - --port=9779
+      - --data_path=/data/storage
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+    depends_on:
+      - nebula-metad0
+      - nebula-metad1
+      - nebula-metad2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://nebula-storaged0:19779/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9779:9779"
+      - "19779:19779"
+    volumes:
+      - ./data/storage0:/data/storage
+      - ./logs/storage0:/logs
+    networks:
+      - nebula-net
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  nebula-storaged1:
+    image: vesoft/nebula-graph:v3.8.0
+    environment:
+      USER: root
+      TZ: UTC
+    command:
+      - --meta_server_addrs=nebula-metad0:9559,nebula-metad1:9559,nebula-metad2:9559
+      - --local_ip=nebula-storaged1
+      - --ws_ip=nebula-storaged1
+      - --port=9779
+      - --data_path=/data/storage
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+    depends_on:
+      - nebula-metad0
+      - nebula-metad1
+      - nebula-metad2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://nebula-storaged1:19779/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9780:9779"
+      - "19780:19779"
+    volumes:
+      - ./data/storage1:/data/storage
+      - ./logs/storage1:/logs
+    networks:
+      - nebula-net
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  nebula-graphd:
+    image: vesoft/nebula-graph:v3.8.0
+    environment:
+      USER: root
+      TZ: UTC
+    command:
+      - --meta_server_addrs=nebula-metad0:9559,nebula-metad1:9559,nebula-metad2:9559
+      - --local_ip=nebula-graphd
+      - --ws_ip=nebula-graphd
+      - --port=9669
+      - --log_dir=/logs
+      - --v=0
+      - --minloglevel=0
+    depends_on:
+      - nebula-metad0
+      - nebula-metad1
+      - nebula-metad2
+      - nebula-storaged0
+      - nebula-storaged1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://nebula-graphd:19669/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    ports:
+      - "9669:9669"
+      - "19669:19669"
+    volumes:
+      - ./logs/graph:/logs
+    networks:
+      - nebula-net
+    restart: on-failure
+    cap_add:
+      - SYS_PTRACE
+
+  nebula-console:
+    image: vesoft/nebula-console:v3.8.0
+    entrypoint: ["sleep", "infinity"]
+    depends_on:
+      - nebula-graphd
+    networks:
+      - nebula-net
+
+networks:
+  nebula-net:
+    driver: bridge

@@ -2,17 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from typing import Optional, Dict
-from nebulagraph_python.client.pool import NebulaPool
+from nebulagraph_python.client.nebula_pool import NebulaPool, NebulaPoolConfig, SessionConfig
 from nebulagraph_python.data import HostAddress
-from dataclasses import dataclass, field
-
-@dataclass
-class SessionConfig:
-    schema: Optional[str] = None
-    graph: Optional[str] = None
-    timezone: Optional[str] = None
-    values: Dict[str, str] = field(default_factory=dict)
-    configs: Dict[str, str] = field(default_factory=dict)
 
 graph_name = "test_graph"
 
