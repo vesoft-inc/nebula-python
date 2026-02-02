@@ -9,13 +9,13 @@ async def worker_task(worker_id: int, query: str, hosts: List[str], username: st
             hosts=hosts,
             username=username,
             password=password,
-            session_pool_config=SessionPoolConfig(size=3),  # 每个进程3个session
+            session_pool_config=SessionPoolConfig(size=3),
         ) as client:
             result = await client.execute_py(query, {"worker_id": worker_id})
             return {
                 "worker_id": worker_id,
                 "status": "success",
-                "result": list(result.as_primitive_by_row()),  # 转换为列表以便序列化
+                "result": list(result.as_primitive_by_row()),
             }
     except Exception as e:
         return {
