@@ -31,7 +31,7 @@ from nebulagraph_python.py_data_types import NVector
 
 client = NebulaClient(
     hosts=["127.0.0.1:9669"],
-    username="root",
+    user_name="root",
     password="NebulaGraph01",
     session_config=SessionConfig(graph="movie"),
 )

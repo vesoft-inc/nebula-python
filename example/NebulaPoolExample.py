@@ -1,65 +1,54 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from typing import Optional, Dict
-from nebulagraph_python.client.pool import NebulaPool
-from nebulagraph_python.data import HostAddress
-from dataclasses import dataclass, field
+from nebulagraph_python import NebulaPool, NebulaPoolConfig
+from nebulagraph_python.client import NebulaBaseExecutor
 
-@dataclass
-class SessionConfig:
-    schema: Optional[str] = None
-    graph: Optional[str] = None
-    timezone: Optional[str] = None
-    values: Dict[str, str] = field(default_factory=dict)
-    configs: Dict[str, str] = field(default_factory=dict)
+class NebulaPoolExecutor(NebulaBaseExecutor):
+    """Wrapper to make NebulaPool compatible with NebulaBaseExecutor"""
+
+    def __init__(self, pool):
+        self.pool = pool
+        self.client = None
+
+    def execute(self, statement: str, *, timeout=None, do_ping=False):
+        if self.client is None:
+            self.client = self.pool.get_client()
+        return self.client.execute_with_timeout(statement, timeout or 30000)
+
 
 graph_name = "test_graph"
 
 def main():
-    # config the connect information
-    hosts = ["127.0.0.1:9669"]
-    username = "root"
+    # configure the connection information
+    addresses = "127.0.0.1:9669"
+    user_name = "root"
     password = "NebulaGraph01"
 
     # create NebulaPool
-    pool = NebulaPool(
-        hosts=hosts,
-        username=username,
+    config = NebulaPoolConfig(
+        addresses=addresses,
+        user_name=user_name,
         password=password,
-        session_config=SessionConfig(graph=graph_name)
+        graph=graph_name
     )
+    pool = NebulaPool(config)
 
     try:
         print("use execute_py to execute `SHOW GRAPHS` ...")
-        result = pool.execute_py("SHOW GRAPHS")
+        executor = NebulaPoolExecutor(pool)
+        result = executor.execute("SHOW GRAPHS")
 
-        # 打印结果
+        # print results
         print("\n query result:")
         print("-" * 50)
-        result.print(style="table")
-
-        print("\n\nuse execute to execute `SHOW GRAPHS`:")
+        result.print()
         print("-" * 50)
-        result2 = pool.execute("SHOW GRAPHS")
-        result2.print(style="table")
-
-        # get the query result
-        print("-" * 50)
-        if result.size > 0:
-            for row in result:
-                print(f"Row: {row}")
-        else:
-            print("Empty")
 
     except Exception as e:
-        print(f"\nerror: {e}")
-        import traceback
-        traceback.print_exc()
+        print(f"Error: {e}")
     finally:
-        print("\nclose the pool...")
         pool.close()
-        print("closed")
 
 
 if __name__ == "__main__":

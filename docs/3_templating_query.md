@@ -17,7 +17,7 @@ from nebulagraph_python.client import NebulaAsyncClient
 async def main() -> None:
     async with await NebulaAsyncClient.connect(
         hosts=["127.0.0.1:9669"],
-        username="root",
+        user_name="root",
         password="NebulaGraph01",
     ) as client:
         query = """

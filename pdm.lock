@@ -5,7 +5,7 @@
 groups = ["default", "all", "console", "full"]
 strategy = []
 lock_version = "4.4"
-content_hash = "sha256:8b25d18ccf0074597c9efe1596774a54ae221562ec27393cff85396a7252b648"
+content_hash = "sha256:bb5c7603bb95487b552e303cd016f871b518cc1cc1d7c23839c26ec0876cf286"
 
 [[package]]
 name = "annotated-types"
@@ -164,6 +164,14 @@ summary = "plugin and hook calling mechanisms for python"
 files = [
     {file = "pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"},
     {file = "pluggy-1.6.0.tar.gz", hash = "sha256:7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3"},
+]
+
+[[package]]
+name = "pool"
+version = "0.1.2dev"
+summary = "general purposed connection pool for gevent, split from sqlalchemy"
+files = [
+    {file = "pool-0.1.2dev.tar.gz", hash = "sha256:99a3aefa842c5bb87c92a3bbd40cacab212f104268a8fc6e706a2df92002f785"},
 ]
 
 [[package]]

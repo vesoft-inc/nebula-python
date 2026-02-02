@@ -17,12 +17,12 @@ The relevant definitions live in the `nebulagraph_python.error` module.
 
 ```python
 import asyncio
-from nebulagraph_python.client.client import NebulaAsyncClient
+from nebulagraph_python.client.nebula_client import NebulaAsyncClient
 from nebulagraph_python.error import NebulaGraphRemoteError, ErrorCode
 
 async def main():
     async with await NebulaAsyncClient.connect(
-        hosts="localhost:9669", username="root", password="NebulaGraph01"
+        hosts="localhost:9669", user_name="root", password="NebulaGraph01"
     ) as client:
         try:
             rs = await client.execute_py("USE not_exist_graph RETURN 1")

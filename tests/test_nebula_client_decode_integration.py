@@ -57,8 +57,8 @@ class TestNebulaClientDecodeIntegration(unittest.TestCase):
         cls.client = None
         try:
             cls.client = NebulaClient(
-                hosts=cls.hosts,
-                username=cls.user,
+                addresses=cls.hosts,
+                user_name=cls.user,
                 password=cls.password,
             )
 

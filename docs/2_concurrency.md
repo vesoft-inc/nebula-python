@@ -32,7 +32,7 @@ async def concurrent_example():
     # Create client with session pool for concurrency
     async with await NebulaAsyncClient.connect(
         hosts=["127.0.0.1:9669", "127.0.0.1:9670"],  # Multiple hosts for HA
-        username="root",
+        user_name="root",
         password="NebulaGraph01",
         session_pool_config=SessionPoolConfig(
             size=3,           # Pool of 3 sessions per host
@@ -70,7 +70,7 @@ By default, statements run on a random session from the pool. When you need to r
 async def contextual_example():
     async with await NebulaAsyncClient.connect(
         hosts=["127.0.0.1:9669"],
-        username="root",
+        user_name="root",
         password="NebulaGraph01",
         session_pool_config=SessionPoolConfig(),
     ) as client:
@@ -148,7 +148,7 @@ from nebulagraph_python import NebulaClient, SessionPoolConfig
 
 with NebulaClient(
     hosts=["127.0.0.1:9669"],
-    username="root",
+    user_name="root",
     password="NebulaGraph01",
     session_pool_config=SessionPoolConfig(),  # enables multiple sessions per host
 ) as client, ThreadPoolExecutor(max_workers=8) as executor:

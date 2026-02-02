@@ -21,16 +21,24 @@ pip install -e .
 
 ```python
 import asyncio
-from nebulagraph_python.client import NebulaAsyncClient
+from nebulagraph_python.client import AsyncNebulaClient
 
 async def main() -> None:
-    async with await NebulaAsyncClient.connect(
-        hosts=["127.0.0.1:9669"],
-        username="root",
-        password="NebulaGraph01",
-    ) as client:
-        result = await client.execute("RETURN 1 AS a, 2 AS b")
-        result.print()
+    # Create async client
+    # Note: AsyncNebulaClient requires manual initialization
+    client = AsyncNebulaClient(
+        addresses="127.0.0.1:9669",
+        user_name="root",
+        password="nebula",
+        connect_timeout_ms=3000,
+        request_timeout_ms=30000
+    )
+
+    # Initialize the connection
+    await client._init_client()
+
+    result = await client.execute("RETURN 1 AS a, 2 AS b")
+    result.print()
 
 asyncio.run(main())
 ```
@@ -116,7 +124,7 @@ from nebulagraph_python import NebulaClient
 
 with NebulaClient(
     hosts=["127.0.0.1:9669"],
-    username="root",
+    user_name="root",
     password="NebulaGraph01",
 ) as client:
     result = client.execute("RETURN 1 AS a, 2 AS b")
@@ -134,7 +142,7 @@ from nebulagraph_python import NebulaClient
 
 client = NebulaClient(
     hosts=["127.0.0.1:9669"],
-    username="root",
+    user_name="root",
     password="NebulaGraph01",
 )
 try:
@@ -153,7 +161,7 @@ from nebulagraph_python.client import NebulaAsyncClient
 async def main() -> None:
     client = await NebulaAsyncClient.connect(
         hosts=["127.0.0.1:9669"],
-        username="root",
+        user_name="root",
         password="NebulaGraph01",
     )
     try:
