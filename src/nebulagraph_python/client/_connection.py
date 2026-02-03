@@ -494,7 +494,7 @@ class AsyncConnection:
                 request, timeout=self.config.request_timeout
             )
         except grpc.aio.AioRpcError as e:
-            self.close()
+            await self.close()
             logger.error(
                 f"Async RPC error during authenticate: {e.code()} {e.details()}"
             )
@@ -502,14 +502,14 @@ class AsyncConnection:
                 f"RPC error during authentication: {e.details()}"
             ) from e
         except Exception as e:  # Catch other potential errors
-            self.close()
+            await self.close()
             logger.error(f"Unexpected error during async authenticate: {e}")
             raise AuthenticatingError(
                 "Unexpected error during async authentication"
             ) from e
 
         if response.status.code != b"00000":
-            self.close()
+            await self.close()
             raise NebulaGraphRemoteError(
                 code=ErrorCode(response.status.code.decode("utf-8")),
                 message=response.status.message.decode("utf-8"),
