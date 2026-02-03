@@ -1,0 +1,17 @@
+<map id="borrow" name="borrow">
+<area shape="rect" id="Node000001" title=" " alt="" coords="968,94,1035,119"/>
+<area shape="rect" id="Node000002" href="$db/de6/classnebulagraph__python_1_1client_1_1client_1_1NebulaAsyncClient.html#aaccb76d84d7ee560a2cee2a7cf9938fc" title=" " alt="" coords="681,29,920,69"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="954,95,919,84,877,72,878,67,921,79,956,89"/>
+<area shape="rect" id="Node000003" href="$db/d56/classnebulagraph__python_1_1client_1_1client_1_1NebulaClient.html#abc9a0a988f0a5d56a073346451d69864" title=" " alt="" coords="764,94,837,119"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="954,117,838,116,838,111,954,112"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="834,18,822,11,801,8,782,10,770,15,766,21,768,28,763,30,761,20,767,11,780,5,801,3,824,6,837,13"/>
+<area shape="poly" id="edge4_Node000003_Node000001" title=" " alt="" coords="851,96,968,97,968,102,851,101"/>
+<area shape="rect" id="Node000004" href="$d5/dff/classnebulagraph__python_1_1client_1_1base__executor_1_1NebulaBaseAsyncExecutor.html#a8cce9aa46f88a7e098f31a598a1385bc" title=" " alt="" coords="295,23,633,63"/>
+<area shape="poly" id="edge5_Node000003_Node000004" title=" " alt="" coords="750,100,633,77,570,65,571,60,634,72,751,95"/>
+<area shape="rect" id="Node000005" href="$d7/d65/classnebulagraph__python_1_1client_1_1base__executor_1_1NebulaBaseExecutor.html#a8cce9aa46f88a7e098f31a598a1385bc" title=" " alt="" coords="315,87,613,127"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="750,109,613,109,613,104,750,104"/>
+<area shape="rect" id="Node000006" href="$d7/d65/classnebulagraph__python_1_1client_1_1base__executor_1_1NebulaBaseExecutor.html#ab466f59ec9d790684468da6092b9e74e" title=" " alt="" coords="337,151,591,206"/>
+<area shape="poly" id="edge7_Node000003_Node000006" title=" " alt="" coords="751,120,592,154,591,149,750,115"/>
+<area shape="rect" id="Node000007" href="$d7/d65/classnebulagraph__python_1_1client_1_1base__executor_1_1NebulaBaseExecutor.html#afdec9dbd01a121835d60473b325ad17c" title=" " alt="" coords="5,159,247,199"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="323,181,247,181,247,176,323,176"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="dimension" name="dimension">
+<area shape="rect" id="Node000001" title=" " alt="" coords="155,55,245,80"/>
+<area shape="rect" id="Node000002" href="$df/dd9/classnebulagraph__python_1_1py__data__types_1_1NVector.html#a9a6fefcb3e86dc34c6997503c11aa578" title=" " alt="" coords="23,5,89,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,53,89,32,91,27,151,48"/>
+<area shape="rect" id="Node000003" href="$df/dd9/classnebulagraph__python_1_1py__data__types_1_1NVector.html#a4f3c83260533932321b98ff72dbadeea" title=" " alt="" coords="5,55,107,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="141,70,107,70,107,65,141,65"/>
+<area shape="rect" id="Node000004" href="$df/dd9/classnebulagraph__python_1_1py__data__types_1_1NVector.html#afd64a095585f64cbe93bdc3b13eba041" title=" " alt="" coords="21,104,91,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="150,87,93,107,91,102,149,82"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="close" name="close">
+<area shape="rect" id="Node000001" title=" " alt="" coords="14,37,70,62"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="12,39,4,29,6,19,20,12,42,10,71,14,79,20,81,26,76,28,75,23,69,19,42,15,21,17,10,22,9,28,16,36"/>
+<area shape="rect" id="Node000002" href="$db/d56/classnebulagraph__python_1_1client_1_1client_1_1NebulaClient.html#a8ab79e14e24aa440dcd1d9e822eb1f1c" title=" " alt="" coords="118,29,357,69"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="71,53,105,55,105,60,70,58"/>
+<area shape="poly" id="edge3_Node000002_Node000001" title=" " alt="" coords="118,43,84,45,84,39,118,38"/>
+<area shape="poly" id="edge4_Node000002_Node000002" title=" " alt="" coords="201,30,199,20,205,11,218,5,238,3,261,6,273,13,270,17,259,11,238,8,219,10,208,15,204,21,206,28"/>
+</map>
