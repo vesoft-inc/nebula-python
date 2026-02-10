@@ -27,7 +27,7 @@ from nebulagraph_python.proto import (
     graph_pb2,
     graph_pb2_grpc,
 )
-
+from nebulagraph_python.client.address_utils import parse_hosts
 from nebulagraph_python.client.auth_result import AuthResult
 from nebulagraph_python.client.constants import DEFAULT_CONNECT_TIMEOUT_MS, DEFAULT_REQUEST_TIMEOUT_MS
 from nebulagraph_python.data import HostAddress, SSLParam
@@ -63,7 +63,7 @@ class ConnectionConfig:
         if ssl_param is True:
             ssl_param = SSLParam()
         return cls(
-            hosts=_parse_hosts(hosts),
+            hosts=parse_hosts(hosts),
             ssl_param=ssl_param,
             connect_timeout=connect_timeout,
             request_timeout=request_timeout,
@@ -72,21 +72,6 @@ class ConnectionConfig:
     def __post_init__(self):
         if len(self.hosts) == 0:
             raise ValueError("hosts cannot be empty")
-
-
-def _parse_hosts(hosts: Union[str, List[str], List[HostAddress]]) -> List[HostAddress]:
-    """Convert various host formats to list of HostAddress objects (backward compatibility)"""
-    if isinstance(hosts, str):
-        hosts = hosts.split(",")
-
-    addresses = []
-    for host in hosts:
-        if isinstance(host, HostAddress):
-            addresses.append(host)
-        else:
-            addr, port = host.split(":")
-            addresses.append(HostAddress(addr, int(port)))
-    return addresses
 
 
 class Connection(ABC):

@@ -23,6 +23,7 @@ from typing import Dict, List, Optional, TYPE_CHECKING
 import grpc
 
 from nebulagraph_python._error_code import ErrorCode
+from nebulagraph_python.client.address_utils import parse_hosts
 from nebulagraph_python.client._connection import GrpcConnection, AsyncConnection, ConnectionConfig
 from nebulagraph_python.client.auth_result import AuthResult
 from nebulagraph_python.client.base_executor import NebulaBaseExecutor, NebulaBaseAsyncExecutor
@@ -79,7 +80,7 @@ class NebulaClient(NebulaBaseExecutor):
             ssl_param: SSL parameters
             auth_options: Additional authentication options
         """
-        self.servers: List[HostAddress] = self._validate_address(addresses)
+        self.servers: List[HostAddress] = parse_hosts(addresses)
         self.user_name: str = user_name
         self.password: Optional[str] = password
         self.auth_options: Dict[str, object] = auth_options or {}
@@ -102,6 +103,44 @@ class NebulaClient(NebulaBaseExecutor):
         self._lock = threading.Lock()
 
         self._init_client()
+
+    def _init_client(self) -> None:
+        """Initialize the client connection"""
+        auth_result: Optional[AuthResult] = None
+
+        # Create connection config
+        config = ConnectionConfig.from_defaults(
+            hosts=self.servers,
+            ssl_param=self.enable_tls or self.ssl_param,
+            connect_timeout=self.connect_timeout_mills / 1000.0,
+            request_timeout=self.request_timeout_mills / 1000.0,
+        )
+        if self.ssl_param:
+            config.ssl_param = self.ssl_param
+
+        self.connection = GrpcConnection()
+
+        try_connect_times = len(self.servers)
+        random.shuffle(self.servers)
+
+        while try_connect_times > 0:
+            try_connect_times -= 1
+            try:
+                self.connection.open(self.servers[try_connect_times], self)
+                auth_result = self.connection.authenticate(
+                    self.user_name, self.auth_options
+                )
+                self.session_id = auth_result.get_session_id()
+                self.version = auth_result.get_version()
+                self.create_time = int(time.time() * 1000)
+                break
+            except AuthenticatingError as e:
+                logger.error(f"create NebulaClient failed: {e}")
+                raise
+            except Exception as e:
+                if try_connect_times == 0:
+                    logger.error(f"create NebulaClient failed: {e}")
+                    raise
 
     def execute(
         self,
@@ -139,7 +178,7 @@ class NebulaClient(NebulaBaseExecutor):
     def get_host(self) -> str:
         """Get the connected host address"""
         if self.connection:
-            return str(self.connection.get_server_address())
+            return str(self.connection.server_addr)
         return ""
 
     def get_connect_timeout_mills(self) -> int:
@@ -188,47 +227,6 @@ class NebulaClient(NebulaBaseExecutor):
         if self.is_closed:
             raise RuntimeError("The NebulaClient already closed.")
 
-    def _init_client(self) -> None:
-        """Initialize the client connection"""
-        auth_result: Optional[AuthResult] = None
-        self.connection = GrpcConnection()
-
-        try_connect_times = len(self.servers)
-        random.shuffle(self.servers)
-
-        while try_connect_times > 0:
-            try_connect_times -= 1
-            try:
-                self.connection.open(self.servers[try_connect_times], self)
-                auth_result = self.connection.authenticate(
-                    self.user_name, self.auth_options
-                )
-                self.session_id = auth_result.get_session_id()
-                self.version = auth_result.get_version()
-                self.create_time = int(time.time() * 1000)
-                break
-            except AuthenticatingError as e:
-                logger.error(f"create NebulaClient failed: {e}")
-                raise
-            except Exception as e:
-                if try_connect_times == 0:
-                    logger.error(f"create NebulaClient failed: {e}")
-                    raise
-
-    @staticmethod
-    def _validate_address(addresses: str) -> List[HostAddress]:
-        """Validate and parse addresses"""
-        result = []
-        if isinstance(addresses, str):
-            for addr in addresses.split(","):
-                addr = addr.strip()
-                if ":" in addr:
-                    host, port = addr.rsplit(":", 1)
-                    result.append(HostAddress(host, int(port)))
-                else:
-                    raise ValueError(f"Invalid address format: {addr}")
-        return result
-
 
 class AsyncNebulaClient(NebulaBaseAsyncExecutor):
     """Async client to connect to NebulaGraph, matching Java NebulaClient with async support"""
@@ -261,7 +259,9 @@ class AsyncNebulaClient(NebulaBaseAsyncExecutor):
             ssl_param: SSL parameters
             auth_options: Additional authentication options
         """
-        self.servers: List[HostAddress] = self._validate_address(addresses)
+        # Parse addresses using centralized address parser from address_utils
+        from nebulagraph_python.client.address_utils import parse_hosts
+        self.servers: List[HostAddress] = parse_hosts(addresses)
         self.user_name: str = user_name
         self.password: Optional[str] = password
         self.auth_options: Dict[str, object] = auth_options or {}
@@ -405,17 +405,3 @@ class AsyncNebulaClient(NebulaBaseAsyncExecutor):
                 if try_connect_times == 0:
                     logger.error(f"create AsyncNebulaClient failed: {e}")
                     raise
-
-    @staticmethod
-    def _validate_address(addresses: str) -> List[HostAddress]:
-        """Validate and parse addresses"""
-        result = []
-        if isinstance(addresses, str):
-            for addr in addresses.split(","):
-                addr = addr.strip()
-                if ":" in addr:
-                    host, port = addr.rsplit(":", 1)
-                    result.append(HostAddress(host, int(port)))
-                else:
-                    raise ValueError(f"Invalid address format: {addr}")
-        return result
