@@ -20,6 +20,7 @@ import threading
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, TYPE_CHECKING
 
+from nebulagraph_python.client.address_utils import parse_hosts
 from nebulagraph_python.client.client_pool_factory import ClientPoolFactory
 from nebulagraph_python.client.constants import (
     DEFAULT_BLOCK_WHEN_EXHAUSTED,
@@ -119,8 +120,7 @@ class NebulaPool:
 
     def _init_pool(self) -> None:
         """Initialize the connection pool"""
-        # Parse addresses
-        addresses = self._parse_addresses(self.config.addresses)
+        addresses = parse_hosts(self.config.addresses)
 
         # Create load balancer config
         class LoadBalancerConfig:
@@ -175,18 +175,7 @@ class NebulaPool:
             except Exception as e:
                 logger.warning(f"Failed to create initial client: {e}")
 
-    @staticmethod
-    def _parse_addresses(addresses: str) -> List[HostAddress]:
-        """Parse address string to HostAddress list"""
-        result = []
-        for addr in addresses.split(","):
-            addr = addr.strip()
-            if ":" in addr:
-                host, port = addr.rsplit(":", 1)
-                result.append(HostAddress(host, int(port)))
-            else:
-                raise ValueError(f"Invalid address format: {addr}")
-        return result
+    
 
     def get_client(self) -> NebulaClient:
         """Get a client from the pool"""

@@ -15,8 +15,8 @@
 from nebulagraph_python.client._connection import (
     AsyncConnection,
     ConnectionConfig,
-    _parse_hosts,
 )
+from nebulagraph_python.client.address_utils import parse_address, parse_hosts
 from nebulagraph_python.client.base_executor import (
     NebulaBaseAsyncExecutor,
     NebulaBaseExecutor,
@@ -35,5 +35,6 @@ __all__ = [
     "NebulaPool",
     "NebulaPoolConfig",
     "unwrap_value",
-    "_parse_hosts",
+    "parse_address",
+    "parse_hosts",
 ]

@@ -22,8 +22,8 @@ from nebulagraph_python.client._connection import (
     AsyncConnection,
     Connection,
     ConnectionConfig,
-    _parse_hosts,
 )
+from nebulagraph_python.client.address_utils import parse_hosts
 from nebulagraph_python.data import HostAddress, SSLParam
 from nebulagraph_python.error import (
     AuthenticatingError,
@@ -35,18 +35,18 @@ from nebulagraph_python.error import (
 
 
 class TestParseHosts:
-    """Test cases for _parse_hosts function"""
+    """Test cases for parse_hosts function"""
 
     def test_parse_single_string_host(self):
         """Test parsing a single host string"""
-        hosts = _parse_hosts("127.0.0.1:9669")
+        hosts = parse_hosts("127.0.0.1:9669")
         assert len(hosts) == 1
         assert hosts[0].host == "127.0.0.1"
         assert hosts[0].port == 9669
 
     def test_parse_multiple_string_hosts(self):
         """Test parsing multiple host strings"""
-        hosts = _parse_hosts("127.0.0.1:9669,127.0.0.2:9669")
+        hosts = parse_hosts("127.0.0.1:9669,127.0.0.2:9669")
         assert len(hosts) == 2
         assert hosts[0].host == "127.0.0.1"
         assert hosts[0].port == 9669
@@ -55,7 +55,7 @@ class TestParseHosts:
 
     def test_parse_host_address_objects(self):
         """Test parsing HostAddress objects"""
-        hosts = _parse_hosts([HostAddress("127.0.0.1", 9669), HostAddress("127.0.0.2", 9670)])
+        hosts = parse_hosts([HostAddress("127.0.0.1", 9669), HostAddress("127.0.0.2", 9670)])
         assert len(hosts) == 2
         assert hosts[0].host == "127.0.0.1"
         assert hosts[0].port == 9669
@@ -64,7 +64,7 @@ class TestParseHosts:
 
     def test_parse_mixed_hosts(self):
         """Test parsing mixed host formats"""
-        hosts = _parse_hosts(["127.0.0.1:9669", HostAddress("127.0.0.2", 9670)])
+        hosts = parse_hosts(["127.0.0.1:9669", HostAddress("127.0.0.2", 9670)])
         assert len(hosts) == 2
         assert hosts[0].host == "127.0.0.1"
         assert hosts[0].port == 9669

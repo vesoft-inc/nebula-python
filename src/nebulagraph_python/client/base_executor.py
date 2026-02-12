@@ -90,6 +90,56 @@ class NebulaBaseAsyncExecutor:
         logger.debug("Executing NebulaGraph statement:\n%s", stmt)
         return await self.execute(stmt, timeout=timeout, do_ping=do_ping)
 
+    async def print_query_result(
+        self,
+        query: str,
+        style: str = "table",
+        width: Optional[int] = None,
+        min_width: int = 8,
+        max_width: Optional[int] = None,
+        padding: int = 1,
+        collapse_padding: bool = False,
+    ) -> None:
+        """Execute a query and print the results in a formatted way using rich
+
+        Args:
+        ----
+            query: The nGQL query to execute
+            style: Output style - either "table" (default) or "rows"
+            width: Fixed width for all columns. If None, width will be auto-calculated
+            min_width: Minimum width of columns when using table style
+            max_width: Maximum width of columns. If None, no maximum is enforced
+            padding: Number of spaces around cell contents in table style
+            collapse_padding: Reduce padding when cell contents are too wide
+
+        Raises:
+        ------
+            Exception if execution fails
+
+        """
+        try:
+            result = await self.execute(query)
+            result.print(
+                style=style,
+                width=width,
+                min_width=min_width,
+                max_width=max_width,
+                padding=padding,
+                collapse_padding=collapse_padding,
+            )
+        except Exception as e:
+            from rich.console import Console
+            from rich.traceback import Traceback
+
+            console = Console()
+            console.print(f"[bold red]Error executing query:[/bold red] {e!s}")
+            if debug_flag:
+                console.print(Traceback.from_exception(type(e), e, e.__traceback__))
+
+    async def pq(self, query: str, **kwargs):
+        """Print query result using rich"""
+        await self.print_query_result(query, **kwargs)
+
 
 class NebulaBaseExecutor:
     @abstractmethod

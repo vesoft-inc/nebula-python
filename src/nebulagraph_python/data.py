@@ -26,6 +26,10 @@ class HostAddress:
     port: int
 
     def __str__(self):
+        """Return string representation with proper IPv6 formatting"""
+        # IPv6 addresses contain colons, so wrap them in brackets
+        if ":" in self.host and not self.host.startswith("["):
+            return f"[{self.host}]:{self.port}"
         return f"{self.host}:{self.port}"
 
     def __hash__(self):
