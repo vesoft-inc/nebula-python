@@ -630,14 +630,14 @@ class ValueParser:
             header = self._get_sub_bytes(vector_data, GEO_HEADER_SIZE, row_idx)
             chunk_index = bytes_to_int32(
                 header[0:CHUNK_INDEX_LENGTH_IN_STRING_HEADER],
-                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+                self.byte_order,
             )
             chunk_offset = bytes_to_int32(
                 header[
                     CHUNK_INDEX_LENGTH_IN_STRING_HEADER : CHUNK_INDEX_LENGTH_IN_STRING_HEADER
                     + CHUNK_OFFSET_LENGTH_IN_STRING_HEADER
                 ],
-                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+                self.byte_order,
             )
             data = vector.get_nested_vectors()[chunk_index].get_vector_data()[
                 chunk_offset :
@@ -650,11 +650,11 @@ class ValueParser:
             value_data = self._get_sub_bytes(vector_data, SET_HEADER_SIZE, row_idx)
             set_offset = bytes_to_int32(
                 value_data[0:4],
-                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+                self.byte_order,
             )
             set_size = bytes_to_int32(
                 value_data[4:8],
-                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+                self.byte_order,
             )
 
             for i in range(set_size):
@@ -675,11 +675,11 @@ class ValueParser:
             value_data = self._get_sub_bytes(vector_data, MAP_HEADER_SIZE, row_idx)
             map_offset = bytes_to_int32(
                 value_data[0:4],
-                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+                self.byte_order,
             )
             map_size = bytes_to_int32(
                 value_data[4:8],
-                byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
+                self.byte_order,
             )
 
             for i in range(map_size):
