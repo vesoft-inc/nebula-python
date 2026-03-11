@@ -20,7 +20,6 @@ from typing import Any, Dict
 from nebulagraph_python.decoder.data_types import (
     AnyHeader,
     BasicType,
-    ByteOrder,
     ColumnType,
     DataType,
     EdgeHeader,
@@ -35,10 +34,10 @@ from nebulagraph_python.decoder.data_types import (
     PathType,
     RecordType,
     ResultGraphSchemas,
-    charset,
 )
 from nebulagraph_python.decoder.decode import BytesReader, VectorType, VectorWrapper
 from nebulagraph_python.decoder.decode_utils import (
+    ByteOrder,
     bytes_to_bool,
     bytes_to_double,
     bytes_to_float,
@@ -49,6 +48,8 @@ from nebulagraph_python.decoder.decode_utils import (
     bytes_to_sized_string,
     bytes_to_uint8,
     bytes_to_uint16,
+    bytes_to_uint32,
+    charset,
 )
 from nebulagraph_python.decoder.size_constant import (
     ANY_HEADER_SIZE,
@@ -212,43 +213,19 @@ class ValueParser:
 
         if column_type in [ColumnType.INT8, ColumnType.UINT8]:
             value_data = self._get_sub_bytes(vector_data, INT8_SIZE, row_idx)
-            return int.from_bytes(
-                value_data,
-                byteorder=(
-                    "little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big"
-                ),
-                signed=column_type == ColumnType.INT8,
-            )
+            return bytes_to_int8(value_data) if column_type == ColumnType.INT8 else bytes_to_uint8(value_data)
 
         if column_type in [ColumnType.INT16, ColumnType.UINT16]:
             value_data = self._get_sub_bytes(vector_data, INT16_SIZE, row_idx)
-            return int.from_bytes(
-                value_data,
-                byteorder=(
-                    "little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big"
-                ),
-                signed=column_type == ColumnType.INT16,
-            )
+            return bytes_to_int16(value_data, self.byte_order) if column_type == ColumnType.INT16 else bytes_to_uint16(value_data, self.byte_order)
 
         if column_type in [ColumnType.INT32, ColumnType.UINT32]:
             value_data = self._get_sub_bytes(vector_data, INT32_SIZE, row_idx)
-            return int.from_bytes(
-                value_data,
-                byteorder=(
-                    "little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big"
-                ),
-                signed=column_type == ColumnType.INT32,
-            )
+            return bytes_to_int32(value_data, self.byte_order) if column_type == ColumnType.INT32 else bytes_to_uint32(value_data, self.byte_order)
 
         if column_type in [ColumnType.INT64, ColumnType.UINT64]:
             value_data = self._get_sub_bytes(vector_data, INT64_SIZE, row_idx)
-            return int.from_bytes(
-                value_data,
-                byteorder=(
-                    "little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big"
-                ),
-                signed=column_type == ColumnType.INT64,
-            )
+            return bytes_to_int64(value_data, self.byte_order) if column_type == ColumnType.INT64 else bytes_to_int64(value_data, self.byte_order) & 0xFFFFFFFFFFFFFFFF
 
         if column_type == ColumnType.FLOAT32:
             value_data = self._get_sub_bytes(vector_data, FLOAT_SIZE, row_idx)
@@ -266,7 +243,7 @@ class ValueParser:
 
         if column_type == ColumnType.BOOL:
             value_data = self._get_sub_bytes(vector_data, BOOL_SIZE, row_idx)
-            return bool(int.from_bytes(value_data, "little"))
+            return bytes_to_bool(value_data)
 
         if column_type == ColumnType.DECIMAL:
             value_data = self._get_sub_bytes(
@@ -692,41 +669,26 @@ class ValueParser:
     def bytes_to_local_time(self, data: bytes) -> datetime.time:
         """Convert bytes to local time"""
         # We can work directly with byte slices in Python
-        hour = int.from_bytes(
-            data[0:1],
-            byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
-        )
-        minute = int.from_bytes(
-            data[1:2],
-            byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
-        )
-        second = int.from_bytes(
-            data[2:3],
-            byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
-        )
+        hour = bytes_to_uint8(data[0:1])
+        minute = bytes_to_uint8(data[1:2])
+        second = bytes_to_uint8(data[2:3])
         # Skip padding byte at index 3
-        microsecond = int.from_bytes(
-            data[4:8],
-            byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
-        )
+        microsecond = bytes_to_int32(data[4:8], self.byte_order)
 
         return datetime.time(hour, minute, second, microsecond)
 
     def bytes_to_zoned_time(self, data: bytes) -> datetime.time:
         """Convert bytes to zoned time"""
-        hour = int.from_bytes(data[0:1], byteorder="little", signed=True)
+        hour = bytes_to_int8(data[0:1])
         current_offset = self.timezone_offset
 
         if hour < 0:
             hour = -hour
 
-        minute = int.from_bytes(data[1:2], byteorder="little")
-        second = int.from_bytes(data[2:3], byteorder="little")
+        minute = bytes_to_uint8(data[1:2])
+        second = bytes_to_uint8(data[2:3])
         # Skip padding byte at index 3
-        microsecond = int.from_bytes(
-            data[4:8],
-            byteorder=self.byte_order.value,
-        )
+        microsecond = bytes_to_int32(data[4:8], self.byte_order)
 
         # Create base time and add timezone offset minutes
         base_time = datetime.time(hour % 24, minute, second, microsecond)
@@ -741,10 +703,7 @@ class ValueParser:
 
     def bytes_to_local_datetime(self, data: bytes) -> datetime.datetime:
         """Convert bytes to local datetime"""
-        qword = int.from_bytes(
-            data,
-            byteorder=self.byte_order.value,
-        )
+        qword = bytes_to_int64(data, self.byte_order)
 
         year = qword & 0xFFFF
         qword >>= 16
@@ -775,10 +734,7 @@ class ValueParser:
     def bytes_to_duration(self, data: bytes) -> "NDuration":
         """Convert bytes to duration"""
         # Read the 8-byte long value
-        qword = int.from_bytes(
-            data[0:8],
-            byteorder="little" if self.byte_order == ByteOrder.LITTLE_ENDIAN else "big",
-        )
+        qword = bytes_to_int64(data[0:8], self.byte_order)
 
         # Extract month-based flag and duration value
         is_month_based = (qword & 0x1) == 1

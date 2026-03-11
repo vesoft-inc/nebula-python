@@ -17,8 +17,9 @@ from logging import getLogger
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 
 from nebulagraph_python.data import ExtraInfo, PlanInfoNode
-from nebulagraph_python.decoder.data_types import ByteOrder, ResultGraphSchemas
+from nebulagraph_python.decoder.data_types import ResultGraphSchemas
 from nebulagraph_python.decoder.decode import Batch, BytesReader
+from nebulagraph_python.decoder.decode_utils import ByteOrder
 from nebulagraph_python.decoder.value_parser import (
     DataType,
     ValueParser,
