@@ -750,7 +750,7 @@ class ValueParser:
         if is_month_based:
             # For month-based duration
             year = int(duration_value / 12)
-            month = int(duration_value % 12)
+            month = int(mod_math(duration_value, 12))
         else:
             # For time-based duration
             day = int(duration_value / MICRO_SECONDS_OF_DAY)

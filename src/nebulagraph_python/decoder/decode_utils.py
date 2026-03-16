@@ -104,23 +104,22 @@ def is_null_bit_map_all_set(vector: NestedVector) -> bool:
 def bytes_to_sized_string(data: bytes, start_pos: int, byte_order: ByteOrder) -> str:
     """Match Java's DecodeUtils.bytesToSizedString"""
     length = bytes_to_int16(
-        data[start_pos : start_pos + ELEMENT_NUMBER_SIZE_FOR_ANY_VALUE],
+        data[start_pos: start_pos + ELEMENT_NUMBER_SIZE_FOR_ANY_VALUE],
         byte_order,
     )
     start_pos += ELEMENT_NUMBER_SIZE_FOR_ANY_VALUE
 
     # Use charset-based decoding instead of character by character
-    str_bytes = data[start_pos : start_pos + length]
+    str_bytes = data[start_pos: start_pos + length]
     return str_bytes.decode(charset)
 
 def mod_math(a, b):
     if b == 0:
         raise RuntimeError("cannot be zero")
 
-    r = a % b
-    if r == 0:
-        return 0
-    elif a < 0:
-        return r - abs(b)  # result is negative
+    if (a >= 0) == (b >= 0):
+        trunc_div = a // b
     else:
-        return r
+        trunc_div = -(abs(a) // abs(b))
+    remainder = a - trunc_div * b
+    return remainder
