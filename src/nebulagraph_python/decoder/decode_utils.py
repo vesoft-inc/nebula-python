@@ -112,3 +112,15 @@ def bytes_to_sized_string(data: bytes, start_pos: int, byte_order: ByteOrder) ->
     # Use charset-based decoding instead of character by character
     str_bytes = data[start_pos : start_pos + length]
     return str_bytes.decode(charset)
+
+def mod_math(a, b):
+    if b == 0:
+        raise RuntimeError("cannot be zero")
+
+    r = a % b
+    if r == 0:
+        return 0
+    elif a < 0:
+        return r - abs(b)  # result is negative
+    else:
+        return r
