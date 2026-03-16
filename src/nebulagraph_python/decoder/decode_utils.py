@@ -13,10 +13,19 @@
 # limitations under the License.
 
 import struct
+from enum import Enum
 
-from nebulagraph_python.decoder.data_types import ByteOrder, charset
 from nebulagraph_python.decoder.size_constant import ELEMENT_NUMBER_SIZE_FOR_ANY_VALUE
 from nebulagraph_python.proto.vector_pb2 import NestedVector
+
+
+class ByteOrder(str, Enum):
+    LITTLE_ENDIAN = "little"
+    BIG_ENDIAN = "big"
+
+
+# Define charset constant to match Java
+charset = "utf-8"
 
 
 def bytes_to_int8(data: bytes) -> int:
