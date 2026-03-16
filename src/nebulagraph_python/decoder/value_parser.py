@@ -743,7 +743,6 @@ class ValueParser:
         # Extract month-based flag and duration value
         is_month_based = (qword & 0x1) == 1
         duration_value = qword >> 1
-        print("duration_value:", duration_value)
 
         # Initialize all fields
         year, month, day, hour, minute, second, micro_sec = 0, 0, 0, 0, 0, 0, 0
