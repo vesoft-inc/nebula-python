@@ -18,6 +18,14 @@ from functools import cache
 from io import BytesIO
 from typing import Dict, List, Optional
 
+from nebulagraph_python.decoder.decode_utils import (
+    ByteOrder,
+    bytes_to_int32,
+    bytes_to_int64,
+    bytes_to_uint16,
+    bytes_to_uint32,
+    charset,
+)
 from nebulagraph_python.proto.vector_pb2 import (
     EdgeType as ProtoEdgeType,
 )
@@ -27,15 +35,6 @@ from nebulagraph_python.proto.vector_pb2 import (
 from nebulagraph_python.proto.vector_pb2 import (
     PropertyGraphSchema,
 )
-
-
-class ByteOrder(str, Enum):
-    LITTLE_ENDIAN = "little"
-    BIG_ENDIAN = "big"
-
-
-# Define charset constant to match Java
-charset = "utf-8"
 
 
 class NodeSchema:
@@ -123,8 +122,8 @@ class GraphSchema:
 class ListHeader:
     def __init__(self, data: bytes, byte_order: ByteOrder):
         buffer = BytesIO(data)
-        self.offset = int.from_bytes(buffer.read(4), byte_order.value)  # uint32
-        self.size = int.from_bytes(buffer.read(4), byte_order.value)  # uint32
+        self.offset = bytes_to_uint32(buffer.read(4), byte_order)
+        self.size = bytes_to_uint32(buffer.read(4), byte_order)
 
     def get_offset(self) -> int:
         return self.offset
@@ -136,9 +135,9 @@ class ListHeader:
 class NodeHeader:
     def __init__(self, data: bytes, byte_order: ByteOrder):
         buffer = BytesIO(data)
-        self.node_id = int.from_bytes(buffer.read(8), byte_order.value)  # int64
+        self.node_id = bytes_to_int64(buffer.read(8), byte_order)  # int64
         self.node_type_id = self.node_id >> 48  # first 16 bytes
-        self.graph_id = int.from_bytes(buffer.read(4), byte_order.value)  # int32
+        self.graph_id = bytes_to_int32(buffer.read(4), byte_order)
 
     def get_node_id(self) -> int:
         return self.node_id
@@ -153,11 +152,11 @@ class NodeHeader:
 class EdgeHeader:
     def __init__(self, data: bytes, byte_order: ByteOrder):
         buffer = BytesIO(data)
-        self.src_id = int.from_bytes(buffer.read(8), byte_order.value)  # int64
-        self.dst_id = int.from_bytes(buffer.read(8), byte_order.value)  # int64
-        self.rank = int.from_bytes(buffer.read(8), byte_order.value)  # int64
-        self.graph_id = int.from_bytes(buffer.read(4), byte_order.value)  # int32
-        self.edge_type_id = int.from_bytes(buffer.read(4), byte_order.value)  # int32
+        self.src_id = bytes_to_int64(buffer.read(8), byte_order)  # int64
+        self.dst_id = bytes_to_int64(buffer.read(8), byte_order) # int64
+        self.rank = bytes_to_int64(buffer.read(8), byte_order)  # int64
+        self.graph_id = bytes_to_int32(buffer.read(4), byte_order)  # int32
+        self.edge_type_id = bytes_to_int32(buffer.read(4), byte_order)  # int32
 
     def get_edge_type_id(self) -> int:
         return self.edge_type_id
@@ -187,17 +186,11 @@ class PathHeader:
 
     def __init__(self, data: bytes, byte_order: ByteOrder):
         buffer = BytesIO(data)
-        self.size = (
-            int.from_bytes(buffer.read(4), byte_order.value) & 0xFFFFFFFF
-        )  # uint32
-        self.head_node_index = (
-            int.from_bytes(buffer.read(2), byte_order.value) & 0xFFFF
-        )  # uint16
-        self.tail_node_index = (
-            int.from_bytes(buffer.read(2), byte_order.value) & 0xFFFF
-        )  # uint16
-        self.head_offset = int.from_bytes(buffer.read(4), byte_order.value)  # uint32
-        self.tail_offset = int.from_bytes(buffer.read(4), byte_order.value)  # uint32
+        self.size = bytes_to_uint32(buffer.read(4), byte_order)  # uint32
+        self.head_node_index = bytes_to_uint16(buffer.read(2), byte_order)  # uint16
+        self.tail_node_index = bytes_to_uint16(buffer.read(2), byte_order)  # uint16
+        self.head_offset = bytes_to_uint32(buffer.read(4), byte_order)  # uint32
+        self.tail_offset = bytes_to_uint32(buffer.read(4), byte_order)  # uint32
 
     def get_head_node_index(self) -> int:
         return self.head_node_index
@@ -387,9 +380,9 @@ class AnyHeader:
         ]:
             buffer = BytesIO(data)
             # chunk_index is uint32, add 1 to match Java implementation
-            self.chunk_index = int.from_bytes(buffer.read(4), byte_order.value) + 1
+            self.chunk_index = bytes_to_uint32(buffer.read(4), byte_order) + 1
             # offset is uint32
-            self.offset = int.from_bytes(buffer.read(4), byte_order.value)
+            self.offset = bytes_to_uint32(buffer.read(4), byte_order)
 
     def get_chunk_index(self) -> int:
         return self.chunk_index

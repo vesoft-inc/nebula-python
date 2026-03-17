@@ -13,10 +13,19 @@
 # limitations under the License.
 
 import struct
+from enum import Enum
 
-from nebulagraph_python.decoder.data_types import ByteOrder, charset
 from nebulagraph_python.decoder.size_constant import ELEMENT_NUMBER_SIZE_FOR_ANY_VALUE
 from nebulagraph_python.proto.vector_pb2 import NestedVector
+
+
+class ByteOrder(str, Enum):
+    LITTLE_ENDIAN = "little"
+    BIG_ENDIAN = "big"
+
+
+# Define charset constant to match Java
+charset = "utf-8"
 
 
 def bytes_to_int8(data: bytes) -> int:
@@ -95,11 +104,22 @@ def is_null_bit_map_all_set(vector: NestedVector) -> bool:
 def bytes_to_sized_string(data: bytes, start_pos: int, byte_order: ByteOrder) -> str:
     """Match Java's DecodeUtils.bytesToSizedString"""
     length = bytes_to_int16(
-        data[start_pos : start_pos + ELEMENT_NUMBER_SIZE_FOR_ANY_VALUE],
+        data[start_pos: start_pos + ELEMENT_NUMBER_SIZE_FOR_ANY_VALUE],
         byte_order,
     )
     start_pos += ELEMENT_NUMBER_SIZE_FOR_ANY_VALUE
 
     # Use charset-based decoding instead of character by character
-    str_bytes = data[start_pos : start_pos + length]
+    str_bytes = data[start_pos: start_pos + length]
     return str_bytes.decode(charset)
+
+def mod_math(a, b):
+    if b == 0:
+        raise RuntimeError("cannot be zero")
+
+    if (a >= 0) == (b >= 0):
+        trunc_div = a // b
+    else:
+        trunc_div = -(abs(a) // abs(b))
+    remainder = a - trunc_div * b
+    return remainder

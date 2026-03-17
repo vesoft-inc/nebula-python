@@ -15,10 +15,12 @@
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from nebulagraph_python.decoder.data_types import ByteOrder, charset
+from nebulagraph_python.decoder.data_types import ResultGraphSchemas
 from nebulagraph_python.decoder.decode_utils import (
+    ByteOrder,
     bytes_to_int16,
     bytes_to_int32,
+    charset,
     is_null_bit_map_all_set,
 )
 from nebulagraph_python.decoder.size_constant import (
