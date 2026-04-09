@@ -1,0 +1,22 @@
+<map id="execute" name="execute">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1255,82,1328,107"/>
+<area shape="rect" id="Node000002" href="$db/d56/classnebulagraph__python_1_1client_1_1client_1_1NebulaClient.html#ac3b9b103c9981c2169d3fb6b25f44947" title=" " alt="" coords="968,140,1207,180"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1243,113,1152,142,1150,137,1241,108"/>
+<area shape="rect" id="Node000005" href="$d5/dff/classnebulagraph__python_1_1client_1_1base__executor_1_1NebulaBaseAsyncExecutor.html#a8cce9aa46f88a7e098f31a598a1385bc" title=" " alt="" coords="295,5,633,45"/>
+<area shape="poly" id="edge10_Node000001_Node000005" title=" " alt="" coords="1247,80,1206,68,1056,45,904,31,759,25,633,24,633,18,760,19,904,26,1057,39,1207,63,1248,75"/>
+<area shape="rect" id="Node000006" href="$d7/d65/classnebulagraph__python_1_1client_1_1base__executor_1_1NebulaBaseExecutor.html#a8cce9aa46f88a7e098f31a598a1385bc" title=" " alt="" coords="315,88,613,128"/>
+<area shape="poly" id="edge11_Node000001_Node000006" title=" " alt="" coords="1241,93,1000,81,842,79,681,84,608,91,607,85,681,79,842,74,1000,76,1241,88"/>
+<area shape="rect" id="Node000007" href="$d7/d65/classnebulagraph__python_1_1client_1_1base__executor_1_1NebulaBaseExecutor.html#ab466f59ec9d790684468da6092b9e74e" title=" " alt="" coords="337,190,591,245"/>
+<area shape="poly" id="edge12_Node000001_Node000007" title=" " alt="" coords="1279,121,1250,160,1230,179,1208,194,1131,227,1050,249,967,263,884,269,803,269,725,264,591,247,592,242,726,259,803,264,884,264,967,258,1049,244,1130,222,1205,190,1227,175,1246,156,1274,118"/>
+<area shape="rect" id="Node000003" href="$db/de6/classnebulagraph__python_1_1client_1_1client_1_1NebulaAsyncClient.html#aaccb76d84d7ee560a2cee2a7cf9938fc" title=" " alt="" coords="764,118,837,143"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="954,149,837,137,838,132,954,144"/>
+<area shape="rect" id="Node000004" href="$db/d56/classnebulagraph__python_1_1client_1_1client_1_1NebulaClient.html#abc9a0a988f0a5d56a073346451d69864" title=" " alt="" coords="681,168,920,208"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="959,184,921,188,920,183,959,179"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="847,113,851,107,846,103,829,98,801,97,768,99,752,105,750,107,751,110,765,119,762,123,747,113,745,107,748,101,767,94,801,91,830,93,849,98,857,107,852,116"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="929,164,967,160,968,165,929,169"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="688,163,680,158,662,138,655,117,648,97,632,78,604,61,573,48,575,43,606,56,635,74,652,94,660,115,667,135,683,154,691,159"/>
+<area shape="poly" id="edge7_Node000004_Node000006" title=" " alt="" coords="701,167,549,131,550,125,703,162"/>
+<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="668,202,592,209,592,204,668,197"/>
+<area shape="rect" id="Node000008" href="$d7/d65/classnebulagraph__python_1_1client_1_1base__executor_1_1NebulaBaseExecutor.html#afdec9dbd01a121835d60473b325ad17c" title=" " alt="" coords="5,197,247,237"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="323,220,247,220,247,215,323,215"/>
+</map>

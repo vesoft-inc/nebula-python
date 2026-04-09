@@ -1,0 +1,11 @@
+<map id="ResultTable" name="ResultTable">
+<area shape="rect" id="Node000001" title=" " alt="" coords="222,108,319,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,144,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,41,107,63,129,82,175,102,222,112,221,118,174,107,127,86,103,66,86,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="168,5,256,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,44,220,64,228,83,238,95,251,106,248,110,235,99,223,85,214,65,210,45"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="280,5,379,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="323,45,302,85,284,109,280,106,298,83,318,42"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="403,5,448,31"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="411,44,391,66,367,86,341,100,315,110,313,105,339,95,364,82,387,62,407,40"/>
+</map>
