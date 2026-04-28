@@ -410,28 +410,10 @@ class SessionPool(BaseExecutor, object):
                 next_addr_index = (next_addr_index + 1) % len(self._addresses)
                 continue
 
-            # connect to the valid service
-            connection = Connection()
             try:
-                if self._ssl_configs is None:
-                    connection.open(
-                        addr[0],
-                        addr[1],
-                        self._configs.timeout,
-                        self._configs.use_http2,
-                        self._configs.http_headers,
-                    )
-                else:
-                    connection.open_SSL(
-                        addr[0],
-                        addr[1],
-                        self._configs.timeout,
-                        self._ssl_configs,
-                        self._configs.use_http2,
-                        self._configs.http_headers,
-                    )
+                connection = self._new_connection(addr)
                 auth_result = connection.authenticate(self._username, self._password)
-                session = Session(connection, auth_result, self, False)
+                session = Session(connection, auth_result, self, True)
 
                 # switch to the space specified in the configs
                 try:
@@ -485,6 +467,65 @@ class SessionPool(BaseExecutor, object):
             self._active_sessions.remove(session)
             self._idle_sessions.append(session)
             session.idle_time_start = time.time()
+
+    def get_connection(self):
+        """get connection for session reconnection"""
+        with self._lock:
+            if self._close:
+                logger.error("The pool is closed")
+                return None
+
+            if not self._addresses:
+                logger.error("No configured nebula address")
+                return None
+
+            retries = len(self._addresses)
+            while retries > 0:
+                self._pos = (self._pos + 1) % len(self._addresses)
+                addr = self._addresses[self._pos]
+
+                if self._addresses_status[addr] == self.S_BAD:
+                    logger.warning("The graph service {} is not available".format(addr))
+                    retries = retries - 1
+                    continue
+
+                try:
+                    connection = self._new_connection(addr)
+                    connection.is_used = True
+                    logger.info("Get connection to {}".format(addr))
+                    return connection
+                except Exception as ex:
+                    logger.warning(
+                        "Get connection to {}:{} failed: {}".format(
+                            addr[0], addr[1], ex
+                        )
+                    )
+                    self._addresses_status[addr] = self.S_BAD
+                    retries = retries - 1
+
+            logger.error("No available connection")
+            return None
+
+    def _new_connection(self, addr):
+        connection = Connection()
+        if self._ssl_configs is None:
+            connection.open(
+                addr[0],
+                addr[1],
+                self._configs.timeout,
+                self._configs.use_http2,
+                self._configs.http_headers,
+            )
+        else:
+            connection.open_SSL(
+                addr[0],
+                addr[1],
+                self._configs.timeout,
+                self._ssl_configs,
+                self._configs.use_http2,
+                self._configs.http_headers,
+            )
+        return connection
 
     def _add_session_to_idle(self, session):
         """add the session to the pool idle list
