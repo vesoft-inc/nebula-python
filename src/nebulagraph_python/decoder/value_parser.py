@@ -23,14 +23,12 @@ from nebulagraph_python.decoder.data_types import (
     ByteOrder,
     ColumnType,
     DataType,
-    EdgeHeader,
     EdgeType,
     EmbeddingVectorType,
     GeographyType,
     ListHeader,
     ListType,
     MapType,
-    NodeHeader,
     NodeType,
     PathAdjHeader,
     PathHeader,
@@ -134,6 +132,8 @@ from nebulagraph_python.py_data_types import (
 )
 from nebulagraph_python.value_wrapper import ValueWrapper
 
+ONE_BIT_MASKS = (1, 2, 4, 8, 16, 32, 64, 128)
+
 
 class AnyValue:
     """The value for any type and its actual data type."""
@@ -165,6 +165,16 @@ class ValueParser:
         self.graph_schemas = graph_schemas
         self.timezone_offset = timezone_offset
         self.byte_order = byte_order
+        self._is_little_endian = byte_order == ByteOrder.LITTLE_ENDIAN
+        self._byteorder_name = "little" if self._is_little_endian else "big"
+        self._float_fmt = "<f" if self._is_little_endian else ">f"
+        self._double_fmt = "<d" if self._is_little_endian else ">d"
+        endian = "<" if self._is_little_endian else ">"
+        self._i16_unpack_from = struct.Struct(endian + "h").unpack_from
+        self._u16_unpack_from = struct.Struct(endian + "H").unpack_from
+        self._i32_unpack_from = struct.Struct(endian + "i").unpack_from
+        self._u32_unpack_from = struct.Struct(endian + "I").unpack_from
+        self._i64_unpack_from = struct.Struct(endian + "q").unpack_from
 
     def decode_value_wrapper(
             self,
@@ -188,20 +198,11 @@ class ValueParser:
     ) -> Any:
         """Main decode method matching Java's decodeValue"""
         # Check if value at index is null
-        if not vector.is_null_all_set() and vector.get_null_bit_map():
+        null_bit_map = vector.get_null_bit_map()
+        if not vector.is_null_all_set() and null_bit_map:
             byte_idx = row_idx // 8
             bit_idx = row_idx % 8
-            k_one_bitmasks = [
-                1 << 0,  # 0000 0001
-                1 << 1,  # 0000 0010
-                1 << 2,  # 0000 0100
-                1 << 3,  # 0000 1000
-                1 << 4,  # 0001 0000
-                1 << 5,  # 0010 0000
-                1 << 6,  # 0100 0000
-                1 << 7,  # 1000 0000
-            ]
-            if (vector.get_null_bit_map()[byte_idx] & k_one_bitmasks[bit_idx]) == 0:
+            if (null_bit_map[byte_idx] & ONE_BIT_MASKS[bit_idx]) == 0:
                 return None
 
         value = None
@@ -209,7 +210,7 @@ class ValueParser:
         if vector_type == VectorType.FLAT_VECTOR:
             value = self._decode_flat_value(vector, data_type, row_idx)
         elif vector_type == VectorType.CONST_VECTOR:
-            if not hasattr(vector, "const_value") or vector.const_value is None:
+            if vector.const_value is None:
                 vector_data = vector.get_vector_data()
                 reader = BytesReader(vector_data)
                 const_value = self._decode_const_value(reader, data_type.get_type())
@@ -229,64 +230,60 @@ class ValueParser:
         """Decode flat vector value at given row index"""
         vector_data = vector.get_vector_data()
         column_type = data_type.get_type()
+        byte_order = self.byte_order
 
         if column_type == ColumnType.NULL:
             return None
 
-        if column_type in [ColumnType.INT8, ColumnType.UINT8]:
-            value_data = self._get_sub_bytes(vector_data, INT8_SIZE, row_idx)
-            return bytes_to_int8(value_data) if column_type == ColumnType.INT8 else bytes_to_uint8(value_data)
+        if column_type == ColumnType.INT8 or column_type == ColumnType.UINT8:
+            value = vector_data[row_idx]
+            if column_type == ColumnType.UINT8:
+                return value
+            return value - 256 if value > 127 else value
 
-        if column_type in [ColumnType.INT16, ColumnType.UINT16]:
-            value_data = self._get_sub_bytes(vector_data, INT16_SIZE, row_idx)
-            return bytes_to_int16(value_data, self.byte_order) if column_type == ColumnType.INT16 else bytes_to_uint16(
-                value_data, self.byte_order)
+        if column_type == ColumnType.INT16 or column_type == ColumnType.UINT16:
+            offset = row_idx * INT16_SIZE
+            if column_type == ColumnType.INT16:
+                return self._i16_unpack_from(vector_data, offset)[0]
+            return self._u16_unpack_from(vector_data, offset)[0]
 
-        if column_type in [ColumnType.INT32, ColumnType.UINT32]:
-            value_data = self._get_sub_bytes(vector_data, INT32_SIZE, row_idx)
-            return bytes_to_int32(value_data, self.byte_order) if column_type == ColumnType.INT32 else bytes_to_uint32(
-                value_data, self.byte_order)
+        if column_type == ColumnType.INT32 or column_type == ColumnType.UINT32:
+            offset = row_idx * INT32_SIZE
+            if column_type == ColumnType.INT32:
+                return self._i32_unpack_from(vector_data, offset)[0]
+            return self._u32_unpack_from(vector_data, offset)[0]
 
-        if column_type in [ColumnType.INT64, ColumnType.UINT64]:
-            value_data = self._get_sub_bytes(vector_data, INT64_SIZE, row_idx)
-            return bytes_to_int64(value_data, self.byte_order) if column_type == ColumnType.INT64 else bytes_to_int64(
-                value_data, self.byte_order) & 0xFFFFFFFFFFFFFFFF
+        if column_type == ColumnType.INT64 or column_type == ColumnType.UINT64:
+            offset = row_idx * INT64_SIZE
+            int64_val = self._i64_unpack_from(vector_data, offset)[0]
+            if column_type == ColumnType.INT64:
+                return int64_val
+            return int64_val & 0xFFFFFFFFFFFFFFFF
 
         if column_type == ColumnType.FLOAT32:
-            value_data = self._get_sub_bytes(vector_data, FLOAT_SIZE, row_idx)
-            return struct.unpack(
-                "<f" if self.byte_order == ByteOrder.LITTLE_ENDIAN else ">f",
-                value_data,
+            return struct.unpack_from(
+                self._float_fmt,
+                vector_data,
+                row_idx * FLOAT_SIZE,
             )[0]
 
         if column_type == ColumnType.FLOAT64:
-            value_data = self._get_sub_bytes(vector_data, DOUBLE_SIZE, row_idx)
-            return struct.unpack(
-                "<d" if self.byte_order == ByteOrder.LITTLE_ENDIAN else ">d",
-                value_data,
+            return struct.unpack_from(
+                self._double_fmt,
+                vector_data,
+                row_idx * DOUBLE_SIZE,
             )[0]
 
         if column_type == ColumnType.BOOL:
-            value_data = self._get_sub_bytes(vector_data, BOOL_SIZE, row_idx)
-            return bytes_to_bool(value_data)
+            return vector_data[row_idx] == 0x01
 
         if column_type == ColumnType.DECIMAL:
-            value_data = self._get_sub_bytes(
-                vector_data,
-                STRING_SIZE,
-                row_idx,
-            )  # STRING_SIZE
             return self.string_to_decimal(
-                self.bytes_to_string(value_data, vector.vector),
+                self.bytes_to_string_at(vector_data, row_idx * STRING_SIZE, vector.vector),
             )
 
         if column_type == ColumnType.STRING:
-            value_data = self._get_sub_bytes(
-                vector_data,
-                STRING_SIZE,
-                row_idx,
-            )  # STRING_SIZE
-            return self.bytes_to_string(value_data, vector.vector)
+            return self.bytes_to_string_at(vector_data, row_idx * STRING_SIZE, vector.vector)
 
         if column_type == ColumnType.DATE:
             value_data = self._get_sub_bytes(
@@ -351,7 +348,7 @@ class ValueParser:
             elements = []
             for i in range(list_header.size):
                 element = self._decode_value(
-                    vector.vector_wrappers[0],
+                    vector.get_vector_wrapper(0),
                     value_type,
                     list_header.offset + i,
                 )
@@ -372,7 +369,7 @@ class ValueParser:
             for i in range(len(field_types)):
                 field_name = reader.read_sized_string(self.byte_order)
                 value = self._decode_value(
-                    vector.vector_wrappers[i],
+                    vector.get_vector_wrapper(i),
                     field_types[field_name],
                     row_idx,
                 )
@@ -388,47 +385,44 @@ class ValueParser:
                 raise ValueError("Expected NodeType for NODE column type")
 
             node_prop_types = data_type.get_node_types()
-            node_prop_vector_index = (
-                vector.get_graph_element_type_id_and_prop_vector_index_map(
-                    NODE_TYPE_ID_SIZE,
-                )
+            node_prop_vector_index = vector.get_graph_element_type_id_and_prop_vector_index_map(
+                NODE_TYPE_ID_SIZE,
             )
 
-            node_header_binary = self._get_sub_bytes(
-                vector_data,
-                VECTOR_NODE_HEADER_SIZE,
-                row_idx,
-            )
-            node_header = NodeHeader(node_header_binary, self.byte_order)
+            node_header_offset = row_idx * VECTOR_NODE_HEADER_SIZE
+            node_id = self._i64_unpack_from(vector_data, node_header_offset)[0]
+            node_type_id = node_id >> 48
+            graph_id = self._i32_unpack_from(vector_data, node_header_offset + INT64_SIZE)[0]
             if (
-                    node_header.graph_id not in node_prop_types
-                    or node_header.node_type_id not in node_prop_types[node_header.graph_id]
+                    graph_id not in node_prop_types
+                    or node_type_id not in node_prop_types[graph_id]
             ):
                 raise RuntimeError(
-                    f"Value type for NODE does not contain graphId {node_header.graph_id} "
-                    f"or node type id {node_header.node_type_id}",
+                    f"Value type for NODE does not contain graphId {graph_id} "
+                    f"or node type id {node_type_id}",
                 )
 
-            prop_type_map = node_prop_types[node_header.graph_id][
-                node_header.node_type_id
-            ]
+            prop_type_map = node_prop_types[graph_id][node_type_id]
+            vector_index_map = node_prop_vector_index[graph_id][node_type_id]
+            get_vector_wrapper = vector.get_vector_wrapper
+            decode_value = self._decode_value
+            value_wrapper_cls = ValueWrapper
             props = {}
 
             for prop_name, prop_type in prop_type_map.items():
-                vector_index = node_prop_vector_index[node_header.graph_id][
-                    node_header.node_type_id
-                ][prop_name]
-                prop_value = self._decode_value(
-                    vector.vector_wrappers[vector_index],
+                vector_index = vector_index_map[prop_name]
+                prop_value = decode_value(
+                    get_vector_wrapper(vector_index),
                     prop_type,
                     row_idx,
                 )
-                props[prop_name] = ValueWrapper(prop_value, prop_type.get_type())
+                prop_column_type = prop_type.get_type()
+                props[prop_name] = value_wrapper_cls(prop_value, prop_column_type)
 
             return Node(
-                node_header.graph_id,
-                node_header.node_type_id,
-                node_header.node_id,
+                graph_id,
+                node_type_id,
+                node_id,
                 props,
                 self.graph_schemas,
             )
@@ -438,52 +432,54 @@ class ValueParser:
                 raise ValueError("Expected EdgeType for EDGE column type")
 
             edge_prop_types = data_type.get_edge_types()
-            edge_prop_vector_index = (
-                vector.get_graph_element_type_id_and_prop_vector_index_map(
-                    EDGE_TYPE_ID_SIZE,
-                )
+            edge_prop_vector_index = vector.get_graph_element_type_id_and_prop_vector_index_map(
+                EDGE_TYPE_ID_SIZE,
             )
 
-            edge_header_binary = self._get_sub_bytes(
+            edge_header_offset = row_idx * VECTOR_EDGE_HEADER_SIZE
+            src_id = self._i64_unpack_from(vector_data, edge_header_offset)[0]
+            dst_id = self._i64_unpack_from(vector_data, edge_header_offset + INT64_SIZE)[0]
+            rank = self._i64_unpack_from(vector_data, edge_header_offset + INT64_SIZE * 2)[0]
+            graph_id = self._i32_unpack_from(vector_data, edge_header_offset + INT64_SIZE * 3)[0]
+            edge_type_id = self._i32_unpack_from(
                 vector_data,
-                VECTOR_EDGE_HEADER_SIZE,
-                row_idx,
-            )
-            edge_header = EdgeHeader(edge_header_binary, self.byte_order)
+                edge_header_offset + INT64_SIZE * 3 + INT32_SIZE,
+            )[0]
 
-            no_directed_type_id = edge_header.edge_type_id & 0x3FFFFFFF
+            no_directed_type_id = edge_type_id & 0x3FFFFFFF
 
             if (
-                    edge_header.graph_id not in edge_prop_types
-                    or no_directed_type_id not in edge_prop_types[edge_header.graph_id]
+                    graph_id not in edge_prop_types
+                    or no_directed_type_id not in edge_prop_types[graph_id]
             ):
                 raise RuntimeError(
-                    f"Value type for EDGE does not contain graphId {edge_header.graph_id} "
+                    f"Value type for EDGE does not contain graphId {graph_id} "
                     f"or edge type id {no_directed_type_id}",
                 )
 
-            edge_prop_type_map = edge_prop_types[edge_header.graph_id][
-                no_directed_type_id
-            ]
+            edge_prop_type_map = edge_prop_types[graph_id][no_directed_type_id]
+            vector_index_map = edge_prop_vector_index[graph_id][no_directed_type_id]
+            get_vector_wrapper = vector.get_vector_wrapper
+            decode_value = self._decode_value
+            value_wrapper_cls = ValueWrapper
             edge_props = {}
 
             for prop_name, prop_type in edge_prop_type_map.items():
-                vector_index = edge_prop_vector_index[edge_header.graph_id][
-                    no_directed_type_id
-                ][prop_name]
-                prop_value = self._decode_value(
-                    vector.vector_wrappers[vector_index],
+                vector_index = vector_index_map[prop_name]
+                prop_value = decode_value(
+                    get_vector_wrapper(vector_index),
                     prop_type,
                     row_idx,
                 )
-                edge_props[prop_name] = ValueWrapper(prop_value, prop_type.get_type())
+                prop_column_type = prop_type.get_type()
+                edge_props[prop_name] = value_wrapper_cls(prop_value, prop_column_type)
 
             return Edge(
-                edge_header.graph_id,
-                edge_header.edge_type_id,
-                edge_header.rank,
-                edge_header.src_id,
-                edge_header.dst_id,
+                graph_id,
+                edge_type_id,
+                rank,
+                src_id,
+                dst_id,
                 edge_props,
                 self.graph_schemas,
             )
@@ -521,6 +517,8 @@ class ValueParser:
             # decode path value
             elements = []
             adj_data_type = BasicType(ColumnType.INT64)
+            path_node_type = NodeType(path_type.get_node_types())
+            path_edge_type = EdgeType(path_type.get_edge_types())
 
             # if path has no element, return empty path
             if path_header.size <= 0:
@@ -557,7 +555,7 @@ class ValueParser:
                     edge_vector_pair = path_special_meta_data.index_and_edges[vec_index]
                     edge = self._decode_value(
                         edge_vector_pair.get_vector(),
-                        EdgeType(path_type.get_edge_types()),
+                        path_edge_type,
                         vec_offset,
                     )
                     adj_vector = edge_vector_pair.get_adj_vector()
@@ -566,7 +564,7 @@ class ValueParser:
                     node_vector_pair = path_special_meta_data.index_and_nodes[vec_index]
                     node = self._decode_value(
                         node_vector_pair.get_vector(),
-                        NodeType(path_type.get_node_types()),
+                        path_node_type,
                         vec_offset,
                     )
                     adj_vector = node_vector_pair.get_adj_vector()
@@ -588,22 +586,12 @@ class ValueParser:
 
             dimension = data_type.get_dimension()
             offset = row_idx * dimension * FLOAT32_SIZE
-
-            # Use memoryview to avoid copying data
-            vector_view = memoryview(vector_data)
-
-            # Pre-allocate list for better performance
-            values = [0.0] * dimension
-
-            # Process chunks of bytes directly
-            for i in range(dimension):
-                start = offset + i * FLOAT32_SIZE
-                values[i] = bytes_to_float(
-                    vector_view[start: start + FLOAT32_SIZE].tobytes(),
-                    self.byte_order,
-                )
-
-            return NVector(values)
+            fmt = (
+                f"<{dimension}f"
+                if self.byte_order == ByteOrder.LITTLE_ENDIAN
+                else f">{dimension}f"
+            )
+            return NVector(list(struct.unpack_from(fmt, vector_data, offset)))
 
         if column_type == ColumnType.ANY:
             value_data = self._get_sub_bytes(vector_data, ANY_HEADER_SIZE, row_idx)
@@ -722,10 +710,10 @@ class ValueParser:
 
     def bytes_to_string(self, string_header: bytes, vector: NestedVector) -> str:
         """Convert bytes to string using string header and vector data"""
-        # Get string value length from first 4 bytes
-        string_value_length = bytes_to_int32(
+        string_value_length = int.from_bytes(
             string_header[0:STRING_VALUE_LENGTH_SIZE],
-            self.byte_order,
+            self._byteorder_name,
+            signed=True,
         )
 
         # If string is small enough, read directly from header
@@ -735,21 +723,22 @@ class ValueParser:
                                           + string_value_length
             ].decode(charset)
 
-        # Get chunk index and offset for longer strings
-        chunk_index = bytes_to_int32(
+        chunk_index = int.from_bytes(
             string_header[
                 CHUNK_INDEX_START_POSITION_IN_STRING_HEADER: CHUNK_INDEX_START_POSITION_IN_STRING_HEADER
                                                              + CHUNK_INDEX_LENGTH_IN_STRING_HEADER
             ],
-            self.byte_order,
+            self._byteorder_name,
+            signed=True,
         )
 
-        chunk_offset = bytes_to_int32(
+        chunk_offset = int.from_bytes(
             string_header[
                 CHUNK_OFFSET_START_POSITION_IN_STRING_HEADER: CHUNK_OFFSET_START_POSITION_IN_STRING_HEADER
                                                               + CHUNK_OFFSET_LENGTH_IN_STRING_HEADER
             ],
-            self.byte_order,
+            self._byteorder_name,
+            signed=True,
         )
 
         # Get string data from chunk
@@ -758,6 +747,28 @@ class ValueParser:
             chunk_offset: chunk_offset + string_value_length
         ]
         return value_data.decode(charset)
+
+    def bytes_to_string_at(self, vector_data: bytes, header_offset: int, vector: NestedVector) -> str:
+        """Decode string from vector data at a known header offset without extra header slicing."""
+        string_value_length = self._i32_unpack_from(vector_data, header_offset)[0]
+
+        if string_value_length <= STRING_MAX_VALUE_LENGTH_IN_HEADER:
+            start = header_offset + STRING_VALUE_LENGTH_SIZE
+            return vector_data[start: start + string_value_length].decode(charset)
+
+        chunk_index = self._i32_unpack_from(
+            vector_data,
+            header_offset + CHUNK_INDEX_START_POSITION_IN_STRING_HEADER,
+        )[0]
+        chunk_offset = self._i32_unpack_from(
+            vector_data,
+            header_offset + CHUNK_OFFSET_START_POSITION_IN_STRING_HEADER,
+        )[0]
+
+        string_chunk_vector = vector.nested_vectors[chunk_index]
+        return string_chunk_vector.vector_data[
+            chunk_offset: chunk_offset + string_value_length
+        ].decode(charset)
 
     def bytes_to_date(self, data: bytes) -> datetime.date:
         """Convert bytes to date"""
