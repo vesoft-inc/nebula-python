@@ -66,29 +66,5 @@ def sync_client_example():
 
 if __name__ == "__main__":
     import logging
-
     logging.basicConfig(level=logging.INFO)
-    logging.getLogger("nebulagraph_pyt[?1l>[?2004l
-[1m[7m%[27m[1m[0m                                                                                                                                             ]2;nicole@nicole-2:~/workspace/nebula/nebula-python]1;..nebula-python]7;file://nicole-2/Users/nicole/workspace/nebula/nebula-python[0m[27m[24m[J[39m[0m[49m[40m[39m nicole@nicole-2 [44m[30m[30m ~/workspace/nebula/nebula-python [43m[34m[30m  improve_decode ±✚ [49m[33m[39m [K[?1h=[?2004h[32mg[39m[90mit st[39m[1m[31mg[1m[31mi[0m[39m[0m[32mg[0m[32mi[32mt[39m[39m [39m[4ms[24m[24ms[39mt[?1l>[?2004l
-]2;git st]1;gitOn branch improve_decode
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-	[32mnew file:   scripts/decode_test.py[m
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	[31mmodified:   pdm.lock[m
-	[31mmodified:   scripts/decode_test.py[m
-	[31mmodified:   src/nebulagraph_python/decoder/data_types.py[m
-	[31mmodified:   src/nebulagraph_python/decoder/decode.py[m
-	[31mmodified:   src/nebulagraph_python/decoder/value_parser.py[m
-	[31mmodified:   src/nebulagraph_python/py_data_types.py[m
-	[31mmodified:   src/nebulagraph_python/result_set.py[m
-	[31mmodified:   src/nebulagraph_python/value_wrapper.py[m
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	[31mscripts/benchmark_decoder.py[m
-
-[1m[7m%[27m[1m[0m                                                                                                                                             ]2;nicole@nicole-2:~/workspace/nebula/nebula-python]1;..nebula-python]7;file://nicole-2/Users/nicole/workspace/nebula/nebula-pythongi[0m[27m[24m[J[39m[0m[49m[40m[39m nicole@nicole-2 [44m[30m[30m ~/workspace/nebula/nebula-python [43m[34m[30m  improve_decode ±✚ [49m[33m[39m [K[?1h=[?2004hg[1m[31mg[1m[31mi[0m[39m[90mt st[39m[0m[32mg[0m[32mi[32mt[39m[39m [39ma[90mp[90mply /Users/nicole/Desktop/decoder_performance.patch[39m[52D[39md[90md[90m [90m.[39m[39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [39m [51D[39md[39m [39m[4m.[24m
+    sync_client_example()
