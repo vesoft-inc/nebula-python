@@ -2,7 +2,7 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "all", "console", "full"]
+groups = ["default", "all", "console", "full", "dev"]
 strategy = []
 lock_version = "4.4"
 content_hash = "sha256:bb5c7603bb95487b552e303cd016f871b518cc1cc1d7c23839c26ec0876cf286"
@@ -338,6 +338,16 @@ summary = "Pygments is a syntax highlighting package written in Python."
 files = [
     {file = "pygments-2.19.1-py3-none-any.whl", hash = "sha256:9ea1544ad55cecf4b8242fab6dd35a93bbce657034b0611ee383099054ab6d8c"},
     {file = "pygments-2.19.1.tar.gz", hash = "sha256:61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f"},
+]
+
+[[package]]
+name = "pyinstrument"
+version = "5.1.2"
+requires_python = ">=3.8"
+summary = "Call stack profiler for Python. Shows you why your code is slow!"
+files = [
+    {file = "pyinstrument-5.1.2-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:3739a05583ea6312c385eb59fe985cd20d9048e95f9eeeb6a2f6c35202e2d36e"},
+    {file = "pyinstrument-5.1.2.tar.gz", hash = "sha256:af149d672da9493fa37334a1cc68f7b80c3e6cb9fd99b9e426c447db5c650bf0"},
 ]
 
 [[package]]

@@ -37,6 +37,8 @@ T = TypeVar("T", bound=TargetType)
 
 
 class ValueWrapper:
+    __slots__ = ("value", "data_type")
+
     def __init__(self, value: Any, data_type: ColumnType):
         self.value = value
         self.data_type = data_type
@@ -362,6 +364,8 @@ class ValueWrapper:
 
 
 class Row:
+    __slots__ = ("values",)
+
     def __init__(self, values: Optional[List[ValueWrapper]] = None):
         self.values = values if values is not None else []
 

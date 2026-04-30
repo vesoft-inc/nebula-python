@@ -98,18 +98,12 @@ class Node(CompositeDataObject):
     ):
         super().__init__()
         self.graph_id = graph_id
-        self.graph_name = graph_schemas.get_graph_schema(graph_id).get_graph_name()
+        graph_schema = graph_schemas.get_graph_schema(graph_id)
+        node_schema = graph_schema.get_node_schema(node_type_id)
+        self.graph_name = graph_schema.get_graph_name()
         self.node_type_id = node_type_id
-        self.node_type_name = (
-            graph_schemas.get_graph_schema(graph_id)
-            .get_node_schema(node_type_id)
-            .get_node_type_name()
-        )
-        self.labels = (
-            graph_schemas.get_graph_schema(graph_id)
-            .get_node_schema(node_type_id)
-            .get_node_labels()
-        )
+        self.node_type_name = node_schema.get_node_type_name()
+        self.labels = node_schema.get_node_labels()
         self.node_id = node_id
         self.properties = properties
 
@@ -255,19 +249,13 @@ class Edge(CompositeDataObject):
         """Edge is a wrapper around the Edge type returned by nebula-graph"""
         super().__init__()
         self.graph_id = graph_id
-        self.graph_name = graph_schemas.get_graph_schema(graph_id).get_graph_name()
+        graph_schema = graph_schemas.get_graph_schema(graph_id)
+        self.graph_name = graph_schema.get_graph_name()
         self.edge_type_id = edge_type_id
         no_directed_type_id = edge_type_id & 0x3FFFFFFF
-        self.edge_type_name = (
-            graph_schemas.get_graph_schema(graph_id)
-            .get_edge_schema(no_directed_type_id)
-            .get_edge_type_name()
-        )
-        self.labels = (
-            graph_schemas.get_graph_schema(graph_id)
-            .get_edge_schema(no_directed_type_id)
-            .get_edge_labels()
-        )
+        edge_schema = graph_schema.get_edge_schema(no_directed_type_id)
+        self.edge_type_name = edge_schema.get_edge_type_name()
+        self.labels = edge_schema.get_edge_labels()
         self.rank = rank
         self.properties = properties
 

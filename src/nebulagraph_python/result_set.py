@@ -38,13 +38,10 @@ logger = getLogger(__name__)
 
 
 class ResultTable:
-    result_table: VectorResultTable
-    byte_order: ByteOrder
-    parser: ValueParser
-    num_batches: int
-    column_names: List[str]
-    column_data_types: List[DataType]
-    total_num_records: int
+    """Stateful iterator over batched result data, matching Java's ResultTable.next() semantics.
+
+    Rows are decoded on-demand as next() is called, rather than all at once.
+    """
 
     def __init__(self, table: Any):
         if not isinstance(table, VectorResultTable):
@@ -66,7 +63,7 @@ class ResultTable:
             raise RuntimeError("the number of batch is not equal to numBatches")
 
         self.column_names = list(table.meta.row_type.column_names)
-        self.column_data_types = []
+        self.column_data_types: List[DataType] = []
         value_type_parser = ValueTypeParser(self.byte_order)
         for col_type in table.meta.row_type.column_types:
             if not col_type.value_type:
@@ -78,80 +75,88 @@ class ResultTable:
 
         self.total_num_records = table.meta.num_records
 
+        # Iterator state (mirrors Java's batchIndex / currentBatchRowIndex)
+        self._batch_index: int = 0
+        self._current_batch_row_index: int = 0
+        self._current_batch: Optional[Batch] = (
+            Batch(table.batch[0], self.byte_order) if self.num_batches > 0 else None
+        )
+
     def _get_row_by_index(self, batch: Batch, index: int) -> Row:
-        """Parse row record from batch
-
-        Args:
-        ----
-            batch: the batch to parse from
-            index: the position of each vector in current batch
-
-        Returns:
-        -------
-            Row: row record
-
-        """
-
+        """Decode one row from the given batch at the specified index."""
         row = Row()
+        decode_value_wrapper = self.parser.decode_value_wrapper
+        get_vectors = batch.get_vectors
+        column_data_types = self.column_data_types
         for i in range(batch.get_vectors_count()):
-            value = self.parser.decode_value_wrapper(
-                batch.get_vectors(i),
-                self.column_data_types[i],
+            value = decode_value_wrapper(
+                get_vectors(i),
+                column_data_types[i],
                 index,
             )
             row.add_value(value)
         return row
 
-    def __iter__(self):
-        return self.rows()
+    def next(self) -> Row:
+        """Return the next decoded row, advancing internal state.
 
-    def rows(self):
-        """Generator that yields rows from the result table.
-
-        Returns
-        -------
-            Iterator[Row]: iterator of row records
-
-        Raises
-        ------
-            InternalError: if no result table data
+        Mirrors Java ResultTable.next():
+        - Skip empty or exhausted batches automatically.
+        - Raises StopIteration when all rows have been consumed.
         """
-        for batch_index in range(self.num_batches):
-            current_batch = Batch(self.result_table.batch[batch_index], self.byte_order)
+        if self._current_batch is None:
+            raise StopIteration("no more batch data")
 
-            # each VectorMetaData has the same numRecords value,
-            # just use the first one to get the numRecord for this batch
-            current_batch_row_size = 0
-            if current_batch.get_vectors_count() != 0:
-                current_batch_row_size = current_batch.get_batch_row_size()
+        current_batch_row_size = 0
+        if self._current_batch.get_vectors_count() != 0:
+            current_batch_row_size = self._current_batch.get_batch_row_size()
 
-            # Skip empty batches
-            if current_batch.get_vectors_count() == 0:
-                continue
+        # Current batch is empty or exhausted – advance to next batch
+        if (
+            self._current_batch.get_vectors_count() == 0
+            or self._current_batch_row_index >= current_batch_row_size
+        ):
+            self._batch_index += 1
+            if self._batch_index >= self.num_batches:
+                raise StopIteration("no more batch data")
+            self._current_batch_row_index = 0
+            self._current_batch = Batch(
+                self.result_table.batch[self._batch_index], self.byte_order
+            )
 
-            # Process rows in current batch
-            for row_index in range(current_batch_row_size):
-                row = self._get_row_by_index(current_batch, row_index)
-                yield row
+        row = self._get_row_by_index(self._current_batch, self._current_batch_row_index)
+        self._current_batch_row_index += 1
+        return row
+
+    def __iter__(self):
+        return self
+
+    def __next__(self) -> Row:
+        return self.next()
 
 
 class Record:
     column_names: List[str]
     col_values: List[ValueWrapper]
-    mapping: Dict[str, int]
+    mapping: Optional[Dict[str, int]]
 
     def __init__(self, column_names: Optional[List[str]], row: Row):
         self.col_values: List[ValueWrapper] = []
-        self.mapping = {}
+        self.mapping: Optional[Dict[str, int]] = None
 
         if column_names is None or row is None or not row.values:
             self.column_names: List[str] = []
+            self.mapping = {}
             return
         self.column_names = column_names
+        self.col_values = row.values
 
-        for idx, value in enumerate(row.values):
-            self.col_values.append(value)
-            self.mapping[column_names[idx]] = len(self.col_values) - 1
+    def _get_mapping(self) -> Dict[str, int]:
+        mapping = self.mapping
+        if mapping is None:
+            mapping = {name: idx for idx, name in enumerate(self.column_names)}
+            self.mapping = mapping
+        return mapping
 
     def __iter__(self) -> Iterator[Tuple[str, ValueWrapper]]:
         return self.items()
@@ -163,7 +168,7 @@ class Record:
     def get(self, key: Union[int, str]) -> ValueWrapper:
         if isinstance(key, str):
             try:
-                key = self.mapping[key]
+                key = self._get_mapping()[key]
             except KeyError as e:
                 raise KeyError(
                     f"Cannot get field because the columnName '{key}' is not exists",
@@ -225,6 +230,11 @@ class ResultSet:
             self.column_names = []
             self.size = 0
 
+        self._is_empty: bool = self.size == 0
+
+        # Cursor position (mirrors Java's AtomicInteger index)
+        self._index: int = 0
+
         if not response.HasField("status"):
             raise InternalError("status is not set in response")
         self.status_code = response.status.code.decode("utf-8")
@@ -259,14 +269,64 @@ class ResultSet:
             )
         return self
 
-    def __iter__(self) -> Iterator[Record]:
-        return self.records()
+    def is_empty(self) -> bool:
+        """Return True when the result set contains no rows."""
+        return self._is_empty
 
-    def records(self):
+    # ------------------------------------------------------------------
+    # Java-style hasNext / next interface
+    # ------------------------------------------------------------------
+
+    def has_next(self) -> bool:
+        """Return True if there are more rows to consume.
+
+        Mirrors Java ResultSet.hasNext().
+        """
+        if self._is_empty:
+            return False
+        return self._index < self.size
+
+    def next(self) -> Record:
+        """Decode and return the next row as a Record.
+
+        Mirrors Java ResultSet.next(): each call advances the internal
+        cursor and decodes exactly one row on demand.
+
+        Raises
+        ------
+            StopIteration: when no more rows are available.
+        """
+        if not self.has_next():
+            raise StopIteration("no more row record data")
         if self.result_table is None:
             raise InternalError("result table is not initialized")
-        for row in self.result_table:
-            yield Record(self.column_names, row)
+        row = self.result_table.next()
+        self._index += 1
+        return Record(self.column_names, row)
+
+    # ------------------------------------------------------------------
+    # Python iterator protocol (delegates to has_next / next)
+    # ------------------------------------------------------------------
+
+    def __iter__(self) -> "ResultSet":
+        return self
+
+    def __next__(self) -> Record:
+        if not self.has_next():
+            raise StopIteration
+        return self.next()
+
+    # ------------------------------------------------------------------
+    # Convenience helpers
+    # ------------------------------------------------------------------
+
+    def records(self) -> Iterator[Record]:
+        """Generator that yields all remaining Records.
+
+        Compatible with existing code that calls ``for record in result.records()``.
+        """
+        while self.has_next():
+            yield self.next()
 
     def __str__(self) -> str:
         if not self.is_succeeded:
@@ -285,17 +345,7 @@ class ResultSet:
         return answer
 
     def as_pandas_df(self) -> "DataFrame":
-        """Convert result set to pandas DataFrame.
-
-        Returns
-        -------
-            pandas.DataFrame: DataFrame containing the query results
-
-        Raises
-        ------
-            ImportError: If pandas is not installed
-
-        """
+        """Convert result set to pandas DataFrame."""
         try:
             import pandas as pd
         except ImportError as e:
@@ -309,10 +359,6 @@ class ResultSet:
         if self.size == 0:
             return pd.DataFrame(columns=self.column_names)
 
-        # Reset index to start
-        self._index = 0
-
-        # Build list of rows
         rows = []
         for record in self.records():
             row = []
@@ -332,34 +378,9 @@ class ResultSet:
         padding: int = 1,
         collapse_padding: bool = False,
     ) -> Optional[str]:
-        """Print query results in a formatted table or row-by-row format. Return the string if console is not provided.
+        """Print query results in a formatted table or row-by-row format.
 
-        Args:
-        ----
-            console: rich.console.Console instance to use for printing. If None, a new instance will be created.
-            style: Output style - either "table" (default) or "rows"
-            width: Fixed width for all columns. If None, width will be auto-calculated
-            min_width: Minimum width of columns when using table style
-            max_width: Maximum width of columns. If None, no maximum is enforced
-            padding: Number of spaces around cell contents in table style
-            collapse_padding: Reduce padding when cell contents are too wide
-
-        Examples:
-        --------
-            # Print as table (default)
-            result.as_ascii_table()
-
-            # Print as rows
-            result.as_ascii_table(style="rows")
-
-            # Customize table formatting
-            result.as_ascii_table(width=20, max_width=30, padding=2)
-
-        Returns:
-        -------
-            Optional[str]: Formatted representation of the results, or error message if query failed.
-                If console is provided, the output will be printed to the console and None will be returned.
-
+        Return the string if console is not provided.
         """
         try:
             from io import StringIO
@@ -387,18 +408,14 @@ class ResultSet:
                 console.file.seek(0)
                 return console.file.read()
 
-        # Reset index to start
         if style == "rows":
-            # Row-by-row format
             row_num = 1
             for record in self.records():
                 console.print(f"\n[bold blue]Row {row_num}[/bold blue]")
                 for col, val in zip(self.column_names, record.values(), strict=True):
                     console.print(f"  [cyan]{col}:[/cyan] {val.cast_primitive()}")
                 row_num += 1
-
         else:
-            # Table format
             table = Table(
                 box=box.DOUBLE_EDGE,
                 show_header=True,
@@ -418,7 +435,6 @@ class ResultSet:
 
             console.print(table)
 
-        # Print summary
         console.print("\n[bold green]Summary[/bold green]")
         console.print(f"├── [green]Rows:[/green] {self.size}")
         console.print(f"└── [blue]Latency:[/blue] {self.latency_us}μs")
@@ -428,11 +444,11 @@ class ResultSet:
             return console.file.read()
 
     def one(self) -> Record:
-        return next(self.records())
+        return self.next()
 
     def one_or_none(self) -> Optional[Record]:
         try:
-            return next(self.records())
+            return self.next()
         except StopIteration:
             return None
 
@@ -445,10 +461,7 @@ class ResultSet:
         padding: int = 1,
         collapse_padding: bool = False,
     ):
-        """Print the results directly to console with rich formatting.
-
-        Args are the same as as_ascii_table().
-        """
+        """Print the results directly to console with rich formatting."""
         from rich.console import Console
 
         console = Console()

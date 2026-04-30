@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
 from nebulagraph_python.decoder.data_types import ResultGraphSchemas
 from nebulagraph_python.decoder.decode_utils import (
@@ -127,10 +127,18 @@ class VectorWrapper:
     def __init__(self, vector: NestedVector, byte_order: ByteOrder):
         self.byte_order = byte_order
         self.vector = vector
+        self._vector_data = vector.vector_data
+        self._null_bit_map = vector.null_bit_map
         self.null_all_set = is_null_bit_map_all_set(self.vector)
-        self.vector_wrappers = [
-            VectorWrapper(vec, byte_order) for vec in vector.nested_vectors
-        ]
+        if not vector.common_meta_data:
+            self._vector_type = VectorType.INVALID_VECTOR
+        else:
+            self._vector_type = VectorType.get_vector_type(
+                vector.common_meta_data.vector_content_type & 0xFF
+            )
+        self._vector_wrappers: List[Optional["VectorWrapper"]] = [None] * len(
+            vector.nested_vectors
+        )
         self.graph_element_type_id_and_prop_vector_index_map = None
         self.path_special_meta_data = None
         self.const_value = None
@@ -145,27 +153,25 @@ class VectorWrapper:
         return self.vector.common_meta_data.num_records
 
     def get_vector_type(self) -> VectorType:
-        """Match Java's DecodeUtils.getVectorType"""
-        if (
-            not hasattr(self.vector, "common_meta_data")
-            or not self.vector.common_meta_data
-        ):
-            return VectorType.INVALID_VECTOR
-        content_type = self.vector.common_meta_data.vector_content_type
-        type_val = content_type & 0xFF
-        return VectorType.get_vector_type(type_val)
+        return self._vector_type
 
     def get_vector_data(self) -> bytes:
-        return self.vector.vector_data
+        return self._vector_data
 
     def get_null_bit_map(self) -> bytes:
-        return self.vector.null_bit_map
+        return self._null_bit_map
 
     def get_nested_vectors(self) -> List["VectorWrapper"]:
-        return self.vector_wrappers
+        for index in range(len(self._vector_wrappers)):
+            self.get_vector_wrapper(index)
+        return cast(List["VectorWrapper"], self._vector_wrappers)
 
     def get_vector_wrapper(self, index: int) -> "VectorWrapper":
-        return self.vector_wrappers[index]
+        wrapper = self._vector_wrappers[index]
+        if wrapper is None:
+            wrapper = VectorWrapper(self.vector.nested_vectors[index], self.byte_order)
+            self._vector_wrappers[index] = wrapper
+        return wrapper
 
     def is_null_all_set(self) -> bool:
         return self.null_all_set
@@ -236,7 +242,11 @@ class VectorWrapper:
         """Get path special metadata, matching Java's getPathSpecialMetaData()"""
         if not self.vector or not self.vector.special_meta_data:
             return None
-        return PathSpecialMetaData(self.vector, self.byte_order)
+        if self.path_special_meta_data is None:
+            self.path_special_meta_data = PathSpecialMetaData(
+                self.vector, self.byte_order
+            )
+        return self.path_special_meta_data
 
     def get_special_meta_data(self) -> Optional[bytes]:
         """Get special metadata bytes, matching Java's getSpecialMetaData()"""
