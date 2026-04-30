@@ -123,11 +123,7 @@ class ResultTable:
             self._current_batch = Batch(
                 self.result_table.batch[self._batch_index], self.byte_order
             )
-            current_batch_row_size = (
-                self._current_batch.get_batch_row_size()
-                if self._current_batch.get_vectors_count() != 0
-                else 0
-            )
+            current_batch_row_size = self._current_batch.get_batch_row_size()
 
         row = self._get_row_by_index(self._current_batch, self._current_batch_row_index)
         self._current_batch_row_index += 1
