@@ -8,9 +8,9 @@ def sync_client_example():
     # Note: NebulaClient automatically establishes connection in __init__
     # and inherits from NebulaBaseExecutor, so it can use execute_py() directly
     client = NebulaClient(
-        addresses="192.168.8.6:3820",
+        addresses="127.0.0.1:9669",
         user_name="root",
-        password="NebulaGraph01",
+        password="nebula",
         connect_timeout_ms=30000,
         request_timeout_ms=300000
     )
@@ -28,7 +28,7 @@ def sync_client_example():
 
         for i in range(runs):
             start_us = time.time_ns() // 1000
-            result = client.execute_with_timeout("use sf100_nicole match(v:Comment) return v  limit 10000", 50000)
+            result = client.execute_with_timeout("use sf100 match(v:Comment) return v  limit 10000", 50000)
             res_us = time.time_ns() // 1000
             for row in result:
                 pass
