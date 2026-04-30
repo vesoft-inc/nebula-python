@@ -1,7 +1,7 @@
 # Copyright 2025 vesoft-inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
+# # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
@@ -710,10 +710,9 @@ class ValueParser:
 
     def bytes_to_string(self, string_header: bytes, vector: NestedVector) -> str:
         """Convert bytes to string using string header and vector data"""
-        string_value_length = int.from_bytes(
+        string_value_length = bytes_to_int32(
             string_header[0:STRING_VALUE_LENGTH_SIZE],
-            self._byteorder_name,
-            signed=True,
+            self.byte_order,
         )
 
         # If string is small enough, read directly from header
@@ -723,22 +722,20 @@ class ValueParser:
                                           + string_value_length
             ].decode(charset)
 
-        chunk_index = int.from_bytes(
+        chunk_index = bytes_to_int32(
             string_header[
                 CHUNK_INDEX_START_POSITION_IN_STRING_HEADER: CHUNK_INDEX_START_POSITION_IN_STRING_HEADER
                                                              + CHUNK_INDEX_LENGTH_IN_STRING_HEADER
             ],
-            self._byteorder_name,
-            signed=True,
+            self.byte_order,
         )
 
-        chunk_offset = int.from_bytes(
+        chunk_offset = bytes_to_int32(
             string_header[
                 CHUNK_OFFSET_START_POSITION_IN_STRING_HEADER: CHUNK_OFFSET_START_POSITION_IN_STRING_HEADER
                                                               + CHUNK_OFFSET_LENGTH_IN_STRING_HEADER
             ],
-            self._byteorder_name,
-            signed=True,
+            self.byte_order,
         )
 
         # Get string data from chunk
@@ -793,7 +790,6 @@ class ValueParser:
     def bytes_to_zoned_time(self, data: bytes) -> datetime.time:
         """Convert bytes to zoned time"""
         hour = bytes_to_int8(data[0:1])
-        current_offset = self.timezone_offset
 
         if hour < 0:
             hour = -hour
@@ -803,16 +799,9 @@ class ValueParser:
         # Skip padding byte at index 3
         microsecond = bytes_to_int32(data[4:8], self.byte_order)
 
-        # Create base time and add timezone offset minutes
+        # Encoded value is already local wall-clock time for the zone.
         base_time = datetime.time(hour % 24, minute, second, microsecond)
-        adjusted_time = (
-                datetime.datetime.combine(datetime.date.today(), base_time)
-                + datetime.timedelta(minutes=current_offset)
-        ).time()
-
-        # Create timezone with offset
-        tz = datetime.timezone(datetime.timedelta(seconds=self.timezone_offset * 60))
-        return adjusted_time.replace(tzinfo=tz)
+        return base_time.replace(tzinfo=self._get_timezone())
 
     def bytes_to_local_datetime(self, data: bytes) -> datetime.datetime:
         """Convert bytes to local datetime"""
@@ -836,13 +825,14 @@ class ValueParser:
 
     def bytes_to_zoned_datetime(self, data: bytes) -> datetime.datetime:
         """Convert bytes to zoned datetime"""
-        # First get local datetime
+        # Encoded value already contains local wall-clock datetime.
         local_dt = self.bytes_to_local_datetime(data)
-        # Add timezone offset
-        local_dt = local_dt + datetime.timedelta(seconds=self.timezone_offset * 60)
-        # Create timezone with offset
-        tz = datetime.timezone(datetime.timedelta(seconds=self.timezone_offset * 60))
-        return local_dt.replace(tzinfo=tz)
+        return local_dt.replace(tzinfo=self._get_timezone())
+
+    def _get_timezone(self) -> datetime.timezone:
+        return datetime.timezone(
+            datetime.timedelta(minutes=self.timezone_offset),
+        )
 
     def bytes_to_duration(self, data: bytes) -> "NDuration":
         """Convert bytes to duration"""
@@ -1286,6 +1276,9 @@ class ValueParser:
                 values[i] = bytes_to_float(value_bytes, self.byte_order)
 
             return NVector(values=values)
+
+        if column_type == ColumnType.GEOGRAPHY:
+            return self.bytes_to_geography(reader)
 
         if column_type == ColumnType.SET:
             set_ele_type = ColumnType(bytes_to_int8(reader.read(VALUE_TYPE_SIZE)))
