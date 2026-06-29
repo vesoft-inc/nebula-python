@@ -1,0 +1,9 @@
+<map id="get_rank" name="get_rank">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,63,84,88"/>
+<area shape="rect" id="Node000002" href="$d4/d5a/classnebulagraph__python_1_1orm_1_1model_1_1EdgeModel.html#ab930754faf04b559e401af10415bc20e" title=" " alt="" coords="173,5,326,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,60,131,41,168,31,169,36,133,46,78,65"/>
+<area shape="rect" id="Node000003" href="$dc/dee/classnebulagraph__python_1_1orm_1_1model_1_1NodeModel.html#a6a95ad2f38d3be2db4c91b02f0416167" title=" " alt="" coords="132,55,367,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="84,73,118,73,118,78,84,78"/>
+<area shape="rect" id="Node000004" href="$d4/d5a/classnebulagraph__python_1_1orm_1_1model_1_1EdgeModel.html#a6a95ad2f38d3be2db4c91b02f0416167" title=" " alt="" coords="210,120,289,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="78,86,133,105,197,120,195,126,131,110,76,91"/>
+</map>

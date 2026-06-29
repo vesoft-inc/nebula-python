@@ -1,0 +1,9 @@
+<map id="NebulaGraphRemoteError" name="NebulaGraphRemoteError">
+<area shape="rect" id="Node000001" title=" " alt="" coords="65,93,254,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,92,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,37,146,91,143,95,73,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="116,5,203,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="162,45,162,93,157,93,157,45"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="227,5,305,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="243,41,175,95,172,91,239,37"/>
+</map>

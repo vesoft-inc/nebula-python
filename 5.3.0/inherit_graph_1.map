@@ -1,0 +1,27 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$d9/ddd/classnebulagraph__python_1_1py__data__types_1_1BaseDataObject.html" title=" " alt="" coords="5,251,132,276"/>
+<area shape="rect" id="Node000001" href="$de/d56/classnebulagraph__python_1_1py__data__types_1_1CompositeDataObject.html" title=" " alt="" coords="180,104,345,129"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="96,240,243,127,246,132,100,244"/>
+<area shape="rect" id="Node000007" href="$d4/d6a/classnebulagraph__python_1_1py__data__types_1_1Geography.html" title=" " alt="" coords="216,227,309,252"/>
+<area shape="poly" id="edge6_Node000000_Node000007" title=" " alt="" coords="146,251,216,242,216,248,146,256"/>
+<area shape="rect" id="Node000011" href="$da/d92/classnebulagraph__python_1_1py__data__types_1_1NDuration.html" title=" " alt="" coords="219,276,307,301"/>
+<area shape="poly" id="edge10_Node000000_Node000011" title=" " alt="" coords="146,271,219,280,218,286,145,276"/>
+<area shape="rect" id="Node000012" href="$df/dd9/classnebulagraph__python_1_1py__data__types_1_1NVector.html" title=" " alt="" coords="226,325,299,351"/>
+<area shape="poly" id="edge11_Node000000_Node000012" title=" " alt="" coords="110,280,181,310,227,325,225,330,179,315,107,284"/>
+<area shape="rect" id="Node000002" href="$d5/d00/classnebulagraph__python_1_1py__data__types_1_1Edge.html" title=" " alt="" coords="415,5,469,31"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="296,95,392,40,414,28,416,33,395,44,298,99"/>
+<area shape="rect" id="Node000003" href="$d7/d0a/classnebulagraph__python_1_1py__data__types_1_1NRecord.html" title=" " alt="" coords="403,55,481,80"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="322,98,402,75,404,80,323,103"/>
+<area shape="rect" id="Node000004" href="$d5/da1/classnebulagraph__python_1_1py__data__types_1_1Node.html" title=" " alt="" coords="414,104,470,129"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="359,114,414,114,414,119,359,119"/>
+<area shape="rect" id="Node000005" href="$d4/d87/classnebulagraph__python_1_1py__data__types_1_1Path.html" title=" " alt="" coords="417,153,467,179"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="323,130,417,157,416,162,322,136"/>
+<area shape="rect" id="Node000008" href="$db/ded/classnebulagraph__python_1_1py__data__types_1_1NLineString.html" title=" " alt="" coords="393,203,491,228"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="323,229,392,219,393,224,324,234"/>
+<area shape="rect" id="Node000009" href="$db/d01/classnebulagraph__python_1_1py__data__types_1_1NPoint.html" title=" " alt="" coords="409,252,475,277"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="323,245,410,258,409,263,322,250"/>
+<area shape="rect" id="Node000010" href="$d6/d96/classnebulagraph__python_1_1py__data__types_1_1NPolygon.html" title=" " alt="" coords="400,301,484,327"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="324,253,346,261,418,299,415,304,344,266,322,258"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="44,104,93,129"/>
+<area shape="poly" id="edge12_Node000006_Node000001" title=" " alt="" coords="107,114,180,114,180,119,107,119"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="EdgeType" name="EdgeType">
+<area shape="rect" id="Node000001" title=" " alt="" coords="244,168,328,193"/>
+<area shape="rect" id="Node000002" href="$d8/d99/classnebulagraph__python_1_1tools_1_1graph__type_1_1WithPropType.html" title=" " alt="" coords="144,93,255,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,126,274,166,270,170,222,130"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,100,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="86,35,181,91,178,95,83,40"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="125,5,173,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="148,44,152,68,163,81,176,91,173,95,159,85,148,70,142,45"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="289,5,334,31"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="345,38,356,54,358,62,357,70,345,100,329,128,299,169,294,166,325,125,340,98,351,69,353,62,352,56,340,41"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="278,40,253,57,212,95,208,91,250,53,275,36"/>
+</map>

@@ -1,0 +1,29 @@
+<map id="print" name="print">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,145,57,170"/>
+<area shape="rect" id="Node000002" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#afd8b9ce866b79c381d5d6743dcc7d8d9" title=" " alt="" coords="105,145,220,170"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="57,155,92,155,92,160,57,160"/>
+<area shape="rect" id="Node000003" href="$da/da6/classnebulagraph__python_1_1result__set_1_1ResultTable.html#aadaf57a5773ac4687e74ec7159ce5239" title=" " alt="" coords="387,219,583,259"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="215,167,392,213,391,218,213,173"/>
+<area shape="rect" id="Node000005" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#a86dacec824832d4901648f23e7b0a19e" title=" " alt="" coords="703,145,754,170"/>
+<area shape="poly" id="edge11_Node000002_Node000005" title=" " alt="" coords="220,155,689,155,689,160,220,160"/>
+<area shape="rect" id="Node000007" href="$d7/d0a/classnebulagraph__python_1_1py__data__types_1_1NRecord.html#a053d7a4251b385862e31222d85dfc81a" title=" " alt="" coords="1007,36,1197,76"/>
+<area shape="poly" id="edge17_Node000002_Node000007" title=" " alt="" coords="172,143,210,99,237,75,267,55,323,27,371,11,420,4,483,3,730,3,799,5,868,12,994,31,993,36,867,17,798,10,730,8,483,8,421,9,372,16,325,32,269,60,240,80,214,103,176,146"/>
+<area shape="rect" id="Node000008" href="$d4/d98/classnebulagraph__python_1_1result__set_1_1Record.html#a053d7a4251b385862e31222d85dfc81a" title=" " alt="" coords="1004,137,1200,177"/>
+<area shape="poly" id="edge18_Node000002_Node000008" title=" " alt="" coords="182,168,230,202,303,244,345,263,390,279,436,289,483,293,730,293,777,290,824,282,915,253,995,217,1057,182,1060,187,998,221,917,258,826,287,778,296,730,299,483,299,436,295,389,284,343,268,300,248,228,207,179,172"/>
+<area shape="rect" id="Node000009" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#a498ba7173d81a4c2e7ddad4b16032d86" title=" " alt="" coords="268,94,339,119"/>
+<area shape="poly" id="edge12_Node000002_Node000009" title=" " alt="" coords="198,142,254,121,256,127,200,147"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="450,219,448,209,454,200,466,194,485,192,506,195,518,202,515,207,504,200,485,197,467,199,457,204,453,210,455,218"/>
+<area shape="rect" id="Node000004" href="$da/da6/classnebulagraph__python_1_1result__set_1_1ResultTable.html#a34b5b6a4a8fbefb842f7e588803e059f" title=" " alt="" coords="631,203,827,258"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="583,233,617,232,617,237,583,238"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="570,216,692,173,694,178,572,221"/>
+<area shape="poly" id="edge9_Node000005_Node000003" title=" " alt="" coords="704,162,626,185,539,216,537,211,624,180,702,157"/>
+<area shape="poly" id="edge10_Node000005_Node000005" title=" " alt="" coords="701,149,692,138,694,128,706,121,729,118,758,123,765,129,766,136,761,137,760,132,755,128,729,123,708,126,698,131,697,137,705,145"/>
+<area shape="rect" id="Node000006" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#a0f0707fa01b2a4c20e42e8358dc59f15" title=" " alt="" coords="875,94,956,119"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="753,148,861,119,862,124,755,153"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="955,93,1014,77,1015,82,957,98"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="957,115,1015,131,1014,136,955,120"/>
+<area shape="poly" id="edge14_Node000009_Node000003" title=" " alt="" coords="324,118,446,208,443,212,321,122"/>
+<area shape="poly" id="edge15_Node000009_Node000005" title=" " alt="" coords="339,108,583,136,690,150,690,155,582,141,339,113"/>
+<area shape="poly" id="edge13_Node000009_Node000006" title=" " alt="" coords="339,104,861,104,861,109,339,109"/>
+<area shape="poly" id="edge16_Node000009_Node000009" title=" " alt="" coords="280,95,275,86,277,76,287,70,303,67,323,71,331,79,327,83,320,76,303,73,289,75,282,79,280,85,284,93"/>
+</map>
