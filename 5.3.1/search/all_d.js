@@ -1,0 +1,8 @@
+var searchData=
+[
+  ['record_0',['Record',['../d4/d98/classnebulagraph__python_1_1result__set_1_1Record.html',1,'nebulagraph_python::result_set']]],
+  ['records_1',['records',['../d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#a498ba7173d81a4c2e7ddad4b16032d86',1,'nebulagraph_python::result_set::ResultSet']]],
+  ['resultset_2',['ResultSet',['../d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html',1,'nebulagraph_python::result_set']]],
+  ['resulttable_3',['ResultTable',['../da/da6/classnebulagraph__python_1_1result__set_1_1ResultTable.html',1,'nebulagraph_python::result_set']]],
+  ['row_4',['Row',['../d1/d86/classnebulagraph__python_1_1value__wrapper_1_1Row.html',1,'nebulagraph_python::value_wrapper']]]
+];

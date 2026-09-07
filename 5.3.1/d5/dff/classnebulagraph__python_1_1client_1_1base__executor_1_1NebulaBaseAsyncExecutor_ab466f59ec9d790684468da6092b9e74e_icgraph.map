@@ -1,0 +1,7 @@
+<map id="print_query_result" name="print_query_result">
+<area shape="rect" id="Node000001" title=" " alt="" coords="295,35,435,60"/>
+<area shape="rect" id="Node000002" href="$d5/dff/classnebulagraph__python_1_1client_1_1base__executor_1_1NebulaBaseAsyncExecutor.html#afdec9dbd01a121835d60473b325ad17c" title=" " alt="" coords="107,5,145,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="281,40,145,23,146,18,281,34"/>
+<area shape="rect" id="Node000003" href="$d7/d65/classnebulagraph__python_1_1client_1_1base__executor_1_1NebulaBaseExecutor.html#afdec9dbd01a121835d60473b325ad17c" title=" " alt="" coords="5,55,247,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="281,60,247,64,247,58,281,54"/>
+</map>

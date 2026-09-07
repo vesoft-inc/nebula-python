@@ -1,0 +1,16 @@
+<map id="next" name="next">
+<area shape="rect" id="Node000001" title=" " alt="" coords="12,87,63,112"/>
+<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="10,89,3,79,6,69,18,62,38,60,62,64,72,74,68,77,60,69,38,65,20,67,10,72,9,78,15,86"/>
+<area shape="rect" id="Node000002" href="$da/da6/classnebulagraph__python_1_1result__set_1_1ResultTable.html#a34b5b6a4a8fbefb842f7e588803e059f" title=" " alt="" coords="136,5,282,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="51,84,77,62,110,41,130,33,132,38,112,46,80,66,54,88"/>
+<area shape="rect" id="Node000003" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#a86dacec824832d4901648f23e7b0a19e" title=" " alt="" coords="111,79,307,119"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="63,103,98,105,97,111,63,109"/>
+<area shape="poly" id="edge7_Node000003_Node000001" title=" " alt="" coords="111,93,77,94,77,89,111,88"/>
+<area shape="poly" id="edge8_Node000003_Node000003" title=" " alt="" coords="176,80,175,70,180,61,191,55,209,53,229,56,240,63,237,67,227,61,209,58,193,60,183,65,180,71,182,78"/>
+<area shape="rect" id="Node000004" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#a0f0707fa01b2a4c20e42e8358dc59f15" title=" " alt="" coords="355,79,551,119"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="307,97,342,97,342,102,307,102"/>
+<area shape="rect" id="Node000005" href="$d7/d0a/classnebulagraph__python_1_1py__data__types_1_1NRecord.html#a053d7a4251b385862e31222d85dfc81a" title=" " alt="" coords="602,47,792,87"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="551,84,588,79,589,84,552,89"/>
+<area shape="rect" id="Node000006" href="$d4/d98/classnebulagraph__python_1_1result__set_1_1Record.html#a053d7a4251b385862e31222d85dfc81a" title=" " alt="" coords="599,111,795,151"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="552,110,586,114,585,119,551,115"/>
+</map>

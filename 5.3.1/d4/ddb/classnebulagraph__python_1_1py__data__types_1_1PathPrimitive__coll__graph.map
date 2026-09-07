@@ -1,0 +1,17 @@
+<map id="PathPrimitive" name="PathPrimitive">
+<area shape="rect" id="Node000001" title=" " alt="" coords="249,200,358,225"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,92,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="60,43,79,81,107,121,139,149,176,170,215,186,251,197,249,202,213,191,174,175,136,153,103,124,74,84,55,45"/>
+<area shape="rect" id="Node000006" href="$d3/d18/classnebulagraph__python_1_1py__data__types_1_1NodePrimitive.html" title=" " alt="" coords="117,95,231,121"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="78,36,159,93,156,97,75,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="372,95,424,121"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="380,133,316,202,312,198,376,129"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="448,95,503,121"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="447,130,369,178,326,202,324,197,366,174,445,126"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="249,5,294,31"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="282,43,285,54,298,137,305,200,300,200,293,138,279,55,277,45"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="250,42,189,97,185,93,247,38"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="186,132,199,154,217,174,238,188,261,197,259,202,235,192,214,178,195,157,182,134"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="117,5,165,31"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="139,44,142,68,150,82,161,93,157,97,146,85,137,70,134,45"/>
+</map>

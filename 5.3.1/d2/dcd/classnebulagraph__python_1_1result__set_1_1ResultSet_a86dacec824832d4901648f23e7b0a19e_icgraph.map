@@ -1,0 +1,20 @@
+<map id="next" name="next">
+<area shape="rect" id="Node000001" title=" " alt="" coords="631,69,681,95"/>
+<area shape="poly" id="edge11_Node000001_Node000001" title=" " alt="" coords="686,60,678,52,656,48,638,50,628,55,627,61,633,69,628,72,622,62,624,52,636,45,656,43,680,47,690,56"/>
+<area shape="rect" id="Node000002" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#afd8b9ce866b79c381d5d6743dcc7d8d9" title=" " alt="" coords="105,45,220,71"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="632,62,609,43,582,29,531,15,477,9,423,9,371,13,275,29,203,48,202,43,274,24,370,7,423,3,478,4,531,10,584,24,612,39,636,58"/>
+<area shape="rect" id="Node000004" href="$da/da6/classnebulagraph__python_1_1result__set_1_1ResultTable.html#aadaf57a5773ac4687e74ec7159ce5239" title=" " alt="" coords="387,62,583,102"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="617,92,583,94,583,88,617,87"/>
+<area shape="rect" id="Node000005" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#a498ba7173d81a4c2e7ddad4b16032d86" title=" " alt="" coords="268,120,339,145"/>
+<area shape="poly" id="edge12_Node000001_Node000005" title=" " alt="" coords="620,103,583,117,516,129,449,135,339,137,339,132,449,130,516,124,582,112,618,98"/>
+<area shape="rect" id="Node000003" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#aec1c1c55a120d2def72f6eb54b6660ac" title=" " alt="" coords="5,45,57,71"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="92,61,58,61,58,55,92,55"/>
+<area shape="poly" id="edge6_Node000004_Node000001" title=" " alt="" coords="596,71,631,73,630,78,596,76"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="373,77,220,65,221,60,373,71"/>
+<area shape="poly" id="edge5_Node000004_Node000004" title=" " alt="" coords="513,50,503,43,485,41,469,43,459,47,455,53,457,61,452,62,450,53,455,43,467,38,485,35,505,38,516,46"/>
+<area shape="poly" id="edge7_Node000004_Node000005" title=" " alt="" coords="400,108,340,126,338,120,399,103"/>
+<area shape="poly" id="edge8_Node000005_Node000002" title=" " alt="" coords="265,116,186,73,189,69,267,111"/>
+<area shape="poly" id="edge10_Node000005_Node000005" title=" " alt="" coords="327,109,320,102,303,99,289,101,282,105,280,111,284,119,280,121,275,112,277,102,287,96,303,93,323,97,331,106"/>
+<area shape="rect" id="Node000006" href="$d2/dcd/classnebulagraph__python_1_1result__set_1_1ResultSet.html#ab179327127050d939849a40c23cc18db" title=" " alt="" coords="107,120,218,145"/>
+<area shape="poly" id="edge9_Node000005_Node000006" title=" " alt="" coords="254,135,218,135,218,130,254,130"/>
+</map>

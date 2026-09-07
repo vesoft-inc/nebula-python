@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="15,5,54,31"/>
+<area shape="rect" id="Node000001" href="$db/da5/classnebulagraph__python_1_1py__data__types_1_1PathPrimitiveField.html" title=" " alt="" coords="112,5,252,31"/>
+<area shape="poly" id="edge34_Node000000_Node000001" title=" " alt="" coords="68,15,111,15,111,21,68,21"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,55,64,80"/>
+<area shape="poly" id="edge36_Node000002_Node000001" title=" " alt="" coords="76,51,142,28,144,33,78,56"/>
+<area shape="rect" id="Node000003" href="$d7/db3/classnebulagraph__python_1_1py__data__types_1_1GeoShape.html" title=" " alt="" coords="138,55,226,80"/>
+<area shape="poly" id="edge35_Node000002_Node000003" title=" " alt="" coords="78,65,138,65,138,70,78,70"/>
+</map>
