@@ -147,6 +147,7 @@ class ExtraInfo:
     total_server_time_us: int = 0
     build_time_us: int = 0
     optimize_time_us: int = 0
+    execution_time_us: int = 0
     serialize_time_us: int = 0
 
     def __str__(self) -> str:
@@ -157,5 +158,6 @@ class ExtraInfo:
             f"totalServerTimeUs={self.total_server_time_us}, "
             f"buildTimeUs={self.build_time_us}, "
             f"optimizeTimeUs={self.optimize_time_us}, "
+            f"executionTimeUs={self.execution_time_us}, "
             f"serializeTimeUs={self.serialize_time_us}}}"
         )

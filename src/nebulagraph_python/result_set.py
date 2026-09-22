@@ -253,6 +253,7 @@ class ResultSet:
             total_server_time_us=response.summary.elapsed_time.total_server_time_us,
             build_time_us=response.summary.elapsed_time.build_time_us,
             optimize_time_us=response.summary.elapsed_time.optimize_time_us,
+            execution_time_us=response.summary.elapsed_time.execution_time_us,
             serialize_time_us=response.summary.elapsed_time.serialize_time_us,
         )
 

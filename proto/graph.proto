@@ -81,6 +81,7 @@ message ElapsedTime {
     int64 optimize_time_us     = 3;
     int64 serialize_time_us    = 4;
     int64 parse_time_us        = 5;
+    int64 execution_time_us    = 6;
 }
 
 message Summary {
