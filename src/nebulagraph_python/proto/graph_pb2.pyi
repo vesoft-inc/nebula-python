@@ -70,18 +70,20 @@ class PlanInfo(_message.Message):
     def __init__(self, id: _Optional[bytes] = ..., name: _Optional[bytes] = ..., details: _Optional[bytes] = ..., columns: _Optional[_Iterable[bytes]] = ..., time_ms: _Optional[float] = ..., rows: _Optional[int] = ..., memory_kib: _Optional[float] = ..., blocked_ms: _Optional[float] = ..., queued_ms: _Optional[float] = ..., consume_ms: _Optional[float] = ..., produce_ms: _Optional[float] = ..., finish_ms: _Optional[float] = ..., batches: _Optional[int] = ..., concurrency: _Optional[int] = ..., other_stats_json: _Optional[bytes] = ..., children: _Optional[_Iterable[_Union[PlanInfo, _Mapping]]] = ...) -> None: ...
 
 class ElapsedTime(_message.Message):
-    __slots__ = ["total_server_time_us", "build_time_us", "optimize_time_us", "serialize_time_us", "parse_time_us"]
+    __slots__ = ["total_server_time_us", "build_time_us", "optimize_time_us", "serialize_time_us", "parse_time_us", "execution_time_us"]
     TOTAL_SERVER_TIME_US_FIELD_NUMBER: _ClassVar[int]
     BUILD_TIME_US_FIELD_NUMBER: _ClassVar[int]
     OPTIMIZE_TIME_US_FIELD_NUMBER: _ClassVar[int]
     SERIALIZE_TIME_US_FIELD_NUMBER: _ClassVar[int]
     PARSE_TIME_US_FIELD_NUMBER: _ClassVar[int]
+    EXECUTION_TIME_US_FIELD_NUMBER: _ClassVar[int]
     total_server_time_us: int
     build_time_us: int
     optimize_time_us: int
     serialize_time_us: int
     parse_time_us: int
-    def __init__(self, total_server_time_us: _Optional[int] = ..., build_time_us: _Optional[int] = ..., optimize_time_us: _Optional[int] = ..., serialize_time_us: _Optional[int] = ..., parse_time_us: _Optional[int] = ...) -> None: ...
+    execution_time_us: int
+    def __init__(self, total_server_time_us: _Optional[int] = ..., build_time_us: _Optional[int] = ..., optimize_time_us: _Optional[int] = ..., serialize_time_us: _Optional[int] = ..., parse_time_us: _Optional[int] = ..., execution_time_us: _Optional[int] = ...) -> None: ...
 
 class Summary(_message.Message):
     __slots__ = ["elapsed_time", "explain_type", "plan_info", "query_stats", "log_stream", "num_warnings"]
